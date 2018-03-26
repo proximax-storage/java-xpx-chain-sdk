@@ -29,12 +29,13 @@ plugins {
     id 'java-lang'
     id 'com.github.johnrengelman.shadow' version '2.0.2'
     id 'net.saliman.properties' version '1.4.6'
+    id 'jacoco'
+    id 'com.github.kt3k.coveralls' version '2.8.2'
 }
 
 apply plugin: 'java'
 apply plugin: 'maven-publish'
 apply plugin: 'org.junit.platform.gradle.plugin'
-
 
 group 'io.nem'
 version '0.8.10-SNAPSHOT'
@@ -50,6 +51,8 @@ configurations {
     integrationTestRuntime.extendsFrom testRuntime
     sharedCompile
 }
+
+// cobertura.coverageFormats = ['html', 'xml']
 
 sourceSets {
     integrationTest {
@@ -213,10 +216,58 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 }
 
 junitPlatform {
+
+    reportsDir = file("$buildDir/test-results")
     platformVersion '1.0.2' // optional, defaults to plugin version
     logManager 'org.apache.logging.log4j.jul.LogManager'
     reportsDir file('build/test-results/junit-platform') // this is the default
     // enableStandardTestTask true
     // selectors (optional)
     // filters (optional)
+    enableStandardTestTask false
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name.equals('junitPlatformTest')) {
+        System.out.println("ADDING TASK " + task.getName() + " to the project!")
+
+        // configure jacoco to analyze the junitPlatformTest task
+        jacoco {
+            // this tool version is compatible with
+            toolVersion = "0.7.6.201602180812"
+            applyTo task
+        }
+
+        // create junit platform jacoco task
+        project.task(type: JacocoReport, "junitPlatformJacocoReport",
+                {
+                    sourceDirectories = files("./src/main")
+                    classDirectories = files("$buildDir/classes/main")
+                    executionData task
+                })
+    }
+}
+
+jacoco {
+    toolVersion = '0.7.9'
+    applyTo junitPlatformTest
+}
+
+jacocoTestReport {
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: ['**/Main*'])
+        })
+    }
+    reports {
+        xml.enabled true
+        csv.enabled true
+        html.destination file("${buildDir}/jacocoHtml")
+    }
+}
+
+junitPlatformTest {
+    jacoco {
+        destinationFile = file("${buildDir}/jacoco/test.exec")
+    }
 }

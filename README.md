@@ -1,5 +1,9 @@
 # nem2-sdk for Java/Kotlin/Scala
 
+[![Build Status](https://api.travis-ci.org/nemtech/nem2-sdk-java.svg?branch=master)](https://travis-ci.org/nemtech/nem2-sdk-java)
+[![Coverage Status](https://coveralls.io/repos/github/nemtech/nem2-sdk-java/badge.svg?branch=travis-ci)](https://coveralls.io/github/nemtech/nem2-sdk-java?branch=travis-ci)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 The official nem2-sdk for Java, Kotlin and Scala to work with the NEM2 (a.k.a Catapult).
 
 ## Requirements
