@@ -256,7 +256,7 @@ jacoco {
 jacocoTestReport {
     afterEvaluate {
         classDirectories = files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: ['**/Main*'])
+            fileTree(dir: it, exclude: ['**/*DTO.*', '**/*Buffer.*'])
         })
     }
     reports {
