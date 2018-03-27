@@ -1,5 +1,6 @@
 # nem2-sdk for Java/Kotlin/Scala
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.nem/sdk/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.nem/sdk)
 [![Build Status](https://api.travis-ci.org/nemtech/nem2-sdk-java.svg?branch=master)](https://travis-ci.org/nemtech/nem2-sdk-java)
 [![Coverage Status](https://coveralls.io/repos/github/nemtech/nem2-sdk-java/badge.svg?branch=master)](https://coveralls.io/github/nemtech/nem2-sdk-java?branch=master)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -13,7 +14,23 @@ The official nem2-sdk for Java, Kotlin and Scala to work with the NEM2 (a.k.a Ca
 
 ## Installation
 
-:information_source: Be patient please, we are publishing the SDK in Maven.
+### Maven
+
+```xml
+<dependency>
+    <groupId>io.nem</groupId>
+    <artifactId>sdk</artifactId>
+    <version>0.8.10</version>
+</dependency>
+```
+
+### Gradle
+
+```compile 'io.nem:sdk:0.8.10```
+
+### SBT
+
+```libraryDependencies += "io.nem" % "sdk" % "0.8.10"```
 
 ## Documentation and Getting Started
 
