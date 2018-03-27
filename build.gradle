@@ -27,18 +27,19 @@ buildscript {
 plugins {
     id 'jvm-component'
     id 'java-lang'
-    id 'com.github.johnrengelman.shadow' version '2.0.2'
     id 'net.saliman.properties' version '1.4.6'
     id 'jacoco'
     id 'com.github.kt3k.coveralls' version '2.8.2'
 }
 
 apply plugin: 'java'
-apply plugin: 'maven-publish'
+apply plugin: 'maven'
+apply plugin: 'signing'
 apply plugin: 'org.junit.platform.gradle.plugin'
 
 group 'io.nem'
-version '0.8.10-SNAPSHOT'
+archivesBaseName = "sdk"
+version '0.8.10'
 
 sourceCompatibility = 1.8
 
@@ -137,82 +138,75 @@ junitPlatform {
     // filters (optional)
 }
 
-shadowJar {
-    appendix = ""
-    dependencies {
-        exclude(dependency {
-            it.moduleGroup != 'io.nem'
-        })
-    }
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-            groupId 'io.nem'
-            artifactId 'sdk'
-            pom.withXml {
-                asNode().with {
-                    appendNode('packaging', 'jar')
-                    appendNode('name', 'NEM2-SDK Java')
-                    appendNode('description', 'nem2 java sdk')
-                    appendNode('url', 'https://github.com/nemtech/nem2-sdk-java')
-                    appendNode('issueManagement').with {
-                        appendNode('url', 'https://github.com/nemtech/nem2-sdk-java/issues')
-                        appendNode('system', 'GitHub Issues')
-                    }
-                    appendNode('licenses').with {
-                        appendNode('license').with {
-                            appendNode('name', 'APACHE-2.0')
-                            appendNode('url', 'https://www.apache.org/licenses/LICENSE-2.0')
-                        }
-                    }
-                    appendNode('organization').with {
-                        appendNode('name', 'NEM')
-                        appendNode('url', 'https://nem.io')
-                    }
-                    appendNode('developers').with {
-                        appendNode('developer').with {
-                            appendNode('id', 'aleix_mp')
-                            appendNode('name', 'aleix')
-                            appendNode('email', 'aleix@nemeurope.eu')
-                            appendNode('organization', 'NEM')
-                            appendNode('organizationUrl', 'https://nem.io')
-                        }
-                        appendNode('developer').with {
-                            appendNode('id', 'guillemchain')
-                            appendNode('name', 'guillem')
-                            appendNode('email', 'guillem@nemeurope.eu')
-                            appendNode('organization', 'NEM')
-                            appendNode('organizationUrl', 'https://nem.io')
-                        }
-                    }
-                }
-            }
-            tasks.withType(Jar) {
-                from(project.projectDir) {
-                    include 'LICENSE'
-                    into 'META-INF'
-                }
-            }
-            artifact sourceJar
-            artifact javadocJar
-        }
-    }
-    repositories {
-
-    }
-}
-
-task sourceJar(type: Jar, dependsOn: classes) {
-    classifier 'sources'
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
     from sourceSets.main.allSource
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
+task javadocJar(type: Jar) {
     classifier = 'javadoc'
-    from javadoc.destinationDir
+    from javadoc
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    def username = project.hasProperty("ossrhUsername") ? project.ossrhUsername : ""
+    def password = project.hasProperty("ossrhPassword") ? project.ossrhPassword : ""
+
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: username, password: password)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: username, password: password)
+            }
+
+            pom.project {
+                name "nem2-sdk"
+                packaging 'jar'
+                // optionally artifactId can be defined here
+                description 'nem2 official sdk'
+                url 'https://github.com/nemtech/nem2-sdk-java'
+
+                scm {
+                    connection 'scm:git:https://github.com/nemtech/nem2-sdk-java.git'
+                    developerConnection 'scm:svn:https://github.com/nemtech/nem2-sdk-java'
+                    url 'https://github.com/nemtech/nem2-sdk-java'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'aleix_nem'
+                        name 'Aleix'
+                        email 'aleix@nemeurope.eu'
+                    }
+                    developer {
+                        id 'guillem_nem'
+                        name 'Guillem'
+                        email 'guillem@nemeurope.eu'
+                    }
+                }
+            }
+        }
+    }
 }
 
 junitPlatform {
