@@ -18,6 +18,7 @@ package io.nem.sdk.infrastructure;
 
 import io.nem.sdk.model.account.Address;
 import io.nem.sdk.model.mosaic.XEM;
+import io.nem.sdk.model.namespace.NamespaceId;
 import io.nem.sdk.model.namespace.NamespaceInfo;
 import io.nem.sdk.model.namespace.NamespaceName;
 import org.junit.jupiter.api.BeforeAll;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class NamespaceHttpTest extends BaseTest {
@@ -90,5 +92,13 @@ class NamespaceHttpTest extends BaseTest {
         assertEquals(1, namespaceNames.size());
         assertEquals("nem", namespaceNames.get(0).getName());
         assertEquals(XEM.NAMESPACEID, namespaceNames.get(0).getNamespaceId());
+    }
+
+    @Test
+    void throwExceptionWhenNamespaceDoesNotExists() throws ExecutionException, InterruptedException {
+        assertThrows(RuntimeException.class, () -> namespaceHttp
+                .getNamespace(new NamespaceId("nonregisterednamespace"))
+                .toFuture()
+                .get());
     }
 }

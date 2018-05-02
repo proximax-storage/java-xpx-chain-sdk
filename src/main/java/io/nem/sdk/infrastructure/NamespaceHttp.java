@@ -60,7 +60,7 @@ public class NamespaceHttp extends Http implements NamespaceRepository {
                         .as(BodyCodec.jsonObject())
                         .rxSend()
                         .toObservable()
-                        .map(HttpResponse::body)
+                        .map(Http::mapOrError)
                         .map(json -> objectMapper.readValue(json.toString(), NamespaceInfoDTO.class))
                         .map(namespaceInfoDTO -> new NamespaceInfo(namespaceInfoDTO.getMeta().isActive(),
                                 namespaceInfoDTO.getMeta().getIndex(),
