@@ -20,16 +20,20 @@ import io.nem.sdk.model.account.*;
 import io.nem.sdk.model.blockchain.NetworkType;
 import io.nem.sdk.model.transaction.AggregateTransaction;
 import io.nem.sdk.model.transaction.Transaction;
+import io.reactivex.observers.TestObserver;
+import io.reactivex.schedulers.Schedulers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -46,11 +50,11 @@ class AccountHttpTest extends BaseTest {
     @Test
     void getAccountInfo() throws ExecutionException, InterruptedException {
         AccountInfo accountInfo = accountHttp
-                .getAccountInfo(Address.createFromRawAddress("SAX5DK5IMLAWBDZNTEBMKSSHOWL5EQ3IEQTHBOTD"))
+                .getAccountInfo(Address.createFromRawAddress("SDRDGFTDLLCB67D4HPGIMIHPNSRYRJRT7DOBGWZY"))
                 .toFuture()
                 .get();
 
-        assertEquals("A122DF52CAD0580748EA51182AA385A78F2043E7CE3505871E6CCBF6AF40DA15", accountInfo.getPublicKey());
+        assertEquals("1026D70E1954775749C6811084D6450A3184D977383F0E4282CD47118AF37755", accountInfo.getPublicKey());
     }
 
     @Test
@@ -161,5 +165,16 @@ class AccountHttpTest extends BaseTest {
                 .get();
 
         assertEquals(0, transactions.size());
+    }
+
+    @Test
+    void throwExceptionWhenBlockDoesNotExists() {
+        TestObserver<AccountInfo> testObserver = new TestObserver<>();
+        accountHttp
+                .getAccountInfo(Address.createFromRawAddress("SARDGFTDLLCB67D4HPGIMIHPNSRYRJRT7DOBGWZY"))
+                .subscribeOn(Schedulers.single())
+                .test()
+                .awaitDone(2, TimeUnit.SECONDS)
+                .assertFailure(RuntimeException.class);
     }
 }

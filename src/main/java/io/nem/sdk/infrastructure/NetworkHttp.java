@@ -40,7 +40,7 @@ public class NetworkHttp extends Http implements NetworkRepository {
                 .as(BodyCodec.jsonObject())
                 .rxSend()
                 .toObservable()
-                .map(HttpResponse::body)
+                .map(Http::mapJsonObjectOrError)
                 .map(json -> json.getString("name"))
                 .map(name -> {
                     if (name.equalsIgnoreCase("mijinTest"))

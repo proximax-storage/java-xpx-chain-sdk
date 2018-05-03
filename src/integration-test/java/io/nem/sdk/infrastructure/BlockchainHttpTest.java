@@ -18,7 +18,11 @@ package io.nem.sdk.infrastructure;
 
 import io.nem.sdk.model.blockchain.BlockInfo;
 import io.nem.sdk.model.blockchain.BlockchainStorageInfo;
+import io.nem.sdk.model.mosaic.MosaicId;
+import io.nem.sdk.model.mosaic.MosaicInfo;
 import io.nem.sdk.model.transaction.Transaction;
+import io.reactivex.observers.TestObserver;
+import io.reactivex.schedulers.Schedulers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -27,6 +31,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -100,5 +105,16 @@ class BlockchainHttpTest extends BaseTest {
         assertTrue(blockchainStorageInfo.getNumAccounts() > 0);
         assertTrue(blockchainStorageInfo.getNumTransactions() > 0);
         assertTrue(blockchainStorageInfo.getNumBlocks() > 0);
+    }
+
+    @Test
+    void throwExceptionWhenBlockDoesNotExists() {
+        TestObserver<BlockInfo> testObserver = new TestObserver<>();
+        blockchainHttp
+                .getBlockByHeight(BigInteger.valueOf(1000000000))
+                .subscribeOn(Schedulers.single())
+                .test()
+                .awaitDone(2, TimeUnit.SECONDS)
+                .assertFailure(RuntimeException.class);
     }
 }

@@ -57,7 +57,7 @@ public class BlockchainHttp extends Http implements BlockchainRepository {
                         .as(BodyCodec.jsonObject())
                         .rxSend()
                         .toObservable()
-                        .map(HttpResponse::body)
+                        .map(Http::mapJsonObjectOrError)
                         .map(json -> objectMapper.readValue(json.toString(), BlockInfoDTO.class))
                         .map(blockInfoDTO -> new BlockInfo(blockInfoDTO.getMeta().getHash(),
                                 blockInfoDTO.getMeta().getGenerationHash(),
@@ -92,7 +92,7 @@ public class BlockchainHttp extends Http implements BlockchainRepository {
                 .as(BodyCodec.jsonArray())
                 .rxSend()
                 .toObservable()
-                .map(HttpResponse::body)
+                .map(Http::mapJsonArrayOrError)
                 .map(json -> new JsonArray(json.toString()).stream().map(s -> (JsonObject) s).collect(Collectors.toList()))
                 .flatMapIterable(item -> item)
                 .map(new TransactionMapping())
@@ -107,7 +107,7 @@ public class BlockchainHttp extends Http implements BlockchainRepository {
                 .as(BodyCodec.jsonObject())
                 .rxSend()
                 .toObservable()
-                .map(HttpResponse::body)
+                .map(Http::mapJsonObjectOrError)
                 .map(json -> objectMapper.readValue(json.toString(), HeightDTO.class))
                 .map(blockchainHeight -> blockchainHeight.getHeight().extractIntArray());
     }
@@ -118,7 +118,7 @@ public class BlockchainHttp extends Http implements BlockchainRepository {
                 .as(BodyCodec.jsonObject())
                 .rxSend()
                 .toObservable()
-                .map(HttpResponse::body)
+                .map(Http::mapJsonObjectOrError)
                 .map(json -> objectMapper.readValue(json.toString(), BlockchainScoreDTO.class))
                 .map(blockchainScoreDTO -> blockchainScoreDTO.extractIntArray());
     }
@@ -130,7 +130,7 @@ public class BlockchainHttp extends Http implements BlockchainRepository {
                 .as(BodyCodec.jsonObject())
                 .rxSend()
                 .toObservable()
-                .map(HttpResponse::body)
+                .map(Http::mapJsonObjectOrError)
                 .map(json -> objectMapper.readValue(json.toString(), BlockchainStorageInfoDTO.class))
                 .map(blockchainStorageInfoDTO -> new BlockchainStorageInfo(blockchainStorageInfoDTO.getNumAccounts(),
                         blockchainStorageInfoDTO.getNumBlocks(),

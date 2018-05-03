@@ -59,7 +59,7 @@ public class MosaicHttp extends Http implements MosaicRepository {
                         .as(BodyCodec.jsonObject())
                         .rxSend()
                         .toObservable()
-                        .map(HttpResponse::body)
+                        .map(Http::mapJsonObjectOrError)
                         .map(json -> objectMapper.readValue(json.toString(), MosaicInfoDTO.class))
                         .map(mosaicInfoDTO -> new MosaicInfo(mosaicInfoDTO.getMeta().isActive(),
                                 mosaicInfoDTO.getMeta().getIndex(),
@@ -84,7 +84,7 @@ public class MosaicHttp extends Http implements MosaicRepository {
                         .as(BodyCodec.jsonArray())
                         .rxSendJson(requestBody)
                         .toObservable()
-                        .map(HttpResponse::body)
+                        .map(Http::mapJsonArrayOrError)
                         .map(json -> objectMapper.<List<MosaicInfoDTO>>readValue(json.toString(), new TypeReference<List<MosaicInfoDTO>>() {
                         }))
                         .flatMapIterable(item -> item)
@@ -120,7 +120,7 @@ public class MosaicHttp extends Http implements MosaicRepository {
                         .as(BodyCodec.jsonArray())
                         .rxSend()
                         .toObservable()
-                        .map(HttpResponse::body)
+                        .map(Http::mapJsonArrayOrError)
                         .map(json -> objectMapper.<List<MosaicInfoDTO>>readValue(json.toString(), new TypeReference<List<MosaicInfoDTO>>() {
                         }))
                         .flatMapIterable(item -> item)
@@ -147,7 +147,7 @@ public class MosaicHttp extends Http implements MosaicRepository {
                 .as(BodyCodec.jsonArray())
                 .rxSendJson(requestBody)
                 .toObservable()
-                .map(HttpResponse::body)
+                .map(Http::mapJsonArrayOrError)
                 .map(json -> objectMapper.<List<MosaicNameDTO>>readValue(json.toString(), new TypeReference<List<MosaicNameDTO>>() {
                 }))
                 .flatMapIterable(item -> item)

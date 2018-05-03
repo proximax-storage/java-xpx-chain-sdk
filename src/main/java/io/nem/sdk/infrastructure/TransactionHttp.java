@@ -46,9 +46,10 @@ public class TransactionHttp extends Http implements TransactionRepository {
     public Observable<Transaction> getTransaction(String transactionHash) {
         return this.client
                 .getAbs(this.url + transactionHash)
+                .as(BodyCodec.jsonObject())
                 .rxSend()
                 .toObservable()
-                .map(HttpResponse::body)
+                .map(Http::mapJsonObjectOrError)
                 .map(json -> new JsonObject(json.toString()))
                 .map(new TransactionMapping());
     }
@@ -62,7 +63,7 @@ public class TransactionHttp extends Http implements TransactionRepository {
                 .as(BodyCodec.jsonArray())
                 .rxSendJson(requestBody)
                 .toObservable()
-                .map(HttpResponse::body)
+                .map(Http::mapJsonArrayOrError)
                 .map(json -> new JsonArray(json.toString()).stream().map(s -> (JsonObject) s).collect(Collectors.toList()))
                 .flatMapIterable(item -> item)
                 .map(new TransactionMapping())
@@ -75,9 +76,10 @@ public class TransactionHttp extends Http implements TransactionRepository {
     public Observable<TransactionStatus> getTransactionStatus(String transactionHash) {
         return this.client
                 .getAbs(this.url + transactionHash + "/status")
+                .as(BodyCodec.jsonObject())
                 .rxSend()
                 .toObservable()
-                .map(HttpResponse::body)
+                .map(Http::mapJsonObjectOrError)
                 .map(json -> objectMapper.readValue(json.toString(), TransactionStatusDTO.class))
                 .map(transactionStatusDTO -> new TransactionStatus(transactionStatusDTO.getGroup(),
                         transactionStatusDTO.getStatus(),
@@ -95,7 +97,7 @@ public class TransactionHttp extends Http implements TransactionRepository {
                 .as(BodyCodec.jsonArray())
                 .rxSendJson(requestBody)
                 .toObservable()
-                .map(HttpResponse::body)
+                .map(Http::mapJsonArrayOrError)
                 .map(json -> objectMapper.<List<TransactionStatusDTO>>readValue(json.toString(), new TypeReference<List<TransactionStatusDTO>>() {
                 }))
                 .flatMapIterable(item -> item)
@@ -117,7 +119,7 @@ public class TransactionHttp extends Http implements TransactionRepository {
                 .as(BodyCodec.jsonObject())
                 .rxSendJson(requestBody)
                 .toObservable()
-                .map(HttpResponse::body)
+                .map(Http::mapJsonObjectOrError)
                 .map(json -> new TransactionAnnounceResponse(new JsonObject(json.toString()).getString("message")));
     }
 
@@ -130,7 +132,7 @@ public class TransactionHttp extends Http implements TransactionRepository {
                 .as(BodyCodec.jsonObject())
                 .rxSendJson(requestBody)
                 .toObservable()
-                .map(HttpResponse::body)
+                .map(Http::mapJsonObjectOrError)
                 .map(json -> new TransactionAnnounceResponse(new JsonObject(json.toString()).getString("message")));
     }
 
@@ -145,7 +147,7 @@ public class TransactionHttp extends Http implements TransactionRepository {
                 .as(BodyCodec.jsonObject())
                 .rxSendJson(requestBody)
                 .toObservable()
-                .map(HttpResponse::body)
+                .map(Http::mapJsonObjectOrError)
                 .map(json -> new TransactionAnnounceResponse(new JsonObject(json.toString()).getString("message")));
     }
 }

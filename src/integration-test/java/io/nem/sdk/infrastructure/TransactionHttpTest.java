@@ -20,6 +20,8 @@ package io.nem.sdk.infrastructure;
 import io.nem.sdk.model.transaction.Transaction;
 import io.nem.sdk.model.transaction.TransactionStatus;
 import io.nem.sdk.model.transaction.TransactionType;
+import io.reactivex.observers.TestObserver;
+import io.reactivex.schedulers.Schedulers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -28,6 +30,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -81,5 +84,29 @@ public class TransactionHttpTest extends BaseTest {
                 .get();
 
         assertEquals(transactionHash, transactionStatuses.get(0).getHash());
+    }
+
+
+    @Test
+    public void throwExceptionWhenTransactionStatusOfATransactionDoesNotExists() {
+        TestObserver<TransactionStatus> testObserver = new TestObserver<>();
+        transactionHttp
+                .getTransactionStatus(transactionHash)
+                .subscribeOn(Schedulers.single())
+                .test()
+                .awaitDone(2, TimeUnit.SECONDS)
+                .assertFailure(RuntimeException.class);
+    }
+
+
+    @Test
+    public void throwExceptionWhenTransactionDoesNotExists() {
+        TestObserver<Transaction> testObserver = new TestObserver<>();
+        transactionHttp
+                .getTransaction(transactionHash)
+                .subscribeOn(Schedulers.single())
+                .test()
+                .awaitDone(2, TimeUnit.SECONDS)
+                .assertFailure(RuntimeException.class);
     }
 }
