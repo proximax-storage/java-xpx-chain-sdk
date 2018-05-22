@@ -59,7 +59,7 @@ public class AccountHttp extends Http implements AccountRepository {
                 .as(BodyCodec.jsonObject())
                 .rxSend()
                 .toObservable()
-                .map(HttpResponse::body)
+                .map(Http::mapJsonObjectOrError)
                 .map(json -> objectMapper.readValue(json.toString(), AccountInfoDTO.class))
                 .map(AccountInfoDTO::getAccount)
                 .map(accountDTO -> new AccountInfo(Address.createFromRawAddress(accountDTO.getAddressEncoded()),
@@ -85,7 +85,7 @@ public class AccountHttp extends Http implements AccountRepository {
                         .as(BodyCodec.jsonArray())
                         .rxSendJson(requestBody)
                         .toObservable()
-                        .map(HttpResponse::body)
+                        .map(Http::mapJsonArrayOrError)
                         .map(json -> objectMapper.<List<AccountInfoDTO>>readValue(json.toString(), new TypeReference<List<AccountInfoDTO>>() {
                         }))
                         .flatMapIterable(item -> item)
@@ -110,9 +110,10 @@ public class AccountHttp extends Http implements AccountRepository {
         return networkTypeResolve
                 .flatMap(networkType -> this.client
                         .getAbs(this.url + address.plain() + "/multisig")
+                        .as(BodyCodec.jsonObject())
                         .rxSend()
                         .toObservable()
-                        .map(HttpResponse::body)
+                        .map(Http::mapJsonObjectOrError)
                         .map(json -> objectMapper.readValue(json.toString(), MultisigAccountInfoDTO.class))
                         .map(MultisigAccountInfoDTO::getMultisig)
                         .map(transfromMultisigAccountInfoDTO(networkType)));
@@ -124,9 +125,10 @@ public class AccountHttp extends Http implements AccountRepository {
         return networkTypeResolve
                 .flatMap(networkType -> this.client
                         .getAbs(this.url + address.plain() + "/multisig/graph")
+                        .as(BodyCodec.jsonArray())
                         .rxSend()
                         .toObservable()
-                        .map(HttpResponse::body)
+                        .map(Http::mapJsonArrayOrError)
                         .map(json -> objectMapper.<List<MultisigAccountGraphInfoDTO>>readValue(json.toString(), new TypeReference<List<MultisigAccountGraphInfoDTO>>() {
                         }))
                         .map(multisigAccountGraphInfoDTOList -> {
@@ -225,7 +227,7 @@ public class AccountHttp extends Http implements AccountRepository {
                 .as(BodyCodec.jsonArray())
                 .rxSend()
                 .toObservable()
-                .map(HttpResponse::body)
+                .map(Http::mapJsonArrayOrError)
                 .map(json -> new JsonArray(json.toString()).stream().map(s -> (JsonObject) s).collect(Collectors.toList()))
                 .flatMapIterable(item -> item)
                 .map(new TransactionMapping())

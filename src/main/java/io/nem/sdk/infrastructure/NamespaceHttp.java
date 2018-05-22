@@ -60,7 +60,7 @@ public class NamespaceHttp extends Http implements NamespaceRepository {
                         .as(BodyCodec.jsonObject())
                         .rxSend()
                         .toObservable()
-                        .map(HttpResponse::body)
+                        .map(Http::mapJsonObjectOrError)
                         .map(json -> objectMapper.readValue(json.toString(), NamespaceInfoDTO.class))
                         .map(namespaceInfoDTO -> new NamespaceInfo(namespaceInfoDTO.getMeta().isActive(),
                                 namespaceInfoDTO.getMeta().getIndex(),
@@ -93,7 +93,7 @@ public class NamespaceHttp extends Http implements NamespaceRepository {
                         .as(BodyCodec.jsonArray())
                         .rxSend()
                         .toObservable()
-                        .map(HttpResponse::body)
+                        .map(Http::mapJsonArrayOrError)
                         .map(json -> objectMapper.<List<NamespaceInfoDTO>>readValue(json.toString(), new TypeReference<List<NamespaceInfoDTO>>() {
                         }))
                         .flatMapIterable(item -> item)
@@ -132,7 +132,7 @@ public class NamespaceHttp extends Http implements NamespaceRepository {
                         .as(BodyCodec.jsonArray())
                         .rxSendJson(requestBody)
                         .toObservable()
-                        .map(HttpResponse::body)
+                        .map(Http::mapJsonArrayOrError)
                         .map(json -> objectMapper.<List<NamespaceInfoDTO>>readValue(json.toString(), new TypeReference<List<NamespaceInfoDTO>>() {
                         }))
                         .flatMapIterable(item -> item)
@@ -160,7 +160,7 @@ public class NamespaceHttp extends Http implements NamespaceRepository {
                 .as(BodyCodec.jsonArray())
                 .rxSendJson(requestBody)
                 .toObservable()
-                .map(HttpResponse::body)
+                .map(Http::mapJsonArrayOrError)
                 .map(json -> objectMapper.<List<NamespaceNameDTO>>readValue(json.toString(), new TypeReference<List<NamespaceNameDTO>>() {
                 }))
                 .flatMapIterable(item -> item)

@@ -16,9 +16,12 @@
 
 package io.nem.sdk.infrastructure;
 
+import io.nem.sdk.model.mosaic.MosaicId;
 import io.nem.sdk.model.mosaic.MosaicInfo;
 import io.nem.sdk.model.mosaic.MosaicName;
 import io.nem.sdk.model.mosaic.XEM;
+import io.reactivex.observers.TestObserver;
+import io.reactivex.schedulers.Schedulers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -28,6 +31,7 @@ import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -83,6 +87,17 @@ class MosaicHttpTest extends BaseTest {
 
         assertEquals("xem", mosaicNames.get(0).getName());
         assertEquals(XEM.MOSAICID, mosaicNames.get(0).getMosaicId());
+    }
+
+    @Test
+    void throwExceptionWhenMosaicDoesNotExists() {
+        TestObserver<MosaicInfo> testObserver = new TestObserver<>();
+        mosaicHttp
+                .getMosaic(new MosaicId("nem:nem"))
+                .subscribeOn(Schedulers.single())
+                .test()
+                .awaitDone(2, TimeUnit.SECONDS)
+                .assertFailure(RuntimeException.class);
     }
 
 }

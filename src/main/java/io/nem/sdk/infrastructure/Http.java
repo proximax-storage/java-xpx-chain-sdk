@@ -20,7 +20,10 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.nem.sdk.model.blockchain.NetworkType;
 import io.reactivex.Observable;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
 import io.vertx.reactivex.core.Vertx;
+import io.vertx.reactivex.ext.web.client.HttpResponse;
 import io.vertx.reactivex.ext.web.client.WebClient;
 
 import java.net.MalformedURLException;
@@ -57,5 +60,19 @@ public class Http {
             networkTypeResolve = Observable.just(networkType);
         }
         return networkTypeResolve;
+    }
+
+    static JsonObject mapJsonObjectOrError(final HttpResponse<JsonObject> response) {
+        if (response.statusCode() < 200 || response.statusCode() > 299) {
+            throw new RuntimeException(response.statusMessage());
+        }
+        return response.body();
+    }
+
+    static JsonArray mapJsonArrayOrError(final HttpResponse<JsonArray> response) {
+        if (response.statusCode() < 200 || response.statusCode() > 299) {
+            throw new RuntimeException(response.statusMessage());
+        }
+        return response.body();
     }
 }

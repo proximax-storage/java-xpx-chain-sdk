@@ -18,8 +18,11 @@ package io.nem.sdk.infrastructure;
 
 import io.nem.sdk.model.account.Address;
 import io.nem.sdk.model.mosaic.XEM;
+import io.nem.sdk.model.namespace.NamespaceId;
 import io.nem.sdk.model.namespace.NamespaceInfo;
 import io.nem.sdk.model.namespace.NamespaceName;
+import io.reactivex.observers.TestObserver;
+import io.reactivex.schedulers.Schedulers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -29,6 +32,7 @@ import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -90,5 +94,16 @@ class NamespaceHttpTest extends BaseTest {
         assertEquals(1, namespaceNames.size());
         assertEquals("nem", namespaceNames.get(0).getName());
         assertEquals(XEM.NAMESPACEID, namespaceNames.get(0).getNamespaceId());
+    }
+
+    @Test
+    void throwExceptionWhenNamespaceDoesNotExists() {
+        TestObserver<NamespaceInfo> testObserver = new TestObserver<>();
+        namespaceHttp
+                .getNamespace(new NamespaceId("nonregisterednamespace"))
+                .subscribeOn(Schedulers.single())
+                .test()
+                .awaitDone(2, TimeUnit.SECONDS)
+                .assertFailure(RuntimeException.class);
     }
 }
