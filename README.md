@@ -20,17 +20,17 @@ The official nem2-sdk for Java, Kotlin and Scala to work with the NEM2 (a.k.a Ca
 <dependency>
     <groupId>io.nem</groupId>
     <artifactId>sdk</artifactId>
-    <version>0.8.10</version>
+    <version>0.9.0</version>
 </dependency>
 ```
 
 ### Gradle
 
-```compile 'io.nem:sdk:0.8.10```
+```compile 'io.nem:sdk:0.9.0```
 
 ### SBT
 
-```libraryDependencies += "io.nem" % "sdk" % "0.8.10"```
+```libraryDependencies += "io.nem" % "sdk" % "0.9.0"```
 
 ## Documentation and Getting Started
 
