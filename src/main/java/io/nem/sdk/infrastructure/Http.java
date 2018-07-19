@@ -42,6 +42,7 @@ public class Http {
         final Vertx vertx = Vertx.vertx();
         this.client = WebClient.create(vertx);
         objectMapper.configure(DeserializationFeature.USE_LONG_FOR_INTS, true);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         this.networkHttp = networkHttp;
     }
 
