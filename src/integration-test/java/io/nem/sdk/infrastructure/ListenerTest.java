@@ -188,7 +188,7 @@ class ListenerTest extends BaseTest {
                 new Deadline(2, HOURS),
                 new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST),
                 Arrays.asList(),
-                PlainMessage.create("test-message"),
+                PlainMessage.create("test-message".getBytes()),
                 NetworkType.MIJIN_TEST
         );
 
@@ -202,7 +202,7 @@ class ListenerTest extends BaseTest {
                 new Deadline(2, HOURS),
                 new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST),
                 Arrays.asList(XEM.createRelative(new BigInteger("100000000000"))),
-                PlainMessage.create("test-message"),
+                PlainMessage.create("test-message".getBytes()),
                 NetworkType.MIJIN_TEST
         );
 
@@ -216,7 +216,7 @@ class ListenerTest extends BaseTest {
                 new Deadline(2, HOURS),
                 new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST),
                 Arrays.asList(),
-                PlainMessage.create("test-message"),
+                PlainMessage.create("test-message".getBytes()),
                 NetworkType.MIJIN_TEST
         );
 

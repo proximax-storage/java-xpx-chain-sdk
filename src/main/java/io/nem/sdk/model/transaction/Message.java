@@ -16,6 +16,8 @@
 
 package io.nem.sdk.model.transaction;
 
+import io.nem.core.crypto.KeyPair;
+
 /**
  * An abstract message class that serves as the base class of all message types.
  *
@@ -23,11 +25,9 @@ package io.nem.sdk.model.transaction;
  */
 public abstract class Message {
     private final int type;
-    private final String payload;
 
-    public Message(int type, String payload) {
+    public Message(int type) {
         this.type = type;
-        this.payload = payload;
     }
 
     /**
@@ -40,11 +40,18 @@ public abstract class Message {
     }
 
     /**
-     * Returns message payload.
+     * Returns the encoded payload
      *
-     * @return String
+     * @return the encoded payload
      */
-    public String getPayload() {
-        return payload;
-    }
+    public abstract byte[] getEncodedPayload();
+
+    /**
+     * Returns the decoded payload
+     *
+     * @param pairWithPrivateKey the key pair with private key
+     * @param otherPair          the key pair of the other party
+     * @return the decoded payload
+     */
+    public abstract byte[] getDecodedPayload(KeyPair pairWithPrivateKey, KeyPair otherPair);
 }
