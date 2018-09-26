@@ -309,7 +309,7 @@ public class TransactionMappingTest {
 
         try {
             assertEquals(new String(Hex.decode(transactionDTO.getJsonObject("transaction").getJsonObject("message").getString("payload")), "UTF-8"),
-                    transaction.getMessage().getPayload());
+                    new String(transaction.getMessage().getEncodedPayload(), "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

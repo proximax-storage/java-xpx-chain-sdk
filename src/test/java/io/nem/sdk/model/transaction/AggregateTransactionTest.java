@@ -99,7 +99,7 @@ public class AggregateTransactionTest {
                 new FakeDeadline(),
                 new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST),
                 Arrays.asList(),
-                new PlainMessage("test-message"),
+                new PlainMessage("test-message".getBytes()),
                 NetworkType.MIJIN_TEST
         );
 

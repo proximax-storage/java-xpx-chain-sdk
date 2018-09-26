@@ -16,6 +16,8 @@
 
 package io.nem.sdk.model.transaction;
 
+import io.nem.core.crypto.KeyPair;
+
 /**
  * The plain message model defines a plain string. When sending it to the network we transform the payload to hex-string.
  *
@@ -26,24 +28,49 @@ public class PlainMessage extends Message {
     /**
      * Plain message containing an empty string.
      */
-    public static PlainMessage Empty = new PlainMessage("");
+    public static PlainMessage Empty = new PlainMessage("".getBytes());
+
+    private final byte[] payload;
 
     /**
      * Constructor
      *
-     * @param payload plain message payload
+     * @param payload plain message payload in byte array
      */
-    public PlainMessage(String payload) {
-        super(0, payload);
+    public PlainMessage(byte[] payload) {
+        super(MessageTypes.PLAIN.getType());
+        this.payload = payload;
     }
 
     /**
      * Create a plain message object.
      *
-     * @param payload plain message payload
+     * @param payload plain message payload in byte array
      * @return instance of PlainMessage
      */
-    public static PlainMessage create(String payload) {
+    public static PlainMessage create(byte[] payload) {
         return new PlainMessage(payload);
+    }
+
+    /**
+     * Returns the payload
+     *
+     * @return the payload
+     */
+    @Override
+    public byte[] getEncodedPayload() {
+        return payload;
+    }
+
+    /**
+     * Returns the payload (params are not used)
+     *
+     * @param pairWithPrivateKey the key pair with private key
+     * @param otherPair          the key pair of the other party
+     * @return the payload
+     */
+    @Override
+    public byte[] getDecodedPayload(KeyPair pairWithPrivateKey, KeyPair otherPair) {
+        return payload;
     }
 }

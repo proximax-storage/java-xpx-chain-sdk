@@ -106,7 +106,7 @@ public class TransferTransaction extends Transaction {
         int version = (int) Long.parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
 
         // Create Message
-        byte[] bytePayload = message.getPayload().getBytes(StandardCharsets.UTF_8);
+        byte[] bytePayload = message.getEncodedPayload();
         int payload = MessageBuffer.createPayloadVector(builder, bytePayload);
         MessageBuffer.startMessageBuffer(builder);
         MessageBuffer.addType(builder, message.getType());

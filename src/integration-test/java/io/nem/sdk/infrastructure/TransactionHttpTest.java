@@ -37,7 +37,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TransactionHttpTest extends BaseTest {
     private TransactionHttp transactionHttp;
-    private final String transactionHash = "EE5B39DBDA00BA39D06B9E67AE5B43162366C862D9B8F656F7E7068D327377BE";
+//    private final String transactionHash = "EE5B39DBDA00BA39D06B9E67AE5B43162366C862D9B8F656F7E7068D327377BE";
+    private static final String TRANSACTION_HASH = "CFF075FD2A496D474775ACCDE4877901023ECE8466590A7B48C5D3E8F098F106";
+    private static final String TRANSACTION_HASH_NOT_EXISTING = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
     @Before
     public void setup() throws IOException {
@@ -47,43 +49,43 @@ public class TransactionHttpTest extends BaseTest {
     @Test
     public void getTransaction() throws ExecutionException, InterruptedException {
         Transaction transaction = transactionHttp
-                .getTransaction(transactionHash)
+                .getTransaction(TRANSACTION_HASH)
                 .toFuture()
                 .get();
 
         assertEquals(TransactionType.TRANSFER.getValue(), transaction.getType().getValue());
-        assertEquals(transactionHash, transaction.getTransactionInfo().get().getHash().get());
+        assertEquals(TRANSACTION_HASH, transaction.getTransactionInfo().get().getHash().get());
     }
 
     @Test
     public void getTransactions() throws ExecutionException, InterruptedException {
         List<Transaction> transaction = transactionHttp
-                .getTransactions(Collections.singletonList(transactionHash))
+                .getTransactions(Collections.singletonList(TRANSACTION_HASH))
                 .toFuture()
                 .get();
 
         assertEquals(TransactionType.TRANSFER.getValue(), transaction.get(0).getType().getValue());
-        assertEquals(transactionHash, transaction.get(0).getTransactionInfo().get().getHash().get());
+        assertEquals(TRANSACTION_HASH, transaction.get(0).getTransactionInfo().get().getHash().get());
     }
 
     @Test
     public void getTransactionStatus() throws ExecutionException, InterruptedException {
         TransactionStatus transactionStatus = transactionHttp
-                .getTransactionStatus(transactionHash)
+                .getTransactionStatus(TRANSACTION_HASH)
                 .toFuture()
                 .get();
 
-        assertEquals(transactionHash, transactionStatus.getHash());
+        assertEquals(TRANSACTION_HASH, transactionStatus.getHash());
     }
 
     @Test
     public void getTransactionsStatuses() throws ExecutionException, InterruptedException {
         List<TransactionStatus> transactionStatuses = transactionHttp
-                .getTransactionStatuses(Collections.singletonList(transactionHash))
+                .getTransactionStatuses(Collections.singletonList(TRANSACTION_HASH))
                 .toFuture()
                 .get();
 
-        assertEquals(transactionHash, transactionStatuses.get(0).getHash());
+        assertEquals(TRANSACTION_HASH, transactionStatuses.get(0).getHash());
     }
 
 
@@ -91,7 +93,7 @@ public class TransactionHttpTest extends BaseTest {
     public void throwExceptionWhenTransactionStatusOfATransactionDoesNotExists() {
         TestObserver<TransactionStatus> testObserver = new TestObserver<>();
         transactionHttp
-                .getTransactionStatus(transactionHash)
+                .getTransactionStatus(TRANSACTION_HASH_NOT_EXISTING)
                 .subscribeOn(Schedulers.single())
                 .test()
                 .awaitDone(2, TimeUnit.SECONDS)
@@ -103,7 +105,7 @@ public class TransactionHttpTest extends BaseTest {
     public void throwExceptionWhenTransactionDoesNotExists() {
         TestObserver<Transaction> testObserver = new TestObserver<>();
         transactionHttp
-                .getTransaction(transactionHash)
+                .getTransaction(TRANSACTION_HASH_NOT_EXISTING)
                 .subscribeOn(Schedulers.single())
                 .test()
                 .awaitDone(2, TimeUnit.SECONDS)
