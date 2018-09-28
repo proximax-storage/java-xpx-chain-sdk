@@ -73,7 +73,7 @@ class E2ETest extends BaseTest {
                 Collections.singletonList(
                         XEM.createAbsolute(BigInteger.valueOf(1))
                 ),
-                new PlainMessage("message"),
+                new PlainMessage("message".getBytes()),
                 NetworkType.MIJIN_TEST
         );
 
@@ -91,13 +91,13 @@ class E2ETest extends BaseTest {
                 Collections.singletonList(
                         XEM.createAbsolute(BigInteger.valueOf(1))
                 ),
-                new PlainMessage("messageloooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo" +
+                new PlainMessage(("messageloooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo" +
                         "ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo" +
                         "ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo" +
                         "ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo" +
                         "ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo" +
                         "ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo" +
-                        "oooooooong"), // Use long message to test if size of inner transaction is calculated correctly
+                        "oooooooong").getBytes()), // Use long message to test if size of inner transaction is calculated correctly
                 NetworkType.MIJIN_TEST
         );
 
@@ -333,7 +333,7 @@ class E2ETest extends BaseTest {
                 Collections.singletonList(
                         XEM.createAbsolute(BigInteger.valueOf(1))
                 ),
-                PlainMessage.create("test-message"),
+                PlainMessage.create("test-message".getBytes()),
                 NetworkType.MIJIN_TEST
         );
 

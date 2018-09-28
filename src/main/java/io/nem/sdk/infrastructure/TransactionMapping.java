@@ -25,13 +25,32 @@ import io.nem.sdk.model.mosaic.MosaicProperties;
 import io.nem.sdk.model.mosaic.MosaicSupplyType;
 import io.nem.sdk.model.namespace.NamespaceId;
 import io.nem.sdk.model.namespace.NamespaceType;
-import io.nem.sdk.model.transaction.*;
+import io.nem.sdk.model.transaction.AggregateTransaction;
+import io.nem.sdk.model.transaction.AggregateTransactionCosignature;
+import io.nem.sdk.model.transaction.Deadline;
+import io.nem.sdk.model.transaction.HashType;
+import io.nem.sdk.model.transaction.LockFundsTransaction;
+import io.nem.sdk.model.transaction.Message;
+import io.nem.sdk.model.transaction.MessageFactory;
+import io.nem.sdk.model.transaction.ModifyMultisigAccountTransaction;
+import io.nem.sdk.model.transaction.MosaicDefinitionTransaction;
+import io.nem.sdk.model.transaction.MosaicSupplyChangeTransaction;
+import io.nem.sdk.model.transaction.MultisigCosignatoryModification;
+import io.nem.sdk.model.transaction.MultisigCosignatoryModificationType;
+import io.nem.sdk.model.transaction.PlainMessage;
+import io.nem.sdk.model.transaction.RegisterNamespaceTransaction;
+import io.nem.sdk.model.transaction.SecretLockTransaction;
+import io.nem.sdk.model.transaction.SecretProofTransaction;
+import io.nem.sdk.model.transaction.SignedTransaction;
+import io.nem.sdk.model.transaction.Transaction;
+import io.nem.sdk.model.transaction.TransactionInfo;
+import io.nem.sdk.model.transaction.TransactionType;
+import io.nem.sdk.model.transaction.TransferTransaction;
 import io.reactivex.functions.Function;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import org.bouncycastle.util.encoders.Hex;
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -127,11 +146,10 @@ class TransferTransactionMapping extends TransactionMapping {
 
         Message message = PlainMessage.Empty;
         if (transaction.getJsonObject("message") != null) {
-            try {
-                message = new PlainMessage(new String(Hex.decode(transaction.getJsonObject("message").getString("payload")), "UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                message = new PlainMessage(transaction.getJsonObject("message").getString("payload"));
-            }
+            final JsonObject messageObj = transaction.getJsonObject("message");
+            int messageType = messageObj.getInteger("type");
+            String messagePayload = messageObj.getString("payload");
+            message = MessageFactory.createMessage(messageType, Hex.decode(messagePayload));
         }
 
         return new TransferTransaction(
