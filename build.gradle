@@ -37,8 +37,8 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 apply plugin: 'org.junit.platform.gradle.plugin'
 
-group 'io.nem'
-archivesBaseName = "sdk"
+group 'com.github.proximax-storage'
+archivesBaseName = "proximax-nem2-java-sdk"
 version '0.9.1-proximax'
 
 sourceCompatibility = 1.8
@@ -157,57 +157,89 @@ signing {
 }
 
 uploadArchives {
-    def username = project.hasProperty("ossrhUsername") ? project.ossrhUsername : ""
-    def password = project.hasProperty("ossrhPassword") ? project.ossrhPassword : ""
+    def username = project.hasProperty("nexusUsername") ? project.nexusUsername : ""
+    def password = project.hasProperty("nexusPassword") ? project.nexusPassword : ""
 
     repositories {
         mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+//            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+            repository(url: "https://nexus.internal.proximax.io/repository/maven-releases/") {
                 authentication(userName: username, password: password)
             }
 
-            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+            snapshotRepository(url: "https://nexus.internal.proximax.io/repository/maven-snapshots/") {
                 authentication(userName: username, password: password)
             }
 
             pom.project {
-                name "nem2-sdk"
+                name "proximax-nem2-java-sdk"
                 packaging 'jar'
                 // optionally artifactId can be defined here
-                description 'nem2 official sdk'
+                description 'proximax nem2 sdk'
                 url 'https://github.com/nemtech/nem2-sdk-java'
 
                 scm {
-                    connection 'scm:git:https://github.com/nemtech/nem2-sdk-java.git'
-                    developerConnection 'scm:svn:https://github.com/nemtech/nem2-sdk-java'
-                    url 'https://github.com/nemtech/nem2-sdk-java'
-                }
-
-                licenses {
-                    license {
-                        name 'The Apache License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id 'aleix_nem'
-                        name 'Aleix'
-                        email 'aleix@nemeurope.eu'
-                    }
-                    developer {
-                        id 'guillem_nem'
-                        name 'Guillem'
-                        email 'guillem@nemeurope.eu'
-                    }
+                    connection 'scm:git:git@github.com:proximax-storage/proximax-nem2-java-sdk.git'
+                    developerConnection 'scm:svn:git@github.com:proximax-storage/proximax-nem2-java-sdk.git'
+                    url 'git@github.com:proximax-storage/proximax-nem2-java-sdk.git'
                 }
             }
         }
     }
 }
+//uploadArchives {
+//    def username = project.hasProperty("ossrhUsername") ? project.ossrhUsername : ""
+//    def password = project.hasProperty("ossrhPassword") ? project.ossrhPassword : ""
+//
+//    repositories {
+//        mavenDeployer {
+//            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+//
+//            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+//                authentication(userName: username, password: password)
+//            }
+//
+//            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+//                authentication(userName: username, password: password)
+//            }
+//
+//            pom.project {
+//                name "nem2-sdk"
+//                packaging 'jar'
+//                // optionally artifactId can be defined here
+//                description 'nem2 official sdk'
+//                url 'https://github.com/nemtech/nem2-sdk-java'
+//
+//                scm {
+//                    connection 'scm:git:https://github.com/nemtech/nem2-sdk-java.git'
+//                    developerConnection 'scm:svn:https://github.com/nemtech/nem2-sdk-java'
+//                    url 'https://github.com/nemtech/nem2-sdk-java'
+//                }
+//
+//                licenses {
+//                    license {
+//                        name 'The Apache License, Version 2.0'
+//                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+//                    }
+//                }
+//
+//                developers {
+//                    developer {
+//                        id 'aleix_nem'
+//                        name 'Aleix'
+//                        email 'aleix@nemeurope.eu'
+//                    }
+//                    developer {
+//                        id 'guillem_nem'
+//                        name 'Guillem'
+//                        email 'guillem@nemeurope.eu'
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
 
 junitPlatform {
 
