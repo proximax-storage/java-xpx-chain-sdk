@@ -25,19 +25,27 @@ public enum NetworkType {
     /**
      * Main net network
      */
-    MAIN_NET(104),
+    MAIN_NET(0xb8),
     /**
      * Test net network
      */
-    TEST_NET(152),
+    TEST_NET(0xa8),
+    /**
+     * Private network
+     */
+    PRIVATE(0xc8),
+    /**
+     * Private test network
+     */
+    PRIVATE_TEST(0xb0),
     /**
      * Mijin net network
      */
-    MIJIN(96),
+    MIJIN(0x60),
     /**
      * Mijin test net network
      */
-    MIJIN_TEST(144);
+    MIJIN_TEST(0x90);
 
     private final int value;
 
@@ -52,13 +60,17 @@ public enum NetworkType {
      */
     public static NetworkType rawValueOf(int value) {
         switch (value) {
-            case 104:
+            case 0xb8:
                 return NetworkType.MAIN_NET;
-            case 152:
+            case 0xa8:
                 return NetworkType.TEST_NET;
-            case 96:
+            case 0xc8:
+                return NetworkType.PRIVATE;
+            case 0xb0:
+                return NetworkType.PRIVATE_TEST;
+            case 0x60:
                 return NetworkType.MIJIN;
-            case 144:
+            case 0x90:
                 return NetworkType.MIJIN_TEST;
             default:
                 throw new IllegalArgumentException(value + " is not a valid value");
