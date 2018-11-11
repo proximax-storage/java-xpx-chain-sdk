@@ -39,7 +39,7 @@ apply plugin: 'org.junit.platform.gradle.plugin'
 
 group 'com.github.proximax-storage'
 archivesBaseName = "proximax-nem2-java-sdk"
-version '0.9.1-proximax'
+version '0.9.3-proximax'
 
 sourceCompatibility = 1.8
 
