@@ -19,7 +19,6 @@ package io.nem.sdk.infrastructure;
 
 import io.nem.sdk.model.blockchain.NetworkType;
 import io.reactivex.Observable;
-import io.vertx.reactivex.ext.web.client.HttpResponse;
 import io.vertx.reactivex.ext.web.codec.BodyCodec;
 
 import java.net.MalformedURLException;
@@ -45,6 +44,16 @@ public class NetworkHttp extends Http implements NetworkRepository {
                 .map(name -> {
                     if (name.equalsIgnoreCase("mijinTest"))
                         return NetworkType.MIJIN_TEST;
+                    else if (name.equalsIgnoreCase("mijin"))
+                        return NetworkType.MIJIN;
+                    else if (name.equalsIgnoreCase("testnet"))
+                        return NetworkType.TEST_NET;
+                    else if (name.equalsIgnoreCase("mainnet"))
+                        return NetworkType.MAIN_NET;
+                    else if (name.equalsIgnoreCase("privateTest"))
+                        return NetworkType.PRIVATE_TEST;
+                    else if (name.equalsIgnoreCase("private"))
+                        return NetworkType.PRIVATE;
                     else {
                         throw new IllegalArgumentException("network " + name + " is not supported yet by the sdk");
                     }

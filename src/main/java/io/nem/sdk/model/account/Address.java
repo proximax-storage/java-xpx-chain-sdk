@@ -51,10 +51,14 @@ public class Address {
                 .toUpperCase();
         this.networkType = Objects.requireNonNull(networkType, "networkType must not be null");
         char addressNetwork = this.address.charAt(0);
-        if (networkType.equals(NetworkType.MAIN_NET) && addressNetwork != 'N') {
-            throw new IllegalArgumentException("MAIN_NET Address must start with N");
-        } else if (networkType.equals(NetworkType.TEST_NET) && addressNetwork != 'T') {
-            throw new IllegalArgumentException("TEST_NET Address must start with T");
+        if (networkType.equals(NetworkType.MAIN_NET) && addressNetwork != 'X') {
+            throw new IllegalArgumentException("MAIN_NET Address must start with X");
+        } else if (networkType.equals(NetworkType.TEST_NET) && addressNetwork != 'V') {
+            throw new IllegalArgumentException("TEST_NET Address must start with V");
+        } else if (networkType.equals(NetworkType.PRIVATE) && addressNetwork != 'Z') {
+            throw new IllegalArgumentException("PRIVATE Address must start with Z");
+        } else if (networkType.equals(NetworkType.PRIVATE_TEST) && addressNetwork != 'W') {
+            throw new IllegalArgumentException("PRIVATE_TEST Address must start with W");
         } else if (networkType.equals(NetworkType.MIJIN) && addressNetwork != 'M') {
             throw new IllegalArgumentException("MIJIN Address must start with M");
         } else if (networkType.equals(NetworkType.MIJIN_TEST) && addressNetwork != 'S') {
@@ -70,10 +74,14 @@ public class Address {
      */
     public static Address createFromRawAddress(String rawAddress) {
         char addressNetwork = rawAddress.charAt(0);
-        if (addressNetwork == 'N') {
+        if (addressNetwork == 'X') {
             return new Address(rawAddress, NetworkType.MAIN_NET);
-        } else if (addressNetwork == 'T') {
+        } else if (addressNetwork == 'V') {
             return new Address(rawAddress, NetworkType.TEST_NET);
+        } else if (addressNetwork == 'Z') {
+            return new Address(rawAddress, NetworkType.PRIVATE);
+        } else if (addressNetwork == 'W') {
+            return new Address(rawAddress, NetworkType.PRIVATE_TEST);
         } else if (addressNetwork == 'M') {
             return new Address(rawAddress, NetworkType.MIJIN);
         } else if (addressNetwork == 'S') {

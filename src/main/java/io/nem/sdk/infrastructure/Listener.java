@@ -22,7 +22,12 @@ import io.nem.sdk.model.account.Address;
 import io.nem.sdk.model.account.PublicAccount;
 import io.nem.sdk.model.blockchain.BlockInfo;
 import io.nem.sdk.model.blockchain.NetworkType;
-import io.nem.sdk.model.transaction.*;
+import io.nem.sdk.model.transaction.AggregateTransaction;
+import io.nem.sdk.model.transaction.CosignatureSignedTransaction;
+import io.nem.sdk.model.transaction.Deadline;
+import io.nem.sdk.model.transaction.Transaction;
+import io.nem.sdk.model.transaction.TransactionStatusError;
+import io.nem.sdk.model.transaction.TransferTransaction;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
@@ -90,11 +95,7 @@ public class Listener {
                     final JsonObject meta = message.getJsonObject("meta");
                     final JsonObject block = message.getJsonObject("block");
                     int rawNetworkType = (int) Long.parseLong(Integer.toHexString(block.getInteger("version")).substring(0, 2), 16);
-                    final NetworkType networkType;
-                    if (rawNetworkType == NetworkType.MIJIN_TEST.getValue()) networkType = NetworkType.MIJIN_TEST;
-                    else if (rawNetworkType == NetworkType.MIJIN.getValue()) networkType = NetworkType.MIJIN;
-                    else if (rawNetworkType == NetworkType.MAIN_NET.getValue()) networkType = NetworkType.MAIN_NET;
-                    else networkType = NetworkType.TEST_NET;
+                    final NetworkType networkType = NetworkType.rawValueOf(rawNetworkType);
 
                     final int version = (int) Long.parseLong(Integer.toHexString(block.getInteger("version")).substring(2, 4), 16);
                     this.messageSubject.onNext(new ListenerMessage(

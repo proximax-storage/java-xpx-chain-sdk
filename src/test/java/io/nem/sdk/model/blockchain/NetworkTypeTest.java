@@ -24,14 +24,26 @@ public class NetworkTypeTest {
 
     @Test
     void MAIN_NETIs0x68() {
-        assertTrue(0x68 == NetworkType.MAIN_NET.getValue());
-        assertTrue(104 == NetworkType.MAIN_NET.getValue());
+        assertTrue(0xb8 == NetworkType.MAIN_NET.getValue());
+        assertTrue(184 == NetworkType.MAIN_NET.getValue());
     }
 
     @Test
     void TEST_NETIs0x96() {
-        assertTrue(0x98 == NetworkType.TEST_NET.getValue());
-        assertTrue(152 == NetworkType.TEST_NET.getValue());
+        assertTrue(0xa8 == NetworkType.TEST_NET.getValue());
+        assertTrue(168 == NetworkType.TEST_NET.getValue());
+    }
+
+    @Test
+    void PRIVATEIs0xc8() {
+        assertTrue(0xc8 == NetworkType.PRIVATE.getValue());
+        assertTrue(200 == NetworkType.PRIVATE.getValue());
+    }
+
+    @Test
+    void PRIVATE_TESTIs0xb0() {
+        assertTrue(0xb0 == NetworkType.PRIVATE_TEST.getValue());
+        assertTrue(176 == NetworkType.PRIVATE_TEST.getValue());
     }
 
     @Test
