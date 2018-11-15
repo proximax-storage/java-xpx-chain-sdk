@@ -33,7 +33,10 @@ import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AggregateTransactionTest {
 
@@ -99,7 +102,7 @@ public class AggregateTransactionTest {
                 new FakeDeadline(),
                 new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST),
                 Arrays.asList(),
-                new PlainMessage("test-message".getBytes()),
+                new PlainMessage("test-message"),
                 NetworkType.MIJIN_TEST
         );
 

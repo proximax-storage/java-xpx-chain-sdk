@@ -22,6 +22,8 @@ import io.nem.core.crypto.KeyPair;
 import io.nem.core.crypto.PrivateKey;
 import io.nem.core.crypto.PublicKey;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * The secure message model defines an encoded payload.
  *
@@ -29,35 +31,22 @@ import io.nem.core.crypto.PublicKey;
  */
 public class SecureMessage extends Message {
 
-    private final byte[] encodedPayload;
-
     /**
      * Constructor
      */
-    private SecureMessage(byte[] encodedPayload) {
-        super(MessageTypes.SECURE.getType());
-        this.encodedPayload = encodedPayload;
+    private SecureMessage(byte[] encodedPayload, String payload) {
+        super(MessageTypes.SECURE.getType(), encodedPayload, payload);
     }
 
     public static SecureMessage createFromEncodedPayload(byte[] encodedPayload) {
-        return new SecureMessage(encodedPayload);
+        return new SecureMessage(encodedPayload, null);
     }
 
-    public static SecureMessage createFromDecodedPayload(PrivateKey senderPrivateKey, PublicKey recipientPublicKey, byte[] decodedPayload) {
+    public static SecureMessage create(PrivateKey senderPrivateKey, PublicKey recipientPublicKey, String payload) {
         final BlockCipher blockCipher = CryptoEngines.ed25519Engine().createBlockCipher(
                 new KeyPair(senderPrivateKey), new KeyPair(recipientPublicKey));
-        final byte[] encodedPayload = blockCipher.encrypt(decodedPayload);
-        return new SecureMessage(encodedPayload);
-    }
-
-    /**
-     * Returns the encoded payload
-     *
-     * @return the encoded payload
-     */
-    @Override
-    public byte[] getEncodedPayload() {
-        return encodedPayload;
+        final byte[] encodedPayload = blockCipher.encrypt(payload.getBytes(StandardCharsets.UTF_8));
+        return new SecureMessage(encodedPayload, payload);
     }
 
     /**
@@ -67,15 +56,18 @@ public class SecureMessage extends Message {
      * @param otherPair          the key pair of the other party
      * @return the decoded payload
      */
-    @Override
-    public byte[] getDecodedPayload(KeyPair pairWithPrivateKey, KeyPair otherPair) {
-        final BlockCipher blockCipher = CryptoEngines.ed25519Engine().createBlockCipher(
-                otherPair, pairWithPrivateKey);
-        final byte[] decodedPayload = blockCipher.decrypt(encodedPayload);
+    public String decrypt(KeyPair pairWithPrivateKey, KeyPair otherPair) {
+        if (getPayload() != null) {
+            return getPayload();
+        } else {
+            final BlockCipher blockCipher = CryptoEngines.ed25519Engine().createBlockCipher(
+                    otherPair, pairWithPrivateKey);
+            final byte[] decodedPayload = blockCipher.decrypt(getEncodedPayload());
 
-        if (decodedPayload == null) {
-            throw new MessagePayloadDecodeFailureException("Failed to decode message payload");
+            if (decodedPayload == null) {
+                throw new MessagePayloadDecodeFailureException("Failed to decode message payload");
+            }
+            return new String(decodedPayload, StandardCharsets.UTF_8);
         }
-        return decodedPayload;
     }
 }
