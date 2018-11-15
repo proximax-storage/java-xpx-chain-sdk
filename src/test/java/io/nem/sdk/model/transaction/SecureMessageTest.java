@@ -39,15 +39,15 @@ class SecureMessageTest {
 
     @Test
     void shouldCreateSecureMessageFromDecodedPayload() {
-        SecureMessage secureMessage = SecureMessage.createFromDecodedPayload(
+        SecureMessage secureMessage = SecureMessage.create(
                 PrivateKey.fromHexString(TEST_SENDER_PRIVATE_KEY),
                 PublicKey.fromHexString(TEST_RECIPIENT_PUBLIC_KEY),
-                "test-message".getBytes());
+                "test-message");
 
-        assertEquals("test-message", new String(secureMessage.getDecodedPayload(
+        assertEquals("test-message", secureMessage.decrypt(
                 new KeyPair(PrivateKey.fromHexString(TEST_SENDER_PRIVATE_KEY)),
                 new KeyPair(PublicKey.fromHexString(TEST_RECIPIENT_PUBLIC_KEY))
-        )));
+        ));
         assertNotNull(secureMessage.getEncodedPayload());
         assertTrue(MessageTypes.SECURE.getType() == secureMessage.getType());
     }
@@ -58,10 +58,10 @@ class SecureMessageTest {
 
         final SecureMessage secureMessage = SecureMessage.createFromEncodedPayload(sampleEncodedPayload);
 
-        assertEquals("test-message", new String(secureMessage.getDecodedPayload(
+        assertEquals("test-message", secureMessage.decrypt(
                 new KeyPair(PrivateKey.fromHexString(TEST_SENDER_PRIVATE_KEY)),
                 new KeyPair(PublicKey.fromHexString(TEST_RECIPIENT_PUBLIC_KEY))
-        )));
+        ));
         assertEquals(sampleEncodedPayload, secureMessage.getEncodedPayload());
         assertTrue(MessageTypes.SECURE.getType() == secureMessage.getType());
     }
@@ -72,11 +72,11 @@ class SecureMessageTest {
 
         final SecureMessage secureMessage = SecureMessage.createFromEncodedPayload(sampleEncodedPayload);
 
-        assertEquals("test-message", new String(secureMessage.getDecodedPayload(
+        assertEquals("test-message", secureMessage.decrypt(
                 new KeyPair(PrivateKey.fromHexString(TEST_RECIPIENT_PRIVATE_KEY)),
                 new KeyPair(PublicKey.fromHexString(TEST_SENDER_PUBLIC_KEY))
 
-        )));
+        ));
         assertEquals(sampleEncodedPayload, secureMessage.getEncodedPayload());
         assertTrue(MessageTypes.SECURE.getType() == secureMessage.getType());
     }
@@ -87,7 +87,7 @@ class SecureMessageTest {
 
         final SecureMessage secureMessage = SecureMessage.createFromEncodedPayload(sampleEncodedPayload);
 
-        assertThrows(MessagePayloadDecodeFailureException.class, () -> secureMessage.getDecodedPayload(
+        assertThrows(MessagePayloadDecodeFailureException.class, () -> secureMessage.decrypt(
                 new KeyPair(PrivateKey.fromHexString(TEST_OTHER_PRIVATE_KEY)),
                 new KeyPair(PublicKey.fromHexString(TEST_SENDER_PUBLIC_KEY))
         ));
@@ -99,7 +99,7 @@ class SecureMessageTest {
 
         final SecureMessage secureMessage = SecureMessage.createFromEncodedPayload(sampleEncodedPayload);
 
-        assertThrows(MessagePayloadDecodeFailureException.class, () -> secureMessage.getDecodedPayload(
+        assertThrows(MessagePayloadDecodeFailureException.class, () -> secureMessage.decrypt(
                 new KeyPair(PrivateKey.fromHexString(TEST_SENDER_PRIVATE_KEY)),
                 new KeyPair(PublicKey.fromHexString(TEST_OTHER_PUBLIC_KEY))
         ));
@@ -111,16 +111,16 @@ class SecureMessageTest {
 
         final SecureMessage secureMessage = SecureMessage.createFromEncodedPayload(sampleEncodedPayload);
 
-        assertThrows(MessagePayloadDecodeFailureException.class, () -> secureMessage.getDecodedPayload(
+        assertThrows(MessagePayloadDecodeFailureException.class, () -> secureMessage.decrypt(
                 new KeyPair(PrivateKey.fromHexString(TEST_OTHER_PRIVATE_KEY)),
                 new KeyPair(PublicKey.fromHexString(TEST_OTHER_PUBLIC_KEY))
         ));
     }
 
     private byte[] sampleEncodedPayload() {
-        return SecureMessage.createFromDecodedPayload(
+        return SecureMessage.create(
                 PrivateKey.fromHexString(TEST_SENDER_PRIVATE_KEY),
                 PublicKey.fromHexString(TEST_RECIPIENT_PUBLIC_KEY),
-                "test-message".getBytes()).getEncodedPayload();
+                "test-message").getEncodedPayload();
     }
 }

@@ -24,8 +24,7 @@ public class MessageFactoryTest {
         assertThat(message, is(notNullValue()));
         assertThat(message, is(instanceOf(PlainMessage.class)));
         assertThat(message.getEncodedPayload(), is("test-message".getBytes()));
-        assertThat(message.getDecodedPayload(new KeyPair(TEST_SENDER_PRIVATE_KEY), new KeyPair(TEST_RECIPIENT_PUBLIC_KEY)),
-                is("test-message".getBytes()));
+        assertThat(message.getPayload(), is("test-message"));
         assertThat(message.getType(), is(MessageTypes.PLAIN.getType()));
     }
 
@@ -37,8 +36,8 @@ public class MessageFactoryTest {
         assertThat(message, is(notNullValue()));
         assertThat(message, is(instanceOf(SecureMessage.class)));
         assertThat(message.getEncodedPayload(), is(encodedPayload));
-        assertThat(message.getDecodedPayload(new KeyPair(TEST_SENDER_PRIVATE_KEY), new KeyPair(TEST_RECIPIENT_PUBLIC_KEY)),
-                is("test-message".getBytes()));
+        assertThat(((SecureMessage) message).decrypt(new KeyPair(TEST_SENDER_PRIVATE_KEY), new KeyPair(TEST_RECIPIENT_PUBLIC_KEY)),
+                is("test-message"));
         assertThat(message.getType(), is(MessageTypes.SECURE.getType()));
     }
 
@@ -51,7 +50,7 @@ public class MessageFactoryTest {
     }
 
     private byte[] sampleEncodedPayload() {
-        return SecureMessage.createFromDecodedPayload(TEST_SENDER_PRIVATE_KEY, TEST_RECIPIENT_PUBLIC_KEY,
-                "test-message".getBytes()).getEncodedPayload();
+        return SecureMessage.create(TEST_SENDER_PRIVATE_KEY, TEST_RECIPIENT_PUBLIC_KEY,
+                "test-message").getEncodedPayload();
     }
 }

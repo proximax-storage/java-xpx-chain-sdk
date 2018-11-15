@@ -25,26 +25,20 @@ class PlainMessageTest {
 
     @Test
     void shouldCreatePlainMessageViaConstructor() {
-        PlainMessage plainMessage = new PlainMessage("test-message".getBytes());
+        PlainMessage plainMessage = new PlainMessage("test-message");
 
         assertEquals("test-message", new String(plainMessage.getEncodedPayload()));
+        assertEquals("test-message", plainMessage.getPayload());
         assertTrue(MessageTypes.PLAIN.getType() == plainMessage.getType());
     }
 
 
     @Test
     void shouldCreatePlainMessageViaStaticConstructor() {
-        PlainMessage plainMessage = PlainMessage.create("test-message".getBytes());
+        PlainMessage plainMessage = PlainMessage.create("test-message");
 
         assertEquals("test-message", new String(plainMessage.getEncodedPayload()));
+        assertEquals("test-message", plainMessage.getPayload());
         assertTrue(MessageTypes.PLAIN.getType() == plainMessage.getType());
-    }
-
-    @Test
-    void shouldHaveSameEncodedAndDecodedPayload() {
-        PlainMessage plainMessage = PlainMessage.create("test-message".getBytes());
-
-        assertEquals("test-message", new String(plainMessage.getEncodedPayload()));
-        assertEquals("test-message", new String(plainMessage.getDecodedPayload(null, null)));
     }
 }
