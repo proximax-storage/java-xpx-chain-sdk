@@ -36,16 +36,12 @@ class AccountInfoTest {
                 new BigInteger("964"),
                 "cf893ffcc47c33e7f68ab1db56365c156b0736824a0c1e273f9e00b8df8f01eb",
                 new BigInteger("966"),
-                new BigInteger("0"),
-                new BigInteger("0"),
                 mosaics);
 
         assertEquals(Address.createFromRawAddress("SDGLFWDSHILTIUHGIBH5UGX2VYF5VNJEKCCDBR26"), accountInfo.getAddress());
         assertEquals(new BigInteger("964"), accountInfo.getAddressHeight());
         assertEquals("cf893ffcc47c33e7f68ab1db56365c156b0736824a0c1e273f9e00b8df8f01eb", accountInfo.getPublicKey());
         assertEquals(new BigInteger("966"), accountInfo.getPublicKeyHeight());
-        assertEquals(new BigInteger("0"), accountInfo.getImportance());
-        assertEquals(new BigInteger("0"), accountInfo.getImportanceHeight());
         assertEquals(mosaics, accountInfo.getMosaics());
         assertEquals(PublicAccount.createFromPublicKey("cf893ffcc47c33e7f68ab1db56365c156b0736824a0c1e273f9e00b8df8f01eb", NetworkType.MIJIN_TEST), accountInfo.getPublicAccount());
 

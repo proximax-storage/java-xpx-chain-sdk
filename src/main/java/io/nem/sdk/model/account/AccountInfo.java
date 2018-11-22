@@ -31,17 +31,13 @@ public class AccountInfo {
     private final BigInteger addressHeight;
     private final String publicKey;
     private final BigInteger publicKeyHeight;
-    private final BigInteger importance;
-    private final BigInteger importanceHeight;
     private final List<Mosaic> mosaics;
 
-    public AccountInfo(Address address, BigInteger addressHeight, String publicKey, BigInteger publicKeyHeight, BigInteger importance, BigInteger importanceHeight, List<Mosaic> mosaics) {
+    public AccountInfo(Address address, BigInteger addressHeight, String publicKey, BigInteger publicKeyHeight,List<Mosaic> mosaics) {
         this.address = address;
         this.addressHeight = addressHeight;
         this.publicKey = publicKey;
         this.publicKeyHeight = publicKeyHeight;
-        this.importance = importance;
-        this.importanceHeight = importanceHeight;
         this.mosaics = mosaics;
     }
 
@@ -79,24 +75,6 @@ public class AccountInfo {
      */
     public BigInteger getPublicKeyHeight() {
         return publicKeyHeight;
-    }
-
-    /**
-     * Returns importance of the account.
-     *
-     * @return BigInteger
-     */
-    public BigInteger getImportance() {
-        return importance;
-    }
-
-    /**
-     * Returns importance height of the account.
-     *
-     * @return BigInteger
-     */
-    public BigInteger getImportanceHeight() {
-        return importanceHeight;
     }
 
     /**
