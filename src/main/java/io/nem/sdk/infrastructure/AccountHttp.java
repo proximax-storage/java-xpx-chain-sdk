@@ -66,8 +66,6 @@ public class AccountHttp extends Http implements AccountRepository {
                         accountDTO.getAddressHeight().extractIntArray(),
                         accountDTO.getPublicKey(),
                         accountDTO.getPublicKeyHeight().extractIntArray(),
-                        accountDTO.getImportance().extractIntArray(),
-                        accountDTO.getImportanceHeight().extractIntArray(),
                         accountDTO.getMosaics().stream().map(mosaicDTO -> new Mosaic(
                                 new MosaicId(mosaicDTO.getId().extractIntArray()),
                                 mosaicDTO.getAmount().extractIntArray()
@@ -94,8 +92,6 @@ public class AccountHttp extends Http implements AccountRepository {
                                 accountDTO.getAddressHeight().extractIntArray(),
                                 accountDTO.getPublicKey(),
                                 accountDTO.getPublicKeyHeight().extractIntArray(),
-                                accountDTO.getImportance().extractIntArray(),
-                                accountDTO.getImportanceHeight().extractIntArray(),
                                 accountDTO.getMosaics().stream().map(mosaicDTO -> new Mosaic(
                                         new MosaicId(mosaicDTO.getId().extractIntArray()),
                                         mosaicDTO.getAmount().extractIntArray()

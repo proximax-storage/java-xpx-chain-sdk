@@ -59,12 +59,6 @@ class AccountDTO {
     @SerializedName("mosaics")
     private List<MosaicDTO> mosaics = new ArrayList<MosaicDTO>();
 
-    @SerializedName("importance")
-    private UInt64DTO importance = null;
-
-    @SerializedName("importanceHeight")
-    private UInt64DTO importanceHeight = null;
-
     public AccountDTO address(String address) {
         this.address = address;
         return this;
@@ -165,45 +159,6 @@ class AccountDTO {
         this.mosaics = mosaics;
     }
 
-    public AccountDTO importance(UInt64DTO importance) {
-        this.importance = importance;
-        return this;
-    }
-
-    /**
-     * Get importance
-     *
-     * @return importance
-     **/
-    @ApiModelProperty(required = true, value = "")
-    public UInt64DTO getImportance() {
-        return importance;
-    }
-
-    public void setImportance(UInt64DTO importance) {
-        this.importance = importance;
-    }
-
-    public AccountDTO importanceHeight(UInt64DTO importanceHeight) {
-        this.importanceHeight = importanceHeight;
-        return this;
-    }
-
-    /**
-     * Get importanceHeight
-     *
-     * @return importanceHeight
-     **/
-    @ApiModelProperty(required = true, value = "")
-    public UInt64DTO getImportanceHeight() {
-        return importanceHeight;
-    }
-
-    public void setImportanceHeight(UInt64DTO importanceHeight) {
-        this.importanceHeight = importanceHeight;
-    }
-
-
     public String getAddressEncoded() throws DecoderException {
         return new String(new Base32().encode(Hex.decodeHex(address)));
     }
@@ -221,14 +176,12 @@ class AccountDTO {
                 Objects.equals(this.addressHeight, accountDTO.addressHeight) &&
                 Objects.equals(this.publicKey, accountDTO.publicKey) &&
                 Objects.equals(this.publicKeyHeight, accountDTO.publicKeyHeight) &&
-                Objects.equals(this.mosaics, accountDTO.mosaics) &&
-                Objects.equals(this.importance, accountDTO.importance) &&
-                Objects.equals(this.importanceHeight, accountDTO.importanceHeight);
+                Objects.equals(this.mosaics, accountDTO.mosaics);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(address, addressHeight, publicKey, publicKeyHeight, mosaics, importance, importanceHeight);
+        return Objects.hash(address, addressHeight, publicKey, publicKeyHeight, mosaics);
     }
 
 
@@ -242,8 +195,6 @@ class AccountDTO {
         sb.append("    publicKey: ").append(toIndentedString(publicKey)).append("\n");
         sb.append("    publicKeyHeight: ").append(toIndentedString(publicKeyHeight)).append("\n");
         sb.append("    mosaics: ").append(toIndentedString(mosaics)).append("\n");
-        sb.append("    importance: ").append(toIndentedString(importance)).append("\n");
-        sb.append("    importanceHeight: ").append(toIndentedString(importanceHeight)).append("\n");
         sb.append("}");
         return sb.toString();
     }
