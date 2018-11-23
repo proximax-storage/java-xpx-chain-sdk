@@ -46,9 +46,9 @@ public class NetworkHttp extends Http implements NetworkRepository {
                         return NetworkType.MIJIN_TEST;
                     else if (name.equalsIgnoreCase("mijin"))
                         return NetworkType.MIJIN;
-                    else if (name.equalsIgnoreCase("testnet"))
+                    else if (name.equalsIgnoreCase("testnet") || name.equalsIgnoreCase("publicTest"))
                         return NetworkType.TEST_NET;
-                    else if (name.equalsIgnoreCase("mainnet"))
+                    else if (name.equalsIgnoreCase("mainnet") || name.equalsIgnoreCase("public"))
                         return NetworkType.MAIN_NET;
                     else if (name.equalsIgnoreCase("privateTest"))
                         return NetworkType.PRIVATE_TEST;
