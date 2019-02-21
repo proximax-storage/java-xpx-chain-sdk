@@ -426,7 +426,7 @@ class E2ETest extends BaseTest {
                 new Deadline(2, HOURS),
                 XEM.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
-                HashType.SHA3_512,
+                HashType.SHA3_256,
                 secret,
                 Address.createFromRawAddress("SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM"),
                 NetworkType.MIJIN_TEST
@@ -449,7 +449,7 @@ class E2ETest extends BaseTest {
                 new Deadline(2, HOURS),
                 XEM.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
-                HashType.SHA3_512,
+                HashType.SHA3_256,
                 secret,
                 Address.createFromRawAddress("SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM"),
                 NetworkType.MIJIN_TEST
@@ -480,7 +480,7 @@ class E2ETest extends BaseTest {
                 new Deadline(2, HOURS),
                 XEM.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
-                HashType.SHA3_512,
+                HashType.SHA3_256,
                 secret,
                 Address.createFromRawAddress("SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM"),
                 NetworkType.MIJIN_TEST
@@ -494,7 +494,7 @@ class E2ETest extends BaseTest {
 
         SecretProofTransaction secretProoftx = SecretProofTransaction.create(
                 new Deadline(2, HOURS),
-                HashType.SHA3_512,
+                HashType.SHA3_256,
                 secret,
                 proof,
                 NetworkType.MIJIN_TEST
@@ -518,7 +518,7 @@ class E2ETest extends BaseTest {
                 new Deadline(2, HOURS),
                 XEM.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
-                HashType.SHA3_512,
+                HashType.SHA3_256,
                 secret,
                 Address.createFromRawAddress("SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM"),
                 NetworkType.MIJIN_TEST
@@ -532,7 +532,7 @@ class E2ETest extends BaseTest {
 
         SecretProofTransaction secretProoftx = SecretProofTransaction.create(
                 new Deadline(2, HOURS),
-                HashType.SHA3_512,
+                HashType.SHA3_256,
                 secret,
                 proof,
                 NetworkType.MIJIN_TEST

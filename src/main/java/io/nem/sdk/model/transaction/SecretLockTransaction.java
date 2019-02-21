@@ -37,7 +37,6 @@ public class SecretLockTransaction extends Transaction {
     private final Address recipient;
     private final Schema schema = new SecretLockTransactionSchema();
 
-
     public SecretLockTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, Mosaic mosaic, BigInteger duration, HashType hashType, String secret, Address recipient, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
         this(networkType, version, deadline, fee, mosaic, duration, hashType, secret, recipient, Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo));
     }
@@ -76,7 +75,7 @@ public class SecretLockTransaction extends Transaction {
      * @return a SecretLockTransaction instance
      */
     public static SecretLockTransaction create(Deadline deadline, Mosaic mosaic, BigInteger duration, HashType hashType, String secret, Address recipient, NetworkType networkType) {
-        return new SecretLockTransaction(networkType, 3, deadline, BigInteger.valueOf(0), mosaic, duration, hashType, secret, recipient);
+        return new SecretLockTransaction(networkType, 1, deadline, BigInteger.valueOf(0), mosaic, duration, hashType, secret, recipient);
     }
 
     /**
