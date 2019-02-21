@@ -34,7 +34,7 @@ class HashTypeTest {
         byte[] result = Hashes.sha3_512(secretBytes);
         String secret = Hex.encodeHexString(result);
 
-        assertTrue(HashType.Validator(HashType.SHA3_512, secret));
+        assertTrue(HashType.Validator(HashType.SHA3_256, secret));
     }
 
     @Test
@@ -44,14 +44,14 @@ class HashTypeTest {
         byte[] result = Hashes.sha3_256(secretBytes);
         String secret = Hex.encodeHexString(result);
 
-        assertFalse(HashType.Validator(HashType.SHA3_512, secret));
+        assertFalse(HashType.Validator(HashType.SHA3_256, secret));
     }
 
     @Test
     void HASH3_512ShouldReturnFalseIfItIsNotAValidHash() {
         String secret = "zyz6053bb910a6027f138ac5ebe92d43a9a18b7239b3c4d5ea69f1632e50aeef" +
                 "28184e46cd22ded096b766318580a569e74521a9d63885cc8d5e8644793be928";
-        assertFalse(HashType.Validator(HashType.SHA3_512, secret));
+        assertFalse(HashType.Validator(HashType.SHA3_256, secret));
 
     }
 }

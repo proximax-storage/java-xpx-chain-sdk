@@ -63,7 +63,7 @@ public class SecretProofTransaction extends Transaction {
      * @return a SecretLockTransaction instance
      */
     public static SecretProofTransaction create(Deadline deadline, HashType hashType, String secret, String proof, NetworkType networkType) {
-        return new SecretProofTransaction(networkType, 3, deadline, BigInteger.valueOf(0), hashType, secret, proof);
+        return new SecretProofTransaction(networkType, 1, deadline, BigInteger.valueOf(0), hashType, secret, proof);
     }
 
     /**

@@ -53,7 +53,7 @@ public class SecretProofTransactionTest {
         String secretSeed = "9a493664";
         SecretProofTransaction secretProoftx = SecretProofTransaction.create(
                 new FakeDeadline(),
-                HashType.SHA3_512,
+                HashType.SHA3_256,
                 secret,
                 secretSeed,
                 NetworkType.MIJIN_TEST
@@ -78,7 +78,7 @@ public class SecretProofTransactionTest {
         String secretSeed = "9a493664";
         SecretProofTransaction secretProoftx = SecretProofTransaction.create(
                 new FakeDeadline(),
-                HashType.SHA3_512,
+                HashType.SHA3_256,
                 secret,
                 secretSeed,
                 NetworkType.MIJIN_TEST
@@ -93,7 +93,7 @@ public class SecretProofTransactionTest {
         String secretSeed = "9a493664";
         SecretProofTransaction secretProoftx = SecretProofTransaction.create(
                 new FakeDeadline(),
-                HashType.SHA3_512,
+                HashType.SHA3_256,
                 secret,
                 secretSeed,
                 NetworkType.MIJIN_TEST
@@ -110,7 +110,7 @@ public class SecretProofTransactionTest {
         assertThrows(IllegalArgumentException.class, ()-> {
             SecretProofTransaction secretProoftx = SecretProofTransaction.create(
                     new FakeDeadline(),
-                    HashType.SHA3_512,
+                    HashType.SHA3_256,
                     "non valid hash",
                     proof,
                     NetworkType.MIJIN_TEST
