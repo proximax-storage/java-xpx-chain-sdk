@@ -420,7 +420,7 @@ class E2ETest extends BaseTest {
     void standaloneSecretLockTransaction() throws ExecutionException, InterruptedException {
         byte[] secretBytes = new byte[20];
         new Random().nextBytes(secretBytes);
-        byte[] result = Hashes.sha3_512(secretBytes);
+        byte[] result = Hashes.sha3_256(secretBytes);
         String secret = Hex.encodeHexString(result);
         SecretLockTransaction secretLocktx = SecretLockTransaction.create(
                 new Deadline(2, HOURS),
@@ -443,7 +443,7 @@ class E2ETest extends BaseTest {
     void aggregateSecretLockTransaction() throws ExecutionException, InterruptedException {
         byte[] secretBytes = new byte[20];
         new Random().nextBytes(secretBytes);
-        byte[] result = Hashes.sha3_512(secretBytes);
+        byte[] result = Hashes.sha3_256(secretBytes);
         String secret = Hex.encodeHexString(result);
         SecretLockTransaction secretLocktx = SecretLockTransaction.create(
                 new Deadline(2, HOURS),
@@ -473,7 +473,7 @@ class E2ETest extends BaseTest {
     void standaloneSecretProofTransaction() throws ExecutionException, InterruptedException {
         byte[] secretBytes = new byte[20];
         new Random().nextBytes(secretBytes);
-        byte[] result = Hashes.sha3_512(secretBytes);
+        byte[] result = Hashes.sha3_256(secretBytes);
         String secret = Hex.encodeHexString(result);
         String proof = Hex.encodeHexString(secretBytes);
         SecretLockTransaction secretLocktx = SecretLockTransaction.create(
@@ -511,7 +511,7 @@ class E2ETest extends BaseTest {
     void aggregateSecretProofTransaction() throws ExecutionException, InterruptedException {
         byte[] secretBytes = new byte[20];
         new Random().nextBytes(secretBytes);
-        byte[] result = Hashes.sha3_512(secretBytes);
+        byte[] result = Hashes.sha3_256(secretBytes);
         String secret = Hex.encodeHexString(result);
         String proof = Hex.encodeHexString(secretBytes);
         SecretLockTransaction secretLocktx = SecretLockTransaction.create(
