@@ -21,6 +21,7 @@ import io.nem.sdk.model.account.Address;
 import io.nem.sdk.model.account.PublicAccount;
 import io.nem.sdk.model.blockchain.NetworkType;
 import io.nem.sdk.model.mosaic.XEM;
+
 import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -41,18 +42,19 @@ public class SecretLockTransactionTest {
     @Test
     @DisplayName("Serialization")
     void serialization() {
-        // Generated at nem2-library-js/test/transactions/SecretLockTransaction.spec.js
-        byte[] expected = new byte[]{(byte)234,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        byte[] expected = new byte[]{(byte)-54,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
                 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,3,(byte)144,76,66,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,41,(byte)207,
-                95,(byte)217,65,(byte)173,37,(byte)213,(byte)128,(byte)150,(byte)152,0,0,0,0,0,100,0,0,0,0,0,0,0,0,(byte)183,120,
-                (byte)163,(byte)154,54,99,113,(byte)157,(byte)252,94,72,(byte)201,(byte)215,(byte)132,49,(byte)177,(byte)228,92,42,(byte)249,(byte)223,83,(byte)135,(byte)130,(byte)191,25,(byte)156,24,
-                (byte)157,(byte)171,(byte)234,(byte)199,104,10,(byte)218,87,(byte)220,(byte)236,(byte)142,(byte)238,(byte)145,(byte)196,(byte)227,(byte)191,59,(byte)250,(byte)154,(byte)246,(byte)255,
-                (byte)222,(byte)144,(byte)205,29,36,(byte)157,28,97,33,(byte)215,(byte)183,89,(byte)160,1,(byte)177,(byte)144,(byte)232,(byte)254,(byte)189,103,29,(byte)212,27,(byte)238,(byte)148,
+                0,0,0,0,0,0,0,1,(byte)144,76,66,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,41,(byte)207,
+                95,(byte)217,65,(byte)173,37,(byte)213,(byte)128,(byte)150,(byte)152,0,0,0,0,0,100,0,0,0,0,0,0,0,0,
+
+                63, (byte)200, (byte)186, 16, 34, (byte)154, (byte)181, 119, (byte)141, 5, (byte)217, (byte)196, (byte)183, (byte)245,
+                102, 118, (byte)168, (byte)139, (byte)249, 41, 92, 24, 90, (byte)207, (byte)192, (byte)249, 97, (byte)219, 84, 8, (byte)202, (byte)254,
+
+                (byte)144,(byte)232,(byte)254, (byte)189,103,29,(byte)212,27,(byte)238,(byte)148,
                 (byte)236,59,(byte)165,(byte)131,28,(byte)182,8,(byte)163,18,(byte)194,(byte)242,3,(byte)186,(byte)132,(byte)172,
         };
 
-        String secret = "b778a39a3663719dfc5e48c9d78431b1e45c2af9df538782bf199c189dabeac7680ada57dcec8eee91c4e3bf3bfa9af6ffde90cd1d249d1c6121d7b759a001b1";
+        String secret = "3fc8ba10229ab5778d05d9c4b7f56676a88bf9295c185acfc0f961db5408cafe";
         SecretLockTransaction secretLocktx = SecretLockTransaction.create(
                 new FakeDeadline(),
                 XEM.createRelative(BigInteger.valueOf(10)),
@@ -69,16 +71,18 @@ public class SecretLockTransactionTest {
     @Test
     @DisplayName("To aggregate")
     void toAggregate() {
-        byte[] expected = new byte[]{(byte)-102,0,0,0,-102,73,54,100,6,-84,-87,82,-72,-117,-83,-11,-15,-23,-66,108,-28,-106,-127,
-                65,3,90,96,-66,80,50,115,-22,101,69,107,36,3,(byte)144,76,66,41,(byte)207,
-                95,(byte)217,65,(byte)173,37,(byte)213,(byte)128,(byte)150,(byte)152,0,0,0,0,0,100,0,0,0,0,0,0,0,0,(byte)183,120,
-                (byte)163,(byte)154,54,99,113,(byte)157,(byte)252,94,72,(byte)201,(byte)215,(byte)132,49,(byte)177,(byte)228,92,42,(byte)249,(byte)223,83,(byte)135,(byte)130,(byte)191,25,(byte)156,24,
-                (byte)157,(byte)171,(byte)234,(byte)199,104,10,(byte)218,87,(byte)220,(byte)236,(byte)142,(byte)238,(byte)145,(byte)196,(byte)227,(byte)191,59,(byte)250,(byte)154,(byte)246,(byte)255,
-                (byte)222,(byte)144,(byte)205,29,36,(byte)157,28,97,33,(byte)215,(byte)183,89,(byte)160,1,(byte)177,(byte)144,(byte)232,(byte)254,(byte)189,103,29,(byte)212,27,(byte)238,(byte)148,
+        byte[] expected = new byte[]{(byte)122,0,0,0,(byte)-102,73,54,100,6,-84,-87,82,-72,-117,-83,-11,-15,-23,-66,108,-28,-106,-127,
+                65,3,90,96,-66,80,50,115,-22,101,69,107,36,1,(byte)144,76,66,41,(byte)207,
+                95,(byte)217,65,(byte)173,37,(byte)213,(byte)128,(byte)150,(byte)152,0,0,0,0,0,100,0,0,0,0,0,0,0,0,
+
+                63, (byte)200, (byte)186, 16, 34, (byte)154, (byte)181, 119, (byte)141, 5, (byte)217, (byte)196, (byte)183, (byte)245,
+                102, 118, (byte)168, (byte)139, (byte)249, 41, 92, 24, 90, (byte)207, (byte)192, (byte)249, 97, (byte)219, 84, 8, (byte)202, (byte)254,
+
+                (byte)144,(byte)232,(byte)254,(byte)189,103,29,(byte)212,27,(byte)238,(byte)148,
                 (byte)236,59,(byte)165,(byte)131,28,(byte)182,8,(byte)163,18,(byte)194,(byte)242,3,(byte)186,(byte)132,(byte)172,
         };
 
-        String secret = "b778a39a3663719dfc5e48c9d78431b1e45c2af9df538782bf199c189dabeac7680ada57dcec8eee91c4e3bf3bfa9af6ffde90cd1d249d1c6121d7b759a001b1";
+        String secret = "3fc8ba10229ab5778d05d9c4b7f56676a88bf9295c185acfc0f961db5408cafe";
         SecretLockTransaction secretLocktx = SecretLockTransaction.create(
                 new FakeDeadline(),
                 XEM.createRelative(BigInteger.valueOf(10)),
@@ -94,7 +98,7 @@ public class SecretLockTransactionTest {
 
     @Test
     void serializeAndSignTransaction() {
-        String secret = "b778a39a3663719dfc5e48c9d78431b1e45c2af9df538782bf199c189dabeac7680ada57dcec8eee91c4e3bf3bfa9af6ffde90cd1d249d1c6121d7b759a001b1";
+        String secret = "3fc8ba10229ab5778d05d9c4b7f56676a88bf9295c185acfc0f961db5408cafe";
         SecretLockTransaction secretLocktx = SecretLockTransaction.create(
                 new FakeDeadline(),
                 XEM.createRelative(BigInteger.valueOf(10)),
@@ -105,8 +109,8 @@ public class SecretLockTransactionTest {
                 NetworkType.MIJIN_TEST
         );
         SignedTransaction signedTransaction = secretLocktx.signWith(account);
-        assertEquals("EA0000005A3B75AE172855381353250EA9A1DFEB86E9280C0006B8FD997C2FCECF211C9A260E76CB704A22EAD4648F18E6931381921A4EDC7D309C32275D0147E9BAD3051026D70E1954775749C6811084D6450A3184D977383F0E4282CD47118AF3775503904C420000000000000000010000000000000029CF5FD941AD25D58096980000000000640000000000000000B778A39A3663719DFC5E48C9D78431B1E45C2AF9DF538782BF199C189DABEAC7680ADA57DCEC8EEE91C4E3BF3BFA9AF6FFDE90CD1D249D1C6121D7B759A001B190E8FEBD671DD41BEE94EC3BA5831CB608A312C2F203BA84AC", signedTransaction.getPayload());
-        assertEquals("B3AF46027909CD24204AF4E7B5B43C3116307D90A1F83A5DE6DBDF1F7759ABC5", signedTransaction.getHash());
+        assertEquals("CA00000048593A86699E4DC2A87842BE7E2D1F4B63CEDD4BC7E740BC31B894612500DC8594C5FFAD1CBE5A8343F0C9180AFBB6D2BBF157549CDEBACB823981566EADEC091026D70E1954775749C6811084D6450A3184D977383F0E4282CD47118AF3775503904C420000000000000000010000000000000029CF5FD941AD25D580969800000000006400000000000000003FC8BA10229AB5778D05D9C4B7F56676A88BF9295C185ACFC0F961DB5408CAFE90E8FEBD671DD41BEE94EC3BA5831CB608A312C2F203BA84AC", signedTransaction.getPayload());
+        assertEquals("D2716B0E1A1A9186B8AE23A3392D7676E801791236755D9BFE2E96D048171ECF", signedTransaction.getHash());
     }
 
     @Test
