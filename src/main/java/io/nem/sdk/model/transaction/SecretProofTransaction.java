@@ -63,7 +63,7 @@ public class SecretProofTransaction extends Transaction {
      * @return a SecretLockTransaction instance
      */
     public static SecretProofTransaction create(Deadline deadline, HashType hashType, String secret, String proof, NetworkType networkType) {
-        return new SecretProofTransaction(networkType, 1, deadline, BigInteger.valueOf(0), hashType, secret, proof);
+        return new SecretProofTransaction(networkType, 3, deadline, BigInteger.valueOf(0), hashType, secret, proof);
     }
 
     /**
@@ -104,7 +104,7 @@ public class SecretProofTransaction extends Transaction {
         int proofVector = SecretProofTransactionBuffer.createProofVector(builder, Hex.decode(proof));
 
         SecretProofTransactionBuffer.startSecretProofTransactionBuffer(builder);
-        SecretProofTransactionBuffer.addSize(builder, 187 + Hex.decode(proof).length);
+        SecretProofTransactionBuffer.addSize(builder, 155 + Hex.decode(proof).length);
         SecretProofTransactionBuffer.addSignature(builder, signatureVector);
         SecretProofTransactionBuffer.addSigner(builder, signerVector);
         SecretProofTransactionBuffer.addVersion(builder, version);

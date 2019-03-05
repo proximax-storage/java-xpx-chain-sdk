@@ -75,7 +75,7 @@ public class SecretLockTransaction extends Transaction {
      * @return a SecretLockTransaction instance
      */
     public static SecretLockTransaction create(Deadline deadline, Mosaic mosaic, BigInteger duration, HashType hashType, String secret, Address recipient, NetworkType networkType) {
-        return new SecretLockTransaction(networkType, 1, deadline, BigInteger.valueOf(0), mosaic, duration, hashType, secret, recipient);
+        return new SecretLockTransaction(networkType, 3, deadline, BigInteger.valueOf(0), mosaic, duration, hashType, secret, recipient);
     }
 
     /**
@@ -134,7 +134,7 @@ public class SecretLockTransaction extends Transaction {
         int recipientVector = SecretLockTransactionBuffer.createRecipientVector(builder, address);
 
         SecretLockTransactionBuffer.startSecretLockTransactionBuffer(builder);
-        SecretLockTransactionBuffer.addSize(builder, 234);
+        SecretLockTransactionBuffer.addSize(builder, 202);
         SecretLockTransactionBuffer.addSignature(builder, signatureVector);
         SecretLockTransactionBuffer.addSigner(builder, signerVector);
         SecretLockTransactionBuffer.addVersion(builder, version);
