@@ -80,24 +80,24 @@ class TransactionTypeTest {
     @Test
     void lockFundsType() {
         TransactionType transactionType = TransactionType.LOCK;
-        assertEquals(0x414C, transactionType.getValue());
-        assertEquals(16716, transactionType.getValue());
-        assertEquals(TransactionType.LOCK, TransactionType.rawValueOf(16716));
+        assertEquals(0x4148, transactionType.getValue());
+        assertEquals(16712, transactionType.getValue());
+        assertEquals(TransactionType.LOCK, TransactionType.rawValueOf(16712));
     }
 
     @Test
     void secretLockType() {
         TransactionType transactionType = TransactionType.SECRET_LOCK;
-        assertEquals(0x424C, transactionType.getValue());
-        assertEquals(16972, transactionType.getValue());
-        assertEquals(TransactionType.SECRET_LOCK, TransactionType.rawValueOf(16972));
+        assertEquals(0x4152, transactionType.getValue());
+        assertEquals(16722, transactionType.getValue());
+        assertEquals(TransactionType.SECRET_LOCK, TransactionType.rawValueOf(16722));
     }
 
     @Test
     void secretProofType() {
         TransactionType transactionType = TransactionType.SECRET_PROOF;
-        assertEquals(0x434C, transactionType.getValue());
-        assertEquals(17228, transactionType.getValue());
-        assertEquals(TransactionType.SECRET_PROOF, TransactionType.rawValueOf(17228));
+        assertEquals(0x4252, transactionType.getValue());
+        assertEquals(16978, transactionType.getValue());
+        assertEquals(TransactionType.SECRET_PROOF, TransactionType.rawValueOf(16978));
     }
 }

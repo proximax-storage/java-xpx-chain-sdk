@@ -36,12 +36,12 @@ public enum TransactionType {
     /**
      * Mosaic definition transaction type.
      */
-    MOSAIC_DEFINITION(0x414d),
+    MOSAIC_DEFINITION(0x414D),
 
     /**
      * Mosaic supply change transaction.
      */
-    MOSAIC_SUPPLY_CHANGE(0x424d),
+    MOSAIC_SUPPLY_CHANGE(0x424D),
 
     /**
      * Modify multisig account transaction type.
@@ -51,7 +51,7 @@ public enum TransactionType {
     /**
      * Register namespace transaction type.
      */
-    REGISTER_NAMESPACE(0x414e),
+    REGISTER_NAMESPACE(0x414E),
 
     /**
      * Transfer Transaction transaction type.
@@ -61,17 +61,17 @@ public enum TransactionType {
     /**
      * Lock transaction type
      */
-    LOCK(0x414C),
+    LOCK(0x4148),
 
     /**
      * Secret Lock Transaction type
      */
-    SECRET_LOCK(0x424C),
+    SECRET_LOCK(0x4152),
 
     /**
      * Secret Proof transaction type
      */
-    SECRET_PROOF(0x434C);
+    SECRET_PROOF(0x4252);
 
     private int value;
 
@@ -105,11 +105,11 @@ public enum TransactionType {
                 return TransactionType.MOSAIC_SUPPLY_CHANGE;
             case 16725:
                 return TransactionType.MODIFY_MULTISIG_ACCOUNT;
-            case 16716:
+            case 16712:
                 return TransactionType.LOCK;
-            case 16972:
+            case 16722:
                 return TransactionType.SECRET_LOCK;
-            case 17228:
+            case 16978:
                 return TransactionType.SECRET_PROOF;
             case 16705:
                 return TransactionType.AGGREGATE_COMPLETE;
