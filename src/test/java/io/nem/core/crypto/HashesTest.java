@@ -34,8 +34,6 @@ public class HashesTest {
 
     private static final HashTester KECCAK_256_TESTER = new HashTester(Hashes::keccak256, 32);
 
-    //private static final HashTester KECCAK_256_TESTER = new HashTester(32, Hashes::keccak256);
-
     //region sha3_256
 
     private static void assertHashesAreDifferent(
