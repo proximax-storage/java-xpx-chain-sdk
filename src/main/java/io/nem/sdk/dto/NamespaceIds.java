@@ -15,52 +15,48 @@
  */
 
 
-package io.nem.sdk.model.mosaic;
+package io.nem.sdk.dto;
 
 import java.util.Objects;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
+
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * MosaicIds
+ * NamespaceIds
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class MosaicIds {
-  @SerializedName("mosaicIds")
-  private List<String> mosaicIds = null;
+public class NamespaceIds {
+  @SerializedName("namespaceIds")
+  private List<String> namespaceIds = null;
 
-  public MosaicIds mosaicIds(List<String> mosaicIds) {
-    this.mosaicIds = mosaicIds;
+  public NamespaceIds namespaceIds(List<String> namespaceIds) {
+    this.namespaceIds = namespaceIds;
     return this;
   }
 
-  public MosaicIds addMosaicIdsItem(String mosaicIdsItem) {
-    if (this.mosaicIds == null) {
-      this.mosaicIds = new ArrayList<String>();
+  public NamespaceIds addNamespaceIdsItem(String namespaceIdsItem) {
+    if (this.namespaceIds == null) {
+      this.namespaceIds = new ArrayList<String>();
     }
-    this.mosaicIds.add(mosaicIdsItem);
+    this.namespaceIds.add(namespaceIdsItem);
     return this;
   }
 
    /**
-   * Get mosaicIds
-   * @return mosaicIds
+   * Get namespaceIds
+   * @return namespaceIds
   **/
-  @ApiModelProperty(example = "[\"d525ad41d95fcf29\"]", value = "")
-  public List<String> getMosaicIds() {
-    return mosaicIds;
+  @ApiModelProperty(example = "[\"84b3552d375ffa4b\"]", value = "")
+  public List<String> getNamespaceIds() {
+    return namespaceIds;
   }
 
-  public void setMosaicIds(List<String> mosaicIds) {
-    this.mosaicIds = mosaicIds;
+  public void setNamespaceIds(List<String> namespaceIds) {
+    this.namespaceIds = namespaceIds;
   }
 
 
@@ -72,22 +68,22 @@ public class MosaicIds {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    MosaicIds mosaicIds = (MosaicIds) o;
-    return Objects.equals(this.mosaicIds, mosaicIds.mosaicIds);
+    NamespaceIds namespaceIds = (NamespaceIds) o;
+    return Objects.equals(this.namespaceIds, namespaceIds.namespaceIds);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(mosaicIds);
+    return Objects.hash(namespaceIds);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class MosaicIds {\n");
+    sb.append("class NamespaceIds {\n");
     
-    sb.append("    mosaicIds: ").append(toIndentedString(mosaicIds)).append("\n");
+    sb.append("    namespaceIds: ").append(toIndentedString(namespaceIds)).append("\n");
     sb.append("}");
     return sb.toString();
   }

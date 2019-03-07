@@ -15,42 +15,58 @@
  */
 
 
-package io.nem.sdk.model.account;
+package io.nem.sdk.dto;
+
+import com.google.gson.annotations.SerializedName;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
 
 /**
- * AccountPropertiesMetaDTO
+ * NetworkTypeDTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class AccountPropertiesMetaDTO {
-  @SerializedName("id")
-  private String id = null;
+public class NetworkTypeDTO {
+  @SerializedName("name")
+  private String name = null;
 
-  public AccountPropertiesMetaDTO id(String id) {
-    this.id = id;
+  @SerializedName("description")
+  private String description = null;
+
+  public NetworkTypeDTO name(String name) {
+    this.name = name;
     return this;
   }
 
    /**
-   * Get id
-   * @return id
+   * Get name
+   * @return name
   **/
-  @ApiModelProperty(example = "00000000000000000000032f", required = true, value = "")
-  public String getId() {
-    return id;
+  @ApiModelProperty(example = "mijinTest", required = true, value = "")
+  public String getName() {
+    return name;
   }
 
-  public void setId(String id) {
-    this.id = id;
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public NetworkTypeDTO description(String description) {
+    this.description = description;
+    return this;
+  }
+
+   /**
+   * Get description
+   * @return description
+  **/
+  @ApiModelProperty(example = "catapult development network", required = true, value = "")
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 
 
@@ -62,22 +78,24 @@ public class AccountPropertiesMetaDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AccountPropertiesMetaDTO accountPropertiesMetaDTO = (AccountPropertiesMetaDTO) o;
-    return Objects.equals(this.id, accountPropertiesMetaDTO.id);
+    NetworkTypeDTO networkTypeDTO = (NetworkTypeDTO) o;
+    return Objects.equals(this.name, networkTypeDTO.name) &&
+        Objects.equals(this.description, networkTypeDTO.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id);
+    return Objects.hash(name, description);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AccountPropertiesMetaDTO {\n");
+    sb.append("class NetworkTypeDTO {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -15,7 +15,7 @@
  */
 
 
-package io.nem.sdk.model.mosaic;
+package io.nem.sdk.dto;
 
 import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModelProperty;
@@ -23,17 +23,17 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.Objects;
 
 /**
- * MosaicInfoDTO
+ * NamespaceInfoDTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class MosaicInfoDTO {
+public class NamespaceInfoDTO {
   @SerializedName("meta")
-  private NamespaceMosaicMetaDTO meta = null;
+  private io.nem.sdk.model.namespace.NamespaceMosaicMetaDTO meta = null;
 
-  @SerializedName("mosaic")
-  private MosaicDefinitionDTO mosaic = null;
+  @SerializedName("namespace")
+  private NamespaceDTO namespace = null;
 
-  public MosaicInfoDTO meta(NamespaceMosaicMetaDTO meta) {
+  public NamespaceInfoDTO meta(io.nem.sdk.model.namespace.NamespaceMosaicMetaDTO meta) {
     this.meta = meta;
     return this;
   }
@@ -42,8 +42,8 @@ public class MosaicInfoDTO {
    * Get meta
    * @return meta
   **/
-  @ApiModelProperty(required = true, value = "")
-  public NamespaceMosaicMetaDTO getMeta() {
+  @ApiModelProperty(value = "")
+  public io.nem.sdk.model.namespace.NamespaceMosaicMetaDTO getMeta() {
     return meta;
   }
 
@@ -51,22 +51,22 @@ public class MosaicInfoDTO {
     this.meta = meta;
   }
 
-  public MosaicInfoDTO mosaic(MosaicDefinitionDTO mosaic) {
-    this.mosaic = mosaic;
+  public NamespaceInfoDTO namespace(NamespaceDTO namespace) {
+    this.namespace = namespace;
     return this;
   }
 
    /**
-   * Get mosaic
-   * @return mosaic
+   * Get namespace
+   * @return namespace
   **/
   @ApiModelProperty(required = true, value = "")
-  public MosaicDefinitionDTO getMosaic() {
-    return mosaic;
+  public NamespaceDTO getNamespace() {
+    return namespace;
   }
 
-  public void setMosaic(MosaicDefinitionDTO mosaic) {
-    this.mosaic = mosaic;
+  public void setNamespace(NamespaceDTO namespace) {
+    this.namespace = namespace;
   }
 
 
@@ -78,24 +78,24 @@ public class MosaicInfoDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    MosaicInfoDTO mosaicInfoDTO = (MosaicInfoDTO) o;
-    return Objects.equals(this.meta, mosaicInfoDTO.meta) &&
-        Objects.equals(this.mosaic, mosaicInfoDTO.mosaic);
+    NamespaceInfoDTO namespaceInfoDTO = (NamespaceInfoDTO) o;
+    return Objects.equals(this.meta, namespaceInfoDTO.meta) &&
+        Objects.equals(this.namespace, namespaceInfoDTO.namespace);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(meta, mosaic);
+    return Objects.hash(meta, namespace);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class MosaicInfoDTO {\n");
+    sb.append("class NamespaceInfoDTO {\n");
     
     sb.append("    meta: ").append(toIndentedString(meta)).append("\n");
-    sb.append("    mosaic: ").append(toIndentedString(mosaic)).append("\n");
+    sb.append("    namespace: ").append(toIndentedString(namespace)).append("\n");
     sb.append("}");
     return sb.toString();
   }

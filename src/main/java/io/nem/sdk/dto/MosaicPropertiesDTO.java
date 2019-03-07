@@ -14,60 +14,19 @@
  * limitations under the License.
  */
 
-package io.nem.sdk.model.blockchain;
 
-import com.google.gson.annotations.SerializedName;
-import io.swagger.annotations.ApiModelProperty;
+package io.nem.sdk.dto;
+
+import io.nem.sdk.model.transaction.UInt64;
 
 import java.util.Objects;
+import java.util.ArrayList;
 
 /**
- * BlockInfoDTO
+ * MosaicPropertiesDTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class BlockInfoDTO {
-  @SerializedName("meta")
-  private BlockMetaDTO meta = null;
-
-  @SerializedName("block")
-  private BlockDTO block = null;
-
-  public BlockInfoDTO meta(BlockMetaDTO meta) {
-    this.meta = meta;
-    return this;
-  }
-
-   /**
-   * Get meta
-   * @return meta
-  **/
-  @ApiModelProperty(required = true, value = "")
-  public BlockMetaDTO getMeta() {
-    return meta;
-  }
-
-  public void setMeta(BlockMetaDTO meta) {
-    this.meta = meta;
-  }
-
-  public BlockInfoDTO block(BlockDTO block) {
-    this.block = block;
-    return this;
-  }
-
-   /**
-   * Get block
-   * @return block
-  **/
-  @ApiModelProperty(required = true, value = "")
-  public BlockDTO getBlock() {
-    return block;
-  }
-
-  public void setBlock(BlockDTO block) {
-    this.block = block;
-  }
-
+public class MosaicPropertiesDTO extends ArrayList<UInt64> {
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -77,24 +36,20 @@ public class BlockInfoDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    BlockInfoDTO blockInfoDTO = (BlockInfoDTO) o;
-    return Objects.equals(this.meta, blockInfoDTO.meta) &&
-        Objects.equals(this.block, blockInfoDTO.block);
+    return super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(meta, block);
+    return Objects.hash(super.hashCode());
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class BlockInfoDTO {\n");
-    
-    sb.append("    meta: ").append(toIndentedString(meta)).append("\n");
-    sb.append("    block: ").append(toIndentedString(block)).append("\n");
+    sb.append("class MosaicPropertiesDTO {\n");
+    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("}");
     return sb.toString();
   }

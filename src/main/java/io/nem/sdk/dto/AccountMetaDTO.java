@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.nem.sdk.model.account;
+package io.nem.sdk.dto;
 
 import java.util.Objects;
 

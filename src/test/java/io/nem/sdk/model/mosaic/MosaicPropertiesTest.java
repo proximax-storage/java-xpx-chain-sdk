@@ -16,6 +16,7 @@
 
 package io.nem.sdk.model.mosaic;
 
+import io.nem.sdk.dto.MosaicProperties;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;

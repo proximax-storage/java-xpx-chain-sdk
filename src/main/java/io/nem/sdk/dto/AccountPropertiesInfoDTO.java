@@ -15,7 +15,7 @@
  */
 
 
-package io.nem.sdk.model.blockchain;
+package io.nem.sdk.dto;
 
 import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModelProperty;
@@ -23,50 +23,50 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.Objects;
 
 /**
- * NetworkTypeDTO
+ * AccountPropertiesInfoDTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class NetworkTypeDTO {
-  @SerializedName("name")
-  private String name = null;
+public class AccountPropertiesInfoDTO {
+  @SerializedName("meta")
+  private AccountPropertiesMetaDTO meta = null;
 
-  @SerializedName("description")
-  private String description = null;
+  @SerializedName("accountProperties")
+  private AccountPropertiesDTO accountProperties = null;
 
-  public NetworkTypeDTO name(String name) {
-    this.name = name;
+  public AccountPropertiesInfoDTO meta(AccountPropertiesMetaDTO meta) {
+    this.meta = meta;
     return this;
   }
 
    /**
-   * Get name
-   * @return name
+   * Get meta
+   * @return meta
   **/
-  @ApiModelProperty(example = "mijinTest", required = true, value = "")
-  public String getName() {
-    return name;
+  @ApiModelProperty(required = true, value = "")
+  public AccountPropertiesMetaDTO getMeta() {
+    return meta;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setMeta(AccountPropertiesMetaDTO meta) {
+    this.meta = meta;
   }
 
-  public NetworkTypeDTO description(String description) {
-    this.description = description;
+  public AccountPropertiesInfoDTO accountProperties(AccountPropertiesDTO accountProperties) {
+    this.accountProperties = accountProperties;
     return this;
   }
 
    /**
-   * Get description
-   * @return description
+   * Get accountProperties
+   * @return accountProperties
   **/
-  @ApiModelProperty(example = "catapult development network", required = true, value = "")
-  public String getDescription() {
-    return description;
+  @ApiModelProperty(required = true, value = "")
+  public AccountPropertiesDTO getAccountProperties() {
+    return accountProperties;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
+  public void setAccountProperties(AccountPropertiesDTO accountProperties) {
+    this.accountProperties = accountProperties;
   }
 
 
@@ -78,24 +78,24 @@ public class NetworkTypeDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    NetworkTypeDTO networkTypeDTO = (NetworkTypeDTO) o;
-    return Objects.equals(this.name, networkTypeDTO.name) &&
-        Objects.equals(this.description, networkTypeDTO.description);
+    AccountPropertiesInfoDTO accountPropertiesInfoDTO = (AccountPropertiesInfoDTO) o;
+    return Objects.equals(this.meta, accountPropertiesInfoDTO.meta) &&
+        Objects.equals(this.accountProperties, accountPropertiesInfoDTO.accountProperties);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, description);
+    return Objects.hash(meta, accountProperties);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class NetworkTypeDTO {\n");
+    sb.append("class AccountPropertiesInfoDTO {\n");
     
-    sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    meta: ").append(toIndentedString(meta)).append("\n");
+    sb.append("    accountProperties: ").append(toIndentedString(accountProperties)).append("\n");
     sb.append("}");
     return sb.toString();
   }

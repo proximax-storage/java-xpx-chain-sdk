@@ -15,59 +15,79 @@
  */
 
 
-package io.nem.sdk.model.blockchain;
-
-import com.google.gson.annotations.SerializedName;
-import io.nem.sdk.model.transaction.UInt64;
-import io.swagger.annotations.ApiModelProperty;
+package io.nem.sdk.dto;
 
 import java.util.Objects;
 
+import com.google.gson.annotations.SerializedName;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
- * BlockchainScoreDTO
+ * AliasDTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class BlockchainScoreDTO {
-  @SerializedName("scoreHigh")
-  private UInt64 scoreHigh = null;
+public class AliasDTO {
+  @SerializedName("type")
+  private Integer type = null;
 
-  @SerializedName("scoreLow")
-  private UInt64 scoreLow = null;
+  @SerializedName("mosaicId")
+  private String mosaicId = null;
 
-  public BlockchainScoreDTO scoreHigh(UInt64 scoreHigh) {
-    this.scoreHigh = scoreHigh;
+  @SerializedName("address")
+  private String address = null;
+
+  public AliasDTO type(Integer type) {
+    this.type = type;
     return this;
   }
 
    /**
-   * Get scoreHigh
-   * @return scoreHigh
+   * Get type
+   * @return type
   **/
   @ApiModelProperty(required = true, value = "")
-  public UInt64 getScoreHigh() {
-    return scoreHigh;
+  public Integer getType() {
+    return type;
   }
 
-  public void setScoreHigh(UInt64 scoreHigh) {
-    this.scoreHigh = scoreHigh;
+  public void setType(Integer type) {
+    this.type = type;
   }
 
-  public BlockchainScoreDTO scoreLow(UInt64 scoreLow) {
-    this.scoreLow = scoreLow;
+  public AliasDTO mosaicId(String mosaicId) {
+    this.mosaicId = mosaicId;
     return this;
   }
 
    /**
-   * Get scoreLow
-   * @return scoreLow
+   * Get mosaicId
+   * @return mosaicId
   **/
-  @ApiModelProperty(required = true, value = "")
-  public UInt64 getScoreLow() {
-    return scoreLow;
+  @ApiModelProperty(value = "")
+  public String getMosaicId() {
+    return mosaicId;
   }
 
-  public void setScoreLow(UInt64 scoreLow) {
-    this.scoreLow = scoreLow;
+  public void setMosaicId(String mosaicId) {
+    this.mosaicId = mosaicId;
+  }
+
+  public AliasDTO address(String address) {
+    this.address = address;
+    return this;
+  }
+
+   /**
+   * Get address
+   * @return address
+  **/
+  @ApiModelProperty(value = "")
+  public String getAddress() {
+    return address;
+  }
+
+  public void setAddress(String address) {
+    this.address = address;
   }
 
 
@@ -79,24 +99,26 @@ public class BlockchainScoreDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    BlockchainScoreDTO blockchainScoreDTO = (BlockchainScoreDTO) o;
-    return Objects.equals(this.scoreHigh, blockchainScoreDTO.scoreHigh) &&
-        Objects.equals(this.scoreLow, blockchainScoreDTO.scoreLow);
+    AliasDTO aliasDTO = (AliasDTO) o;
+    return Objects.equals(this.type, aliasDTO.type) &&
+        Objects.equals(this.mosaicId, aliasDTO.mosaicId) &&
+        Objects.equals(this.address, aliasDTO.address);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(scoreHigh, scoreLow);
+    return Objects.hash(type, mosaicId, address);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class BlockchainScoreDTO {\n");
+    sb.append("class AliasDTO {\n");
     
-    sb.append("    scoreHigh: ").append(toIndentedString(scoreHigh)).append("\n");
-    sb.append("    scoreLow: ").append(toIndentedString(scoreLow)).append("\n");
+    sb.append("    type: ").append(toIndentedString(type)).append("\n");
+    sb.append("    mosaicId: ").append(toIndentedString(mosaicId)).append("\n");
+    sb.append("    address: ").append(toIndentedString(address)).append("\n");
     sb.append("}");
     return sb.toString();
   }

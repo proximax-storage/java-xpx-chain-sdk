@@ -15,10 +15,9 @@
  */
 
 
-package io.nem.sdk.model.account;
+package io.nem.sdk.dto;
 
 import com.google.gson.annotations.SerializedName;
-import io.nem.sdk.model.mosaic.MosaicDTO;
 import io.nem.sdk.model.transaction.UInt64;
 import io.swagger.annotations.ApiModelProperty;
 

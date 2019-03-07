@@ -14,64 +14,23 @@
  * limitations under the License.
  */
 
-package io.nem.sdk.model.mosaic;
+
+package io.nem.sdk.dto;
+
+import java.util.Objects;
 
 import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.Objects;
-
 /**
- * NamespaceMosaicMetaDTO
+ * AccountPropertiesMetaDTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class NamespaceMosaicMetaDTO {
-  @SerializedName("active")
-  private Boolean active = null;
-
-  @SerializedName("index")
-  private Integer index = null;
-
+public class AccountPropertiesMetaDTO {
   @SerializedName("id")
   private String id = null;
 
-  public NamespaceMosaicMetaDTO active(Boolean active) {
-    this.active = active;
-    return this;
-  }
-
-   /**
-   * Get active
-   * @return active
-  **/
-  @ApiModelProperty(required = true, value = "")
-  public Boolean isActive() {
-    return active;
-  }
-
-  public void setActive(Boolean active) {
-    this.active = active;
-  }
-
-  public NamespaceMosaicMetaDTO index(Integer index) {
-    this.index = index;
-    return this;
-  }
-
-   /**
-   * Get index
-   * @return index
-  **/
-  @ApiModelProperty(required = true, value = "")
-  public Integer getIndex() {
-    return index;
-  }
-
-  public void setIndex(Integer index) {
-    this.index = index;
-  }
-
-  public NamespaceMosaicMetaDTO id(String id) {
+  public AccountPropertiesMetaDTO id(String id) {
     this.id = id;
     return this;
   }
@@ -80,7 +39,7 @@ public class NamespaceMosaicMetaDTO {
    * Get id
    * @return id
   **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(example = "00000000000000000000032f", required = true, value = "")
   public String getId() {
     return id;
   }
@@ -98,25 +57,21 @@ public class NamespaceMosaicMetaDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    NamespaceMosaicMetaDTO namespaceMosaicMetaDTO = (NamespaceMosaicMetaDTO) o;
-    return Objects.equals(this.active, namespaceMosaicMetaDTO.active) &&
-        Objects.equals(this.index, namespaceMosaicMetaDTO.index) &&
-        Objects.equals(this.id, namespaceMosaicMetaDTO.id);
+    AccountPropertiesMetaDTO accountPropertiesMetaDTO = (AccountPropertiesMetaDTO) o;
+    return Objects.equals(this.id, accountPropertiesMetaDTO.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(active, index, id);
+    return Objects.hash(id);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class NamespaceMosaicMetaDTO {\n");
+    sb.append("class AccountPropertiesMetaDTO {\n");
     
-    sb.append("    active: ").append(toIndentedString(active)).append("\n");
-    sb.append("    index: ").append(toIndentedString(index)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("}");
     return sb.toString();

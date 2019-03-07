@@ -14,53 +14,59 @@
  * limitations under the License.
  */
 
+package io.nem.sdk.dto;
 
-package io.nem.sdk.model.namespace;
+import com.google.gson.annotations.SerializedName;
+import io.nem.sdk.model.transaction.UInt64;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- * NamespaceIds
+ * MosaicDTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class NamespaceIds {
-  @SerializedName("namespaceIds")
-  private List<String> namespaceIds = null;
+public class MosaicDTO {
+  @SerializedName("id")
+  private UInt64 id = null;
 
-  public NamespaceIds namespaceIds(List<String> namespaceIds) {
-    this.namespaceIds = namespaceIds;
-    return this;
-  }
+  @SerializedName("amount")
+  private UInt64 amount = null;
 
-  public NamespaceIds addNamespaceIdsItem(String namespaceIdsItem) {
-    if (this.namespaceIds == null) {
-      this.namespaceIds = new ArrayList<String>();
-    }
-    this.namespaceIds.add(namespaceIdsItem);
+  public MosaicDTO id(UInt64 id) {
+    this.id = id;
     return this;
   }
 
    /**
-   * Get namespaceIds
-   * @return namespaceIds
+   * Get id
+   * @return id
   **/
-  @ApiModelProperty(example = "[\"84b3552d375ffa4b\"]", value = "")
-  public List<String> getNamespaceIds() {
-    return namespaceIds;
+  @ApiModelProperty(required = true, value = "")
+  public UInt64 getId() {
+    return id;
   }
 
-  public void setNamespaceIds(List<String> namespaceIds) {
-    this.namespaceIds = namespaceIds;
+  public void setId(UInt64 id) {
+    this.id = id;
+  }
+
+  public MosaicDTO amount(UInt64 amount) {
+    this.amount = amount;
+    return this;
+  }
+
+   /**
+   * Get amount
+   * @return amount
+  **/
+  @ApiModelProperty(required = true, value = "")
+  public UInt64 getAmount() {
+    return amount;
+  }
+
+  public void setAmount(UInt64 amount) {
+    this.amount = amount;
   }
 
 
@@ -72,22 +78,24 @@ public class NamespaceIds {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    NamespaceIds namespaceIds = (NamespaceIds) o;
-    return Objects.equals(this.namespaceIds, namespaceIds.namespaceIds);
+    MosaicDTO mosaicDTO = (MosaicDTO) o;
+    return Objects.equals(this.id, mosaicDTO.id) &&
+        Objects.equals(this.amount, mosaicDTO.amount);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(namespaceIds);
+    return Objects.hash(id, amount);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class NamespaceIds {\n");
+    sb.append("class MosaicDTO {\n");
     
-    sb.append("    namespaceIds: ").append(toIndentedString(namespaceIds)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
     sb.append("}");
     return sb.toString();
   }

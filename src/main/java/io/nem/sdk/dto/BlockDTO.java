@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.nem.sdk.model.blockchain;
+package io.nem.sdk.dto;
 
 import com.google.gson.annotations.SerializedName;
 import io.nem.sdk.model.transaction.UInt64;

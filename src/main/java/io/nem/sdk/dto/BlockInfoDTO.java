@@ -14,59 +14,58 @@
  * limitations under the License.
  */
 
-package io.nem.sdk.model.mosaic;
+package io.nem.sdk.dto;
 
 import com.google.gson.annotations.SerializedName;
-import io.nem.sdk.model.transaction.UInt64;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
 
 /**
- * MosaicDTO
+ * BlockInfoDTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class MosaicDTO {
-  @SerializedName("id")
-  private UInt64 id = null;
+public class BlockInfoDTO {
+  @SerializedName("meta")
+  private BlockMetaDTO meta = null;
 
-  @SerializedName("amount")
-  private UInt64 amount = null;
+  @SerializedName("block")
+  private BlockDTO block = null;
 
-  public MosaicDTO id(UInt64 id) {
-    this.id = id;
+  public BlockInfoDTO meta(BlockMetaDTO meta) {
+    this.meta = meta;
     return this;
   }
 
    /**
-   * Get id
-   * @return id
+   * Get meta
+   * @return meta
   **/
   @ApiModelProperty(required = true, value = "")
-  public UInt64 getId() {
-    return id;
+  public BlockMetaDTO getMeta() {
+    return meta;
   }
 
-  public void setId(UInt64 id) {
-    this.id = id;
+  public void setMeta(BlockMetaDTO meta) {
+    this.meta = meta;
   }
 
-  public MosaicDTO amount(UInt64 amount) {
-    this.amount = amount;
+  public BlockInfoDTO block(BlockDTO block) {
+    this.block = block;
     return this;
   }
 
    /**
-   * Get amount
-   * @return amount
+   * Get block
+   * @return block
   **/
   @ApiModelProperty(required = true, value = "")
-  public UInt64 getAmount() {
-    return amount;
+  public BlockDTO getBlock() {
+    return block;
   }
 
-  public void setAmount(UInt64 amount) {
-    this.amount = amount;
+  public void setBlock(BlockDTO block) {
+    this.block = block;
   }
 
 
@@ -78,24 +77,24 @@ public class MosaicDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    MosaicDTO mosaicDTO = (MosaicDTO) o;
-    return Objects.equals(this.id, mosaicDTO.id) &&
-        Objects.equals(this.amount, mosaicDTO.amount);
+    BlockInfoDTO blockInfoDTO = (BlockInfoDTO) o;
+    return Objects.equals(this.meta, blockInfoDTO.meta) &&
+        Objects.equals(this.block, blockInfoDTO.block);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, amount);
+    return Objects.hash(meta, block);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class MosaicDTO {\n");
+    sb.append("class BlockInfoDTO {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
+    sb.append("    meta: ").append(toIndentedString(meta)).append("\n");
+    sb.append("    block: ").append(toIndentedString(block)).append("\n");
     sb.append("}");
     return sb.toString();
   }

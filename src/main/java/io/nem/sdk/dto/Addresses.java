@@ -15,65 +15,48 @@
  */
 
 
-package io.nem.sdk.model.account;
+package io.nem.sdk.dto;
 
 import java.util.Objects;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
+
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.nem.sdk.model.account.AccountDTO;
-import io.nem.sdk.model.account.AccountMetaDTO;
-import java.io.IOException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * AccountInfoDTO
+ * Addresses
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class AccountInfoDTO {
-  @SerializedName("meta")
-  private AccountMetaDTO meta = null;
+public class Addresses {
+  @SerializedName("addresses")
+  private List<String> addresses = null;
 
-  @SerializedName("account")
-  private AccountDTO account = null;
+  public Addresses addresses(List<String> addresses) {
+    this.addresses = addresses;
+    return this;
+  }
 
-  public AccountInfoDTO meta(AccountMetaDTO meta) {
-    this.meta = meta;
+  public Addresses addAddressesItem(String addressesItem) {
+    if (this.addresses == null) {
+      this.addresses = new ArrayList<String>();
+    }
+    this.addresses.add(addressesItem);
     return this;
   }
 
    /**
-   * Get meta
-   * @return meta
+   * Get addresses
+   * @return addresses
   **/
-  @ApiModelProperty(required = true, value = "")
-  public AccountMetaDTO getMeta() {
-    return meta;
+  @ApiModelProperty(example = "[\"SDRDGFTDLLCB67D4HPGIMIHPNSRYRJRT7DOBGWZY\",\"SBCPGZ3S2SCC3YHBBTYDCUZV4ZZEPHM2KGCP4QXX\"]", value = "")
+  public List<String> getAddresses() {
+    return addresses;
   }
 
-  public void setMeta(AccountMetaDTO meta) {
-    this.meta = meta;
-  }
-
-  public AccountInfoDTO account(AccountDTO account) {
-    this.account = account;
-    return this;
-  }
-
-   /**
-   * Get account
-   * @return account
-  **/
-  @ApiModelProperty(required = true, value = "")
-  public AccountDTO getAccount() {
-    return account;
-  }
-
-  public void setAccount(AccountDTO account) {
-    this.account = account;
+  public void setAddresses(List<String> addresses) {
+    this.addresses = addresses;
   }
 
 
@@ -85,24 +68,22 @@ public class AccountInfoDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AccountInfoDTO accountInfoDTO = (AccountInfoDTO) o;
-    return Objects.equals(this.meta, accountInfoDTO.meta) &&
-        Objects.equals(this.account, accountInfoDTO.account);
+    Addresses addresses = (Addresses) o;
+    return Objects.equals(this.addresses, addresses.addresses);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(meta, account);
+    return Objects.hash(addresses);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AccountInfoDTO {\n");
+    sb.append("class Addresses {\n");
     
-    sb.append("    meta: ").append(toIndentedString(meta)).append("\n");
-    sb.append("    account: ").append(toIndentedString(account)).append("\n");
+    sb.append("    addresses: ").append(toIndentedString(addresses)).append("\n");
     sb.append("}");
     return sb.toString();
   }

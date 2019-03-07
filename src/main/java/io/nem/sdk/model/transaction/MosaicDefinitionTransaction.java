@@ -20,7 +20,7 @@ import com.google.flatbuffers.FlatBufferBuilder;
 import io.nem.sdk.model.account.PublicAccount;
 import io.nem.sdk.model.blockchain.NetworkType;
 import io.nem.sdk.model.mosaic.MosaicId;
-import io.nem.sdk.model.mosaic.MosaicProperties;
+import io.nem.sdk.dto.MosaicProperties;
 import io.nem.sdk.model.namespace.NamespaceId;
 
 import org.apache.commons.lang.Validate;

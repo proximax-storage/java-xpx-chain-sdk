@@ -15,52 +15,48 @@
  */
 
 
-package io.nem.sdk.model.account;
+package io.nem.sdk.dto;
 
 import java.util.Objects;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
+
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Addresses
+ * MosaicIds
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class Addresses {
-  @SerializedName("addresses")
-  private List<String> addresses = null;
+public class MosaicIds {
+  @SerializedName("mosaicIds")
+  private List<String> mosaicIds = null;
 
-  public Addresses addresses(List<String> addresses) {
-    this.addresses = addresses;
+  public MosaicIds mosaicIds(List<String> mosaicIds) {
+    this.mosaicIds = mosaicIds;
     return this;
   }
 
-  public Addresses addAddressesItem(String addressesItem) {
-    if (this.addresses == null) {
-      this.addresses = new ArrayList<String>();
+  public MosaicIds addMosaicIdsItem(String mosaicIdsItem) {
+    if (this.mosaicIds == null) {
+      this.mosaicIds = new ArrayList<String>();
     }
-    this.addresses.add(addressesItem);
+    this.mosaicIds.add(mosaicIdsItem);
     return this;
   }
 
    /**
-   * Get addresses
-   * @return addresses
+   * Get mosaicIds
+   * @return mosaicIds
   **/
-  @ApiModelProperty(example = "[\"SDRDGFTDLLCB67D4HPGIMIHPNSRYRJRT7DOBGWZY\",\"SBCPGZ3S2SCC3YHBBTYDCUZV4ZZEPHM2KGCP4QXX\"]", value = "")
-  public List<String> getAddresses() {
-    return addresses;
+  @ApiModelProperty(example = "[\"d525ad41d95fcf29\"]", value = "")
+  public List<String> getMosaicIds() {
+    return mosaicIds;
   }
 
-  public void setAddresses(List<String> addresses) {
-    this.addresses = addresses;
+  public void setMosaicIds(List<String> mosaicIds) {
+    this.mosaicIds = mosaicIds;
   }
 
 
@@ -72,22 +68,22 @@ public class Addresses {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Addresses addresses = (Addresses) o;
-    return Objects.equals(this.addresses, addresses.addresses);
+    MosaicIds mosaicIds = (MosaicIds) o;
+    return Objects.equals(this.mosaicIds, mosaicIds.mosaicIds);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(addresses);
+    return Objects.hash(mosaicIds);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Addresses {\n");
+    sb.append("class MosaicIds {\n");
     
-    sb.append("    addresses: ").append(toIndentedString(addresses)).append("\n");
+    sb.append("    mosaicIds: ").append(toIndentedString(mosaicIds)).append("\n");
     sb.append("}");
     return sb.toString();
   }

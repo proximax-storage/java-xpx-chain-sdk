@@ -15,7 +15,7 @@
  */
 
 
-package io.nem.sdk.model.mosaic;
+package io.nem.sdk.dto;
 
 import com.google.gson.annotations.SerializedName;
 import io.nem.sdk.model.transaction.UInt64;
@@ -24,20 +24,20 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.Objects;
 
 /**
- * MosaicNameDTO
+ * NamespaceNameDTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class MosaicNameDTO {
+public class NamespaceNameDTO {
   @SerializedName("parentId")
   private UInt64 parentId = null;
 
-  @SerializedName("mosaicId")
-  private UInt64 mosaicId = null;
+  @SerializedName("namespaceId")
+  private UInt64 namespaceId = null;
 
   @SerializedName("name")
   private String name = null;
 
-  public MosaicNameDTO parentId(UInt64 parentId) {
+  public NamespaceNameDTO parentId(UInt64 parentId) {
     this.parentId = parentId;
     return this;
   }
@@ -46,7 +46,7 @@ public class MosaicNameDTO {
    * Get parentId
    * @return parentId
   **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(value = "")
   public UInt64 getParentId() {
     return parentId;
   }
@@ -55,25 +55,25 @@ public class MosaicNameDTO {
     this.parentId = parentId;
   }
 
-  public MosaicNameDTO mosaicId(UInt64 mosaicId) {
-    this.mosaicId = mosaicId;
+  public NamespaceNameDTO namespaceId(UInt64 namespaceId) {
+    this.namespaceId = namespaceId;
     return this;
   }
 
    /**
-   * Get mosaicId
-   * @return mosaicId
+   * Get namespaceId
+   * @return namespaceId
   **/
   @ApiModelProperty(required = true, value = "")
-  public UInt64 getMosaicId() {
-    return mosaicId;
+  public UInt64 getNamespaceId() {
+    return namespaceId;
   }
 
-  public void setMosaicId(UInt64 mosaicId) {
-    this.mosaicId = mosaicId;
+  public void setNamespaceId(UInt64 namespaceId) {
+    this.namespaceId = namespaceId;
   }
 
-  public MosaicNameDTO name(String name) {
+  public NamespaceNameDTO name(String name) {
     this.name = name;
     return this;
   }
@@ -100,25 +100,25 @@ public class MosaicNameDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    MosaicNameDTO mosaicNameDTO = (MosaicNameDTO) o;
-    return Objects.equals(this.parentId, mosaicNameDTO.parentId) &&
-        Objects.equals(this.mosaicId, mosaicNameDTO.mosaicId) &&
-        Objects.equals(this.name, mosaicNameDTO.name);
+    NamespaceNameDTO namespaceNameDTO = (NamespaceNameDTO) o;
+    return Objects.equals(this.parentId, namespaceNameDTO.parentId) &&
+        Objects.equals(this.namespaceId, namespaceNameDTO.namespaceId) &&
+        Objects.equals(this.name, namespaceNameDTO.name);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(parentId, mosaicId, name);
+    return Objects.hash(parentId, namespaceId, name);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class MosaicNameDTO {\n");
+    sb.append("class NamespaceNameDTO {\n");
     
     sb.append("    parentId: ").append(toIndentedString(parentId)).append("\n");
-    sb.append("    mosaicId: ").append(toIndentedString(mosaicId)).append("\n");
+    sb.append("    namespaceId: ").append(toIndentedString(namespaceId)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("}");
     return sb.toString();

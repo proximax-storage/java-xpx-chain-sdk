@@ -14,70 +14,27 @@
  * limitations under the License.
  */
 
+package io.nem.sdk.dto;
 
-package io.nem.sdk.model.account;
-
-import java.util.Objects;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
- * AliasDTO
+ * AccountPropertiesDTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class AliasDTO {
-  @SerializedName("type")
-  private Integer type = null;
-
-  @SerializedName("mosaicId")
-  private String mosaicId = null;
-
+public class AccountPropertiesDTO {
   @SerializedName("address")
   private String address = null;
 
-  public AliasDTO type(Integer type) {
-    this.type = type;
-    return this;
-  }
+  @SerializedName("properties")
+  private List<AccountPropertyDTO> properties = new ArrayList<AccountPropertyDTO>();
 
-   /**
-   * Get type
-   * @return type
-  **/
-  @ApiModelProperty(required = true, value = "")
-  public Integer getType() {
-    return type;
-  }
-
-  public void setType(Integer type) {
-    this.type = type;
-  }
-
-  public AliasDTO mosaicId(String mosaicId) {
-    this.mosaicId = mosaicId;
-    return this;
-  }
-
-   /**
-   * Get mosaicId
-   * @return mosaicId
-  **/
-  @ApiModelProperty(value = "")
-  public String getMosaicId() {
-    return mosaicId;
-  }
-
-  public void setMosaicId(String mosaicId) {
-    this.mosaicId = mosaicId;
-  }
-
-  public AliasDTO address(String address) {
+  public AccountPropertiesDTO address(String address) {
     this.address = address;
     return this;
   }
@@ -86,13 +43,36 @@ public class AliasDTO {
    * Get address
    * @return address
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(example = "U0RSREdGVERMTENCNjdENEhQR0lNSUhQTlNSWVJKUlQ3RE9CR1daWQ==", required = true, value = "")
   public String getAddress() {
     return address;
   }
 
   public void setAddress(String address) {
     this.address = address;
+  }
+
+  public AccountPropertiesDTO properties(List<AccountPropertyDTO> properties) {
+    this.properties = properties;
+    return this;
+  }
+
+  public AccountPropertiesDTO addPropertiesItem(AccountPropertyDTO propertiesItem) {
+    this.properties.add(propertiesItem);
+    return this;
+  }
+
+   /**
+   * Get properties
+   * @return properties
+  **/
+  @ApiModelProperty(required = true, value = "")
+  public List<AccountPropertyDTO> getProperties() {
+    return properties;
+  }
+
+  public void setProperties(List<AccountPropertyDTO> properties) {
+    this.properties = properties;
   }
 
 
@@ -104,26 +84,24 @@ public class AliasDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AliasDTO aliasDTO = (AliasDTO) o;
-    return Objects.equals(this.type, aliasDTO.type) &&
-        Objects.equals(this.mosaicId, aliasDTO.mosaicId) &&
-        Objects.equals(this.address, aliasDTO.address);
+    AccountPropertiesDTO accountPropertiesDTO = (AccountPropertiesDTO) o;
+    return Objects.equals(this.address, accountPropertiesDTO.address) &&
+        Objects.equals(this.properties, accountPropertiesDTO.properties);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(type, mosaicId, address);
+    return Objects.hash(address, properties);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AliasDTO {\n");
+    sb.append("class AccountPropertiesDTO {\n");
     
-    sb.append("    type: ").append(toIndentedString(type)).append("\n");
-    sb.append("    mosaicId: ").append(toIndentedString(mosaicId)).append("\n");
     sb.append("    address: ").append(toIndentedString(address)).append("\n");
+    sb.append("    properties: ").append(toIndentedString(properties)).append("\n");
     sb.append("}");
     return sb.toString();
   }

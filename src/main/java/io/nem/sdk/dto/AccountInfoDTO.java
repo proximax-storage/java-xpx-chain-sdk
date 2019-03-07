@@ -15,25 +15,25 @@
  */
 
 
-package io.nem.sdk.model.account;
+package io.nem.sdk.dto;
+
+import java.util.Objects;
 
 import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.Objects;
-
 /**
- * AccountPropertiesInfoDTO
+ * AccountInfoDTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class AccountPropertiesInfoDTO {
+public class AccountInfoDTO {
   @SerializedName("meta")
-  private AccountPropertiesMetaDTO meta = null;
+  private AccountMetaDTO meta = null;
 
-  @SerializedName("accountProperties")
-  private AccountPropertiesDTO accountProperties = null;
+  @SerializedName("account")
+  private AccountDTO account = null;
 
-  public AccountPropertiesInfoDTO meta(AccountPropertiesMetaDTO meta) {
+  public AccountInfoDTO meta(AccountMetaDTO meta) {
     this.meta = meta;
     return this;
   }
@@ -43,30 +43,30 @@ public class AccountPropertiesInfoDTO {
    * @return meta
   **/
   @ApiModelProperty(required = true, value = "")
-  public AccountPropertiesMetaDTO getMeta() {
+  public AccountMetaDTO getMeta() {
     return meta;
   }
 
-  public void setMeta(AccountPropertiesMetaDTO meta) {
+  public void setMeta(AccountMetaDTO meta) {
     this.meta = meta;
   }
 
-  public AccountPropertiesInfoDTO accountProperties(AccountPropertiesDTO accountProperties) {
-    this.accountProperties = accountProperties;
+  public AccountInfoDTO account(AccountDTO account) {
+    this.account = account;
     return this;
   }
 
    /**
-   * Get accountProperties
-   * @return accountProperties
+   * Get account
+   * @return account
   **/
   @ApiModelProperty(required = true, value = "")
-  public AccountPropertiesDTO getAccountProperties() {
-    return accountProperties;
+  public AccountDTO getAccount() {
+    return account;
   }
 
-  public void setAccountProperties(AccountPropertiesDTO accountProperties) {
-    this.accountProperties = accountProperties;
+  public void setAccount(AccountDTO account) {
+    this.account = account;
   }
 
 
@@ -78,24 +78,24 @@ public class AccountPropertiesInfoDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AccountPropertiesInfoDTO accountPropertiesInfoDTO = (AccountPropertiesInfoDTO) o;
-    return Objects.equals(this.meta, accountPropertiesInfoDTO.meta) &&
-        Objects.equals(this.accountProperties, accountPropertiesInfoDTO.accountProperties);
+    AccountInfoDTO accountInfoDTO = (AccountInfoDTO) o;
+    return Objects.equals(this.meta, accountInfoDTO.meta) &&
+        Objects.equals(this.account, accountInfoDTO.account);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(meta, accountProperties);
+    return Objects.hash(meta, account);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AccountPropertiesInfoDTO {\n");
+    sb.append("class AccountInfoDTO {\n");
     
     sb.append("    meta: ").append(toIndentedString(meta)).append("\n");
-    sb.append("    accountProperties: ").append(toIndentedString(accountProperties)).append("\n");
+    sb.append("    account: ").append(toIndentedString(account)).append("\n");
     sb.append("}");
     return sb.toString();
   }

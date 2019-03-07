@@ -15,58 +15,59 @@
  */
 
 
-package io.nem.sdk.model.namespace;
+package io.nem.sdk.dto;
 
 import com.google.gson.annotations.SerializedName;
+import io.nem.sdk.model.transaction.UInt64;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
 
 /**
- * NamespaceInfoDTO
+ * BlockchainScoreDTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class NamespaceInfoDTO {
-  @SerializedName("meta")
-  private NamespaceMosaicMetaDTO meta = null;
+public class BlockchainScoreDTO {
+  @SerializedName("scoreHigh")
+  private UInt64 scoreHigh = null;
 
-  @SerializedName("namespace")
-  private NamespaceDTO namespace = null;
+  @SerializedName("scoreLow")
+  private UInt64 scoreLow = null;
 
-  public NamespaceInfoDTO meta(NamespaceMosaicMetaDTO meta) {
-    this.meta = meta;
+  public BlockchainScoreDTO scoreHigh(UInt64 scoreHigh) {
+    this.scoreHigh = scoreHigh;
     return this;
   }
 
    /**
-   * Get meta
-   * @return meta
-  **/
-  @ApiModelProperty(value = "")
-  public NamespaceMosaicMetaDTO getMeta() {
-    return meta;
-  }
-
-  public void setMeta(NamespaceMosaicMetaDTO meta) {
-    this.meta = meta;
-  }
-
-  public NamespaceInfoDTO namespace(NamespaceDTO namespace) {
-    this.namespace = namespace;
-    return this;
-  }
-
-   /**
-   * Get namespace
-   * @return namespace
+   * Get scoreHigh
+   * @return scoreHigh
   **/
   @ApiModelProperty(required = true, value = "")
-  public NamespaceDTO getNamespace() {
-    return namespace;
+  public UInt64 getScoreHigh() {
+    return scoreHigh;
   }
 
-  public void setNamespace(NamespaceDTO namespace) {
-    this.namespace = namespace;
+  public void setScoreHigh(UInt64 scoreHigh) {
+    this.scoreHigh = scoreHigh;
+  }
+
+  public BlockchainScoreDTO scoreLow(UInt64 scoreLow) {
+    this.scoreLow = scoreLow;
+    return this;
+  }
+
+   /**
+   * Get scoreLow
+   * @return scoreLow
+  **/
+  @ApiModelProperty(required = true, value = "")
+  public UInt64 getScoreLow() {
+    return scoreLow;
+  }
+
+  public void setScoreLow(UInt64 scoreLow) {
+    this.scoreLow = scoreLow;
   }
 
 
@@ -78,24 +79,24 @@ public class NamespaceInfoDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    NamespaceInfoDTO namespaceInfoDTO = (NamespaceInfoDTO) o;
-    return Objects.equals(this.meta, namespaceInfoDTO.meta) &&
-        Objects.equals(this.namespace, namespaceInfoDTO.namespace);
+    BlockchainScoreDTO blockchainScoreDTO = (BlockchainScoreDTO) o;
+    return Objects.equals(this.scoreHigh, blockchainScoreDTO.scoreHigh) &&
+        Objects.equals(this.scoreLow, blockchainScoreDTO.scoreLow);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(meta, namespace);
+    return Objects.hash(scoreHigh, scoreLow);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class NamespaceInfoDTO {\n");
+    sb.append("class BlockchainScoreDTO {\n");
     
-    sb.append("    meta: ").append(toIndentedString(meta)).append("\n");
-    sb.append("    namespace: ").append(toIndentedString(namespace)).append("\n");
+    sb.append("    scoreHigh: ").append(toIndentedString(scoreHigh)).append("\n");
+    sb.append("    scoreLow: ").append(toIndentedString(scoreLow)).append("\n");
     sb.append("}");
     return sb.toString();
   }
