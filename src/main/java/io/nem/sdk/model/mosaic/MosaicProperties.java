@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.nem.sdk.dto;
+package io.nem.sdk.model.mosaic;
 
 import org.apache.commons.lang3.Validate;
 

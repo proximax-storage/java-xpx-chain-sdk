@@ -22,7 +22,7 @@ import io.nem.sdk.model.blockchain.NetworkType;
 import io.nem.sdk.model.mosaic.MosaicId;
 import io.nem.sdk.model.mosaic.MosaicInfo;
 import io.nem.sdk.model.mosaic.MosaicName;
-import io.nem.sdk.dto.MosaicProperties;
+import io.nem.sdk.model.mosaic.MosaicProperties;
 import io.nem.sdk.model.namespace.NamespaceId;
 import io.nem.sdk.model.transaction.UInt64;
 import io.reactivex.Observable;

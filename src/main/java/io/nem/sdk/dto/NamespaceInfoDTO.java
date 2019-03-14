@@ -28,12 +28,12 @@ import java.util.Objects;
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
 public class NamespaceInfoDTO {
   @SerializedName("meta")
-  private io.nem.sdk.model.namespace.NamespaceMosaicMetaDTO meta = null;
+  private NamespaceMosaicMetaDTO meta = null;
 
   @SerializedName("namespace")
   private NamespaceDTO namespace = null;
 
-  public NamespaceInfoDTO meta(io.nem.sdk.model.namespace.NamespaceMosaicMetaDTO meta) {
+  public NamespaceInfoDTO meta(NamespaceMosaicMetaDTO meta) {
     this.meta = meta;
     return this;
   }
@@ -43,7 +43,7 @@ public class NamespaceInfoDTO {
    * @return meta
   **/
   @ApiModelProperty(value = "")
-  public io.nem.sdk.model.namespace.NamespaceMosaicMetaDTO getMeta() {
+  public NamespaceMosaicMetaDTO getMeta() {
     return meta;
   }
 

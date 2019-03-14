@@ -16,7 +16,6 @@
 
 package io.nem.sdk.model.mosaic;
 
-import io.nem.sdk.dto.MosaicProperties;
 import io.nem.sdk.model.account.PublicAccount;
 import io.nem.sdk.model.blockchain.NetworkType;
 import io.nem.sdk.model.namespace.NamespaceId;

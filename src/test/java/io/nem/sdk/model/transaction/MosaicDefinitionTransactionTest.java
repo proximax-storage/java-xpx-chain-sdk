@@ -17,7 +17,7 @@
 package io.nem.sdk.model.transaction;
 
 import io.nem.sdk.model.blockchain.NetworkType;
-import io.nem.sdk.dto.MosaicProperties;
+import io.nem.sdk.model.mosaic.MosaicProperties;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

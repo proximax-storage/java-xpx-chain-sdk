@@ -21,7 +21,7 @@ import io.nem.sdk.model.account.PublicAccount;
 import io.nem.sdk.model.blockchain.NetworkType;
 import io.nem.sdk.model.mosaic.Mosaic;
 import io.nem.sdk.model.mosaic.MosaicId;
-import io.nem.sdk.dto.MosaicProperties;
+import io.nem.sdk.model.mosaic.MosaicProperties;
 import io.nem.sdk.model.mosaic.MosaicSupplyType;
 import io.nem.sdk.model.namespace.NamespaceId;
 import io.nem.sdk.model.namespace.NamespaceType;
