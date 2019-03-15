@@ -100,4 +100,52 @@ class TransactionTypeTest {
         assertEquals(16978, transactionType.getValue());
         assertEquals(TransactionType.SECRET_PROOF, TransactionType.rawValueOf(16978));
     }
+
+    @Test
+    void addressAliasType() {
+        TransactionType transactionType = TransactionType.ADDRESS_ALIAS;
+        assertEquals(0x424E, transactionType.getValue());
+        assertEquals(16974, transactionType.getValue());
+        assertEquals(TransactionType.ADDRESS_ALIAS, TransactionType.rawValueOf(16974));
+    }
+
+    @Test
+    void mosaicAliasType() {
+        TransactionType transactionType = TransactionType.MOSAIC_ALIAS;
+        assertEquals(0x434E, transactionType.getValue());
+        assertEquals(17230, transactionType.getValue());
+        assertEquals(TransactionType.MOSAIC_ALIAS, TransactionType.rawValueOf(17230));
+    }
+
+    @Test
+    void accountPropertiesAddressType() {
+        TransactionType transactionType = TransactionType.ACCOUNT_PROPERTIES_ADDRESS;
+        assertEquals(0x4150, transactionType.getValue());
+        assertEquals(16720, transactionType.getValue());
+        assertEquals(TransactionType.ACCOUNT_PROPERTIES_ADDRESS, TransactionType.rawValueOf(16720));
+    }
+
+    @Test
+    void accountPropertiesMosaic() {
+        TransactionType transactionType = TransactionType.ACCOUNT_PROPERTIES_MOSAIC;
+        assertEquals(0x4250, transactionType.getValue());
+        assertEquals(16976, transactionType.getValue());
+        assertEquals(TransactionType.ACCOUNT_PROPERTIES_MOSAIC, TransactionType.rawValueOf(16976));
+    }
+
+    @Test
+    void accountPropertiesEntityType() {
+        TransactionType transactionType = TransactionType.ACCOUNT_PROPERTIES_ENTITY_TYPE;
+        assertEquals(0x4350, transactionType.getValue());
+        assertEquals(17232, transactionType.getValue());
+        assertEquals(TransactionType.ACCOUNT_PROPERTIES_ENTITY_TYPE, TransactionType.rawValueOf(17232));
+    }
+
+    @Test
+    void accountLinkType() {
+        TransactionType transactionType = TransactionType.ACCOUNT_LINK;
+        assertEquals(0x414C, transactionType.getValue());
+        assertEquals(16716, transactionType.getValue());
+        assertEquals(TransactionType.ACCOUNT_LINK, TransactionType.rawValueOf(16716));
+    }
 }
