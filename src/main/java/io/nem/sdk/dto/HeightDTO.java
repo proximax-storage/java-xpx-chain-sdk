@@ -18,44 +18,35 @@
 package io.nem.sdk.dto;
 
 import com.google.gson.annotations.SerializedName;
+import io.nem.sdk.infrastructure.UInt64DTO;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
- * MosaicIds
+ * HeightDTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class MosaicIds {
-  @SerializedName("mosaicIds")
-  private List<String> mosaicIds = null;
+public class HeightDTO {
+  @SerializedName("height")
+  private UInt64DTO height = null;
 
-  public MosaicIds mosaicIds(List<String> mosaicIds) {
-    this.mosaicIds = mosaicIds;
-    return this;
-  }
-
-  public MosaicIds addMosaicIdsItem(String mosaicIdsItem) {
-    if (this.mosaicIds == null) {
-      this.mosaicIds = new ArrayList<String>();
-    }
-    this.mosaicIds.add(mosaicIdsItem);
+  public HeightDTO height(UInt64DTO height) {
+    this.height = height;
     return this;
   }
 
    /**
-   * Get mosaicIds
-   * @return mosaicIds
+   * Get height
+   * @return height
   **/
-  @ApiModelProperty(example = "[\"d525ad41d95fcf29\"]", value = "")
-  public List<String> getMosaicIds() {
-    return mosaicIds;
+  @ApiModelProperty(required = true, value = "")
+  public UInt64DTO getHeight() {
+    return height;
   }
 
-  public void setMosaicIds(List<String> mosaicIds) {
-    this.mosaicIds = mosaicIds;
+  public void setHeight(UInt64DTO height) {
+    this.height = height;
   }
 
 
@@ -67,22 +58,22 @@ public class MosaicIds {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    MosaicIds mosaicIds = (MosaicIds) o;
-    return Objects.equals(this.mosaicIds, mosaicIds.mosaicIds);
+    HeightDTO heightDTO = (HeightDTO) o;
+    return Objects.equals(this.height, heightDTO.height);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(mosaicIds);
+    return Objects.hash(height);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class MosaicIds {\n");
+    sb.append("class HeightDTO {\n");
     
-    sb.append("    mosaicIds: ").append(toIndentedString(mosaicIds)).append("\n");
+    sb.append("    height: ").append(toIndentedString(height)).append("\n");
     sb.append("}");
     return sb.toString();
   }

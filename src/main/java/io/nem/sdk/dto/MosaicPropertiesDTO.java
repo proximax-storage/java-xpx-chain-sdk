@@ -19,8 +19,8 @@ package io.nem.sdk.dto;
 
 import io.nem.sdk.model.transaction.UInt64;
 
-import java.util.Objects;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * MosaicPropertiesDTO

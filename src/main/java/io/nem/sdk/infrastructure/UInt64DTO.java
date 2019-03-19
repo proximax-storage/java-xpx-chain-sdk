@@ -39,7 +39,7 @@ import java.util.Objects;
  * UInt64DTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-12-19T19:07:40.115Z")
-class UInt64DTO extends ArrayList<Long> {
+public class UInt64DTO extends ArrayList<Long> {
 
     @Override
     public boolean equals(java.lang.Object o) {

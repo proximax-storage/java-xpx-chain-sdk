@@ -20,42 +20,53 @@ package io.nem.sdk.dto;
 import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
- * MosaicIds
+ * MerklePathItem
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class MosaicIds {
-  @SerializedName("mosaicIds")
-  private List<String> mosaicIds = null;
+public class MerklePathItem {
+  @SerializedName("position")
+  private Integer position = null;
 
-  public MosaicIds mosaicIds(List<String> mosaicIds) {
-    this.mosaicIds = mosaicIds;
-    return this;
-  }
+  @SerializedName("hash")
+  private String hash = null;
 
-  public MosaicIds addMosaicIdsItem(String mosaicIdsItem) {
-    if (this.mosaicIds == null) {
-      this.mosaicIds = new ArrayList<String>();
-    }
-    this.mosaicIds.add(mosaicIdsItem);
+  public MerklePathItem position(Integer position) {
+    this.position = position;
     return this;
   }
 
    /**
-   * Get mosaicIds
-   * @return mosaicIds
+   * Get position
+   * @return position
   **/
-  @ApiModelProperty(example = "[\"d525ad41d95fcf29\"]", value = "")
-  public List<String> getMosaicIds() {
-    return mosaicIds;
+  @ApiModelProperty(example = "1", value = "")
+  public Integer getPosition() {
+    return position;
   }
 
-  public void setMosaicIds(List<String> mosaicIds) {
-    this.mosaicIds = mosaicIds;
+  public void setPosition(Integer position) {
+    this.position = position;
+  }
+
+  public MerklePathItem hash(String hash) {
+    this.hash = hash;
+    return this;
+  }
+
+   /**
+   * Get hash
+   * @return hash
+  **/
+  @ApiModelProperty(value = "")
+  public String getHash() {
+    return hash;
+  }
+
+  public void setHash(String hash) {
+    this.hash = hash;
   }
 
 
@@ -67,22 +78,24 @@ public class MosaicIds {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    MosaicIds mosaicIds = (MosaicIds) o;
-    return Objects.equals(this.mosaicIds, mosaicIds.mosaicIds);
+    MerklePathItem merklePathItem = (MerklePathItem) o;
+    return Objects.equals(this.position, merklePathItem.position) &&
+        Objects.equals(this.hash, merklePathItem.hash);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(mosaicIds);
+    return Objects.hash(position, hash);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class MosaicIds {\n");
+    sb.append("class MerklePathItem {\n");
     
-    sb.append("    mosaicIds: ").append(toIndentedString(mosaicIds)).append("\n");
+    sb.append("    position: ").append(toIndentedString(position)).append("\n");
+    sb.append("    hash: ").append(toIndentedString(hash)).append("\n");
     sb.append("}");
     return sb.toString();
   }

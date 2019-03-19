@@ -20,42 +20,32 @@ package io.nem.sdk.dto;
 import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
- * MosaicIds
+ * AnnounceTransactionInfoDTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class MosaicIds {
-  @SerializedName("mosaicIds")
-  private List<String> mosaicIds = null;
+public class AnnounceTransactionInfoDTO {
+  @SerializedName("message")
+  private String message = null;
 
-  public MosaicIds mosaicIds(List<String> mosaicIds) {
-    this.mosaicIds = mosaicIds;
-    return this;
-  }
-
-  public MosaicIds addMosaicIdsItem(String mosaicIdsItem) {
-    if (this.mosaicIds == null) {
-      this.mosaicIds = new ArrayList<String>();
-    }
-    this.mosaicIds.add(mosaicIdsItem);
+  public AnnounceTransactionInfoDTO message(String message) {
+    this.message = message;
     return this;
   }
 
    /**
-   * Get mosaicIds
-   * @return mosaicIds
+   * Get message
+   * @return message
   **/
-  @ApiModelProperty(example = "[\"d525ad41d95fcf29\"]", value = "")
-  public List<String> getMosaicIds() {
-    return mosaicIds;
+  @ApiModelProperty(required = true, value = "")
+  public String getMessage() {
+    return message;
   }
 
-  public void setMosaicIds(List<String> mosaicIds) {
-    this.mosaicIds = mosaicIds;
+  public void setMessage(String message) {
+    this.message = message;
   }
 
 
@@ -67,22 +57,22 @@ public class MosaicIds {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    MosaicIds mosaicIds = (MosaicIds) o;
-    return Objects.equals(this.mosaicIds, mosaicIds.mosaicIds);
+    AnnounceTransactionInfoDTO announceTransactionInfoDTO = (AnnounceTransactionInfoDTO) o;
+    return Objects.equals(this.message, announceTransactionInfoDTO.message);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(mosaicIds);
+    return Objects.hash(message);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class MosaicIds {\n");
+    sb.append("class AnnounceTransactionInfoDTO {\n");
     
-    sb.append("    mosaicIds: ").append(toIndentedString(mosaicIds)).append("\n");
+    sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("}");
     return sb.toString();
   }

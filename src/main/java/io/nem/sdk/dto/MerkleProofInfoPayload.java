@@ -25,37 +25,37 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * MosaicIds
+ * MerkleProofInfoPayload
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class MosaicIds {
-  @SerializedName("mosaicIds")
-  private List<String> mosaicIds = null;
+public class MerkleProofInfoPayload {
+  @SerializedName("merklePath")
+  private List<MerklePathItem> merklePath = null;
 
-  public MosaicIds mosaicIds(List<String> mosaicIds) {
-    this.mosaicIds = mosaicIds;
+  public MerkleProofInfoPayload merklePath(List<MerklePathItem> merklePath) {
+    this.merklePath = merklePath;
     return this;
   }
 
-  public MosaicIds addMosaicIdsItem(String mosaicIdsItem) {
-    if (this.mosaicIds == null) {
-      this.mosaicIds = new ArrayList<String>();
+  public MerkleProofInfoPayload addMerklePathItem(MerklePathItem merklePathItem) {
+    if (this.merklePath == null) {
+      this.merklePath = new ArrayList<MerklePathItem>();
     }
-    this.mosaicIds.add(mosaicIdsItem);
+    this.merklePath.add(merklePathItem);
     return this;
   }
 
    /**
-   * Get mosaicIds
-   * @return mosaicIds
+   * Get merklePath
+   * @return merklePath
   **/
-  @ApiModelProperty(example = "[\"d525ad41d95fcf29\"]", value = "")
-  public List<String> getMosaicIds() {
-    return mosaicIds;
+  @ApiModelProperty(value = "")
+  public List<MerklePathItem> getMerklePath() {
+    return merklePath;
   }
 
-  public void setMosaicIds(List<String> mosaicIds) {
-    this.mosaicIds = mosaicIds;
+  public void setMerklePath(List<MerklePathItem> merklePath) {
+    this.merklePath = merklePath;
   }
 
 
@@ -67,22 +67,22 @@ public class MosaicIds {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    MosaicIds mosaicIds = (MosaicIds) o;
-    return Objects.equals(this.mosaicIds, mosaicIds.mosaicIds);
+    MerkleProofInfoPayload merkleProofInfoPayload = (MerkleProofInfoPayload) o;
+    return Objects.equals(this.merklePath, merkleProofInfoPayload.merklePath);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(mosaicIds);
+    return Objects.hash(merklePath);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class MosaicIds {\n");
+    sb.append("class MerkleProofInfoPayload {\n");
     
-    sb.append("    mosaicIds: ").append(toIndentedString(mosaicIds)).append("\n");
+    sb.append("    merklePath: ").append(toIndentedString(merklePath)).append("\n");
     sb.append("}");
     return sb.toString();
   }

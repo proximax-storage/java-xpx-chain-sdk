@@ -14,48 +14,58 @@
  * limitations under the License.
  */
 
-
 package io.nem.sdk.dto;
 
 import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
- * MosaicIds
+ * MerkleProofInfoDTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class MosaicIds {
-  @SerializedName("mosaicIds")
-  private List<String> mosaicIds = null;
+public class MerkleProofInfoDTO {
+  @SerializedName("payload")
+  private MerkleProofInfoPayload payload = null;
 
-  public MosaicIds mosaicIds(List<String> mosaicIds) {
-    this.mosaicIds = mosaicIds;
-    return this;
-  }
+  @SerializedName("type")
+  private String type = null;
 
-  public MosaicIds addMosaicIdsItem(String mosaicIdsItem) {
-    if (this.mosaicIds == null) {
-      this.mosaicIds = new ArrayList<String>();
-    }
-    this.mosaicIds.add(mosaicIdsItem);
+  public MerkleProofInfoDTO payload(MerkleProofInfoPayload payload) {
+    this.payload = payload;
     return this;
   }
 
    /**
-   * Get mosaicIds
-   * @return mosaicIds
+   * Get payload
+   * @return payload
   **/
-  @ApiModelProperty(example = "[\"d525ad41d95fcf29\"]", value = "")
-  public List<String> getMosaicIds() {
-    return mosaicIds;
+  @ApiModelProperty(required = true, value = "")
+  public MerkleProofInfoPayload getPayload() {
+    return payload;
   }
 
-  public void setMosaicIds(List<String> mosaicIds) {
-    this.mosaicIds = mosaicIds;
+  public void setPayload(MerkleProofInfoPayload payload) {
+    this.payload = payload;
+  }
+
+  public MerkleProofInfoDTO type(String type) {
+    this.type = type;
+    return this;
+  }
+
+   /**
+   * Get type
+   * @return type
+  **/
+  @ApiModelProperty(example = "merkleProofInfo", required = true, value = "")
+  public String getType() {
+    return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
   }
 
 
@@ -67,22 +77,24 @@ public class MosaicIds {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    MosaicIds mosaicIds = (MosaicIds) o;
-    return Objects.equals(this.mosaicIds, mosaicIds.mosaicIds);
+    MerkleProofInfoDTO merkleProofInfoDTO = (MerkleProofInfoDTO) o;
+    return Objects.equals(this.payload, merkleProofInfoDTO.payload) &&
+        Objects.equals(this.type, merkleProofInfoDTO.type);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(mosaicIds);
+    return Objects.hash(payload, type);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class MosaicIds {\n");
+    sb.append("class MerkleProofInfoDTO {\n");
     
-    sb.append("    mosaicIds: ").append(toIndentedString(mosaicIds)).append("\n");
+    sb.append("    payload: ").append(toIndentedString(payload)).append("\n");
+    sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("}");
     return sb.toString();
   }

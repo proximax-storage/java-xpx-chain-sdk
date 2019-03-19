@@ -25,37 +25,37 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * MosaicIds
+ * TransactionHashes
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class MosaicIds {
-  @SerializedName("mosaicIds")
-  private List<String> mosaicIds = null;
+public class TransactionHashes {
+  @SerializedName("hashes")
+  private List<String> hashes = null;
 
-  public MosaicIds mosaicIds(List<String> mosaicIds) {
-    this.mosaicIds = mosaicIds;
+  public TransactionHashes hashes(List<String> hashes) {
+    this.hashes = hashes;
     return this;
   }
 
-  public MosaicIds addMosaicIdsItem(String mosaicIdsItem) {
-    if (this.mosaicIds == null) {
-      this.mosaicIds = new ArrayList<String>();
+  public TransactionHashes addHashesItem(String hashesItem) {
+    if (this.hashes == null) {
+      this.hashes = new ArrayList<String>();
     }
-    this.mosaicIds.add(mosaicIdsItem);
+    this.hashes.add(hashesItem);
     return this;
   }
 
    /**
-   * Get mosaicIds
-   * @return mosaicIds
+   * Get hashes
+   * @return hashes
   **/
-  @ApiModelProperty(example = "[\"d525ad41d95fcf29\"]", value = "")
-  public List<String> getMosaicIds() {
-    return mosaicIds;
+  @ApiModelProperty(example = "[\"5AF72FE39C0515E823903918A0BFE9625DD752C7BD63969C8869F25E9D155DE5\"]", value = "")
+  public List<String> getHashes() {
+    return hashes;
   }
 
-  public void setMosaicIds(List<String> mosaicIds) {
-    this.mosaicIds = mosaicIds;
+  public void setHashes(List<String> hashes) {
+    this.hashes = hashes;
   }
 
 
@@ -67,22 +67,22 @@ public class MosaicIds {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    MosaicIds mosaicIds = (MosaicIds) o;
-    return Objects.equals(this.mosaicIds, mosaicIds.mosaicIds);
+    TransactionHashes transactionHashes = (TransactionHashes) o;
+    return Objects.equals(this.hashes, transactionHashes.hashes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(mosaicIds);
+    return Objects.hash(hashes);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class MosaicIds {\n");
+    sb.append("class TransactionHashes {\n");
     
-    sb.append("    mosaicIds: ").append(toIndentedString(mosaicIds)).append("\n");
+    sb.append("    hashes: ").append(toIndentedString(hashes)).append("\n");
     sb.append("}");
     return sb.toString();
   }

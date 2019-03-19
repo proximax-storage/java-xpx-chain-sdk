@@ -14,48 +14,37 @@
  * limitations under the License.
  */
 
-
 package io.nem.sdk.dto;
 
 import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
- * MosaicIds
+ * NodeTimeDTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class MosaicIds {
-  @SerializedName("mosaicIds")
-  private List<String> mosaicIds = null;
+public class NodeTimeDTO {
+  @SerializedName("communicationTimestamps")
+  private CommunicationTimestamps communicationTimestamps = null;
 
-  public MosaicIds mosaicIds(List<String> mosaicIds) {
-    this.mosaicIds = mosaicIds;
-    return this;
-  }
-
-  public MosaicIds addMosaicIdsItem(String mosaicIdsItem) {
-    if (this.mosaicIds == null) {
-      this.mosaicIds = new ArrayList<String>();
-    }
-    this.mosaicIds.add(mosaicIdsItem);
+  public NodeTimeDTO communicationTimestamps(CommunicationTimestamps communicationTimestamps) {
+    this.communicationTimestamps = communicationTimestamps;
     return this;
   }
 
    /**
-   * Get mosaicIds
-   * @return mosaicIds
+   * Get communicationTimestamps
+   * @return communicationTimestamps
   **/
-  @ApiModelProperty(example = "[\"d525ad41d95fcf29\"]", value = "")
-  public List<String> getMosaicIds() {
-    return mosaicIds;
+  @ApiModelProperty(required = true, value = "")
+  public CommunicationTimestamps getCommunicationTimestamps() {
+    return communicationTimestamps;
   }
 
-  public void setMosaicIds(List<String> mosaicIds) {
-    this.mosaicIds = mosaicIds;
+  public void setCommunicationTimestamps(CommunicationTimestamps communicationTimestamps) {
+    this.communicationTimestamps = communicationTimestamps;
   }
 
 
@@ -67,22 +56,22 @@ public class MosaicIds {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    MosaicIds mosaicIds = (MosaicIds) o;
-    return Objects.equals(this.mosaicIds, mosaicIds.mosaicIds);
+    NodeTimeDTO nodeTimeDTO = (NodeTimeDTO) o;
+    return Objects.equals(this.communicationTimestamps, nodeTimeDTO.communicationTimestamps);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(mosaicIds);
+    return Objects.hash(communicationTimestamps);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class MosaicIds {\n");
+    sb.append("class NodeTimeDTO {\n");
     
-    sb.append("    mosaicIds: ").append(toIndentedString(mosaicIds)).append("\n");
+    sb.append("    communicationTimestamps: ").append(toIndentedString(communicationTimestamps)).append("\n");
     sb.append("}");
     return sb.toString();
   }
