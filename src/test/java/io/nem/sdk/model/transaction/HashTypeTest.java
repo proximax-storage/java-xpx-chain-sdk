@@ -28,31 +28,108 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class HashTypeTest {
 
     @Test
-    void HASH3_512ShouldBeExactly128CharactersLength() {
-        byte[] secretBytes = new byte[20];
-        new Random().nextBytes(secretBytes);
-        byte[] result = Hashes.sha3_512(secretBytes);
-        String secret = Hex.encodeHexString(result);
-
-        assertTrue(HashType.Validator(HashType.SHA3_512, secret));
-    }
-
-    @Test
-    void HASH3_512ShouldReturnFalseIfItIsNot128CharsLength() {
+    void SHA3_256ShouldBeExactly64CharactersLength() {
         byte[] secretBytes = new byte[20];
         new Random().nextBytes(secretBytes);
         byte[] result = Hashes.sha3_256(secretBytes);
         String secret = Hex.encodeHexString(result);
 
-        assertFalse(HashType.Validator(HashType.SHA3_512, secret));
+        assertTrue(HashType.Validator(HashType.SHA3_256, secret));
     }
 
     @Test
-    void HASH3_512ShouldReturnFalseIfItIsNotAValidHash() {
-        String secret = "zyz6053bb910a6027f138ac5ebe92d43a9a18b7239b3c4d5ea69f1632e50aeef" +
-                "28184e46cd22ded096b766318580a569e74521a9d63885cc8d5e8644793be928";
-        assertFalse(HashType.Validator(HashType.SHA3_512, secret));
+    void SHA3_256ShouldReturnFalseIfItIsNot64CharsLength() {
+        byte[] secretBytes = new byte[20];
+        new Random().nextBytes(secretBytes);
+        byte[] result = Hashes.sha3_512(secretBytes);
+        String secret = Hex.encodeHexString(result);
 
+        assertFalse(HashType.Validator(HashType.SHA3_256, secret));
+    }
+
+    @Test
+    void SHA3_256ShouldReturnFalseIfItIsNotAValidHash() {
+        String secret = "zyz6053bb910a6027f138ac5ebe92d43a9a18b7239b3c4d5ea69f1632e50aeef";
+        assertFalse(HashType.Validator(HashType.SHA3_256, secret));
+
+    }
+
+    @Test
+    void KECCAK_256ShouldBeExactly64CharactersLength() {
+        byte[] secretBytes = new byte[20];
+        new Random().nextBytes(secretBytes);
+        byte[] result = Hashes.keccak256(secretBytes);
+        String secret = Hex.encodeHexString(result);
+
+        assertTrue(HashType.Validator(HashType.KECCAK_256, secret));
+    }
+
+    @Test
+    void KECCAK_256ShouldReturnFalseIfItIsNot64CharsLength() {
+        byte[] secretBytes = new byte[20];
+        new Random().nextBytes(secretBytes);
+        byte[] result = Hashes.ripemd160(secretBytes);
+        String secret = Hex.encodeHexString(result);
+
+        assertFalse(HashType.Validator(HashType.KECCAK_256, secret));
+    }
+
+    @Test
+    void KECCAK_256ShouldReturnFalseIfItIsNotAValidHash() {
+        String secret = "zyz6053bb910a6027f138ac5ebe92d43a9a18b7239b3c4d5ea69f1632e50aeef";
+        assertFalse(HashType.Validator(HashType.KECCAK_256, secret));
+    }
+
+    @Test
+    void HASH_160ShouldBeExactly40CharactersLength() {
+        byte[] secretBytes = new byte[20];
+        new Random().nextBytes(secretBytes);
+        byte[] result = Hashes.hash160(secretBytes);
+        String secret = Hex.encodeHexString(result);
+
+        assertTrue(HashType.Validator(HashType.HASH_160, secret));
+    }
+
+    @Test
+    void HASH_160ShouldReturnFalseIfItIsNot40CharsLength() {
+        byte[] secretBytes = new byte[20];
+        new Random().nextBytes(secretBytes);
+        byte[] result = Hashes.sha3_256(secretBytes);
+        String secret = Hex.encodeHexString(result);
+
+        assertFalse(HashType.Validator(HashType.HASH_160, secret));
+    }
+
+    @Test
+    void HASH_160ShouldReturnFalseIfItIsNotAValidHash() {
+        String secret = "zyz6053bb910a6027f138ac5ebe92d43a9a18b7239b3c4d5ea69f1632e50aeef";
+        assertFalse(HashType.Validator(HashType.HASH_160, secret));
+    }
+
+    @Test
+    void HASH_256ShouldBeExactly64CharactersLength() {
+        byte[] secretBytes = new byte[20];
+        new Random().nextBytes(secretBytes);
+        byte[] result = Hashes.hash256(secretBytes);
+        String secret = Hex.encodeHexString(result);
+
+        assertTrue(HashType.Validator(HashType.HASH_256, secret));
+    }
+
+    @Test
+    void HASH_256ShouldReturnFalseIfItIsNot64CharsLength() {
+        byte[] secretBytes = new byte[20];
+        new Random().nextBytes(secretBytes);
+        byte[] result = Hashes.ripemd160(secretBytes);
+        String secret = Hex.encodeHexString(result);
+
+        assertFalse(HashType.Validator(HashType.HASH_256, secret));
+    }
+
+    @Test
+    void HASH_256ShouldReturnFalseIfItIsNotAValidHash() {
+        String secret = "zyz6053bb910a6027f138ac5ebe92d43a9a18b7239b3c4d5ea69f1632e50aeef";
+        assertFalse(HashType.Validator(HashType.HASH_256, secret));
     }
 }
 

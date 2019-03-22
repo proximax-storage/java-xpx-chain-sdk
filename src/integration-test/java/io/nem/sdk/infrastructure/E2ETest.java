@@ -420,13 +420,13 @@ class E2ETest extends BaseTest {
     void standaloneSecretLockTransaction() throws ExecutionException, InterruptedException {
         byte[] secretBytes = new byte[20];
         new Random().nextBytes(secretBytes);
-        byte[] result = Hashes.sha3_512(secretBytes);
+        byte[] result = Hashes.sha3_256(secretBytes);
         String secret = Hex.encodeHexString(result);
         SecretLockTransaction secretLocktx = SecretLockTransaction.create(
                 new Deadline(2, HOURS),
                 XEM.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
-                HashType.SHA3_512,
+                HashType.SHA3_256,
                 secret,
                 Address.createFromRawAddress("SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM"),
                 NetworkType.MIJIN_TEST
@@ -443,13 +443,13 @@ class E2ETest extends BaseTest {
     void aggregateSecretLockTransaction() throws ExecutionException, InterruptedException {
         byte[] secretBytes = new byte[20];
         new Random().nextBytes(secretBytes);
-        byte[] result = Hashes.sha3_512(secretBytes);
+        byte[] result = Hashes.sha3_256(secretBytes);
         String secret = Hex.encodeHexString(result);
         SecretLockTransaction secretLocktx = SecretLockTransaction.create(
                 new Deadline(2, HOURS),
                 XEM.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
-                HashType.SHA3_512,
+                HashType.SHA3_256,
                 secret,
                 Address.createFromRawAddress("SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM"),
                 NetworkType.MIJIN_TEST
@@ -473,14 +473,14 @@ class E2ETest extends BaseTest {
     void standaloneSecretProofTransaction() throws ExecutionException, InterruptedException {
         byte[] secretBytes = new byte[20];
         new Random().nextBytes(secretBytes);
-        byte[] result = Hashes.sha3_512(secretBytes);
+        byte[] result = Hashes.sha3_256(secretBytes);
         String secret = Hex.encodeHexString(result);
         String proof = Hex.encodeHexString(secretBytes);
         SecretLockTransaction secretLocktx = SecretLockTransaction.create(
                 new Deadline(2, HOURS),
                 XEM.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
-                HashType.SHA3_512,
+                HashType.SHA3_256,
                 secret,
                 Address.createFromRawAddress("SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM"),
                 NetworkType.MIJIN_TEST
@@ -494,7 +494,7 @@ class E2ETest extends BaseTest {
 
         SecretProofTransaction secretProoftx = SecretProofTransaction.create(
                 new Deadline(2, HOURS),
-                HashType.SHA3_512,
+                HashType.SHA3_256,
                 secret,
                 proof,
                 NetworkType.MIJIN_TEST
@@ -511,14 +511,14 @@ class E2ETest extends BaseTest {
     void aggregateSecretProofTransaction() throws ExecutionException, InterruptedException {
         byte[] secretBytes = new byte[20];
         new Random().nextBytes(secretBytes);
-        byte[] result = Hashes.sha3_512(secretBytes);
+        byte[] result = Hashes.sha3_256(secretBytes);
         String secret = Hex.encodeHexString(result);
         String proof = Hex.encodeHexString(secretBytes);
         SecretLockTransaction secretLocktx = SecretLockTransaction.create(
                 new Deadline(2, HOURS),
                 XEM.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
-                HashType.SHA3_512,
+                HashType.SHA3_256,
                 secret,
                 Address.createFromRawAddress("SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM"),
                 NetworkType.MIJIN_TEST
@@ -532,7 +532,7 @@ class E2ETest extends BaseTest {
 
         SecretProofTransaction secretProoftx = SecretProofTransaction.create(
                 new Deadline(2, HOURS),
-                HashType.SHA3_512,
+                HashType.SHA3_256,
                 secret,
                 proof,
                 NetworkType.MIJIN_TEST

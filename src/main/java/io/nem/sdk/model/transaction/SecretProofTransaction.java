@@ -104,7 +104,7 @@ public class SecretProofTransaction extends Transaction {
         int proofVector = SecretProofTransactionBuffer.createProofVector(builder, Hex.decode(proof));
 
         SecretProofTransactionBuffer.startSecretProofTransactionBuffer(builder);
-        SecretProofTransactionBuffer.addSize(builder, 187 + Hex.decode(proof).length);
+        SecretProofTransactionBuffer.addSize(builder, 155 + Hex.decode(proof).length);
         SecretProofTransactionBuffer.addSignature(builder, signatureVector);
         SecretProofTransactionBuffer.addSigner(builder, signerVector);
         SecretProofTransactionBuffer.addVersion(builder, version);
