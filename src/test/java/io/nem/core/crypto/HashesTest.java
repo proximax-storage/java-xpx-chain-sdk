@@ -29,6 +29,10 @@ public class HashesTest {
     private static final HashTester SHA3_256_TESTER = new HashTester(Hashes::sha3_256, 32);
     private static final HashTester SHA3_512_TESTER = new HashTester(Hashes::sha3_512, 64);
     private static final HashTester RIPEMD160_TESTER = new HashTester(Hashes::ripemd160, 20);
+    private static final HashTester HASH_160_TESTER = new HashTester(Hashes::hash160, 20);
+    private static final HashTester HASH_256_TESTER = new HashTester(Hashes::hash256, 32);
+
+    private static final HashTester KECCAK_256_TESTER = new HashTester(Hashes::keccak256, 32);
 
     //region sha3_256
 
@@ -65,15 +69,15 @@ public class HashesTest {
         SHA3_256_TESTER.assertHashIsSameForSplitInputs();
     }
 
-    //endregion
-
-    //region sha3_512
-
     @Test
     public void sha3_256GeneratesDifferentHashForDifferentInputs() {
         // Assert:
         SHA3_256_TESTER.assertHashIsDifferentForDifferentInputs();
     }
+
+    //endregion
+
+    //region sha3_512
 
     @Test
     public void sha3_512HashHasExpectedByteLength() {
@@ -93,15 +97,15 @@ public class HashesTest {
         SHA3_512_TESTER.assertHashIsSameForSplitInputs();
     }
 
-    //endregion
-
-    //region ripemd160
-
     @Test
     public void sha3_512GeneratesDifferentHashForDifferentInputs() {
         // Assert:
         SHA3_512_TESTER.assertHashIsDifferentForDifferentInputs();
     }
+
+    //endregion
+
+    //region ripemd160
 
     @Test
     public void ripemd160HashHasExpectedByteLength() {
@@ -121,15 +125,99 @@ public class HashesTest {
         RIPEMD160_TESTER.assertHashIsSameForSplitInputs();
     }
 
-    //endregion
-
-    //region different hash algorithm
-
     @Test
     public void ripemd160GeneratesDifferentHashForDifferentInputs() {
         // Assert:
         RIPEMD160_TESTER.assertHashIsDifferentForDifferentInputs();
     }
+
+    //endregion
+
+    //region keccak_256
+
+    @Test
+    public void keccak_256HashHasExpectedByteLength() {
+        // Assert:
+        KECCAK_256_TESTER.assertHashHasExpectedLength();
+    }
+
+    @Test
+    public void keccak_256GeneratesSameHashForSameInputs() {
+        // Assert:
+        KECCAK_256_TESTER.assertHashIsSameForSameInputs();
+    }
+
+    @Test
+    public void keccak_256GeneratesSameHashForSameMergedInputs() {
+        // Assert:
+        KECCAK_256_TESTER.assertHashIsSameForSplitInputs();
+    }
+
+    @Test
+    public void keccak_256GeneratesDifferentHashForDifferentInputs() {
+        // Assert:
+        KECCAK_256_TESTER.assertHashIsDifferentForDifferentInputs();
+    }
+
+    //endregion
+
+    //region HASH_160
+
+    @Test
+    public void hash_160HashHasExpectedByteLength() {
+        // Assert:
+        HASH_160_TESTER.assertHashHasExpectedLength();
+    }
+
+    @Test
+    public void hash_160GeneratesSameHashForSameInputs() {
+        // Assert:
+        HASH_160_TESTER.assertHashIsSameForSameInputs();
+    }
+
+    @Test
+    public void hash_160GeneratesSameHashForSameMergedInputs() {
+        // Assert:
+        HASH_160_TESTER.assertHashIsSameForSplitInputs();
+    }
+
+    @Test
+    public void hash_160GeneratesDifferentHashForDifferentInputs() {
+        // Assert:
+        HASH_160_TESTER.assertHashIsDifferentForDifferentInputs();
+    }
+
+    //endregion
+
+    //region HASH_256
+
+    @Test
+    public void hash_256HashHasExpectedByteLength() {
+        // Assert:
+        HASH_256_TESTER.assertHashHasExpectedLength();
+    }
+
+    @Test
+    public void hash_256GeneratesSameHashForSameInputs() {
+        // Assert:
+        HASH_256_TESTER.assertHashIsSameForSameInputs();
+    }
+
+    @Test
+    public void hash_256GeneratesSameHashForSameMergedInputs() {
+        // Assert:
+        HASH_256_TESTER.assertHashIsSameForSplitInputs();
+    }
+
+    @Test
+    public void hash_256GeneratesDifferentHashForDifferentInputs() {
+        // Assert:
+        HASH_256_TESTER.assertHashIsDifferentForDifferentInputs();
+    }
+
+    //endregion
+
+    //region different hash algorithm
 
     @Test
     public void sha3_256AndRipemd160GenerateDifferentHashForSameInputs() {
@@ -144,9 +232,81 @@ public class HashesTest {
     }
 
     @Test
+    public void sha3_256AndKeccak_256GenerateDifferentHashForSameInputs() {
+        // Assert:
+        assertHashesAreDifferent(Hashes::sha3_256, Hashes::keccak256);
+    }
+
+    @Test
+    public void sha3_256AndHash_160GenerateDifferentHashForSameInputs() {
+        // Assert:
+        assertHashesAreDifferent(Hashes::sha3_256, Hashes::hash160);
+    }
+
+    @Test
+    public void sha3_256AndHash_256GenerateDifferentHashForSameInputs() {
+        // Assert:
+        assertHashesAreDifferent(Hashes::sha3_256, Hashes::hash256);
+    }
+
+    @Test
     public void sha3_512AndRipemd160GenerateDifferentHashForSameInputs() {
         // Assert:
         assertHashesAreDifferent(Hashes::sha3_512, Hashes::ripemd160);
+    }
+
+    @Test
+    public void sha3_512AndKeccak_256GenerateDifferentHashForSameInputs() {
+        // Assert:
+        assertHashesAreDifferent(Hashes::sha3_512, Hashes::keccak256);
+    }
+
+    @Test
+    public void sha3_512AndHash_160GenerateDifferentHashForSameInputs() {
+        // Assert:
+        assertHashesAreDifferent(Hashes::sha3_512, Hashes::hash160);
+    }
+
+    @Test
+    public void sha3_512AndHash_256GenerateDifferentHashForSameInputs() {
+        // Assert:
+        assertHashesAreDifferent(Hashes::sha3_512, Hashes::hash256);
+    }
+
+    @Test
+    public void keccak_256AndRipemd160GenerateDifferentHashForSameInputs() {
+        // Assert:
+        assertHashesAreDifferent(Hashes::keccak256, Hashes::ripemd160);
+    }
+
+    @Test
+    public void keccak_256AndHash_160GenerateDifferentHashForSameInputs() {
+        // Assert:
+        assertHashesAreDifferent(Hashes::keccak256, Hashes::hash160);
+    }
+
+    @Test
+    public void keccak_256AndHash_256GenerateDifferentHashForSameInputs() {
+        // Assert:
+        assertHashesAreDifferent(Hashes::keccak256, Hashes::hash256);
+    }
+
+    @Test
+    public void hash_160AndRipemd160GenerateDifferentHashForSameInputs() {
+        // Assert:
+        assertHashesAreDifferent(Hashes::hash160, Hashes::ripemd160);
+    }
+
+    @Test
+    public void hash_160AndHash_256GenerateDifferentHashForSameInputs() {
+        // Assert:
+        assertHashesAreDifferent(Hashes::hash160, Hashes::hash256);
+    }
+
+    @Test
+    public void hash_256AndRipemd160GenerateDifferentHashForSameInputs() {
+        // Assert:
+        assertHashesAreDifferent(Hashes::hash256, Hashes::ripemd160);
     }
 
     //endregion
@@ -159,6 +319,13 @@ public class HashesTest {
         public HashTester(final Function<byte[][], byte[]> hashMultipleFunction, final int expectedHashLength) {
             this.hashMultipleFunction = hashMultipleFunction;
             this.hashFunction = input -> hashMultipleFunction.apply(new byte[][]{input});
+            this.expectedHashLength = expectedHashLength;
+        }
+
+        // this is only for Keccak function, accepting only byte array
+        public HashTester(final int expectedHashLength, final Function<byte[], byte[]> hashFunction) {
+            this.hashMultipleFunction = null;
+            this.hashFunction = input -> hashFunction.apply(input);
             this.expectedHashLength = expectedHashLength;
         }
 
