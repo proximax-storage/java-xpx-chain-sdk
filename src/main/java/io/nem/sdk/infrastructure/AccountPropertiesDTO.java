@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.nem.sdk.dto;
+package io.nem.sdk.infrastructure;
 
 import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModelProperty;
@@ -77,7 +77,7 @@ public class AccountPropertiesDTO {
 
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -99,7 +99,7 @@ public class AccountPropertiesDTO {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class AccountPropertiesDTO {\n");
-    
+
     sb.append("    address: ").append(toIndentedString(address)).append("\n");
     sb.append("    properties: ").append(toIndentedString(properties)).append("\n");
     sb.append("}");
@@ -110,7 +110,7 @@ public class AccountPropertiesDTO {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

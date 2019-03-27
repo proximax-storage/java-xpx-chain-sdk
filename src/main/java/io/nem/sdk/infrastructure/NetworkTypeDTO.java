@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-package io.nem.sdk.dto;
+
+package io.nem.sdk.infrastructure;
 
 import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModelProperty;
@@ -22,56 +23,79 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.Objects;
 
 /**
- * NodeTimeDTO
+ * NetworkTypeDTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class NodeTimeDTO {
-  @SerializedName("communicationTimestamps")
-  private CommunicationTimestamps communicationTimestamps = null;
+public class NetworkTypeDTO {
+  @SerializedName("name")
+  private String name = null;
 
-  public NodeTimeDTO communicationTimestamps(CommunicationTimestamps communicationTimestamps) {
-    this.communicationTimestamps = communicationTimestamps;
+  @SerializedName("description")
+  private String description = null;
+
+  public NetworkTypeDTO name(String name) {
+    this.name = name;
     return this;
   }
 
    /**
-   * Get communicationTimestamps
-   * @return communicationTimestamps
+   * Get name
+   * @return name
   **/
-  @ApiModelProperty(required = true, value = "")
-  public CommunicationTimestamps getCommunicationTimestamps() {
-    return communicationTimestamps;
+  @ApiModelProperty(example = "mijinTest", required = true, value = "")
+  public String getName() {
+    return name;
   }
 
-  public void setCommunicationTimestamps(CommunicationTimestamps communicationTimestamps) {
-    this.communicationTimestamps = communicationTimestamps;
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public NetworkTypeDTO description(String description) {
+    this.description = description;
+    return this;
+  }
+
+   /**
+   * Get description
+   * @return description
+  **/
+  @ApiModelProperty(example = "catapult development network", required = true, value = "")
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    NodeTimeDTO nodeTimeDTO = (NodeTimeDTO) o;
-    return Objects.equals(this.communicationTimestamps, nodeTimeDTO.communicationTimestamps);
+    NetworkTypeDTO networkTypeDTO = (NetworkTypeDTO) o;
+    return Objects.equals(this.name, networkTypeDTO.name) &&
+        Objects.equals(this.description, networkTypeDTO.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(communicationTimestamps);
+    return Objects.hash(name, description);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class NodeTimeDTO {\n");
-    
-    sb.append("    communicationTimestamps: ").append(toIndentedString(communicationTimestamps)).append("\n");
+    sb.append("class NetworkTypeDTO {\n");
+
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -80,7 +104,7 @@ public class NodeTimeDTO {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

@@ -14,87 +14,75 @@
  * limitations under the License.
  */
 
-package io.nem.sdk.dto;
+
+package io.nem.sdk.infrastructure;
 
 import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
- * MerkleProofInfoDTO
+ * Addresses
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class MerkleProofInfoDTO {
-  @SerializedName("payload")
-  private MerkleProofInfoPayload payload = null;
+public class Addresses {
+  @SerializedName("addresses")
+  private List<String> addresses = null;
 
-  @SerializedName("type")
-  private String type = null;
+  public Addresses addresses(List<String> addresses) {
+    this.addresses = addresses;
+    return this;
+  }
 
-  public MerkleProofInfoDTO payload(MerkleProofInfoPayload payload) {
-    this.payload = payload;
+  public Addresses addAddressesItem(String addressesItem) {
+    if (this.addresses == null) {
+      this.addresses = new ArrayList<String>();
+    }
+    this.addresses.add(addressesItem);
     return this;
   }
 
    /**
-   * Get payload
-   * @return payload
+   * Get addresses
+   * @return addresses
   **/
-  @ApiModelProperty(required = true, value = "")
-  public MerkleProofInfoPayload getPayload() {
-    return payload;
+  @ApiModelProperty(example = "[\"SDRDGFTDLLCB67D4HPGIMIHPNSRYRJRT7DOBGWZY\",\"SBCPGZ3S2SCC3YHBBTYDCUZV4ZZEPHM2KGCP4QXX\"]", value = "")
+  public List<String> getAddresses() {
+    return addresses;
   }
 
-  public void setPayload(MerkleProofInfoPayload payload) {
-    this.payload = payload;
-  }
-
-  public MerkleProofInfoDTO type(String type) {
-    this.type = type;
-    return this;
-  }
-
-   /**
-   * Get type
-   * @return type
-  **/
-  @ApiModelProperty(example = "merkleProofInfo", required = true, value = "")
-  public String getType() {
-    return type;
-  }
-
-  public void setType(String type) {
-    this.type = type;
+  public void setAddresses(List<String> addresses) {
+    this.addresses = addresses;
   }
 
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    MerkleProofInfoDTO merkleProofInfoDTO = (MerkleProofInfoDTO) o;
-    return Objects.equals(this.payload, merkleProofInfoDTO.payload) &&
-        Objects.equals(this.type, merkleProofInfoDTO.type);
+    Addresses addresses = (Addresses) o;
+    return Objects.equals(this.addresses, addresses.addresses);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(payload, type);
+    return Objects.hash(addresses);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class MerkleProofInfoDTO {\n");
-    
-    sb.append("    payload: ").append(toIndentedString(payload)).append("\n");
-    sb.append("    type: ").append(toIndentedString(type)).append("\n");
+    sb.append("class Addresses {\n");
+
+    sb.append("    addresses: ").append(toIndentedString(addresses)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -103,7 +91,7 @@ public class MerkleProofInfoDTO {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

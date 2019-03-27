@@ -14,75 +14,64 @@
  * limitations under the License.
  */
 
-
-package io.nem.sdk.dto;
+package io.nem.sdk.infrastructure;
 
 import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
- * TransactionIds
+ * NodeTimeDTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class TransactionIds {
-  @SerializedName("transactionIds")
-  private List<String> transactionIds = null;
+public class NodeTimeDTO {
+  @SerializedName("communicationTimestamps")
+  private CommunicationTimestamps communicationTimestamps = null;
 
-  public TransactionIds transactionIds(List<String> transactionIds) {
-    this.transactionIds = transactionIds;
-    return this;
-  }
-
-  public TransactionIds addTransactionIdsItem(String transactionIdsItem) {
-    if (this.transactionIds == null) {
-      this.transactionIds = new ArrayList<String>();
-    }
-    this.transactionIds.add(transactionIdsItem);
+  public NodeTimeDTO communicationTimestamps(CommunicationTimestamps communicationTimestamps) {
+    this.communicationTimestamps = communicationTimestamps;
     return this;
   }
 
    /**
-   * Get transactionIds
-   * @return transactionIds
+   * Get communicationTimestamps
+   * @return communicationTimestamps
   **/
-  @ApiModelProperty(example = "[\"59B8DA0F0CB2720001103922\",\"59B8D8E60CB2720001103904\"]", value = "")
-  public List<String> getTransactionIds() {
-    return transactionIds;
+  @ApiModelProperty(required = true, value = "")
+  public CommunicationTimestamps getCommunicationTimestamps() {
+    return communicationTimestamps;
   }
 
-  public void setTransactionIds(List<String> transactionIds) {
-    this.transactionIds = transactionIds;
+  public void setCommunicationTimestamps(CommunicationTimestamps communicationTimestamps) {
+    this.communicationTimestamps = communicationTimestamps;
   }
 
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    TransactionIds transactionIds = (TransactionIds) o;
-    return Objects.equals(this.transactionIds, transactionIds.transactionIds);
+    NodeTimeDTO nodeTimeDTO = (NodeTimeDTO) o;
+    return Objects.equals(this.communicationTimestamps, nodeTimeDTO.communicationTimestamps);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(transactionIds);
+    return Objects.hash(communicationTimestamps);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class TransactionIds {\n");
-    
-    sb.append("    transactionIds: ").append(toIndentedString(transactionIds)).append("\n");
+    sb.append("class NodeTimeDTO {\n");
+
+    sb.append("    communicationTimestamps: ").append(toIndentedString(communicationTimestamps)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -91,7 +80,7 @@ public class TransactionIds {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

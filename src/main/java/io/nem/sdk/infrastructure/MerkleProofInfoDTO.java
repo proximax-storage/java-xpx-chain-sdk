@@ -14,88 +14,87 @@
  * limitations under the License.
  */
 
-package io.nem.sdk.dto;
+package io.nem.sdk.infrastructure;
 
 import com.google.gson.annotations.SerializedName;
-import io.nem.sdk.model.transaction.UInt64;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
 
 /**
- * MosaicDTO
+ * MerkleProofInfoDTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class MosaicDTO {
-  @SerializedName("id")
-  private UInt64 id = null;
+public class MerkleProofInfoDTO {
+  @SerializedName("payload")
+  private MerkleProofInfoPayload payload = null;
 
-  @SerializedName("amount")
-  private UInt64 amount = null;
+  @SerializedName("type")
+  private String type = null;
 
-  public MosaicDTO id(UInt64 id) {
-    this.id = id;
+  public MerkleProofInfoDTO payload(MerkleProofInfoPayload payload) {
+    this.payload = payload;
     return this;
   }
 
    /**
-   * Get id
-   * @return id
+   * Get payload
+   * @return payload
   **/
   @ApiModelProperty(required = true, value = "")
-  public UInt64 getId() {
-    return id;
+  public MerkleProofInfoPayload getPayload() {
+    return payload;
   }
 
-  public void setId(UInt64 id) {
-    this.id = id;
+  public void setPayload(MerkleProofInfoPayload payload) {
+    this.payload = payload;
   }
 
-  public MosaicDTO amount(UInt64 amount) {
-    this.amount = amount;
+  public MerkleProofInfoDTO type(String type) {
+    this.type = type;
     return this;
   }
 
    /**
-   * Get amount
-   * @return amount
+   * Get type
+   * @return type
   **/
-  @ApiModelProperty(required = true, value = "")
-  public UInt64 getAmount() {
-    return amount;
+  @ApiModelProperty(example = "merkleProofInfo", required = true, value = "")
+  public String getType() {
+    return type;
   }
 
-  public void setAmount(UInt64 amount) {
-    this.amount = amount;
+  public void setType(String type) {
+    this.type = type;
   }
 
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    MosaicDTO mosaicDTO = (MosaicDTO) o;
-    return Objects.equals(this.id, mosaicDTO.id) &&
-        Objects.equals(this.amount, mosaicDTO.amount);
+    MerkleProofInfoDTO merkleProofInfoDTO = (MerkleProofInfoDTO) o;
+    return Objects.equals(this.payload, merkleProofInfoDTO.payload) &&
+        Objects.equals(this.type, merkleProofInfoDTO.type);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, amount);
+    return Objects.hash(payload, type);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class MosaicDTO {\n");
-    
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
+    sb.append("class MerkleProofInfoDTO {\n");
+
+    sb.append("    payload: ").append(toIndentedString(payload)).append("\n");
+    sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -104,7 +103,7 @@ public class MosaicDTO {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

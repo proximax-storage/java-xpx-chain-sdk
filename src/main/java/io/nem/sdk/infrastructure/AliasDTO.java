@@ -15,7 +15,7 @@
  */
 
 
-package io.nem.sdk.dto;
+package io.nem.sdk.infrastructure;
 
 import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModelProperty;
@@ -92,7 +92,7 @@ public class AliasDTO {
 
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -115,7 +115,7 @@ public class AliasDTO {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class AliasDTO {\n");
-    
+
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("    mosaicId: ").append(toIndentedString(mosaicId)).append("\n");
     sb.append("    address: ").append(toIndentedString(address)).append("\n");
@@ -127,7 +127,7 @@ public class AliasDTO {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

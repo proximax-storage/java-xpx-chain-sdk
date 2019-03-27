@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package io.nem.sdk.dto;
+package io.nem.sdk.infrastructure;
 
 import com.google.gson.annotations.SerializedName;
-import io.nem.sdk.infrastructure.UInt64DTO;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
@@ -71,7 +70,7 @@ public class CommunicationTimestamps {
 
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -93,7 +92,7 @@ public class CommunicationTimestamps {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class CommunicationTimestamps {\n");
-    
+
     sb.append("    sendTimestamp: ").append(toIndentedString(sendTimestamp)).append("\n");
     sb.append("    receiveTimestamp: ").append(toIndentedString(receiveTimestamp)).append("\n");
     sb.append("}");
@@ -104,7 +103,7 @@ public class CommunicationTimestamps {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

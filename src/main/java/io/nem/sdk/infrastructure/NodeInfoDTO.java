@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.nem.sdk.dto;
+package io.nem.sdk.infrastructure;
 
 import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModelProperty;
@@ -175,7 +175,7 @@ public class NodeInfoDTO {
 
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -202,7 +202,7 @@ public class NodeInfoDTO {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class NodeInfoDTO {\n");
-    
+
     sb.append("    publicKey: ").append(toIndentedString(publicKey)).append("\n");
     sb.append("    port: ").append(toIndentedString(port)).append("\n");
     sb.append("    networkIdentifier: ").append(toIndentedString(networkIdentifier)).append("\n");
@@ -218,7 +218,7 @@ public class NodeInfoDTO {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }
