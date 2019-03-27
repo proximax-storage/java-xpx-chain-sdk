@@ -61,6 +61,17 @@ public class Account {
     }
 
     /**
+     * Create an new Account
+     *
+     * @param networkType
+     * @return
+     */
+    public static Account generateNewAccount(NetworkType networkType){
+        KeyPair keyPair = new KeyPair();
+        return new Account( keyPair.getPrivateKey().toString(),networkType);
+    }
+
+    /**
      * Account public key.
      *
      * @return {@link String}

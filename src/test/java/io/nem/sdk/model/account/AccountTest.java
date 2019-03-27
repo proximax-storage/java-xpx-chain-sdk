@@ -31,6 +31,7 @@ import java.math.BigInteger;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class AccountTest {
 
@@ -67,6 +68,13 @@ class AccountTest {
         assertEquals("SBE6CS7LZKJXLDVTNAC3VZ3AUVZDTF3PACNFIXFN", account.getAddress().plain());
     }
 
+    @Test
+    void generateNewAccountTest(){
+        Account account = Account.generateNewAccount(NetworkType.MIJIN_TEST);
+        assertNotEquals(account.getPrivateKey(),null);
+        assertNotEquals(account.getPublicKey(), null);
+        assertEquals(account.getPrivateKey().toString().length(),64);
+    }
 
     @Test
     void shouldSignTransaction() {
