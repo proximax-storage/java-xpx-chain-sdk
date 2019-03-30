@@ -16,13 +16,37 @@
 
 package io.nem.sdk.infrastructure;
 
+import com.google.gson.annotations.SerializedName;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Objects;
 
 /**
- * AccountMetaDTO
+ * NodeTimeDTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class AccountMetaDTO {
+public class NodeTimeDTO {
+  @SerializedName("communicationTimestamps")
+  private CommunicationTimestamps communicationTimestamps = null;
+
+  public NodeTimeDTO communicationTimestamps(CommunicationTimestamps communicationTimestamps) {
+    this.communicationTimestamps = communicationTimestamps;
+    return this;
+  }
+
+   /**
+   * Get communicationTimestamps
+   * @return communicationTimestamps
+  **/
+  @ApiModelProperty(required = true, value = "")
+  public CommunicationTimestamps getCommunicationTimestamps() {
+    return communicationTimestamps;
+  }
+
+  public void setCommunicationTimestamps(CommunicationTimestamps communicationTimestamps) {
+    this.communicationTimestamps = communicationTimestamps;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -32,20 +56,22 @@ public class AccountMetaDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    return true;
+    NodeTimeDTO nodeTimeDTO = (NodeTimeDTO) o;
+    return Objects.equals(this.communicationTimestamps, nodeTimeDTO.communicationTimestamps);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash();
+    return Objects.hash(communicationTimestamps);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AccountMetaDTO {\n");
+    sb.append("class NodeTimeDTO {\n");
 
+    sb.append("    communicationTimestamps: ").append(toIndentedString(communicationTimestamps)).append("\n");
     sb.append("}");
     return sb.toString();
   }

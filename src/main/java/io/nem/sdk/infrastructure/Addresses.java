@@ -14,15 +14,50 @@
  * limitations under the License.
  */
 
+
 package io.nem.sdk.infrastructure;
 
+import com.google.gson.annotations.SerializedName;
+import io.swagger.annotations.ApiModelProperty;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
- * AccountMetaDTO
+ * Addresses
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class AccountMetaDTO {
+public class Addresses {
+  @SerializedName("addresses")
+  private List<String> addresses = null;
+
+  public Addresses addresses(List<String> addresses) {
+    this.addresses = addresses;
+    return this;
+  }
+
+  public Addresses addAddressesItem(String addressesItem) {
+    if (this.addresses == null) {
+      this.addresses = new ArrayList<String>();
+    }
+    this.addresses.add(addressesItem);
+    return this;
+  }
+
+   /**
+   * Get addresses
+   * @return addresses
+  **/
+  @ApiModelProperty(example = "[\"SDRDGFTDLLCB67D4HPGIMIHPNSRYRJRT7DOBGWZY\",\"SBCPGZ3S2SCC3YHBBTYDCUZV4ZZEPHM2KGCP4QXX\"]", value = "")
+  public List<String> getAddresses() {
+    return addresses;
+  }
+
+  public void setAddresses(List<String> addresses) {
+    this.addresses = addresses;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -32,20 +67,22 @@ public class AccountMetaDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    return true;
+    Addresses addresses = (Addresses) o;
+    return Objects.equals(this.addresses, addresses.addresses);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash();
+    return Objects.hash(addresses);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AccountMetaDTO {\n");
+    sb.append("class Addresses {\n");
 
+    sb.append("    addresses: ").append(toIndentedString(addresses)).append("\n");
     sb.append("}");
     return sb.toString();
   }

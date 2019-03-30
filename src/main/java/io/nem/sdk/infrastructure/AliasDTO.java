@@ -23,50 +23,71 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.Objects;
 
 /**
- * AccountInfoDTO
+ * AliasDTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class AccountInfoDTO {
-  @SerializedName("meta")
-  private AccountMetaDTO meta = null;
+public class AliasDTO {
+  @SerializedName("type")
+  private Integer type = null;
 
-  @SerializedName("account")
-  private AccountDTO account = null;
+  @SerializedName("mosaicId")
+  private String mosaicId = null;
 
-  public AccountInfoDTO meta(AccountMetaDTO meta) {
-    this.meta = meta;
+  @SerializedName("address")
+  private String address = null;
+
+  public AliasDTO type(Integer type) {
+    this.type = type;
     return this;
   }
 
    /**
-   * Get meta
-   * @return meta
+   * Get type
+   * @return type
   **/
   @ApiModelProperty(required = true, value = "")
-  public AccountMetaDTO getMeta() {
-    return meta;
+  public Integer getType() {
+    return type;
   }
 
-  public void setMeta(AccountMetaDTO meta) {
-    this.meta = meta;
+  public void setType(Integer type) {
+    this.type = type;
   }
 
-  public AccountInfoDTO account(AccountDTO account) {
-    this.account = account;
+  public AliasDTO mosaicId(String mosaicId) {
+    this.mosaicId = mosaicId;
     return this;
   }
 
    /**
-   * Get account
-   * @return account
+   * Get mosaicId
+   * @return mosaicId
   **/
-  @ApiModelProperty(required = true, value = "")
-  public AccountDTO getAccount() {
-    return account;
+  @ApiModelProperty(value = "")
+  public String getMosaicId() {
+    return mosaicId;
   }
 
-  public void setAccount(AccountDTO account) {
-    this.account = account;
+  public void setMosaicId(String mosaicId) {
+    this.mosaicId = mosaicId;
+  }
+
+  public AliasDTO address(String address) {
+    this.address = address;
+    return this;
+  }
+
+   /**
+   * Get address
+   * @return address
+  **/
+  @ApiModelProperty(value = "")
+  public String getAddress() {
+    return address;
+  }
+
+  public void setAddress(String address) {
+    this.address = address;
   }
 
 
@@ -78,24 +99,26 @@ public class AccountInfoDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AccountInfoDTO accountInfoDTO = (AccountInfoDTO) o;
-    return Objects.equals(this.meta, accountInfoDTO.meta) &&
-        Objects.equals(this.account, accountInfoDTO.account);
+    AliasDTO aliasDTO = (AliasDTO) o;
+    return Objects.equals(this.type, aliasDTO.type) &&
+        Objects.equals(this.mosaicId, aliasDTO.mosaicId) &&
+        Objects.equals(this.address, aliasDTO.address);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(meta, account);
+    return Objects.hash(type, mosaicId, address);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AccountInfoDTO {\n");
+    sb.append("class AliasDTO {\n");
 
-    sb.append("    meta: ").append(toIndentedString(meta)).append("\n");
-    sb.append("    account: ").append(toIndentedString(account)).append("\n");
+    sb.append("    type: ").append(toIndentedString(type)).append("\n");
+    sb.append("    mosaicId: ").append(toIndentedString(mosaicId)).append("\n");
+    sb.append("    address: ").append(toIndentedString(address)).append("\n");
     sb.append("}");
     return sb.toString();
   }

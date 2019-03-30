@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package io.nem.sdk.infrastructure;
 
 import com.google.gson.annotations.SerializedName;
@@ -23,50 +22,50 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.Objects;
 
 /**
- * AccountInfoDTO
+ * CommunicationTimestamps
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class AccountInfoDTO {
-  @SerializedName("meta")
-  private AccountMetaDTO meta = null;
+public class CommunicationTimestamps {
+  @SerializedName("sendTimestamp")
+  private UInt64DTO sendTimestamp = null;
 
-  @SerializedName("account")
-  private AccountDTO account = null;
+  @SerializedName("receiveTimestamp")
+  private UInt64DTO receiveTimestamp = null;
 
-  public AccountInfoDTO meta(AccountMetaDTO meta) {
-    this.meta = meta;
+  public CommunicationTimestamps sendTimestamp(UInt64DTO sendTimestamp) {
+    this.sendTimestamp = sendTimestamp;
     return this;
   }
 
    /**
-   * Get meta
-   * @return meta
+   * Get sendTimestamp
+   * @return sendTimestamp
   **/
-  @ApiModelProperty(required = true, value = "")
-  public AccountMetaDTO getMeta() {
-    return meta;
+  @ApiModelProperty(value = "")
+  public UInt64DTO getSendTimestamp() {
+    return sendTimestamp;
   }
 
-  public void setMeta(AccountMetaDTO meta) {
-    this.meta = meta;
+  public void setSendTimestamp(UInt64DTO sendTimestamp) {
+    this.sendTimestamp = sendTimestamp;
   }
 
-  public AccountInfoDTO account(AccountDTO account) {
-    this.account = account;
+  public CommunicationTimestamps receiveTimestamp(UInt64DTO receiveTimestamp) {
+    this.receiveTimestamp = receiveTimestamp;
     return this;
   }
 
    /**
-   * Get account
-   * @return account
+   * Get receiveTimestamp
+   * @return receiveTimestamp
   **/
-  @ApiModelProperty(required = true, value = "")
-  public AccountDTO getAccount() {
-    return account;
+  @ApiModelProperty(value = "")
+  public UInt64DTO getReceiveTimestamp() {
+    return receiveTimestamp;
   }
 
-  public void setAccount(AccountDTO account) {
-    this.account = account;
+  public void setReceiveTimestamp(UInt64DTO receiveTimestamp) {
+    this.receiveTimestamp = receiveTimestamp;
   }
 
 
@@ -78,24 +77,24 @@ public class AccountInfoDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AccountInfoDTO accountInfoDTO = (AccountInfoDTO) o;
-    return Objects.equals(this.meta, accountInfoDTO.meta) &&
-        Objects.equals(this.account, accountInfoDTO.account);
+    CommunicationTimestamps communicationTimestamps = (CommunicationTimestamps) o;
+    return Objects.equals(this.sendTimestamp, communicationTimestamps.sendTimestamp) &&
+        Objects.equals(this.receiveTimestamp, communicationTimestamps.receiveTimestamp);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(meta, account);
+    return Objects.hash(sendTimestamp, receiveTimestamp);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AccountInfoDTO {\n");
+    sb.append("class CommunicationTimestamps {\n");
 
-    sb.append("    meta: ").append(toIndentedString(meta)).append("\n");
-    sb.append("    account: ").append(toIndentedString(account)).append("\n");
+    sb.append("    sendTimestamp: ").append(toIndentedString(sendTimestamp)).append("\n");
+    sb.append("    receiveTimestamp: ").append(toIndentedString(receiveTimestamp)).append("\n");
     sb.append("}");
     return sb.toString();
   }

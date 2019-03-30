@@ -23,50 +23,50 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.Objects;
 
 /**
- * AccountInfoDTO
+ * NetworkTypeDTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class AccountInfoDTO {
-  @SerializedName("meta")
-  private AccountMetaDTO meta = null;
+public class NetworkTypeDTO {
+  @SerializedName("name")
+  private String name = null;
 
-  @SerializedName("account")
-  private AccountDTO account = null;
+  @SerializedName("description")
+  private String description = null;
 
-  public AccountInfoDTO meta(AccountMetaDTO meta) {
-    this.meta = meta;
+  public NetworkTypeDTO name(String name) {
+    this.name = name;
     return this;
   }
 
    /**
-   * Get meta
-   * @return meta
+   * Get name
+   * @return name
   **/
-  @ApiModelProperty(required = true, value = "")
-  public AccountMetaDTO getMeta() {
-    return meta;
+  @ApiModelProperty(example = "mijinTest", required = true, value = "")
+  public String getName() {
+    return name;
   }
 
-  public void setMeta(AccountMetaDTO meta) {
-    this.meta = meta;
+  public void setName(String name) {
+    this.name = name;
   }
 
-  public AccountInfoDTO account(AccountDTO account) {
-    this.account = account;
+  public NetworkTypeDTO description(String description) {
+    this.description = description;
     return this;
   }
 
    /**
-   * Get account
-   * @return account
+   * Get description
+   * @return description
   **/
-  @ApiModelProperty(required = true, value = "")
-  public AccountDTO getAccount() {
-    return account;
+  @ApiModelProperty(example = "catapult development network", required = true, value = "")
+  public String getDescription() {
+    return description;
   }
 
-  public void setAccount(AccountDTO account) {
-    this.account = account;
+  public void setDescription(String description) {
+    this.description = description;
   }
 
 
@@ -78,24 +78,24 @@ public class AccountInfoDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AccountInfoDTO accountInfoDTO = (AccountInfoDTO) o;
-    return Objects.equals(this.meta, accountInfoDTO.meta) &&
-        Objects.equals(this.account, accountInfoDTO.account);
+    NetworkTypeDTO networkTypeDTO = (NetworkTypeDTO) o;
+    return Objects.equals(this.name, networkTypeDTO.name) &&
+        Objects.equals(this.description, networkTypeDTO.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(meta, account);
+    return Objects.hash(name, description);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AccountInfoDTO {\n");
+    sb.append("class NetworkTypeDTO {\n");
 
-    sb.append("    meta: ").append(toIndentedString(meta)).append("\n");
-    sb.append("    account: ").append(toIndentedString(account)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("}");
     return sb.toString();
   }

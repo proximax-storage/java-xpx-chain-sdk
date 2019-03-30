@@ -14,15 +14,40 @@
  * limitations under the License.
  */
 
+
 package io.nem.sdk.infrastructure;
+
+import com.google.gson.annotations.SerializedName;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
 
 /**
- * AccountMetaDTO
+ * AccountPropertiesMetaDTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class AccountMetaDTO {
+public class AccountPropertiesMetaDTO {
+  @SerializedName("id")
+  private String id = null;
+
+  public AccountPropertiesMetaDTO id(String id) {
+    this.id = id;
+    return this;
+  }
+
+   /**
+   * Get id
+   * @return id
+  **/
+  @ApiModelProperty(example = "00000000000000000000032f", required = true, value = "")
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -32,20 +57,22 @@ public class AccountMetaDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    return true;
+    AccountPropertiesMetaDTO accountPropertiesMetaDTO = (AccountPropertiesMetaDTO) o;
+    return Objects.equals(this.id, accountPropertiesMetaDTO.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash();
+    return Objects.hash(id);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AccountMetaDTO {\n");
+    sb.append("class AccountPropertiesMetaDTO {\n");
 
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("}");
     return sb.toString();
   }

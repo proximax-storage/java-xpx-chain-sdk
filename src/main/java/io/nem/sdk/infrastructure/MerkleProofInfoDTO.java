@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package io.nem.sdk.infrastructure;
 
 import com.google.gson.annotations.SerializedName;
@@ -23,50 +22,50 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.Objects;
 
 /**
- * AccountInfoDTO
+ * MerkleProofInfoDTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-02-28T19:50:06.335-03:00")
-public class AccountInfoDTO {
-  @SerializedName("meta")
-  private AccountMetaDTO meta = null;
+public class MerkleProofInfoDTO {
+  @SerializedName("payload")
+  private MerkleProofInfoPayload payload = null;
 
-  @SerializedName("account")
-  private AccountDTO account = null;
+  @SerializedName("type")
+  private String type = null;
 
-  public AccountInfoDTO meta(AccountMetaDTO meta) {
-    this.meta = meta;
+  public MerkleProofInfoDTO payload(MerkleProofInfoPayload payload) {
+    this.payload = payload;
     return this;
   }
 
    /**
-   * Get meta
-   * @return meta
+   * Get payload
+   * @return payload
   **/
   @ApiModelProperty(required = true, value = "")
-  public AccountMetaDTO getMeta() {
-    return meta;
+  public MerkleProofInfoPayload getPayload() {
+    return payload;
   }
 
-  public void setMeta(AccountMetaDTO meta) {
-    this.meta = meta;
+  public void setPayload(MerkleProofInfoPayload payload) {
+    this.payload = payload;
   }
 
-  public AccountInfoDTO account(AccountDTO account) {
-    this.account = account;
+  public MerkleProofInfoDTO type(String type) {
+    this.type = type;
     return this;
   }
 
    /**
-   * Get account
-   * @return account
+   * Get type
+   * @return type
   **/
-  @ApiModelProperty(required = true, value = "")
-  public AccountDTO getAccount() {
-    return account;
+  @ApiModelProperty(example = "merkleProofInfo", required = true, value = "")
+  public String getType() {
+    return type;
   }
 
-  public void setAccount(AccountDTO account) {
-    this.account = account;
+  public void setType(String type) {
+    this.type = type;
   }
 
 
@@ -78,24 +77,24 @@ public class AccountInfoDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AccountInfoDTO accountInfoDTO = (AccountInfoDTO) o;
-    return Objects.equals(this.meta, accountInfoDTO.meta) &&
-        Objects.equals(this.account, accountInfoDTO.account);
+    MerkleProofInfoDTO merkleProofInfoDTO = (MerkleProofInfoDTO) o;
+    return Objects.equals(this.payload, merkleProofInfoDTO.payload) &&
+        Objects.equals(this.type, merkleProofInfoDTO.type);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(meta, account);
+    return Objects.hash(payload, type);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AccountInfoDTO {\n");
+    sb.append("class MerkleProofInfoDTO {\n");
 
-    sb.append("    meta: ").append(toIndentedString(meta)).append("\n");
-    sb.append("    account: ").append(toIndentedString(account)).append("\n");
+    sb.append("    payload: ").append(toIndentedString(payload)).append("\n");
+    sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("}");
     return sb.toString();
   }
