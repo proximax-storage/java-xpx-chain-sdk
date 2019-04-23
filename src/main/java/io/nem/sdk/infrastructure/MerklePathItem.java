@@ -29,43 +29,54 @@ package io.nem.sdk.infrastructure;
 import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
- * NamespaceIds
+ * MerklePathItem
  * @author alexjavabraz
  * @since 4/8/2019
  */
-public class NamespaceIds {
-  @SerializedName("namespaceIds")
-  private List<String> namespaceIds = null;
+public class MerklePathItem {
+  @SerializedName("position")
+  private Integer position = null;
 
-  public NamespaceIds namespaceIds(List<String> namespaceIds) {
-    this.namespaceIds = namespaceIds;
-    return this;
-  }
+  @SerializedName("hash")
+  private String hash = null;
 
-  public NamespaceIds addNamespaceIdsItem(String namespaceIdsItem) {
-    if (this.namespaceIds == null) {
-      this.namespaceIds = new ArrayList<String>();
-    }
-    this.namespaceIds.add(namespaceIdsItem);
+  public MerklePathItem position(Integer position) {
+    this.position = position;
     return this;
   }
 
    /**
-   * Get namespaceIds
-   * @return namespaceIds
+   * Get position
+   * @return position
   **/
-  @ApiModelProperty(example = "[\"84b3552d375ffa4b\"]", value = "")
-  public List<String> getNamespaceIds() {
-    return namespaceIds;
+  @ApiModelProperty(example = "1", value = "")
+  public Integer getPosition() {
+    return position;
   }
 
-  public void setNamespaceIds(List<String> namespaceIds) {
-    this.namespaceIds = namespaceIds;
+  public void setPosition(Integer position) {
+    this.position = position;
+  }
+
+  public MerklePathItem hash(String hash) {
+    this.hash = hash;
+    return this;
+  }
+
+   /**
+   * Get hash
+   * @return hash
+  **/
+  @ApiModelProperty(value = "")
+  public String getHash() {
+    return hash;
+  }
+
+  public void setHash(String hash) {
+    this.hash = hash;
   }
 
 
@@ -77,22 +88,24 @@ public class NamespaceIds {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    NamespaceIds namespaceIds = (NamespaceIds) o;
-    return Objects.equals(this.namespaceIds, namespaceIds.namespaceIds);
+    MerklePathItem merklePathItem = (MerklePathItem) o;
+    return Objects.equals(this.position, merklePathItem.position) &&
+        Objects.equals(this.hash, merklePathItem.hash);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(namespaceIds);
+    return Objects.hash(position, hash);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class NamespaceIds {\n");
+    sb.append("class MerklePathItem {\n");
     
-    sb.append("    namespaceIds: ").append(toIndentedString(namespaceIds)).append("\n");
+    sb.append("    position: ").append(toIndentedString(position)).append("\n");
+    sb.append("    hash: ").append(toIndentedString(hash)).append("\n");
     sb.append("}");
     return sb.toString();
   }

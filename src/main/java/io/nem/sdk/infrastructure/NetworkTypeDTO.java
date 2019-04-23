@@ -29,43 +29,54 @@ package io.nem.sdk.infrastructure;
 import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
- * NamespaceIds
+ * NetworkTypeDTO
  * @author alexjavabraz
  * @since 4/8/2019
  */
-public class NamespaceIds {
-  @SerializedName("namespaceIds")
-  private List<String> namespaceIds = null;
+public class NetworkTypeDTO {
+  @SerializedName("name")
+  private String name = null;
 
-  public NamespaceIds namespaceIds(List<String> namespaceIds) {
-    this.namespaceIds = namespaceIds;
-    return this;
-  }
+  @SerializedName("description")
+  private String description = null;
 
-  public NamespaceIds addNamespaceIdsItem(String namespaceIdsItem) {
-    if (this.namespaceIds == null) {
-      this.namespaceIds = new ArrayList<String>();
-    }
-    this.namespaceIds.add(namespaceIdsItem);
+  public NetworkTypeDTO name(String name) {
+    this.name = name;
     return this;
   }
 
    /**
-   * Get namespaceIds
-   * @return namespaceIds
+   * Get name
+   * @return name
   **/
-  @ApiModelProperty(example = "[\"84b3552d375ffa4b\"]", value = "")
-  public List<String> getNamespaceIds() {
-    return namespaceIds;
+  @ApiModelProperty(example = "mijinTest", required = true, value = "")
+  public String getName() {
+    return name;
   }
 
-  public void setNamespaceIds(List<String> namespaceIds) {
-    this.namespaceIds = namespaceIds;
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public NetworkTypeDTO description(String description) {
+    this.description = description;
+    return this;
+  }
+
+   /**
+   * Get description
+   * @return description
+  **/
+  @ApiModelProperty(example = "catapult development network", required = true, value = "")
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 
 
@@ -77,22 +88,24 @@ public class NamespaceIds {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    NamespaceIds namespaceIds = (NamespaceIds) o;
-    return Objects.equals(this.namespaceIds, namespaceIds.namespaceIds);
+    NetworkTypeDTO networkTypeDTO = (NetworkTypeDTO) o;
+    return Objects.equals(this.name, networkTypeDTO.name) &&
+        Objects.equals(this.description, networkTypeDTO.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(namespaceIds);
+    return Objects.hash(name, description);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class NamespaceIds {\n");
+    sb.append("class NetworkTypeDTO {\n");
     
-    sb.append("    namespaceIds: ").append(toIndentedString(namespaceIds)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("}");
     return sb.toString();
   }

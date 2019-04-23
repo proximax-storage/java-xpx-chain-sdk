@@ -29,43 +29,54 @@ package io.nem.sdk.infrastructure;
 import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
- * NamespaceIds
+ * AccountPropertiesInfoDTO
  * @author alexjavabraz
  * @since 4/8/2019
  */
-public class NamespaceIds {
-  @SerializedName("namespaceIds")
-  private List<String> namespaceIds = null;
+public class AccountPropertiesInfoDTO {
+  @SerializedName("meta")
+  private AccountPropertiesMetaDTO meta = null;
 
-  public NamespaceIds namespaceIds(List<String> namespaceIds) {
-    this.namespaceIds = namespaceIds;
-    return this;
-  }
+  @SerializedName("accountProperties")
+  private AccountPropertiesDTO accountProperties = null;
 
-  public NamespaceIds addNamespaceIdsItem(String namespaceIdsItem) {
-    if (this.namespaceIds == null) {
-      this.namespaceIds = new ArrayList<String>();
-    }
-    this.namespaceIds.add(namespaceIdsItem);
+  public AccountPropertiesInfoDTO meta(AccountPropertiesMetaDTO meta) {
+    this.meta = meta;
     return this;
   }
 
    /**
-   * Get namespaceIds
-   * @return namespaceIds
+   * Get meta
+   * @return meta
   **/
-  @ApiModelProperty(example = "[\"84b3552d375ffa4b\"]", value = "")
-  public List<String> getNamespaceIds() {
-    return namespaceIds;
+  @ApiModelProperty(required = true, value = "")
+  public AccountPropertiesMetaDTO getMeta() {
+    return meta;
   }
 
-  public void setNamespaceIds(List<String> namespaceIds) {
-    this.namespaceIds = namespaceIds;
+  public void setMeta(AccountPropertiesMetaDTO meta) {
+    this.meta = meta;
+  }
+
+  public AccountPropertiesInfoDTO accountProperties(AccountPropertiesDTO accountProperties) {
+    this.accountProperties = accountProperties;
+    return this;
+  }
+
+   /**
+   * Get accountProperties
+   * @return accountProperties
+  **/
+  @ApiModelProperty(required = true, value = "")
+  public AccountPropertiesDTO getAccountProperties() {
+    return accountProperties;
+  }
+
+  public void setAccountProperties(AccountPropertiesDTO accountProperties) {
+    this.accountProperties = accountProperties;
   }
 
 
@@ -77,22 +88,24 @@ public class NamespaceIds {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    NamespaceIds namespaceIds = (NamespaceIds) o;
-    return Objects.equals(this.namespaceIds, namespaceIds.namespaceIds);
+    AccountPropertiesInfoDTO accountPropertiesInfoDTO = (AccountPropertiesInfoDTO) o;
+    return Objects.equals(this.meta, accountPropertiesInfoDTO.meta) &&
+        Objects.equals(this.accountProperties, accountPropertiesInfoDTO.accountProperties);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(namespaceIds);
+    return Objects.hash(meta, accountProperties);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class NamespaceIds {\n");
+    sb.append("class AccountPropertiesInfoDTO {\n");
     
-    sb.append("    namespaceIds: ").append(toIndentedString(namespaceIds)).append("\n");
+    sb.append("    meta: ").append(toIndentedString(meta)).append("\n");
+    sb.append("    accountProperties: ").append(toIndentedString(accountProperties)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -109,4 +122,3 @@ public class NamespaceIds {
   }
 
 }
-

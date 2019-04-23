@@ -24,48 +24,60 @@
  * Do not edit the class manually.
  */
 
+
 package io.nem.sdk.infrastructure;
 
 import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
- * NamespaceIds
+ * MerkleProofInfoDTO
  * @author alexjavabraz
  * @since 4/8/2019
  */
-public class NamespaceIds {
-  @SerializedName("namespaceIds")
-  private List<String> namespaceIds = null;
+public class MerkleProofInfoDTO {
+  @SerializedName("payload")
+  private MerkleProofInfoPayload payload = null;
 
-  public NamespaceIds namespaceIds(List<String> namespaceIds) {
-    this.namespaceIds = namespaceIds;
-    return this;
-  }
+  @SerializedName("type")
+  private String type = null;
 
-  public NamespaceIds addNamespaceIdsItem(String namespaceIdsItem) {
-    if (this.namespaceIds == null) {
-      this.namespaceIds = new ArrayList<String>();
-    }
-    this.namespaceIds.add(namespaceIdsItem);
+  public MerkleProofInfoDTO payload(MerkleProofInfoPayload payload) {
+    this.payload = payload;
     return this;
   }
 
    /**
-   * Get namespaceIds
-   * @return namespaceIds
+   * Get payload
+   * @return payload
   **/
-  @ApiModelProperty(example = "[\"84b3552d375ffa4b\"]", value = "")
-  public List<String> getNamespaceIds() {
-    return namespaceIds;
+  @ApiModelProperty(required = true, value = "")
+  public MerkleProofInfoPayload getPayload() {
+    return payload;
   }
 
-  public void setNamespaceIds(List<String> namespaceIds) {
-    this.namespaceIds = namespaceIds;
+  public void setPayload(MerkleProofInfoPayload payload) {
+    this.payload = payload;
+  }
+
+  public MerkleProofInfoDTO type(String type) {
+    this.type = type;
+    return this;
+  }
+
+   /**
+   * Get type
+   * @return type
+  **/
+  @ApiModelProperty(example = "merkleProofInfo", required = true, value = "")
+  public String getType() {
+    return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
   }
 
 
@@ -77,22 +89,24 @@ public class NamespaceIds {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    NamespaceIds namespaceIds = (NamespaceIds) o;
-    return Objects.equals(this.namespaceIds, namespaceIds.namespaceIds);
+    MerkleProofInfoDTO merkleProofInfoDTO = (MerkleProofInfoDTO) o;
+    return Objects.equals(this.payload, merkleProofInfoDTO.payload) &&
+        Objects.equals(this.type, merkleProofInfoDTO.type);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(namespaceIds);
+    return Objects.hash(payload, type);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class NamespaceIds {\n");
+    sb.append("class MerkleProofInfoDTO {\n");
     
-    sb.append("    namespaceIds: ").append(toIndentedString(namespaceIds)).append("\n");
+    sb.append("    payload: ").append(toIndentedString(payload)).append("\n");
+    sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("}");
     return sb.toString();
   }

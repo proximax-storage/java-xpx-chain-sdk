@@ -297,3 +297,9 @@ junitPlatformTest {
         destinationFile = file("${buildDir}/jacoco/test.exec")
     }
 }
+
+allprojects {
+    tasks.withType(Javadoc) {
+        options.addStringOption('Xdoclint:none', '-quiet')
+    }
+}

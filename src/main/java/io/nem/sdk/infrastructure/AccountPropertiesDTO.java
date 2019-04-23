@@ -34,38 +34,56 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * NamespaceIds
+ * AccountPropertiesDTO
  * @author alexjavabraz
  * @since 4/8/2019
  */
-public class NamespaceIds {
-  @SerializedName("namespaceIds")
-  private List<String> namespaceIds = null;
+public class AccountPropertiesDTO {
+  @SerializedName("address")
+  private String address = null;
 
-  public NamespaceIds namespaceIds(List<String> namespaceIds) {
-    this.namespaceIds = namespaceIds;
-    return this;
-  }
+  @SerializedName("properties")
+  private List<AccountPropertyDTO> properties = new ArrayList<AccountPropertyDTO>();
 
-  public NamespaceIds addNamespaceIdsItem(String namespaceIdsItem) {
-    if (this.namespaceIds == null) {
-      this.namespaceIds = new ArrayList<String>();
-    }
-    this.namespaceIds.add(namespaceIdsItem);
+  public AccountPropertiesDTO address(String address) {
+    this.address = address;
     return this;
   }
 
    /**
-   * Get namespaceIds
-   * @return namespaceIds
+   * Get address
+   * @return address
   **/
-  @ApiModelProperty(example = "[\"84b3552d375ffa4b\"]", value = "")
-  public List<String> getNamespaceIds() {
-    return namespaceIds;
+  @ApiModelProperty(example = "U0RSREdGVERMTENCNjdENEhQR0lNSUhQTlNSWVJKUlQ3RE9CR1daWQ==", required = true, value = "")
+  public String getAddress() {
+    return address;
   }
 
-  public void setNamespaceIds(List<String> namespaceIds) {
-    this.namespaceIds = namespaceIds;
+  public void setAddress(String address) {
+    this.address = address;
+  }
+
+  public AccountPropertiesDTO properties(List<AccountPropertyDTO> properties) {
+    this.properties = properties;
+    return this;
+  }
+
+  public AccountPropertiesDTO addPropertiesItem(AccountPropertyDTO propertiesItem) {
+    this.properties.add(propertiesItem);
+    return this;
+  }
+
+   /**
+   * Get properties
+   * @return properties
+  **/
+  @ApiModelProperty(required = true, value = "")
+  public List<AccountPropertyDTO> getProperties() {
+    return properties;
+  }
+
+  public void setProperties(List<AccountPropertyDTO> properties) {
+    this.properties = properties;
   }
 
 
@@ -77,22 +95,24 @@ public class NamespaceIds {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    NamespaceIds namespaceIds = (NamespaceIds) o;
-    return Objects.equals(this.namespaceIds, namespaceIds.namespaceIds);
+    AccountPropertiesDTO accountPropertiesDTO = (AccountPropertiesDTO) o;
+    return Objects.equals(this.address, accountPropertiesDTO.address) &&
+        Objects.equals(this.properties, accountPropertiesDTO.properties);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(namespaceIds);
+    return Objects.hash(address, properties);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class NamespaceIds {\n");
+    sb.append("class AccountPropertiesDTO {\n");
     
-    sb.append("    namespaceIds: ").append(toIndentedString(namespaceIds)).append("\n");
+    sb.append("    address: ").append(toIndentedString(address)).append("\n");
+    sb.append("    properties: ").append(toIndentedString(properties)).append("\n");
     sb.append("}");
     return sb.toString();
   }

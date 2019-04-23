@@ -27,7 +27,6 @@ import io.nem.sdk.model.namespace.NamespaceId;
 import io.nem.sdk.model.transaction.UInt64;
 import io.reactivex.Observable;
 import io.vertx.core.json.JsonObject;
-import io.vertx.reactivex.ext.web.client.HttpResponse;
 import io.vertx.reactivex.ext.web.codec.BodyCodec;
 
 import java.net.MalformedURLException;

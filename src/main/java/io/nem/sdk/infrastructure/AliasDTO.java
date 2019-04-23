@@ -29,43 +29,75 @@ package io.nem.sdk.infrastructure;
 import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
- * NamespaceIds
+ * AliasDTO
  * @author alexjavabraz
  * @since 4/8/2019
  */
-public class NamespaceIds {
-  @SerializedName("namespaceIds")
-  private List<String> namespaceIds = null;
+public class AliasDTO {
+  @SerializedName("type")
+  private Integer type = null;
 
-  public NamespaceIds namespaceIds(List<String> namespaceIds) {
-    this.namespaceIds = namespaceIds;
-    return this;
-  }
+  @SerializedName("mosaicId")
+  private UInt64DTO mosaicId = null;
 
-  public NamespaceIds addNamespaceIdsItem(String namespaceIdsItem) {
-    if (this.namespaceIds == null) {
-      this.namespaceIds = new ArrayList<String>();
-    }
-    this.namespaceIds.add(namespaceIdsItem);
+  @SerializedName("address")
+  private String address = null;
+
+  public AliasDTO type(Integer type) {
+    this.type = type;
     return this;
   }
 
    /**
-   * Get namespaceIds
-   * @return namespaceIds
+   * Get type
+   * @return type
   **/
-  @ApiModelProperty(example = "[\"84b3552d375ffa4b\"]", value = "")
-  public List<String> getNamespaceIds() {
-    return namespaceIds;
+  @ApiModelProperty(required = true, value = "")
+  public Integer getType() {
+    return type;
   }
 
-  public void setNamespaceIds(List<String> namespaceIds) {
-    this.namespaceIds = namespaceIds;
+  public void setType(Integer type) {
+    this.type = type;
+  }
+
+  public AliasDTO mosaicId(UInt64DTO mosaicId) {
+    this.mosaicId = mosaicId;
+    return this;
+  }
+
+   /**
+   * Get mosaicId
+   * @return mosaicId
+  **/
+  @ApiModelProperty(value = "")
+  public UInt64DTO getMosaicId() {
+    return mosaicId;
+  }
+
+  public void setMosaicId(UInt64DTO mosaicId) {
+    this.mosaicId = mosaicId;
+  }
+
+  public AliasDTO address(String address) {
+    this.address = address;
+    return this;
+  }
+
+   /**
+   * Get address
+   * @return address
+  **/
+  @ApiModelProperty(value = "")
+  public String getAddress() {
+    return address;
+  }
+
+  public void setAddress(String address) {
+    this.address = address;
   }
 
 
@@ -77,22 +109,26 @@ public class NamespaceIds {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    NamespaceIds namespaceIds = (NamespaceIds) o;
-    return Objects.equals(this.namespaceIds, namespaceIds.namespaceIds);
+    AliasDTO aliasDTO = (AliasDTO) o;
+    return Objects.equals(this.type, aliasDTO.type) &&
+        Objects.equals(this.mosaicId, aliasDTO.mosaicId) &&
+        Objects.equals(this.address, aliasDTO.address);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(namespaceIds);
+    return Objects.hash(type, mosaicId, address);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class NamespaceIds {\n");
+    sb.append("class AliasDTO {\n");
     
-    sb.append("    namespaceIds: ").append(toIndentedString(namespaceIds)).append("\n");
+    sb.append("    type: ").append(toIndentedString(type)).append("\n");
+    sb.append("    mosaicId: ").append(toIndentedString(mosaicId)).append("\n");
+    sb.append("    address: ").append(toIndentedString(address)).append("\n");
     sb.append("}");
     return sb.toString();
   }

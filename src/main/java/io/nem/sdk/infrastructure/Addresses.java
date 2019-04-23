@@ -34,38 +34,38 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * NamespaceIds
+ * Addresses
  * @author alexjavabraz
  * @since 4/8/2019
  */
-public class NamespaceIds {
-  @SerializedName("namespaceIds")
-  private List<String> namespaceIds = null;
+public class Addresses {
+  @SerializedName("addresses")
+  private List<String> addresses = null;
 
-  public NamespaceIds namespaceIds(List<String> namespaceIds) {
-    this.namespaceIds = namespaceIds;
+  public Addresses addresses(List<String> addresses) {
+    this.addresses = addresses;
     return this;
   }
 
-  public NamespaceIds addNamespaceIdsItem(String namespaceIdsItem) {
-    if (this.namespaceIds == null) {
-      this.namespaceIds = new ArrayList<String>();
+  public Addresses addAddressesItem(String addressesItem) {
+    if (this.addresses == null) {
+      this.addresses = new ArrayList<String>();
     }
-    this.namespaceIds.add(namespaceIdsItem);
+    this.addresses.add(addressesItem);
     return this;
   }
 
    /**
-   * Get namespaceIds
-   * @return namespaceIds
+   * Get addresses
+   * @return addresses
   **/
-  @ApiModelProperty(example = "[\"84b3552d375ffa4b\"]", value = "")
-  public List<String> getNamespaceIds() {
-    return namespaceIds;
+  @ApiModelProperty(example = "[\"SDRDGFTDLLCB67D4HPGIMIHPNSRYRJRT7DOBGWZY\",\"SBCPGZ3S2SCC3YHBBTYDCUZV4ZZEPHM2KGCP4QXX\"]", value = "")
+  public List<String> getAddresses() {
+    return addresses;
   }
 
-  public void setNamespaceIds(List<String> namespaceIds) {
-    this.namespaceIds = namespaceIds;
+  public void setAddresses(List<String> addresses) {
+    this.addresses = addresses;
   }
 
 
@@ -77,22 +77,22 @@ public class NamespaceIds {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    NamespaceIds namespaceIds = (NamespaceIds) o;
-    return Objects.equals(this.namespaceIds, namespaceIds.namespaceIds);
+    Addresses addresses = (Addresses) o;
+    return Objects.equals(this.addresses, addresses.addresses);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(namespaceIds);
+    return Objects.hash(addresses);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class NamespaceIds {\n");
+    sb.append("class Addresses {\n");
     
-    sb.append("    namespaceIds: ").append(toIndentedString(namespaceIds)).append("\n");
+    sb.append("    addresses: ").append(toIndentedString(addresses)).append("\n");
     sb.append("}");
     return sb.toString();
   }

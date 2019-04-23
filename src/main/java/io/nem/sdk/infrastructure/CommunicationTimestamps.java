@@ -29,43 +29,54 @@ package io.nem.sdk.infrastructure;
 import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
- * NamespaceIds
+ * CommunicationTimestamps
  * @author alexjavabraz
  * @since 4/8/2019
  */
-public class NamespaceIds {
-  @SerializedName("namespaceIds")
-  private List<String> namespaceIds = null;
+public class CommunicationTimestamps {
+  @SerializedName("sendTimestamp")
+  private UInt64DTO sendTimestamp = null;
 
-  public NamespaceIds namespaceIds(List<String> namespaceIds) {
-    this.namespaceIds = namespaceIds;
-    return this;
-  }
+  @SerializedName("receiveTimestamp")
+  private UInt64DTO receiveTimestamp = null;
 
-  public NamespaceIds addNamespaceIdsItem(String namespaceIdsItem) {
-    if (this.namespaceIds == null) {
-      this.namespaceIds = new ArrayList<String>();
-    }
-    this.namespaceIds.add(namespaceIdsItem);
+  public CommunicationTimestamps sendTimestamp(UInt64DTO sendTimestamp) {
+    this.sendTimestamp = sendTimestamp;
     return this;
   }
 
    /**
-   * Get namespaceIds
-   * @return namespaceIds
+   * Get sendTimestamp
+   * @return sendTimestamp
   **/
-  @ApiModelProperty(example = "[\"84b3552d375ffa4b\"]", value = "")
-  public List<String> getNamespaceIds() {
-    return namespaceIds;
+  @ApiModelProperty(value = "")
+  public UInt64DTO getSendTimestamp() {
+    return sendTimestamp;
   }
 
-  public void setNamespaceIds(List<String> namespaceIds) {
-    this.namespaceIds = namespaceIds;
+  public void setSendTimestamp(UInt64DTO sendTimestamp) {
+    this.sendTimestamp = sendTimestamp;
+  }
+
+  public CommunicationTimestamps receiveTimestamp(UInt64DTO receiveTimestamp) {
+    this.receiveTimestamp = receiveTimestamp;
+    return this;
+  }
+
+   /**
+   * Get receiveTimestamp
+   * @return receiveTimestamp
+  **/
+  @ApiModelProperty(value = "")
+  public UInt64DTO getReceiveTimestamp() {
+    return receiveTimestamp;
+  }
+
+  public void setReceiveTimestamp(UInt64DTO receiveTimestamp) {
+    this.receiveTimestamp = receiveTimestamp;
   }
 
 
@@ -77,22 +88,24 @@ public class NamespaceIds {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    NamespaceIds namespaceIds = (NamespaceIds) o;
-    return Objects.equals(this.namespaceIds, namespaceIds.namespaceIds);
+    CommunicationTimestamps communicationTimestamps = (CommunicationTimestamps) o;
+    return Objects.equals(this.sendTimestamp, communicationTimestamps.sendTimestamp) &&
+        Objects.equals(this.receiveTimestamp, communicationTimestamps.receiveTimestamp);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(namespaceIds);
+    return Objects.hash(sendTimestamp, receiveTimestamp);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class NamespaceIds {\n");
+    sb.append("class CommunicationTimestamps {\n");
     
-    sb.append("    namespaceIds: ").append(toIndentedString(namespaceIds)).append("\n");
+    sb.append("    sendTimestamp: ").append(toIndentedString(sendTimestamp)).append("\n");
+    sb.append("    receiveTimestamp: ").append(toIndentedString(receiveTimestamp)).append("\n");
     sb.append("}");
     return sb.toString();
   }

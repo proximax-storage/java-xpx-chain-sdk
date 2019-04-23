@@ -34,38 +34,57 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * NamespaceIds
+ * AccountPropertyDTO
  * @author alexjavabraz
  * @since 4/8/2019
  */
-public class NamespaceIds {
-  @SerializedName("namespaceIds")
-  private List<String> namespaceIds = null;
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-04-08T14:18:21.334-03:00")
+public class AccountPropertyDTO {
+  @SerializedName("propertyType")
+  private Integer propertyType = null;
 
-  public NamespaceIds namespaceIds(List<String> namespaceIds) {
-    this.namespaceIds = namespaceIds;
-    return this;
-  }
+  @SerializedName("values")
+  private List<Object> values = new ArrayList<Object>();
 
-  public NamespaceIds addNamespaceIdsItem(String namespaceIdsItem) {
-    if (this.namespaceIds == null) {
-      this.namespaceIds = new ArrayList<String>();
-    }
-    this.namespaceIds.add(namespaceIdsItem);
+  public AccountPropertyDTO propertyType(Integer propertyType) {
+    this.propertyType = propertyType;
     return this;
   }
 
    /**
-   * Get namespaceIds
-   * @return namespaceIds
+   * Get propertyType
+   * @return propertyType
   **/
-  @ApiModelProperty(example = "[\"84b3552d375ffa4b\"]", value = "")
-  public List<String> getNamespaceIds() {
-    return namespaceIds;
+  @ApiModelProperty(example = "1", required = true, value = "")
+  public Integer getPropertyType() {
+    return propertyType;
   }
 
-  public void setNamespaceIds(List<String> namespaceIds) {
-    this.namespaceIds = namespaceIds;
+  public void setPropertyType(Integer propertyType) {
+    this.propertyType = propertyType;
+  }
+
+  public AccountPropertyDTO values(List<Object> values) {
+    this.values = values;
+    return this;
+  }
+
+  public AccountPropertyDTO addValuesItem(Object valuesItem) {
+    this.values.add(valuesItem);
+    return this;
+  }
+
+   /**
+   * Get values
+   * @return values
+  **/
+  @ApiModelProperty(example = "[\"C14+w2br1wkUdGm/SNSlBwCvcksjWBkBXg==\",\"Ul6vmYP5TAEIOMMcDoHz6sn7bCdpjBaE+Q==\"]", required = true, value = "")
+  public List<Object> getValues() {
+    return values;
+  }
+
+  public void setValues(List<Object> values) {
+    this.values = values;
   }
 
 
@@ -77,22 +96,24 @@ public class NamespaceIds {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    NamespaceIds namespaceIds = (NamespaceIds) o;
-    return Objects.equals(this.namespaceIds, namespaceIds.namespaceIds);
+    AccountPropertyDTO accountPropertyDTO = (AccountPropertyDTO) o;
+    return Objects.equals(this.propertyType, accountPropertyDTO.propertyType) &&
+        Objects.equals(this.values, accountPropertyDTO.values);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(namespaceIds);
+    return Objects.hash(propertyType, values);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class NamespaceIds {\n");
+    sb.append("class AccountPropertyDTO {\n");
     
-    sb.append("    namespaceIds: ").append(toIndentedString(namespaceIds)).append("\n");
+    sb.append("    propertyType: ").append(toIndentedString(propertyType)).append("\n");
+    sb.append("    values: ").append(toIndentedString(values)).append("\n");
     sb.append("}");
     return sb.toString();
   }

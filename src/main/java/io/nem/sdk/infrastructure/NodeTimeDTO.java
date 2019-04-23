@@ -29,43 +29,33 @@ package io.nem.sdk.infrastructure;
 import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
- * NamespaceIds
+ * NodeTimeDTO
  * @author alexjavabraz
  * @since 4/8/2019
  */
-public class NamespaceIds {
-  @SerializedName("namespaceIds")
-  private List<String> namespaceIds = null;
+public class NodeTimeDTO {
+  @SerializedName("communicationTimestamps")
+  private CommunicationTimestamps communicationTimestamps = null;
 
-  public NamespaceIds namespaceIds(List<String> namespaceIds) {
-    this.namespaceIds = namespaceIds;
-    return this;
-  }
-
-  public NamespaceIds addNamespaceIdsItem(String namespaceIdsItem) {
-    if (this.namespaceIds == null) {
-      this.namespaceIds = new ArrayList<String>();
-    }
-    this.namespaceIds.add(namespaceIdsItem);
+  public NodeTimeDTO communicationTimestamps(CommunicationTimestamps communicationTimestamps) {
+    this.communicationTimestamps = communicationTimestamps;
     return this;
   }
 
    /**
-   * Get namespaceIds
-   * @return namespaceIds
+   * Get communicationTimestamps
+   * @return communicationTimestamps
   **/
-  @ApiModelProperty(example = "[\"84b3552d375ffa4b\"]", value = "")
-  public List<String> getNamespaceIds() {
-    return namespaceIds;
+  @ApiModelProperty(required = true, value = "")
+  public CommunicationTimestamps getCommunicationTimestamps() {
+    return communicationTimestamps;
   }
 
-  public void setNamespaceIds(List<String> namespaceIds) {
-    this.namespaceIds = namespaceIds;
+  public void setCommunicationTimestamps(CommunicationTimestamps communicationTimestamps) {
+    this.communicationTimestamps = communicationTimestamps;
   }
 
 
@@ -77,22 +67,22 @@ public class NamespaceIds {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    NamespaceIds namespaceIds = (NamespaceIds) o;
-    return Objects.equals(this.namespaceIds, namespaceIds.namespaceIds);
+    NodeTimeDTO nodeTimeDTO = (NodeTimeDTO) o;
+    return Objects.equals(this.communicationTimestamps, nodeTimeDTO.communicationTimestamps);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(namespaceIds);
+    return Objects.hash(communicationTimestamps);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class NamespaceIds {\n");
+    sb.append("class NodeTimeDTO {\n");
     
-    sb.append("    namespaceIds: ").append(toIndentedString(namespaceIds)).append("\n");
+    sb.append("    communicationTimestamps: ").append(toIndentedString(communicationTimestamps)).append("\n");
     sb.append("}");
     return sb.toString();
   }

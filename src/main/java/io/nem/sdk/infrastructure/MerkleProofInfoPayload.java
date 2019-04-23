@@ -34,38 +34,38 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * NamespaceIds
+ * MerkleProofInfoPayload
  * @author alexjavabraz
  * @since 4/8/2019
  */
-public class NamespaceIds {
-  @SerializedName("namespaceIds")
-  private List<String> namespaceIds = null;
+public class MerkleProofInfoPayload {
+  @SerializedName("merklePath")
+  private List<MerklePathItem> merklePath = null;
 
-  public NamespaceIds namespaceIds(List<String> namespaceIds) {
-    this.namespaceIds = namespaceIds;
+  public MerkleProofInfoPayload merklePath(List<MerklePathItem> merklePath) {
+    this.merklePath = merklePath;
     return this;
   }
 
-  public NamespaceIds addNamespaceIdsItem(String namespaceIdsItem) {
-    if (this.namespaceIds == null) {
-      this.namespaceIds = new ArrayList<String>();
+  public MerkleProofInfoPayload addMerklePathItem(MerklePathItem merklePathItem) {
+    if (this.merklePath == null) {
+      this.merklePath = new ArrayList<MerklePathItem>();
     }
-    this.namespaceIds.add(namespaceIdsItem);
+    this.merklePath.add(merklePathItem);
     return this;
   }
 
    /**
-   * Get namespaceIds
-   * @return namespaceIds
+   * Get merklePath
+   * @return merklePath
   **/
-  @ApiModelProperty(example = "[\"84b3552d375ffa4b\"]", value = "")
-  public List<String> getNamespaceIds() {
-    return namespaceIds;
+  @ApiModelProperty(value = "")
+  public List<MerklePathItem> getMerklePath() {
+    return merklePath;
   }
 
-  public void setNamespaceIds(List<String> namespaceIds) {
-    this.namespaceIds = namespaceIds;
+  public void setMerklePath(List<MerklePathItem> merklePath) {
+    this.merklePath = merklePath;
   }
 
 
@@ -77,22 +77,22 @@ public class NamespaceIds {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    NamespaceIds namespaceIds = (NamespaceIds) o;
-    return Objects.equals(this.namespaceIds, namespaceIds.namespaceIds);
+    MerkleProofInfoPayload merkleProofInfoPayload = (MerkleProofInfoPayload) o;
+    return Objects.equals(this.merklePath, merkleProofInfoPayload.merklePath);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(namespaceIds);
+    return Objects.hash(merklePath);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class NamespaceIds {\n");
+    sb.append("class MerkleProofInfoPayload {\n");
     
-    sb.append("    namespaceIds: ").append(toIndentedString(namespaceIds)).append("\n");
+    sb.append("    merklePath: ").append(toIndentedString(merklePath)).append("\n");
     sb.append("}");
     return sb.toString();
   }
