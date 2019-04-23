@@ -58,7 +58,10 @@ public class Listener {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     /**
-     * @param url nis host
+     * Create new instance for specified URL
+     * 
+     * @param url URL of nis host
+     * @throws MalformedURLException thrown when specified URL is malformed
      */
     public Listener(final String url) throws MalformedURLException {
         this.url = new URL(url);

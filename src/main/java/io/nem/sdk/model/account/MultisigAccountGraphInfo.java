@@ -35,7 +35,7 @@ public class MultisigAccountGraphInfo {
     /**
      * Returns multisig accounts levels number.
      *
-     * @return Set<Integer>
+     * @return Set of {@link Integer}
      */
     public Set<Integer> getLevelsNumber() {
         return this.multisigAccounts.keySet();
@@ -44,7 +44,7 @@ public class MultisigAccountGraphInfo {
     /**
      * Returns multisig accounts.
      *
-     * @return Map<Integer ,   List < { @ link   MultisigAccountInfo }>>
+     * @return Map from Integer to List of {@link MultisigAccountInfo}
      */
     public Map<Integer, List<MultisigAccountInfo>> getMultisigAccounts() {
         return multisigAccounts;

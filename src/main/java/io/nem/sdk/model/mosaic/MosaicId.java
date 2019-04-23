@@ -34,7 +34,7 @@ public class MosaicId {
     /**
      * Create MosaicId from mosaic and namespace string name (ex: nem:xem or domain.subdom.subdome:token)
      *
-     * @param id
+     * @param id String representation of mosaic ID
      * @throws IllegalIdentifierException MosaicId identifier
      */
     public MosaicId(String id) {
@@ -51,7 +51,7 @@ public class MosaicId {
     /**
      * Create MosaicId from biginteger id
      *
-     * @param id
+     * @param id numeric representaion of Mosaic ID
      */
     public MosaicId(BigInteger id) {
         this.id = id;

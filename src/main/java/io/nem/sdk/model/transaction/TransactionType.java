@@ -91,6 +91,7 @@ public enum TransactionType {
     /**
      * Static constructor converting transaction type raw value to enum instance.
      *
+     * @param value numeric representation of the transaction type
      * @return {@link TransactionType}
      */
     public static TransactionType rawValueOf(int value) {

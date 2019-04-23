@@ -34,7 +34,7 @@ public class NamespaceId {
     /**
      * Create NamespaceId from namespace string name (ex: nem or domain.subdom.subdome)
      *
-     * @param id
+     * @param id String representation of the Namespace ID
      */
     public NamespaceId(String id) {
         this.id = IdGenerator.generateNamespaceId(id);
@@ -44,7 +44,7 @@ public class NamespaceId {
     /**
      * Create NamespaceId from biginteger id
      *
-     * @param id
+     * @param id numeric representation of the Namespace ID
      */
     public NamespaceId(BigInteger id) {
         this.id = id;
