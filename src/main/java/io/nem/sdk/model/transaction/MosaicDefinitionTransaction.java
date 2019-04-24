@@ -17,6 +17,8 @@
 package io.nem.sdk.model.transaction;
 
 import com.google.flatbuffers.FlatBufferBuilder;
+
+import io.nem.sdk.infrastructure.utils.UInt64Utils;
 import io.nem.sdk.model.account.PublicAccount;
 import io.nem.sdk.model.blockchain.NetworkType;
 import io.nem.sdk.model.mosaic.MosaicId;
@@ -144,11 +146,11 @@ public class MosaicDefinitionTransaction extends Transaction {
         // Create Vectors
         int signatureVector = MosaicDefinitionCreationTransactionBuffer.createSignatureVector(builder, new byte[64]);
         int signerVector = MosaicDefinitionCreationTransactionBuffer.createSignerVector(builder, new byte[32]);
-        int deadlineVector = MosaicDefinitionCreationTransactionBuffer.createDeadlineVector(builder, UInt64.fromBigInteger(deadlineBigInt));
+        int deadlineVector = MosaicDefinitionCreationTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
         int feeVector = MosaicDefinitionCreationTransactionBuffer.createFeeVector(builder, fee);
-        int mosaicIdVector = MosaicDefinitionCreationTransactionBuffer.createParentIdVector(builder, UInt64.fromBigInteger(mosaicId.getId()));
-        int namespaceIdVector = MosaicDefinitionCreationTransactionBuffer.createParentIdVector(builder, UInt64.fromBigInteger(namespaceId.getId()));
-        int durationVector = MosaicDefinitionCreationTransactionBuffer.createDurationVector(builder, UInt64.fromBigInteger(mosaicProperties.getDuration()));
+        int mosaicIdVector = MosaicDefinitionCreationTransactionBuffer.createParentIdVector(builder, UInt64Utils.fromBigInteger(mosaicId.getId()));
+        int namespaceIdVector = MosaicDefinitionCreationTransactionBuffer.createParentIdVector(builder, UInt64Utils.fromBigInteger(namespaceId.getId()));
+        int durationVector = MosaicDefinitionCreationTransactionBuffer.createDurationVector(builder, UInt64Utils.fromBigInteger(mosaicProperties.getDuration()));
 
         int fixSize = 149; // replace by the all numbers sum or add a comment explaining this
 

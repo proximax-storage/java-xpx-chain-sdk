@@ -17,6 +17,8 @@
 package io.nem.sdk.model.transaction;
 
 import com.google.flatbuffers.FlatBufferBuilder;
+
+import io.nem.sdk.infrastructure.utils.UInt64Utils;
 import io.nem.sdk.model.account.PublicAccount;
 import io.nem.sdk.model.blockchain.NetworkType;
 import io.nem.sdk.model.mosaic.Mosaic;
@@ -103,11 +105,11 @@ public class LockFundsTransaction extends Transaction {
         // Create Vectors
         int signatureVector = LockFundsTransactionBuffer.createSignatureVector(builder, new byte[64]);
         int signerVector = LockFundsTransactionBuffer.createSignerVector(builder, new byte[32]);
-        int deadlineVector = LockFundsTransactionBuffer.createDeadlineVector(builder, UInt64.fromBigInteger(deadlineBigInt));
+        int deadlineVector = LockFundsTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
         int feeVector = LockFundsTransactionBuffer.createFeeVector(builder, fee);
-        int mosaicIdVector = LockFundsTransactionBuffer.createMosaicIdVector(builder, UInt64.fromBigInteger(mosaic.getId().getId()));
-        int mosaicAmountVector = LockFundsTransactionBuffer.createMosaicAmountVector(builder, UInt64.fromBigInteger(mosaic.getAmount()));
-        int durationVector = LockFundsTransactionBuffer.createDurationVector(builder, UInt64.fromBigInteger(duration));
+        int mosaicIdVector = LockFundsTransactionBuffer.createMosaicIdVector(builder, UInt64Utils.fromBigInteger(mosaic.getId().getId()));
+        int mosaicAmountVector = LockFundsTransactionBuffer.createMosaicAmountVector(builder, UInt64Utils.fromBigInteger(mosaic.getAmount()));
+        int durationVector = LockFundsTransactionBuffer.createDurationVector(builder, UInt64Utils.fromBigInteger(duration));
 
         int hashVector = LockFundsTransactionBuffer.createHashVector(builder, Hex.decode(signedTransaction.getHash()));
 

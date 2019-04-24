@@ -16,8 +16,27 @@
 
 package io.nem.sdk.infrastructure;
 
+import static io.nem.sdk.infrastructure.utils.AccountDTOUtils.getAddressEncoded;
+import static io.nem.sdk.infrastructure.utils.UInt64Utils.toBigInt;
+
+import java.net.MalformedURLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import com.fasterxml.jackson.core.type.TypeReference;
-import io.nem.sdk.model.account.*;
+
+import io.nem.sdk.infrastructure.model.AccountInfoDTO;
+import io.nem.sdk.infrastructure.model.MultisigAccountGraphInfoDTO;
+import io.nem.sdk.infrastructure.model.MultisigAccountInfoDTO;
+import io.nem.sdk.infrastructure.model.MultisigDTO;
+import io.nem.sdk.model.account.AccountInfo;
+import io.nem.sdk.model.account.Address;
+import io.nem.sdk.model.account.MultisigAccountGraphInfo;
+import io.nem.sdk.model.account.MultisigAccountInfo;
+import io.nem.sdk.model.account.PublicAccount;
 import io.nem.sdk.model.blockchain.NetworkType;
 import io.nem.sdk.model.mosaic.Mosaic;
 import io.nem.sdk.model.mosaic.MosaicId;
@@ -27,15 +46,7 @@ import io.reactivex.Observable;
 import io.reactivex.functions.Function;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import io.vertx.reactivex.ext.web.client.HttpResponse;
 import io.vertx.reactivex.ext.web.codec.BodyCodec;
-
-import java.net.MalformedURLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Account http repository.
@@ -62,20 +73,20 @@ public class AccountHttp extends Http implements AccountRepository {
                 .map(Http::mapJsonObjectOrError)
                 .map(json -> objectMapper.readValue(json.toString(), AccountInfoDTO.class))
                 .map(AccountInfoDTO::getAccount)
-                .map(accountDTO -> new AccountInfo(Address.createFromRawAddress(accountDTO.getAddressEncoded()),
-                        accountDTO.getAddressHeight().extractIntArray(),
+                .map(accountDTO -> new AccountInfo(Address.createFromRawAddress(getAddressEncoded(accountDTO)),
+                		toBigInt(accountDTO.getAddressHeight()),
                         accountDTO.getPublicKey(),
-                        accountDTO.getPublicKeyHeight().extractIntArray(),
+                        toBigInt(accountDTO.getPublicKeyHeight()),
                         accountDTO.getMosaics().stream().map(mosaicDTO -> new Mosaic(
-                                new MosaicId(mosaicDTO.getId().extractIntArray()),
-                                mosaicDTO.getAmount().extractIntArray()
+                                new MosaicId(toBigInt(mosaicDTO.getId())),
+                                toBigInt(mosaicDTO.getAmount())
                         )).collect(Collectors.toList())));
     }
 
     @Override
     public Observable<List<AccountInfo>> getAccountsInfo(List<Address> addresses) {
         JsonObject requestBody = new JsonObject();
-        requestBody.put("addresses", addresses.stream().map(address -> address.plain()).collect(Collectors.toList()));
+        requestBody.put("addresses", addresses.stream().map(Address::plain).collect(Collectors.toList()));
         Observable<NetworkType> networkTypeResolve = getNetworkTypeObservable();
         return networkTypeResolve
                 .flatMap(networkType -> this.client
@@ -88,13 +99,13 @@ public class AccountHttp extends Http implements AccountRepository {
                         }))
                         .flatMapIterable(item -> item)
                         .map(AccountInfoDTO::getAccount)
-                        .map(accountDTO -> new AccountInfo(Address.createFromRawAddress(accountDTO.getAddressEncoded()),
-                                accountDTO.getAddressHeight().extractIntArray(),
+                        .map(accountDTO -> new AccountInfo(Address.createFromRawAddress(getAddressEncoded(accountDTO)),
+                        		toBigInt(accountDTO.getAddressHeight()),
                                 accountDTO.getPublicKey(),
-                                accountDTO.getPublicKeyHeight().extractIntArray(),
+                                toBigInt(accountDTO.getPublicKeyHeight()),
                                 accountDTO.getMosaics().stream().map(mosaicDTO -> new Mosaic(
-                                        new MosaicId(mosaicDTO.getId().extractIntArray()),
-                                        mosaicDTO.getAmount().extractIntArray()
+                                        new MosaicId(toBigInt(mosaicDTO.getId())),
+                                        toBigInt(mosaicDTO.getAmount())
                                 )).collect(Collectors.toList())))
                         .toList()
                         .toObservable());
@@ -231,7 +242,13 @@ public class AccountHttp extends Http implements AccountRepository {
                 .toObservable();
     }
 
-    private Function<Multisig, MultisigAccountInfo> transfromMultisigAccountInfoDTO(NetworkType networkType) {
+    /**
+     * return function that transforms MultisigDTO to MultisigAccountInfo
+     * 
+     * @param networkType
+     * @return
+     */
+    private Function<MultisigDTO, MultisigAccountInfo> transfromMultisigAccountInfoDTO(NetworkType networkType) {
         return multisig -> new MultisigAccountInfo(
                 new PublicAccount(multisig.getAccount(), networkType),
                 multisig.getMinApproval(),

@@ -16,17 +16,25 @@
 
 package io.nem.sdk.infrastructure;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import io.nem.sdk.model.transaction.*;
-import io.reactivex.Observable;
-import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
-import io.vertx.reactivex.ext.web.client.HttpResponse;
-import io.vertx.reactivex.ext.web.codec.BodyCodec;
+import static io.nem.sdk.infrastructure.utils.UInt64Utils.toBigInt;
 
 import java.net.MalformedURLException;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+
+import io.nem.sdk.infrastructure.model.TransactionStatusDTO;
+import io.nem.sdk.model.transaction.CosignatureSignedTransaction;
+import io.nem.sdk.model.transaction.Deadline;
+import io.nem.sdk.model.transaction.SignedTransaction;
+import io.nem.sdk.model.transaction.Transaction;
+import io.nem.sdk.model.transaction.TransactionAnnounceResponse;
+import io.nem.sdk.model.transaction.TransactionStatus;
+import io.reactivex.Observable;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
+import io.vertx.reactivex.ext.web.codec.BodyCodec;
 
 /**
  * Transaction http repository.
@@ -34,6 +42,9 @@ import java.util.stream.Collectors;
  * @since 1.0
  */
 public class TransactionHttp extends Http implements TransactionRepository {
+	/** JSON key containing the message */
+	private static final String KEY_MESSAGE = "message";
+	
     public TransactionHttp(String host) throws MalformedURLException {
         this(host + "/transaction/", new NetworkHttp(host));
     }
@@ -84,8 +95,8 @@ public class TransactionHttp extends Http implements TransactionRepository {
                 .map(transactionStatusDTO -> new TransactionStatus(transactionStatusDTO.getGroup(),
                         transactionStatusDTO.getStatus(),
                         transactionStatusDTO.getHash(),
-                        new Deadline(transactionStatusDTO.getDeadline().extractIntArray()),
-                        transactionStatusDTO.getHeight().extractIntArray()));
+                        new Deadline(toBigInt(transactionStatusDTO.getDeadline())),
+                        toBigInt(transactionStatusDTO.getHeight())));
     }
 
     @Override
@@ -104,8 +115,8 @@ public class TransactionHttp extends Http implements TransactionRepository {
                 .map(transactionStatusDTO -> new TransactionStatus(transactionStatusDTO.getGroup(),
                         transactionStatusDTO.getStatus(),
                         transactionStatusDTO.getHash(),
-                        new Deadline(transactionStatusDTO.getDeadline().extractIntArray()),
-                        transactionStatusDTO.getHeight().extractIntArray()))
+                        new Deadline(toBigInt(transactionStatusDTO.getDeadline())),
+                        toBigInt(transactionStatusDTO.getHeight())))
                 .toList()
                 .toObservable();
     }
@@ -120,7 +131,7 @@ public class TransactionHttp extends Http implements TransactionRepository {
                 .rxSendJson(requestBody)
                 .toObservable()
                 .map(Http::mapJsonObjectOrError)
-                .map(json -> new TransactionAnnounceResponse(new JsonObject(json.toString()).getString("message")));
+                .map(json -> new TransactionAnnounceResponse(new JsonObject(json.toString()).getString(KEY_MESSAGE)));
     }
 
     @Override
@@ -133,7 +144,7 @@ public class TransactionHttp extends Http implements TransactionRepository {
                 .rxSendJson(requestBody)
                 .toObservable()
                 .map(Http::mapJsonObjectOrError)
-                .map(json -> new TransactionAnnounceResponse(new JsonObject(json.toString()).getString("message")));
+                .map(json -> new TransactionAnnounceResponse(new JsonObject(json.toString()).getString(KEY_MESSAGE)));
     }
 
     @Override
@@ -148,6 +159,6 @@ public class TransactionHttp extends Http implements TransactionRepository {
                 .rxSendJson(requestBody)
                 .toObservable()
                 .map(Http::mapJsonObjectOrError)
-                .map(json -> new TransactionAnnounceResponse(new JsonObject(json.toString()).getString("message")));
+                .map(json -> new TransactionAnnounceResponse(new JsonObject(json.toString()).getString(KEY_MESSAGE)));
     }
 }

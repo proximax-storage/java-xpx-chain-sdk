@@ -17,6 +17,8 @@
 package io.nem.sdk.model.transaction;
 
 import com.google.flatbuffers.FlatBufferBuilder;
+
+import io.nem.sdk.infrastructure.utils.UInt64Utils;
 import io.nem.sdk.model.account.PublicAccount;
 import io.nem.sdk.model.blockchain.NetworkType;
 import io.nem.sdk.model.mosaic.MosaicId;
@@ -107,10 +109,10 @@ public class MosaicSupplyChangeTransaction extends Transaction {
         // Create Vectors
         int signatureVector = MosaicSupplyChangeTransactionBuffer.createSignatureVector(builder, new byte[64]);
         int signerVector = MosaicSupplyChangeTransactionBuffer.createSignerVector(builder, new byte[32]);
-        int deadlineVector = MosaicSupplyChangeTransactionBuffer.createDeadlineVector(builder, UInt64.fromBigInteger(deadlineBigInt));
+        int deadlineVector = MosaicSupplyChangeTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
         int feeVector = MosaicSupplyChangeTransactionBuffer.createFeeVector(builder, fee);
-        int mosaicIdVector = MosaicSupplyChangeTransactionBuffer.createMosaicIdVector(builder, UInt64.fromBigInteger(mosaicId.getId()));
-        int deltaVector = MosaicSupplyChangeTransactionBuffer.createDeltaVector(builder, UInt64.fromBigInteger(delta));
+        int mosaicIdVector = MosaicSupplyChangeTransactionBuffer.createMosaicIdVector(builder, UInt64Utils.fromBigInteger(mosaicId.getId()));
+        int deltaVector = MosaicSupplyChangeTransactionBuffer.createDeltaVector(builder, UInt64Utils.fromBigInteger(delta));
 
         int fixSize = 137; // replace by the all numbers sum or add a comment explaining this
 

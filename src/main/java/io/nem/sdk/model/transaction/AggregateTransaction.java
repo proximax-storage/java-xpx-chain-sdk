@@ -18,6 +18,7 @@ package io.nem.sdk.model.transaction;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 import io.nem.core.crypto.Signer;
+import io.nem.sdk.infrastructure.utils.UInt64Utils;
 import io.nem.sdk.model.account.Account;
 import io.nem.sdk.model.account.PublicAccount;
 import io.nem.sdk.model.blockchain.NetworkType;
@@ -109,7 +110,7 @@ public class AggregateTransaction extends Transaction {
         // Create Vectors
         int signatureVector = AggregateTransactionBuffer.createSignatureVector(builder, new byte[64]);
         int signerVector = AggregateTransactionBuffer.createSignerVector(builder, new byte[32]);
-        int deadlineVector = AggregateTransactionBuffer.createDeadlineVector(builder, UInt64.fromBigInteger(deadlineBigInt));
+        int deadlineVector = AggregateTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
         int feeVector = AggregateTransactionBuffer.createFeeVector(builder, fee);
         int transactionsVector = AggregateTransactionBuffer.createTransactionsVector(builder, transactionsBytes);
 

@@ -18,6 +18,7 @@ package io.nem.sdk.model.transaction;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 import io.nem.core.utils.HexEncoder;
+import io.nem.sdk.infrastructure.utils.UInt64Utils;
 import io.nem.sdk.model.account.PublicAccount;
 import io.nem.sdk.model.blockchain.NetworkType;
 import org.apache.commons.lang3.Validate;
@@ -119,7 +120,7 @@ public class ModifyMultisigAccountTransaction extends Transaction {
         // Create Vectors
         int signatureVector = MultisigAggregateModificationTransactionBuffer.createSignatureVector(builder, new byte[64]);
         int signerVector = MultisigAggregateModificationTransactionBuffer.createSignerVector(builder, new byte[32]);
-        int deadlineVector = MultisigAggregateModificationTransactionBuffer.createDeadlineVector(builder, UInt64.fromBigInteger(deadlineBigInt));
+        int deadlineVector = MultisigAggregateModificationTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
         int feeVector = MultisigAggregateModificationTransactionBuffer.createFeeVector(builder, fee);
         int modificationsVector = TransferTransactionBuffer.createMosaicsVector(builder, modificationsBuffers);
 

@@ -16,6 +16,19 @@
 
 package io.nem.sdk.infrastructure;
 
+import static io.nem.sdk.infrastructure.utils.UInt64Utils.toBigInt;
+
+import java.math.BigInteger;
+import java.net.MalformedURLException;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import io.nem.sdk.infrastructure.model.BlockInfoDTO;
+import io.nem.sdk.infrastructure.model.BlockchainScoreDTO;
+import io.nem.sdk.infrastructure.model.BlockchainStorageInfoDTO;
+import io.nem.sdk.infrastructure.model.HeightDTO;
+import io.nem.sdk.infrastructure.utils.BlockchainScoreDTOUtils;
 import io.nem.sdk.model.account.PublicAccount;
 import io.nem.sdk.model.blockchain.BlockInfo;
 import io.nem.sdk.model.blockchain.BlockchainStorageInfo;
@@ -24,14 +37,7 @@ import io.nem.sdk.model.transaction.Transaction;
 import io.reactivex.Observable;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import io.vertx.reactivex.ext.web.client.HttpResponse;
 import io.vertx.reactivex.ext.web.codec.BodyCodec;
-
-import java.math.BigInteger;
-import java.net.MalformedURLException;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Blockchain http repository.
@@ -61,19 +67,18 @@ public class BlockchainHttp extends Http implements BlockchainRepository {
                         .map(json -> objectMapper.readValue(json.toString(), BlockInfoDTO.class))
                         .map(blockInfoDTO -> new BlockInfo(blockInfoDTO.getMeta().getHash(),
                                 blockInfoDTO.getMeta().getGenerationHash(),
-                                Optional.of(blockInfoDTO.getMeta().getTotalFee().extractIntArray()),
+                                Optional.of(toBigInt(blockInfoDTO.getMeta().getTotalFee())),
                                 Optional.of(blockInfoDTO.getMeta().getNumTransactions().intValue()),
                                 blockInfoDTO.getBlock().getSignature(),
                                 new PublicAccount(blockInfoDTO.getBlock().getSigner(), networkType),
                                 networkType,
                                 (int) Long.parseLong(Integer.toHexString(blockInfoDTO.getBlock().getVersion().intValue()).substring(2, 4), 16),
                                 blockInfoDTO.getBlock().getType().intValue(),
-                                blockInfoDTO.getBlock().getHeight().extractIntArray(),
-                                blockInfoDTO.getBlock().getTimestamp().extractIntArray(),
-                                blockInfoDTO.getBlock().getDifficulty().extractIntArray(),
+                                toBigInt(blockInfoDTO.getBlock().getHeight()),
+                                toBigInt(blockInfoDTO.getBlock().getTimestamp()),
+                                toBigInt(blockInfoDTO.getBlock().getDifficulty()),
                                 blockInfoDTO.getBlock().getPreviousBlockHash(),
                                 blockInfoDTO.getBlock().getBlockTransactionsHash())));
-
     }
 
     @Override
@@ -109,7 +114,7 @@ public class BlockchainHttp extends Http implements BlockchainRepository {
                 .toObservable()
                 .map(Http::mapJsonObjectOrError)
                 .map(json -> objectMapper.readValue(json.toString(), HeightDTO.class))
-                .map(blockchainHeight -> blockchainHeight.getHeight().extractIntArray());
+                .map(blockchainHeight -> toBigInt(blockchainHeight.getHeight()));
     }
 
     public Observable<BigInteger> getBlockchainScore() {
@@ -120,7 +125,7 @@ public class BlockchainHttp extends Http implements BlockchainRepository {
                 .toObservable()
                 .map(Http::mapJsonObjectOrError)
                 .map(json -> objectMapper.readValue(json.toString(), BlockchainScoreDTO.class))
-                .map(blockchainScoreDTO -> blockchainScoreDTO.extractIntArray());
+                .map(BlockchainScoreDTOUtils::toBigInt);
     }
 
     @Override

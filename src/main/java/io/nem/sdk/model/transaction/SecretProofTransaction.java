@@ -17,6 +17,8 @@
 package io.nem.sdk.model.transaction;
 
 import com.google.flatbuffers.FlatBufferBuilder;
+
+import io.nem.sdk.infrastructure.utils.UInt64Utils;
 import io.nem.sdk.model.account.PublicAccount;
 import io.nem.sdk.model.blockchain.NetworkType;
 import org.apache.commons.lang3.Validate;
@@ -98,7 +100,7 @@ public class SecretProofTransaction extends Transaction {
         // Create Vectors
         int signatureVector = SecretProofTransactionBuffer.createSignatureVector(builder, new byte[64]);
         int signerVector = SecretProofTransactionBuffer.createSignerVector(builder, new byte[32]);
-        int deadlineVector = SecretProofTransactionBuffer.createDeadlineVector(builder, UInt64.fromBigInteger(deadlineBigInt));
+        int deadlineVector = SecretProofTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
         int feeVector = SecretProofTransactionBuffer.createFeeVector(builder, fee);
         int secretVector = SecretProofTransactionBuffer.createSecretVector(builder, Hex.decode(secret));
         int proofVector = SecretProofTransactionBuffer.createProofVector(builder, Hex.decode(proof));

@@ -17,6 +17,8 @@
 package io.nem.sdk.model.transaction;
 
 import com.google.flatbuffers.FlatBufferBuilder;
+
+import io.nem.sdk.infrastructure.utils.UInt64Utils;
 import io.nem.sdk.model.account.Address;
 import io.nem.sdk.model.account.PublicAccount;
 import io.nem.sdk.model.blockchain.NetworkType;
@@ -117,8 +119,8 @@ public class TransferTransaction extends Transaction {
         int[] mosaicBuffers = new int[mosaics.size()];
         for (int i = 0; i < mosaics.size(); ++i) {
             Mosaic mosaic = mosaics.get(i);
-            int id = MosaicBuffer.createIdVector(builder, UInt64.fromBigInteger(mosaic.getId().getId()));
-            int amount = MosaicBuffer.createAmountVector(builder, UInt64.fromBigInteger(mosaic.getAmount()));
+            int id = MosaicBuffer.createIdVector(builder, UInt64Utils.fromBigInteger(mosaic.getId().getId()));
+            int amount = MosaicBuffer.createAmountVector(builder, UInt64Utils.fromBigInteger(mosaic.getAmount()));
             MosaicBuffer.startMosaicBuffer(builder);
             MosaicBuffer.addId(builder, id);
             MosaicBuffer.addAmount(builder, amount);
@@ -129,7 +131,7 @@ public class TransferTransaction extends Transaction {
         // Create Vectors
         int signatureVector = TransferTransactionBuffer.createSignatureVector(builder, new byte[64]);
         int signerVector = TransferTransactionBuffer.createSignerVector(builder, new byte[32]);
-        int deadlineVector = TransferTransactionBuffer.createDeadlineVector(builder, UInt64.fromBigInteger(deadlineBigInt));
+        int deadlineVector = TransferTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
         int feeVector = TransferTransactionBuffer.createFeeVector(builder, fee);
         int recipientVector = TransferTransactionBuffer.createRecipientVector(builder, address);
         int mosaicsVector = TransferTransactionBuffer.createMosaicsVector(builder, mosaicBuffers);

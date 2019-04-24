@@ -16,21 +16,23 @@
 
 package io.nem.sdk.infrastructure;
 
-import io.nem.sdk.model.account.Address;
-import io.nem.sdk.model.namespace.NamespaceType;
-import io.nem.sdk.model.transaction.*;
-import io.vertx.core.json.Json;
-import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
-import org.bouncycastle.util.encoders.Hex;
-import org.junit.jupiter.api.Test;
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.bouncycastle.util.encoders.Hex;
+import org.junit.jupiter.api.Test;
+
+import io.nem.sdk.infrastructure.model.UInt64DTO;
+import io.nem.sdk.infrastructure.utils.UInt64Utils;
+import io.nem.sdk.model.account.Address;
+import io.nem.sdk.model.namespace.NamespaceType;
+import io.nem.sdk.model.transaction.*;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
 
 public class TransactionMappingTest {
 
@@ -405,7 +407,7 @@ public class TransactionMappingTest {
 
     BigInteger extractBigInteger(JsonArray input) {
         UInt64DTO uInt64DTO = new UInt64DTO();
-        input.stream().forEach(item -> uInt64DTO.add(new Long(item.toString())));
-        return uInt64DTO.extractIntArray();
+        input.stream().forEach(item -> uInt64DTO.add(new Integer(item.toString())));
+        return UInt64Utils.toBigInt(uInt64DTO);
     }
 }

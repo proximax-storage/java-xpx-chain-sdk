@@ -17,6 +17,8 @@
 package io.nem.sdk.model.transaction;
 
 import com.google.flatbuffers.FlatBufferBuilder;
+
+import io.nem.sdk.infrastructure.utils.UInt64Utils;
 import io.nem.sdk.model.account.PublicAccount;
 import io.nem.sdk.model.blockchain.NetworkType;
 import io.nem.sdk.model.namespace.NamespaceId;
@@ -146,10 +148,10 @@ public class RegisterNamespaceTransaction extends Transaction {
         // Create Vectors
         int signatureVector = ProvisionNamespaceTransactionBuffer.createSignatureVector(builder, new byte[64]);
         int signerVector = ProvisionNamespaceTransactionBuffer.createSignerVector(builder, new byte[32]);
-        int deadlineVector = ProvisionNamespaceTransactionBuffer.createDeadlineVector(builder, UInt64.fromBigInteger(deadlineBigInt));
+        int deadlineVector = ProvisionNamespaceTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
         int feeVector = ProvisionNamespaceTransactionBuffer.createFeeVector(builder, fee);
-        int namespaceIdVector = ProvisionNamespaceTransactionBuffer.createNamespaceIdVector(builder, UInt64.fromBigInteger(namespaceId.getId()));
-        int durationParentIdVector = ProvisionNamespaceTransactionBuffer.createDurationParentIdVector(builder, getNamespaceType() == NamespaceType.RootNamespace ? UInt64.fromBigInteger(duration.get()) : UInt64.fromBigInteger(parentId.get().getId()));
+        int namespaceIdVector = ProvisionNamespaceTransactionBuffer.createNamespaceIdVector(builder, UInt64Utils.fromBigInteger(namespaceId.getId()));
+        int durationParentIdVector = ProvisionNamespaceTransactionBuffer.createDurationParentIdVector(builder, getNamespaceType() == NamespaceType.RootNamespace ? UInt64Utils.fromBigInteger(duration.get()) : UInt64Utils.fromBigInteger(parentId.get().getId()));
 
         int fixSize = 138; // replace by the all numbers sum or add a comment explaining this
 

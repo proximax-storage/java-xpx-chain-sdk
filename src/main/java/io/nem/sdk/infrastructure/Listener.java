@@ -16,8 +16,18 @@
 
 package io.nem.sdk.infrastructure;
 
+import java.math.BigInteger;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.nem.sdk.infrastructure.model.UInt64DTO;
+import io.nem.sdk.infrastructure.utils.UInt64Utils;
 import io.nem.sdk.model.account.Address;
 import io.nem.sdk.model.account.PublicAccount;
 import io.nem.sdk.model.blockchain.BlockInfo;
@@ -37,13 +47,6 @@ import io.vertx.core.http.RequestOptions;
 import io.vertx.core.http.WebSocket;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-
-import java.math.BigInteger;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Listener
@@ -297,8 +300,8 @@ public class Listener {
 
     private BigInteger extractBigInteger(JsonArray input) {
         UInt64DTO uInt64DTO = new UInt64DTO();
-        input.stream().forEach(item -> uInt64DTO.add(new Long(item.toString())));
-        return uInt64DTO.extractIntArray();
+        input.stream().forEachOrdered(item -> uInt64DTO.add(Integer.parseInt(item.toString())));
+        return UInt64Utils.toBigInt(uInt64DTO);
     }
 
     private boolean transactionFromAddress(final Transaction transaction, final Address address) {
