@@ -14,16 +14,6 @@
  * limitations under the License.
  */
 
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.2'
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.2'
-    }
-}
-
 plugins {
     id 'jvm-component'
     id 'java-lang'
@@ -35,9 +25,8 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'signing'
-apply plugin: 'org.junit.platform.gradle.plugin'
 
-group 'com.github.proximax-storage'
+group 'io.proximax'
 version '0.10.0'
 
 sourceCompatibility = 1.8
@@ -87,7 +76,8 @@ check {
 ext {
     vertxVersion = "3.5.0"
     rxjavaVersion = "2.1.7"
-    junitVersion = "5.0.2"
+    junitVersion = "5.4.2"
+    junitPlatformVersion = "1.4.2"
 }
 
 dependencies {
@@ -115,26 +105,18 @@ dependencies {
 
     testCompile 'org.hamcrest:hamcrest-core:1.3'
     testCompile 'org.hamcrest:hamcrest-library:1.3'
-    testCompile 'junit:junit:4.11'
     testCompile 'org.mockito:mockito-all:1.9.5'
     testCompile 'com.googlecode.matrix-toolkits-java:mtj:1.0.1'
 
     // Tests
     testCompile 'org.slf4j:slf4j-simple:1.7.25'
+    testCompile 'org.apiguardian:apiguardian-api:1.0.0'
     testCompile "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
     testCompile "org.junit.jupiter:junit-jupiter-params:${junitVersion}"
     testRuntime "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
-    testCompile 'org.apiguardian:apiguardian-api:1.0.0'
-    testCompile 'org.junit.platform:junit-platform-console-standalone:1.1.0-M1'
-}
-
-junitPlatform {
-    platformVersion '1.0.2' // optional, defaults to plugin version
-    logManager 'org.apache.logging.log4j.jul.LogManager'
-    reportsDir file('build/test-results/junit-platform') // this is the default
-    enableStandardTestTask true
-    // selectors (optional)
-    // filters (optional)
+    
+    testCompile "org.junit.platform:junit-platform-console-standalone:${junitPlatformVersion}"
+    testRuntime "org.junit.platform:junit-platform-launcher:${junitPlatformVersion}"
 }
 
 task sourcesJar(type: Jar) {
@@ -187,70 +169,6 @@ uploadArchives {
         }
     }
 }
-//uploadArchives {
-//    def username = project.hasProperty("ossrhUsername") ? project.ossrhUsername : ""
-//    def password = project.hasProperty("ossrhPassword") ? project.ossrhPassword : ""
-//
-//    repositories {
-//        mavenDeployer {
-//            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-//
-//            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-//                authentication(userName: username, password: password)
-//            }
-//
-//            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-//                authentication(userName: username, password: password)
-//            }
-//
-//            pom.project {
-//                name "nem2-sdk"
-//                packaging 'jar'
-//                // optionally artifactId can be defined here
-//                description 'nem2 official sdk'
-//                url 'https://github.com/nemtech/nem2-sdk-java'
-//
-//                scm {
-//                    connection 'scm:git:https://github.com/nemtech/nem2-sdk-java.git'
-//                    developerConnection 'scm:svn:https://github.com/nemtech/nem2-sdk-java'
-//                    url 'https://github.com/nemtech/nem2-sdk-java'
-//                }
-//
-//                licenses {
-//                    license {
-//                        name 'The Apache License, Version 2.0'
-//                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-//                    }
-//                }
-//
-//                developers {
-//                    developer {
-//                        id 'aleix_nem'
-//                        name 'Aleix'
-//                        email 'aleix@nemeurope.eu'
-//                    }
-//                    developer {
-//                        id 'guillem_nem'
-//                        name 'Guillem'
-//                        email 'guillem@nemeurope.eu'
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
-
-junitPlatform {
-
-    reportsDir = file("$buildDir/test-results")
-    platformVersion '1.0.2' // optional, defaults to plugin version
-    logManager 'org.apache.logging.log4j.jul.LogManager'
-    reportsDir file('build/test-results/junit-platform') // this is the default
-    // enableStandardTestTask true
-    // selectors (optional)
-    // filters (optional)
-    enableStandardTestTask false
-}
 
 tasks.whenTaskAdded { task ->
     if (task.name.equals('junitPlatformTest')) {
@@ -273,11 +191,6 @@ tasks.whenTaskAdded { task ->
     }
 }
 
-jacoco {
-    toolVersion = '0.7.9'
-    applyTo junitPlatformTest
-}
-
 jacocoTestReport {
     afterEvaluate {
         classDirectories = files(classDirectories.files.collect {
@@ -288,12 +201,6 @@ jacocoTestReport {
         xml.enabled true
         csv.enabled true
         html.destination file("${buildDir}/jacocoHtml")
-    }
-}
-
-junitPlatformTest {
-    jacoco {
-        destinationFile = file("${buildDir}/jacoco/test.exec")
     }
 }
 
