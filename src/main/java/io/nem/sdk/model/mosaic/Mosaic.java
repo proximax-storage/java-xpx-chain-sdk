@@ -52,4 +52,10 @@ public class Mosaic {
     public BigInteger getAmount() {
         return amount;
     }
+
+
+	@Override
+	public String toString() {
+		return "Mosaic [id=" + id + ", amount=" + amount + "]";
+	}
 }

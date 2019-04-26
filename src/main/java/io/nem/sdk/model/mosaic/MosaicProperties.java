@@ -16,9 +16,9 @@
 
 package io.nem.sdk.model.mosaic;
 
-import org.apache.commons.lang3.Validate;
-
 import java.math.BigInteger;
+
+import org.apache.commons.lang3.Validate;
 
 /**
  * The mosaic properties structure describes mosaic properties.
@@ -122,4 +122,10 @@ public class MosaicProperties {
             return new MosaicProperties(this.supplyMutable, this.transferable, this.levyMutable, this.divisibility, this.duration);
         }
     }
+
+	@Override
+	public String toString() {
+		return "MosaicProperties [supplyMutable=" + supplyMutable + ", transferable=" + transferable + ", levyMutable="
+				+ levyMutable + ", divisibility=" + divisibility + ", duration=" + duration + "]";
+	}
 }

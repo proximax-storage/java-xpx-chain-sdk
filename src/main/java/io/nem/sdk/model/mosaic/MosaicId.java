@@ -16,11 +16,11 @@
 
 package io.nem.sdk.model.mosaic;
 
-import io.nem.sdk.model.transaction.IdGenerator;
-
 import java.math.BigInteger;
 import java.util.Objects;
 import java.util.Optional;
+
+import io.nem.sdk.model.transaction.IdGenerator;
 
 /**
  * The mosaic id structure describes mosaic id
@@ -88,4 +88,9 @@ public class MosaicId {
         MosaicId mosaicId1 = (MosaicId) o;
         return Objects.equals(id, mosaicId1.id);
     }
+
+	@Override
+	public String toString() {
+		return "MosaicId [id=" + id + ", fullName=" + fullName + "]";
+	}
 }

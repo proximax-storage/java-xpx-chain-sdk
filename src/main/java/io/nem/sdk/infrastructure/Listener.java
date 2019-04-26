@@ -69,6 +69,8 @@ public class Listener {
     }
 
     /**
+     * open the listener
+     * 
      * @return a {@link CompletableFuture} that resolves when the websocket connection is opened
      */
     public CompletableFuture<Void> open() {

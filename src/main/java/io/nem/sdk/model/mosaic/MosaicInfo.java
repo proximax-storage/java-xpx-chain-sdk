@@ -126,5 +126,11 @@ public class MosaicInfo {
     public int getDivisibility() {
         return properties.getDivisibility();
     }
+
+	@Override
+	public String toString() {
+		return "MosaicInfo [metaId=" + metaId + ", mosaicId=" + mosaicId + ", supply=" + supply + ", height=" + height
+				+ ", owner=" + owner + ", properties=" + properties + "]";
+	}
 }
 

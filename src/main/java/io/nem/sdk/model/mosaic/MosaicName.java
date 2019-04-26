@@ -65,4 +65,9 @@ public class MosaicName {
     public NamespaceId getParentId() {
         return parentId;
     }
+
+	@Override
+	public String toString() {
+		return "MosaicName [mosaicId=" + mosaicId + ", name=" + name + ", parentId=" + parentId + "]";
+	}
 }
