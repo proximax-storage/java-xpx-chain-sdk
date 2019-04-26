@@ -103,6 +103,16 @@ public class UInt64Utils {
      */
     public static String bigIntegerToHex(BigInteger input) {
         int[] uint64Parts = UInt64Utils.fromBigInteger(input);
-        return Integer.toHexString(uint64Parts[1]) + Integer.toHexString(uint64Parts[0]);
+        return getPaddedHex(uint64Parts[1]) + getPaddedHex(uint64Parts[0]);
+    }
+    
+    /**
+     * convert int to a hexadecimal string of length 8 characters
+     * 
+     * @param value integer to be converted to a hex string
+     * @return 8 character string representing the value. left-padded by 0 characters
+     */
+    public static String getPaddedHex(int value) {
+    	return String.format("%08x", value);
     }
 }

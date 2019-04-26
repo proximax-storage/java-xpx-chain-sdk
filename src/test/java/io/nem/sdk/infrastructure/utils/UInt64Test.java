@@ -42,6 +42,14 @@ class UInt64Test {
     }
 
     @Test
+    void hexShouldBePadded() {
+        assertEquals("00000001", UInt64Utils.getPaddedHex(1));
+        assertEquals("00000010", UInt64Utils.getPaddedHex(16));
+        assertEquals("0000000f", UInt64Utils.getPaddedHex(15));
+        assertEquals("ffffffff", UInt64Utils.getPaddedHex(-1));
+    }
+
+    @Test
     void zeroShouldReturnAnArrayOfTwoWithTwoZeros() {
         int[] result = UInt64Utils.fromBigInteger(BigInteger.valueOf(0));
         assertArrayEquals(new int[]{0, 0}, result);
