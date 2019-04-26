@@ -1,0 +1,50 @@
+{
+	"transactions": [
+		{
+			"meta": {
+				"height": [
+					1,
+					0
+				],
+				"hash": "C0B0C87B76C9C8333F734EA5EA758B4C2144DC47F1AA62981931BAF489726333",
+				"merkleComponentHash": "C0B0C87B76C9C8333F734EA5EA758B4C2144DC47F1AA62981931BAF489726333",
+				"index": 9,
+				"id": "5C9CADAC9C481200014BCB7D"
+			},
+			"transaction": {
+				"signature": "DE26FD35487414DDCA532B58D55DC3844ACCF82F964594E0F938CCF3424215A3E10B83F8A49D4270D92F63B4EE3747BA87974D567104D2375A4F4DAF18AC2A06",
+				"signer": "B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF",
+				"version": 43011,
+				"type": 16724,
+				"maxFee": "0",
+				"deadline": [
+					1,
+					0
+				],
+				"recipient": "A8998D6DF14E095266CB6E36613F037616C72F224DA95C2BF4",
+				"mosaics": [
+					{
+						"id": [
+							3027515473,
+							3159330062
+						],
+						"amount": [
+							3863990592,
+							95248
+						]
+					},
+					{
+						"id": [
+							2434186742,
+							3220914849
+						],
+						"amount": [
+							3863990592,
+							95248
+						]
+					}
+				]
+			}
+		}
+	]
+}

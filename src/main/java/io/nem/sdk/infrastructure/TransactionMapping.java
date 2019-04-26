@@ -70,52 +70,89 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
         throw new UnsupportedOperationException("Unimplemented Transaction type");
     }
 
+    /**
+     * take array of unsigned integers and combine them to BigInteger
+     * 
+     * @param input json array
+     * @return big integer represented by the array
+     */
     BigInteger extractBigInteger(JsonArray input) {
         UInt64DTO uInt64DTO = new UInt64DTO();
         input.stream().forEach(item -> uInt64DTO.add(Long.parseLong(item.toString())));
         return UInt64Utils.toBigInt(uInt64DTO);
     }
 
+    /**
+     * extract transaction version from version
+     * 
+     * @param version version field of transaction
+     * @return transaction version
+     */
     Integer extractTransactionVersion(int version) {
+    	// take second most significant byte of a version and return it as a number
         return (int) Long.parseLong(Integer.toHexString(version).substring(2, 4), 16);
     }
 
+    /**
+     * extract network type from the version
+     * 
+     * @param version version field of transaction
+     * @return transaction network type
+     */
     NetworkType extractNetworkType(int version) {
+    	// take most significant byte of a version and return it as a number
         int networkType = (int) Long.parseLong(Integer.toHexString(version).substring(0, 2), 16);
         return NetworkType.rawValueOf(networkType);
     }
 
+    /**
+     * create transaction info based on the provided transaction meta json object
+     * 
+     * @param jsonObject json object representing the meta field
+     * @return TransactionInfo instance representing the meta
+     */
     public TransactionInfo createTransactionInfo(JsonObject jsonObject) {
+    	// hash and id indicate standard transaction info
         if (jsonObject.containsKey("hash") && jsonObject.containsKey("id")) {
-            return TransactionInfo.create(extractBigInteger(jsonObject.getJsonArray("height")),
+            return TransactionInfo.create(
+            		extractBigInteger(jsonObject.getJsonArray("height")),
                     jsonObject.getInteger("index"),
                     jsonObject.getString("id"),
                     jsonObject.getString("hash"),
                     jsonObject.getString("merkleComponentHash"));
-        } else if (jsonObject.containsKey("aggregateHash") && jsonObject.containsKey("id")) {
+        }
+    	// agrregateHash and id indicate aggregate transaction
+        if (jsonObject.containsKey("aggregateHash") && jsonObject.containsKey("id")) {
             return TransactionInfo.createAggregate(extractBigInteger(jsonObject.getJsonArray("height")),
                     jsonObject.getInteger("index"),
                     jsonObject.getString("id"),
                     jsonObject.getString("aggregateHash"),
                     jsonObject.getString("aggregateId"));
-        } else {
-            return TransactionInfo.create(extractBigInteger(jsonObject.getJsonArray("height")),
-                    jsonObject.getString("hash"),
-                    jsonObject.getString("merkleComponentHash"));
         }
+        // transaction with missing id
+        return TransactionInfo.create(extractBigInteger(jsonObject.getJsonArray("height")),
+        		jsonObject.getString("hash"),
+                jsonObject.getString("merkleComponentHash"));
     }
 }
 
+/**
+ * mapping for transfer transaction
+ * 
+ * @author tonowie
+ */
 class TransferTransactionMapping extends TransactionMapping {
 
     @Override
     public TransferTransaction apply(JsonObject input) {
-        TransactionInfo transactionInfo = this.createTransactionInfo(input.getJsonObject("meta"));
-
+    	// retrieve transaction info from meta field
+        TransactionInfo transactionInfo = createTransactionInfo(input.getJsonObject("meta"));
+        // retrieve transaction data from transaction field
         JsonObject transaction = input.getJsonObject("transaction");
+        // deadline
         Deadline deadline = new Deadline(extractBigInteger(transaction.getJsonArray("deadline")));
-        List<Mosaic> mosaics = new ArrayList<>();
-
+        // mosaics
+        List<Mosaic> mosaics;
         if (transaction.getJsonArray("mosaics") != null) {
             mosaics = transaction
                     .getJsonArray("mosaics")
@@ -125,70 +162,92 @@ class TransferTransactionMapping extends TransactionMapping {
                             new MosaicId(extractBigInteger(mosaic.getJsonArray("id"))),
                             extractBigInteger(mosaic.getJsonArray("amount"))))
                     .collect(Collectors.toList());
+        } else {
+        	mosaics = new ArrayList<>();
         }
-
-        Message message = PlainMessage.Empty;
+        // message
+        Message message;
         if (transaction.getJsonObject("message") != null) {
             final JsonObject messageObj = transaction.getJsonObject("message");
             int messageType = messageObj.getInteger("type");
             String messagePayload = messageObj.getString("payload");
             message = MessageFactory.createMessage(messageType, Hex.decode(messagePayload));
+        } else {
+        	message = PlainMessage.Empty;
         }
-
+        // version
+        int version = transaction.getInteger("version");
+        // create transfer transaction instance
         return new TransferTransaction(
-                extractNetworkType(transaction.getInteger("version")),
-                extractTransactionVersion(transaction.getInteger("version")),
+                extractNetworkType(version),
+                extractTransactionVersion(version),
                 deadline,
-                extractBigInteger(transaction.getJsonArray("fee")),
+                new BigInteger(transaction.getString("maxFee")),
                 Address.createFromEncoded(transaction.getString("recipient")),
                 mosaics,
                 message,
                 transaction.getString("signature"),
-                new PublicAccount(transaction.getString("signer"), extractNetworkType(transaction.getInteger("version"))),
+                new PublicAccount(transaction.getString("signer"), extractNetworkType(version)),
                 transactionInfo
         );
     }
 }
 
+/**
+ * mapper for transaction that registers namespace
+ * 
+ * @author tonowie
+ */
 class NamespaceCreationTransactionMapping extends TransactionMapping {
 
     @Override
     public RegisterNamespaceTransaction apply(JsonObject input) {
+    	// get transaction info and data
         TransactionInfo transactionInfo = this.createTransactionInfo(input.getJsonObject("meta"));
-
         JsonObject transaction = input.getJsonObject("transaction");
+        // retrieve fields
         Deadline deadline = new Deadline(extractBigInteger(transaction.getJsonArray("deadline")));
         NamespaceType namespaceType = NamespaceType.rawValueOf(transaction.getInteger("namespaceType"));
-
+        NamespaceId namespaceId = new NamespaceId(extractBigInteger(transaction.getJsonArray("namespaceId")));
+        Optional<BigInteger> namespaceDuration = namespaceType == NamespaceType.RootNamespace ? Optional.of(extractBigInteger(transaction.getJsonArray("duration"))) : Optional.empty();
+        Optional<NamespaceId> namespaceParentId = namespaceType == NamespaceType.SubNamespace ? Optional.of(new NamespaceId(extractBigInteger(transaction.getJsonArray("parentId")))) : Optional.empty();
+        int version = transaction.getInteger("version");
+        // return the register namespace transaction
         return new RegisterNamespaceTransaction(
-                extractNetworkType(transaction.getInteger("version")),
-                extractTransactionVersion(transaction.getInteger("version")),
+                extractNetworkType(version),
+                extractTransactionVersion(version),
                 deadline,
-                extractBigInteger(transaction.getJsonArray("fee")),
+                extractBigInteger(transaction.getJsonArray("maxFee")),
                 transaction.getString("name"),
-                new NamespaceId(extractBigInteger(transaction.getJsonArray("namespaceId"))),
+                namespaceId,
                 namespaceType,
-                namespaceType == NamespaceType.RootNamespace ? Optional.of(extractBigInteger(transaction.getJsonArray("duration"))) : Optional.empty(),
-                namespaceType == NamespaceType.SubNamespace ? Optional.of(new NamespaceId(extractBigInteger(transaction.getJsonArray("parentId")))) : Optional.empty(),
+                namespaceDuration,
+                namespaceParentId,
                 transaction.getString("signature"),
-                new PublicAccount(transaction.getString("signer"), extractNetworkType(transaction.getInteger("version"))),
+                new PublicAccount(transaction.getString("signer"), extractNetworkType(version)),
                 transactionInfo
         );
     }
 }
 
+/**
+ * transaction that creates new mosaic
+ * 
+ * TODO name field is not there anymore and nonce was added
+ * 
+ * @author tonowie
+ */
 class MosaicCreationTransactionMapping extends TransactionMapping {
 
     @Override
     public MosaicDefinitionTransaction apply(JsonObject input) {
+    	// load transaction info and data
         TransactionInfo transactionInfo = this.createTransactionInfo(input.getJsonObject("meta"));
-
-
         JsonObject transaction = input.getJsonObject("transaction");
+        // load data fields
         Deadline deadline = new Deadline(extractBigInteger(transaction.getJsonArray("deadline")));
-
+        // construct properties
         JsonArray mosaicProperties = transaction.getJsonArray("properties");
-
         String flags = "00" + Integer.toBinaryString(extractBigInteger(mosaicProperties.getJsonObject(0).getJsonArray("value")).intValue());
         String bitMapFlags = flags.substring(flags.length() - 3, flags.length());
         MosaicProperties properties = new MosaicProperties(bitMapFlags.charAt(2) == '1',
@@ -196,18 +255,19 @@ class MosaicCreationTransactionMapping extends TransactionMapping {
                 bitMapFlags.charAt(0) == '1',
                 extractBigInteger(mosaicProperties.getJsonObject(1).getJsonArray("value")).intValue(),
                 mosaicProperties.size() == 3 ? extractBigInteger(mosaicProperties.getJsonObject(2).getJsonArray("value")) : BigInteger.valueOf(0));
-
+        int version = transaction.getInteger("version");
+        // return instance of mosaic definition transaction
         return new MosaicDefinitionTransaction(
-                extractNetworkType(transaction.getInteger("version")),
-                extractTransactionVersion(transaction.getInteger("version")),
+                extractNetworkType(version),
+                extractTransactionVersion(version),
                 deadline,
-                extractBigInteger(transaction.getJsonArray("fee")),
+                extractBigInteger(transaction.getJsonArray("maxFee")),
                 transaction.getString("name"),
                 new NamespaceId(extractBigInteger(transaction.getJsonArray("parentId"))),
                 new MosaicId(extractBigInteger(transaction.getJsonArray("mosaicId"))),
                 properties,
                 transaction.getString("signature"),
-                new PublicAccount(transaction.getString("signer"), extractNetworkType(transaction.getInteger("version"))),
+                new PublicAccount(transaction.getString("signer"), extractNetworkType(version)),
                 transactionInfo
         );
     }

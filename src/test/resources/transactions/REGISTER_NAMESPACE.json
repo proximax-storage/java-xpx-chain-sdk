@@ -1,0 +1,37 @@
+{
+	"transactions": [
+		{
+			"meta": {
+				"height": [
+					1,
+					0
+				],
+				"hash": "B802649FC96AA7DB62F398FDF587C4E719F67E292D9169EE8C13CB7D5CBA132A",
+				"merkleComponentHash": "B802649FC96AA7DB62F398FDF587C4E719F67E292D9169EE8C13CB7D5CBA132A",
+				"index": 0,
+				"id": "5C9CADAC9C481200014BCB74"
+			},
+			"transaction": {
+				"signature": "81AF5E39DDF7D680473C5925B9AD97C3102F91D24FA9DCF2DC3DC2EBD00B92DD372B39F07176D63372F2E2641EAA78AF6568106CCC9166A30829C6258D56D802",
+				"signer": "B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF",
+				"version": 43010,
+				"type": 16718,
+				"maxFee": "0",
+				"deadline": [
+					1,
+					0
+				],
+				"namespaceType": 0,
+				"duration": [
+					0,
+					0
+				],
+				"namespaceId": [
+					2339353534,
+					2976741373
+				],
+				"name": "prx"
+			}
+		}
+	]
+}

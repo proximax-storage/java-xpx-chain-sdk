@@ -19,9 +19,17 @@ package io.nem.sdk.infrastructure;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
 
 import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.Test;
@@ -36,13 +44,45 @@ import io.vertx.core.json.JsonObject;
 
 public class TransactionMappingTest {
 
+	/**
+	 * load array of transactions from bundle with given name
+	 * @param name
+	 * @return
+	 */
+	private static JsonArray getTransactions(String name) {
+		// first get URI from the classpath
+        URI resourceUri;
+		try {
+			resourceUri = TransactionMappingTest.class.getClassLoader().getResource("transactions/"+name+".json").toURI();
+		} catch (URISyntaxException e) {
+			throw new RuntimeException("Failed to locate resource " + name, e);
+		}
+		// load object from the classpath
+        try (Stream<String> stream = Files.lines( Paths.get(resourceUri), StandardCharsets.UTF_8))
+        {
+            StringBuilder contentBuilder = new StringBuilder();
+            stream.forEach(s -> contentBuilder.append(s).append("\n"));
+            JsonObject obj = new JsonObject(contentBuilder.toString());
+            // retrieve transactions as an array
+            return obj.getJsonArray("transactions");
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException("Failed to load transactions from " + name, e);
+        }
+ 
+        
+	}
+	
     @Test
     void shouldCreateStandaloneTransferTransaction() throws Exception {
-        JsonObject transferTransactionDTO = new JsonObject("{\"meta\":{\"hash\":\"18C036C20B32348D63684E09A13128A2C18F6A75650D3A5FB43853D716E5E219\",\"height\":[1,0],\"id\":\"59FDA0733F17CF0001772CA7\",\"index\":19,\"merkleComponentHash\":\"18C036C20B32348D63684E09A13128A2C18F6A75650D3A5FB43853D716E5E219\"},\"transaction\":{\"deadline\":[10000,0],\"fee\":[0,0],\"message\":{\"payload\":\"746573742D6D657373616765\",\"type\":0},\"mosaics\":[{\"amount\":[3863990592,95248],\"id\":[3646934825,3576016193]}],\"recipient\":\"9050B9837EFAB4BBE8A4B9BB32D812F9885C00D8FC1650E142\",\"signature\":\"553E696EB4A54E43A11D180EBA57E4B89D0048C9DD2604A9E0608120018B9E02F6EE63025FEEBCED3293B622AF8581334D0BDAB7541A9E7411E7EE4EF0BC5D0E\",\"signer\":\"B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF\",\"type\":16724,\"version\":36867}}");
-
-        Transaction transferTransaction = new TransactionMapping().apply(transferTransactionDTO);
-
-        validateStandaloneTransaction(transferTransaction, transferTransactionDTO);
+    	getTransactions("TRANSFER").stream()
+    		.map(obj -> (JsonObject)obj)
+    		.forEachOrdered(transactionDTO -> {
+    			Transaction transferTransaction = new TransactionMapping().apply(transactionDTO);
+    			validateStandaloneTransaction(transferTransaction, transactionDTO);
+    		}
+    	);
     }
 
     @Test
@@ -233,7 +273,7 @@ public class TransactionMappingTest {
         assertTrue(transaction.getVersion() == version);
         int networkType = (int) Long.parseLong(Integer.toHexString(transactionDTO.getJsonObject("transaction").getInteger("version")).substring(0, 2), 16);
         assertTrue(transaction.getNetworkType().getValue() == networkType);
-        assertEquals(extractBigInteger(transactionDTO.getJsonObject("transaction").getJsonArray("fee")),
+        assertEquals(new BigInteger(transactionDTO.getJsonObject("transaction").getString("maxFee")),
                 transaction.getFee());
         assertNotNull(transaction.getDeadline());
 
@@ -309,16 +349,20 @@ public class TransactionMappingTest {
                     transaction.getMosaics().get(0).getAmount());
         }
 
-        try {
-            assertEquals(new String(Hex.decode(transactionDTO.getJsonObject("transaction").getJsonObject("message").getString("payload")), "UTF-8"),
-                    new String(transaction.getMessage().getEncodedPayload(), "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        assertTrue(transactionDTO.getJsonObject("transaction").getJsonObject("message").getInteger("type") ==
-                transaction.getMessage().getType());
-
+		if (transactionDTO.getJsonObject("transaction").getJsonObject("message") != null) {
+			try {
+				assertEquals(
+						new String(Hex.decode(transactionDTO.getJsonObject("transaction").getJsonObject("message")
+								.getString("payload")), "UTF-8"),
+						new String(transaction.getMessage().getEncodedPayload(), "UTF-8"));
+		        assertTrue(transactionDTO.getJsonObject("transaction").getJsonObject("message").getInteger("type") ==
+		                transaction.getMessage().getType());
+			} catch (UnsupportedEncodingException e) {
+				fail("unsupported encoing", e);
+			}
+		} else {
+			assertEquals("", transaction.getMessage().getPayload());
+		}
     }
 
     void validateNamespaceCreationTx(RegisterNamespaceTransaction transaction, JsonObject transactionDTO) {
@@ -339,8 +383,6 @@ public class TransactionMappingTest {
     }
 
     void validateMosaicCreationTx(MosaicDefinitionTransaction transaction, JsonObject transactionDTO) {
-        assertEquals(extractBigInteger(transactionDTO.getJsonObject("transaction").getJsonArray("parentId")),
-                transaction.getNamespaceId().getId());
         assertEquals(extractBigInteger(transactionDTO.getJsonObject("transaction").getJsonArray("mosaicId")),
                 transaction.getMosaicId().getId());
         assertEquals(transactionDTO.getJsonObject("transaction").getString("name"),
