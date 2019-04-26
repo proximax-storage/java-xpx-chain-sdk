@@ -21,8 +21,8 @@ import java.util.List;
 /**
  * UInt64DTO
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-04-24T01:47:49.709+02:00")
-public class UInt64DTO extends ArrayList<Integer> {
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-04-25T23:13:29.920+02:00")
+public class UInt64DTO extends ArrayList<Long> {
 
   @Override
   public boolean equals(java.lang.Object o) {

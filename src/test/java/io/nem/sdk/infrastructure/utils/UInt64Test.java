@@ -64,13 +64,13 @@ class UInt64Test {
         String result = UInt64Utils.bigIntegerToHex(new BigInteger("-3087871471161192663"));
         assertEquals("d525ad41d95fcf29", result);
     }
-
+    
     @ParameterizedTest
     @MethodSource("provider")
     void dtoToBigInteger(int[] input, BigInteger expected) {
     	UInt64DTO uint = new UInt64DTO();
-    	uint.add(input[0]);
-    	uint.add(input[1]);
+    	uint.add(Long.valueOf(input[0]));
+    	uint.add(Long.valueOf(input[1]));
     	assertEquals(expected, UInt64Utils.toBigInt(uint));
     	
     }

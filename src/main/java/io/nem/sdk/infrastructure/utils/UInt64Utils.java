@@ -86,13 +86,13 @@ public class UInt64Utils {
     }
 
     /**
-     * convert DTO representing array of integers to BigInteger instance
+     * convert DTO representing array of unsigned integers to BigInteger instance
      * 
-     * @param dto UInt64DTO instance representing array of int32 values
+     * @param dto UInt64DTO instance representing array of int64 values holding unsigned integer
      * @return BigInteger reconstructed from the array
      */
     public static BigInteger toBigInt(UInt64DTO dto) {
-    	return fromIntArray(dto.stream().mapToInt(Integer::intValue).toArray());
+    	return fromIntArray(dto.stream().mapToInt(Long::intValue).toArray());
     }
     
     /**

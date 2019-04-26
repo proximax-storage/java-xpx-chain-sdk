@@ -300,7 +300,7 @@ public class Listener {
 
     private BigInteger extractBigInteger(JsonArray input) {
         UInt64DTO uInt64DTO = new UInt64DTO();
-        input.stream().forEachOrdered(item -> uInt64DTO.add(Integer.parseInt(item.toString())));
+        input.stream().forEachOrdered(item -> uInt64DTO.add(Long.parseLong(item.toString())));
         return UInt64Utils.toBigInt(uInt64DTO);
     }
 

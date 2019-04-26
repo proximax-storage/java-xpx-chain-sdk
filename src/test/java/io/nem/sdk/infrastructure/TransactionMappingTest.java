@@ -407,7 +407,7 @@ public class TransactionMappingTest {
 
     BigInteger extractBigInteger(JsonArray input) {
         UInt64DTO uInt64DTO = new UInt64DTO();
-        input.stream().forEach(item -> uInt64DTO.add(new Integer(item.toString())));
+        input.stream().forEach(item -> uInt64DTO.add(new Long(item.toString())));
         return UInt64Utils.toBigInt(uInt64DTO);
     }
 }
