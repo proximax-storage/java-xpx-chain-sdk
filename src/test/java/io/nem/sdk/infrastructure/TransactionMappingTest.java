@@ -70,20 +70,36 @@ public class TransactionMappingTest {
         {
             throw new RuntimeException("Failed to load transactions from " + name, e);
         }
- 
-        
+	}
+	
+	/**
+	 * return stream of concatenated transaction bundles
+	 * @param bundles
+	 * @return
+	 */
+	private static Stream<JsonObject> streamTransactions(String ... bundles) {
+		// take bundle names and create stream of transactions in those bundles
+		return Stream.of(bundles)
+			// map from bundle name to stream of JsonObjects
+			.map(bundle -> getTransactions(bundle).stream())
+			// concatenate the streams
+			.reduce(Stream::concat)
+			// return empty stream if there was nothing to concatenate
+			.orElse(Stream.empty())
+			// map items in the stream to type JsonObject
+			.map(obj -> (JsonObject)obj);
 	}
 	
     @Test
     void shouldCreateStandaloneTransferTransaction() throws Exception {
-    	getTransactions("TRANSFER").stream()
-    		.map(obj -> (JsonObject)obj)
+    	streamTransactions("TRANSFER", "REGISTER_NAMESPACE", "MOSAIC_DEFINITION")
     		.forEachOrdered(transactionDTO -> {
     			Transaction transferTransaction = new TransactionMapping().apply(transactionDTO);
     			validateStandaloneTransaction(transferTransaction, transactionDTO);
     		}
     	);
     }
+
 
     @Test
     void shouldCreateAggregateTransferTransaction() throws Exception {

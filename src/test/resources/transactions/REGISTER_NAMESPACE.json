@@ -32,6 +32,72 @@
 				],
 				"name": "prx"
 			}
+		},
+		{
+			"meta": {
+				"height": [
+					1,
+					0
+				],
+				"hash": "7308E072F9519025911C150B7655D9BCD981234CFA058FA8E45C49FB35D66F31",
+				"merkleComponentHash": "7308E072F9519025911C150B7655D9BCD981234CFA058FA8E45C49FB35D66F31",
+				"index": 1,
+				"id": "5CC3923B062BB100016D35C7"
+			},
+			"transaction": {
+				"signature": "3014D1A091C630F9817DCCB9A0E2C46F917F1B5C429A33FDF2D00E4C62E2D0057A62A4FBBD10D2BF4E1EF4EE18DFEED5E2590BACC0A66B2D19F00DE14F84130A",
+				"signer": "B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF",
+				"version": 43010,
+				"type": 16718,
+				"maxFee": "0",
+				"deadline": [
+					1,
+					0
+				],
+				"namespaceType": 1,
+				"parentId": [
+					2339353534,
+					2976741373
+				],
+				"namespaceId": [
+					3027515473,
+					3159330062
+				],
+				"name": "storage"
+			}
+		},
+		{
+			"meta": {
+				"height": [
+					1,
+					0
+				],
+				"hash": "FA70D1EF1F070755ECAE1CAAC1B019B065C469C618B5BD1C3D1D47F36CC5EA53",
+				"merkleComponentHash": "FA70D1EF1F070755ECAE1CAAC1B019B065C469C618B5BD1C3D1D47F36CC5EA53",
+				"index": 2,
+				"id": "5CC3923B062BB100016D35C8"
+			},
+			"transaction": {
+				"signature": "E0D21D9CE402594648D0B2401F9C9FAA405A4080D198D4DF38B70F1CE865CF2ED0862DAEA226FD9E2373805FC80012371EB9613175085BFE98A41A5A8DFB3405",
+				"signer": "B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF",
+				"version": 43010,
+				"type": 16718,
+				"maxFee": "0",
+				"deadline": [
+					1,
+					0
+				],
+				"namespaceType": 1,
+				"parentId": [
+					2339353534,
+					2976741373
+				],
+				"namespaceId": [
+					2434186742,
+					3220914849
+				],
+				"name": "xpx"
+			}
 		}
 	]
 }
