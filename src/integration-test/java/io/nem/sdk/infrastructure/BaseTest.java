@@ -16,13 +16,20 @@
 
 package io.nem.sdk.infrastructure;
 
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import io.nem.sdk.model.account.Account;
+import io.nem.sdk.model.blockchain.NetworkType;
+
 public abstract class BaseTest {
 
-    public String getNodeUrl() throws IOException {
+	private static final String SYS_ENV_PRIVATE_KEY = "SEED_ACCOUNT_PRIVATE_KEY";
+			
+	public String getNodeUrl() throws IOException {
         String url = null;
         final Properties properties = new Properties();
         try (InputStream inputStream = BaseTest.class.getClassLoader().getResourceAsStream("config.properties")) {
@@ -34,5 +41,21 @@ public abstract class BaseTest {
         } catch (IOException ignored) {
         }
         return url;
+    }
+    
+	/**
+	 * 
+	 * @param networkType
+	 * @return
+	 */
+    protected Account getSeedAccount(NetworkType networkType) {
+    	String accountPk = System.getenv(SYS_ENV_PRIVATE_KEY);
+    	if (accountPk == null) {
+    		fail("Seed account private key needs to be defined as env variable " + SYS_ENV_PRIVATE_KEY);
+    	} else {
+    		return new Account(accountPk, networkType);
+    	}
+    	// should never get here since fail throws exception
+    	throw new IllegalStateException("Test was supposed to fail or return account");
     }
 }

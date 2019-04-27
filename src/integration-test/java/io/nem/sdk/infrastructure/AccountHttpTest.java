@@ -16,18 +16,9 @@
 
 package io.nem.sdk.infrastructure;
 
-import io.nem.sdk.model.account.*;
-import io.nem.sdk.model.blockchain.NetworkType;
-import io.nem.sdk.model.transaction.AggregateTransaction;
-import io.nem.sdk.model.transaction.Transaction;
-import io.reactivex.observers.TestObserver;
-import io.reactivex.schedulers.Schedulers;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -35,10 +26,26 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+
+import io.nem.sdk.model.account.AccountInfo;
+import io.nem.sdk.model.account.Address;
+import io.nem.sdk.model.account.MultisigAccountGraphInfo;
+import io.nem.sdk.model.account.MultisigAccountInfo;
+import io.nem.sdk.model.account.PublicAccount;
+import io.nem.sdk.model.blockchain.NetworkType;
+import io.nem.sdk.model.transaction.AggregateTransaction;
+import io.nem.sdk.model.transaction.Transaction;
+import io.reactivex.observers.TestObserver;
+import io.reactivex.schedulers.Schedulers;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AccountHttpTest extends BaseTest {
+	private static final String ADDRESS = "VCGXJFX2H76VX7TTLC5XVWZ34Y2LZIXHHQM7X3HC";
+	private static final String PUBLIC_KEY = "A36DF1F0B64C7FF71499784317C8D63FB1DB8E1909519AB72051D2BE77A1EF45";
+	
     private AccountHttp accountHttp;
     private final PublicAccount publicAccount = PublicAccount.createFromPublicKey("1026D70E1954775749C6811084D6450A3184D977383F0E4282CD47118AF37755", NetworkType.MIJIN_TEST);
 
@@ -60,12 +67,12 @@ class AccountHttpTest extends BaseTest {
     @Test
     void getAccountsInfo() throws ExecutionException, InterruptedException {
         List<AccountInfo> accountInfos = accountHttp
-                .getAccountsInfo(Collections.singletonList(Address.createFromRawAddress("SDRDGFTDLLCB67D4HPGIMIHPNSRYRJRT7DOBGWZY")))
+                .getAccountsInfo(Collections.singletonList(Address.createFromRawAddress(ADDRESS)))
                 .toFuture()
                 .get();
 
         assertEquals(1, accountInfos.size());
-        assertEquals("1026D70E1954775749C6811084D6450A3184D977383F0E4282CD47118AF37755", accountInfos.get(0).getPublicKey());
+        assertEquals(PUBLIC_KEY, accountInfos.get(0).getPublicKey());
     }
 
     @Test
