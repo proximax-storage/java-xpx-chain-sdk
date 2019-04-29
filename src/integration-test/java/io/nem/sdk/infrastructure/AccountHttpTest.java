@@ -141,7 +141,7 @@ class AccountHttpTest extends BaseTest {
                 .toFuture()
                 .get();
 
-        assertEquals(4, transactions.size());
+        assertEquals(3, transactions.size());
     }
 
     @Test

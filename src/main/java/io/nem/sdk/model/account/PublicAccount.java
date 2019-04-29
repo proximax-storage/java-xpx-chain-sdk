@@ -16,9 +16,9 @@
 
 package io.nem.sdk.model.account;
 
-import io.nem.sdk.model.blockchain.NetworkType;
-
 import java.util.Objects;
+
+import io.nem.sdk.model.blockchain.NetworkType;
 
 /**
  * The public account structure contains account's address and public key.
@@ -77,5 +77,10 @@ public class PublicAccount {
     public String getPublicKey() {
         return publicKey;
     }
+
+	@Override
+	public String toString() {
+		return "PublicAccount [address=" + address + ", publicKey=" + publicKey + "]";
+	}
 
 }

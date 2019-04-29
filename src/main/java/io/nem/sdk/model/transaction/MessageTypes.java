@@ -31,4 +31,12 @@ public enum MessageTypes {
     public int getType() {
         return type;
     }
+    
+    public static MessageTypes getByCode(int code) {
+    	switch (code) {
+    		case 0: return PLAIN;
+    		case 1: return SECURE;
+    		default: throw new IllegalStateException("Unknow message type code " + code);
+    	}
+    }
 }

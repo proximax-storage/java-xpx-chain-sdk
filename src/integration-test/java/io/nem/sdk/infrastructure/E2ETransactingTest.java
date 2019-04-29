@@ -17,15 +17,20 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
+import io.nem.core.crypto.KeyPair;
 import io.nem.sdk.model.account.Account;
 import io.nem.sdk.model.account.AccountInfo;
+import io.nem.sdk.model.account.Address;
 import io.nem.sdk.model.blockchain.NetworkType;
 import io.nem.sdk.model.mosaic.Mosaic;
 import io.nem.sdk.model.mosaic.MosaicId;
 import io.nem.sdk.model.mosaic.MosaicInfo;
 import io.nem.sdk.model.transaction.Deadline;
+import io.nem.sdk.model.transaction.Message;
 import io.nem.sdk.model.transaction.PlainMessage;
+import io.nem.sdk.model.transaction.SecureMessage;
 import io.nem.sdk.model.transaction.SignedTransaction;
+import io.nem.sdk.model.transaction.TransactionAnnounceResponse;
 import io.nem.sdk.model.transaction.TransferTransaction;
 
 /**
@@ -69,23 +74,44 @@ public class E2ETransactingTest extends BaseTest {
 		assertTrue(!mosaics.isEmpty());
 		// TODO check the account balances to make sure we can run the tests
 		
-		// create transfer transaction for some hardcoded account
-		Account targetAccount = new Account("787225aaff3d2c71f4ffa32d4f19ec4922f3cd869747f267378f81f8e3fcb12d", NETWORK_TYPE);
-        TransferTransaction transferTransaction = TransferTransaction.create(
-                new Deadline(2, HOURS),
-                targetAccount.getAddress(),
-                Collections.singletonList(
-                        new Mosaic(mosaicIDs.get(0), BigInteger.valueOf(0l))
-                ),
-                new PlainMessage("java sdk test"),
-                NETWORK_TYPE
-        );
-        SignedTransaction signedTransaction = seedAccount.sign(transferTransaction);
-        System.out.println(transactionHttp.announce(signedTransaction).toFuture().get());
+		// create transfer transaction with plaintext mesage
+		Account targetAccount = new Account(new KeyPair(), NETWORK_TYPE);
+		System.out.println("Sending transactions to " + targetAccount);
+		// send transaction with plaintext message
+		System.out.println(transfer(seedAccount, targetAccount.getAddress(), new Mosaic(mosaicIDs.get(0), BigInteger.valueOf(0l)), new PlainMessage("java SDK plain message test")));
+		// send transaction with encrypted message
+		SecureMessage secureMessage = SecureMessage.create(seedAccount.getKeyPair().getPrivateKey(), targetAccount.getKeyPair().getPublicKey(), "java SDK secure message");
+		System.out.println(transfer(seedAccount, targetAccount.getAddress(), new Mosaic(mosaicIDs.get(0), BigInteger.valueOf(0l)), secureMessage));
         // TODO check the response and wait for inclusion of transaction to the block
 //        .subscribe(
 //        		(resp) -> System.out.println(resp), 
 //        		(err) -> System.out.println(err),
 //        		() -> System.out.println("done"));
+	}
+	
+	/**
+	 * return transactions as specified by arguments signed by the signer account
+	 * 
+	 * @param signerAccount account used to sign the transaction
+	 * @param target target address for the transfer
+	 * @param amount mosaic to transfer
+	 * @param message message for the transfer
+	 * @return instance of signed transaction which can be then announced to the network
+	 */
+	private static SignedTransaction signTransfer(Account signerAccount, Address target, Mosaic amount, Message message) {
+        TransferTransaction transaction = TransferTransaction.create(
+                new Deadline(2, HOURS),
+                target,
+                Collections.singletonList(amount),
+                message,
+                NETWORK_TYPE
+        );
+        return signerAccount.sign(transaction);
+	}
+	
+	private TransactionAnnounceResponse transfer(Account from, Address to, Mosaic mosaic, Message message) throws InterruptedException, ExecutionException {
+		SignedTransaction signedTransaction = signTransfer(from, to, mosaic, message);
+        return transactionHttp.announce(signedTransaction).toFuture().get();
+
 	}
 }

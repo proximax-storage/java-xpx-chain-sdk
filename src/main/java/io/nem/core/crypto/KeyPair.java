@@ -119,4 +119,11 @@ public class KeyPair {
     public boolean hasPrivateKey() {
         return null != this.privateKey;
     }
+
+	@Override
+	public String toString() {
+		return "KeyPair [privateKey=" + privateKey + ", publicKey=" + publicKey + "]";
+	}
+    
+    
 }

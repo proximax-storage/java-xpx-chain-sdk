@@ -34,6 +34,9 @@ import java.util.stream.Stream;
 import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.Test;
 
+import io.nem.core.crypto.KeyPair;
+import io.nem.core.crypto.PrivateKey;
+import io.nem.core.crypto.PublicKey;
 import io.nem.sdk.infrastructure.model.UInt64DTO;
 import io.nem.sdk.infrastructure.utils.UInt64Utils;
 import io.nem.sdk.model.account.Address;
@@ -91,11 +94,43 @@ public class TransactionMappingTest {
 	}
 	
     @Test
-    void shouldCreateStandaloneTransferTransaction() throws Exception {
-    	streamTransactions("TRANSFER", "REGISTER_NAMESPACE", "MOSAIC_DEFINITION")
+    void validateStandaloneTransactions() throws Exception {
+    	streamTransactions("TRANSFER", "TRANSFER.messages", "REGISTER_NAMESPACE", "MOSAIC_DEFINITION")
     		.forEachOrdered(transactionDTO -> {
-    			Transaction transferTransaction = new TransactionMapping().apply(transactionDTO);
-    			validateStandaloneTransaction(transferTransaction, transactionDTO);
+    			Transaction transaction = new TransactionMapping().apply(transactionDTO);
+    			validateStandaloneTransaction(transaction, transactionDTO);
+    		}
+    	);
+    }
+
+    @Test
+    void testMessages() throws Exception {
+    	// Sending transactions to Account [keyPair=KeyPair [privateKey=6556da78c063e0547b7fd2e8a8b66ba09b8f28043235fea441414f0fc591f507, publicKey=831b324ae7248acd22d1d0b463e19b427664c00255c6df3050345054c1343557], publicAccount=PublicAccount [address=Address [address=VDNPRW6PPFLIX64XUOQVQCF6RQ3D5E7LZWY5APYV, networkType=TEST_NET], publicKey=831B324AE7248ACD22D1D0B463E19B427664C00255C6DF3050345054C1343557]]
+    	streamTransactions("TRANSFER.messages")
+    		.forEachOrdered(transactionDTO -> {
+    			Transaction transaction = new TransactionMapping().apply(transactionDTO);
+    			validateStandaloneTransaction(transaction, transactionDTO);
+    			// assert transfer
+    			assertEquals(TransactionType.TRANSFER, transaction.getType());
+    			// retrieve the message
+    			Message msg = ((TransferTransaction)transaction).getMessage();
+    			MessageTypes msgType = MessageTypes.getByCode(msg.getType());
+    			switch (msgType) {
+    				case PLAIN:
+    					// this message comes from the integration test
+    					assertEquals("java SDK plain message test", ((PlainMessage)msg).getPayload());
+    					break;
+    				case SECURE:
+    					SecureMessage secMsg = (SecureMessage)msg;
+    					// private key of recipient is needed to decrypt the message
+    					KeyPair recipientKeyPair = new KeyPair(PrivateKey.fromHexString("6556da78c063e0547b7fd2e8a8b66ba09b8f28043235fea441414f0fc591f507"));
+    					// public key of sender is needed to decrypt the message
+    					KeyPair senderKeyPair = new KeyPair(PublicKey.fromHexString("A36DF1F0B64C7FF71499784317C8D63FB1DB8E1909519AB72051D2BE77A1EF45"));
+    					// check that all went well
+    					assertEquals("java SDK secure message", secMsg.decrypt(recipientKeyPair, senderKeyPair));
+    					break;
+    				default: fail("Unsupported message type " + msgType);
+    			}
     		}
     	);
     }
@@ -401,13 +436,13 @@ public class TransactionMappingTest {
     void validateMosaicCreationTx(MosaicDefinitionTransaction transaction, JsonObject transactionDTO) {
         assertEquals(extractBigInteger(transactionDTO.getJsonObject("transaction").getJsonArray("mosaicId")),
                 transaction.getMosaicId().getId());
-        assertTrue(transaction.getMosaicProperties().getDivisibility() ==
-                transactionDTO.getJsonObject("transaction").getJsonArray("properties").getJsonObject(1).getJsonArray("value").getInteger(0));
-        assertEquals(extractBigInteger(transactionDTO.getJsonObject("transaction").getJsonArray("properties").getJsonObject(2).getJsonArray("value")),
-                transaction.getMosaicProperties().getDuration());
-        assertTrue(transaction.getMosaicProperties().isSupplyMutable());
-        assertTrue(transaction.getMosaicProperties().isTransferable());
-        assertTrue(transaction.getMosaicProperties().isLevyMutable());
+        JsonArray properties = transactionDTO.getJsonObject("transaction").getJsonArray("properties");
+        assertEquals(transaction.getMosaicProperties().getDivisibility(), properties.getJsonObject(1).getJsonArray("value").getInteger(0));
+        if (properties.size() > 2) {
+        	assertEquals(extractBigInteger(properties.getJsonObject(2).getJsonArray("value")), transaction.getMosaicProperties().getDuration());
+        } else {
+        	assertEquals(BigInteger.valueOf(0), transaction.getMosaicProperties().getDuration());
+        }
     }
 
     void validateMosaicSupplyChangeTx(MosaicSupplyChangeTransaction transaction, JsonObject transactionDTO) {

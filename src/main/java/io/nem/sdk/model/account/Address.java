@@ -16,16 +16,17 @@
 
 package io.nem.sdk.model.account;
 
-import io.nem.core.crypto.Hashes;
-import io.nem.core.utils.ArrayUtils;
-import io.nem.core.utils.Base32Encoder;
-import io.nem.sdk.model.blockchain.NetworkType;
+import java.util.Arrays;
+import java.util.Objects;
+
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base32;
 import org.apache.commons.codec.binary.Hex;
 
-import java.util.Arrays;
-import java.util.Objects;
+import io.nem.core.crypto.Hashes;
+import io.nem.core.utils.ArrayUtils;
+import io.nem.core.utils.Base32Encoder;
+import io.nem.sdk.model.blockchain.NetworkType;
 
 /**
  * The address structure describes an address with its network.
@@ -206,4 +207,11 @@ public class Address {
     public int hashCode() {
         return Objects.hash(address, networkType);
     }
+
+	@Override
+	public String toString() {
+		return "Address [address=" + address + ", networkType=" + networkType + "]";
+	}
+    
+    
 }

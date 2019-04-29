@@ -16,13 +16,18 @@
 
 package io.nem.sdk.model.account;
 
+import java.util.List;
+
+import javax.validation.constraints.NotNull;
+
 import io.nem.core.crypto.KeyPair;
 import io.nem.core.crypto.PrivateKey;
 import io.nem.sdk.model.blockchain.NetworkType;
-import io.nem.sdk.model.transaction.*;
-
-import javax.validation.constraints.NotNull;
-import java.util.List;
+import io.nem.sdk.model.transaction.AggregateTransaction;
+import io.nem.sdk.model.transaction.CosignatureSignedTransaction;
+import io.nem.sdk.model.transaction.CosignatureTransaction;
+import io.nem.sdk.model.transaction.SignedTransaction;
+import io.nem.sdk.model.transaction.Transaction;
 
 /**
  * The account structure describes an account private key, public key, address and allows signing transactions.
@@ -146,4 +151,10 @@ public class Account {
     public SignedTransaction signTransactionWithCosignatories(AggregateTransaction transaction, List<Account> cosignatories) {
         return transaction.signTransactionWithCosigners(this, cosignatories);
     }
+
+	@Override
+	public String toString() {
+		return "Account [keyPair=" + keyPair + ", publicAccount=" + publicAccount + "]";
+	}
+    
 }
