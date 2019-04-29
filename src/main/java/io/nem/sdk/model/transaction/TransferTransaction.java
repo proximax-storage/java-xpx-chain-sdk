@@ -111,7 +111,7 @@ public class TransferTransaction extends Transaction {
         byte[] bytePayload = message.getEncodedPayload();
         int payload = MessageBuffer.createPayloadVector(builder, bytePayload);
         MessageBuffer.startMessageBuffer(builder);
-        MessageBuffer.addType(builder, message.getType());
+        MessageBuffer.addType(builder, message.getTypeCode());
         MessageBuffer.addPayload(builder, payload);
         int message = MessageBuffer.endMessageBuffer(builder);
 

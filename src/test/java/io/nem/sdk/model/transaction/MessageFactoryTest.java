@@ -19,26 +19,26 @@ public class MessageFactoryTest {
 
     @Test
     public void shouldCreatePlainMessage() {
-        final Message message = MessageFactory.createMessage(MessageTypes.PLAIN.getType(), "test-message".getBytes());
+        final Message message = MessageFactory.createMessage(MessageType.PLAIN.getCode(), "test-message".getBytes());
 
         assertThat(message, is(notNullValue()));
         assertThat(message, is(instanceOf(PlainMessage.class)));
         assertThat(message.getEncodedPayload(), is("test-message".getBytes()));
         assertThat(message.getPayload(), is("test-message"));
-        assertThat(message.getType(), is(MessageTypes.PLAIN.getType()));
+        assertThat(message.getTypeCode(), is(MessageType.PLAIN.getCode()));
     }
 
     @Test
     public void shouldCreateSecureMessage() {
         final byte[] encodedPayload = sampleEncodedPayload();
-        final Message message = MessageFactory.createMessage(MessageTypes.SECURE.getType(), encodedPayload);
+        final Message message = MessageFactory.createMessage(MessageType.SECURE.getCode(), encodedPayload);
 
         assertThat(message, is(notNullValue()));
         assertThat(message, is(instanceOf(SecureMessage.class)));
         assertThat(message.getEncodedPayload(), is(encodedPayload));
         assertThat(((SecureMessage) message).decrypt(new KeyPair(TEST_SENDER_PRIVATE_KEY), new KeyPair(TEST_RECIPIENT_PUBLIC_KEY)),
                 is("test-message"));
-        assertThat(message.getType(), is(MessageTypes.SECURE.getType()));
+        assertThat(message.getTypeCode(), is(MessageType.SECURE.getCode()));
     }
 
     @Test

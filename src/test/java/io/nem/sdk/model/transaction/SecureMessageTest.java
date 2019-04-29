@@ -49,7 +49,7 @@ class SecureMessageTest {
                 new KeyPair(PublicKey.fromHexString(TEST_RECIPIENT_PUBLIC_KEY))
         ));
         assertNotNull(secureMessage.getEncodedPayload());
-        assertTrue(MessageTypes.SECURE.getType() == secureMessage.getType());
+        assertTrue(MessageType.SECURE.getCode() == secureMessage.getTypeCode());
     }
 
     @Test
@@ -63,7 +63,7 @@ class SecureMessageTest {
                 new KeyPair(PublicKey.fromHexString(TEST_RECIPIENT_PUBLIC_KEY))
         ));
         assertEquals(sampleEncodedPayload, secureMessage.getEncodedPayload());
-        assertTrue(MessageTypes.SECURE.getType() == secureMessage.getType());
+        assertTrue(MessageType.SECURE.getCode() == secureMessage.getTypeCode());
     }
 
     @Test
@@ -78,7 +78,7 @@ class SecureMessageTest {
 
         ));
         assertEquals(sampleEncodedPayload, secureMessage.getEncodedPayload());
-        assertTrue(MessageTypes.SECURE.getType() == secureMessage.getType());
+        assertTrue(MessageType.SECURE.getCode() == secureMessage.getTypeCode());
     }
 
     @Test

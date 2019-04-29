@@ -29,7 +29,7 @@ class PlainMessageTest {
 
         assertEquals("test-message", new String(plainMessage.getEncodedPayload()));
         assertEquals("test-message", plainMessage.getPayload());
-        assertTrue(MessageTypes.PLAIN.getType() == plainMessage.getType());
+        assertTrue(MessageType.PLAIN.getCode() == plainMessage.getTypeCode());
     }
 
 
@@ -39,6 +39,6 @@ class PlainMessageTest {
 
         assertEquals("test-message", new String(plainMessage.getEncodedPayload()));
         assertEquals("test-message", plainMessage.getPayload());
-        assertTrue(MessageTypes.PLAIN.getType() == plainMessage.getType());
+        assertTrue(MessageType.PLAIN.getCode() == plainMessage.getTypeCode());
     }
 }

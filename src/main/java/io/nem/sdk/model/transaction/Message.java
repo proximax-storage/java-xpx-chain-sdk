@@ -38,10 +38,19 @@ public abstract class Message {
      *
      * @return int
      */
-    public int getType() {
+    public int getTypeCode() {
         return type;
     }
 
+    /**
+     * get message type
+     * 
+     * @return MessageType enum entry representing the message type code or UNKNOWN
+     */
+    public MessageType getType() {
+    	return MessageType.getByCode(type);
+    }
+    
     /**
      * Returns message payload.
      *

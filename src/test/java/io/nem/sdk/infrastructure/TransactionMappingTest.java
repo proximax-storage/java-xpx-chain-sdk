@@ -114,7 +114,7 @@ public class TransactionMappingTest {
     			assertEquals(TransactionType.TRANSFER, transaction.getType());
     			// retrieve the message
     			Message msg = ((TransferTransaction)transaction).getMessage();
-    			MessageTypes msgType = MessageTypes.getByCode(msg.getType());
+    			MessageType msgType = MessageType.getByCode(msg.getTypeCode());
     			switch (msgType) {
     				case PLAIN:
     					// this message comes from the integration test
@@ -129,7 +129,7 @@ public class TransactionMappingTest {
     					// check that all went well
     					assertEquals("java SDK secure message", secMsg.decrypt(recipientKeyPair, senderKeyPair));
     					break;
-    				default: fail("Unsupported message type " + msgType);
+    				case UNKNOWN: fail("Unsupported message type " + msgType);
     			}
     		}
     	);
@@ -407,7 +407,7 @@ public class TransactionMappingTest {
 								.getString("payload")), "UTF-8"),
 						new String(transaction.getMessage().getEncodedPayload(), "UTF-8"));
 		        assertTrue(transactionDTO.getJsonObject("transaction").getJsonObject("message").getInteger("type") ==
-		                transaction.getMessage().getType());
+		                transaction.getMessage().getTypeCode());
 			} catch (UnsupportedEncodingException e) {
 				fail("unsupported encoing", e);
 			}

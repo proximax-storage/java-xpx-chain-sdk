@@ -35,7 +35,7 @@ public class SecureMessage extends Message {
      * Constructor
      */
     private SecureMessage(byte[] encodedPayload, String payload) {
-        super(MessageTypes.SECURE.getType(), encodedPayload, payload);
+        super(MessageType.SECURE.getCode(), encodedPayload, payload);
     }
 
     public static SecureMessage createFromEncodedPayload(byte[] encodedPayload) {

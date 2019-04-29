@@ -36,7 +36,7 @@ public class PlainMessage extends Message {
      * @param payload plain message payload
      */
     public PlainMessage(String payload) {
-        super(MessageTypes.PLAIN.getType(), payload.getBytes(StandardCharsets.UTF_8), payload);
+        super(MessageType.PLAIN.getCode(), payload.getBytes(StandardCharsets.UTF_8), payload);
     }
 
     /**

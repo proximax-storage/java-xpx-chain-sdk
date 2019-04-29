@@ -16,9 +16,9 @@ public class MessageFactory {
      * @return the instance of Message
      */
     public static Message createMessage(int type, byte[] encodedPayload) {
-        if (type == MessageTypes.PLAIN.getType()) {
+        if (type == MessageType.PLAIN.getCode()) {
             return PlainMessage.create(new String(encodedPayload, StandardCharsets.UTF_8));
-        } else if (type == MessageTypes.SECURE.getType()){
+        } else if (type == MessageType.SECURE.getCode()){
             return SecureMessage.createFromEncodedPayload(encodedPayload);
         }
         return PlainMessage.Empty;
