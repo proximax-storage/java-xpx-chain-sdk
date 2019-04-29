@@ -421,7 +421,7 @@ class LockFundsTransactionMapping extends TransactionMapping {
                 networkType,
                 extractTransactionVersion(transaction.getInteger("version")),
                 deadline,
-                extractBigInteger(transaction.getJsonArray("fee")),
+                new BigInteger(transaction.getString("maxFee")),
                 mosaic,
                 extractBigInteger(transaction.getJsonArray("duration")),
                 new SignedTransaction("", transaction.getString("hash"), TransactionType.AGGREGATE_BONDED),

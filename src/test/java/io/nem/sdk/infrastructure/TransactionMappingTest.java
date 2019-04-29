@@ -95,7 +95,7 @@ public class TransactionMappingTest {
 	
     @Test
     void validateStandaloneTransactions() throws Exception {
-    	streamTransactions("TRANSFER", "TRANSFER.messages", "REGISTER_NAMESPACE", "MOSAIC_DEFINITION")
+    	streamTransactions("TRANSFER", "TRANSFER.messages", "REGISTER_NAMESPACE", "MOSAIC_DEFINITION", "LOCK")
     		.forEachOrdered(transactionDTO -> {
     			Transaction transaction = new TransactionMapping().apply(transactionDTO);
     			validateStandaloneTransaction(transaction, transactionDTO);
