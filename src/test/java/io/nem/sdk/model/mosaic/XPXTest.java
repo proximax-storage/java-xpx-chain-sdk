@@ -16,32 +16,32 @@
 
 package io.nem.sdk.model.mosaic;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigInteger;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
-class XEMTest {
+class XPXTest {
 
     @Test
     void shouldCreateXEMViaConstructor() {
-        XEM xem = new XEM(BigInteger.valueOf(0));
+        XPX xem = new XPX(BigInteger.valueOf(0));
         assertEquals(BigInteger.valueOf(0), xem.getAmount());
-        assertEquals(XEM.MOSAICID, xem.getId());
+        assertEquals(XPX.MOSAICID, xem.getId());
     }
 
     @Test
     void shouldCreateRelativeXEM() {
-        XEM xem = XEM.createRelative(BigInteger.valueOf(1));
+    	XPX xem = XPX.createRelative(BigInteger.valueOf(1));
         assertEquals(BigInteger.valueOf(1000000), xem.getAmount());
-        assertEquals(XEM.MOSAICID, xem.getId());
+        assertEquals(XPX.MOSAICID, xem.getId());
     }
 
     @Test
     void shouldCreateAbsoluteXEM() {
-        XEM xem = XEM.createAbsolute(BigInteger.valueOf(1));
+    	XPX xem = XPX.createAbsolute(BigInteger.valueOf(1));
         assertEquals(BigInteger.valueOf(1), xem.getAmount());
-        assertEquals(XEM.MOSAICID, xem.getId());
+        assertEquals(XPX.MOSAICID, xem.getId());
     }
 }

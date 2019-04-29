@@ -32,8 +32,7 @@ import org.junit.jupiter.api.TestInstance;
 import io.nem.sdk.model.mosaic.MosaicId;
 import io.nem.sdk.model.mosaic.MosaicInfo;
 import io.nem.sdk.model.mosaic.MosaicName;
-import io.nem.sdk.model.mosaic.XEM;
-import io.reactivex.observers.TestObserver;
+import io.nem.sdk.model.mosaic.XPX;
 import io.reactivex.schedulers.Schedulers;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -48,53 +47,49 @@ class MosaicHttpTest extends BaseTest {
     @Test
     void getMosaic() throws ExecutionException, InterruptedException {
         MosaicInfo mosaicInfo = mosaicHttp
-                .getMosaic(XEM.MOSAICID)
+                .getMosaic(XPX.MOSAICID)
                 .toFuture()
                 .get();
 
         assertEquals(new BigInteger("1"), mosaicInfo.getHeight());
-//        assertEquals(XEM.NAMESPACEID, mosaicInfo.getNamespaceId());
-        assertEquals(XEM.MOSAICID, mosaicInfo.getMosaicId());
+        assertEquals(XPX.MOSAICID, mosaicInfo.getMosaicId());
     }
 
     @Test
     void getMosaics() throws ExecutionException, InterruptedException {
         List<MosaicInfo> mosaicsInfo = mosaicHttp
-                .getMosaics(Collections.singletonList(XEM.MOSAICID))
+                .getMosaics(Collections.singletonList(XPX.MOSAICID))
                 .toFuture()
                 .get();
 
-//        assertEquals(XEM.NAMESPACEID, mosaicsInfo.get(0).getNamespaceId());
-        assertEquals(XEM.MOSAICID, mosaicsInfo.get(0).getMosaicId());
+        assertEquals(XPX.MOSAICID, mosaicsInfo.get(0).getMosaicId());
     }
 
     @Test
     void getMosaicsFromNamespace() throws ExecutionException, InterruptedException {
         List<MosaicInfo> mosaicsInfo = mosaicHttp
-                .getMosaicsFromNamespace(XEM.NAMESPACEID)
+                .getMosaicsFromNamespace(PROXIMA_NAMESPACE)
                 .toFuture()
                 .get();
 
-//        assertEquals(XEM.NAMESPACEID, mosaicsInfo.get(0).getNamespaceId());
-        assertEquals(XEM.MOSAICID, mosaicsInfo.get(0).getMosaicId());
+        assertEquals(XPX.MOSAICID, mosaicsInfo.get(0).getMosaicId());
     }
 
     @Test
     void getMosaicNames() throws ExecutionException, InterruptedException {
         List<MosaicName> mosaicNames = mosaicHttp
-                .getMosaicNames(Collections.singletonList(XEM.MOSAICID))
+                .getMosaicNames(Collections.singletonList(XPX.MOSAICID))
                 .toFuture()
                 .get();
 
-        assertEquals("xem", mosaicNames.get(0).getName());
-        assertEquals(XEM.MOSAICID, mosaicNames.get(0).getMosaicId());
+        assertEquals("xpx", mosaicNames.get(0).getName());
+        assertEquals(XPX.MOSAICID, mosaicNames.get(0).getMosaicId());
     }
 
     @Test
     void throwExceptionWhenMosaicDoesNotExists() {
-        TestObserver<MosaicInfo> testObserver = new TestObserver<>();
         mosaicHttp
-                .getMosaic(new MosaicId("nem:nem"))
+                .getMosaic(new MosaicId(BigInteger.valueOf(123456789l)))
                 .subscribeOn(Schedulers.single())
                 .test()
                 .awaitDone(2, TimeUnit.SECONDS)

@@ -16,20 +16,22 @@
 
 package io.nem.sdk.model.transaction;
 
-import io.nem.sdk.model.account.Account;
-import io.nem.sdk.model.account.Address;
-import io.nem.sdk.model.account.PublicAccount;
-import io.nem.sdk.model.blockchain.NetworkType;
-import io.nem.sdk.model.mosaic.XEM;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.math.BigInteger;
 
 import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigInteger;
-
-import static org.junit.jupiter.api.Assertions.*;
+import io.nem.sdk.model.account.Account;
+import io.nem.sdk.model.account.Address;
+import io.nem.sdk.model.account.PublicAccount;
+import io.nem.sdk.model.blockchain.NetworkType;
+import io.nem.sdk.model.mosaic.XPX;
 
 public class SecretLockTransactionTest {
     static Account account;
@@ -57,7 +59,7 @@ public class SecretLockTransactionTest {
         String secret = "3fc8ba10229ab5778d05d9c4b7f56676a88bf9295c185acfc0f961db5408cafe";
         SecretLockTransaction secretLocktx = SecretLockTransaction.create(
                 new FakeDeadline(),
-                XEM.createRelative(BigInteger.valueOf(10)),
+                XPX.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
                 HashType.SHA3_256,
                 secret,
@@ -85,7 +87,7 @@ public class SecretLockTransactionTest {
         String secret = "3fc8ba10229ab5778d05d9c4b7f56676a88bf9295c185acfc0f961db5408cafe";
         SecretLockTransaction secretLocktx = SecretLockTransaction.create(
                 new FakeDeadline(),
-                XEM.createRelative(BigInteger.valueOf(10)),
+                XPX.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
                 HashType.SHA3_256,
                 secret,
@@ -101,7 +103,7 @@ public class SecretLockTransactionTest {
         String secret = "3fc8ba10229ab5778d05d9c4b7f56676a88bf9295c185acfc0f961db5408cafe";
         SecretLockTransaction secretLocktx = SecretLockTransaction.create(
                 new FakeDeadline(),
-                XEM.createRelative(BigInteger.valueOf(10)),
+                XPX.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
                 HashType.SHA3_256,
                 secret,
@@ -118,7 +120,7 @@ public class SecretLockTransactionTest {
         assertThrows(IllegalArgumentException.class, ()-> {
             SecretLockTransaction secretLocktx = SecretLockTransaction.create(
                     new FakeDeadline(),
-                    XEM.createRelative(BigInteger.valueOf(10)),
+                    XPX.createRelative(BigInteger.valueOf(10)),
                     BigInteger.valueOf(100),
                     HashType.SHA3_256,
                     "non valid hash",

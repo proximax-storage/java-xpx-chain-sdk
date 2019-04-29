@@ -16,16 +16,10 @@
 
 package io.nem.sdk.model.transaction;
 
-import io.nem.sdk.infrastructure.TransactionMapping;
-import io.nem.sdk.model.account.Account;
-import io.nem.sdk.model.account.Address;
-import io.nem.sdk.model.account.PublicAccount;
-import io.nem.sdk.model.blockchain.NetworkType;
-import io.nem.sdk.model.mosaic.Mosaic;
-import io.nem.sdk.model.mosaic.XEM;
-import io.vertx.core.json.JsonObject;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
@@ -33,10 +27,17 @@ import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import io.nem.sdk.infrastructure.TransactionMapping;
+import io.nem.sdk.model.account.Account;
+import io.nem.sdk.model.account.Address;
+import io.nem.sdk.model.account.PublicAccount;
+import io.nem.sdk.model.blockchain.NetworkType;
+import io.nem.sdk.model.mosaic.Mosaic;
+import io.nem.sdk.model.mosaic.XPX;
+import io.vertx.core.json.JsonObject;
 
 public class AggregateTransactionTest {
 
@@ -79,7 +80,7 @@ public class AggregateTransactionTest {
                 new FakeDeadline(),
                 new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST),
                 Collections.singletonList(
-                        new Mosaic(XEM.MOSAICID, BigInteger.valueOf(10000000))
+                        new Mosaic(XPX.MOSAICID, BigInteger.valueOf(10000000))
                 ),
                 PlainMessage.Empty,
                 NetworkType.MIJIN_TEST

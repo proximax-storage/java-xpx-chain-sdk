@@ -1,0 +1,20 @@
+namespace io.nem.sdk.model.transaction;
+
+table MosaicDefinitionTransactionBuffer {
+    size: uint;
+    signature: [ubyte];
+    signer: [ubyte];
+    version: ushort;
+    type: ushort;
+    fee: [uint];
+    deadline:[uint];
+    mosaicNonce:uint;
+    mosaicId:[uint];
+    numOptionalProperties:ubyte;
+    flags:ubyte;
+    divisibility:ubyte;
+    indicateDuration:ubyte;
+    duration:[uint];
+}
+
+root_type MosaicDefinitionTransactionBuffer;

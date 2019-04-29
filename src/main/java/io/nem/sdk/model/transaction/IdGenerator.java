@@ -16,16 +16,19 @@
 
 package io.nem.sdk.model.transaction;
 
-import io.nem.core.crypto.Hashes;
-import io.nem.sdk.model.mosaic.IllegalIdentifierException;
-import org.apache.commons.lang.ArrayUtils;
-
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import org.apache.commons.lang.ArrayUtils;
+import org.bouncycastle.util.encoders.Hex;
+
+import io.nem.core.crypto.Hashes;
+import io.nem.sdk.model.mosaic.IllegalIdentifierException;
 
 
 public class IdGenerator {
@@ -80,17 +83,22 @@ public class IdGenerator {
     public static BigInteger generateSubNamespaceIdFromParentId(BigInteger parentId, String namespaceName) {
         return generateId(namespaceName, parentId);
     }
-
-    public static BigInteger generateMosaicId(String namespaceName, String mosaicName) {
-        if (mosaicName.length() == 0) {
-            throw new IllegalIdentifierException("having zero length");
-        }
-        List<BigInteger> namespacePath = generateNamespacePath(namespaceName);
-        BigInteger namespaceId = namespacePath.get(namespacePath.size() - 1);
-
-        if (!mosaicName.matches("^[a-z0-9][a-z0-9-_]*$")) {
-            throw new IllegalIdentifierException("invalid mosaic name");
-        }
-        return generateId(mosaicName, namespaceId);
+    
+    public static BigInteger generateMosaicId(Integer nonce, String ownerPublicKeyHex) {
+        byte[] nonceBytes = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(nonce).array();
+        byte[] ownerPublicKeyBytes = Hex.decode(ownerPublicKeyHex);
+        // compute hash of little-endian nonce and public key hex
+        byte[] hash = Hashes.sha3_256(nonceBytes, ownerPublicKeyBytes);
+        // take low and high 4 bytes
+        byte[] low = Arrays.copyOfRange(hash, 0, 4);
+        byte[] high = Arrays.copyOfRange(hash, 4, 8);
+        // convert to little-endian
+        ArrayUtils.reverse(low);
+        ArrayUtils.reverse(high);
+        // recombine back to one byte array
+        // TODO check why does GO and high with 0x7FFFFFFF
+        byte[] result = ArrayUtils.addAll(high, low);
+        // return the result
+        return new BigInteger(result);
     }
 }

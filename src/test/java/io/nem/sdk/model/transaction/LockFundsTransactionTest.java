@@ -16,18 +16,21 @@
 
 package io.nem.sdk.model.transaction;
 
-import io.nem.sdk.model.account.Account;
-import io.nem.sdk.model.account.PublicAccount;
-import io.nem.sdk.model.blockchain.NetworkType;
-import io.nem.sdk.model.mosaic.XEM;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.math.BigInteger;
+
 import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigInteger;
-
-import static org.junit.jupiter.api.Assertions.*;
+import io.nem.sdk.model.account.Account;
+import io.nem.sdk.model.account.PublicAccount;
+import io.nem.sdk.model.blockchain.NetworkType;
+import io.nem.sdk.model.mosaic.XPX;
 
 class LockFundsTransactionTest {
     static Account account;
@@ -52,7 +55,7 @@ class LockFundsTransactionTest {
         SignedTransaction signedTransaction = new SignedTransaction("payload", "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", TransactionType.AGGREGATE_BONDED);
         LockFundsTransaction lockFundstx = LockFundsTransaction.create(
                 new FakeDeadline(),
-                XEM.createRelative(BigInteger.valueOf(10)),
+                XPX.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
                 signedTransaction,
                 NetworkType.MIJIN_TEST
@@ -74,7 +77,7 @@ class LockFundsTransactionTest {
         SignedTransaction signedTransaction = new SignedTransaction("payload", "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", TransactionType.AGGREGATE_BONDED);
         LockFundsTransaction lockFundstx = LockFundsTransaction.create(
                 new FakeDeadline(),
-                XEM.createRelative(BigInteger.valueOf(10)),
+                XPX.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
                 signedTransaction,
                 NetworkType.MIJIN_TEST
@@ -88,7 +91,7 @@ class LockFundsTransactionTest {
         SignedTransaction signedTransaction = new SignedTransaction("payload", "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", TransactionType.AGGREGATE_BONDED);
         LockFundsTransaction lockFundstx = LockFundsTransaction.create(
                 new FakeDeadline(),
-                XEM.createRelative(BigInteger.valueOf(10)),
+                XPX.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
                 signedTransaction,
                 NetworkType.MIJIN_TEST
@@ -104,7 +107,7 @@ class LockFundsTransactionTest {
         SignedTransaction signedTransaction = new SignedTransaction("payload", "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", TransactionType.TRANSFER);
         assertThrows(IllegalArgumentException.class, ()->{LockFundsTransaction.create(
                 new FakeDeadline(),
-                XEM.createRelative(BigInteger.valueOf(10)),
+                XPX.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
                 signedTransaction,
                 NetworkType.MIJIN_TEST

@@ -8,11 +8,11 @@ import java.util.*;
 import com.google.flatbuffers.*;
 
 @SuppressWarnings("unused")
-public final class AggregateTransactionBuffer extends Table {
-  public static AggregateTransactionBuffer getRootAsAggregateTransactionBuffer(ByteBuffer _bb) { return getRootAsAggregateTransactionBuffer(_bb, new AggregateTransactionBuffer()); }
-  public static AggregateTransactionBuffer getRootAsAggregateTransactionBuffer(ByteBuffer _bb, AggregateTransactionBuffer obj) { _bb.order(ByteOrder.LITTLE_ENDIAN); return (obj.__assign(_bb.getInt(_bb.position()) + _bb.position(), _bb)); }
+public final class ModifyMetadataTransactionBuffer extends Table {
+  public static ModifyMetadataTransactionBuffer getRootAsModifyMetadataTransactionBuffer(ByteBuffer _bb) { return getRootAsModifyMetadataTransactionBuffer(_bb, new ModifyMetadataTransactionBuffer()); }
+  public static ModifyMetadataTransactionBuffer getRootAsModifyMetadataTransactionBuffer(ByteBuffer _bb, ModifyMetadataTransactionBuffer obj) { _bb.order(ByteOrder.LITTLE_ENDIAN); return (obj.__assign(_bb.getInt(_bb.position()) + _bb.position(), _bb)); }
   public void __init(int _i, ByteBuffer _bb) { bb_pos = _i; bb = _bb; vtable_start = bb_pos - bb.getInt(bb_pos); vtable_size = bb.getShort(vtable_start); }
-  public AggregateTransactionBuffer __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
+  public ModifyMetadataTransactionBuffer __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
   public long size() { int o = __offset(4); return o != 0 ? (long)bb.getInt(o + bb_pos) & 0xFFFFFFFFL : 0L; }
   public int signature(int j) { int o = __offset(6); return o != 0 ? bb.get(__vector(o) + j * 1) & 0xFF : 0; }
@@ -33,13 +33,16 @@ public final class AggregateTransactionBuffer extends Table {
   public int deadlineLength() { int o = __offset(16); return o != 0 ? __vector_len(o) : 0; }
   public ByteBuffer deadlineAsByteBuffer() { return __vector_as_bytebuffer(16, 4); }
   public ByteBuffer deadlineInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 16, 4); }
-  public long transactionsSize() { int o = __offset(18); return o != 0 ? (long)bb.getInt(o + bb_pos) & 0xFFFFFFFFL : 0L; }
-  public int transactions(int j) { int o = __offset(20); return o != 0 ? bb.get(__vector(o) + j * 1) & 0xFF : 0; }
-  public int transactionsLength() { int o = __offset(20); return o != 0 ? __vector_len(o) : 0; }
-  public ByteBuffer transactionsAsByteBuffer() { return __vector_as_bytebuffer(20, 1); }
-  public ByteBuffer transactionsInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 20, 1); }
+  public int metadataType() { int o = __offset(18); return o != 0 ? bb.get(o + bb_pos) & 0xFF : 0; }
+  public int metadataId(int j) { int o = __offset(20); return o != 0 ? bb.get(__vector(o) + j * 1) & 0xFF : 0; }
+  public int metadataIdLength() { int o = __offset(20); return o != 0 ? __vector_len(o) : 0; }
+  public ByteBuffer metadataIdAsByteBuffer() { return __vector_as_bytebuffer(20, 1); }
+  public ByteBuffer metadataIdInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 20, 1); }
+  public MetadataModificationBuffer modifications(int j) { return modifications(new MetadataModificationBuffer(), j); }
+  public MetadataModificationBuffer modifications(MetadataModificationBuffer obj, int j) { int o = __offset(22); return o != 0 ? obj.__assign(__indirect(__vector(o) + j * 4), bb) : null; }
+  public int modificationsLength() { int o = __offset(22); return o != 0 ? __vector_len(o) : 0; }
 
-  public static int createAggregateTransactionBuffer(FlatBufferBuilder builder,
+  public static int createModifyMetadataTransactionBuffer(FlatBufferBuilder builder,
       long size,
       int signatureOffset,
       int signerOffset,
@@ -47,22 +50,24 @@ public final class AggregateTransactionBuffer extends Table {
       int type,
       int feeOffset,
       int deadlineOffset,
-      long transactionsSize,
-      int transactionsOffset) {
-    builder.startObject(9);
-    AggregateTransactionBuffer.addTransactions(builder, transactionsOffset);
-    AggregateTransactionBuffer.addTransactionsSize(builder, transactionsSize);
-    AggregateTransactionBuffer.addDeadline(builder, deadlineOffset);
-    AggregateTransactionBuffer.addFee(builder, feeOffset);
-    AggregateTransactionBuffer.addSigner(builder, signerOffset);
-    AggregateTransactionBuffer.addSignature(builder, signatureOffset);
-    AggregateTransactionBuffer.addSize(builder, size);
-    AggregateTransactionBuffer.addType(builder, type);
-    AggregateTransactionBuffer.addVersion(builder, version);
-    return AggregateTransactionBuffer.endAggregateTransactionBuffer(builder);
+      int metadataType,
+      int metadataIdOffset,
+      int modificationsOffset) {
+    builder.startObject(10);
+    ModifyMetadataTransactionBuffer.addModifications(builder, modificationsOffset);
+    ModifyMetadataTransactionBuffer.addMetadataId(builder, metadataIdOffset);
+    ModifyMetadataTransactionBuffer.addDeadline(builder, deadlineOffset);
+    ModifyMetadataTransactionBuffer.addFee(builder, feeOffset);
+    ModifyMetadataTransactionBuffer.addSigner(builder, signerOffset);
+    ModifyMetadataTransactionBuffer.addSignature(builder, signatureOffset);
+    ModifyMetadataTransactionBuffer.addSize(builder, size);
+    ModifyMetadataTransactionBuffer.addType(builder, type);
+    ModifyMetadataTransactionBuffer.addVersion(builder, version);
+    ModifyMetadataTransactionBuffer.addMetadataType(builder, metadataType);
+    return ModifyMetadataTransactionBuffer.endModifyMetadataTransactionBuffer(builder);
   }
 
-  public static void startAggregateTransactionBuffer(FlatBufferBuilder builder) { builder.startObject(9); }
+  public static void startModifyMetadataTransactionBuffer(FlatBufferBuilder builder) { builder.startObject(10); }
   public static void addSize(FlatBufferBuilder builder, long size) { builder.addInt(0, (int)size, (int)0L); }
   public static void addSignature(FlatBufferBuilder builder, int signatureOffset) { builder.addOffset(1, signatureOffset, 0); }
   public static int createSignatureVector(FlatBufferBuilder builder, byte[] data) { builder.startVector(1, data.length, 1); for (int i = data.length - 1; i >= 0; i--) builder.addByte(data[i]); return builder.endVector(); }
@@ -78,15 +83,18 @@ public final class AggregateTransactionBuffer extends Table {
   public static void addDeadline(FlatBufferBuilder builder, int deadlineOffset) { builder.addOffset(6, deadlineOffset, 0); }
   public static int createDeadlineVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addInt(data[i]); return builder.endVector(); }
   public static void startDeadlineVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
-  public static void addTransactionsSize(FlatBufferBuilder builder, long transactionsSize) { builder.addInt(7, (int)transactionsSize, (int)0L); }
-  public static void addTransactions(FlatBufferBuilder builder, int transactionsOffset) { builder.addOffset(8, transactionsOffset, 0); }
-  public static int createTransactionsVector(FlatBufferBuilder builder, byte[] data) { builder.startVector(1, data.length, 1); for (int i = data.length - 1; i >= 0; i--) builder.addByte(data[i]); return builder.endVector(); }
-  public static void startTransactionsVector(FlatBufferBuilder builder, int numElems) { builder.startVector(1, numElems, 1); }
-  public static int endAggregateTransactionBuffer(FlatBufferBuilder builder) {
+  public static void addMetadataType(FlatBufferBuilder builder, int metadataType) { builder.addByte(7, (byte)metadataType, (byte)0); }
+  public static void addMetadataId(FlatBufferBuilder builder, int metadataIdOffset) { builder.addOffset(8, metadataIdOffset, 0); }
+  public static int createMetadataIdVector(FlatBufferBuilder builder, byte[] data) { builder.startVector(1, data.length, 1); for (int i = data.length - 1; i >= 0; i--) builder.addByte(data[i]); return builder.endVector(); }
+  public static void startMetadataIdVector(FlatBufferBuilder builder, int numElems) { builder.startVector(1, numElems, 1); }
+  public static void addModifications(FlatBufferBuilder builder, int modificationsOffset) { builder.addOffset(9, modificationsOffset, 0); }
+  public static int createModificationsVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addOffset(data[i]); return builder.endVector(); }
+  public static void startModificationsVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
+  public static int endModifyMetadataTransactionBuffer(FlatBufferBuilder builder) {
     int o = builder.endObject();
     return o;
   }
-  public static void finishAggregateTransactionBufferBuffer(FlatBufferBuilder builder, int offset) { builder.finish(offset); }
-  public static void finishSizePrefixedAggregateTransactionBufferBuffer(FlatBufferBuilder builder, int offset) { builder.finishSizePrefixed(offset); }
+  public static void finishModifyMetadataTransactionBufferBuffer(FlatBufferBuilder builder, int offset) { builder.finish(offset); }
+  public static void finishSizePrefixedModifyMetadataTransactionBufferBuffer(FlatBufferBuilder builder, int offset) { builder.finishSizePrefixed(offset); }
 }
 

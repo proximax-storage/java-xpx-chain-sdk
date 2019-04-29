@@ -47,27 +47,21 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
         JsonObject transaction = input.getJsonObject("transaction");
         int type = transaction.getInteger("type");
 
-        if (type == TransactionType.TRANSFER.getValue()) {
-            return new TransferTransactionMapping().apply(input);
-        } else if (type == TransactionType.REGISTER_NAMESPACE.getValue()) {
-            return new NamespaceCreationTransactionMapping().apply(input);
-        } else if (type == TransactionType.MOSAIC_DEFINITION.getValue()) {
-            return new MosaicCreationTransactionMapping().apply(input);
-        } else if (type == TransactionType.MOSAIC_SUPPLY_CHANGE.getValue()) {
-            return new MosaicSupplyChangeTransactionMapping().apply(input);
-        } else if (type == TransactionType.MODIFY_MULTISIG_ACCOUNT.getValue()) {
-            return new MultisigModificationTransactionMapping().apply(input);
-        } else if (type == TransactionType.AGGREGATE_COMPLETE.getValue() || type == TransactionType.AGGREGATE_BONDED.getValue()) {
-            return new AggregateTransactionMapping().apply(input);
-        } else if (type == TransactionType.LOCK.getValue()) {
-            return new LockFundsTransactionMapping().apply(input);
-        } else if (type == TransactionType.SECRET_LOCK.getValue()) {
-            return new SecretLockTransactionMapping().apply(input);
-        } else if (type == TransactionType.SECRET_PROOF.getValue()) {
-            return new SecretProofTransactionMapping().apply(input);
+        switch (TransactionType.rawValueOf(type)) {
+        	case TRANSFER: return new TransferTransactionMapping().apply(input);
+        	case REGISTER_NAMESPACE: return new NamespaceCreationTransactionMapping().apply(input);
+        	case MOSAIC_DEFINITION: return new MosaicCreationTransactionMapping().apply(input);
+        	case MOSAIC_SUPPLY_CHANGE: return new MosaicSupplyChangeTransactionMapping().apply(input);
+        	case MOSAIC_ALIAS: return new MosaicAliasTransactionMapping().apply(input);
+        	case MODIFY_MULTISIG_ACCOUNT: return new MultisigModificationTransactionMapping().apply(input);
+        	case AGGREGATE_COMPLETE: case AGGREGATE_BONDED: return new AggregateTransactionMapping().apply(input);
+        	case LOCK: return new LockFundsTransactionMapping().apply(input);
+        	case SECRET_LOCK: return new SecretLockTransactionMapping().apply(input);
+        	case SECRET_PROOF: return new SecretProofTransactionMapping().apply(input);
         }
 
-        throw new UnsupportedOperationException("Unimplemented Transaction type");
+        System.out.println(input.toString());
+        throw new UnsupportedOperationException("Unimplemented Transaction type " + type);
     }
 
     /**
@@ -233,8 +227,6 @@ class NamespaceCreationTransactionMapping extends TransactionMapping {
 /**
  * transaction that creates new mosaic
  * 
- * TODO name field is not there anymore and nonce was added
- * 
  * @author tonowie
  */
 class MosaicCreationTransactionMapping extends TransactionMapping {
@@ -262,10 +254,40 @@ class MosaicCreationTransactionMapping extends TransactionMapping {
                 extractTransactionVersion(version),
                 deadline,
                 new BigInteger(transaction.getString("maxFee")),
-                transaction.getString("name"),
-                new NamespaceId(extractBigInteger(transaction.getJsonArray("parentId"))),
                 new MosaicId(extractBigInteger(transaction.getJsonArray("mosaicId"))),
+                transaction.getInteger("mosaicNonce"),
                 properties,
+                transaction.getString("signature"),
+                new PublicAccount(transaction.getString("signer"), extractNetworkType(version)),
+                transactionInfo
+        );
+    }
+}
+
+/**
+ * transaction that creates alias between namespace and mosaic
+ * 
+ * @author tonowie
+ */
+class MosaicAliasTransactionMapping extends TransactionMapping {
+
+    @Override
+    public MosaicAliasDefinitionTransaction apply(JsonObject input) {
+    	// load transaction info and data
+        TransactionInfo transactionInfo = this.createTransactionInfo(input.getJsonObject("meta"));
+        JsonObject transaction = input.getJsonObject("transaction");
+        // load data fields
+        Deadline deadline = new Deadline(extractBigInteger(transaction.getJsonArray("deadline")));
+        int version = transaction.getInteger("version");
+        // return instance of mosaic alias definition transaction
+        return new MosaicAliasDefinitionTransaction(
+                extractNetworkType(version),
+                extractTransactionVersion(version),
+                deadline,
+                new BigInteger(transaction.getString("maxFee")),
+                new MosaicId(extractBigInteger(transaction.getJsonArray("mosaicId"))),
+                new NamespaceId(extractBigInteger(transaction.getJsonArray("namespaceId"))),
+                transaction.getInteger("action"),
                 transaction.getString("signature"),
                 new PublicAccount(transaction.getString("signer"), extractNetworkType(version)),
                 transactionInfo
@@ -286,7 +308,7 @@ class MosaicSupplyChangeTransactionMapping extends TransactionMapping {
                 extractNetworkType(transaction.getInteger("version")),
                 extractTransactionVersion(transaction.getInteger("version")),
                 deadline,
-                extractBigInteger(transaction.getJsonArray("fee")),
+                new BigInteger(transaction.getString("maxFee")),
                 new MosaicId(extractBigInteger(transaction.getJsonArray("mosaicId"))),
                 MosaicSupplyType.rawValueOf(transaction.getInteger("direction")),
                 extractBigInteger(transaction.getJsonArray("delta")),

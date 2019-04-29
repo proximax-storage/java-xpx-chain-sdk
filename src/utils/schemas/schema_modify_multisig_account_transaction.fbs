@@ -1,0 +1,22 @@
+namespace io.nem.sdk.model.transaction;
+
+table CosignatoryModificationBuffer {
+    type: ubyte;
+    cosignatoryPublicKey: [ubyte];
+}
+
+table ModifyMultisigAccountTransactionBuffer {
+    size: uint;
+    signature: [ubyte];
+    signer: [ubyte];
+    version: ushort;
+    type: ushort;
+    fee: [uint];
+    deadline:[uint];
+    minRemovalDelta: byte;
+    minApprovalDelta: byte;
+    numModifications: ubyte;
+    modifications: [CosignatoryModificationBuffer];
+}
+
+root_type ModifyMultisigAccountTransactionBuffer;

@@ -16,17 +16,13 @@
 
 package io.nem.sdk.model.mosaic;
 
-import io.nem.sdk.model.namespace.NamespaceId;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
 /**
- * XEM Mosaic
- *
- * @since 1.0
+ * XPX Mosaic
  */
-public class XEM extends Mosaic {
+public class XPX extends Mosaic {
     /**
      * Divisibility
      */
@@ -44,36 +40,33 @@ public class XEM extends Mosaic {
      */
     public static final boolean SUPPLYMUTABLE = false;
     /**
-     * Namespace id
-     */
-    public static final NamespaceId NAMESPACEID = new NamespaceId("nem");
-    /**
      * Mosaic id
      */
-    public static final MosaicId MOSAICID = new MosaicId("nem:xem");
+    // TODO need to provide proper ID here
+    public static final MosaicId MOSAICID = new MosaicId(BigInteger.valueOf(1));
 
-    public XEM(BigInteger amount) {
-        super(XEM.MOSAICID, amount);
+    public XPX(BigInteger amount) {
+        super(XPX.MOSAICID, amount);
     }
 
     /**
-     * Create xem with using xem as unit.
+     * Create XPX with using XPX as unit.
      *
      * @param amount amount to send
-     * @return a XEM instance
+     * @return a XPX instance
      */
-    public static XEM createRelative(BigInteger amount) {
-        BigInteger relativeAmount = new BigDecimal(Math.pow(10, XEM.DIVISIBILITY)).toBigInteger().multiply(amount);
-        return new XEM(relativeAmount);
+    public static XPX createRelative(BigInteger amount) {
+        BigInteger relativeAmount = BigDecimal.valueOf(Math.pow(10, XPX.DIVISIBILITY)).toBigInteger().multiply(amount);
+        return new XPX(relativeAmount);
     }
 
     /**
-     * Create xem with using micro xem as unit, 1 XEM = 1000000 micro XEM.
+     * Create XPX with using micro XPX as unit, 1 XPX = 1000000 micro XPX.
      *
      * @param amount amount to send
-     * @return a XEM instance
+     * @return a XPX instance
      */
-    public static XEM createAbsolute(BigInteger amount) {
-        return new XEM(amount);
+    public static XPX createAbsolute(BigInteger amount) {
+        return new XPX(amount);
     }
 }

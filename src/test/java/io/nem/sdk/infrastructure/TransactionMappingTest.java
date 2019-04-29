@@ -401,8 +401,6 @@ public class TransactionMappingTest {
     void validateMosaicCreationTx(MosaicDefinitionTransaction transaction, JsonObject transactionDTO) {
         assertEquals(extractBigInteger(transactionDTO.getJsonObject("transaction").getJsonArray("mosaicId")),
                 transaction.getMosaicId().getId());
-        assertEquals(transactionDTO.getJsonObject("transaction").getString("name"),
-                transaction.getMosaicName());
         assertTrue(transaction.getMosaicProperties().getDivisibility() ==
                 transactionDTO.getJsonObject("transaction").getJsonArray("properties").getJsonObject(1).getJsonArray("value").getInteger(0));
         assertEquals(extractBigInteger(transactionDTO.getJsonObject("transaction").getJsonArray("properties").getJsonObject(2).getJsonArray("value")),

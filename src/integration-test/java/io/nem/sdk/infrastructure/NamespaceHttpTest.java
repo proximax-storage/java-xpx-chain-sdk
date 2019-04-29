@@ -16,16 +16,7 @@
 
 package io.nem.sdk.infrastructure;
 
-import io.nem.sdk.model.account.Address;
-import io.nem.sdk.model.mosaic.XEM;
-import io.nem.sdk.model.namespace.NamespaceId;
-import io.nem.sdk.model.namespace.NamespaceInfo;
-import io.nem.sdk.model.namespace.NamespaceName;
-import io.reactivex.observers.TestObserver;
-import io.reactivex.schedulers.Schedulers;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -34,7 +25,16 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+
+import io.nem.sdk.model.account.Address;
+import io.nem.sdk.model.namespace.NamespaceId;
+import io.nem.sdk.model.namespace.NamespaceInfo;
+import io.nem.sdk.model.namespace.NamespaceName;
+import io.reactivex.observers.TestObserver;
+import io.reactivex.schedulers.Schedulers;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class NamespaceHttpTest extends BaseTest {
@@ -48,13 +48,13 @@ class NamespaceHttpTest extends BaseTest {
     @Test
     void getNamespace() throws ExecutionException, InterruptedException {
         NamespaceInfo namespaceInfo = namespaceHttp
-                .getNamespace(XEM.NAMESPACEID)
+                .getNamespace(PROXIMA_NAMESPACE)
                 .toFuture()
                 .get();
 
         assertEquals(new BigInteger("1"), namespaceInfo.getStartHeight());
         assertEquals(new BigInteger("-1"), namespaceInfo.getEndHeight());
-        assertEquals(XEM.NAMESPACEID, namespaceInfo.getLevels().get(0));
+        assertEquals(PROXIMA_NAMESPACE, namespaceInfo.getLevels().get(0));
     }
 
     @Test
@@ -67,7 +67,7 @@ class NamespaceHttpTest extends BaseTest {
         assertEquals(1, namespacesInfo.size());
         assertEquals(new BigInteger("1"), namespacesInfo.get(0).getStartHeight());
         assertEquals(new BigInteger("-1"), namespacesInfo.get(0).getEndHeight());
-        assertEquals(XEM.NAMESPACEID, namespacesInfo.get(0).getLevels().get(0));
+        assertEquals(PROXIMA_NAMESPACE, namespacesInfo.get(0).getLevels().get(0));
     }
 
     @Test
@@ -80,20 +80,20 @@ class NamespaceHttpTest extends BaseTest {
         assertEquals(1, namespacesInfo.size());
         assertEquals(new BigInteger("1"), namespacesInfo.get(0).getStartHeight());
         assertEquals(new BigInteger("-1"), namespacesInfo.get(0).getEndHeight());
-        assertEquals(XEM.NAMESPACEID, namespacesInfo.get(0).getLevels().get(0));
+        assertEquals(PROXIMA_NAMESPACE, namespacesInfo.get(0).getLevels().get(0));
     }
 
     @Test
     void getNamespaceNames() throws ExecutionException, InterruptedException {
         List<NamespaceName> namespaceNames = namespaceHttp
-                .getNamespaceNames(Collections.singletonList(XEM.NAMESPACEID))
+                .getNamespaceNames(Collections.singletonList(PROXIMA_NAMESPACE))
                 .toFuture()
                 .get();
 
 
         assertEquals(1, namespaceNames.size());
         assertEquals("nem", namespaceNames.get(0).getName());
-        assertEquals(XEM.NAMESPACEID, namespaceNames.get(0).getNamespaceId());
+        assertEquals(PROXIMA_NAMESPACE, namespaceNames.get(0).getNamespaceId());
     }
 
     @Test

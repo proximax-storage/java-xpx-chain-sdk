@@ -16,6 +16,11 @@
 
 package io.nem.sdk.model.transaction;
 
+import java.math.BigInteger;
+import java.util.Optional;
+
+import org.apache.commons.lang.Validate;
+
 import com.google.flatbuffers.FlatBufferBuilder;
 
 import io.nem.sdk.infrastructure.utils.UInt64Utils;
@@ -23,12 +28,6 @@ import io.nem.sdk.model.account.PublicAccount;
 import io.nem.sdk.model.blockchain.NetworkType;
 import io.nem.sdk.model.mosaic.MosaicId;
 import io.nem.sdk.model.mosaic.MosaicProperties;
-import io.nem.sdk.model.namespace.NamespaceId;
-
-import org.apache.commons.lang.Validate;
-
-import java.math.BigInteger;
-import java.util.Optional;
 
 /**
  * Before a mosaic can be created or transferred, a corresponding definition of the mosaic has to be created and published to the network.
@@ -37,30 +36,27 @@ import java.util.Optional;
  * @since 1.0
  */
 public class MosaicDefinitionTransaction extends Transaction {
-    private final String mosaicName;
     private final MosaicId mosaicId;
-    private final NamespaceId namespaceId;
+    private final Integer nonce;
     private final MosaicProperties mosaicProperties;
     private final Schema schema = new MosaicDefinitionTransactionSchema();
 
 
-    public MosaicDefinitionTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, String mosaicName, NamespaceId namespaceId, MosaicId mosaicId, MosaicProperties mosaicProperties, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
-        this(networkType, version, deadline, fee, mosaicName, namespaceId, mosaicId, mosaicProperties, Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo));
+    public MosaicDefinitionTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee,  MosaicId mosaicId, Integer nonce, MosaicProperties mosaicProperties, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
+        this(networkType, version, deadline, fee, mosaicId, nonce, mosaicProperties, Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo));
     }
 
-    public MosaicDefinitionTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, String mosaicName, NamespaceId namespaceId, MosaicId mosaicId, MosaicProperties mosaicProperties) {
-        this(networkType, version, deadline, fee, mosaicName, namespaceId, mosaicId, mosaicProperties, Optional.empty(), Optional.empty(), Optional.empty());
+    public MosaicDefinitionTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, MosaicId mosaicId, Integer nonce, MosaicProperties mosaicProperties) {
+        this(networkType, version, deadline, fee, mosaicId, nonce, mosaicProperties, Optional.empty(), Optional.empty(), Optional.empty());
     }
 
-    private MosaicDefinitionTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, String mosaicName, NamespaceId namespaceId, MosaicId mosaicId, MosaicProperties mosaicProperties, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
+    private MosaicDefinitionTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, MosaicId mosaicId, Integer nonce, MosaicProperties mosaicProperties, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
         super(TransactionType.MOSAIC_DEFINITION, networkType, version, deadline, fee, signature, signer, transactionInfo);
-        Validate.notNull(mosaicName, "MosaicName must not be null");
-        Validate.notNull(namespaceId, "NamespaceId must not be null");
         Validate.notNull(mosaicId, "MosaicId must not be null");
+        Validate.notNull(nonce, "Nonce must not be null");
         Validate.notNull(mosaicProperties, "MosaicProperties must not be null");
-        this.mosaicName = mosaicName;
-        this.namespaceId = namespaceId;
         this.mosaicId = mosaicId;
+        this.nonce = nonce;
         this.mosaicProperties = mosaicProperties;
     }
 
@@ -74,26 +70,16 @@ public class MosaicDefinitionTransaction extends Transaction {
      * @param networkType      The network type.
      * @return {@link MosaicDefinitionTransaction}
      */
-    public static MosaicDefinitionTransaction create(Deadline deadline, String mosaicName, String namespaceName, MosaicProperties mosaicProperties, NetworkType networkType) {
-        Validate.notNull(mosaicName, "MosaicName must not be null");
-        Validate.notNull(namespaceName, "NamespaceName must not be null");
+    public static MosaicDefinitionTransaction create(Integer nonce, String publicKeyHex, Deadline deadline, MosaicProperties mosaicProperties, NetworkType networkType) {
+        Validate.notNull(nonce, "nonce must not be null");
+        Validate.notNull(publicKeyHex, "publicKeyHex must not be null");
         return new MosaicDefinitionTransaction(networkType,
-                2,
+                2, // TODO is this OK?
                 deadline,
                 BigInteger.valueOf(0),
-                mosaicName,
-                new NamespaceId(namespaceName),
-                new MosaicId(IdGenerator.generateMosaicId(namespaceName, mosaicName)),
+                new MosaicId(IdGenerator.generateMosaicId(nonce, publicKeyHex)),
+                nonce,
                 mosaicProperties);
-    }
-
-    /**
-     * Returns namespace id generated from namespace name.
-     *
-     * @return NamespaceId
-     */
-    public NamespaceId getNamespaceId() {
-        return namespaceId;
     }
 
     /**
@@ -103,15 +89,6 @@ public class MosaicDefinitionTransaction extends Transaction {
      */
     public MosaicId getMosaicId() {
         return mosaicId;
-    }
-
-    /**
-     * Returns mosaic name.
-     *
-     * @return String
-     */
-    public String getMosaicName() {
-        return mosaicName;
     }
 
     /**
@@ -144,40 +121,31 @@ public class MosaicDefinitionTransaction extends Transaction {
         }
 
         // Create Vectors
-        int signatureVector = MosaicDefinitionCreationTransactionBuffer.createSignatureVector(builder, new byte[64]);
-        int signerVector = MosaicDefinitionCreationTransactionBuffer.createSignerVector(builder, new byte[32]);
-        int deadlineVector = MosaicDefinitionCreationTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
-        int feeVector = MosaicDefinitionCreationTransactionBuffer.createFeeVector(builder, fee);
-        int mosaicIdVector = MosaicDefinitionCreationTransactionBuffer.createParentIdVector(builder, UInt64Utils.fromBigInteger(mosaicId.getId()));
-        int namespaceIdVector = MosaicDefinitionCreationTransactionBuffer.createParentIdVector(builder, UInt64Utils.fromBigInteger(namespaceId.getId()));
-        int durationVector = MosaicDefinitionCreationTransactionBuffer.createDurationVector(builder, UInt64Utils.fromBigInteger(mosaicProperties.getDuration()));
+        int signatureVector = MosaicDefinitionTransactionBuffer.createSignatureVector(builder, new byte[64]);
+        int signerVector = MosaicDefinitionTransactionBuffer.createSignerVector(builder, new byte[32]);
+        int deadlineVector = MosaicDefinitionTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
+        int feeVector = MosaicDefinitionTransactionBuffer.createFeeVector(builder, fee);
+        int mosaicIdVector = MosaicDefinitionTransactionBuffer.createMosaicIdVector(builder, UInt64Utils.fromBigInteger(mosaicId.getId()));
+        int durationVector = MosaicDefinitionTransactionBuffer.createDurationVector(builder, UInt64Utils.fromBigInteger(mosaicProperties.getDuration()));
 
-        int fixSize = 149; // replace by the all numbers sum or add a comment explaining this
+        MosaicDefinitionTransactionBuffer.startMosaicDefinitionTransactionBuffer(builder);
+        MosaicDefinitionTransactionBuffer.addSignature(builder, signatureVector);
+        MosaicDefinitionTransactionBuffer.addSigner(builder, signerVector);
+        MosaicDefinitionTransactionBuffer.addVersion(builder, version);
+        MosaicDefinitionTransactionBuffer.addType(builder, getType().getValue());
+        MosaicDefinitionTransactionBuffer.addFee(builder, feeVector);
+        MosaicDefinitionTransactionBuffer.addDeadline(builder, deadlineVector);
 
-        int name = builder.createString(mosaicName);
+        MosaicDefinitionTransactionBuffer.addMosaicId(builder, mosaicIdVector);
+        MosaicDefinitionTransactionBuffer.addNumOptionalProperties(builder, 1);
+        MosaicDefinitionTransactionBuffer.addFlags(builder, flags);
 
-        MosaicDefinitionCreationTransactionBuffer.startMosaicDefinitionCreationTransactionBuffer(builder);
-        MosaicDefinitionCreationTransactionBuffer.addSize(builder, fixSize + mosaicName.length());
-        MosaicDefinitionCreationTransactionBuffer.addSignature(builder, signatureVector);
-        MosaicDefinitionCreationTransactionBuffer.addSigner(builder, signerVector);
-        MosaicDefinitionCreationTransactionBuffer.addVersion(builder, version);
-        MosaicDefinitionCreationTransactionBuffer.addType(builder, getType().getValue());
-        MosaicDefinitionCreationTransactionBuffer.addFee(builder, feeVector);
-        MosaicDefinitionCreationTransactionBuffer.addDeadline(builder, deadlineVector);
+        MosaicDefinitionTransactionBuffer.addDivisibility(builder, mosaicProperties.getDivisibility());
 
-        MosaicDefinitionCreationTransactionBuffer.addMosaicId(builder, mosaicIdVector);
-        MosaicDefinitionCreationTransactionBuffer.addParentId(builder, namespaceIdVector);
-        MosaicDefinitionCreationTransactionBuffer.addMosaicNameLength(builder, mosaicName.length());
-        MosaicDefinitionCreationTransactionBuffer.addNumOptionalProperties(builder, 1);
-        MosaicDefinitionCreationTransactionBuffer.addFlags(builder, flags);
+        MosaicDefinitionTransactionBuffer.addIndicateDuration(builder, 2);
+        MosaicDefinitionTransactionBuffer.addDuration(builder, durationVector);
 
-        MosaicDefinitionCreationTransactionBuffer.addDivisibility(builder, mosaicProperties.getDivisibility());
-
-        MosaicDefinitionCreationTransactionBuffer.addMosaicName(builder, name);
-        MosaicDefinitionCreationTransactionBuffer.addIndicateDuration(builder, 2);
-        MosaicDefinitionCreationTransactionBuffer.addDuration(builder, durationVector);
-
-        int codedTransaction = MosaicDefinitionCreationTransactionBuffer.endMosaicDefinitionCreationTransactionBuffer(builder);
+        int codedTransaction = MosaicDefinitionTransactionBuffer.endMosaicDefinitionTransactionBuffer(builder);
         builder.finish(codedTransaction);
 
         return schema.serialize(builder.sizedByteArray());

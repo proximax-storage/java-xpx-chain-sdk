@@ -16,16 +16,10 @@
 
 package io.nem.sdk.infrastructure;
 
-import io.nem.sdk.model.account.Account;
-import io.nem.sdk.model.account.Address;
-import io.nem.sdk.model.blockchain.BlockInfo;
-import io.nem.sdk.model.blockchain.NetworkType;
-import io.nem.sdk.model.mosaic.XEM;
-import io.nem.sdk.model.transaction.*;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import static java.time.temporal.ChronoUnit.HOURS;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -35,8 +29,25 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static java.time.temporal.ChronoUnit.HOURS;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+
+import io.nem.sdk.model.account.Account;
+import io.nem.sdk.model.account.Address;
+import io.nem.sdk.model.blockchain.BlockInfo;
+import io.nem.sdk.model.blockchain.NetworkType;
+import io.nem.sdk.model.mosaic.XPX;
+import io.nem.sdk.model.transaction.AggregateTransaction;
+import io.nem.sdk.model.transaction.CosignatureSignedTransaction;
+import io.nem.sdk.model.transaction.CosignatureTransaction;
+import io.nem.sdk.model.transaction.Deadline;
+import io.nem.sdk.model.transaction.PlainMessage;
+import io.nem.sdk.model.transaction.SignedTransaction;
+import io.nem.sdk.model.transaction.Transaction;
+import io.nem.sdk.model.transaction.TransactionStatusError;
+import io.nem.sdk.model.transaction.TransferTransaction;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ListenerTest extends BaseTest {
@@ -201,7 +212,7 @@ class ListenerTest extends BaseTest {
         TransferTransaction transferTransaction = TransferTransaction.create(
                 new Deadline(2, HOURS),
                 new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST),
-                Arrays.asList(XEM.createRelative(new BigInteger("100000000000"))),
+                Arrays.asList(XPX.createRelative(new BigInteger("100000000000"))),
                 PlainMessage.create("test-message"),
                 NetworkType.MIJIN_TEST
         );

@@ -16,30 +16,30 @@
 
 package io.nem.sdk.model.mosaic;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
-import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+import io.nem.sdk.infrastructure.utils.UInt64Utils;
 
 class MosaicIdTest {
-
+	private static final Integer NONCE = 0;
+	private static final String PUB_KEY = "B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF";
+	private static final BigInteger ID = UInt64Utils.fromIntArray(new int[]{481110499,231112638});
+	
     @Test
     void createAMosaicIdFromMosaicNameViaConstructor() {
-        MosaicId mosaicId = new MosaicId("nem:xem");
-        assertEquals(mosaicId.getId(), new BigInteger("-3087871471161192663"));
-        assertEquals(mosaicId.getFullName().get(), "nem:xem");
+        MosaicId mosaicId = new MosaicId(NONCE, PUB_KEY);
+        assertEquals(ID, mosaicId.getId());
     }
 
     @Test
     void createAMosaicIdFromIdViaConstructor() {
         MosaicId mosaicId = new MosaicId(new BigInteger("-8884663987180930485"));
-        assertEquals(mosaicId.getId(), new BigInteger("-8884663987180930485"));
-        assertFalse(mosaicId.getFullName().isPresent());
+        assertEquals(new BigInteger("-8884663987180930485"), mosaicId.getId());
     }
 
     @Test
@@ -47,24 +47,5 @@ class MosaicIdTest {
         MosaicId mosaicId = new MosaicId(new BigInteger("-8884663987180930485"));
         MosaicId mosaicId2 = new MosaicId(new BigInteger("-8884663987180930485"));
         assertTrue(mosaicId.equals(mosaicId2));
-    }
-
-    private static Stream<Arguments> provider() {
-        return Stream.of(
-                Arguments.of("nem"),
-                Arguments.of("nem.xem"),
-                Arguments.of(":nem"),
-                Arguments.of("nem.xem:"),
-                Arguments.of(""),
-                Arguments.of("nem:xem:nem")
-        );
-    }
-
-    @ParameterizedTest
-    @MethodSource("provider")
-    void throwIllegalMosaicIdentifierExceptionWhenMosaicIsNotValid(String invalidIdentifier) {
-        assertThrows(IllegalIdentifierException.class, () -> {
-            new MosaicId(invalidIdentifier);
-        });
     }
 }

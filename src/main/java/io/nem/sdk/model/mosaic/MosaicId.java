@@ -29,68 +29,73 @@ import io.nem.sdk.model.transaction.IdGenerator;
  */
 public class MosaicId {
     private final BigInteger id;
-    private final Optional<String> fullName;
+    private final Optional<Integer> nonce;
+    private final Optional<String> ownerPublicKeyHex;
 
     /**
-     * Create MosaicId from mosaic and namespace string name (ex: nem:xem or domain.subdom.subdome:token)
-     *
-     * @param id
-     * @throws IllegalIdentifierException MosaicId identifier
+     * Create mosaic from the random nonce and public key of the owner
+     * 
+     * @param nonce random integer
+     * @param ownerPublicKeyHex hexadecimal representation of owner's public key
      */
-    public MosaicId(String id) {
-        if (id.isEmpty()) throw new IllegalIdentifierException(id + " is not valid");
-        if (!id.contains(":")) throw new IllegalIdentifierException(id + " is not valid");
-        String[] parts = id.split(":");
-        if (parts.length != 2) throw new IllegalIdentifierException(id + " is not valid");
-        String namespaceName = parts[0];
-        String mosaicName = parts[1];
-        this.id = IdGenerator.generateMosaicId(namespaceName, mosaicName);
-        this.fullName = Optional.of(id);
+    public MosaicId(Integer nonce, String ownerPublicKeyHex) {
+        this.id = IdGenerator.generateMosaicId(nonce, ownerPublicKeyHex);
+        this.nonce = Optional.of(nonce);
+        this.ownerPublicKeyHex = Optional.of(ownerPublicKeyHex);
     }
 
     /**
-     * Create MosaicId from biginteger id
+     * Create MosaicId from BigInteger id
      *
-     * @param id
+     * @param id id of the mosaic
      */
     public MosaicId(BigInteger id) {
         this.id = id;
-        this.fullName = Optional.empty();
+        this.nonce = Optional.empty();
+        this.ownerPublicKeyHex = Optional.empty();
     }
 
-    /**
-     * Returns mosaic biginteger id
-     *
-     * @return mosaic biginteger id
-     */
-    public BigInteger getId() {
-        return id;
-    }
+	/**
+	 * @return the id
+	 */
+	public BigInteger getId() {
+		return id;
+	}
 
-    /**
-     * Returns optional mosaic full name, with namespace name (ex: nem:xem)
-     *
-     * @return namespace full name
-     */
-    public Optional<String> getFullName() {
-        return fullName;
-    }
+	/**
+	 * @return the nonce
+	 */
+	public Optional<Integer> getNonce() {
+		return nonce;
+	}
 
-    /**
-     * Compares mosaicIds for equality.
-     *
-     * @return boolean
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof MosaicId)) return false;
-        MosaicId mosaicId1 = (MosaicId) o;
-        return Objects.equals(id, mosaicId1.id);
-    }
+	/**
+	 * @return the ownerPublicKeyHex
+	 */
+	public Optional<String> getOwnerPublicKeyHex() {
+		return ownerPublicKeyHex;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MosaicId other = (MosaicId) obj;
+		return Objects.equals(id, other.id);
+	}
 
 	@Override
 	public String toString() {
-		return "MosaicId [id=" + id + ", fullName=" + fullName + "]";
+		return "MosaicId [id=" + id + ", nonce=" + nonce + ", ownerPublicKeyHex=" + ownerPublicKeyHex + "]";
 	}
+
 }

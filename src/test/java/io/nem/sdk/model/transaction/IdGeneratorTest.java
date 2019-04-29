@@ -16,15 +16,17 @@
 
 package io.nem.sdk.model.transaction;
 
-import io.nem.sdk.model.mosaic.IllegalIdentifierException;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
+
+import io.nem.sdk.infrastructure.utils.UInt64Utils;
+import io.nem.sdk.model.mosaic.IllegalIdentifierException;
 
 class IdGeneratorTest {
 
@@ -62,19 +64,8 @@ class IdGeneratorTest {
 
     @Test
     void mosaicIdGeneratesCorrectWellKnowId() {
-        BigInteger id = IdGenerator.generateMosaicId("nem", "xem");
-        assertEquals(new BigInteger("-3087871471161192663"), id);
-    }
-
-    @Test
-    void mosaicIdSupportMultiLevelMosaics() {
-        List<BigInteger> ids = new ArrayList<BigInteger>();
-        ids.add(IdGenerator.generateId("foo", BigInteger.valueOf(0)));
-        ids.add(IdGenerator.generateId("bar", ids.get(0)));
-        ids.add(IdGenerator.generateId("baz", ids.get(1)));
-        ids.add(IdGenerator.generateId("tokens", ids.get(2)));
-
-        assertEquals(IdGenerator.generateMosaicId("foo.bar.baz", "tokens"), ids.get(3));
+        BigInteger id = IdGenerator.generateMosaicId(0, "B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF");
+        assertEquals(UInt64Utils.fromIntArray(new int[]{481110499,231112638}), id);
     }
 
     @Test
@@ -89,18 +80,4 @@ class IdGeneratorTest {
         assertThrows(IllegalIdentifierException.class, ()->{IdGenerator.generateNamespacePath("a..a");}, "invalid part");
         assertThrows(IllegalIdentifierException.class, ()->{IdGenerator.generateNamespacePath("A");}, "invalid part");
     }
-
-    @Test
-    void mosaicInvalid() {
-        assertThrows(IllegalIdentifierException.class, ()->{IdGenerator.generateMosaicId("a", "");}, "having zero length");
-        assertThrows(IllegalIdentifierException.class, ()->{IdGenerator.generateMosaicId("a","A");}, "invalid part");
-        assertThrows(IllegalIdentifierException.class, ()->{IdGenerator.generateMosaicId("a","a..a");}, "invalid part");
-        assertThrows(IllegalIdentifierException.class, ()->{IdGenerator.generateMosaicId("a",".");}, "invalid part");
-        assertThrows(IllegalIdentifierException.class, ()->{IdGenerator.generateMosaicId("a","@lpha");}, "invalid part");
-        assertThrows(IllegalIdentifierException.class, ()->{IdGenerator.generateMosaicId("a","a!pha");}, "invalid part");
-        assertThrows(IllegalIdentifierException.class, ()->{IdGenerator.generateMosaicId("a","alph*");}, "invalid part");
-        assertThrows(IllegalIdentifierException.class, ()->{IdGenerator.generateMosaicId("a","alp^a");}, "invalid part");
-    }
-    
-    
 }

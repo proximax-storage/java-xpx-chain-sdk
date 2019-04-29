@@ -16,15 +16,16 @@
 
 package io.nem.sdk.infrastructure;
 
-import io.nem.sdk.model.blockchain.NetworkType;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+
+import io.nem.sdk.model.blockchain.NetworkType;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class NetworkHttpTest extends BaseTest {
@@ -39,6 +40,6 @@ class NetworkHttpTest extends BaseTest {
     void getNetworkType() throws ExecutionException, InterruptedException {
         NetworkType networkType = networkHttp.getNetworkType().toFuture().get();
 
-        assertEquals(NetworkType.MIJIN_TEST.getValue(), networkType.getValue());
+        assertEquals(NetworkType.TEST_NET.getValue(), networkType.getValue());
     }
 }

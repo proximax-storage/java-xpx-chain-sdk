@@ -24,9 +24,11 @@ import java.util.Properties;
 
 import io.nem.sdk.model.account.Account;
 import io.nem.sdk.model.blockchain.NetworkType;
+import io.nem.sdk.model.namespace.NamespaceId;
 
 public abstract class BaseTest {
-
+	protected static final NamespaceId PROXIMA_NAMESPACE = new NamespaceId("prx");
+	
 	private static final String SYS_ENV_PRIVATE_KEY = "SEED_ACCOUNT_PRIVATE_KEY";
 			
 	public String getNodeUrl() throws IOException {
@@ -49,7 +51,7 @@ public abstract class BaseTest {
 	 * @return
 	 */
     protected Account getSeedAccount(NetworkType networkType) {
-    	String accountPk = System.getenv(SYS_ENV_PRIVATE_KEY);
+    	String accountPk = "FA4EB55A4C0B462095F22F7768B7EDCC1DFC9287B16614E019E1326AC6E625D9";//System.getenv(SYS_ENV_PRIVATE_KEY);
     	if (accountPk == null) {
     		fail("Seed account private key needs to be defined as env variable " + SYS_ENV_PRIVATE_KEY);
     	} else {
