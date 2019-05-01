@@ -30,6 +30,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
+import io.nem.sdk.BaseTest;
 import io.nem.sdk.model.account.AccountInfo;
 import io.nem.sdk.model.account.Address;
 import io.nem.sdk.model.account.MultisigAccountGraphInfo;

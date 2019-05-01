@@ -58,10 +58,8 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
         	case LOCK: return new LockFundsTransactionMapping().apply(input);
         	case SECRET_LOCK: return new SecretLockTransactionMapping().apply(input);
         	case SECRET_PROOF: return new SecretProofTransactionMapping().apply(input);
+        	default: throw new UnsupportedOperationException("Unimplemented transaction type " + type);
         }
-
-        System.out.println(input.toString());
-        throw new UnsupportedOperationException("Unimplemented Transaction type " + type);
     }
 
     /**
@@ -169,6 +167,15 @@ class TransferTransactionMapping extends TransactionMapping {
         } else {
         	message = PlainMessage.Empty;
         }
+        // listener returns fee as uint64 "fee" and services return string "maxFee" so lets support both
+        BigInteger fee;
+        if (transaction.getString("maxFee") != null) {
+        	fee = new BigInteger(transaction.getString("maxFee"));
+        } else if (transaction.getJsonArray("fee") != null) {
+        	fee = extractBigInteger(transaction.getJsonArray("fee"));
+        } else {
+        	throw new IllegalArgumentException("Fee is missing in the transaction description");
+        }
         // version
         int version = transaction.getInteger("version");
         // create transfer transaction instance
@@ -176,7 +183,7 @@ class TransferTransactionMapping extends TransactionMapping {
                 extractNetworkType(version),
                 extractTransactionVersion(version),
                 deadline,
-                new BigInteger(transaction.getString("maxFee")),
+                fee,
                 Address.createFromEncoded(transaction.getString("recipient")),
                 mosaics,
                 message,

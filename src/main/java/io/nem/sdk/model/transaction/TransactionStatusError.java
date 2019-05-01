@@ -58,4 +58,11 @@ public class TransactionStatusError {
     public Deadline getDeadline() {
         return deadline;
     }
+
+   @Override
+   public String toString() {
+      return "TransactionStatusError [hash=" + hash + ", status=" + status + ", deadline=" + deadline + "]";
+   }
+    
+    
 }

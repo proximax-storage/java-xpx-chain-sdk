@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.nem.sdk.infrastructure;
+package io.nem.sdk;
 
 import static org.junit.Assert.fail;
 
@@ -27,37 +27,37 @@ import io.nem.sdk.model.blockchain.NetworkType;
 import io.nem.sdk.model.namespace.NamespaceId;
 
 public abstract class BaseTest {
-	protected static final NamespaceId PROXIMA_NAMESPACE = new NamespaceId("prx");
-	
-	private static final String SYS_ENV_PRIVATE_KEY = "SEED_ACCOUNT_PRIVATE_KEY";
-			
-	public String getNodeUrl() throws IOException {
-        String url = null;
-        final Properties properties = new Properties();
-        try (InputStream inputStream = BaseTest.class.getClassLoader().getResourceAsStream("config.properties")) {
-            if (inputStream == null) {
-                throw new IOException("config.properties not found");
-            }
-            properties.load(inputStream);
-            url = properties.getProperty("nem2sdk.conf.nodeurl");
-        } catch (IOException ignored) {
-        }
-        return url;
-    }
-    
-	/**
-	 * 
-	 * @param networkType
-	 * @return
-	 */
-    protected Account getSeedAccount(NetworkType networkType) {
-    	String accountPk = System.getenv(SYS_ENV_PRIVATE_KEY);
-    	if (accountPk == null) {
-    		fail("Seed account private key needs to be defined as env variable " + SYS_ENV_PRIVATE_KEY);
-    	} else {
-    		return new Account(accountPk, networkType);
-    	}
-    	// should never get here since fail throws exception
-    	throw new IllegalStateException("Test was supposed to fail or return account");
-    }
+   protected static final NamespaceId PROXIMA_NAMESPACE = new NamespaceId("prx");
+
+   private static final String SYS_ENV_PRIVATE_KEY = "SEED_ACCOUNT_PRIVATE_KEY";
+
+   public String getNodeUrl() throws IOException {
+      String url = null;
+      final Properties properties = new Properties();
+      try (InputStream inputStream = BaseTest.class.getClassLoader().getResourceAsStream("config.properties")) {
+         if (inputStream == null) {
+            throw new IOException("config.properties not found");
+         }
+         properties.load(inputStream);
+         url = properties.getProperty("nem2sdk.conf.nodeurl");
+      } catch (IOException ignored) {
+      }
+      return url;
+   }
+
+   /**
+    * 
+    * @param networkType
+    * @return
+    */
+   protected Account getSeedAccount(NetworkType networkType) {
+      String accountPk = System.getenv(SYS_ENV_PRIVATE_KEY);
+      if (accountPk == null) {
+         fail("Seed account private key needs to be defined as env variable " + SYS_ENV_PRIVATE_KEY);
+      } else {
+         return new Account(accountPk, networkType);
+      }
+      // should never get here since fail throws exception
+      throw new IllegalStateException("Test was supposed to fail or return account");
+   }
 }

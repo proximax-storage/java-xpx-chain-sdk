@@ -79,6 +79,49 @@
 					}
 				]
 			}
+		},
+		{
+			"transaction": {
+				"signature": "BF1D28677EAF7DD5DCAFFC93841E7F529B8BB539FB5EF79C210B1E049BB6BB83EB83E8CB96BBBA05AAF28B760B6D1214FD80D82F98D65E34623E9D2F2696E60C",
+				"signer": "A36DF1F0B64C7FF71499784317C8D63FB1DB8E1909519AB72051D2BE77A1EF45",
+				"version": 43011,
+				"type": 16724,
+				"fee": [
+					0,
+					0
+				],
+				"deadline": [
+					2714791270,
+					22
+				],
+				"recipient": "A8CA9690D2587BE149913C549DB04CE2449BECF2AEF96B876C",
+				"message": {
+					"type": 0,
+					"payload": "6A6176612053444B20706C61696E206D6573736167652074657374"
+				},
+				"mosaics": [
+					{
+						"id": [
+							519256100,
+							642862634
+						],
+						"amount": [
+							0,
+							0
+						]
+					}
+				]
+			},
+			"meta": {
+				"hash": "8BCB161A6FF5DA01CB0AF187D0990C6EE8289E449E83798806A5E3D93A49625D",
+				"merkleComponentHash": "8BCB161A6FF5DA01CB0AF187D0990C6EE8289E449E83798806A5E3D93A49625D",
+				"height": [
+					5592,
+					0
+				],
+				"channelName": "confirmedAdded",
+				"address": "A88D7496FA3FFD5BFE7358BB7ADB3BE634BCA2E73C19FBECE2"
+			}
 		}
 	]
 }

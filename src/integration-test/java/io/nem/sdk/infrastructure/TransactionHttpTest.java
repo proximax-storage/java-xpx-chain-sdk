@@ -17,6 +17,7 @@
 package io.nem.sdk.infrastructure;
 
 
+import io.nem.sdk.BaseTest;
 import io.nem.sdk.model.transaction.Transaction;
 import io.nem.sdk.model.transaction.TransactionStatus;
 import io.nem.sdk.model.transaction.TransactionType;

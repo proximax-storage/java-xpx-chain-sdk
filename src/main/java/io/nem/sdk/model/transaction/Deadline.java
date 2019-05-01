@@ -93,4 +93,9 @@ public class Deadline {
     public LocalDateTime getLocalDateTime() {
         return getLocalDateTime(ZoneId.systemDefault());
     }
+
+   @Override
+   public String toString() {
+      return "Deadline [instant=" + instant + "]";
+   }
 }

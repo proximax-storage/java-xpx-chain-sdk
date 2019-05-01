@@ -3,7 +3,12 @@
  */
 package io.nem.sdk;
 
+import static java.time.temporal.ChronoUnit.HOURS;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
+import java.math.BigInteger;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -21,11 +26,17 @@ import io.nem.sdk.infrastructure.MosaicHttp;
 import io.nem.sdk.infrastructure.TransactionHttp;
 import io.nem.sdk.model.account.Account;
 import io.nem.sdk.model.account.AccountInfo;
+import io.nem.sdk.model.account.Address;
 import io.nem.sdk.model.blockchain.BlockInfo;
 import io.nem.sdk.model.blockchain.NetworkType;
 import io.nem.sdk.model.mosaic.Mosaic;
 import io.nem.sdk.model.mosaic.MosaicId;
 import io.nem.sdk.model.mosaic.MosaicInfo;
+import io.nem.sdk.model.mosaic.XPX;
+import io.nem.sdk.model.transaction.Deadline;
+import io.nem.sdk.model.transaction.PlainMessage;
+import io.nem.sdk.model.transaction.SignedTransaction;
+import io.nem.sdk.model.transaction.TransferTransaction;
 
 /**
  * @author tonowie
@@ -103,5 +114,28 @@ public class E2EBaseTest extends BaseTest {
       // wait for new block so we know all is on the blockchain
       return listener.newBlock().take(numberOfBlocks)
             .doOnNext((block) -> logger.info("Block created with height {}", block.getHeight())).blockingLast();
+   }
+   
+   /**
+    * send XPX from account to recipient
+    * 
+    * @param recipient address who gets the funds
+    * @param amount amount of XPX taking the divisibility into account
+    */
+   protected void sendSomeCash(Account sender, Address recipient, long amount) {
+      BigInteger bigAmount = BigInteger.valueOf(amount);
+      Mosaic mosaic = XPX.createRelative(bigAmount);
+      TransferTransaction transfer = TransferTransaction.create(new Deadline(2, HOURS),
+            recipient,
+            Collections.singletonList(mosaic),
+            PlainMessage.Empty,
+            NETWORK_TYPE);
+      SignedTransaction signedTransfer = sender.sign(transfer);
+      logger.info("Sent XPX to {}: {}", recipient.pretty(), transactionHttp.announce(signedTransfer).blockingFirst());
+      logger.info("request confirmed: {}", listener.confirmed(sender.getAddress()).blockingFirst());
+      BigInteger endAmount = accountHttp.getAccountInfo(recipient)
+            .map(acct -> acct.getMosaics().get(0).getAmount()).blockingFirst();
+      BigInteger mosaicScale = mosaic.getAmount().divide(bigAmount);
+      assertEquals(bigAmount.multiply(mosaicScale), endAmount);
    }
 }

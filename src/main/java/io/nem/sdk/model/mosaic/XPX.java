@@ -30,7 +30,7 @@ public class XPX extends Mosaic {
     /**
      * Initial supply
      */
-    public static final BigInteger INITIALSUPPLY = new BigInteger("8999999999");
+    public static final BigInteger INITIALSUPPLY = BigInteger.valueOf(9000000000000000l);
     /**
      * Is transferable
      */
@@ -42,9 +42,13 @@ public class XPX extends Mosaic {
     /**
      * Mosaic id
      */
-    // TODO need to provide proper ID here
-    public static final MosaicId MOSAICID = new MosaicId(BigInteger.valueOf(1));
+    public static final MosaicId MOSAICID = new MosaicId(BigInteger.valueOf(992621222383397347l));
 
+    /**
+     * create specified amount of micro XPX
+     * 
+     * @param amount amount of micro XPX
+     */
     public XPX(BigInteger amount) {
         super(XPX.MOSAICID, amount);
     }

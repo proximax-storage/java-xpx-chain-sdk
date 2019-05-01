@@ -7,6 +7,7 @@ import static java.time.temporal.ChronoUnit.HOURS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 
@@ -22,6 +23,7 @@ import io.nem.sdk.model.account.Account;
 import io.nem.sdk.model.account.Address;
 import io.nem.sdk.model.mosaic.Mosaic;
 import io.nem.sdk.model.mosaic.XPX;
+import io.nem.sdk.model.transaction.AggregateTransaction;
 import io.nem.sdk.model.transaction.Deadline;
 import io.nem.sdk.model.transaction.Message;
 import io.nem.sdk.model.transaction.PlainMessage;
@@ -52,11 +54,11 @@ public class E2ETransferTest extends E2EBaseTest {
    void verifyResults() throws InterruptedException, ExecutionException {
       // check that target account has expected number of incoming transactions
       int transactions = accountHttp.incomingTransactions(simpleAccount.getPublicAccount()).toFuture().get().size();
-      assertEquals(2, transactions);
+      assertEquals(4, transactions);
       // return the xem
       transfer(simpleAccount,
             seedAccount.getAddress(),
-            XPX.createAbsolute(BigInteger.valueOf(2)),
+            XPX.createAbsolute(BigInteger.valueOf(4)),
             new PlainMessage("money back guarantee"));
    }
 
@@ -95,6 +97,26 @@ public class E2ETransferTest extends E2EBaseTest {
    }
 
    /**
+    * return transactions as specified by arguments signed by the signer account
+    * 
+    * @param signerAccount account used to sign the transaction
+    * @param target target address for the transfer
+    * @param amount mosaic to transfer
+    * @param message message for the transfer
+    * @return instance of signed transaction which can be then announced to the network
+    */
+   private static SignedTransaction signAggregateTransfer(Account signerAccount, Address target, Mosaic amount,
+         Message message) {
+      TransferTransaction transfer = TransferTransaction
+            .create(new Deadline(2, HOURS), target, Collections.singletonList(amount), message, NETWORK_TYPE);
+      // add the modification to the aggregate transaction. has to be bonded because we are going to test the lock
+      AggregateTransaction aggregateTransaction = AggregateTransaction.createComplete(Deadline.create(2, HOURS),
+            Arrays.asList(transfer.toAggregate(signerAccount.getPublicAccount())),
+            NETWORK_TYPE);
+      return signerAccount.sign(aggregateTransaction);
+   }
+
+   /**
     * create transaction and announce it
     * 
     * @param from account used to sign the transaction
@@ -108,6 +130,9 @@ public class E2ETransferTest extends E2EBaseTest {
    private void transfer(Account from, Address to, Mosaic mosaic, Message message) {
       SignedTransaction signedTransaction = signTransfer(from, to, mosaic, message);
       logger.info("Transfer announced. {}", transactionHttp.announce(signedTransaction).blockingFirst());
+      logger.info("Transfer done. {}", listener.confirmed(from.getAddress()).blockingFirst());
+      SignedTransaction signedAggregateTransaction = signAggregateTransfer(from, to, mosaic, message);
+      logger.info("Transfer announced. {}", transactionHttp.announce(signedAggregateTransaction).blockingFirst());
       logger.info("Transfer done. {}", listener.confirmed(from.getAddress()).blockingFirst());
 
    }

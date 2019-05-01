@@ -16,6 +16,7 @@
 
 package io.nem.sdk.infrastructure;
 
+import io.nem.sdk.BaseTest;
 import io.nem.sdk.model.blockchain.BlockInfo;
 import io.nem.sdk.model.blockchain.BlockchainStorageInfo;
 import io.nem.sdk.model.mosaic.MosaicId;
