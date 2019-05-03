@@ -16,15 +16,15 @@
 
 package io.nem.core.utils;
 
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Supplier;
+
 import org.hamcrest.core.IsEqual;
 import org.hamcrest.core.IsInstanceOf;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
-import java.util.function.Supplier;
 
 public class ExceptionUtilsTest {
 
@@ -234,8 +234,6 @@ public class ExceptionUtilsTest {
 
         public InterruptedExceptionTestRunner(final Supplier<Void> supplier) {
             this.blockingThread = new Thread(() -> {
-                this.isInterruptedPreRun = Thread.currentThread().isInterrupted();
-
                 try {
                     supplier.get();
                 } finally {
@@ -259,8 +257,9 @@ public class ExceptionUtilsTest {
         }
 
         public void run() throws InterruptedException {
+            this.isInterruptedPreRun = blockingThread.isInterrupted();
             this.blockingThread.start();
-            Thread.sleep(10);
+            Thread.sleep(100);
 
             this.blockingThread.interrupt();
             this.blockingThread.join();

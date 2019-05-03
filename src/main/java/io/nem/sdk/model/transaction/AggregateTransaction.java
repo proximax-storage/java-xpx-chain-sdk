@@ -16,20 +16,22 @@
 
 package io.nem.sdk.model.transaction;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.Validate;
+import org.bouncycastle.util.encoders.Hex;
+
 import com.google.flatbuffers.FlatBufferBuilder;
+
 import io.nem.core.crypto.Signer;
 import io.nem.sdk.infrastructure.utils.UInt64Utils;
 import io.nem.sdk.model.account.Account;
 import io.nem.sdk.model.account.PublicAccount;
 import io.nem.sdk.model.blockchain.NetworkType;
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.Validate;
-import org.bouncycastle.util.encoders.Hex;
-
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * The aggregate innerTransactions contain multiple innerTransactions that can be initiated by different accounts.
@@ -168,4 +170,10 @@ public class AggregateTransaction extends Transaction {
     public boolean signedByAccount(PublicAccount publicAccount) {
         return this.getSigner().get().equals(publicAccount) || this.getCosignatures().stream().anyMatch(o -> o.getSigner().equals(publicAccount));
     }
+
+   @Override
+   public String toString() {
+      return "AggregateTransaction [innerTransactions=" + innerTransactions + ", cosignatures=" + cosignatures
+            + ", schema=" + schema + "]";
+   }
 }

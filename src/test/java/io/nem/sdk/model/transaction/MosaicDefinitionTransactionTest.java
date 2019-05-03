@@ -35,7 +35,7 @@ class MosaicDefinitionTransactionTest {
     @Test
     void createAMosaicCreationTransactionViaStaticConstructor() {
         MosaicDefinitionTransaction mosaicCreationTx = MosaicDefinitionTransaction.create(
-        		7, "pubkey",
+        		0, "B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF",
                 new Deadline(2, ChronoUnit.HOURS),
                 new MosaicProperties(true, true, true, 3, BigInteger.valueOf(10)),
                 NetworkType.TEST_NET
@@ -45,7 +45,7 @@ class MosaicDefinitionTransactionTest {
         assertTrue(2 == mosaicCreationTx.getVersion());
         assertTrue(LocalDateTime.now().isBefore(mosaicCreationTx.getDeadline().getLocalDateTime()));
         assertEquals(BigInteger.valueOf(0), mosaicCreationTx.getFee());
-        assertEquals(new BigInteger("-5158169874280477899"), mosaicCreationTx.getMosaicId().getId());
+        assertEquals(BigInteger.valueOf(992621222383397347l), mosaicCreationTx.getMosaicId().getId());
         assertEquals(true, mosaicCreationTx.getMosaicProperties().isSupplyMutable());
         assertEquals(true, mosaicCreationTx.getMosaicProperties().isTransferable());
         assertEquals(true, mosaicCreationTx.getMosaicProperties().isLevyMutable());

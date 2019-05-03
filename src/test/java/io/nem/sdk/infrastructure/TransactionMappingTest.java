@@ -324,8 +324,7 @@ public class TransactionMappingTest {
         assertTrue(transaction.getVersion() == version);
         int networkType = (int) Long.parseLong(Integer.toHexString(transactionDTO.getJsonObject("transaction").getInteger("version")).substring(0, 2), 16);
         assertTrue(transaction.getNetworkType().getValue() == networkType);
-        assertEquals(new BigInteger(transactionDTO.getJsonObject("transaction").getString("maxFee")),
-                transaction.getFee());
+        assertEquals(TransactionMapping.extractFee(transactionDTO.getJsonObject("transaction")), transaction.getFee());
         assertNotNull(transaction.getDeadline());
 
         if (transaction.getType() == TransactionType.TRANSFER) {

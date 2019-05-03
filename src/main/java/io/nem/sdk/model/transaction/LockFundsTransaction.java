@@ -16,17 +16,18 @@
 
 package io.nem.sdk.model.transaction;
 
+import java.math.BigInteger;
+import java.util.Optional;
+
+import org.apache.commons.lang3.Validate;
+import org.bouncycastle.util.encoders.Hex;
+
 import com.google.flatbuffers.FlatBufferBuilder;
 
 import io.nem.sdk.infrastructure.utils.UInt64Utils;
 import io.nem.sdk.model.account.PublicAccount;
 import io.nem.sdk.model.blockchain.NetworkType;
 import io.nem.sdk.model.mosaic.Mosaic;
-import org.apache.commons.lang3.Validate;
-import org.bouncycastle.util.encoders.Hex;
-
-import java.math.BigInteger;
-import java.util.Optional;
 
 /**
  * Lock funds transaction is used before sending an Aggregate bonded transaction, as a deposit to announce the transaction.
@@ -71,7 +72,7 @@ public class LockFundsTransaction extends Transaction {
      * @return a LockFundsTransaction instance
      */
     public static LockFundsTransaction create(Deadline deadline, Mosaic mosaic, BigInteger duration, SignedTransaction signedTransaction, NetworkType networkType) {
-        return new LockFundsTransaction(networkType, 3, deadline, BigInteger.valueOf(0), mosaic, duration, signedTransaction);
+        return new LockFundsTransaction(networkType, 1, deadline, BigInteger.valueOf(0), mosaic, duration, signedTransaction);
     }
 
     /**
@@ -131,4 +132,10 @@ public class LockFundsTransaction extends Transaction {
 
         return schema.serialize(builder.sizedByteArray());
     }
+
+   @Override
+   public String toString() {
+      return "LockFundsTransaction [mosaic=" + mosaic + ", duration=" + duration + ", signedTransaction="
+            + signedTransaction + ", schema=" + schema + "]";
+   }
 }

@@ -16,18 +16,19 @@
 
 package io.nem.sdk.model.transaction;
 
+import java.math.BigInteger;
+import java.util.Optional;
+
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.Validate;
+import org.bouncycastle.util.encoders.Hex;
+
 import io.nem.core.crypto.Hashes;
 import io.nem.core.crypto.Signature;
 import io.nem.core.crypto.Signer;
 import io.nem.sdk.model.account.Account;
 import io.nem.sdk.model.account.PublicAccount;
 import io.nem.sdk.model.blockchain.NetworkType;
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang3.Validate;
-import org.bouncycastle.util.encoders.Hex;
-
-import java.math.BigInteger;
-import java.util.Optional;
 
 /**
  * An abstract transaction class that serves as the base class of all NEM transactions.
@@ -250,4 +251,13 @@ public abstract class Transaction {
     public boolean isUnannounced() {
         return !this.transactionInfo.isPresent();
     }
+
+   @Override
+   public String toString() {
+      return "Transaction [type=" + type + ", networkType=" + networkType + ", version=" + version + ", deadline="
+            + deadline + ", fee=" + fee + ", signature=" + signature + ", signer=" + signer + ", transactionInfo="
+            + transactionInfo + "]";
+   }
+    
+    
 }

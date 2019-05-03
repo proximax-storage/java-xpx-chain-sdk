@@ -16,18 +16,20 @@
 
 package io.nem.sdk.model.transaction;
 
-import io.nem.sdk.model.account.PublicAccount;
-import io.nem.sdk.model.blockchain.NetworkType;
-import io.nem.sdk.model.namespace.NamespaceId;
-import io.nem.sdk.model.namespace.NamespaceType;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import io.nem.sdk.model.blockchain.NetworkType;
+import io.nem.sdk.model.namespace.NamespaceId;
+import io.nem.sdk.model.namespace.NamespaceType;
 
 class RegisterNamespaceTransactionTest {
 
@@ -35,7 +37,7 @@ class RegisterNamespaceTransactionTest {
     void createANamespaceCreationRootNamespaceTransactionViaStaticConstructor() {
         RegisterNamespaceTransaction registerNamespaceTransaction = RegisterNamespaceTransaction.createRootNamespace(
                 new Deadline(2, ChronoUnit.HOURS),
-                "newnamespace",
+                "prx",
                 BigInteger.valueOf(2000),
                 NetworkType.MIJIN_TEST
         );
@@ -44,9 +46,9 @@ class RegisterNamespaceTransactionTest {
         assertTrue(2 == registerNamespaceTransaction.getVersion());
         assertTrue(LocalDateTime.now().isBefore(registerNamespaceTransaction.getDeadline().getLocalDateTime()));
         assertEquals(BigInteger.valueOf(0), registerNamespaceTransaction.getFee());
-        assertEquals("newnamespace", registerNamespaceTransaction.getNamespaceName());
+        assertEquals("prx", registerNamespaceTransaction.getNamespaceName());
         assertEquals(NamespaceType.RootNamespace, registerNamespaceTransaction.getNamespaceType());
-        assertEquals(new BigInteger("4635294387305441662"), registerNamespaceTransaction.getNamespaceId().getId());
+        assertEquals(new BigInteger("-5661737225685060674"), registerNamespaceTransaction.getNamespaceId().getId());
         assertEquals(BigInteger.valueOf(2000), registerNamespaceTransaction.getDuration().get());
     }
 

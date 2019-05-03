@@ -32,23 +32,23 @@ class IdGeneratorTest {
 
     @Test
     void namespacePathGeneratesCorrectWellKnownRootPath() {
-        List<BigInteger> ids = IdGenerator.generateNamespacePath("nem");
+        List<BigInteger> ids = IdGenerator.generateNamespacePath("prx");
         assertEquals(ids.size(), 1);
-        assertEquals(new BigInteger("-8884663987180930485"), ids.get(0));
+        assertEquals(new BigInteger("-5661737225685060674"), ids.get(0));
     }
 
     @Test
     void namespacePathGeneratesCorrectWellKnownChildPath() {
-        List<BigInteger> ids = IdGenerator.generateNamespacePath("nem.xem");
+        List<BigInteger> ids = IdGenerator.generateNamespacePath("prx.xpx");
 
         assertEquals(ids.size(), 2);
-        assertEquals(new BigInteger("-8884663987180930485"), ids.get(0));
-        assertEquals(new BigInteger("-3087871471161192663"), ids.get(1));
+        assertEquals(new BigInteger("-5661737225685060674"), ids.get(0));
+        assertEquals(new BigInteger("-4613020131619586570"), ids.get(1));
     }
 
     @Test
     void namespacePathSupportsMultiLevelNamespaces() {
-        List<BigInteger> ids = new ArrayList<BigInteger>();
+        List<BigInteger> ids = new ArrayList<>();
         ids.add(IdGenerator.generateId("foo", BigInteger.valueOf(0)));
         ids.add(IdGenerator.generateId("bar", ids.get(0)));
         ids.add(IdGenerator.generateId("baz", ids.get(1)));

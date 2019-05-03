@@ -52,14 +52,16 @@ public class E2ETransferTest extends E2EBaseTest {
 
    @AfterAll
    void verifyResults() throws InterruptedException, ExecutionException {
-      // check that target account has expected number of incoming transactions
-      int transactions = accountHttp.incomingTransactions(simpleAccount.getPublicAccount()).toFuture().get().size();
-      assertEquals(4, transactions);
-      // return the xem
-      transfer(simpleAccount,
+      // return the XPX
+      SignedTransaction signedTransaction = signTransfer(simpleAccount,
             seedAccount.getAddress(),
             XPX.createAbsolute(BigInteger.valueOf(4)),
             new PlainMessage("money back guarantee"));
+      logger.info("Returning funds. {}", transactionHttp.announce(signedTransaction).blockingFirst());
+      logger.info("Returned funds. {}", listener.confirmed(simpleAccount.getAddress()).blockingFirst());
+      // check that target account has expected number of incoming transactions
+      int transactions = accountHttp.incomingTransactions(simpleAccount.getPublicAccount()).toFuture().get().size();
+      assertEquals(4, transactions);
    }
 
    @Test
@@ -92,7 +94,7 @@ public class E2ETransferTest extends E2EBaseTest {
    private static SignedTransaction signTransfer(Account signerAccount, Address target, Mosaic amount,
          Message message) {
       TransferTransaction transaction = TransferTransaction
-            .create(new Deadline(2, HOURS), target, Collections.singletonList(amount), message, NETWORK_TYPE);
+            .create(DEADLINE, target, Collections.singletonList(amount), message, NETWORK_TYPE);
       return signerAccount.sign(transaction);
    }
 
@@ -108,7 +110,7 @@ public class E2ETransferTest extends E2EBaseTest {
    private static SignedTransaction signAggregateTransfer(Account signerAccount, Address target, Mosaic amount,
          Message message) {
       TransferTransaction transfer = TransferTransaction
-            .create(new Deadline(2, HOURS), target, Collections.singletonList(amount), message, NETWORK_TYPE);
+            .create(DEADLINE, target, Collections.singletonList(amount), message, NETWORK_TYPE);
       // add the modification to the aggregate transaction. has to be bonded because we are going to test the lock
       AggregateTransaction aggregateTransaction = AggregateTransaction.createComplete(Deadline.create(2, HOURS),
             Arrays.asList(transfer.toAggregate(signerAccount.getPublicAccount())),

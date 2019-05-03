@@ -30,7 +30,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import io.nem.sdk.BaseTest;
+import io.nem.sdk.model.account.Account;
 import io.nem.sdk.model.account.Address;
+import io.nem.sdk.model.blockchain.NetworkType;
 import io.nem.sdk.model.namespace.NamespaceId;
 import io.nem.sdk.model.namespace.NamespaceInfo;
 import io.nem.sdk.model.namespace.NamespaceName;
@@ -39,72 +41,74 @@ import io.reactivex.schedulers.Schedulers;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class NamespaceHttpTest extends BaseTest {
-    private NamespaceHttp namespaceHttp;
+   /** network type for IT tests */
+   protected static final NetworkType NETWORK_TYPE = NetworkType.TEST_NET;
+   private static final String NAMESPACE_PRX_NAME = "prx";
+   
+   private NamespaceHttp namespaceHttp;
+   private Account seedAccount;
+   private Address king = Address
+         .createFromPublicKey("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", NETWORK_TYPE);
 
-    @BeforeAll
-    void setup() throws IOException {
-        namespaceHttp = new NamespaceHttp(this.getNodeUrl());
-    }
+   @BeforeAll
+   void setup() throws IOException {
+      namespaceHttp = new NamespaceHttp(this.getNodeUrl());
+      seedAccount = getSeedAccount(NETWORK_TYPE);
+   }
 
-    @Test
-    void getNamespace() throws ExecutionException, InterruptedException {
-        NamespaceInfo namespaceInfo = namespaceHttp
-                .getNamespace(PROXIMA_NAMESPACE)
-                .toFuture()
-                .get();
+   @Test
+   void getNamespace() throws ExecutionException, InterruptedException {
+      NamespaceInfo namespaceInfo = namespaceHttp.getNamespace(PROXIMA_NAMESPACE).toFuture().get();
 
-        assertEquals(new BigInteger("1"), namespaceInfo.getStartHeight());
-        assertEquals(new BigInteger("-1"), namespaceInfo.getEndHeight());
-        assertEquals(PROXIMA_NAMESPACE, namespaceInfo.getLevels().get(0));
-    }
+      assertEquals(new BigInteger("1"), namespaceInfo.getStartHeight());
+      assertEquals(new BigInteger("-1"), namespaceInfo.getEndHeight());
+      assertEquals(PROXIMA_NAMESPACE, namespaceInfo.getLevels().get(0));
+   }
 
-    @Test
-    void getNamespacesFromAccount() throws ExecutionException, InterruptedException {
-        List<NamespaceInfo> namespacesInfo = namespaceHttp
-                .getNamespacesFromAccount(Address.createFromRawAddress("SARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJETM3ZSP"))
-                .toFuture()
-                .get();
+   @Test
+   void getVerifyNamespaceIdGenerator() throws ExecutionException, InterruptedException {
+      NamespaceInfo namespaceInfoByNum = namespaceHttp.getNamespace(PROXIMA_NAMESPACE).toFuture().get();
+      NamespaceInfo namespaceInfoByName = namespaceHttp.getNamespace(new NamespaceId(NAMESPACE_PRX_NAME)).toFuture().get();
 
-        assertEquals(1, namespacesInfo.size());
-        assertEquals(new BigInteger("1"), namespacesInfo.get(0).getStartHeight());
-        assertEquals(new BigInteger("-1"), namespacesInfo.get(0).getEndHeight());
-        assertEquals(PROXIMA_NAMESPACE, namespacesInfo.get(0).getLevels().get(0));
-    }
+      assertEquals(namespaceInfoByNum.getOwner(), namespaceInfoByName.getOwner());
+   }
 
-    @Test
-    void getNamespacesFromAccounts() throws ExecutionException, InterruptedException {
-        List<NamespaceInfo> namespacesInfo = namespaceHttp
-                .getNamespacesFromAccounts(Collections.singletonList(Address.createFromRawAddress("SARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJETM3ZSP")))
-                .toFuture()
-                .get();
+   @Test
+   void getNamespacesFromAccount() throws ExecutionException, InterruptedException {
+      List<NamespaceInfo> namespacesInfo = namespaceHttp.getNamespacesFromAccount(king).toFuture()
+            .get();
 
-        assertEquals(1, namespacesInfo.size());
-        assertEquals(new BigInteger("1"), namespacesInfo.get(0).getStartHeight());
-        assertEquals(new BigInteger("-1"), namespacesInfo.get(0).getEndHeight());
-        assertEquals(PROXIMA_NAMESPACE, namespacesInfo.get(0).getLevels().get(0));
-    }
+      assertEquals(3, namespacesInfo.size());
+      assertEquals(new BigInteger("1"), namespacesInfo.get(0).getStartHeight());
+      assertEquals(new BigInteger("-1"), namespacesInfo.get(0).getEndHeight());
+      assertEquals(PROXIMA_NAMESPACE, namespacesInfo.get(0).getLevels().get(0));
+   }
 
-    @Test
-    void getNamespaceNames() throws ExecutionException, InterruptedException {
-        List<NamespaceName> namespaceNames = namespaceHttp
-                .getNamespaceNames(Collections.singletonList(PROXIMA_NAMESPACE))
-                .toFuture()
-                .get();
+   @Test
+   void getNamespacesFromAccounts() throws ExecutionException, InterruptedException {
+      List<NamespaceInfo> namespacesInfo = namespaceHttp
+            .getNamespacesFromAccounts(Collections.singletonList(king)).toFuture().get();
 
+      assertEquals(3, namespacesInfo.size());
+      assertEquals(new BigInteger("1"), namespacesInfo.get(0).getStartHeight());
+      assertEquals(new BigInteger("-1"), namespacesInfo.get(0).getEndHeight());
+      assertEquals(PROXIMA_NAMESPACE, namespacesInfo.get(0).getLevels().get(0));
+   }
 
-        assertEquals(1, namespaceNames.size());
-        assertEquals("nem", namespaceNames.get(0).getName());
-        assertEquals(PROXIMA_NAMESPACE, namespaceNames.get(0).getNamespaceId());
-    }
+   @Test
+   void getNamespaceNames() throws ExecutionException, InterruptedException {
+      List<NamespaceName> namespaceNames = namespaceHttp.getNamespaceNames(Collections.singletonList(PROXIMA_NAMESPACE))
+            .toFuture().get();
 
-    @Test
-    void throwExceptionWhenNamespaceDoesNotExists() {
-        TestObserver<NamespaceInfo> testObserver = new TestObserver<>();
-        namespaceHttp
-                .getNamespace(new NamespaceId("nonregisterednamespace"))
-                .subscribeOn(Schedulers.single())
-                .test()
-                .awaitDone(2, TimeUnit.SECONDS)
-                .assertFailure(RuntimeException.class);
-    }
+      assertEquals(1, namespaceNames.size());
+      assertEquals(NAMESPACE_PRX_NAME, namespaceNames.get(0).getName());
+      assertEquals(PROXIMA_NAMESPACE, namespaceNames.get(0).getNamespaceId());
+   }
+
+   @Test
+   void throwExceptionWhenNamespaceDoesNotExists() {
+      TestObserver<NamespaceInfo> testObserver = new TestObserver<>();
+      namespaceHttp.getNamespace(new NamespaceId("nonregisterednamespace")).subscribeOn(Schedulers.single()).test()
+            .awaitDone(2, TimeUnit.SECONDS).assertFailure(RuntimeException.class);
+   }
 }

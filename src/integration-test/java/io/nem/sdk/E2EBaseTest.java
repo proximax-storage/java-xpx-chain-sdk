@@ -3,11 +3,11 @@
  */
 package io.nem.sdk;
 
-import static java.time.temporal.ChronoUnit.HOURS;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -47,6 +47,9 @@ public class E2EBaseTest extends BaseTest {
    /** logger */
    private static final Logger logger = LoggerFactory.getLogger(E2EBaseTest.class);
 
+   /** default deadline for transactions */
+   protected static final Deadline DEADLINE = new Deadline(5, ChronoUnit.MINUTES);
+
    /** network type for IT tests */
    protected static final NetworkType NETWORK_TYPE = NetworkType.TEST_NET;
 
@@ -76,6 +79,9 @@ public class E2EBaseTest extends BaseTest {
       seedAccount = getSeedAccount(NETWORK_TYPE);
       // get the mosaic that will be used here
       mosaic = getMosaic();
+      // add listener to see account
+      listener.status(seedAccount.getAddress()).subscribe(err -> logger.error("Operation failed: {}", err),
+            t -> logger.error("exception thrown", t));
    }
 
    @AfterAll
@@ -115,7 +121,7 @@ public class E2EBaseTest extends BaseTest {
       return listener.newBlock().take(numberOfBlocks)
             .doOnNext((block) -> logger.info("Block created with height {}", block.getHeight())).blockingLast();
    }
-   
+
    /**
     * send XPX from account to recipient
     * 
@@ -124,18 +130,15 @@ public class E2EBaseTest extends BaseTest {
     */
    protected void sendSomeCash(Account sender, Address recipient, long amount) {
       BigInteger bigAmount = BigInteger.valueOf(amount);
-      Mosaic mosaic = XPX.createRelative(bigAmount);
-      TransferTransaction transfer = TransferTransaction.create(new Deadline(2, HOURS),
-            recipient,
-            Collections.singletonList(mosaic),
-            PlainMessage.Empty,
-            NETWORK_TYPE);
+      Mosaic mosaicToTransfer = XPX.createRelative(bigAmount);
+      TransferTransaction transfer = TransferTransaction
+            .create(DEADLINE, recipient, Collections.singletonList(mosaicToTransfer), PlainMessage.Empty, NETWORK_TYPE);
       SignedTransaction signedTransfer = sender.sign(transfer);
       logger.info("Sent XPX to {}: {}", recipient.pretty(), transactionHttp.announce(signedTransfer).blockingFirst());
       logger.info("request confirmed: {}", listener.confirmed(sender.getAddress()).blockingFirst());
-      BigInteger endAmount = accountHttp.getAccountInfo(recipient)
-            .map(acct -> acct.getMosaics().get(0).getAmount()).blockingFirst();
-      BigInteger mosaicScale = mosaic.getAmount().divide(bigAmount);
-      assertEquals(bigAmount.multiply(mosaicScale), endAmount);
+      BigInteger endAmount = accountHttp.getAccountInfo(recipient).map(acct -> acct.getMosaics().get(0).getAmount())
+            .blockingFirst();
+      BigInteger mosaicScale = mosaicToTransfer.getAmount().divide(bigAmount);
+      assertTrue(bigAmount.multiply(mosaicScale).compareTo(endAmount) <= 0);
    }
 }

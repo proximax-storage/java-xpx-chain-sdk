@@ -68,7 +68,7 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
      * @param input json array
      * @return big integer represented by the array
      */
-    BigInteger extractBigInteger(JsonArray input) {
+    public static BigInteger extractBigInteger(JsonArray input) {
         UInt64DTO uInt64DTO = new UInt64DTO();
         input.stream().forEach(item -> uInt64DTO.add(Long.parseLong(item.toString())));
         return UInt64Utils.toBigInt(uInt64DTO);
@@ -97,6 +97,23 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
         return NetworkType.rawValueOf(networkType);
     }
 
+    /**
+     * retrieve fee from the transaction. listener returns fee as uint64 "fee" and services return string "maxFee"
+     * and this method provides support for both
+     * 
+     * @param transaction transaction object with fee or maxFee field
+     * @return value of the fee
+     */
+    public static BigInteger extractFee(JsonObject transaction) {
+      if (transaction.getString("maxFee") != null) {
+         return new BigInteger(transaction.getString("maxFee"));
+      } else if (transaction.getJsonArray("fee") != null) {
+         return extractBigInteger(transaction.getJsonArray("fee"));
+      } else {
+         throw new IllegalArgumentException("Fee is missing in the transaction description");
+      }
+   }
+   
     /**
      * create transaction info based on the provided transaction meta json object
      * 
@@ -167,15 +184,7 @@ class TransferTransactionMapping extends TransactionMapping {
         } else {
         	message = PlainMessage.Empty;
         }
-        // listener returns fee as uint64 "fee" and services return string "maxFee" so lets support both
-        BigInteger fee;
-        if (transaction.getString("maxFee") != null) {
-        	fee = new BigInteger(transaction.getString("maxFee"));
-        } else if (transaction.getJsonArray("fee") != null) {
-        	fee = extractBigInteger(transaction.getJsonArray("fee"));
-        } else {
-        	throw new IllegalArgumentException("Fee is missing in the transaction description");
-        }
+
         // version
         int version = transaction.getInteger("version");
         // create transfer transaction instance
@@ -183,7 +192,7 @@ class TransferTransactionMapping extends TransactionMapping {
                 extractNetworkType(version),
                 extractTransactionVersion(version),
                 deadline,
-                fee,
+                extractFee(transaction),
                 Address.createFromEncoded(transaction.getString("recipient")),
                 mosaics,
                 message,
@@ -218,7 +227,7 @@ class NamespaceCreationTransactionMapping extends TransactionMapping {
                 extractNetworkType(version),
                 extractTransactionVersion(version),
                 deadline,
-                new BigInteger(transaction.getString("maxFee")),
+                extractFee(transaction),
                 transaction.getString("name"),
                 namespaceId,
                 namespaceType,
@@ -260,7 +269,7 @@ class MosaicCreationTransactionMapping extends TransactionMapping {
                 extractNetworkType(version),
                 extractTransactionVersion(version),
                 deadline,
-                new BigInteger(transaction.getString("maxFee")),
+                extractFee(transaction),
                 new MosaicId(extractBigInteger(transaction.getJsonArray("mosaicId"))),
                 transaction.getInteger("mosaicNonce"),
                 properties,
@@ -291,7 +300,7 @@ class MosaicAliasTransactionMapping extends TransactionMapping {
                 extractNetworkType(version),
                 extractTransactionVersion(version),
                 deadline,
-                new BigInteger(transaction.getString("maxFee")),
+                extractFee(transaction),
                 new MosaicId(extractBigInteger(transaction.getJsonArray("mosaicId"))),
                 new NamespaceId(extractBigInteger(transaction.getJsonArray("namespaceId"))),
                 transaction.getInteger("action"),
@@ -315,7 +324,7 @@ class MosaicSupplyChangeTransactionMapping extends TransactionMapping {
                 extractNetworkType(transaction.getInteger("version")),
                 extractTransactionVersion(transaction.getInteger("version")),
                 deadline,
-                new BigInteger(transaction.getString("maxFee")),
+                extractFee(transaction),
                 new MosaicId(extractBigInteger(transaction.getJsonArray("mosaicId"))),
                 MosaicSupplyType.rawValueOf(transaction.getInteger("direction")),
                 extractBigInteger(transaction.getJsonArray("delta")),
@@ -349,7 +358,7 @@ class MultisigModificationTransactionMapping extends TransactionMapping {
                 networkType,
                 extractTransactionVersion(transaction.getInteger("version")),
                 deadline,
-                extractBigInteger(transaction.getJsonArray("fee")),
+                extractFee(transaction),
                 transaction.getInteger("minApprovalDelta"),
                 transaction.getInteger("minRemovalDelta"),
                 modifications,
@@ -374,6 +383,7 @@ class AggregateTransactionMapping extends TransactionMapping {
         for (int i = 0; i < transaction.getJsonArray("transactions").getList().size(); i++) {
             JsonObject innerTransaction = transaction.getJsonArray("transactions").getJsonObject(i);
             innerTransaction.getJsonObject("transaction").put("deadline", transaction.getJsonArray("deadline"));
+            setFee(innerTransaction.getJsonObject("transaction"), transaction);
             innerTransaction.getJsonObject("transaction").put("fee", transaction.getJsonArray("fee"));
             innerTransaction.getJsonObject("transaction").put("signature", transaction.getString("signature"));
             if (!innerTransaction.containsKey("meta")) {
@@ -399,13 +409,29 @@ class AggregateTransactionMapping extends TransactionMapping {
                 TransactionType.rawValueOf(transaction.getInteger("type")),
                 extractTransactionVersion(transaction.getInteger("version")),
                 deadline,
-                extractBigInteger(transaction.getJsonArray("fee")),
+                extractFee(transaction),
                 transactions,
                 cosignatures,
                 transaction.getString("signature"),
                 new PublicAccount(transaction.getString("signer"), networkType),
                 transactionInfo
         );
+    }
+    
+    /**
+     * copy the fee field from the source to target object
+     * 
+     * @param target JSON object to copy the fee to
+     * @param source JSON object to take the fee from
+     */
+    private void setFee(JsonObject target, JsonObject source) {
+       if (source.getString("maxFee") != null) {
+          target.put("maxFee", source.getString("maxFee"));
+       } else if (source.getJsonArray("fee") != null) {
+          target.put("fee", source.getJsonArray("fee"));
+       } else {
+          throw new IllegalArgumentException("Fee is missing in the transaction description");
+       }
     }
 }
 
@@ -428,7 +454,7 @@ class LockFundsTransactionMapping extends TransactionMapping {
                 networkType,
                 extractTransactionVersion(transaction.getInteger("version")),
                 deadline,
-                new BigInteger(transaction.getString("maxFee")),
+                extractFee(transaction),
                 mosaic,
                 extractBigInteger(transaction.getJsonArray("duration")),
                 new SignedTransaction("", transaction.getString("hash"), TransactionType.AGGREGATE_BONDED),
@@ -458,7 +484,7 @@ class SecretLockTransactionMapping extends TransactionMapping {
                 networkType,
                 extractTransactionVersion(transaction.getInteger("version")),
                 deadline,
-                extractBigInteger(transaction.getJsonArray("fee")),
+                extractFee(transaction),
                 mosaic,
                 extractBigInteger(transaction.getJsonArray("duration")),
                 HashType.rawValueOf(transaction.getInteger("hashAlgorithm")),
@@ -485,7 +511,7 @@ class SecretProofTransactionMapping extends TransactionMapping {
                 networkType,
                 extractTransactionVersion(transaction.getInteger("version")),
                 deadline,
-                extractBigInteger(transaction.getJsonArray("fee")),
+                extractFee(transaction),
                 HashType.rawValueOf(transaction.getInteger("hashAlgorithm")),
                 transaction.getString("secret"),
                 transaction.getString("proof"),
