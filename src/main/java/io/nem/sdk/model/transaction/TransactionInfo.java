@@ -16,10 +16,10 @@
 
 package io.nem.sdk.model.transaction;
 
-import org.apache.commons.lang3.Validate;
-
 import java.math.BigInteger;
 import java.util.Optional;
+
+import org.apache.commons.lang3.Validate;
 
 /**
  * The transaction information model included in all transactions.
@@ -149,4 +149,13 @@ public class TransactionInfo {
     public Optional<String> getAggregateId() {
         return aggregateId;
     }
+
+   @Override
+   public String toString() {
+      return "TransactionInfo [height=" + height + ", index=" + index + ", id=" + id + ", hash=" + hash
+            + ", merkleComponentHash=" + merkleComponentHash + ", aggregateHash=" + aggregateHash + ", aggregateId="
+            + aggregateId + "]";
+   }
+    
+    
 }

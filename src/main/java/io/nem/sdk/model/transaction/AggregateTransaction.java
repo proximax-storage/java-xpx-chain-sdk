@@ -170,10 +170,4 @@ public class AggregateTransaction extends Transaction {
     public boolean signedByAccount(PublicAccount publicAccount) {
         return this.getSigner().get().equals(publicAccount) || this.getCosignatures().stream().anyMatch(o -> o.getSigner().equals(publicAccount));
     }
-
-   @Override
-   public String toString() {
-      return "AggregateTransaction [innerTransactions=" + innerTransactions + ", cosignatures=" + cosignatures
-            + ", schema=" + schema + "]";
-   }
 }
