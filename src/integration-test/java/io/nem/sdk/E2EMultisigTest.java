@@ -57,7 +57,7 @@ public class E2EMultisigTest extends E2EBaseTest {
    }
 
    private void signup(Address addr) {
-      Consumer<? super Object> logme = (obj) -> logger.trace("listener fired: {}", obj); 
+      Consumer<? super Object> logme = (obj) -> logger.trace("listener fired: {}", obj);
       listener.status(addr).subscribe(logme, logme);
       listener.unconfirmedAdded(addr).subscribe(logme, logme);
       listener.unconfirmedRemoved(addr).subscribe(logme, logme);
@@ -67,7 +67,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       listener.confirmed(addr).subscribe(logme, logme);
       listener.newBlock().subscribe(logme, logme);
    }
-   
+
    @Test
    void test00GetFunds() {
       logger.info("multisig: {}", multisigAccount);
@@ -96,7 +96,8 @@ public class E2EMultisigTest extends E2EBaseTest {
       // announce the transaction
       logger.info("Sent request: {}", transactionHttp.announce(signedChangeToMultisig).toFuture().get());
       // verify that account is multisig
-      logger.info("request o create multisig confirmed: {}", listener.confirmed(multisigAccount.getAddress()).blockingFirst());
+      logger.info("request o create multisig confirmed: {}",
+            listener.confirmed(multisigAccount.getAddress()).blockingFirst());
       testMultisigAccount(true, 1, 1, 2);
    }
 
@@ -146,7 +147,8 @@ public class E2EMultisigTest extends E2EBaseTest {
       // announce the lock transaction
       logger.info("Sent request to lock funds before transfer: {}",
             transactionHttp.announce(lockFundsTransactionSigned).blockingFirst());
-      logger.info("request to transfer aggregate bonded confirmed: {}", listener.confirmed(cosig1.getAddress()).blockingFirst());
+      logger.info("request to transfer aggregate bonded confirmed: {}",
+            listener.confirmed(cosig1.getAddress()).blockingFirst());
       // announce the multisig change as aggregate bounded
       logger.info("Announced the aggregate bonded transfer from multisig: {}",
             transactionHttp.announceAggregateBonded(signedTransaction).blockingFirst());
@@ -168,7 +170,8 @@ public class E2EMultisigTest extends E2EBaseTest {
       SignedTransaction signedChangeTo2of2 = cosig1.sign(aggregateTransaction);
       logger.info("Sent request: {}", transactionHttp.announce(signedChangeTo2of2).toFuture().get());
       // verify that min approvals is set to 2
-      logger.info("request to increase min approval confirmed: {}", listener.confirmed(cosig1.getAddress()).blockingFirst());
+      logger.info("request to increase min approval confirmed: {}",
+            listener.confirmed(cosig1.getAddress()).blockingFirst());
       testMultisigAccount(true, 2, 1, 2);
    }
 
@@ -228,6 +231,41 @@ public class E2EMultisigTest extends E2EBaseTest {
    }
 
    @Test
+   void test02TransferFromMultisig2Of2AggregateBondedSeparateConfirmation() {
+      // prepare transfer to the seed account
+      TransferTransaction transfer = TransferTransaction.create(DEADLINE,
+            seedAccount.getAddress(),
+            Collections.singletonList(XPX.createAbsolute(BigInteger.valueOf(1))),
+            PlainMessage.Empty,
+            NETWORK_TYPE);
+      // add the modification to the aggregate transaction. has to be bonded because we are going to test the lock
+      AggregateTransaction aggregateTransaction = AggregateTransaction.createBonded(DEADLINE,
+            Arrays.asList(transfer.toAggregate(multisigAccount.getPublicAccount())),
+            NETWORK_TYPE);
+      // sign the aggregate bonded transaction
+      SignedTransaction signedTransaction = cosig1.sign(aggregateTransaction);
+      // lock 10 of XPX (required to prevent spamming)
+      LockFundsTransaction lockFundsTransaction = LockFundsTransaction.create(DEADLINE,
+            XPX.createRelative(BigInteger.valueOf(10)),
+            BigInteger.valueOf(480),
+            signedTransaction,
+            NETWORK_TYPE);
+      logger.info("locking account {}", lockFundsTransaction);
+      // sign the fund lock
+      SignedTransaction lockFundsTransactionSigned = cosig1.sign(lockFundsTransaction);
+      // announce the lock transaction
+      logger.info("Sent request to lock funds: {}",
+            transactionHttp.announce(lockFundsTransactionSigned).blockingFirst());
+      logger.info("request confirmed: {}", listener.confirmed(cosig1.getAddress()).blockingFirst());
+      // announce the multisig change as aggregate bounded
+      logger.info("Announced the transfer from multisig: {}",
+            transactionHttp.announceAggregateBonded(signedTransaction).blockingFirst());
+      logger.info("request confirmed: {}", listener.aggregateBondedAdded(cosig1.getAddress()).blockingFirst());
+      // cosign the request
+      cosignMultisigTransaction();
+   }
+
+   @Test
    void test03AddCosignatory() throws InterruptedException, ExecutionException {
       logger.info("Going to add third cosignatory");
       // create multisig modification
@@ -266,6 +304,14 @@ public class E2EMultisigTest extends E2EBaseTest {
    @Test
    void test04CosignNewCosignatory() {
       logger.info("Going to cosign the addition of cosignatory");
+      cosignMultisigTransaction();
+      testMultisigAccount(true, 2, 1, 3);
+   }
+
+   /**
+    * cosign all aggregate bonded transactions pending on the multisig account
+    */
+   private void cosignMultisigTransaction() {
       accountHttp.aggregateBondedTransactions(multisigAccount.getPublicAccount()).flatMapIterable(tx -> tx)
             .filter(tx -> !tx.signedByAccount(cosig2.getPublicAccount())).map(tx -> {
                logger.info("Going to co-sign {}", tx);
@@ -274,8 +320,8 @@ public class E2EMultisigTest extends E2EBaseTest {
                      .signCosignatureTransaction(cosignatureTransaction);
                return transactionHttp.announceAggregateBondedCosignature(cosignatureSignedTransaction).blockingFirst();
             }).blockingFirst();
-      logger.info("request confirmed: {}", listener.confirmed(cosig2.getAddress()).blockingFirst());
-      testMultisigAccount(true, 2, 1, 3);
+      // TODO this is bad, need to wait appropriate number of times depending on number of signatures
+      logger.info("cosingned transactions: {}", listener.confirmed(cosig2.getAddress()).blockingFirst());
    }
 
    /**
