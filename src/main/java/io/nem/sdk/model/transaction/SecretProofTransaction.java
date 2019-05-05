@@ -16,16 +16,17 @@
 
 package io.nem.sdk.model.transaction;
 
+import java.math.BigInteger;
+import java.util.Optional;
+
+import org.apache.commons.lang3.Validate;
+import org.bouncycastle.util.encoders.Hex;
+
 import com.google.flatbuffers.FlatBufferBuilder;
 
 import io.nem.sdk.infrastructure.utils.UInt64Utils;
 import io.nem.sdk.model.account.PublicAccount;
 import io.nem.sdk.model.blockchain.NetworkType;
-import org.apache.commons.lang3.Validate;
-import org.bouncycastle.util.encoders.Hex;
-
-import java.math.BigInteger;
-import java.util.Optional;
 
 public class SecretProofTransaction extends Transaction {
     private final HashType hashType;
@@ -45,7 +46,7 @@ public class SecretProofTransaction extends Transaction {
         super(TransactionType.SECRET_PROOF, networkType, version, deadline, fee, signature, signer, transactionInfo);
         Validate.notNull(secret, "Secret must not be null");
         Validate.notNull(proof, "Proof must not be null");
-        if (!HashType.Validator(hashType, secret)) {
+        if (!hashType.validate(secret)) {
             throw new IllegalArgumentException("HashType and Secret have incompatible length or not hexadecimal string");
         }
         this.hashType = hashType;
@@ -65,7 +66,7 @@ public class SecretProofTransaction extends Transaction {
      * @return a SecretLockTransaction instance
      */
     public static SecretProofTransaction create(Deadline deadline, HashType hashType, String secret, String proof, NetworkType networkType) {
-        return new SecretProofTransaction(networkType, 3, deadline, BigInteger.valueOf(0), hashType, secret, proof);
+        return new SecretProofTransaction(networkType, 1, deadline, BigInteger.valueOf(0), hashType, secret, proof);
     }
 
     /**

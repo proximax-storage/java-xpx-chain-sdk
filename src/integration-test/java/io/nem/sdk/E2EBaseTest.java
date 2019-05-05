@@ -51,7 +51,7 @@ public class E2EBaseTest extends BaseTest {
    protected static final Deadline DEADLINE = new Deadline(5, ChronoUnit.MINUTES);
 
    /** network type for IT tests */
-   protected static final NetworkType NETWORK_TYPE = NetworkType.TEST_NET;
+   protected static final NetworkType NETWORK_TYPE = NetworkType.MIJIN_TEST;
 
    protected BlockchainHttp blockchainHttp;
    protected AccountHttp accountHttp;
@@ -65,8 +65,8 @@ public class E2EBaseTest extends BaseTest {
 
    @BeforeAll
    void setup() throws ExecutionException, InterruptedException, IOException {
-      logger.info("Preparing for tests");
       String nodeUrl = this.getNodeUrl();
+      logger.info("Preparing tests for {} using {}", NETWORK_TYPE, nodeUrl);
       // create HTTP APIs
       transactionHttp = new TransactionHttp(nodeUrl);
       accountHttp = new AccountHttp(nodeUrl);

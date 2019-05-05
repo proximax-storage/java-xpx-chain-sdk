@@ -16,14 +16,15 @@
 
 package io.nem.sdk.model.transaction;
 
-import io.nem.core.crypto.Hashes;
-import org.apache.commons.codec.binary.Hex;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.apache.commons.codec.binary.Hex;
+import org.junit.jupiter.api.Test;
+
+import io.nem.core.crypto.Hashes;
 
 class HashTypeTest {
 
@@ -34,7 +35,7 @@ class HashTypeTest {
         byte[] result = Hashes.sha3_256(secretBytes);
         String secret = Hex.encodeHexString(result);
 
-        assertTrue(HashType.Validator(HashType.SHA3_256, secret));
+        assertTrue(HashType.SHA3_256.validate(secret));
     }
 
     @Test
@@ -44,13 +45,13 @@ class HashTypeTest {
         byte[] result = Hashes.sha3_512(secretBytes);
         String secret = Hex.encodeHexString(result);
 
-        assertFalse(HashType.Validator(HashType.SHA3_256, secret));
+        assertFalse(HashType.SHA3_256.validate(secret));
     }
 
     @Test
     void SHA3_256ShouldReturnFalseIfItIsNotAValidHash() {
         String secret = "zyz6053bb910a6027f138ac5ebe92d43a9a18b7239b3c4d5ea69f1632e50aeef";
-        assertFalse(HashType.Validator(HashType.SHA3_256, secret));
+        assertFalse(HashType.SHA3_256.validate(secret));
 
     }
 
@@ -61,7 +62,7 @@ class HashTypeTest {
         byte[] result = Hashes.keccak256(secretBytes);
         String secret = Hex.encodeHexString(result);
 
-        assertTrue(HashType.Validator(HashType.KECCAK_256, secret));
+        assertTrue(HashType.KECCAK_256.validate(secret));
     }
 
     @Test
@@ -71,13 +72,13 @@ class HashTypeTest {
         byte[] result = Hashes.ripemd160(secretBytes);
         String secret = Hex.encodeHexString(result);
 
-        assertFalse(HashType.Validator(HashType.KECCAK_256, secret));
+        assertFalse(HashType.KECCAK_256.validate(secret));
     }
 
     @Test
     void KECCAK_256ShouldReturnFalseIfItIsNotAValidHash() {
         String secret = "zyz6053bb910a6027f138ac5ebe92d43a9a18b7239b3c4d5ea69f1632e50aeef";
-        assertFalse(HashType.Validator(HashType.KECCAK_256, secret));
+        assertFalse(HashType.KECCAK_256.validate(secret));
     }
 
     @Test
@@ -87,7 +88,7 @@ class HashTypeTest {
         byte[] result = Hashes.hash160(secretBytes);
         String secret = Hex.encodeHexString(result);
 
-        assertTrue(HashType.Validator(HashType.HASH_160, secret));
+        assertTrue(HashType.HASH_160.validate(secret));
     }
 
     @Test
@@ -97,13 +98,13 @@ class HashTypeTest {
         byte[] result = Hashes.sha3_256(secretBytes);
         String secret = Hex.encodeHexString(result);
 
-        assertFalse(HashType.Validator(HashType.HASH_160, secret));
+        assertFalse(HashType.HASH_160.validate(secret));
     }
 
     @Test
     void HASH_160ShouldReturnFalseIfItIsNotAValidHash() {
         String secret = "zyz6053bb910a6027f138ac5ebe92d43a9a18b7239b3c4d5ea69f1632e50aeef";
-        assertFalse(HashType.Validator(HashType.HASH_160, secret));
+        assertFalse(HashType.HASH_160.validate(secret));
     }
 
     @Test
@@ -113,7 +114,7 @@ class HashTypeTest {
         byte[] result = Hashes.hash256(secretBytes);
         String secret = Hex.encodeHexString(result);
 
-        assertTrue(HashType.Validator(HashType.HASH_256, secret));
+        assertTrue(HashType.HASH_256.validate(secret));
     }
 
     @Test
@@ -123,13 +124,13 @@ class HashTypeTest {
         byte[] result = Hashes.ripemd160(secretBytes);
         String secret = Hex.encodeHexString(result);
 
-        assertFalse(HashType.Validator(HashType.HASH_256, secret));
+        assertFalse(HashType.HASH_256.validate(secret));
     }
 
     @Test
     void HASH_256ShouldReturnFalseIfItIsNotAValidHash() {
         String secret = "zyz6053bb910a6027f138ac5ebe92d43a9a18b7239b3c4d5ea69f1632e50aeef";
-        assertFalse(HashType.Validator(HashType.HASH_256, secret));
+        assertFalse(HashType.HASH_256.validate(secret));
     }
 }
 

@@ -15,40 +15,55 @@
  */
 package io.nem.sdk.model.transaction;
 
+import java.util.function.UnaryOperator;
+
+import io.nem.core.crypto.Hashes;
+
 /**
  * Enum containing hash type.
  *
  * @since 1.0
  */
 public enum HashType {
-
     /**
      *  hashed using SHA3-256
      *  (Catapult Native)
      */
-    SHA3_256(0),
+    SHA3_256(0, Hashes::sha3_256, "-?[0-9a-fA-F]+", 64),
     /**
      *  hashed using Keccak-256
      *  (ETH Compat)
      */
-    KECCAK_256(1),
+    KECCAK_256(1, Hashes::keccak256, "-?[0-9a-fA-F]+", 64),
     /**
      * hashed twice: first with SHA-256 and then with RIPEMD-160
      * (BTC Compat)
      */
-    HASH_160(2),
+    HASH_160(2, Hashes::hash160, "-?[0-9a-fA-F]+", 40),
     /**
      * Hashed twice with SHA-256
      * (BTC Compat)
      */
-    HASH_256(3);
+    HASH_256(3, Hashes::hash256,"-?[0-9a-fA-F]+", 64);
 
-    private int value;
-
-    HashType(int value) {
+    private final int value;
+    private final int length;
+    private final UnaryOperator<byte[]> hashFunction;
+    private final String pattern;
+    
+    HashType(int value, UnaryOperator<byte[]> hashFunction, String pattern, int length) {
         this.value = value;
+        this.hashFunction = hashFunction;
+        this.length = length;
+        this.pattern = pattern;
     }
 
+    /**
+     * retrieve hash type by its code
+     * 
+     * @param value code of the hash type
+     * @return hash type or throw IllegalArgumentException
+     */
     public static HashType rawValueOf(int value) {
         switch (value) {
             case 0:
@@ -60,7 +75,7 @@ public enum HashType {
             case 3:
                 return HashType.HASH_256;
             default:
-                throw new IllegalArgumentException(value + " is not a valid value");
+                throw new IllegalArgumentException(value + " is not a valid hash type code");
         }
     }
 
@@ -69,24 +84,40 @@ public enum HashType {
      * @param hashType  Hash type
      * @param input     Input hashed
      * @return boolean when format is correct
+     * 
+     * @deprecated use {@link HashType#validate(String)}
      */
+    @Deprecated
     public static boolean Validator(HashType hashType, String input) {
-        if (hashType == HashType.SHA3_256 && input.matches("-?[0-9a-fA-F]+")) {
-            return input.length() == 64;
-        }
-        else if (hashType == HashType.KECCAK_256 && input.matches("-?[0-9a-fA-F]+")) {
-            return input.length() == 64;
-        }
-        else if (hashType == HashType.HASH_160 && input.matches("-?[0-9a-fA-F]+")) {
-            return input.length() == 40;
-        }
-        else if (hashType == HashType.HASH_256 && input.matches("-?[0-9a-fA-F]+")) {
-            return input.length() == 64;
-        }
-        return false;
+        return hashType.validate(input);
     }
 
+    /**
+     * validate that input is valid result of hashing using this hash type
+     * 
+     * @param input hashed value
+     * @return true or false indicating whether input is ok
+     */
+    public boolean validate(String input) {
+       return input.length() == length && input.matches(pattern);
+    }
+    
+    /**
+     * get the code of the hash type
+     * 
+     * @return the code of hash type recognized by server
+     */
     public int getValue() {
         return value;
+    }
+    
+    /**
+     * hash the provided value using this hash type
+     * 
+     * @param value value to be hashed
+     * @return hashed value
+     */
+    public byte[] hashValue(byte[] value) {
+       return hashFunction.apply(value);
     }
 }

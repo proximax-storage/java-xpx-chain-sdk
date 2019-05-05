@@ -16,6 +16,14 @@
 
 package io.nem.sdk.model.transaction;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.util.Optional;
+
+import org.apache.commons.codec.binary.Base32;
+import org.apache.commons.lang3.Validate;
+import org.bouncycastle.util.encoders.Hex;
+
 import com.google.flatbuffers.FlatBufferBuilder;
 
 import io.nem.sdk.infrastructure.utils.UInt64Utils;
@@ -23,13 +31,6 @@ import io.nem.sdk.model.account.Address;
 import io.nem.sdk.model.account.PublicAccount;
 import io.nem.sdk.model.blockchain.NetworkType;
 import io.nem.sdk.model.mosaic.Mosaic;
-import org.apache.commons.codec.binary.Base32;
-import org.apache.commons.lang3.Validate;
-import org.bouncycastle.util.encoders.Hex;
-
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 
 public class SecretLockTransaction extends Transaction {
     private final Mosaic mosaic;
@@ -53,7 +54,7 @@ public class SecretLockTransaction extends Transaction {
         Validate.notNull(duration, "Duration must not be null");
         Validate.notNull(secret, "Secret must not be null");
         Validate.notNull(recipient, "Recipient must not be null");
-        if (!HashType.Validator(hashType, secret)) {
+        if (!hashType.validate(secret)) {
             throw new IllegalArgumentException("HashType and Secret have incompatible length or not hexadecimal string");
         }
         this.mosaic = mosaic;
@@ -77,7 +78,7 @@ public class SecretLockTransaction extends Transaction {
      * @return a SecretLockTransaction instance
      */
     public static SecretLockTransaction create(Deadline deadline, Mosaic mosaic, BigInteger duration, HashType hashType, String secret, Address recipient, NetworkType networkType) {
-        return new SecretLockTransaction(networkType, 3, deadline, BigInteger.valueOf(0), mosaic, duration, hashType, secret, recipient);
+        return new SecretLockTransaction(networkType, 1, deadline, BigInteger.valueOf(0), mosaic, duration, hashType, secret, recipient);
     }
 
     /**
