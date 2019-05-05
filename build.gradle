@@ -159,16 +159,15 @@ uploadArchives {
             }
 
             pom.project {
-                name "proximax-nem2-java-sdk"
+                name 'java-xpx-catapult-sdk'
                 packaging 'jar'
-                // optionally artifactId can be defined here
-                description 'proximax nem2 sdk'
-                url 'https://github.com/nemtech/nem2-sdk-java'
+                description 'Official ProximaX Blockchain Java SDK'
+                url 'https://proximax.io'
 
                 scm {
-                    connection 'scm:git:git@github.com:proximax-storage/proximax-nem2-java-sdk.git'
-                    developerConnection 'scm:svn:git@github.com:proximax-storage/proximax-nem2-java-sdk.git'
-                    url 'git@github.com:proximax-storage/proximax-nem2-java-sdk.git'
+                    connection 'scm:git:git@github.com/proximax-storage/java-xpx-catapult-sdk.git'
+                    developerConnection 'scm:svn:git@github.com/proximax-storage/java-xpx-catapult-sdk.git'
+                    url 'git@github.com/proximax-storage/java-xpx-catapult-sdk.git'
                 }
             }
         }
