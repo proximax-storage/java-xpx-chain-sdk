@@ -27,7 +27,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 group 'io.proximax'
-version '0.10.0'
+version '0.1.0'
 
 sourceCompatibility = 1.8
 
