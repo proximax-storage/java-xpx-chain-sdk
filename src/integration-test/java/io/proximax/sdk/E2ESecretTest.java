@@ -29,7 +29,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.proximax.core.crypto.Hashes;
 import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
@@ -132,7 +131,7 @@ public class E2ESecretTest extends E2EBaseTest {
       logger.info("Creating aggregate lock and proof for {}", hashType);
       byte[] secretBytes = new byte[20];
       new Random().nextBytes(secretBytes);
-      byte[] result = Hashes.sha3_256(secretBytes);
+      byte[] result = hashType.hashValue(secretBytes);
       String secret = Hex.encodeHexString(result);
       String proof = Hex.encodeHexString(secretBytes);
       // make a secret lock moving mosaic to the target account
