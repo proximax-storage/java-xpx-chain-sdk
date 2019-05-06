@@ -1,5 +1,17 @@
-/**
- * 
+/*
+ * Copyright 2019 ProximaX
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package io.nem.sdk;
 
@@ -32,8 +44,9 @@ import io.nem.sdk.model.transaction.SignedTransaction;
 import io.nem.sdk.model.transaction.TransferTransaction;
 
 /**
+ * E2E tests that demonstrate transfers
+ * 
  * @author tonowie
- *
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class E2ETransferTest extends E2EBaseTest {
@@ -92,10 +105,10 @@ public class E2ETransferTest extends E2EBaseTest {
     * @param message message for the transfer
     * @return instance of signed transaction which can be then announced to the network
     */
-   private static SignedTransaction signTransfer(Account signerAccount, Address target, Mosaic amount,
+   private SignedTransaction signTransfer(Account signerAccount, Address target, Mosaic amount,
          Message message) {
       TransferTransaction transaction = TransferTransaction
-            .create(DEADLINE, target, Collections.singletonList(amount), message, NETWORK_TYPE);
+            .create(getDeadline(), target, Collections.singletonList(amount), message, NETWORK_TYPE);
       return signerAccount.sign(transaction);
    }
 
@@ -108,10 +121,10 @@ public class E2ETransferTest extends E2EBaseTest {
     * @param message message for the transfer
     * @return instance of signed transaction which can be then announced to the network
     */
-   private static SignedTransaction signAggregateTransfer(Account signerAccount, Address target, Mosaic amount,
+   private SignedTransaction signAggregateTransfer(Account signerAccount, Address target, Mosaic amount,
          Message message) {
       TransferTransaction transfer = TransferTransaction
-            .create(DEADLINE, target, Collections.singletonList(amount), message, NETWORK_TYPE);
+            .create(getDeadline(), target, Collections.singletonList(amount), message, NETWORK_TYPE);
       // add the modification to the aggregate transaction. has to be bonded because we are going to test the lock
       AggregateTransaction aggregateTransaction = AggregateTransaction.createComplete(Deadline.create(2, HOURS),
             Arrays.asList(transfer.toAggregate(signerAccount.getPublicAccount())),

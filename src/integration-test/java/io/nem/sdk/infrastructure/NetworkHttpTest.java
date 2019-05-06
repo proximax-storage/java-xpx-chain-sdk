@@ -41,6 +41,6 @@ class NetworkHttpTest extends BaseTest {
     void getNetworkType() throws ExecutionException, InterruptedException {
         NetworkType networkType = networkHttp.getNetworkType().toFuture().get();
 
-        assertEquals(NetworkType.TEST_NET.getValue(), networkType.getValue());
+        assertEquals(NETWORK_TYPE.getValue(), networkType.getValue());
     }
 }

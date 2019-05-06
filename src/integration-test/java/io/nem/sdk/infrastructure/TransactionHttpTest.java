@@ -17,15 +17,7 @@
 package io.nem.sdk.infrastructure;
 
 
-import io.nem.sdk.BaseTest;
-import io.nem.sdk.model.transaction.Transaction;
-import io.nem.sdk.model.transaction.TransactionStatus;
-import io.nem.sdk.model.transaction.TransactionType;
-import io.reactivex.observers.TestObserver;
-import io.reactivex.schedulers.Schedulers;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.jupiter.api.TestInstance;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -33,9 +25,20 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.TestInstance;
+
+import io.nem.sdk.BaseTest;
+import io.nem.sdk.model.transaction.Transaction;
+import io.nem.sdk.model.transaction.TransactionStatus;
+import io.nem.sdk.model.transaction.TransactionType;
+import io.reactivex.observers.TestObserver;
+import io.reactivex.schedulers.Schedulers;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Disabled("partially replaced by other tests")
 public class TransactionHttpTest extends BaseTest {
     private TransactionHttp transactionHttp;
     private static final String TRANSACTION_HASH = "CFF075FD2A496D474775ACCDE4877901023ECE8466590A7B48C5D3E8F098F106";

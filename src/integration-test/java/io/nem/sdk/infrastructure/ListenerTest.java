@@ -51,6 +51,7 @@ import io.nem.sdk.model.transaction.TransactionStatusError;
 import io.nem.sdk.model.transaction.TransferTransaction;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Disabled("listeners are used by other tests")
 class ListenerTest extends BaseTest {
     private TransactionHttp transactionHttp;
     private AccountHttp accountHttp;

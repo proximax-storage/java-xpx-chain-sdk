@@ -1,5 +1,17 @@
-/**
- * 
+/*
+ * Copyright 2019 ProximaX
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package io.nem.sdk;
 
@@ -8,7 +20,9 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.time.temporal.ChronoUnit;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -28,7 +42,6 @@ import io.nem.sdk.model.account.Account;
 import io.nem.sdk.model.account.AccountInfo;
 import io.nem.sdk.model.account.Address;
 import io.nem.sdk.model.blockchain.BlockInfo;
-import io.nem.sdk.model.blockchain.NetworkType;
 import io.nem.sdk.model.mosaic.Mosaic;
 import io.nem.sdk.model.mosaic.MosaicId;
 import io.nem.sdk.model.mosaic.MosaicInfo;
@@ -37,21 +50,17 @@ import io.nem.sdk.model.transaction.Deadline;
 import io.nem.sdk.model.transaction.PlainMessage;
 import io.nem.sdk.model.transaction.SignedTransaction;
 import io.nem.sdk.model.transaction.TransferTransaction;
+import io.reactivex.disposables.Disposable;
 
 /**
+ * Base class for new set of tests that proof and demo the functionality
+ * 
  * @author tonowie
- *
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class E2EBaseTest extends BaseTest {
    /** logger */
    private static final Logger logger = LoggerFactory.getLogger(E2EBaseTest.class);
-
-   /** default deadline for transactions */
-   protected static final Deadline DEADLINE = new Deadline(5, ChronoUnit.MINUTES);
-
-   /** network type for IT tests */
-   protected static final NetworkType NETWORK_TYPE = NetworkType.MIJIN_TEST;
 
    protected BlockchainHttp blockchainHttp;
    protected AccountHttp accountHttp;
@@ -63,6 +72,8 @@ public class E2EBaseTest extends BaseTest {
    protected Account seedAccount;
    protected MosaicInfo mosaic;
 
+   protected Collection<Disposable> disposables = new LinkedList<>();
+   
    @BeforeAll
    void setup() throws ExecutionException, InterruptedException, IOException {
       String nodeUrl = this.getNodeUrl();
@@ -80,14 +91,16 @@ public class E2EBaseTest extends BaseTest {
       // get the mosaic that will be used here
       mosaic = getMosaic();
       // add listener to see account
-      listener.status(seedAccount.getAddress()).subscribe(err -> logger.error("Operation failed: {}", err),
-            t -> logger.error("exception thrown", t));
+      disposables.add(listener.status(seedAccount.getAddress())
+            .subscribe(err -> logger.error("Operation failed: {}", err), t -> logger.error("exception thrown", t)));
    }
 
    @AfterAll
    void cleanup() {
       logger.info("Cleaning up");
       listener.close();
+      disposables.stream().forEach(Disposable::dispose);
+      disposables.clear();
    }
 
    /**
@@ -123,6 +136,15 @@ public class E2EBaseTest extends BaseTest {
    }
 
    /**
+    * create deadline of 5 minutes
+    * 
+    * @return deadline
+    */
+   protected Deadline getDeadline() {
+      return new Deadline(5, ChronoUnit.MINUTES);
+   }
+   
+   /**
     * send XPX from account to recipient
     * 
     * @param recipient address who gets the funds
@@ -132,7 +154,7 @@ public class E2EBaseTest extends BaseTest {
       BigInteger bigAmount = BigInteger.valueOf(amount);
       Mosaic mosaicToTransfer = XPX.createRelative(bigAmount);
       TransferTransaction transfer = TransferTransaction
-            .create(DEADLINE, recipient, Collections.singletonList(mosaicToTransfer), PlainMessage.Empty, NETWORK_TYPE);
+            .create(getDeadline(), recipient, Collections.singletonList(mosaicToTransfer), PlainMessage.Empty, NETWORK_TYPE);
       SignedTransaction signedTransfer = sender.sign(transfer);
       logger.info("Sent XPX to {}: {}", recipient.pretty(), transactionHttp.announce(signedTransfer).blockingFirst());
       logger.info("request confirmed: {}", listener.confirmed(sender.getAddress()).blockingFirst());

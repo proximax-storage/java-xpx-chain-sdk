@@ -26,8 +26,18 @@ import io.nem.sdk.model.account.Account;
 import io.nem.sdk.model.blockchain.NetworkType;
 import io.nem.sdk.model.namespace.NamespaceId;
 
+/**
+ * base class for all integration tests
+ *
+ * @author tonowie
+ */
 public abstract class BaseTest {
-   protected static final NamespaceId PROXIMA_NAMESPACE = new NamespaceId("prx");
+   protected static final String NAMESPACE_PRX_NAME = "cat";
+   protected static final NamespaceId PROXIMA_NAMESPACE = new NamespaceId(NAMESPACE_PRX_NAME);
+
+   /** network type for IT tests */
+   protected static final NetworkType NETWORK_TYPE = NetworkType.MIJIN_TEST;
+
 
    private static final String SYS_ENV_PRIVATE_KEY = "SEED_ACCOUNT_PRIVATE_KEY";
 
@@ -51,7 +61,7 @@ public abstract class BaseTest {
     * @return
     */
    protected Account getSeedAccount(NetworkType networkType) {
-      String accountPk = System.getenv(SYS_ENV_PRIVATE_KEY);
+      String accountPk =  System.getenv(SYS_ENV_PRIVATE_KEY);
       if (accountPk == null) {
          fail("Seed account private key needs to be defined as env variable " + SYS_ENV_PRIVATE_KEY);
       } else {

@@ -27,6 +27,7 @@ import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.codec.binary.Hex;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
@@ -43,6 +44,7 @@ import io.nem.sdk.model.namespace.NamespaceId;
 import io.nem.sdk.model.transaction.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Disabled("replaced by other tests")
 class E2ETest extends BaseTest {
     private TransactionHttp transactionHttp;
     private Account account;

@@ -32,7 +32,6 @@ import org.junit.jupiter.api.TestInstance;
 import io.nem.sdk.BaseTest;
 import io.nem.sdk.model.account.Account;
 import io.nem.sdk.model.account.Address;
-import io.nem.sdk.model.blockchain.NetworkType;
 import io.nem.sdk.model.namespace.NamespaceId;
 import io.nem.sdk.model.namespace.NamespaceInfo;
 import io.nem.sdk.model.namespace.NamespaceName;
@@ -41,10 +40,6 @@ import io.reactivex.schedulers.Schedulers;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class NamespaceHttpTest extends BaseTest {
-   /** network type for IT tests */
-   protected static final NetworkType NETWORK_TYPE = NetworkType.TEST_NET;
-   private static final String NAMESPACE_PRX_NAME = "prx";
-   
    private NamespaceHttp namespaceHttp;
    private Account seedAccount;
    private Address king = Address
