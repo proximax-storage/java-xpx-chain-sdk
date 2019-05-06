@@ -22,6 +22,7 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -58,22 +59,22 @@ public class E2ETransferTest extends E2EBaseTest {
    @BeforeAll
    void addListener() {
       logger.info("Sending transactions to {}", simpleAccount);
-      listener.status(simpleAccount.getAddress()).doOnNext(err -> logger.info("Error on recipient: {}", err))
-            .doOnError(exception -> logger.error("Failure on recipient: {}", exception))
-            .doOnComplete(() -> logger.info("done with recipient {}", simpleAccount));
+      disposables.add(listener.status(simpleAccount.getAddress())
+            .subscribe(err -> logger.error("Operation failed: {}", err), t -> logger.error("exception thrown", t)));
    }
 
    @AfterAll
-   void verifyResults() throws InterruptedException, ExecutionException {
+   void closeDown() {
       // return the XPX
       SignedTransaction signedTransaction = signTransfer(simpleAccount,
             seedAccount.getAddress(),
             XPX.createAbsolute(BigInteger.valueOf(4)),
             new PlainMessage("money back guarantee"));
       logger.info("Returning funds. {}", transactionHttp.announce(signedTransaction).blockingFirst());
-      logger.info("Returned funds. {}", listener.confirmed(simpleAccount.getAddress()).blockingFirst());
+      logger.info("Returned funds. {}",
+            listener.confirmed(simpleAccount.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
       // check that target account has expected number of incoming transactions
-      int transactions = accountHttp.incomingTransactions(simpleAccount.getPublicAccount()).toFuture().get().size();
+      int transactions = accountHttp.incomingTransactions(simpleAccount.getPublicAccount()).blockingFirst().size();
       // TODO why 2? we did 4 transfers but 2 were aggregate?
       assertEquals(2, transactions);
    }
@@ -105,8 +106,7 @@ public class E2ETransferTest extends E2EBaseTest {
     * @param message message for the transfer
     * @return instance of signed transaction which can be then announced to the network
     */
-   private SignedTransaction signTransfer(Account signerAccount, Address target, Mosaic amount,
-         Message message) {
+   private SignedTransaction signTransfer(Account signerAccount, Address target, Mosaic amount, Message message) {
       TransferTransaction transaction = TransferTransaction
             .create(getDeadline(), target, Collections.singletonList(amount), message, NETWORK_TYPE);
       return signerAccount.sign(transaction);
@@ -146,10 +146,12 @@ public class E2ETransferTest extends E2EBaseTest {
    private void transfer(Account from, Address to, Mosaic mosaic, Message message) {
       SignedTransaction signedTransaction = signTransfer(from, to, mosaic, message);
       logger.info("Transfer announced. {}", transactionHttp.announce(signedTransaction).blockingFirst());
-      logger.info("Transfer done. {}", listener.confirmed(from.getAddress()).blockingFirst());
+      logger.info("Transfer done. {}",
+            listener.confirmed(from.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
       SignedTransaction signedAggregateTransaction = signAggregateTransfer(from, to, mosaic, message);
       logger.info("Transfer announced. {}", transactionHttp.announce(signedAggregateTransaction).blockingFirst());
-      logger.info("Transfer done. {}", listener.confirmed(from.getAddress()).blockingFirst());
+      logger.info("Transfer done. {}",
+            listener.confirmed(from.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
 
    }
 

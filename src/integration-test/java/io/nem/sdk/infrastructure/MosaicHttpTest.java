@@ -26,6 +26,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
@@ -67,6 +68,7 @@ class MosaicHttpTest extends BaseTest {
     }
 
     @Test
+    @Disabled("this service is not available anymore")
     void getMosaicsFromNamespace() throws ExecutionException, InterruptedException {
         List<MosaicInfo> mosaicsInfo = mosaicHttp
                 .getMosaicsFromNamespace(PROXIMA_NAMESPACE)
@@ -77,6 +79,7 @@ class MosaicHttpTest extends BaseTest {
     }
 
     @Test
+    @Disabled("not implemented yet")
     void getMosaicNames() throws ExecutionException, InterruptedException {
         List<MosaicName> mosaicNames = mosaicHttp
                 .getMosaicNames(Collections.singletonList(XPX.MOSAICID))
