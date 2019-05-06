@@ -33,6 +33,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.namespace.NamespaceInfo;
 import io.proximax.sdk.model.namespace.NamespaceName;
@@ -124,6 +125,26 @@ public class E2ENamespaceTest extends E2EBaseTest {
       checkNamespace(CHILD1_NAME, Optional.of(aggRootName), 100);
    }
 
+   @Test
+   void test04RetrieveFromAccount() {
+      NamespaceId nsId = new NamespaceId(ROOT_NAME);
+      // check that the seed account has the namespace as expected
+      long nsCount = namespaceHttp.getNamespacesFromAccount(seedAccount.getAddress()).flatMapIterable(list -> list)
+            .filter(info -> nsId.getId().equals(info.getId().getId()))
+            .count().blockingGet();
+      assertEquals(1, nsCount);
+   }
+   
+   @Test
+   void test05RetrieveFromAccounts() {
+      NamespaceId nsId = new NamespaceId(ROOT_NAME);
+      // check that the seed account has the namespace as expected
+      long nsCount = namespaceHttp.getNamespacesFromAccounts(Arrays.asList(seedAccount.getAddress(), Account.generateNewAccount(NETWORK_TYPE).getAddress())).flatMapIterable(list -> list)
+            .filter(info -> nsId.getId().equals(info.getId().getId()))
+            .count().blockingGet();
+      assertEquals(1, nsCount);
+   }
+   
    /**
     * service method that checks for existence of a namespace
     * 
