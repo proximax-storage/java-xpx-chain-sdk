@@ -20,6 +20,7 @@ import java.math.BigInteger;
 import java.util.Objects;
 import java.util.Optional;
 
+import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.transaction.IdGenerator;
 
 /**
@@ -81,4 +82,9 @@ public class NamespaceId {
         NamespaceId namespaceId1 = (NamespaceId) o;
         return Objects.equals(id, namespaceId1.id);
     }
+
+   @Override
+   public String toString() {
+      return "NamespaceId [id=" + id + ", fullName=" + fullName + ", hexaId=" + UInt64Utils.bigIntegerToHex(id) + "]";
+   }
 }

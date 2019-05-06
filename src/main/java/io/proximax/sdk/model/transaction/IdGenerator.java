@@ -56,16 +56,16 @@ public class IdGenerator {
       List<BigInteger> path = new ArrayList<>();
 
       if (parts.length == 0) {
-         throw new IllegalIdentifierException("invalid namespace name");
+         throw new IllegalIdentifierException("invalid namespace name: " + name);
       } else if (parts.length > 3) {
-         throw new IllegalIdentifierException("too many parts");
+         throw new IllegalIdentifierException("too many parts (max 3): " + parts.length);
       }
 
       BigInteger namespaceId = BigInteger.valueOf(0);
 
       for (int i = 0; i < parts.length; i++) {
          if (!parts[i].matches("^[a-z0-9][a-z0-9-_]*$")) {
-            throw new IllegalIdentifierException("invalid namespace name");
+            throw new IllegalIdentifierException("invalid namespace name: " + name);
          }
          namespaceId = generateId(parts[i], namespaceId);
          path.add(namespaceId);

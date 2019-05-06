@@ -37,6 +37,7 @@ import io.proximax.sdk.infrastructure.AccountHttp;
 import io.proximax.sdk.infrastructure.BlockchainHttp;
 import io.proximax.sdk.infrastructure.Listener;
 import io.proximax.sdk.infrastructure.MosaicHttp;
+import io.proximax.sdk.infrastructure.NamespaceHttp;
 import io.proximax.sdk.infrastructure.TransactionHttp;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.AccountInfo;
@@ -66,7 +67,8 @@ public class E2EBaseTest extends BaseTest {
    protected AccountHttp accountHttp;
    protected TransactionHttp transactionHttp;
    protected MosaicHttp mosaicHttp;
-
+   protected NamespaceHttp namespaceHttp;
+   
    protected Listener listener;
 
    protected Account seedAccount;
@@ -83,6 +85,7 @@ public class E2EBaseTest extends BaseTest {
       accountHttp = new AccountHttp(nodeUrl);
       blockchainHttp = new BlockchainHttp(nodeUrl);
       mosaicHttp = new MosaicHttp(nodeUrl);
+      namespaceHttp = new NamespaceHttp(nodeUrl);
       // prepare listener
       listener = new Listener(nodeUrl);
       listener.open().get();
