@@ -26,8 +26,10 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +46,7 @@ import io.proximax.sdk.model.transaction.SignedTransaction;
  * @author tonowie
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestMethodOrder(MethodOrderer.Alphanumeric.class)
 public class E2ENamespaceTest extends E2EBaseTest {
    private static final String ROOT_NAME = "test-root-namespace-"
          + new Double(Math.floor(Math.random() * 10000)).intValue();
@@ -120,7 +123,7 @@ public class E2ENamespaceTest extends E2EBaseTest {
       checkNamespace(aggRootName, Optional.empty(), 100);
       checkNamespace(CHILD1_NAME, Optional.of(aggRootName), 100);
    }
-   
+
    /**
     * service method that checks for existence of a namespace
     * 
@@ -137,18 +140,17 @@ public class E2ENamespaceTest extends E2EBaseTest {
       }
       logger.info("Checking namespace {}", nsId);
       // retrieve the namespace and check it is OK
-      NamespaceInfo namespace = namespaceHttp.getNamespace(nsId).timeout(30, TimeUnit.SECONDS)
-            .blockingFirst();
+      NamespaceInfo namespace = namespaceHttp.getNamespace(nsId).timeout(30, TimeUnit.SECONDS).blockingFirst();
       // check for namespace properties
       assertEquals(BigInteger.valueOf(duration), namespace.getEndHeight().subtract(namespace.getStartHeight()));
       assertEquals(nsId.getId(), namespace.getId().getId());
       // try to check name
-      NamespaceName nsName = namespaceHttp.getNamespaceNames(Arrays.asList(nsId))
-            .flatMapIterable(list -> list).timeout(30, TimeUnit.SECONDS).blockingFirst();
+      NamespaceName nsName = namespaceHttp.getNamespaceNames(Arrays.asList(nsId)).flatMapIterable(list -> list)
+            .timeout(30, TimeUnit.SECONDS).blockingFirst();
       assertEquals(name, nsName.getName());
       assertEquals(nsId.getId(), nsName.getNamespaceId().getId());
       if (!parentName.isPresent()) {
-           // we expect to be root
+         // we expect to be root
          assertFalse(nsName.getParentId().isPresent());
       } else {
          NamespaceId parentId = new NamespaceId(parentName.get());
