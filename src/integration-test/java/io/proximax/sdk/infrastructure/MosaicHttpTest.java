@@ -49,34 +49,34 @@ class MosaicHttpTest extends BaseTest {
     @Test
     void getMosaic() throws ExecutionException, InterruptedException {
         MosaicInfo mosaicInfo = mosaicHttp
-                .getMosaic(NetworkCurrencyMosaic.NAMESPACEID)
+                .getMosaic(NetworkCurrencyMosaic.ID)
                 .toFuture()
                 .get();
 
         assertEquals(new BigInteger("1"), mosaicInfo.getHeight());
-        assertEquals(NetworkCurrencyMosaic.NAMESPACEID, mosaicInfo.getMosaicId());
+        assertEquals(NetworkCurrencyMosaic.ID, mosaicInfo.getMosaicId());
     }
 
     @Test
     void getMosaics() throws ExecutionException, InterruptedException {
         List<MosaicInfo> mosaicsInfo = mosaicHttp
-                .getMosaics(Collections.singletonList(NetworkCurrencyMosaic.NAMESPACEID))
+                .getMosaics(Collections.singletonList(NetworkCurrencyMosaic.ID))
                 .toFuture()
                 .get();
 
-        assertEquals(NetworkCurrencyMosaic.NAMESPACEID, mosaicsInfo.get(0).getMosaicId());
+        assertEquals(NetworkCurrencyMosaic.ID, mosaicsInfo.get(0).getMosaicId());
     }
 
     @Test
     @Disabled("not implemented yet")
     void getMosaicNames() throws ExecutionException, InterruptedException {
         List<MosaicName> mosaicNames = mosaicHttp
-                .getMosaicNames(Collections.singletonList(NetworkCurrencyMosaic.NAMESPACEID))
+                .getMosaicNames(Collections.singletonList(NetworkCurrencyMosaic.ID))
                 .toFuture()
                 .get();
 
         assertEquals("xpx", mosaicNames.get(0).getName());
-        assertEquals(NetworkCurrencyMosaic.NAMESPACEID, mosaicNames.get(0).getMosaicId());
+        assertEquals(NetworkCurrencyMosaic.ID, mosaicNames.get(0).getMosaicId());
     }
 
     @Test

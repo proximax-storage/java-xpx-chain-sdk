@@ -80,7 +80,7 @@ public class AggregateTransactionTest {
                 new FakeDeadline(),
                 new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST),
                 Collections.singletonList(
-                        new Mosaic(NetworkCurrencyMosaic.NAMESPACEID, BigInteger.valueOf(10000000))
+                        new Mosaic(NetworkCurrencyMosaic.ID, BigInteger.valueOf(10000000))
                 ),
                 PlainMessage.Empty,
                 NetworkType.MIJIN_TEST

@@ -30,9 +30,9 @@ import io.proximax.sdk.model.namespace.NamespaceId;
 public class NetworkHarvestMosaic extends Mosaic {
 
    /**
-    * Namespace id of `currency` namespace.
+    * ID of `harvest` namespace.
     */
-   public static final NamespaceId NAMESPACEID = new NamespaceId("cat.harvest");
+   public static final NamespaceId ID = new NamespaceId("cat.harvest");
    /**
     * Divisibility
     */
@@ -60,7 +60,7 @@ public class NetworkHarvestMosaic extends Mosaic {
     */
    public NetworkHarvestMosaic(BigInteger amount) {
 
-      super(NetworkHarvestMosaic.NAMESPACEID, amount);
+      super(NetworkHarvestMosaic.ID, amount);
    }
 
    /**
