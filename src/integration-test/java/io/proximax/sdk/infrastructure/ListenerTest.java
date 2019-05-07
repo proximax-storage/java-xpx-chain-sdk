@@ -42,7 +42,7 @@ import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.blockchain.BlockInfo;
 import io.proximax.sdk.model.blockchain.NetworkType;
-import io.proximax.sdk.model.mosaic.XPX;
+import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.CosignatureSignedTransaction;
 import io.proximax.sdk.model.transaction.CosignatureTransaction;
@@ -217,7 +217,7 @@ class ListenerTest extends BaseTest {
         TransferTransaction transferTransaction = TransferTransaction.create(
                 new Deadline(2, HOURS),
                 new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST),
-                Arrays.asList(XPX.createRelative(new BigInteger("100000000000"))),
+                Arrays.asList(NetworkCurrencyMosaic.createRelative(new BigInteger("100000000000"))),
                 PlainMessage.create("test-message"),
                 NetworkType.MIJIN_TEST
         );

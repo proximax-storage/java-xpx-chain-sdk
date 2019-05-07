@@ -33,7 +33,7 @@ import io.proximax.core.crypto.Hashes;
 import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
-import io.proximax.sdk.model.mosaic.XPX;
+import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.HashType;
 import io.proximax.sdk.model.transaction.SecretLockTransaction;
@@ -89,7 +89,7 @@ public class E2ESecretTest extends E2EBaseTest {
       String proof = Hex.encodeHexString(secretBytes);
       // make a secret lock moving mosaic to the target account
       SecretLockTransaction secretLocktx = SecretLockTransaction.create(getDeadline(),
-            XPX.createRelative(BigInteger.valueOf(1)),
+            NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(1)),
             BigInteger.valueOf(10),
             hashType,
             secret,
@@ -137,7 +137,7 @@ public class E2ESecretTest extends E2EBaseTest {
       String proof = Hex.encodeHexString(secretBytes);
       // make a secret lock moving mosaic to the target account
       SecretLockTransaction secretLocktx = SecretLockTransaction.create(getDeadline(),
-            XPX.createRelative(BigInteger.valueOf(1)),
+            NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(1)),
             BigInteger.valueOf(10),
             hashType,
             secret,

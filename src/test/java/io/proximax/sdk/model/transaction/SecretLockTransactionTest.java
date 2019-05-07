@@ -31,7 +31,7 @@ import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
-import io.proximax.sdk.model.mosaic.XPX;
+import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.transaction.HashType;
 import io.proximax.sdk.model.transaction.SecretLockTransaction;
 import io.proximax.sdk.model.transaction.SignedTransaction;
@@ -62,7 +62,7 @@ public class SecretLockTransactionTest {
         String secret = "3fc8ba10229ab5778d05d9c4b7f56676a88bf9295c185acfc0f961db5408cafe";
         SecretLockTransaction secretLocktx = SecretLockTransaction.create(
                 new FakeDeadline(),
-                XPX.createRelative(BigInteger.valueOf(10)),
+                NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
                 HashType.SHA3_256,
                 secret,
@@ -90,7 +90,7 @@ public class SecretLockTransactionTest {
         String secret = "3fc8ba10229ab5778d05d9c4b7f56676a88bf9295c185acfc0f961db5408cafe";
         SecretLockTransaction secretLocktx = SecretLockTransaction.create(
                 new FakeDeadline(),
-                XPX.createRelative(BigInteger.valueOf(10)),
+                NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
                 HashType.SHA3_256,
                 secret,
@@ -106,7 +106,7 @@ public class SecretLockTransactionTest {
         String secret = "3fc8ba10229ab5778d05d9c4b7f56676a88bf9295c185acfc0f961db5408cafe";
         SecretLockTransaction secretLocktx = SecretLockTransaction.create(
                 new FakeDeadline(),
-                XPX.createRelative(BigInteger.valueOf(10)),
+                NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
                 HashType.SHA3_256,
                 secret,
@@ -123,7 +123,7 @@ public class SecretLockTransactionTest {
         assertThrows(IllegalArgumentException.class, ()-> {
             SecretLockTransaction secretLocktx = SecretLockTransaction.create(
                     new FakeDeadline(),
-                    XPX.createRelative(BigInteger.valueOf(10)),
+                    NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
                     BigInteger.valueOf(100),
                     HashType.SHA3_256,
                     "non valid hash",

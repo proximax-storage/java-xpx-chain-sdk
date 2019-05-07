@@ -22,28 +22,26 @@ import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
 
-import io.proximax.sdk.model.mosaic.XPX;
-
 class XPXTest {
 
     @Test
     void shouldCreateXEMViaConstructor() {
-        XPX xem = new XPX(BigInteger.valueOf(0));
+        NetworkCurrencyMosaic xem = new NetworkCurrencyMosaic(BigInteger.valueOf(0));
         assertEquals(BigInteger.valueOf(0), xem.getAmount());
-        assertEquals(XPX.MOSAICID, xem.getId());
+        assertEquals(NetworkCurrencyMosaic.NAMESPACEID, xem.getId());
     }
 
     @Test
     void shouldCreateRelativeXEM() {
-    	XPX xem = XPX.createRelative(BigInteger.valueOf(1));
+    	NetworkCurrencyMosaic xem = NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(1));
         assertEquals(BigInteger.valueOf(1000000), xem.getAmount());
-        assertEquals(XPX.MOSAICID, xem.getId());
+        assertEquals(NetworkCurrencyMosaic.NAMESPACEID, xem.getId());
     }
 
     @Test
     void shouldCreateAbsoluteXEM() {
-    	XPX xem = XPX.createAbsolute(BigInteger.valueOf(1));
+    	NetworkCurrencyMosaic xem = NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1));
         assertEquals(BigInteger.valueOf(1), xem.getAmount());
-        assertEquals(XPX.MOSAICID, xem.getId());
+        assertEquals(NetworkCurrencyMosaic.NAMESPACEID, xem.getId());
     }
 }

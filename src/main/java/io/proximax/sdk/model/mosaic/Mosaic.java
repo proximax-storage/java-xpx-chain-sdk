@@ -18,44 +18,52 @@ package io.proximax.sdk.model.mosaic;
 
 import java.math.BigInteger;
 
+import io.proximax.sdk.model.transaction.UInt64Id;
+
 /**
- * A mosaic describes an instance of a mosaic definition.
- * Mosaics can be transferred by means of a transfer transaction.
+ * A mosaic describes an instance of a mosaic definition. Mosaics can be transferred by means of a transfer transaction.
  *
  * @since 1.0
  */
 public class Mosaic {
-    private final MosaicId id;
-    private final BigInteger amount;
+   private final UInt64Id id;
+   private final BigInteger amount;
 
-    public Mosaic(MosaicId id, BigInteger amount) {
-        this.id = id;
-        this.amount = amount;
-    }
+   public Mosaic(UInt64Id id, BigInteger amount) {
+      this.id = id;
+      this.amount = amount;
+   }
 
+   /**
+    * Returns the mosaic identifier
+    *
+    * @return mosaic identifier
+    */
+   public UInt64Id getId() {
+      return id;
+   }
 
-    /**
-     * Returns the mosaic identifier
-     *
-     * @return mosaic identifier
-     */
-    public MosaicId getId() {
-        return id;
-    }
+   /**
+    * Return mosaic amount. The quantity is always given in smallest units for the mosaic i.e. if it has a divisibility
+    * of 3 the quantity is given in millis.
+    *
+    * @return amount of mosaic
+    */
+   public BigInteger getAmount() {
+      return amount;
+   }
 
-    /**
-     * Return mosaic amount. The quantity is always given in smallest units for the mosaic
-     * i.e. if it has a divisibility of 3 the quantity is given in millis.
-     *
-     * @return amount of mosaic
-     */
-    public BigInteger getAmount() {
-        return amount;
-    }
+   /**
+    * Returns mosaic id as a hexadecimal string
+    *
+    * @return id hex string
+    */
+   public String getIdAsHex() {
+      return id.getIdAsHex();
+   }
 
-
-	@Override
-	public String toString() {
-		return "Mosaic [id=" + id + ", amount=" + amount + "]";
-	}
+   @Override
+   public String toString() {
+      return "Mosaic [id=" + id + ", amount=" + amount + "]";
+   }
 }

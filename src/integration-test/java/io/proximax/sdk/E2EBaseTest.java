@@ -44,13 +44,13 @@ import io.proximax.sdk.model.account.AccountInfo;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.blockchain.BlockInfo;
 import io.proximax.sdk.model.mosaic.Mosaic;
-import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicInfo;
-import io.proximax.sdk.model.mosaic.XPX;
+import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.transaction.Deadline;
 import io.proximax.sdk.model.transaction.PlainMessage;
 import io.proximax.sdk.model.transaction.SignedTransaction;
 import io.proximax.sdk.model.transaction.TransferTransaction;
+import io.proximax.sdk.model.transaction.UInt64Id;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -116,7 +116,7 @@ public class E2EBaseTest extends BaseTest {
    private MosaicInfo getMosaic() throws InterruptedException, ExecutionException {
       // check that account actually has some funds
       AccountInfo seedAccountInfo = accountHttp.getAccountInfo(seedAccount.getAddress()).toFuture().get();
-      List<MosaicId> seedMosaicIDs = seedAccountInfo.getMosaics().stream().map(Mosaic::getId)
+      List<UInt64Id> seedMosaicIDs = seedAccountInfo.getMosaics().stream().map(Mosaic::getId)
             .collect(Collectors.toList());
       List<MosaicInfo> mosaics = mosaicHttp.getMosaics(seedMosaicIDs).toFuture().get();
       logger.info("Seed account has following mosaics: {}", mosaics);
@@ -155,7 +155,7 @@ public class E2EBaseTest extends BaseTest {
     */
    protected void sendSomeCash(Account sender, Address recipient, long amount) {
       BigInteger bigAmount = BigInteger.valueOf(amount);
-      Mosaic mosaicToTransfer = XPX.createRelative(bigAmount);
+      Mosaic mosaicToTransfer = NetworkCurrencyMosaic.createRelative(bigAmount);
       TransferTransaction transfer = TransferTransaction
             .create(getDeadline(), recipient, Collections.singletonList(mosaicToTransfer), PlainMessage.Empty, NETWORK_TYPE);
       SignedTransaction signedTransfer = sender.sign(transfer);

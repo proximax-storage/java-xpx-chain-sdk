@@ -36,12 +36,7 @@ import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.Mosaic;
-import io.proximax.sdk.model.mosaic.XPX;
-import io.proximax.sdk.model.transaction.AggregateTransaction;
-import io.proximax.sdk.model.transaction.Deadline;
-import io.proximax.sdk.model.transaction.PlainMessage;
-import io.proximax.sdk.model.transaction.SignedTransaction;
-import io.proximax.sdk.model.transaction.TransferTransaction;
+import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.vertx.core.json.JsonObject;
 
 public class AggregateTransactionTest {
@@ -85,7 +80,7 @@ public class AggregateTransactionTest {
                 new FakeDeadline(),
                 new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST),
                 Collections.singletonList(
-                        new Mosaic(XPX.MOSAICID, BigInteger.valueOf(10000000))
+                        new Mosaic(NetworkCurrencyMosaic.NAMESPACEID, BigInteger.valueOf(10000000))
                 ),
                 PlainMessage.Empty,
                 NetworkType.MIJIN_TEST

@@ -20,82 +20,97 @@ import java.math.BigInteger;
 import java.util.Objects;
 import java.util.Optional;
 
+import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.transaction.IdGenerator;
+import io.proximax.sdk.model.transaction.UInt64Id;
 
 /**
  * The mosaic id structure describes mosaic id
  *
  * @since 1.0
  */
-public class MosaicId {
-    private final BigInteger id;
-    private final Optional<Integer> nonce;
-    private final Optional<String> ownerPublicKeyHex;
+public class MosaicId implements UInt64Id {
+   private final BigInteger id;
+   private final Optional<Integer> nonce;
+   private final Optional<String> fullName = Optional.empty();
 
-    /**
-     * Create mosaic from the random nonce and public key of the owner
-     * 
-     * @param nonce random integer
-     * @param ownerPublicKeyHex hexadecimal representation of owner's public key
-     */
-    public MosaicId(Integer nonce, String ownerPublicKeyHex) {
-        this.id = IdGenerator.generateMosaicId(nonce, ownerPublicKeyHex);
-        this.nonce = Optional.of(nonce);
-        this.ownerPublicKeyHex = Optional.of(ownerPublicKeyHex);
-    }
+   /**
+    * Create mosaic from the random nonce and public key of the owner
+    * 
+    * @param nonce random integer
+    * @param ownerPublicKeyHex hexadecimal representation of owner's public key
+    */
+   public MosaicId(Integer nonce, String ownerPublicKeyHex) {
+      this.id = IdGenerator.generateMosaicId(nonce, ownerPublicKeyHex);
+      this.nonce = Optional.of(nonce);
+   }
 
-    /**
-     * Create MosaicId from BigInteger id
-     *
-     * @param id id of the mosaic
-     */
-    public MosaicId(BigInteger id) {
-        this.id = id;
-        this.nonce = Optional.empty();
-        this.ownerPublicKeyHex = Optional.empty();
-    }
+   public MosaicId(String hex) {
+      if (!hex.matches("^[0-9A-Fa-f]{16}$")) {
+         throw new IllegalIdentifierException("invalid hex string");
+      }
+      this.id = new BigInteger(hex, 16);
+      this.nonce = Optional.empty();
+   }
 
-	/**
-	 * @return the id
-	 */
-	public BigInteger getId() {
-		return id;
-	}
+   /**
+    * Create MosaicId from BigInteger id
+    *
+    * @param id id of the mosaic
+    */
+   public MosaicId(BigInteger id) {
+      this.id = id;
+      this.nonce = Optional.empty();
+   }
 
-	/**
-	 * @return the nonce
-	 */
-	public Optional<Integer> getNonce() {
-		return nonce;
-	}
+   /**
+    * @return the id
+    */
+   public BigInteger getId() {
+      return id;
+   }
 
-	/**
-	 * @return the ownerPublicKeyHex
-	 */
-	public Optional<String> getOwnerPublicKeyHex() {
-		return ownerPublicKeyHex;
-	}
+   /**
+    * @return the nonce
+    */
+   public Optional<Integer> getNonce() {
+      return nonce;
+   }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
+   @Override
+   public long getIdAsLong() {
+      return id.longValue();
+   }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		MosaicId other = (MosaicId) obj;
-		return Objects.equals(id, other.id);
-	}
+   @Override
+   public String getIdAsHex() {
+      return UInt64Utils.bigIntegerToHex(id);
+   }
+   
+   @Override
+   public Optional<String> getFullName() {
+      return fullName;
+   }
+   
+   @Override
+   public int hashCode() {
+      return Objects.hash(id);
+   }
 
-	@Override
-	public String toString() {
-		return "MosaicId [id=" + id + ", nonce=" + nonce + ", ownerPublicKeyHex=" + ownerPublicKeyHex + "]";
-	}
+   @Override
+   public boolean equals(Object obj) {
+      if (this == obj)
+         return true;
+      if (obj == null)
+         return false;
+      if (getClass() != obj.getClass())
+         return false;
+      MosaicId other = (MosaicId) obj;
+      return Objects.equals(id, other.id);
+   }
 
+   @Override
+   public String toString() {
+      return "MosaicId [id=" + id + ", nonce=" + nonce + "]";
+   }
 }

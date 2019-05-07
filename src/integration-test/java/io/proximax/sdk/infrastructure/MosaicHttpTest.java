@@ -31,11 +31,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import io.proximax.sdk.BaseTest;
-import io.proximax.sdk.infrastructure.MosaicHttp;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicInfo;
 import io.proximax.sdk.model.mosaic.MosaicName;
-import io.proximax.sdk.model.mosaic.XPX;
+import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.reactivex.schedulers.Schedulers;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -50,45 +49,34 @@ class MosaicHttpTest extends BaseTest {
     @Test
     void getMosaic() throws ExecutionException, InterruptedException {
         MosaicInfo mosaicInfo = mosaicHttp
-                .getMosaic(XPX.MOSAICID)
+                .getMosaic(NetworkCurrencyMosaic.NAMESPACEID)
                 .toFuture()
                 .get();
 
         assertEquals(new BigInteger("1"), mosaicInfo.getHeight());
-        assertEquals(XPX.MOSAICID, mosaicInfo.getMosaicId());
+        assertEquals(NetworkCurrencyMosaic.NAMESPACEID, mosaicInfo.getMosaicId());
     }
 
     @Test
     void getMosaics() throws ExecutionException, InterruptedException {
         List<MosaicInfo> mosaicsInfo = mosaicHttp
-                .getMosaics(Collections.singletonList(XPX.MOSAICID))
+                .getMosaics(Collections.singletonList(NetworkCurrencyMosaic.NAMESPACEID))
                 .toFuture()
                 .get();
 
-        assertEquals(XPX.MOSAICID, mosaicsInfo.get(0).getMosaicId());
-    }
-
-    @Test
-    @Disabled("this service is not available anymore")
-    void getMosaicsFromNamespace() throws ExecutionException, InterruptedException {
-        List<MosaicInfo> mosaicsInfo = mosaicHttp
-                .getMosaicsFromNamespace(PROXIMA_NAMESPACE)
-                .toFuture()
-                .get();
-
-        assertEquals(XPX.MOSAICID, mosaicsInfo.get(0).getMosaicId());
+        assertEquals(NetworkCurrencyMosaic.NAMESPACEID, mosaicsInfo.get(0).getMosaicId());
     }
 
     @Test
     @Disabled("not implemented yet")
     void getMosaicNames() throws ExecutionException, InterruptedException {
         List<MosaicName> mosaicNames = mosaicHttp
-                .getMosaicNames(Collections.singletonList(XPX.MOSAICID))
+                .getMosaicNames(Collections.singletonList(NetworkCurrencyMosaic.NAMESPACEID))
                 .toFuture()
                 .get();
 
         assertEquals("xpx", mosaicNames.get(0).getName());
-        assertEquals(XPX.MOSAICID, mosaicNames.get(0).getMosaicId());
+        assertEquals(NetworkCurrencyMosaic.NAMESPACEID, mosaicNames.get(0).getMosaicId());
     }
 
     @Test

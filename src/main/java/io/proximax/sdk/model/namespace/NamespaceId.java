@@ -22,13 +22,14 @@ import java.util.Optional;
 
 import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.transaction.IdGenerator;
+import io.proximax.sdk.model.transaction.UInt64Id;
 
 /**
  * The namespace id structure describes namespace id
  *
  * @since 1.0
  */
-public class NamespaceId {
+public class NamespaceId implements UInt64Id {
     private final BigInteger id;
     private final Optional<String> fullName;
 
@@ -86,5 +87,15 @@ public class NamespaceId {
    @Override
    public String toString() {
       return "NamespaceId [id=" + id + ", fullName=" + fullName + ", hexaId=" + UInt64Utils.bigIntegerToHex(id) + "]";
+   }
+
+   @Override
+   public long getIdAsLong() {
+      return id.longValue();
+   }
+
+   @Override
+   public String getIdAsHex() {
+      return UInt64Utils.bigIntegerToHex(id);
    }
 }
