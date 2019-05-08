@@ -33,7 +33,7 @@ public enum TransactionVersion {
    /**
     * Mosaic definition transaction type.
     */
-   MOSAIC_DEFINITION(2),
+   MOSAIC_DEFINITION(3),
 
    /**
     * Mosaic supply change transaction.

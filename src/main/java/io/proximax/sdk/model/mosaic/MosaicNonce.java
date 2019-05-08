@@ -99,11 +99,6 @@ public class MosaicNonce {
      * @return MosaicNonce
      */
     public static MosaicNonce createFromBigInteger(BigInteger number) {
-        /*byte[] bytes = number.toByteArray();
-        int size = bytes.length;
-        bytes = Arrays.copyOfRange(bytes, (size <= 4) ? 0 : size - 4, (size <= 4) ? 4 : size);
-        return new MosaicNonce(bytes);*/
-
         return new MosaicNonce(ByteUtils.bigIntToBytesOfSize(number, 4));
     }
 }

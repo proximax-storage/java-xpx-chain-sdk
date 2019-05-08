@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.proximax.sdk.model.mosaic.MosaicId;
+import io.proximax.sdk.model.mosaic.MosaicNonce;
 import io.proximax.sdk.model.mosaic.MosaicProperties;
 import io.proximax.sdk.model.transaction.MosaicDefinitionTransaction;
 import io.proximax.sdk.model.transaction.SignedTransaction;
@@ -50,7 +51,8 @@ public class E2EMosaicTest extends E2EBaseTest {
 
    @Test
    void createMosaic() {
-      MosaicDefinitionTransaction mdt = MosaicDefinitionTransaction.create(new MosaicId(1, seedAccount.getPublicKey()),
+      MosaicNonce nonce = MosaicNonce.createRandom();
+      MosaicDefinitionTransaction mdt = MosaicDefinitionTransaction.create(nonce, new MosaicId(nonce, seedAccount.getPublicKey()),
             getDeadline(),
             new MosaicProperties(false, true, false, 6, BigInteger.valueOf(20)),
             NETWORK_TYPE);
