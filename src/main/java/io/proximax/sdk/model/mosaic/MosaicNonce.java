@@ -19,13 +19,17 @@ package io.proximax.sdk.model.mosaic;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Random;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.lang.Validate;
 
 import io.proximax.core.utils.ByteUtils;
 
 public class MosaicNonce {
+   private static final int NONCE_BYTES = 4;
+   
     /**
      * Mosaic nonce
      */
@@ -53,7 +57,25 @@ public class MosaicNonce {
      * @param nonce
      */
     public MosaicNonce(byte[] nonce) {
+       Validate.notNull(nonce, "Nonce must not be null");
+       Validate.isTrue(nonce.length == NONCE_BYTES, "Nonce needs to have size " + NONCE_BYTES);
         this.nonce = nonce;
+    }
+
+    /**
+     * Create cryptographically safe random MosaicNonce. This might be time and resource intensive 
+     * while not really worth it because nonce is not secret
+     *
+     * @return MosaicNonce nonce
+     */
+    public static MosaicNonce createSecureRandom() {
+        byte[] bytes = new byte[NONCE_BYTES]; 
+        try {
+            SecureRandom.getInstanceStrong().nextBytes(bytes);
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalIdentifierException("NoSuchAlgorithmException:" + e);
+        }
+        return new MosaicNonce(bytes);
     }
 
     /**
@@ -62,13 +84,8 @@ public class MosaicNonce {
      * @return MosaicNonce nonce
      */
     public static MosaicNonce createRandom() {
-        byte byteCount = 4;
-        byte[] bytes = new byte[byteCount]; // the array to be filled in with random bytes
-        try {
-            SecureRandom.getInstanceStrong().nextBytes(bytes);
-        } catch (NoSuchAlgorithmException e) {
-            throw new IllegalIdentifierException("NoSuchAlgorithmException:" + e);
-        }
+        byte[] bytes = new byte[NONCE_BYTES];
+        new Random().nextBytes(bytes);
         return new MosaicNonce(bytes);
     }
 
@@ -101,4 +118,11 @@ public class MosaicNonce {
     public static MosaicNonce createFromBigInteger(BigInteger number) {
         return new MosaicNonce(ByteUtils.bigIntToBytesOfSize(number, 4));
     }
+
+   @Override
+   public String toString() {
+      return "MosaicNonce [nonce=" + getNonceAsInt() + "]";
+   }
+    
+    
 }

@@ -106,9 +106,9 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
      * @return value of the fee
      */
     public static BigInteger extractFee(JsonObject transaction) {
-      if (transaction.getString("maxFee") != null) {
+      if (transaction.containsKey("maxFee")) {
          return new BigInteger(transaction.getString("maxFee"));
-      } else if (transaction.getJsonArray("fee") != null) {
+      } else if (transaction.containsKey("fee")) {
          return extractBigInteger(transaction.getJsonArray("fee"));
       } else {
          throw new IllegalArgumentException("Fee is missing in the transaction description");
@@ -288,10 +288,10 @@ class MosaicCreationTransactionMapping extends TransactionMapping {
      * @return value of the fee
      */
     public static MosaicNonce extractNonce(JsonObject transaction) {
-      if (transaction.getInteger("mosaicNonce") != null) {
+      if (transaction.containsKey("mosaicNonce")) {
          return MosaicNonce.createFromBigInteger(BigInteger.valueOf(transaction.getInteger("mosaicNonce")));
-      } else if (transaction.getJsonArray("fee") != null) {
-         return MosaicNonce.createFromBigInteger(extractBigInteger(transaction.getJsonArray("nonce")));
+      } else if (transaction.containsKey("nonce")) {
+         return MosaicNonce.createFromBigInteger(BigInteger.valueOf(transaction.getInteger("nonce")));
       } else {
          throw new IllegalArgumentException("Fee is missing in the transaction description");
       }
