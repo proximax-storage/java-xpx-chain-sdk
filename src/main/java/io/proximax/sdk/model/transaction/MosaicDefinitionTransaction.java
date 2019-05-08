@@ -130,20 +130,22 @@ public class MosaicDefinitionTransaction extends Transaction {
       int durationVector = MosaicDefinitionTransactionBuffer.createDurationVector(builder,
             UInt64Utils.fromBigInteger(mosaicProperties.getDuration()));
 
+      // 4+2+64+32+8+8+4+8+1+1+1+1+8+2
+      int fixSize = 144; // replace by the all numbers sum or add a comment explaining this
+
       MosaicDefinitionTransactionBuffer.startMosaicDefinitionTransactionBuffer(builder);
+      MosaicDefinitionTransactionBuffer.addSize(builder, fixSize);
       MosaicDefinitionTransactionBuffer.addSignature(builder, signatureVector);
       MosaicDefinitionTransactionBuffer.addSigner(builder, signerVector);
       MosaicDefinitionTransactionBuffer.addVersion(builder, version);
       MosaicDefinitionTransactionBuffer.addType(builder, getType().getValue());
       MosaicDefinitionTransactionBuffer.addFee(builder, feeVector);
       MosaicDefinitionTransactionBuffer.addDeadline(builder, deadlineVector);
-
+      MosaicDefinitionTransactionBuffer.addMosaicNonce(builder, 0);
       MosaicDefinitionTransactionBuffer.addMosaicId(builder, mosaicIdVector);
       MosaicDefinitionTransactionBuffer.addNumOptionalProperties(builder, 1);
       MosaicDefinitionTransactionBuffer.addFlags(builder, flags);
-
       MosaicDefinitionTransactionBuffer.addDivisibility(builder, mosaicProperties.getDivisibility());
-
       MosaicDefinitionTransactionBuffer.addIndicateDuration(builder, 2);
       MosaicDefinitionTransactionBuffer.addDuration(builder, durationVector);
 
