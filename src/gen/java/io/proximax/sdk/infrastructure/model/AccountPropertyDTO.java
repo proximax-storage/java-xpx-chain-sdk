@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * AccountPropertyDTO
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-04-29T09:43:14.260+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-05-10T01:03:53.323+02:00")
 public class AccountPropertyDTO {
   @SerializedName("propertyType")
   private Integer propertyType = null;
@@ -69,7 +69,7 @@ public class AccountPropertyDTO {
    * Get values
    * @return values
   **/
-  @ApiModelProperty(example = "[\"C14+w2br1wkUdGm/SNSlBwCvcksjWBkBXg==\",\"Ul6vmYP5TAEIOMMcDoHz6sn7bCdpjBaE+Q==\"]", required = true, value = "")
+  @ApiModelProperty(example = "[\"909CE152A6F4F48962CCE1630AD6AF3A2116C49FAC036038D4\"]", required = true, value = "")
   public List<Object> getValues() {
     return values;
   }

@@ -27,7 +27,7 @@ import java.io.IOException;
 /**
  * AnnounceTransactionInfoDTO
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-04-29T09:43:14.260+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-05-10T01:03:53.323+02:00")
 public class AnnounceTransactionInfoDTO {
   @SerializedName("message")
   private String message = null;
