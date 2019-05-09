@@ -105,14 +105,22 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
      * @param transaction transaction object with fee or maxFee field
      * @return value of the fee
      */
-    public static BigInteger extractFee(JsonObject transaction) {
-      if (transaction.containsKey("maxFee")) {
-         return new BigInteger(transaction.getString("maxFee"));
-      } else if (transaction.containsKey("fee")) {
-         return extractBigInteger(transaction.getJsonArray("fee"));
-      } else {
-         throw new IllegalArgumentException("Fee is missing in the transaction description");
+   public static BigInteger extractFee(JsonObject transaction) {
+      // first get value from a field
+      Object feeObj = transaction.getValue("maxFee");
+      if (feeObj == null) {
+         feeObj = transaction.getValue("fee");
       }
+      // based on the retrieved value create big integer instance
+      if (feeObj instanceof String) {
+         return new BigInteger((String) feeObj);
+      } else if (feeObj instanceof Long) {
+         return BigInteger.valueOf((Long) feeObj);
+      } else if (feeObj instanceof JsonArray) {
+         return extractBigInteger((JsonArray) feeObj);
+      }
+      // throw error
+      throw new IllegalArgumentException("Unable to get fee from " + transaction.encode());
    }
    
     /**
