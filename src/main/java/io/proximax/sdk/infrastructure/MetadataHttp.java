@@ -41,6 +41,8 @@ public class MetadataHttp extends Http implements MetadataRepository {
    private static final String URL_ACCOUNT = "/account/";
    private static final String URL_MOSAIC = "/mosaic/";
    private static final String URL_NAMESPACE = "/namespace/";
+   
+   private static final String URL_SUFFIX_METADATA = "/metadata";
 
    public MetadataHttp(String host) throws MalformedURLException {
       this(host, new NetworkHttp(host));
@@ -84,7 +86,7 @@ public class MetadataHttp extends Http implements MetadataRepository {
    @Override
    public Observable<AddressMetadata> getMetadataFromAddress(String address) {
       return this.client
-            .getAbs(this.url + URL_ACCOUNT + address + "/metadata")
+            .getAbs(this.url + URL_ACCOUNT + address + URL_SUFFIX_METADATA)
             .as(BodyCodec.jsonObject())
             .rxSend()
             .toObservable()
@@ -96,7 +98,7 @@ public class MetadataHttp extends Http implements MetadataRepository {
    @Override
    public Observable<MosaicMetadata> getMetadataFromMosaic(MosaicId mosaicId) {
       return this.client
-            .getAbs(this.url + URL_MOSAIC + mosaicId.getIdAsHex() + "/metadata")
+            .getAbs(this.url + URL_MOSAIC + mosaicId.getIdAsHex() + URL_SUFFIX_METADATA)
             .as(BodyCodec.jsonObject())
             .rxSend()
             .toObservable()
@@ -108,7 +110,7 @@ public class MetadataHttp extends Http implements MetadataRepository {
    @Override
    public Observable<NamespaceMetadata> getMetadataFromNamespace(NamespaceId namespaceId) {
       return this.client
-            .getAbs(this.url + URL_NAMESPACE + namespaceId.getIdAsHex() + "/metadata")
+            .getAbs(this.url + URL_NAMESPACE + namespaceId.getIdAsHex() + URL_SUFFIX_METADATA)
             .as(BodyCodec.jsonObject())
             .rxSend()
             .toObservable()

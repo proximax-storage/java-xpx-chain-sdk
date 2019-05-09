@@ -15,31 +15,66 @@
  */
 package io.proximax.sdk.model.metadata;
 
+import java.util.Optional;
+
 /**
  * Metadata field representing key and value pair
  */
 public class Field {
 
    private final String key;
-   private final String value;
+   private final Optional<String> value;
+   
    /**
     * @param key
     * @param value
     */
    public Field(String key, String value) {
       this.key = key;
-      this.value = value;
+      this.value = Optional.of(value);
+   }   
+   
+   /**
+    * @param key
+    * @param value
+    */
+   public Field(String key) {
+      this.key = key;
+      this.value = Optional.empty();
    }
+   
    /**
     * @return the key
     */
    public String getKey() {
       return key;
    }
+   
    /**
+    * check whether this field defines value
+    * 
+    * @return true or false indication whether value is present
+    */
+   public boolean hasValue() {
+      return value.isPresent();
+   }
+   
+   /**
+    * get value or throw runtime exception. Use {@link #hasValue()} to check for presence of value or
+    * use {@link #getValueOptional() to retrieve optional
+    * 
     * @return the value
     */
    public String getValue() {
+      return value.orElseThrow(() -> new RuntimeException("Value not available"));
+   }
+   
+   /**
+    * get optional value
+    * 
+    * @return the optional value
+    */
+   public Optional<String> getValueOptional() {
       return value;
    }
 }

@@ -114,12 +114,17 @@ public enum TransactionVersion {
    /**
     * Account link transaction type
     */
-   ACCOUNT_LINK(2);
+   ACCOUNT_LINK(2),
+   
+   /**
+    * modification of metadata
+    */
+   METADATA_MODIFICATION(1);
 
-   private Integer value;
+   private Integer code;
 
-   TransactionVersion(int value) {
-      this.value = value;
+   TransactionVersion(int code) {
+      this.code = code;
    }
 
    /**
@@ -128,7 +133,6 @@ public enum TransactionVersion {
     * @return enum value
     */
    public Integer getValue() {
-      return this.value;
+      return this.code;
    }
-
 }

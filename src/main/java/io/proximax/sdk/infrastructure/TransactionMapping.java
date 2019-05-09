@@ -30,6 +30,9 @@ import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.metadata.MetadataModification;
+import io.proximax.sdk.model.metadata.MetadataModificationType;
+import io.proximax.sdk.model.metadata.MetadataType;
 import io.proximax.sdk.model.mosaic.Mosaic;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicProperties;
@@ -43,24 +46,40 @@ import io.vertx.core.json.JsonObject;
 
 public class TransactionMapping implements Function<JsonObject, Transaction> {
     @Override
-    public Transaction apply(JsonObject input) {
-        JsonObject transaction = input.getJsonObject("transaction");
-        int type = transaction.getInteger("type");
+   public Transaction apply(JsonObject input) {
+      JsonObject transaction = input.getJsonObject("transaction");
+      int type = transaction.getInteger("type");
 
-        switch (TransactionType.rawValueOf(type)) {
-        	case TRANSFER: return new TransferTransactionMapping().apply(input);
-        	case REGISTER_NAMESPACE: return new NamespaceCreationTransactionMapping().apply(input);
-        	case MOSAIC_DEFINITION: return new MosaicCreationTransactionMapping().apply(input);
-        	case MOSAIC_SUPPLY_CHANGE: return new MosaicSupplyChangeTransactionMapping().apply(input);
-        	case MOSAIC_ALIAS: return new MosaicAliasTransactionMapping().apply(input);
-        	case MODIFY_MULTISIG_ACCOUNT: return new MultisigModificationTransactionMapping().apply(input);
-        	case AGGREGATE_COMPLETE: case AGGREGATE_BONDED: return new AggregateTransactionMapping().apply(input);
-        	case LOCK: return new LockFundsTransactionMapping().apply(input);
-        	case SECRET_LOCK: return new SecretLockTransactionMapping().apply(input);
-        	case SECRET_PROOF: return new SecretProofTransactionMapping().apply(input);
-        	default: throw new UnsupportedOperationException("Unimplemented transaction type " + type);
-        }
-    }
+      switch (TransactionType.rawValueOf(type)) {
+      case TRANSFER:
+         return new TransferTransactionMapping().apply(input);
+      case REGISTER_NAMESPACE:
+         return new NamespaceCreationTransactionMapping().apply(input);
+      case MOSAIC_DEFINITION:
+         return new MosaicCreationTransactionMapping().apply(input);
+      case MOSAIC_SUPPLY_CHANGE:
+         return new MosaicSupplyChangeTransactionMapping().apply(input);
+      case MOSAIC_ALIAS:
+         return new MosaicAliasTransactionMapping().apply(input);
+      case MODIFY_MULTISIG_ACCOUNT:
+         return new MultisigModificationTransactionMapping().apply(input);
+      case AGGREGATE_COMPLETE:
+      case AGGREGATE_BONDED:
+         return new AggregateTransactionMapping().apply(input);
+      case LOCK:
+         return new LockFundsTransactionMapping().apply(input);
+      case SECRET_LOCK:
+         return new SecretLockTransactionMapping().apply(input);
+      case SECRET_PROOF:
+         return new SecretProofTransactionMapping().apply(input);
+      case MODIFY_ADDRESS_METADATA:
+      case MODIFY_MOSAIC_METADATA:
+      case MODIFY_NAMESPACE_METADATA:
+         return new ModifyMetadataTransactionMapping().apply(input);
+      default:
+         throw new UnsupportedOperationException("Unimplemented transaction type " + type);
+      }
+   }
 
     /**
      * take array of unsigned integers and combine them to BigInteger
@@ -201,6 +220,77 @@ class TransferTransactionMapping extends TransactionMapping {
                 transactionInfo
         );
     }
+}
+
+/**
+ * mapping for transfer transaction
+ * 
+ * @author tonowie
+ */
+class ModifyMetadataTransactionMapping extends TransactionMapping {
+
+   @Override
+   public ModifyMetadataTransaction apply(JsonObject input) {
+      // retrieve transaction info from meta field
+      TransactionInfo transactionInfo = createTransactionInfo(input.getJsonObject("meta"));
+      // retrieve transaction data from transaction field
+      JsonObject transaction = input.getJsonObject("transaction");
+      // deadline
+      Deadline deadline = new Deadline(extractBigInteger(transaction.getJsonArray("deadline")));
+      // version
+      int version = transaction.getInteger("version");
+      // transaction type
+      TransactionType type = TransactionType.rawValueOf(transaction.getInteger("type"));
+      // modifications
+      List<MetadataModification> modifications = transaction.getJsonArray("modifications").stream()
+            .map(obj -> (JsonObject) obj).map(ModifyMetadataTransactionMapping::mapModFromJson)
+            .collect(Collectors.toList());
+      // signer
+      PublicAccount signer = new PublicAccount(transaction.getString("signer"), extractNetworkType(version));
+      // signature
+      String signature = transaction.getString("signature");
+      // metadata type
+      MetadataType metadataType = MetadataType.getByCode(transaction.getInteger("metadataType"));
+      // create instance of transaction
+      switch (type) {
+      case MODIFY_ADDRESS_METADATA:
+         return new ModifyMetadataTransaction(type, extractNetworkType(version), extractTransactionVersion(version),
+               deadline, extractFee(transaction), Optional.empty(),
+               Optional.of(Address.createFromEncoded(transaction.getString("metadataId"))), metadataType, modifications,
+               signature, signer, transactionInfo);
+      case MODIFY_MOSAIC_METADATA:
+         return new ModifyMetadataTransaction(type, extractNetworkType(version), extractTransactionVersion(version),
+               deadline, extractFee(transaction),
+               Optional.of(new MosaicId(extractBigInteger(transaction.getJsonArray("metadataId")))), Optional.empty(),
+               metadataType, modifications, signature, signer, transactionInfo);
+      case MODIFY_NAMESPACE_METADATA:
+         return new ModifyMetadataTransaction(type, extractNetworkType(version), extractTransactionVersion(version),
+               deadline, extractFee(transaction),
+               Optional.of(new NamespaceId(extractBigInteger(transaction.getJsonArray("metadataId")))),
+               Optional.empty(), metadataType, modifications, signature, signer, transactionInfo);
+      default:
+         throw new IllegalArgumentException("unsupported transaction type " + type);
+      }
+   }
+
+   /**
+    * transform JSON object into metadata modification instance
+    * 
+    * @param json JSON representation of the modification
+    * @return metadata modification
+    */
+   static MetadataModification mapModFromJson(JsonObject json) {
+      MetadataModificationType type = MetadataModificationType.getByCode(json.getInteger("modificationType"));
+      String key = json.getString("key");
+      switch (type) {
+      case ADD:
+         return MetadataModification.add(key, json.getString("value"));
+      case REMOVE:
+         return MetadataModification.remove(key);
+      default:
+         throw new IllegalArgumentException("modification type not supported: " + type);
+      }
+   }
 }
 
 /**

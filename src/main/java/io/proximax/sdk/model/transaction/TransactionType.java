@@ -108,8 +108,22 @@ public enum TransactionType {
     /**
      * Account link transaction type
      */
-    ACCOUNT_LINK(0x414C);
+    ACCOUNT_LINK(0x414C),
 
+    /**
+     * transaction to modify address meta datata
+     */
+     MODIFY_ADDRESS_METADATA(0x413d),
+
+   /**
+    * transaction to modify mosaic meta datata
+    */
+    MODIFY_MOSAIC_METADATA(0x423d),
+
+    /**
+     * transaction to modify namespace meta datata
+     */
+     MODIFY_NAMESPACE_METADATA(0x433d);
 
     private int value;
 
@@ -127,47 +141,17 @@ public enum TransactionType {
     }
 
     /**
-     * Static constructor converting transaction type raw value to enum instance.
-     *
-     * @return {@link TransactionType}
+     * retrieve transaction type by the code
+     * 
+     * @param code of the transaction type
+     * @return transaction type
      */
-    public static TransactionType rawValueOf(int value) {
-        switch (value) {
-            case 16717:
-                return TransactionType.MOSAIC_DEFINITION;
-            case 16973:
-                return TransactionType.MOSAIC_SUPPLY_CHANGE;
-            case 16718:
-                return TransactionType.REGISTER_NAMESPACE;
-            case 16974:
-                return TransactionType.ADDRESS_ALIAS;
-            case 17230:
-                return TransactionType.MOSAIC_ALIAS;
-            case 16724:
-                return TransactionType.TRANSFER;
-            case 16725:
-                return TransactionType.MODIFY_MULTISIG_ACCOUNT;
-            case 16705:
-                return TransactionType.AGGREGATE_COMPLETE;
-            case 16961:
-                return TransactionType.AGGREGATE_BONDED;
-            case 16712:
-                return TransactionType.LOCK;
-            case 16720:
-                return TransactionType.ACCOUNT_PROPERTIES_ADDRESS;
-            case 16976:
-                return TransactionType.ACCOUNT_PROPERTIES_MOSAIC;
-            case 17232:
-                return TransactionType.ACCOUNT_PROPERTIES_ENTITY_TYPE;
-            case 16722:
-                return TransactionType.SECRET_LOCK;
-            case 16978:
-                return TransactionType.SECRET_PROOF;
-            case 16716:
-                return TransactionType.ACCOUNT_LINK;
-            default:
-                throw new IllegalArgumentException(value + " is not a valid value");
-        }
+    public static TransactionType rawValueOf(int code) {
+       for (TransactionType type : TransactionType.values()) {
+          if (code == type.value) {
+             return type;
+          }
+       }
+       throw new IllegalArgumentException("Unsupported transaction type code " + code);
     }
-
 }

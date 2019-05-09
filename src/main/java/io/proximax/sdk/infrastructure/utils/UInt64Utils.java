@@ -22,6 +22,7 @@ import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.bouncycastle.util.Arrays;
 
 import io.proximax.sdk.infrastructure.model.UInt64DTO;
 
@@ -114,5 +115,23 @@ public class UInt64Utils {
      */
     public static String getPaddedHex(int value) {
     	return String.format("%08x", value);
+    }
+    
+    /**
+     * get array of 8 bytes representing the specified value in little endian encoding
+     * 
+     * @param value uint64 value as big integer
+     * @return byte array in little endian
+     */
+    public static byte[] getBytes(BigInteger value) {
+       byte[] bytes = value.toByteArray();
+       // reverse the bytes to encode in little endian
+       Arrays.reverse(bytes);
+       if (bytes.length < 8) {
+          byte[] padded = new byte[8];
+          System.arraycopy(bytes, 0, padded, 0, bytes.length);
+          bytes = padded;
+       }
+       return bytes;
     }
 }

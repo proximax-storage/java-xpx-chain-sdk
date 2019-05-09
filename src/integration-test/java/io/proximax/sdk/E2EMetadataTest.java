@@ -20,25 +20,35 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.proximax.sdk.infrastructure.MetadataHttp;
+import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.metadata.AddressMetadata;
 import io.proximax.sdk.model.metadata.Metadata;
 import io.proximax.sdk.model.metadata.MetadataId;
+import io.proximax.sdk.model.metadata.MetadataModification;
 import io.proximax.sdk.model.metadata.MetadataType;
 import io.proximax.sdk.model.metadata.MosaicMetadata;
 import io.proximax.sdk.model.metadata.NamespaceMetadata;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.namespace.NamespaceId;
+import io.proximax.sdk.model.transaction.ModifyMetadataTransaction;
+import io.proximax.sdk.model.transaction.SignedTransaction;
 
 /**
  * E2E tests to proof work with metadata
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class E2EMetadataTest extends E2EBaseTest {
+   /** logger */
+   private static final Logger logger = LoggerFactory.getLogger(E2EMetadataTest.class);
 
    @Test
    void testHardcodedMetaAddress() throws MalformedURLException {
@@ -91,6 +101,18 @@ public class E2EMetadataTest extends E2EBaseTest {
                   Arrays.asList("04E8F1965203B09C", "VCMY23PRJYEVEZWLNY3GCPYDOYLMOLZCJWUVYK7U", "C9363100BC38D88F"))
             .count().blockingGet();
       assertEquals(3, count);
+   }
+   
+   @Test
+   void addMetadataToAccount() {
+      Account target = Account.generateNewAccount(NETWORK_TYPE);
+      logger.info("Adding metadata to account {}", target);
+      List<MetadataModification> mods = Arrays.asList(MetadataModification.add("tono", "a"));
+      ModifyMetadataTransaction addMeta = ModifyMetadataTransaction.createForAddress(getDeadline(), target.getAddress(), mods, NETWORK_TYPE);
+      SignedTransaction signedAddMeta = target.sign(addMeta);
+      transactionHttp.announce(signedAddMeta).blockingFirst();
+      logger.info("Transfer done. {}",
+            listener.confirmed(target.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
    }
 
 }

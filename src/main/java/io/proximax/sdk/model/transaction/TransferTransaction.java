@@ -16,6 +16,14 @@
 
 package io.proximax.sdk.model.transaction;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Optional;
+
+import org.apache.commons.codec.binary.Base32;
+import org.apache.commons.lang3.Validate;
+
 import com.google.flatbuffers.FlatBufferBuilder;
 
 import io.proximax.sdk.infrastructure.utils.UInt64Utils;
@@ -23,17 +31,6 @@ import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.Mosaic;
-import io.proximax.sdk.model.transaction.MessageBuffer;
-import io.proximax.sdk.model.transaction.MosaicBuffer;
-import io.proximax.sdk.model.transaction.TransferTransactionBuffer;
-
-import org.apache.commons.codec.binary.Base32;
-import org.apache.commons.lang3.Validate;
-
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * The transfer transactions object contain data about transfers of mosaics and message to another account.
@@ -140,10 +137,10 @@ public class TransferTransaction extends Transaction {
         int recipientVector = TransferTransactionBuffer.createRecipientVector(builder, address);
         int mosaicsVector = TransferTransactionBuffer.createMosaicsVector(builder, mosaicBuffers);
 
-        int fixSize = 149; // replace by the all numbers sum or add a comment explaining this
+        int size = 120 + 29 + (16 * mosaics.size()) + bytePayload.length;
 
         TransferTransactionBuffer.startTransferTransactionBuffer(builder);
-        TransferTransactionBuffer.addSize(builder, fixSize + (16 * mosaics.size()) + bytePayload.length);
+        TransferTransactionBuffer.addSize(builder, size);
         TransferTransactionBuffer.addSignature(builder, signatureVector);
         TransferTransactionBuffer.addSigner(builder, signerVector);
         TransferTransactionBuffer.addVersion(builder, version);
@@ -159,6 +156,8 @@ public class TransferTransaction extends Transaction {
         int codedTransfer = TransferTransactionBuffer.endTransferTransactionBuffer(builder);
         builder.finish(codedTransfer);
 
-        return schema.serialize(builder.sizedByteArray());
+        byte[] output = schema.serialize(builder.sizedByteArray());
+        Validate.isTrue(output.length == size, "Serialized form has incorrect length");
+        return output;
     }
 }
