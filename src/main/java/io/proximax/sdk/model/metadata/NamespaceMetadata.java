@@ -17,19 +17,19 @@ package io.proximax.sdk.model.metadata;
 
 import java.util.List;
 
-import io.proximax.sdk.model.transaction.UInt64Id;
+import io.proximax.sdk.model.namespace.NamespaceId;
 
 /**
  * Namespace metadata defining numeric ID
  */
 public class NamespaceMetadata extends Metadata {
-   private UInt64Id id;
+   private NamespaceId id;
 
    /**
     * @param fields
     * @param id
     */
-   public NamespaceMetadata(List<Field> fields, UInt64Id id) {
+   public NamespaceMetadata(List<Field> fields, NamespaceId id) {
       super(MetadataType.NAMESPACE, fields);
       this.id = id;
    }
@@ -37,14 +37,14 @@ public class NamespaceMetadata extends Metadata {
    /**
     * @return the id
     */
-   public UInt64Id getId() {
+   public NamespaceId getId() {
       return id;
    }
 
    /**
     * @param id the id to set
     */
-   public void setId(UInt64Id id) {
+   public void setId(NamespaceId id) {
       this.id = id;
    }
 

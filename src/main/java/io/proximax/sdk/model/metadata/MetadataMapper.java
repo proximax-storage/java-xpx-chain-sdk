@@ -21,7 +21,9 @@ import java.util.stream.Collectors;
 
 import io.proximax.sdk.infrastructure.model.UInt64DTO;
 import io.proximax.sdk.infrastructure.utils.UInt64Utils;
+import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.mosaic.MosaicId;
+import io.proximax.sdk.model.namespace.NamespaceId;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
@@ -85,7 +87,7 @@ public class MetadataMapper {
     * @return the metadata instance
     */
    private static Metadata getAddressMetadata(List<Field> fields, JsonObject json) {
-      return new AddressMetadata(fields, json.getString(META_KEY_ID));
+      return new AddressMetadata(fields, Address.createFromEncoded(json.getString(META_KEY_ID)));
    }
    
    /**
@@ -105,7 +107,7 @@ public class MetadataMapper {
     * @return the metadata instance
     */
    private static Metadata getNamespaceMetadata(List<Field> fields, JsonObject json) {
-      return new NamespaceMetadata(fields, new MosaicId(extractBigInteger(json.getJsonArray(META_KEY_ID))));
+      return new NamespaceMetadata(fields, new NamespaceId(extractBigInteger(json.getJsonArray(META_KEY_ID))));
    }
    
    /**

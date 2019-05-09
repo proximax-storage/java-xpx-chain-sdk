@@ -20,6 +20,7 @@ import java.net.MalformedURLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.metadata.AddressMetadata;
 import io.proximax.sdk.model.metadata.Metadata;
 import io.proximax.sdk.model.metadata.MetadataMapper;
@@ -69,6 +70,11 @@ public class MetadataHttp extends Http implements MetadataRepository {
    }
 
    @Override
+   public Observable<Metadata> getMetadata(Address address) {
+      return getMetadata(AddressMetadata.getIdFromAddress(address));
+   }
+
+   @Override
    public Observable<Metadata> getMetadata(List<String> metadataIds) {
       JsonObject requestBody = new JsonObject();
       requestBody.put("metadataIds", metadataIds);
@@ -84,9 +90,9 @@ public class MetadataHttp extends Http implements MetadataRepository {
    }
 
    @Override
-   public Observable<AddressMetadata> getMetadataFromAddress(String address) {
+   public Observable<AddressMetadata> getMetadataFromAddress(Address address) {
       return this.client
-            .getAbs(this.url + URL_ACCOUNT + address + URL_SUFFIX_METADATA)
+            .getAbs(this.url + URL_ACCOUNT + AddressMetadata.getIdFromAddress(address) + URL_SUFFIX_METADATA)
             .as(BodyCodec.jsonObject())
             .rxSend()
             .toObservable()

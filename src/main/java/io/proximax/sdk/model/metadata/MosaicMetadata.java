@@ -17,19 +17,19 @@ package io.proximax.sdk.model.metadata;
 
 import java.util.List;
 
-import io.proximax.sdk.model.transaction.UInt64Id;
+import io.proximax.sdk.model.mosaic.MosaicId;
 
 /**
  * Mosaic metadata defining numeric ID
  */
 public class MosaicMetadata extends Metadata {
-   private UInt64Id id;
+   private MosaicId id;
 
    /**
     * @param fields
     * @param id
     */
-   public MosaicMetadata(List<Field> fields, UInt64Id id) {
+   public MosaicMetadata(List<Field> fields, MosaicId id) {
       super(MetadataType.MOSAIC, fields);
       this.id = id;
    }
@@ -37,14 +37,14 @@ public class MosaicMetadata extends Metadata {
    /**
     * @return the id
     */
-   public UInt64Id getId() {
+   public MosaicId getId() {
       return id;
    }
 
    /**
     * @param id the id to set
     */
-   public void setId(UInt64Id id) {
+   public void setId(MosaicId id) {
       this.id = id;
    }
 

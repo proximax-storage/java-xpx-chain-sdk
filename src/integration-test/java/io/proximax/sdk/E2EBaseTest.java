@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import io.proximax.sdk.infrastructure.AccountHttp;
 import io.proximax.sdk.infrastructure.BlockchainHttp;
 import io.proximax.sdk.infrastructure.Listener;
+import io.proximax.sdk.infrastructure.MetadataHttp;
 import io.proximax.sdk.infrastructure.MosaicHttp;
 import io.proximax.sdk.infrastructure.NamespaceHttp;
 import io.proximax.sdk.infrastructure.NetworkHttp;
@@ -65,6 +66,7 @@ public class E2EBaseTest extends BaseTest {
    protected TransactionHttp transactionHttp;
    protected MosaicHttp mosaicHttp;
    protected NamespaceHttp namespaceHttp;
+   protected MetadataHttp metadataHttp;
    
    protected Listener listener;
 
@@ -83,6 +85,7 @@ public class E2EBaseTest extends BaseTest {
       blockchainHttp = new BlockchainHttp(nodeUrl, networkHttp);
       mosaicHttp = new MosaicHttp(nodeUrl, networkHttp);
       namespaceHttp = new NamespaceHttp(nodeUrl, networkHttp);
+      metadataHttp = new MetadataHttp(nodeUrl, networkHttp);
       logger.info("Created HTTP interfaces");
       // prepare listener
       listener = new Listener(nodeUrl);

@@ -17,17 +17,19 @@ package io.proximax.sdk.model.metadata;
 
 import java.util.List;
 
+import io.proximax.sdk.model.account.Address;
+
 /**
- * Metadata for address. The ID here is String representing the address
+ * Metadata for address. The ID here is the address representing the address
  */
 public class AddressMetadata extends Metadata {
-   private String address;
+   private final Address address;
 
    /**
     * @param fields
     * @param address
     */
-   public AddressMetadata(List<Field> fields, String address) {
+   public AddressMetadata(List<Field> fields, Address address) {
       super(MetadataType.ADDRESS, fields);
       this.address = address;
    }
@@ -35,15 +37,24 @@ public class AddressMetadata extends Metadata {
    /**
     * @return the address
     */
-   public String getAddress() {
+   public Address getAddress() {
       return address;
    }
 
    /**
-    * @param address the address to set
+    * get String ID of the metadata
+    * 
+    * @return the string ID
     */
-   public void setAddress(String address) {
-      this.address = address;
+   public String getId() {
+      return getIdFromAddress(address);
    }
-
+   /**
+    * return the address metadata ID used for requests to APIs
+    * 
+    * @return
+    */
+   public static String getIdFromAddress(Address address) {
+      return address.plain();
+   }
 }

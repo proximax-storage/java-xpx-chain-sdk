@@ -124,9 +124,9 @@ public class UInt64Utils {
      * @return byte array in little endian
      */
     public static byte[] getBytes(BigInteger value) {
-       byte[] bytes = value.toByteArray();
-       // reverse the bytes to encode in little endian
-       Arrays.reverse(bytes);
+       // get bytes in reversed order
+       byte[] bytes = Arrays.reverse(value.toByteArray());
+       // make sure we have 8 bytes even for small numbers
        if (bytes.length < 8) {
           byte[] padded = new byte[8];
           System.arraycopy(bytes, 0, padded, 0, bytes.length);

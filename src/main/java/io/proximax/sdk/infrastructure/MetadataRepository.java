@@ -18,6 +18,7 @@ package io.proximax.sdk.infrastructure;
 
 import java.util.List;
 
+import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.metadata.AddressMetadata;
 import io.proximax.sdk.model.metadata.Metadata;
 import io.proximax.sdk.model.metadata.MosaicMetadata;
@@ -33,7 +34,7 @@ import io.reactivex.Observable;
 public interface MetadataRepository {
 
    /**
-    * Gets the metadata(AccountMetadataIndo, MosaicMetadataInfo or NamespaceMetadataInfo) for a given metadataId
+    * Gets the metadata (mosaic or namespace) for a given metadataId
     * 
     * @param metadataId id of the metadata
     * @return metadata information assigned to the id
@@ -41,10 +42,17 @@ public interface MetadataRepository {
    Observable<Metadata> getMetadata(UInt64Id metadataId);
 
    /**
-    * Gets the metadata(AccountMetadataIndo, MosaicMetadataInfo or NamespaceMetadataInfo) for a given metadataId
+    * Gets the metadata (address) for a given address
     * 
-    * @param metadataId string representing the metadata ID
+    * @param address of the account
+    * @return metadata information assigned to the id
+    */
+   Observable<Metadata> getMetadata(Address address);
+   
+   /**
+    * Gets the metadata(AccountMetadataInfo, MosaicMetadataInfo or NamespaceMetadataInfo) for a given metadataId
     * 
+    * @param metadataId generic string representing the metadata ID
     * @return metadata instance
     */
    Observable<Metadata> getMetadata(String metadataId);
@@ -64,7 +72,7 @@ public interface MetadataRepository {
     * @param address address to retrieve metadata from
     * @return address metadata
     */
-   Observable<AddressMetadata> getMetadataFromAddress(String address);
+   Observable<AddressMetadata> getMetadataFromAddress(Address address);
    
    /**
     * Get mosaic metadata
