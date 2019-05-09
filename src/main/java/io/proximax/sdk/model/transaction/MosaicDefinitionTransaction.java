@@ -59,6 +59,7 @@ public class MosaicDefinitionTransaction extends Transaction {
          MosaicNonce nonce, MosaicId mosaicId, MosaicProperties mosaicProperties, Optional<String> signature,
          Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
       super(TransactionType.MOSAIC_DEFINITION, networkType, version, deadline, fee, signature, signer, transactionInfo);
+      Validate.notNull(nonce, "nonce must not be null");
       Validate.notNull(mosaicId, "MosaicId must not be null");
       Validate.notNull(mosaicProperties, "MosaicProperties must not be null");
       this.mosaicId = mosaicId;
