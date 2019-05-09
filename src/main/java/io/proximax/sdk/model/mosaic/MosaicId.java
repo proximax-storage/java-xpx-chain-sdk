@@ -31,7 +31,7 @@ import io.proximax.sdk.model.transaction.UInt64Id;
  */
 public class MosaicId implements UInt64Id {
    private final BigInteger id;
-   private final Optional<Integer> nonce;
+   private final Optional<MosaicNonce> nonce;
    private final Optional<String> fullName = Optional.empty();
 
    /**
@@ -40,8 +40,8 @@ public class MosaicId implements UInt64Id {
     * @param nonce random integer
     * @param ownerPublicKeyHex hexadecimal representation of owner's public key
     */
-   public MosaicId(Integer nonce, String ownerPublicKeyHex) {
-      this.id = IdGenerator.generateMosaicId(nonce, ownerPublicKeyHex);
+   public MosaicId(MosaicNonce nonce, String ownerPublicKeyHex) {
+      this.id = IdGenerator.generateMosaicId(nonce.getNonceAsInt(), ownerPublicKeyHex);
       this.nonce = Optional.of(nonce);
    }
 
@@ -73,7 +73,7 @@ public class MosaicId implements UInt64Id {
    /**
     * @return the nonce
     */
-   public Optional<Integer> getNonce() {
+   public Optional<MosaicNonce> getNonce() {
       return nonce;
    }
 

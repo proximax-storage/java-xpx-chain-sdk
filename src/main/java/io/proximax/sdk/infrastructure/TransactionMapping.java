@@ -35,6 +35,7 @@ import io.proximax.sdk.model.metadata.MetadataModificationType;
 import io.proximax.sdk.model.metadata.MetadataType;
 import io.proximax.sdk.model.mosaic.Mosaic;
 import io.proximax.sdk.model.mosaic.MosaicId;
+import io.proximax.sdk.model.mosaic.MosaicNonce;
 import io.proximax.sdk.model.mosaic.MosaicProperties;
 import io.proximax.sdk.model.mosaic.MosaicSupplyType;
 import io.proximax.sdk.model.namespace.NamespaceId;
@@ -124,9 +125,9 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
      * @return value of the fee
      */
     public static BigInteger extractFee(JsonObject transaction) {
-      if (transaction.getString("maxFee") != null) {
+      if (transaction.containsKey("maxFee")) {
          return new BigInteger(transaction.getString("maxFee"));
-      } else if (transaction.getJsonArray("fee") != null) {
+      } else if (transaction.containsKey("fee")) {
          return extractBigInteger(transaction.getJsonArray("fee"));
       } else {
          throw new IllegalArgumentException("Fee is missing in the transaction description");
@@ -360,15 +361,31 @@ class MosaicCreationTransactionMapping extends TransactionMapping {
                 extractTransactionVersion(version),
                 deadline,
                 extractFee(transaction),
+                extractNonce(transaction),
                 new MosaicId(extractBigInteger(transaction.getJsonArray("mosaicId"))),
-//                MosaicNonce.createFromBigInteger(extractBigInteger(transaction.getJsonArray("nonce"))),
-//                MosaicNonce.createFromBigInteger(BigInteger.valueOf(transaction.getInteger("mosaicNonce"))),
                 properties,
                 transaction.getString("signature"),
                 new PublicAccount(transaction.getString("signer"), extractNetworkType(version)),
                 transactionInfo
         );
     }
+    
+    /**
+     * retrieve fee from the transaction. listener returns fee as uint64 "fee" and services return string "maxFee"
+     * and this method provides support for both
+     * 
+     * @param transaction transaction object with fee or maxFee field
+     * @return value of the fee
+     */
+    public static MosaicNonce extractNonce(JsonObject transaction) {
+      if (transaction.containsKey("mosaicNonce")) {
+         return MosaicNonce.createFromBigInteger(BigInteger.valueOf(transaction.getInteger("mosaicNonce")));
+      } else if (transaction.containsKey("nonce")) {
+         return MosaicNonce.createFromBigInteger(BigInteger.valueOf(transaction.getInteger("nonce")));
+      } else {
+         throw new IllegalArgumentException("Fee is missing in the transaction description");
+      }
+   }
 }
 
 /**
