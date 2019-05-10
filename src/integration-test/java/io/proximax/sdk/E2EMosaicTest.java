@@ -122,7 +122,7 @@ public class E2EMosaicTest extends E2EBaseTest {
       MosaicNonce aNonce = MosaicNonce.createRandom();
       MosaicId aId = new MosaicId(aNonce, seedAccount.getPublicKey());
       // create mosaic
-      MosaicDefinitionTransaction create = MosaicDefinitionTransaction.create(nonce,
+      MosaicDefinitionTransaction create = MosaicDefinitionTransaction.create(aNonce,
             aId,
             getDeadline(),
             new MosaicProperties(true, true, false, 6, BigInteger.valueOf(20)),
@@ -146,7 +146,7 @@ public class E2EMosaicTest extends E2EBaseTest {
       // announce the request
       transactionHttp.announce(signedTransaction).blockingFirst();
       // wait for acceptance
-      logger.info("Supply changed. {}",
+      logger.info("Aggregate mosaic done. {}",
             listener.confirmed(seedAccount.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
       // verify that mosaic looks fine
       MosaicInfo info = mosaicHttp.getMosaic(aId).blockingFirst();
