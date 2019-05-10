@@ -58,7 +58,6 @@ public class MosaicNonce {
    public MosaicNonce(byte[] nonce) {
       Validate.notNull(nonce, "Nonce must not be null");
       Validate.isTrue(nonce.length == NONCE_BYTES, "Nonce needs to have size " + NONCE_BYTES);
-      Validate.isTrue(ByteUtils.bytesToInt(nonce) != 0, "Zero is not a valid nonce");
       this.nonce = nonce;
    }
 
