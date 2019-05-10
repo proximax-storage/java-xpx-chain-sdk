@@ -124,14 +124,22 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
      * @param transaction transaction object with fee or maxFee field
      * @return value of the fee
      */
-    public static BigInteger extractFee(JsonObject transaction) {
-      if (transaction.containsKey("maxFee")) {
-         return new BigInteger(transaction.getString("maxFee"));
-      } else if (transaction.containsKey("fee")) {
-         return extractBigInteger(transaction.getJsonArray("fee"));
-      } else {
-         throw new IllegalArgumentException("Fee is missing in the transaction description");
+   public static BigInteger extractFee(JsonObject transaction) {
+      // first get value from a field
+      Object feeObj = transaction.getValue("maxFee");
+      if (feeObj == null) {
+         feeObj = transaction.getValue("fee");
       }
+      // based on the retrieved value create big integer instance
+      if (feeObj instanceof String) {
+         return new BigInteger((String) feeObj);
+      } else if (feeObj instanceof Long) {
+         return BigInteger.valueOf((Long) feeObj);
+      } else if (feeObj instanceof JsonArray) {
+         return extractBigInteger((JsonArray) feeObj);
+      }
+      // throw error
+      throw new IllegalArgumentException("Unable to get fee from " + transaction.encode());
    }
    
     /**
@@ -533,10 +541,10 @@ class AggregateTransactionMapping extends TransactionMapping {
      * @param source JSON object to take the fee from
      */
     private void setFee(JsonObject target, JsonObject source) {
-       if (source.getString("maxFee") != null) {
-          target.put("maxFee", source.getString("maxFee"));
-       } else if (source.getJsonArray("fee") != null) {
-          target.put("fee", source.getJsonArray("fee"));
+       if (source.containsKey("maxFee")) {
+          target.put("maxFee", source.getValue("maxFee"));
+       } else if (source.containsKey("fee")) {
+          target.put("fee", source.getValue("fee"));
        } else {
           throw new IllegalArgumentException("Fee is missing in the transaction description");
        }

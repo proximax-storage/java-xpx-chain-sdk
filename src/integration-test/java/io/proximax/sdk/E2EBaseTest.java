@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -147,7 +148,7 @@ public class E2EBaseTest extends BaseTest {
             .create(getDeadline(), recipient, Collections.singletonList(mosaicToTransfer), PlainMessage.Empty, NETWORK_TYPE);
       SignedTransaction signedTransfer = sender.sign(transfer);
       logger.info("Sent XPX to {}: {}", recipient.pretty(), transactionHttp.announce(signedTransfer).blockingFirst());
-      logger.info("request confirmed: {}", listener.confirmed(sender.getAddress()).blockingFirst());
+      logger.info("request confirmed: {}", listener.confirmed(sender.getAddress()).timeout(1, TimeUnit.MINUTES).blockingFirst());
       BigInteger endAmount = accountHttp.getAccountInfo(recipient).map(acct -> acct.getMosaics().get(0).getAmount())
             .blockingFirst();
       BigInteger mosaicScale = mosaicToTransfer.getAmount().divide(bigAmount);

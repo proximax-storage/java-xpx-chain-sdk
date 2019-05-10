@@ -20,13 +20,11 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-
 import io.proximax.sdk.infrastructure.model.FieldDTO;
 import io.proximax.sdk.infrastructure.model.MetadataDTO;
 import io.proximax.sdk.infrastructure.model.UInt64DTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +32,7 @@ import java.util.List;
 /**
  * MosaicMetadataDTO
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-04-29T09:43:14.260+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-05-10T01:03:53.323+02:00")
 public class MosaicMetadataDTO {
   @SerializedName("metadataType")
   private Integer metadataType = null;

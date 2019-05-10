@@ -61,9 +61,7 @@ public abstract class BaseTest {
     * @return
     */
    protected Account getSeedAccount(NetworkType networkType) {
-      String accountPk = "28FCECEA252231D2C86E1BCF7DD541552BDBBEFBB09324758B3AC199B4AA7B78"; // local
-//    String accountPk = "FA4EB55A4C0B462095F22F7768B7EDCC1DFC9287B16614E019E1326AC6E625D9"; // bcstage
-//      String accountPk =  System.getenv(SYS_ENV_PRIVATE_KEY);
+      String accountPk =  System.getenv(SYS_ENV_PRIVATE_KEY);
       if (accountPk == null) {
          fail("Seed account private key needs to be defined as env variable " + SYS_ENV_PRIVATE_KEY);
       } else {

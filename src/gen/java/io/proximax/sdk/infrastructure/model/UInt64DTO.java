@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * UInt64DTO
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-04-29T09:43:14.260+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-05-10T01:08:01.530+02:00")
 public class UInt64DTO extends ArrayList<Long> {
 
   @Override

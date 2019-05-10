@@ -20,12 +20,10 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-
 import io.proximax.sdk.infrastructure.model.MosaicDTO;
 import io.proximax.sdk.infrastructure.model.UInt64DTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +31,7 @@ import java.util.List;
 /**
  * AccountDTO
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-04-29T09:43:14.260+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-05-10T01:03:53.323+02:00")
 public class AccountDTO {
   @SerializedName("address")
   private String address = null;
@@ -47,14 +45,14 @@ public class AccountDTO {
   @SerializedName("publicKeyHeight")
   private UInt64DTO publicKeyHeight = null;
 
+  @SerializedName("accountType")
+  private Integer accountType = null;
+
+  @SerializedName("linkedAccountKey")
+  private String linkedAccountKey = null;
+
   @SerializedName("mosaics")
   private List<MosaicDTO> mosaics = new ArrayList<MosaicDTO>();
-
-  @SerializedName("importance")
-  private UInt64DTO importance = null;
-
-  @SerializedName("importanceHeight")
-  private UInt64DTO importanceHeight = null;
 
   public AccountDTO address(String address) {
     this.address = address;
@@ -128,6 +126,42 @@ public class AccountDTO {
     this.publicKeyHeight = publicKeyHeight;
   }
 
+  public AccountDTO accountType(Integer accountType) {
+    this.accountType = accountType;
+    return this;
+  }
+
+   /**
+   * Get accountType
+   * @return accountType
+  **/
+  @ApiModelProperty(required = true, value = "")
+  public Integer getAccountType() {
+    return accountType;
+  }
+
+  public void setAccountType(Integer accountType) {
+    this.accountType = accountType;
+  }
+
+  public AccountDTO linkedAccountKey(String linkedAccountKey) {
+    this.linkedAccountKey = linkedAccountKey;
+    return this;
+  }
+
+   /**
+   * Get linkedAccountKey
+   * @return linkedAccountKey
+  **/
+  @ApiModelProperty(required = true, value = "")
+  public String getLinkedAccountKey() {
+    return linkedAccountKey;
+  }
+
+  public void setLinkedAccountKey(String linkedAccountKey) {
+    this.linkedAccountKey = linkedAccountKey;
+  }
+
   public AccountDTO mosaics(List<MosaicDTO> mosaics) {
     this.mosaics = mosaics;
     return this;
@@ -151,42 +185,6 @@ public class AccountDTO {
     this.mosaics = mosaics;
   }
 
-  public AccountDTO importance(UInt64DTO importance) {
-    this.importance = importance;
-    return this;
-  }
-
-   /**
-   * Get importance
-   * @return importance
-  **/
-  @ApiModelProperty(required = true, value = "")
-  public UInt64DTO getImportance() {
-    return importance;
-  }
-
-  public void setImportance(UInt64DTO importance) {
-    this.importance = importance;
-  }
-
-  public AccountDTO importanceHeight(UInt64DTO importanceHeight) {
-    this.importanceHeight = importanceHeight;
-    return this;
-  }
-
-   /**
-   * Get importanceHeight
-   * @return importanceHeight
-  **/
-  @ApiModelProperty(required = true, value = "")
-  public UInt64DTO getImportanceHeight() {
-    return importanceHeight;
-  }
-
-  public void setImportanceHeight(UInt64DTO importanceHeight) {
-    this.importanceHeight = importanceHeight;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -201,14 +199,14 @@ public class AccountDTO {
         Objects.equals(this.addressHeight, accountDTO.addressHeight) &&
         Objects.equals(this.publicKey, accountDTO.publicKey) &&
         Objects.equals(this.publicKeyHeight, accountDTO.publicKeyHeight) &&
-        Objects.equals(this.mosaics, accountDTO.mosaics) &&
-        Objects.equals(this.importance, accountDTO.importance) &&
-        Objects.equals(this.importanceHeight, accountDTO.importanceHeight);
+        Objects.equals(this.accountType, accountDTO.accountType) &&
+        Objects.equals(this.linkedAccountKey, accountDTO.linkedAccountKey) &&
+        Objects.equals(this.mosaics, accountDTO.mosaics);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(address, addressHeight, publicKey, publicKeyHeight, mosaics, importance, importanceHeight);
+    return Objects.hash(address, addressHeight, publicKey, publicKeyHeight, accountType, linkedAccountKey, mosaics);
   }
 
 
@@ -221,9 +219,9 @@ public class AccountDTO {
     sb.append("    addressHeight: ").append(toIndentedString(addressHeight)).append("\n");
     sb.append("    publicKey: ").append(toIndentedString(publicKey)).append("\n");
     sb.append("    publicKeyHeight: ").append(toIndentedString(publicKeyHeight)).append("\n");
+    sb.append("    accountType: ").append(toIndentedString(accountType)).append("\n");
+    sb.append("    linkedAccountKey: ").append(toIndentedString(linkedAccountKey)).append("\n");
     sb.append("    mosaics: ").append(toIndentedString(mosaics)).append("\n");
-    sb.append("    importance: ").append(toIndentedString(importance)).append("\n");
-    sb.append("    importanceHeight: ").append(toIndentedString(importanceHeight)).append("\n");
     sb.append("}");
     return sb.toString();
   }
