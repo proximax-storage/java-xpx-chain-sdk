@@ -46,11 +46,11 @@ public class TransactionHttp extends Http implements TransactionRepository {
 	private static final String KEY_MESSAGE = "message";
 	
     public TransactionHttp(String host) throws MalformedURLException {
-        this(host + "/transaction/", new NetworkHttp(host));
+        this(host, new NetworkHttp(host));
     }
 
     public TransactionHttp(String host, NetworkHttp networkHttp) throws MalformedURLException {
-        super(host, networkHttp);
+        super(host + "/transaction/", networkHttp);
     }
 
     @Override

@@ -41,7 +41,7 @@ import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicSupplyType;
-import io.proximax.sdk.model.mosaic.XPX;
+import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.transaction.*;
 
@@ -75,7 +75,7 @@ class E2ETest extends BaseTest {
                 new Deadline(2, HOURS),
                 new Address("SDRDGFTDLLCB67D4HPGIMIHPNSRYRJRT7DOBGWZY", NetworkType.MIJIN_TEST),
                 Collections.singletonList(
-                        XPX.createAbsolute(BigInteger.valueOf(1))
+                        NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))
                 ),
                 new PlainMessage("message"),
                 NetworkType.MIJIN_TEST
@@ -93,7 +93,7 @@ class E2ETest extends BaseTest {
                 new Deadline(2, HOURS),
                 new Address("SDRDGFTDLLCB67D4HPGIMIHPNSRYRJRT7DOBGWZY", NetworkType.MIJIN_TEST),
                 Collections.singletonList(
-                		XPX.createAbsolute(BigInteger.valueOf(1))
+                		NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))
                 ),
                 new PlainMessage("messageloooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo" +
                         "ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo" +
@@ -315,7 +315,7 @@ class E2ETest extends BaseTest {
 
         LockFundsTransaction lockFundsTransaction = LockFundsTransaction.create(
                 new Deadline(2, HOURS),
-                XPX.createRelative(BigInteger.valueOf(10)),
+                NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
                 signedTransaction,
                 NetworkType.MIJIN_TEST
@@ -338,7 +338,7 @@ class E2ETest extends BaseTest {
                 new Deadline(2, HOURS),
                 new Address("SDRDGFTDLLCB67D4HPGIMIHPNSRYRJRT7DOBGWZY", NetworkType.MIJIN_TEST),
                 Collections.singletonList(
-                		XPX.createAbsolute(BigInteger.valueOf(1))
+                		NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))
                 ),
                 PlainMessage.create("test-message"),
                 NetworkType.MIJIN_TEST
@@ -354,7 +354,7 @@ class E2ETest extends BaseTest {
 
         LockFundsTransaction lockFundsTransaction = LockFundsTransaction.create(
                 new Deadline(2, HOURS),
-                XPX.createRelative(BigInteger.valueOf(10)),
+                NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
                 signedTransaction,
                 NetworkType.MIJIN_TEST
@@ -385,7 +385,7 @@ class E2ETest extends BaseTest {
         SignedTransaction signedTransaction = this.account.sign(aggregateTransaction);
         LockFundsTransaction lockFundstx = LockFundsTransaction.create(
                 new Deadline(2, HOURS),
-                XPX.createRelative(BigInteger.valueOf(10)),
+                NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
                 signedTransaction,
                 NetworkType.MIJIN_TEST
@@ -403,7 +403,7 @@ class E2ETest extends BaseTest {
         SignedTransaction signedTransaction = this.account.sign(aggregateTransaction);
         LockFundsTransaction lockFundstx = LockFundsTransaction.create(
                 new Deadline(2, HOURS),
-                XPX.createRelative(BigInteger.valueOf(10)),
+                NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
                 signedTransaction,
                 NetworkType.MIJIN_TEST
@@ -431,7 +431,7 @@ class E2ETest extends BaseTest {
         String secret = Hex.encodeHexString(result);
         SecretLockTransaction secretLocktx = SecretLockTransaction.create(
                 new Deadline(2, HOURS),
-                XPX.createRelative(BigInteger.valueOf(10)),
+                NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
                 HashType.SHA3_256,
                 secret,
@@ -454,7 +454,7 @@ class E2ETest extends BaseTest {
         String secret = Hex.encodeHexString(result);
         SecretLockTransaction secretLocktx = SecretLockTransaction.create(
                 new Deadline(2, HOURS),
-                XPX.createRelative(BigInteger.valueOf(10)),
+                NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
                 HashType.SHA3_256,
                 secret,
@@ -485,7 +485,7 @@ class E2ETest extends BaseTest {
         String proof = Hex.encodeHexString(secretBytes);
         SecretLockTransaction secretLocktx = SecretLockTransaction.create(
                 new Deadline(2, HOURS),
-                XPX.createRelative(BigInteger.valueOf(10)),
+                NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
                 HashType.SHA3_256,
                 secret,
@@ -523,7 +523,7 @@ class E2ETest extends BaseTest {
         String proof = Hex.encodeHexString(secretBytes);
         SecretLockTransaction secretLocktx = SecretLockTransaction.create(
                 new Deadline(2, HOURS),
-                XPX.createRelative(BigInteger.valueOf(10)),
+                NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
                 HashType.SHA3_256,
                 secret,

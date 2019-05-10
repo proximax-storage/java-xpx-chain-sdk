@@ -24,10 +24,9 @@ import java.math.BigInteger;
 import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.infrastructure.utils.UInt64Utils;
-import io.proximax.sdk.model.mosaic.MosaicId;
 
 class MosaicIdTest {
-	private static final Integer NONCE = 0;
+	private static final MosaicNonce NONCE = new MosaicNonce(new byte[4]);
 	private static final String PUB_KEY = "B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF";
 	private static final BigInteger ID = UInt64Utils.fromIntArray(new int[]{481110499,231112638});
 	
@@ -49,4 +48,12 @@ class MosaicIdTest {
         MosaicId mosaicId2 = new MosaicId(new BigInteger("-8884663987180930485"));
         assertTrue(mosaicId.equals(mosaicId2));
     }
+    
+    @Test
+    void someMoreData() {
+        MosaicId mosaicId = new MosaicId(MosaicNonce.createFromHex("B76FE378"), "4AFF7B4BA8C1C26A7917575993346627CB6C80DE62CD92F7F9AEDB7064A3DE62");
+        MosaicId mosaicId2 = new MosaicId(new BigInteger("3AD842A8C0AFC518", 16));
+        assertTrue(mosaicId.equals(mosaicId2));
+    }
+
 }

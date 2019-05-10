@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
-import io.proximax.sdk.model.mosaic.XPX;
+import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.transaction.LockFundsTransaction;
 import io.proximax.sdk.model.transaction.SignedTransaction;
 import io.proximax.sdk.model.transaction.TransactionType;
@@ -58,7 +58,7 @@ class LockFundsTransactionTest {
         SignedTransaction signedTransaction = new SignedTransaction("payload", "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", TransactionType.AGGREGATE_BONDED);
         LockFundsTransaction lockFundstx = LockFundsTransaction.create(
                 new FakeDeadline(),
-                XPX.createRelative(BigInteger.valueOf(10)),
+                NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
                 signedTransaction,
                 NetworkType.MIJIN_TEST
@@ -80,7 +80,7 @@ class LockFundsTransactionTest {
         SignedTransaction signedTransaction = new SignedTransaction("payload", "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", TransactionType.AGGREGATE_BONDED);
         LockFundsTransaction lockFundstx = LockFundsTransaction.create(
                 new FakeDeadline(),
-                XPX.createRelative(BigInteger.valueOf(10)),
+                NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
                 signedTransaction,
                 NetworkType.MIJIN_TEST
@@ -94,7 +94,7 @@ class LockFundsTransactionTest {
         SignedTransaction signedTransaction = new SignedTransaction("payload", "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", TransactionType.AGGREGATE_BONDED);
         LockFundsTransaction lockFundstx = LockFundsTransaction.create(
                 new FakeDeadline(),
-                XPX.createRelative(BigInteger.valueOf(10)),
+                NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
                 signedTransaction,
                 NetworkType.MIJIN_TEST
@@ -110,7 +110,7 @@ class LockFundsTransactionTest {
         SignedTransaction signedTransaction = new SignedTransaction("payload", "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", TransactionType.TRANSFER);
         assertThrows(IllegalArgumentException.class, ()->{LockFundsTransaction.create(
                 new FakeDeadline(),
-                XPX.createRelative(BigInteger.valueOf(10)),
+                NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
                 BigInteger.valueOf(100),
                 signedTransaction,
                 NetworkType.MIJIN_TEST

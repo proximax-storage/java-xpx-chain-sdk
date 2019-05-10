@@ -87,6 +87,60 @@
 					}
 				]
 			}
+		},
+		{
+			"transaction": {
+				"signature": "2D69EDAC984A92F828CAE54585F0E3508105B5AC1207AFD4AF348FB54DA14DA176F67529D7E45200B3B0C8FB730054E5423167A8B69E40847793D5CEB3CA9C0D",
+				"signer": "0EB448D07C7CCB312989AC27AA052738FF589E2F83973F909B506B450DC5C4E2",
+				"version": 36867,
+				"type": 16717,
+				"fee": [
+					0,
+					0
+				],
+				"deadline": [
+					3366581008,
+					22
+				],
+				"nonce": 597062187,
+				"mosaicId": [
+					519715527,
+					2095048262
+				],
+				"properties": [
+					{
+						"key": 0,
+						"value": [
+							3,
+							0
+						]
+					},
+					{
+						"key": 1,
+						"value": [
+							6,
+							0
+						]
+					},
+					{
+						"key": 2,
+						"value": [
+							20,
+							0
+						]
+					}
+				]
+			},
+			"meta": {
+				"hash": "FFE6DC2C06006EA3312230BBA72C95735F5307AAEB6C04FBB01ACCB3E71C2F27",
+				"merkleComponentHash": "FFE6DC2C06006EA3312230BBA72C95735F5307AAEB6C04FBB01ACCB3E71C2F27",
+				"height": [
+					46500,
+					0
+				],
+				"channelName": "confirmedAdded",
+				"address": "904D2D20D420F9FF44984773932255910E02FB08866BEC24B0"
+			}
 		}
 	]
 }

@@ -35,7 +35,7 @@ import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.mosaic.Mosaic;
-import io.proximax.sdk.model.mosaic.XPX;
+import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.Deadline;
 import io.proximax.sdk.model.transaction.Message;
@@ -68,7 +68,7 @@ public class E2ETransferTest extends E2EBaseTest {
       // return the XPX
       SignedTransaction signedTransaction = signTransfer(simpleAccount,
             seedAccount.getAddress(),
-            XPX.createAbsolute(BigInteger.valueOf(4)),
+            NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(4)),
             new PlainMessage("money back guarantee"));
       logger.info("Returning funds. {}", transactionHttp.announce(signedTransaction).blockingFirst());
       logger.info("Returned funds. {}",
@@ -84,7 +84,7 @@ public class E2ETransferTest extends E2EBaseTest {
       // send transaction with plain message
       transfer(seedAccount,
             simpleAccount.getAddress(),
-            XPX.createAbsolute(BigInteger.valueOf(1)),
+            NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1)),
             new PlainMessage("java SDK plain message test"));
    }
 
@@ -94,7 +94,7 @@ public class E2ETransferTest extends E2EBaseTest {
       SecureMessage secureMessage = SecureMessage.create(seedAccount.getKeyPair().getPrivateKey(),
             simpleAccount.getKeyPair().getPublicKey(),
             "java SDK secure message");
-      transfer(seedAccount, simpleAccount.getAddress(), XPX.createAbsolute(BigInteger.valueOf(1)), secureMessage);
+      transfer(seedAccount, simpleAccount.getAddress(), NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1)), secureMessage);
    }
 
    /**

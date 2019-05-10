@@ -34,12 +34,10 @@ import org.slf4j.LoggerFactory;
 
 import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.model.account.Account;
-import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.MultisigAccountGraphInfo;
 import io.proximax.sdk.model.account.MultisigAccountInfo;
-import io.proximax.sdk.model.mosaic.XPX;
+import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.transaction.*;
-import io.reactivex.functions.Consumer;
 
 /**
  * Multisig integration tests
@@ -70,23 +68,6 @@ public class E2EMultisigTest extends E2EBaseTest {
       signup(multisigAccount.getAddress());
       signup(cosig1.getAddress());
       signup(cosig2.getAddress());
-   }
-
-   /**
-    * subscribe to all channels for the address
-    * 
-    * @param addr
-    */
-   private void signup(Address addr) {
-      // output nothing by default
-      Consumer<? super Object> logme = (obj) -> logger.trace("listener fired: {}", obj);
-      disposables.add(listener.status(addr).subscribe(logme, logme));
-      disposables.add(listener.unconfirmedAdded(addr).subscribe(logme, logme));
-      disposables.add(listener.unconfirmedRemoved(addr).subscribe(logme, logme));
-      disposables.add(listener.aggregateBondedAdded(addr).subscribe(logme, logme));
-      disposables.add(listener.aggregateBondedRemoved(addr).subscribe(logme, logme));
-      disposables.add(listener.cosignatureAdded(addr).subscribe(logme, logme));
-      disposables.add(listener.confirmed(addr).subscribe(logme, logme));
    }
 
    @Test
@@ -127,7 +108,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       // prepare transfer to the seed account
       TransferTransaction transfer = TransferTransaction.create(getDeadline(),
             seedAccount.getAddress(),
-            Collections.singletonList(XPX.createAbsolute(BigInteger.valueOf(1))),
+            Collections.singletonList(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))),
             PlainMessage.Empty,
             NETWORK_TYPE);
       // add the modification to the aggregate transaction
@@ -147,7 +128,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       // prepare transfer to the seed account
       TransferTransaction transfer = TransferTransaction.create(getDeadline(),
             seedAccount.getAddress(),
-            Collections.singletonList(XPX.createAbsolute(BigInteger.valueOf(1))),
+            Collections.singletonList(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))),
             PlainMessage.Empty,
             NETWORK_TYPE);
       // add the modification to the aggregate transaction. has to be bonded because we are going to test the lock
@@ -158,7 +139,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       SignedTransaction signedTransaction = cosig1.sign(aggregateTransaction);
       // lock 10 of XPX (required to prevent spamming)
       LockFundsTransaction lockFundsTransaction = LockFundsTransaction.create(getDeadline(),
-            XPX.createRelative(BigInteger.valueOf(10)),
+            NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
             BigInteger.valueOf(480),
             signedTransaction,
             NETWORK_TYPE);
@@ -201,7 +182,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       // prepare transfer to the seed account
       TransferTransaction transfer = TransferTransaction.create(getDeadline(),
             seedAccount.getAddress(),
-            Collections.singletonList(XPX.createAbsolute(BigInteger.valueOf(1))),
+            Collections.singletonList(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))),
             PlainMessage.Empty,
             NETWORK_TYPE);
       // add the modification to the aggregate transaction
@@ -222,7 +203,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       // prepare transfer to the seed account
       TransferTransaction transfer = TransferTransaction.create(getDeadline(),
             seedAccount.getAddress(),
-            Collections.singletonList(XPX.createAbsolute(BigInteger.valueOf(1))),
+            Collections.singletonList(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))),
             PlainMessage.Empty,
             NETWORK_TYPE);
       // add the modification to the aggregate transaction. has to be bonded because we are going to test the lock
@@ -234,7 +215,7 @@ public class E2EMultisigTest extends E2EBaseTest {
             Arrays.asList(cosig2));
       // lock 10 of XPX (required to prevent spamming)
       LockFundsTransaction lockFundsTransaction = LockFundsTransaction.create(getDeadline(),
-            XPX.createRelative(BigInteger.valueOf(10)),
+            NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
             BigInteger.valueOf(480),
             signedTransaction,
             NETWORK_TYPE);
@@ -256,7 +237,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       // prepare transfer to the seed account
       TransferTransaction transfer = TransferTransaction.create(getDeadline(),
             seedAccount.getAddress(),
-            Collections.singletonList(XPX.createAbsolute(BigInteger.valueOf(1))),
+            Collections.singletonList(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))),
             PlainMessage.Empty,
             NETWORK_TYPE);
       // add the modification to the aggregate transaction. has to be bonded because we are going to test the lock
@@ -267,7 +248,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       SignedTransaction signedTransaction = cosig1.sign(aggregateTransaction);
       // lock 10 of XPX (required to prevent spamming)
       LockFundsTransaction lockFundsTransaction = LockFundsTransaction.create(getDeadline(),
-            XPX.createRelative(BigInteger.valueOf(10)),
+            NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
             BigInteger.valueOf(480),
             signedTransaction,
             NETWORK_TYPE);
@@ -304,7 +285,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       SignedTransaction signedTransaction = cosig1.sign(aggregateTransaction);
       // lock 10 of XPX (required to prevent spamming)
       LockFundsTransaction lockFundsTransaction = LockFundsTransaction.create(getDeadline(),
-            XPX.createRelative(BigInteger.valueOf(10)),
+            NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
             BigInteger.valueOf(480),
             signedTransaction,
             NETWORK_TYPE);

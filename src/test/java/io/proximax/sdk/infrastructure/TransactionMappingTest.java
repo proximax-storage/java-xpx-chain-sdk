@@ -21,15 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.stream.Stream;
 
 import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.Test;
@@ -37,6 +30,7 @@ import org.junit.jupiter.api.Test;
 import io.proximax.core.crypto.KeyPair;
 import io.proximax.core.crypto.PrivateKey;
 import io.proximax.core.crypto.PublicKey;
+import io.proximax.sdk.ResourceBasedTest;
 import io.proximax.sdk.infrastructure.model.UInt64DTO;
 import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.account.Address;
@@ -45,55 +39,11 @@ import io.proximax.sdk.model.transaction.*;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
-public class TransactionMappingTest {
+public class TransactionMappingTest extends ResourceBasedTest {
 
-	/**
-	 * load array of transactions from bundle with given name
-	 * @param name
-	 * @return
-	 */
-   private static JsonArray getTransactions(String name) {
-      // first get URI from the classpath
-      URI resourceUri;
-      try {
-         resourceUri = TransactionMappingTest.class.getClassLoader().getResource("transactions/" + name + ".json")
-               .toURI();
-      } catch (URISyntaxException e) {
-         throw new RuntimeException("Failed to locate resource " + name, e);
-      }
-      // load object from the classpath
-      try (Stream<String> stream = Files.lines(Paths.get(resourceUri), StandardCharsets.UTF_8)) {
-         StringBuilder contentBuilder = new StringBuilder();
-         stream.forEach(s -> contentBuilder.append(s).append("\n"));
-         JsonObject obj = new JsonObject(contentBuilder.toString());
-         // retrieve transactions as an array
-         return obj.getJsonArray("transactions");
-      } catch (IOException e) {
-         throw new RuntimeException("Failed to load transactions from " + name, e);
-      }
-   }
-	
-	/**
-	 * return stream of concatenated transaction bundles
-	 * @param bundles
-	 * @return
-	 */
-   private static Stream<JsonObject> streamTransactions(String... bundles) {
-      // take bundle names and create stream of transactions in those bundles
-      return Stream.of(bundles)
-            // map from bundle name to stream of JsonObjects
-            .map(bundle -> getTransactions(bundle).stream())
-            // concatenate the streams
-            .reduce(Stream::concat)
-            // return empty stream if there was nothing to concatenate
-            .orElse(Stream.empty())
-            // map items in the stream to type JsonObject
-            .map(obj -> (JsonObject) obj);
-   }
-	
     @Test
     void validateStandaloneTransactions() {
-    	streamTransactions("TRANSFER", "TRANSFER.messages", "REGISTER_NAMESPACE", "MOSAIC_DEFINITION", "LOCK")
+    	streamTransactions("TRANSFER", "TRANSFER.messages", "REGISTER_NAMESPACE", "MOSAIC_DEFINITION", "LOCK", "METADATA_MODIFICATION")
     		.forEachOrdered(transactionDTO -> {
     			Transaction transaction = new TransactionMapping().apply(transactionDTO);
     			validateStandaloneTransaction(transaction, transactionDTO);

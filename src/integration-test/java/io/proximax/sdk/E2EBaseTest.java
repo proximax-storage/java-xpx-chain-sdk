@@ -23,9 +23,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -36,22 +34,21 @@ import org.slf4j.LoggerFactory;
 import io.proximax.sdk.infrastructure.AccountHttp;
 import io.proximax.sdk.infrastructure.BlockchainHttp;
 import io.proximax.sdk.infrastructure.Listener;
+import io.proximax.sdk.infrastructure.MetadataHttp;
 import io.proximax.sdk.infrastructure.MosaicHttp;
 import io.proximax.sdk.infrastructure.NamespaceHttp;
+import io.proximax.sdk.infrastructure.NetworkHttp;
 import io.proximax.sdk.infrastructure.TransactionHttp;
 import io.proximax.sdk.model.account.Account;
-import io.proximax.sdk.model.account.AccountInfo;
 import io.proximax.sdk.model.account.Address;
-import io.proximax.sdk.model.blockchain.BlockInfo;
 import io.proximax.sdk.model.mosaic.Mosaic;
-import io.proximax.sdk.model.mosaic.MosaicId;
-import io.proximax.sdk.model.mosaic.MosaicInfo;
-import io.proximax.sdk.model.mosaic.XPX;
+import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.transaction.Deadline;
 import io.proximax.sdk.model.transaction.PlainMessage;
 import io.proximax.sdk.model.transaction.SignedTransaction;
 import io.proximax.sdk.model.transaction.TransferTransaction;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * Base class for new set of tests that proof and demo the functionality
@@ -63,16 +60,17 @@ public class E2EBaseTest extends BaseTest {
    /** logger */
    private static final Logger logger = LoggerFactory.getLogger(E2EBaseTest.class);
 
+   protected NetworkHttp networkHttp;
    protected BlockchainHttp blockchainHttp;
    protected AccountHttp accountHttp;
    protected TransactionHttp transactionHttp;
    protected MosaicHttp mosaicHttp;
    protected NamespaceHttp namespaceHttp;
+   protected MetadataHttp metadataHttp;
    
    protected Listener listener;
 
    protected Account seedAccount;
-   protected MosaicInfo mosaic;
 
    protected Collection<Disposable> disposables = new LinkedList<>();
    
@@ -81,21 +79,25 @@ public class E2EBaseTest extends BaseTest {
       String nodeUrl = this.getNodeUrl();
       logger.info("Preparing tests for {} using {}", NETWORK_TYPE, nodeUrl);
       // create HTTP APIs
-      transactionHttp = new TransactionHttp(nodeUrl);
-      accountHttp = new AccountHttp(nodeUrl);
-      blockchainHttp = new BlockchainHttp(nodeUrl);
-      mosaicHttp = new MosaicHttp(nodeUrl);
-      namespaceHttp = new NamespaceHttp(nodeUrl);
+      networkHttp = new NetworkHttp(nodeUrl);
+      transactionHttp = new TransactionHttp(nodeUrl, networkHttp);
+      accountHttp = new AccountHttp(nodeUrl, networkHttp);
+      blockchainHttp = new BlockchainHttp(nodeUrl, networkHttp);
+      mosaicHttp = new MosaicHttp(nodeUrl, networkHttp);
+      namespaceHttp = new NamespaceHttp(nodeUrl, networkHttp);
+      metadataHttp = new MetadataHttp(nodeUrl, networkHttp);
+      logger.info("Created HTTP interfaces");
       // prepare listener
       listener = new Listener(nodeUrl);
       listener.open().get();
+      logger.info("Created listener");
       // retrieve the seed account which has for tests
       seedAccount = getSeedAccount(NETWORK_TYPE);
-      // get the mosaic that will be used here
-      mosaic = getMosaic();
+      logger.info("Seed account: {}", seedAccount);
       // add listener to see account
       disposables.add(listener.status(seedAccount.getAddress())
             .subscribe(err -> logger.error("Operation failed: {}", err), t -> logger.error("exception thrown", t)));
+      logger.info("Base initialized");
    }
 
    @AfterAll
@@ -107,38 +109,6 @@ public class E2EBaseTest extends BaseTest {
    }
 
    /**
-    * retrieve mosaic from seed account that will be used to transfer funds
-    * 
-    * @return
-    * @throws InterruptedException
-    * @throws ExecutionException
-    */
-   private MosaicInfo getMosaic() throws InterruptedException, ExecutionException {
-      // check that account actually has some funds
-      AccountInfo seedAccountInfo = accountHttp.getAccountInfo(seedAccount.getAddress()).toFuture().get();
-      List<MosaicId> seedMosaicIDs = seedAccountInfo.getMosaics().stream().map(Mosaic::getId)
-            .collect(Collectors.toList());
-      List<MosaicInfo> mosaics = mosaicHttp.getMosaics(seedMosaicIDs).toFuture().get();
-      logger.info("Seed account has following mosaics: {}", mosaics);
-      // TODO pick the mosaic to be used here
-      return mosaics.get(0);
-   }
-
-   /**
-    * wait for next block and return the block info
-    * 
-    * @return block info
-    * @throws InterruptedException when wait for block is interrupted
-    * @throws ExecutionException when retrieval of block info fails
-    */
-   protected BlockInfo waitForBlock(int numberOfBlocks) throws InterruptedException, ExecutionException {
-      logger.info("Waiting for {} blocks", numberOfBlocks);
-      // wait for new block so we know all is on the blockchain
-      return listener.newBlock().take(numberOfBlocks)
-            .doOnNext((block) -> logger.info("Block created with height {}", block.getHeight())).blockingLast();
-   }
-
-   /**
     * create deadline of 5 minutes
     * 
     * @return deadline
@@ -147,6 +117,23 @@ public class E2EBaseTest extends BaseTest {
       return new Deadline(5, ChronoUnit.MINUTES);
    }
    
+
+   /**
+    * subscribe to all channels for the address
+    * 
+    * @param addr
+    */
+   protected void signup(Address addr) {
+      // output nothing by default
+      Consumer<? super Object> logme = (obj) -> logger.trace("listener fired: {}", obj);
+      disposables.add(listener.status(addr).subscribe(logme, logme));
+      disposables.add(listener.unconfirmedAdded(addr).subscribe(logme, logme));
+      disposables.add(listener.unconfirmedRemoved(addr).subscribe(logme, logme));
+      disposables.add(listener.aggregateBondedAdded(addr).subscribe(logme, logme));
+      disposables.add(listener.aggregateBondedRemoved(addr).subscribe(logme, logme));
+      disposables.add(listener.cosignatureAdded(addr).subscribe(logme, logme));
+      disposables.add(listener.confirmed(addr).subscribe(logme, logme));
+   }
    /**
     * send XPX from account to recipient
     * 
@@ -155,7 +142,7 @@ public class E2EBaseTest extends BaseTest {
     */
    protected void sendSomeCash(Account sender, Address recipient, long amount) {
       BigInteger bigAmount = BigInteger.valueOf(amount);
-      Mosaic mosaicToTransfer = XPX.createRelative(bigAmount);
+      Mosaic mosaicToTransfer = NetworkCurrencyMosaic.createRelative(bigAmount);
       TransferTransaction transfer = TransferTransaction
             .create(getDeadline(), recipient, Collections.singletonList(mosaicToTransfer), PlainMessage.Empty, NETWORK_TYPE);
       SignedTransaction signedTransfer = sender.sign(transfer);
