@@ -451,10 +451,10 @@ class AggregateTransactionMapping extends TransactionMapping {
      * @param source JSON object to take the fee from
      */
     private void setFee(JsonObject target, JsonObject source) {
-       if (source.getString("maxFee") != null) {
-          target.put("maxFee", source.getString("maxFee"));
-       } else if (source.getJsonArray("fee") != null) {
-          target.put("fee", source.getJsonArray("fee"));
+       if (source.containsKey("maxFee")) {
+          target.put("maxFee", source.getValue("maxFee"));
+       } else if (source.containsKey("fee")) {
+          target.put("fee", source.getValue("fee"));
        } else {
           throw new IllegalArgumentException("Fee is missing in the transaction description");
        }
