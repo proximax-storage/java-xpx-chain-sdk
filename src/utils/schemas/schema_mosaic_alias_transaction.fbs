@@ -10,7 +10,7 @@ table MosaicAliasDefinitionTransactionBuffer {
     deadline:[uint];
     namespaceId:[uint];
     mosaicId:[uint];
-	aliasAction:uint;
+	aliasAction:ubyte;
 }
 
 root_type MosaicAliasDefinitionTransactionBuffer;

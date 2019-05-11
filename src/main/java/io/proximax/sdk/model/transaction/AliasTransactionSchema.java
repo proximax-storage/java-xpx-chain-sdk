@@ -18,19 +18,20 @@ package io.proximax.sdk.model.transaction;
 
 import java.util.Arrays;
 
-class MosaicAliasTransactionSchema extends Schema {
-    public MosaicAliasTransactionSchema() {
+class AliasTransactionSchema extends Schema {
+    public AliasTransactionSchema() {
         super(Arrays.asList(
                 new ScalarAttribute("size", Constants.SIZEOF_INT),
                 new ArrayAttribute ("signature", Constants.SIZEOF_BYTE),
                 new ArrayAttribute ("signer", Constants.SIZEOF_BYTE),
                 new ScalarAttribute("version", Constants.SIZEOF_SHORT),
                 new ScalarAttribute("type", Constants.SIZEOF_SHORT),
-                new ArrayAttribute ("fee", Constants.SIZEOF_INT),
+                new ArrayAttribute ("maxFee", Constants.SIZEOF_INT),
                 new ArrayAttribute ("deadline", Constants.SIZEOF_INT),
-                new ScalarAttribute("namespaceId", Constants.SIZEOF_INT),
-                new ArrayAttribute ("mosaicId", Constants.SIZEOF_INT),
-                new ScalarAttribute("action", Constants.SIZEOF_INT)
+                
+                new ScalarAttribute("actionType", Constants.SIZEOF_BYTE),
+                new ArrayAttribute("namespaceId", Constants.SIZEOF_INT),
+                new ArrayAttribute ("aliasId", Constants.SIZEOF_BYTE)
         ));
     }
 }

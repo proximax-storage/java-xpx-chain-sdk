@@ -29,6 +29,7 @@ import io.proximax.sdk.infrastructure.model.UInt64DTO;
 import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
+import io.proximax.sdk.model.alias.AliasAction;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.metadata.MetadataModification;
 import io.proximax.sdk.model.metadata.MetadataModificationType;
@@ -404,7 +405,7 @@ class MosaicCreationTransactionMapping extends TransactionMapping {
 class MosaicAliasTransactionMapping extends TransactionMapping {
 
     @Override
-    public MosaicAliasDefinitionTransaction apply(JsonObject input) {
+    public AliasTransaction apply(JsonObject input) {
     	// load transaction info and data
         TransactionInfo transactionInfo = this.createTransactionInfo(input.getJsonObject("meta"));
         JsonObject transaction = input.getJsonObject("transaction");
@@ -412,14 +413,16 @@ class MosaicAliasTransactionMapping extends TransactionMapping {
         Deadline deadline = new Deadline(extractBigInteger(transaction.getJsonArray("deadline")));
         int version = transaction.getInteger("version");
         // return instance of mosaic alias definition transaction
-        return new MosaicAliasDefinitionTransaction(
+        return new AliasTransaction(
+                TransactionType.MOSAIC_ALIAS,
                 extractNetworkType(version),
                 extractTransactionVersion(version),
                 deadline,
                 extractFee(transaction),
-                new MosaicId(extractBigInteger(transaction.getJsonArray("mosaicId"))),
+                Optional.of(new MosaicId(extractBigInteger(transaction.getJsonArray("mosaicId")))),
+                Optional.empty(),
                 new NamespaceId(extractBigInteger(transaction.getJsonArray("namespaceId"))),
-                transaction.getInteger("action"),
+                AliasAction.getBycode(transaction.getInteger("aliasAction")),
                 transaction.getString("signature"),
                 new PublicAccount(transaction.getString("signer"), extractNetworkType(version)),
                 transactionInfo

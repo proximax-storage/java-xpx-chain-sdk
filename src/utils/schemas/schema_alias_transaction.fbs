@@ -1,0 +1,17 @@
+namespace io.proximax.sdk.model.transaction;
+
+table AliasTransactionBuffer {
+    size: uint;
+    signature: [ubyte];
+    signer: [ubyte];
+    version: ushort;
+    type: ushort;
+    maxFee: [uint];
+    deadline:[uint];
+    actionType: ubyte;
+    namespaceId: [uint];
+    /// In case of address it is 25 bytes array. In case of mosaic it is 8 byte array(or 2 uint32 array)
+    aliasId: [ubyte];
+}
+
+root_type AliasTransactionBuffer;
