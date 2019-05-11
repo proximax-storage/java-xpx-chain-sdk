@@ -38,12 +38,16 @@ public enum HashType {
     /**
      * hashed twice: first with SHA-256 and then with RIPEMD-160
      * (BTC Compat)
+     * @deprecated This is currently not supported by Sirius platform
      */
+    @Deprecated
     HASH_160(2, Hashes::hash160, "-?[0-9a-fA-F]+", 40),
     /**
      * Hashed twice with SHA-256
      * (BTC Compat)
+     * @deprecated This is currently not supported by Sirius platform
      */
+    @Deprecated
     HASH_256(3, Hashes::hash256,"-?[0-9a-fA-F]+", 64);
 
     private final int value;
@@ -65,18 +69,12 @@ public enum HashType {
      * @return hash type or throw IllegalArgumentException
      */
     public static HashType rawValueOf(int value) {
-        switch (value) {
-            case 0:
-                return HashType.SHA3_256;
-            case 1:
-                return HashType.KECCAK_256;
-            case 2:
-                return HashType.HASH_160;
-            case 3:
-                return HashType.HASH_256;
-            default:
-                throw new IllegalArgumentException(value + " is not a valid hash type code");
-        }
+       for (HashType type : HashType.values()) {
+          if (value == type.value) {
+             return type;
+          }
+       }
+       throw new IllegalArgumentException("Unsupported hash type code " + value);
     }
 
     /**
