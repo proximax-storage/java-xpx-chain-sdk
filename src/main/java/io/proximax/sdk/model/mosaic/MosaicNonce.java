@@ -98,7 +98,7 @@ public class MosaicNonce {
    /**
     * Create a MosaicNonce from a BigInteger.
     *
-    * TODO BEWARE this uses little endian while getNonceAsInt uses big endian. do not mix the two
+    * BEWARE this uses little endian while getNonceAsInt uses big endian. do not mix the two
     * 
     * @param number
     * @return MosaicNonce
