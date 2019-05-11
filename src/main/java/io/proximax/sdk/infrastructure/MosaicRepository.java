@@ -19,7 +19,7 @@ package io.proximax.sdk.infrastructure;
 import java.util.List;
 
 import io.proximax.sdk.model.mosaic.MosaicInfo;
-import io.proximax.sdk.model.mosaic.MosaicName;
+import io.proximax.sdk.model.mosaic.MosaicNames;
 import io.proximax.sdk.model.transaction.UInt64Id;
 import io.reactivex.Observable;
 
@@ -50,7 +50,7 @@ public interface MosaicRepository {
      * Gets list of MosaicName for different mosaicIds.
      *
      * @param mosaicIds List of BigInteger
-     * @return Observable of List<{@link MosaicName}>
+     * @return Observable of List<{@link MosaicNames}>
      */
-    Observable<List<MosaicName>> getMosaicNames(List<UInt64Id> mosaicIds);
+    Observable<List<MosaicNames>> getMosaicNames(List<UInt64Id> mosaicIds);
 }

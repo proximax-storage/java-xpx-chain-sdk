@@ -15,7 +15,11 @@
  */
 package io.proximax.sdk;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.AfterAll;
@@ -33,6 +37,7 @@ import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.alias.AliasAction;
 import io.proximax.sdk.model.mosaic.MosaicId;
+import io.proximax.sdk.model.mosaic.MosaicNames;
 import io.proximax.sdk.model.mosaic.MosaicNonce;
 import io.proximax.sdk.model.mosaic.MosaicProperties;
 import io.proximax.sdk.model.namespace.NamespaceId;
@@ -144,4 +149,11 @@ public class E2EAliasTest extends E2EBaseTest {
             listener.confirmed(seedAccount.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
    }
 
+   @Test
+   void test04RetrieveMosaicName() {
+      List<MosaicNames> names = mosaicHttp.getMosaicNames(Arrays.asList(mosaicId)).blockingFirst();
+      MosaicNames name = names.get(0);
+      assertEquals(ROOT_NAME+"."+CHILD1_NAME, name.getNames().get(0));
+   }
+   
 }
