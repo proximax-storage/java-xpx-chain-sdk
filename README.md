@@ -1,4 +1,4 @@
-<p align="center"><a href="https://vuejs.org" target="_blank" rel="noopener noreferrer"><img width="150" src="https://user-images.githubusercontent.com/29048783/57000439-a41fa000-6b81-11e9-94f3-6df17de7e41a.png" alt="Vue logo"></a></p>
+<p align="center"><a href="https://github.com/proximax-storage" target="_blank"><img width="150" src="https://github.com/proximax-storage/java-xpx-catapult-sdk/raw/issue/10-readme/docs/images/logo.jpg" alt="ProximaX Sirius Blockchain Java SDK"></a></p>
 
 # ProximaX Sirius Blockchain Java SDK #
 
