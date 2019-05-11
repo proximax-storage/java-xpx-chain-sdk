@@ -99,7 +99,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       logger.info("Sent request: {}", transactionHttp.announce(signedChangeToMultisig).toFuture().get());
       // verify that account is multisig
       logger.info("request o create multisig confirmed: {}",
-            listener.confirmed(multisigAccount.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(multisigAccount.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
       testMultisigAccount(multisigAccount, true, 1, 1, 2, 2);
    }
 
@@ -120,7 +120,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       // announce the transfer
       logger.info("Announced the aggregate complete transfer from multisig: {}",
             transactionHttp.announce(signedTransaction).blockingFirst());
-      logger.info("request to transfer confirmed: {}", listener.confirmed(cosig1.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+      logger.info("request to transfer confirmed: {}", listener.confirmed(cosig1.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
    }
 
    @Test
@@ -150,11 +150,11 @@ public class E2EMultisigTest extends E2EBaseTest {
       logger.info("Sent request to lock funds before transfer: {}",
             transactionHttp.announce(lockFundsTransactionSigned).blockingFirst());
       logger.info("request to transfer aggregate bonded confirmed: {}",
-            listener.confirmed(cosig1.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(cosig1.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
       // announce the multisig change as aggregate bounded
       logger.info("Announced the aggregate bonded transfer from multisig: {}",
             transactionHttp.announceAggregateBonded(signedTransaction).blockingFirst());
-      logger.info("request to make transfer confirmed: {}", listener.confirmed(cosig1.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+      logger.info("request to make transfer confirmed: {}", listener.confirmed(cosig1.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
    }
 
    @Test
@@ -173,7 +173,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       logger.info("Sent request: {}", transactionHttp.announce(signedChangeTo2of2).toFuture().get());
       // verify that min approvals is set to 2
       logger.info("request to increase min approval confirmed: {}",
-            listener.confirmed(cosig1.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(cosig1.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
       testMultisigAccount(multisigAccount, true, 2, 1, 2, 2);
    }
 
@@ -195,7 +195,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       // announce the transfer
       logger.info("Announced the transfer from multisig: {}",
             transactionHttp.announce(signedTransaction).blockingFirst());
-      logger.info("request confirmed: {}", listener.confirmed(cosig1.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+      logger.info("request confirmed: {}", listener.confirmed(cosig1.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
    }
 
    @Test
@@ -225,11 +225,11 @@ public class E2EMultisigTest extends E2EBaseTest {
       // announce the lock transaction
       logger.info("Sent request to lock funds: {}",
             transactionHttp.announce(lockFundsTransactionSigned).blockingFirst());
-      logger.info("request confirmed: {}", listener.confirmed(cosig1.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+      logger.info("request confirmed: {}", listener.confirmed(cosig1.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
       // announce the multisig change as aggregate bounded
       logger.info("Announced the transfer from multisig: {}",
             transactionHttp.announceAggregateBonded(signedTransaction).blockingFirst());
-      logger.info("request confirmed: {}", listener.confirmed(cosig1.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+      logger.info("request confirmed: {}", listener.confirmed(cosig1.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
    }
 
    @Test
@@ -258,11 +258,11 @@ public class E2EMultisigTest extends E2EBaseTest {
       // announce the lock transaction
       logger.info("Sent request to lock funds: {}",
             transactionHttp.announce(lockFundsTransactionSigned).blockingFirst());
-      logger.info("request confirmed: {}", listener.confirmed(cosig1.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+      logger.info("request confirmed: {}", listener.confirmed(cosig1.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
       // announce the multisig change as aggregate bounded
       logger.info("Announced the transfer from multisig: {}",
             transactionHttp.announceAggregateBonded(signedTransaction).blockingFirst());
-      logger.info("request confirmed: {}", listener.aggregateBondedAdded(cosig1.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+      logger.info("request confirmed: {}", listener.aggregateBondedAdded(cosig1.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
       // cosign the request
       cosignMultisigTransaction();
    }
@@ -294,11 +294,11 @@ public class E2EMultisigTest extends E2EBaseTest {
       // announce the transaction
       logger.info("Sent request to lock funds: {}",
             transactionHttp.announce(lockFundsTransactionSigned).toFuture().get());
-      logger.info("request confirmed: {}", listener.confirmed(cosig1.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+      logger.info("request confirmed: {}", listener.confirmed(cosig1.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
       // announce the multisig change as aggregate bounded
       logger.info("Announced the multisig change: {}",
             transactionHttp.announceAggregateBonded(signedTransaction).toFuture().get());
-      logger.info("request confirmed: {}", listener.aggregateBondedAdded(cosig1.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+      logger.info("request confirmed: {}", listener.aggregateBondedAdded(cosig1.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
       // change should not be in effect yet
       testMultisigAccount(multisigAccount, true, 2, 1, 2, 2);
    }
@@ -327,7 +327,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       logger.info("Sent request: {}", transactionHttp.announce(signedChangeToMultisig).toFuture().get());
       // verify that account is multisig
       logger.info("request o create multilevel multisig confirmed: {}",
-            listener.confirmed(multiMultisigAccount.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(multiMultisigAccount.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
       testMultisigAccount(multiMultisigAccount, true, 1, 1, 2, 3);
    }
    
@@ -345,7 +345,7 @@ public class E2EMultisigTest extends E2EBaseTest {
             }).count().blockingGet();
       // make sure that we co-signed exactly one transaction
       assertEquals(1, count);
-      logger.info("cosingned transactions: {}", listener.confirmed(cosig2.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+      logger.info("cosingned transactions: {}", listener.confirmed(cosig2.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
    }
 
    /**

@@ -72,7 +72,7 @@ public class E2ETransferTest extends E2EBaseTest {
             new PlainMessage("money back guarantee"));
       logger.info("Returning funds. {}", transactionHttp.announce(signedTransaction).blockingFirst());
       logger.info("Returned funds. {}",
-            listener.confirmed(simpleAccount.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(simpleAccount.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
       // check that target account has expected number of incoming transactions
       int transactions = accountHttp.incomingTransactions(simpleAccount.getPublicAccount()).blockingFirst().size();
       // TODO why 2? we did 4 transfers but 2 were aggregate?
@@ -147,11 +147,11 @@ public class E2ETransferTest extends E2EBaseTest {
       SignedTransaction signedTransaction = signTransfer(from, to, mosaic, message);
       logger.info("Transfer announced. {}", transactionHttp.announce(signedTransaction).blockingFirst());
       logger.info("Transfer done. {}",
-            listener.confirmed(from.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(from.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
       SignedTransaction signedAggregateTransaction = signAggregateTransfer(from, to, mosaic, message);
       logger.info("Transfer announced. {}", transactionHttp.announce(signedAggregateTransaction).blockingFirst());
       logger.info("Transfer done. {}",
-            listener.confirmed(from.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(from.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
 
    }
 

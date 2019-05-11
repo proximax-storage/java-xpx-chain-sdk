@@ -97,14 +97,14 @@ public class E2ESecretTest extends E2EBaseTest {
       SignedTransaction secretLockTransactionSigned = from.sign(secretLocktx);
       transactionHttp.announce(secretLockTransactionSigned).blockingFirst();
       logger.info("Lock confirmed: {}",
-            listener.confirmed(from.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(from.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
 
       SecretProofTransaction secretProoftx = SecretProofTransaction
             .create(getDeadline(), hashType, secret, proof, NETWORK_TYPE);
       SignedTransaction secretProoftxSigned = from.sign(secretProoftx);
       transactionHttp.announce(secretProoftxSigned).blockingFirst();
       logger.info("Proof confirmed: {}",
-            listener.confirmed(from.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(from.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
    }
 
    @Test
@@ -145,7 +145,7 @@ public class E2ESecretTest extends E2EBaseTest {
       SignedTransaction lockFundsTransactionSigned = from.sign(secretLocktx);
       transactionHttp.announce(lockFundsTransactionSigned).blockingFirst();
       logger.info("Lock confirmed: {}",
-            listener.confirmed(from.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(from.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
 
       // create aggregate proof
       SecretProofTransaction secretProoftx = SecretProofTransaction
@@ -157,6 +157,6 @@ public class E2ESecretTest extends E2EBaseTest {
       transactionHttp.announce(secretProofTransactionSigned).blockingFirst();
 
       logger.info("Proof confirmed: {}",
-            listener.confirmed(from.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(from.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
    }
 }

@@ -76,7 +76,7 @@ public class E2ENamespaceTest extends E2EBaseTest {
       transactionHttp.announce(signedTransaction).blockingFirst();
       logger.info("Registered namespace {}. {}",
             ROOT_NAME,
-            listener.confirmed(seedAccount.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(seedAccount.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
       // check the namespace
       checkNamespace(ROOT_NAME, Optional.empty(), 100);
    }
@@ -93,7 +93,7 @@ public class E2ENamespaceTest extends E2EBaseTest {
       transactionHttp.announce(signedTransaction).blockingFirst();
       logger.info("Registered namespace {}. {}",
             CHILD1_NAME,
-            listener.confirmed(seedAccount.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(seedAccount.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
       // check the namespace
       checkNamespace(CHILD1_NAME, Optional.of(ROOT_NAME), 100);
    }
@@ -119,7 +119,7 @@ public class E2ENamespaceTest extends E2EBaseTest {
       transactionHttp.announce(signedTransaction).blockingFirst();
       logger.info("Registered namespaces {}. {}",
             CHILD1_NAME,
-            listener.confirmed(seedAccount.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(seedAccount.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
       // check the namespaces
       checkNamespace(aggRootName, Optional.empty(), 100);
       checkNamespace(CHILD1_NAME, Optional.of(aggRootName), 100);
@@ -161,13 +161,13 @@ public class E2ENamespaceTest extends E2EBaseTest {
       }
       logger.info("Checking namespace {}", nsId);
       // retrieve the namespace and check it is OK
-      NamespaceInfo namespace = namespaceHttp.getNamespace(nsId).timeout(30, TimeUnit.SECONDS).blockingFirst();
+      NamespaceInfo namespace = namespaceHttp.getNamespace(nsId).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst();
       // check for namespace properties
       assertEquals(BigInteger.valueOf(duration), namespace.getEndHeight().subtract(namespace.getStartHeight()));
       assertEquals(nsId.getId(), namespace.getId().getId());
       // try to check name
       NamespaceName nsName = namespaceHttp.getNamespaceNames(Arrays.asList(nsId)).flatMapIterable(list -> list)
-            .timeout(30, TimeUnit.SECONDS).blockingFirst();
+            .timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst();
       assertEquals(name, nsName.getName());
       assertEquals(nsId.getId(), nsName.getNamespaceId().getId());
       if (!parentName.isPresent()) {

@@ -80,7 +80,7 @@ public class E2EMosaicTest extends E2EBaseTest {
             getDeadline(),
             new MosaicProperties(true, true, false, 6, BigInteger.valueOf(20)),
             NETWORK_TYPE).signWith(seedAccount);
-      Observable<Transaction> confirmation = listener.confirmed(seedAccount.getAddress()).timeout(30, TimeUnit.SECONDS);
+      Observable<Transaction> confirmation = listener.confirmed(seedAccount.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
       transactionHttp.announce(mdt).blockingFirst();
       logger.info("Mosaic created. {}", confirmation.blockingFirst());
       // verify that mosaic looks fine
@@ -96,7 +96,7 @@ public class E2EMosaicTest extends E2EBaseTest {
             .signWith(seedAccount);
       transactionHttp.announce(supplychange).blockingFirst();
       logger.info("Supply changed. {}",
-            listener.confirmed(seedAccount.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(seedAccount.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
       // verify that mosaic looks fine
       MosaicInfo info = mosaicHttp.getMosaic(id).blockingFirst();
       assertEquals(BigInteger.TEN, info.getSupply());
@@ -110,7 +110,7 @@ public class E2EMosaicTest extends E2EBaseTest {
             .signWith(seedAccount);
       transactionHttp.announce(supplychange).blockingFirst();
       logger.info("Supply changed. {}",
-            listener.confirmed(seedAccount.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(seedAccount.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
       // verify that mosaic looks fine
       MosaicInfo info = mosaicHttp.getMosaic(id).blockingFirst();
       assertEquals(BigInteger.valueOf(9), info.getSupply());
@@ -147,7 +147,7 @@ public class E2EMosaicTest extends E2EBaseTest {
       transactionHttp.announce(signedTransaction).blockingFirst();
       // wait for acceptance
       logger.info("Aggregate mosaic done. {}",
-            listener.confirmed(seedAccount.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(seedAccount.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
       // verify that mosaic looks fine
       MosaicInfo info = mosaicHttp.getMosaic(aId).blockingFirst();
       assertEquals(BigInteger.valueOf(9), info.getSupply());

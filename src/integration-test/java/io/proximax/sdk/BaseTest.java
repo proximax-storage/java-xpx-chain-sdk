@@ -36,8 +36,9 @@ public abstract class BaseTest {
    protected static final NamespaceId PROXIMA_NAMESPACE = new NamespaceId(NAMESPACE_PRX_NAME);
 
    /** network type for IT tests */
-   protected static final NetworkType NETWORK_TYPE = NetworkType.MIJIN_TEST;
-
+   protected static final NetworkType NETWORK_TYPE = NetworkType.TEST_NET;
+   /** timeout in seconds to wait for response */
+   protected static final Integer WAIT_TIMEOUT_SECONDS = 30;
 
    private static final String SYS_ENV_PRIVATE_KEY = "SEED_ACCOUNT_PRIVATE_KEY";
 
