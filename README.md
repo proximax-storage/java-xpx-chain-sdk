@@ -1,4 +1,4 @@
-<p align="center"><a href="https://github.com/proximax-storage" target="_blank"><img width="150" src="https://github.com/proximax-storage/java-xpx-catapult-sdk/raw/issue/10-readme/docs/images/logo.jpg" alt="ProximaX Sirius Blockchain Java SDK"></a></p>
+<p align="center"><a href="https://github.com/proximax-storage" target="_blank"><img width="150" src="https://github.com/proximax-storage/java-xpx-catapult-sdk/raw/master/docs/images/logo.jpg" alt="ProximaX Sirius Blockchain Java SDK"></a></p>
 
 # ProximaX Sirius Blockchain Java SDK #
 
