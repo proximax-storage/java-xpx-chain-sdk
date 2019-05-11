@@ -26,8 +26,8 @@ Gets a block from the chain that has the given height.
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.BlockchainRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.BlockchainRoutesApi;
 
 
 BlockchainRoutesApi apiInstance = new BlockchainRoutesApi();
@@ -71,8 +71,8 @@ Returns the [receipts](https://nemtech.github.io/concepts/receipt.html) linked t
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.BlockchainRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.BlockchainRoutesApi;
 
 
 BlockchainRoutesApi apiInstance = new BlockchainRoutesApi();
@@ -116,8 +116,8 @@ Returns an array of [transactions](https://nemtech.github.io/concepts/transactio
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.BlockchainRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.BlockchainRoutesApi;
 
 
 BlockchainRoutesApi apiInstance = new BlockchainRoutesApi();
@@ -165,8 +165,8 @@ Returns the current height of the blockchain.
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.BlockchainRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.BlockchainRoutesApi;
 
 
 BlockchainRoutesApi apiInstance = new BlockchainRoutesApi();
@@ -206,8 +206,8 @@ Gets the current score of the blockchain. The higher the score, the better the c
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.BlockchainRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.BlockchainRoutesApi;
 
 
 BlockchainRoutesApi apiInstance = new BlockchainRoutesApi();
@@ -247,8 +247,8 @@ Gets up to limit number of blocks after given block height.
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.BlockchainRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.BlockchainRoutesApi;
 
 
 BlockchainRoutesApi apiInstance = new BlockchainRoutesApi();
@@ -294,8 +294,8 @@ Returns statistical information about the blockchain.
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.BlockchainRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.BlockchainRoutesApi;
 
 
 BlockchainRoutesApi apiInstance = new BlockchainRoutesApi();
@@ -335,8 +335,8 @@ Returns the merkle path for a [receipt statement or resolution](https://nemtech.
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.BlockchainRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.BlockchainRoutesApi;
 
 
 BlockchainRoutesApi apiInstance = new BlockchainRoutesApi();
@@ -382,8 +382,8 @@ Returns the merkle path for a [transaction](https://nemtech.github.io/concepts/t
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.BlockchainRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.BlockchainRoutesApi;
 
 
 BlockchainRoutesApi apiInstance = new BlockchainRoutesApi();

@@ -21,8 +21,8 @@ Gets the contract for a given publicKey.
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.ContractRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.ContractRoutesApi;
 
 
 ContractRoutesApi apiInstance = new ContractRoutesApi();
@@ -66,8 +66,8 @@ Gets an array of contracts.
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.ContractRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.ContractRoutesApi;
 
 
 ContractRoutesApi apiInstance = new ContractRoutesApi();
@@ -111,8 +111,8 @@ Gets the contract for a given accountId.
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.ContractRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.ContractRoutesApi;
 
 
 ContractRoutesApi apiInstance = new ContractRoutesApi();
@@ -156,8 +156,8 @@ Gets an array of contracts.
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.ContractRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.ContractRoutesApi;
 
 
 ContractRoutesApi apiInstance = new ContractRoutesApi();

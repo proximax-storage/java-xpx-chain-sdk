@@ -24,8 +24,8 @@ Announces a [cosignature transaction](https://nemtech.github.io/concepts/aggrega
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.TransactionRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.TransactionRoutesApi;
 
 
 TransactionRoutesApi apiInstance = new TransactionRoutesApi();
@@ -69,8 +69,8 @@ Announces an [aggregate bonded transaction](https://nemtech.github.io/concepts/a
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.TransactionRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.TransactionRoutesApi;
 
 
 TransactionRoutesApi apiInstance = new TransactionRoutesApi();
@@ -114,8 +114,8 @@ Announces a transaction to the network. It is recommended to use the NEM2-SDK to
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.TransactionRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.TransactionRoutesApi;
 
 
 TransactionRoutesApi apiInstance = new TransactionRoutesApi();
@@ -159,8 +159,8 @@ Returns transaction information given a transactionId or hash.
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.TransactionRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.TransactionRoutesApi;
 
 
 TransactionRoutesApi apiInstance = new TransactionRoutesApi();
@@ -204,8 +204,8 @@ Returns the transaction status for a given hash.
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.TransactionRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.TransactionRoutesApi;
 
 
 TransactionRoutesApi apiInstance = new TransactionRoutesApi();
@@ -249,8 +249,8 @@ Returns transactions information for a given array of transactionIds.
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.TransactionRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.TransactionRoutesApi;
 
 
 TransactionRoutesApi apiInstance = new TransactionRoutesApi();
@@ -294,8 +294,8 @@ Returns an array of transaction statuses for a given array of transaction hashes
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.TransactionRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.TransactionRoutesApi;
 
 
 TransactionRoutesApi apiInstance = new TransactionRoutesApi();

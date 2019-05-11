@@ -1,67 +1,43 @@
-# nem2-sdk for Java/Kotlin/Scala
-#
+<p align="center"><a href="https://vuejs.org" target="_blank" rel="noopener noreferrer"><img width="150" src="https://user-images.githubusercontent.com/29048783/57000439-a41fa000-6b81-11e9-94f3-6df17de7e41a.png" alt="Vue logo"></a></p>
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.nem/sdk/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.nem/sdk)
-[![Build Status](https://api.travis-ci.org/nemtech/nem2-sdk-java.svg?branch=master)](https://travis-ci.org/nemtech/nem2-sdk-java)
-[![Coverage Status](https://coveralls.io/repos/github/nemtech/nem2-sdk-java/badge.svg?branch=master)](https://coveralls.io/github/nemtech/nem2-sdk-java?branch=master)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+# ProximaX Sirius Blockchain Java SDK #
 
-The official nem2-sdk for Java, Kotlin and Scala to work with the NEM2 (a.k.a Catapult).
+Official ProximaX Sirius Blockchain SDK Library in Java.
 
-## Requirements
+The ProximaX Sirius Catapult Chain Java SDK is a Java library for interacting with the Sirius Blockchain. It provides a complete library set coverage, and supports synchronous and asynchronous requests.
 
-- Java 8
-- Java 9 has not been tested yet
+## Use the library ##
 
-## Installation
+This library requires use of Java8. To include library and its dependencies, add following to your build script:
 
-### Maven
+### Maven ###
 
 ```xml
 <dependency>
-    <groupId>io.nem</groupId>
-    <artifactId>sdk</artifactId>
-    <version>0.9.0</version>
+    <groupId>io.proximax</groupId>
+    <artifactId>java-xpx-catapult-sdk</artifactId>
+    <version>0.1.0</version>
 </dependency>
 ```
 
-### Gradle
+### Gradle ###
 
-```compile 'io.nem:sdk:0.9.0```
+```gradle
+compile 'io.proximax:java-xpx-catapult-sdk:0.1.0'
+```
 
-### SBT
+## Wiki and Examples ##
 
-```libraryDependencies += "io.nem" % "sdk" % "0.9.0"```
+For SDK documentation and examples see [wiki](https://github.com/proximax-storage/java-xpx-catapult-sdk/wiki)
 
-## Documentation and Getting Started
+Check [integration tests](https://github.com/proximax-storage/java-xpx-catapult-sdk/tree/master/src/integration-test/java/io/proximax/sdk) for examples how to use the library.
 
-Get started and learn more about nem2-sdk-java, check the [official documentation][docs].
+## Contribution ##
 
-Check SDK reference [here][sdk-ref]
+We'd love to get more people involved in the project. Please feel free to [raise issue](https://github.com/proximax-storage/java-xpx-catapult-sdk/issues/new) or PR and we'll review your contribution.
+    
+Copyright (c) 2019 ProximaX Limited
 
-## nem2-sdk Releases
+## License ##
 
-The release notes for the nem2-sdk can be found [here](CHANGELOG.md).
-
-## Contributing
-
-This project is developed and maintained by NEM Foundation. Contributions are welcome and appreciated. You can find [nem2-sdk on GitHub][self];
-Feel free to start an issue or create a pull request. Check [CONTRIBUTING](CONTRIBUTING.md) before start.
-
-## Getting help
-
-We use GitHub issues for tracking bugs and have limited bandwidth to address them.
-Please, use the following available resources to get help:
-
-- [nem2-cli documentation][docs]
-- If you found a bug, [open a new issue][issues]
-
-## License
-
-Copyright (c) 2018 NEM
-Licensed under the [Apache License 2.0](LICENSE)
-
-[self]: https://github.com/nemtech/nem2-sdk-java
-[docs]: http://nemtech.github.io/getting-started/setup-workstation.html
-[issues]: https://github.com/nemtech/nem2-sdk-java/issues
-[sdk-ref]: http://nemtech.github.io/nem2-sdk-java
+Project is licensed under Apache License Version 2.0. See [LICENSE](https://github.com/proximax-storage/java-xpx-catapult-sdk/blob/master/LICENSE) file for details.

@@ -139,6 +139,7 @@ artifacts {
 }
 
 signing {
+    required false
     sign configurations.archives
 }
 

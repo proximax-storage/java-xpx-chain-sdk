@@ -20,8 +20,8 @@ Gets the mosaic definition for a given mosaicId.
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.MosaicRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.MosaicRoutesApi;
 
 
 MosaicRoutesApi apiInstance = new MosaicRoutesApi();
@@ -65,8 +65,8 @@ Gets an array of mosaic definition.
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.MosaicRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.MosaicRoutesApi;
 
 
 MosaicRoutesApi apiInstance = new MosaicRoutesApi();
@@ -101,7 +101,7 @@ No authorization required
 
 <a name="getMosaicsName"></a>
 # **getMosaicsName**
-> List&lt;MosaicNameDTO&gt; getMosaicsName(mosaicIds)
+> List&lt;MosaicNamesDTO&gt; getMosaicsName(mosaicIds)
 
 Get readable names for a set of mosaics
 
@@ -110,14 +110,14 @@ Returns friendly names for mosaics.
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.MosaicRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.MosaicRoutesApi;
 
 
 MosaicRoutesApi apiInstance = new MosaicRoutesApi();
 MosaicIds mosaicIds = new MosaicIds(); // MosaicIds | An array of mosaicIds.
 try {
-    List<MosaicNameDTO> result = apiInstance.getMosaicsName(mosaicIds);
+    List<MosaicNamesDTO> result = apiInstance.getMosaicsName(mosaicIds);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling MosaicRoutesApi#getMosaicsName");
@@ -133,7 +133,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**List&lt;MosaicNameDTO&gt;**](MosaicNameDTO.md)
+[**List&lt;MosaicNamesDTO&gt;**](MosaicNamesDTO.md)
 
 ### Authorization
 
