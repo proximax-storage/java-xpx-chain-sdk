@@ -33,7 +33,6 @@ import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.alias.AliasAction;
 import io.proximax.sdk.model.mosaic.MosaicId;
-import io.proximax.sdk.model.mosaic.MosaicInfo;
 import io.proximax.sdk.model.mosaic.MosaicNonce;
 import io.proximax.sdk.model.mosaic.MosaicProperties;
 import io.proximax.sdk.model.namespace.NamespaceId;
@@ -131,21 +130,18 @@ public class E2EAliasTest extends E2EBaseTest {
       transactionHttp.announce(signed).blockingFirst();
       logger.info("created alias. {}",
             listener.confirmed(seedAccount.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
-      // try to retrieve the mosaic
-      MosaicInfo mosaic = mosaicHttp.getMosaic(mosaNamespaceId).blockingFirst();
-      logger.info("retrieved mosaic by alias {}", mosaic);
    }
 
    @Test
    void test03CreateAccountAlias() {
+      sendSomeCash(seedAccount, account.getAddress(), 1);
+      sendSomeCash(account, seedAccount.getAddress(), 1);
+      logger.info("creating alias for address");
       AliasTransaction alias = AliasTransaction.create(account.getAddress(), accNamespaceId, AliasAction.LINK, getDeadline(), NETWORK_TYPE);
       SignedTransaction signed = seedAccount.sign(alias);
       transactionHttp.announce(signed).blockingFirst();
       logger.info("created alias. {}",
             listener.confirmed(seedAccount.getAddress()).timeout(30, TimeUnit.SECONDS).blockingFirst());
-      // try to retrieve the account info
-//      AccountInfo acc = accountHttp.getAccountInfo(accNamespaceId).blockingFirst();
-//      logger.info("retrieved account by alias {}", mosaic);
    }
 
 }

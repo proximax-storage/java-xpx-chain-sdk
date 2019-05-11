@@ -43,7 +43,7 @@ public class TransactionMappingTest extends ResourceBasedTest {
 
     @Test
     void validateStandaloneTransactions() {
-    	streamTransactions("TRANSFER", "TRANSFER.messages", "REGISTER_NAMESPACE", "MOSAIC_DEFINITION", "LOCK", "METADATA_MODIFICATION", "MOSAIC_ALIAS")
+    	streamTransactions("TRANSFER", "TRANSFER.messages", "REGISTER_NAMESPACE", "MOSAIC_DEFINITION", "LOCK", "METADATA_MODIFICATION", "ALIAS")
     		.forEachOrdered(transactionDTO -> {
     			Transaction transaction = new TransactionMapping().apply(transactionDTO);
     			validateStandaloneTransaction(transaction, transactionDTO);

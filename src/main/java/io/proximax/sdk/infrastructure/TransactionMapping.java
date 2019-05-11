@@ -63,6 +63,8 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
          return new MosaicSupplyChangeTransactionMapping().apply(input);
       case MOSAIC_ALIAS:
          return new MosaicAliasTransactionMapping().apply(input);
+      case ADDRESS_ALIAS:
+         return new AddressAliasTransactionMapping().apply(input);
       case MODIFY_MULTISIG_ACCOUNT:
          return new MultisigModificationTransactionMapping().apply(input);
       case AGGREGATE_COMPLETE:
@@ -176,8 +178,6 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
 
 /**
  * mapping for transfer transaction
- * 
- * @author tonowie
  */
 class TransferTransactionMapping extends TransactionMapping {
 
@@ -234,8 +234,6 @@ class TransferTransactionMapping extends TransactionMapping {
 
 /**
  * mapping for transfer transaction
- * 
- * @author tonowie
  */
 class ModifyMetadataTransactionMapping extends TransactionMapping {
 
@@ -305,8 +303,6 @@ class ModifyMetadataTransactionMapping extends TransactionMapping {
 
 /**
  * mapper for transaction that registers namespace
- * 
- * @author tonowie
  */
 class NamespaceCreationTransactionMapping extends TransactionMapping {
 
@@ -342,8 +338,6 @@ class NamespaceCreationTransactionMapping extends TransactionMapping {
 
 /**
  * transaction that creates new mosaic
- * 
- * @author tonowie
  */
 class MosaicCreationTransactionMapping extends TransactionMapping {
 
@@ -399,14 +393,12 @@ class MosaicCreationTransactionMapping extends TransactionMapping {
 
 /**
  * transaction that creates alias between namespace and mosaic
- * 
- * @author tonowie
  */
 class MosaicAliasTransactionMapping extends TransactionMapping {
 
     @Override
     public AliasTransaction apply(JsonObject input) {
-    	// load transaction info and data
+      // load transaction info and data
         TransactionInfo transactionInfo = this.createTransactionInfo(input.getJsonObject("meta"));
         JsonObject transaction = input.getJsonObject("transaction");
         // load data fields
@@ -421,6 +413,37 @@ class MosaicAliasTransactionMapping extends TransactionMapping {
                 extractFee(transaction),
                 Optional.of(new MosaicId(extractBigInteger(transaction.getJsonArray("mosaicId")))),
                 Optional.empty(),
+                new NamespaceId(extractBigInteger(transaction.getJsonArray("namespaceId"))),
+                AliasAction.getBycode(transaction.getInteger("aliasAction")),
+                transaction.getString("signature"),
+                new PublicAccount(transaction.getString("signer"), extractNetworkType(version)),
+                transactionInfo
+        );
+    }
+}
+
+/**
+ * transaction that creates alias between namespace and address
+ */
+class AddressAliasTransactionMapping extends TransactionMapping {
+
+    @Override
+    public AliasTransaction apply(JsonObject input) {
+      // load transaction info and data
+        TransactionInfo transactionInfo = this.createTransactionInfo(input.getJsonObject("meta"));
+        JsonObject transaction = input.getJsonObject("transaction");
+        // load data fields
+        Deadline deadline = new Deadline(extractBigInteger(transaction.getJsonArray("deadline")));
+        int version = transaction.getInteger("version");
+        // return instance of mosaic alias definition transaction
+        return new AliasTransaction(
+                TransactionType.ADDRESS_ALIAS,
+                extractNetworkType(version),
+                extractTransactionVersion(version),
+                deadline,
+                extractFee(transaction),
+                Optional.empty(),
+                Optional.of(Address.createFromEncoded(transaction.getString("address"))),
                 new NamespaceId(extractBigInteger(transaction.getJsonArray("namespaceId"))),
                 AliasAction.getBycode(transaction.getInteger("aliasAction")),
                 transaction.getString("signature"),
