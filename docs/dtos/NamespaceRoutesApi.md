@@ -21,8 +21,8 @@ Gets the namespace for a given namespaceId.
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.NamespaceRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.NamespaceRoutesApi;
 
 
 NamespaceRoutesApi apiInstance = new NamespaceRoutesApi();
@@ -66,8 +66,8 @@ Gets an array of namespaces for a given account address.
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.NamespaceRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.NamespaceRoutesApi;
 
 
 NamespaceRoutesApi apiInstance = new NamespaceRoutesApi();
@@ -115,8 +115,8 @@ Gets namespaces for a given array of addresses.
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.NamespaceRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.NamespaceRoutesApi;
 
 
 NamespaceRoutesApi apiInstance = new NamespaceRoutesApi();
@@ -164,8 +164,8 @@ Returns friendly names for mosaics.
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.NamespaceRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.NamespaceRoutesApi;
 
 
 NamespaceRoutesApi apiInstance = new NamespaceRoutesApi();

@@ -7,7 +7,7 @@ Method | HTTP request | Description
 [**getAccountInfo**](AccountRoutesApi.md#getAccountInfo) | **GET** /account/{accountId} | Get account information
 [**getAccountMultisig**](AccountRoutesApi.md#getAccountMultisig) | **GET** /account/{accountId}/multisig | Get multisig account information
 [**getAccountMultisigGraph**](AccountRoutesApi.md#getAccountMultisigGraph) | **GET** /account/{accountId}/multisig/graph | Get multisig account graph information
-[**getAccountProperties**](AccountRoutesApi.md#getAccountProperties) | **GET** /account/properties/{accountId} | Get account configurable properties information
+[**getAccountProperties**](AccountRoutesApi.md#getAccountProperties) | **GET** /account/{accountId}/properties | Get account configurable properties information
 [**getAccountPropertiesFromAccounts**](AccountRoutesApi.md#getAccountPropertiesFromAccounts) | **POST** /account/properties | Get account properties for given array of addresses
 [**getAccountsInfo**](AccountRoutesApi.md#getAccountsInfo) | **POST** /account | Get accounts information
 [**incomingTransactions**](AccountRoutesApi.md#incomingTransactions) | **GET** /account/{publicKey}/transactions/incoming | Get incoming transactions
@@ -28,8 +28,8 @@ Returns the account information.
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.AccountRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.AccountRoutesApi;
 
 
 AccountRoutesApi apiInstance = new AccountRoutesApi();
@@ -73,8 +73,8 @@ Returns the [multisig account](https://nemtech.github.io/concepts/multisig-accou
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.AccountRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.AccountRoutesApi;
 
 
 AccountRoutesApi apiInstance = new AccountRoutesApi();
@@ -118,8 +118,8 @@ Returns the [multisig account](https://nemtech.github.io/concepts/multisig-accou
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.AccountRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.AccountRoutesApi;
 
 
 AccountRoutesApi apiInstance = new AccountRoutesApi();
@@ -163,8 +163,8 @@ Returns the [configurable properties](https://nemtech.github.io/concepts/account
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.AccountRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.AccountRoutesApi;
 
 
 AccountRoutesApi apiInstance = new AccountRoutesApi();
@@ -208,8 +208,8 @@ Returns the [configurable properties](https://nemtech.github.io/concepts/account
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.AccountRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.AccountRoutesApi;
 
 
 AccountRoutesApi apiInstance = new AccountRoutesApi();
@@ -253,8 +253,8 @@ Returns the account information for an array of accounts.
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.AccountRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.AccountRoutesApi;
 
 
 AccountRoutesApi apiInstance = new AccountRoutesApi();
@@ -298,8 +298,8 @@ Gets an array of incoming transactions. A transaction is said to be incoming wit
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.AccountRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.AccountRoutesApi;
 
 
 AccountRoutesApi apiInstance = new AccountRoutesApi();
@@ -349,8 +349,8 @@ Gets an array of outgoing transactions. A transaction is said to be outgoing wit
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.AccountRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.AccountRoutesApi;
 
 
 AccountRoutesApi apiInstance = new AccountRoutesApi();
@@ -400,8 +400,8 @@ Gets an array of [aggregate bonded transactions](https://nemtech.github.io/conce
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.AccountRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.AccountRoutesApi;
 
 
 AccountRoutesApi apiInstance = new AccountRoutesApi();
@@ -451,8 +451,8 @@ Gets an array of transactions for which an account is the sender or receiver.
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.AccountRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.AccountRoutesApi;
 
 
 AccountRoutesApi apiInstance = new AccountRoutesApi();
@@ -502,8 +502,8 @@ Gets the array of transactions not included in a block where an account is the s
 ### Example
 ```java
 // Import classes:
-//import io.nem.sdk.api.ApiException;
-//import io.nem.sdk.api.swagger.AccountRoutesApi;
+//import io.proximax.sdk.api.ApiException;
+//import io.proximax.sdk.api.swagger.AccountRoutesApi;
 
 
 AccountRoutesApi apiInstance = new AccountRoutesApi();
