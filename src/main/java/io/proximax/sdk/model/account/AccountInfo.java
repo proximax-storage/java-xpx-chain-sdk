@@ -80,7 +80,7 @@ public class AccountInfo {
     /**
      * Returns mosaics hold by the account.
      *
-     * @return {List<Mosaic>}
+     * @return mosaics owned by the account
      */
     public List<Mosaic> getMosaics() {
         return mosaics;

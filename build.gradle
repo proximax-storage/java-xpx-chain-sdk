@@ -208,9 +208,3 @@ jacocoTestReport {
         html.destination file("${buildDir}/jacocoHtml")
     }
 }
-
-allprojects {
-    tasks.withType(Javadoc) {
-        options.addStringOption('Xdoclint:none', '-quiet')
-    }
-}

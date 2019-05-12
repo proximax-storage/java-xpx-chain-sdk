@@ -26,8 +26,8 @@ public class AddressMetadata extends Metadata {
    private final Address address;
 
    /**
-    * @param fields
-    * @param address
+    * @param fields metadata fields associated with the address
+    * @param address the address
     */
    public AddressMetadata(List<Field> fields, Address address) {
       super(MetadataType.ADDRESS, fields);
@@ -52,7 +52,8 @@ public class AddressMetadata extends Metadata {
    /**
     * return the address metadata ID used for requests to APIs
     * 
-    * @return
+    * @param address metadata address
+    * @return the string representation of address
     */
    public static String getIdFromAddress(Address address) {
       return address.plain();

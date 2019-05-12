@@ -25,9 +25,8 @@ public class MetadataModification {
    private final Field field;
 
    /**
-    * @param type
-    * @param key
-    * @param value
+    * @param type type of the modification
+    * @param field key-value pair
     */
    public MetadataModification(MetadataModificationType type, Field field) {
       Validate.notNull(type, "type can not be null");

@@ -19,16 +19,19 @@ package io.proximax.sdk.model.mosaic;
 import java.util.List;
 
 /**
- * The mosaic name info structure describes basic information of a mosaic and name.
+ * The mosaic names structure provides information about aliases of specified mosaic
  *
  * @since 1.0
  */
 public class MosaicNames {
     private final MosaicId mosaicId;
     private final List<String> names;
+    
    /**
-    * @param mosaicId
-    * @param names
+    * create new instance with mosaic aliases
+    * 
+    * @param mosaicId id of the mosaic
+    * @param names collection of alias names
     */
    public MosaicNames(MosaicId mosaicId, List<String> names) {
       this.mosaicId = mosaicId;

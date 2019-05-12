@@ -19,7 +19,7 @@ public enum MessageType {
 
     /**
      * Secure message type. 
-     * Encrypted by the private key of sender and public key of recipient => decrypted by public key of sender and private key of recipient
+     * Encrypted by the private key of sender and public key of recipient =&gt; decrypted by public key of sender and private key of recipient
      */
     SECURE(1);
 

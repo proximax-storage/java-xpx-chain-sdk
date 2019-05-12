@@ -56,6 +56,7 @@ public enum NetworkType {
     /**
      * Static constructor converting network raw value to enum instance.
      *
+     * @param value numeric representation of network type
      * @return {@link NetworkType}
      */
     public static NetworkType rawValueOf(int value) {

@@ -68,8 +68,8 @@ public class Account {
     /**
      * Create an new Account
      *
-     * @param networkType
-     * @return
+     * @param networkType the network type or account
+     * @return new random account for specified network type
      */
     public static Account generateNewAccount(NetworkType networkType){
         KeyPair keyPair = new KeyPair();

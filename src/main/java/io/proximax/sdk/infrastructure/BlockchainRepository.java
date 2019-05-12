@@ -16,13 +16,13 @@
 
 package io.proximax.sdk.infrastructure;
 
+import java.math.BigInteger;
+import java.util.List;
+
 import io.proximax.sdk.model.blockchain.BlockInfo;
 import io.proximax.sdk.model.blockchain.BlockchainStorageInfo;
 import io.proximax.sdk.model.transaction.Transaction;
 import io.reactivex.Observable;
-
-import java.math.BigInteger;
-import java.util.List;
 
 /**
  * Blockchain interface repository
@@ -43,7 +43,7 @@ public interface BlockchainRepository {
      * Gets list of transactions included in a block for a block height
      *
      * @param height BigInteger
-     * @return Observable of List<{@link Transaction}>
+     * @return Observable of {@link Transaction} list
      */
     Observable<List<Transaction>> getBlockTransactions(BigInteger height);
 
@@ -53,7 +53,7 @@ public interface BlockchainRepository {
      *
      * @param height      BigInteger
      * @param queryParams QueryParams
-     * @return Observable of List<{@link Transaction}>
+     * @return Observable of {@link Transaction} list
      */
     Observable<List<Transaction>> getBlockTransactions(BigInteger height, QueryParams queryParams);
 

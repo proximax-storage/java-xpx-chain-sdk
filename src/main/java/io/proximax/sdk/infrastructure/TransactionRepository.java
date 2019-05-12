@@ -16,10 +16,14 @@
 
 package io.proximax.sdk.infrastructure;
 
-import io.proximax.sdk.model.transaction.*;
-import io.reactivex.Observable;
-
 import java.util.List;
+
+import io.proximax.sdk.model.transaction.CosignatureSignedTransaction;
+import io.proximax.sdk.model.transaction.SignedTransaction;
+import io.proximax.sdk.model.transaction.Transaction;
+import io.proximax.sdk.model.transaction.TransactionAnnounceResponse;
+import io.proximax.sdk.model.transaction.TransactionStatus;
+import io.reactivex.Observable;
 
 /**
  * Transaction interface repository.
@@ -32,7 +36,7 @@ public interface TransactionRepository {
      * Gets a transaction for a given hash.
      *
      * @param transactionHash String
-     * @return Observable of {@link Transaction}
+     * @return Observable of Transaction
      */
     Observable<Transaction> getTransaction(String transactionHash);
 
@@ -40,7 +44,7 @@ public interface TransactionRepository {
      * Gets an list of transactions for different transaction hashes.
      *
      * @param transactionHashes List of String
-     * @return Observable of List<{@link Transaction}>
+     * @return Observable of Transaction list
      */
     Observable<List<Transaction>> getTransactions(List<String> transactionHashes);
 
@@ -48,7 +52,7 @@ public interface TransactionRepository {
      * Gets a transaction status for a transaction hash.
      *
      * @param transactionHash String
-     * @return Observable of {@link TransactionStatus}
+     * @return Observable of TransactionStatus
      */
     Observable<TransactionStatus> getTransactionStatus(String transactionHash);
 
@@ -56,7 +60,7 @@ public interface TransactionRepository {
      * Gets an list of transaction status for different transaction hashes.
      *
      * @param transactionHashes List of String
-     * @return Observable of List<{@link TransactionStatus}>
+     * @return Observable of TransactionStatus list
      */
     Observable<List<TransactionStatus>> getTransactionStatuses(List<String> transactionHashes);
 
@@ -77,7 +81,7 @@ public interface TransactionRepository {
     Observable<TransactionAnnounceResponse> announceAggregateBonded(SignedTransaction signedTransaction);
 
     /**
-     * Send a cosignature signed transaction of an already announced transaction.
+     * Send a co-signature signed transaction of an already announced transaction.
      *
      * @param cosignatureSignedTransaction CosignatureSignedTransaction
      * @return Observable of TransactionAnnounceResponse

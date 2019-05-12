@@ -40,7 +40,7 @@ public class NetworkHarvestMosaic extends Mosaic {
    /**
     * Initial supply
     */
-   public static final BigInteger INITIALSUPPLY = new BigInteger("15000000");
+   public static final BigInteger INITIALSUPPLY = BigInteger.valueOf(15000000l);
    /**
     * Is transferable
     */
@@ -55,8 +55,9 @@ public class NetworkHarvestMosaic extends Mosaic {
    public static final boolean LEVYMUTABLE = false;
 
    /**
-    *
-    * @param amount
+    * create new instance of network harvest mosaic of specified amount
+    * 
+    * @param amount amount of mosaic irrespective of divisibility
     */
    public NetworkHarvestMosaic(BigInteger amount) {
 

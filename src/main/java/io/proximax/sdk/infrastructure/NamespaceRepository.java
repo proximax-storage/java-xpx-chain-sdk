@@ -16,15 +16,13 @@
 
 package io.proximax.sdk.infrastructure;
 
+import java.util.List;
+
 import io.proximax.sdk.model.account.Address;
-import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.namespace.NamespaceInfo;
 import io.proximax.sdk.model.namespace.NamespaceName;
 import io.reactivex.Observable;
-
-import java.math.BigInteger;
-import java.util.List;
 
 /**
  * Namespace interface repository.
@@ -47,7 +45,7 @@ public interface NamespaceRepository {
      *
      * @param address Address
      * @param queryParams   QueryParans
-     * @return Observable of List<{@link NamespaceInfo}>
+     * @return Observable of {@link NamespaceInfo} list
      */
     Observable<List<NamespaceInfo>> getNamespacesFromAccount(Address address, QueryParams queryParams);
 
@@ -55,7 +53,7 @@ public interface NamespaceRepository {
      * Gets list of NamespaceInfo for an account.
      *
      * @param address Address
-     * @return Observable of List<{@link NamespaceInfo}>
+     * @return Observable of {@link NamespaceInfo} list
      */
     Observable<List<NamespaceInfo>> getNamespacesFromAccount(Address address);
 
@@ -65,7 +63,7 @@ public interface NamespaceRepository {
      *
      * @param addresses List of Address
      * @param queryParams    QueryParams
-     * @return Observable of List<{@link NamespaceInfo}>
+     * @return Observable of {@link NamespaceInfo} list
      */
     Observable<List<NamespaceInfo>> getNamespacesFromAccounts(List<Address> addresses, QueryParams queryParams);
 
@@ -73,7 +71,7 @@ public interface NamespaceRepository {
      * Gets list of NamespaceInfo for different account.
      *
      * @param addresses List of Address
-     * @return Observable of List<{@link NamespaceInfo}>
+     * @return Observable of {@link NamespaceInfo} list
      */
     Observable<List<NamespaceInfo>> getNamespacesFromAccounts(List<Address> addresses);
 
@@ -81,7 +79,7 @@ public interface NamespaceRepository {
      * Gets list of NamespaceName for different namespaceIds.
      *
      * @param namespaceIds List of NamespaceId
-     * @return Observable of List<{@link NamespaceName}>
+     * @return Observable of {@link NamespaceName} list
      */
     Observable<List<NamespaceName>> getNamespaceNames(List<NamespaceId> namespaceIds);
 }

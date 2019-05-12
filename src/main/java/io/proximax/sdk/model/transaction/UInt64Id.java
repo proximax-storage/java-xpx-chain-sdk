@@ -47,7 +47,7 @@ public interface UInt64Id {
    /**
     * Get the optional UInt64Id full name
     *
-    * @return Optional<String> full name
+    * @return full name optional
     */
    Optional<String> getFullName();
 

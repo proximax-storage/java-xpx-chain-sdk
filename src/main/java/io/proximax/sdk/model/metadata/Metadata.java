@@ -25,8 +25,8 @@ public class Metadata {
    private List<Field> fields;
    
    /**
-    * @param type
-    * @param fields
+    * @param type type of the metadata (account/mosaic/namespace)
+    * @param fields metadata fields
     */
    public Metadata(MetadataType type, List<Field> fields) {
       this.type = type;
