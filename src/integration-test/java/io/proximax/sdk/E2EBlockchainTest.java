@@ -29,10 +29,10 @@ import org.slf4j.LoggerFactory;
  * E2E tests that demonstrate transfers
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class E2ENetworkTest extends E2EBaseTest {
+public class E2EBlockchainTest extends E2EBaseTest {
 
    /** logger */
-   private static final Logger logger = LoggerFactory.getLogger(E2ENetworkTest.class);
+   private static final Logger logger = LoggerFactory.getLogger(E2EBlockchainTest.class);
 
    @Test
    void blocksShouldBeAdded() {
