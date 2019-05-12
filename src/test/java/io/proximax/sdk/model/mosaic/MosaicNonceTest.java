@@ -46,7 +46,7 @@ class MosaicNonceTest {
          byte[] bytes = new byte[] {1,2,3,4,5};
          new MosaicNonce(bytes);
       });
-      assertThrows(IllegalArgumentException.class, () -> {
+      assertThrows(NullPointerException.class, () -> {
          new MosaicNonce(null);
       });
    }

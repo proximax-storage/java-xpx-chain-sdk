@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.codec.binary.Base32;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 

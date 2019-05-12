@@ -15,7 +15,7 @@
  */
 package io.proximax.sdk.model.metadata;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 
 /**
  * Metadata modification

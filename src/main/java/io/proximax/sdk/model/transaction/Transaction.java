@@ -19,7 +19,7 @@ package io.proximax.sdk.model.transaction;
 import java.math.BigInteger;
 import java.util.Optional;
 
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Validate;
 import org.bouncycastle.util.encoders.Hex;
 

@@ -1,0 +1,55 @@
+/*
+ * Copyright 2018 NEM
+ * Copyright 2019 ProximaX
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+ 
+ ext {
+    classpathSeparator = System.properties['os.name'].toLowerCase().contains('windows')?";":":"
+}
+
+ sourceSets {
+    integrationTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integration-test/java')
+        }
+        resources.srcDir file('src/integration-test/resources')
+    }
+}
+ 
+ configurations {
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
+    sharedCompile
+}
+
+def integrationTest = task('integrationTest',
+        type: JavaExec,
+        group: 'Verification') {
+    description = 'Runs integration tests.'
+    dependsOn testClasses
+    shouldRunAfter test
+    classpath = sourceSets.integrationTest.runtimeClasspath
+
+    main = 'org.junit.platform.console.ConsoleLauncher'
+    args = ['--scan-class-path',
+            sourceSets.integrationTest.output.classesDirs.join(classpathSeparator),
+            '--reports-dir', "${buildDir}/test-results/junit-integrationTest"]
+}
+
+check {
+    dependsOn integrationTest
+}

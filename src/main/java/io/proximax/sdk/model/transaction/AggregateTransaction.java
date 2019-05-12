@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.Validate;
 import org.bouncycastle.util.encoders.Hex;
 
 import com.google.flatbuffers.FlatBufferBuilder;
@@ -32,7 +32,6 @@ import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
-import io.proximax.sdk.model.transaction.AggregateTransactionBuffer;
 
 /**
  * The aggregate innerTransactions contain multiple innerTransactions that can be initiated by different accounts.

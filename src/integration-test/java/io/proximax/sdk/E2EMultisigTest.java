@@ -98,9 +98,36 @@ public class E2EMultisigTest extends E2EBaseTest {
       // announce the transaction
       logger.info("Sent request: {}", transactionHttp.announce(signedChangeToMultisig).toFuture().get());
       // verify that account is multisig
-      logger.info("request o create multisig confirmed: {}",
+      logger.info("request to create multisig confirmed: {}",
             listener.confirmed(multisigAccount.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
       testMultisigAccount(multisigAccount, true, 1, 1, 2, 2);
+   }
+
+   @Test
+   void test01CreateMultisigAggregate() throws InterruptedException, ExecutionException {
+      Account aggMulti = new Account(new KeyPair(), NETWORK_TYPE);
+      // change the account to multisig with 1 of2 cosignatories
+      ModifyMultisigAccountTransaction changeToMultisig = ModifyMultisigAccountTransaction.create(getDeadline(),
+            1,
+            1,
+            Arrays.asList(
+                  new MultisigCosignatoryModification(MultisigCosignatoryModificationType.ADD,
+                        cosig1.getPublicAccount()),
+                  new MultisigCosignatoryModification(MultisigCosignatoryModificationType.ADD,
+                        cosig2.getPublicAccount())),
+            NETWORK_TYPE);
+      // add the modification to the aggregate transaction
+      AggregateTransaction aggregateTransaction = AggregateTransaction.createComplete(getDeadline(),
+            Arrays.asList(changeToMultisig.toAggregate(aggMulti.getPublicAccount())),
+            NETWORK_TYPE);
+      // sign the aggregate transaction
+      SignedTransaction signedTransaction = aggMulti.sign(aggregateTransaction);
+      // announce the transaction
+      logger.info("Sent request: {}", transactionHttp.announce(signedTransaction).toFuture().get());
+      // verify that account is multisig
+      logger.info("request to create multisig confirmed: {}",
+            listener.confirmed(aggMulti.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
+      testMultisigAccount(aggMulti, true, 1, 1, 2, 2);
    }
 
    @Test
