@@ -16,12 +16,11 @@
 
 package io.proximax.core.utils;
 
-import io.proximax.core.test.ExceptionAssert;
-import io.proximax.core.utils.SetOnce;
-
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.IsEqual;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import io.proximax.core.test.ExceptionAssert;
 
 public class SetOnceTest {
 
@@ -34,7 +33,7 @@ public class SetOnceTest {
         final Integer value = wrapper.get();
 
         // Assert:
-        Assert.assertThat(value, IsEqual.equalTo(17));
+        MatcherAssert.assertThat(value, IsEqual.equalTo(17));
     }
 
     @Test
@@ -47,7 +46,7 @@ public class SetOnceTest {
         final Integer value = wrapper.get();
 
         // Assert:
-        Assert.assertThat(value, IsEqual.equalTo(54));
+        MatcherAssert.assertThat(value, IsEqual.equalTo(54));
     }
 
     @Test
@@ -61,7 +60,7 @@ public class SetOnceTest {
         final Integer value = wrapper.get();
 
         // Assert:
-        Assert.assertThat(value, IsEqual.equalTo(17));
+        MatcherAssert.assertThat(value, IsEqual.equalTo(17));
     }
 
     @Test

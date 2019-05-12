@@ -16,19 +16,19 @@
 
 package io.proximax.sdk.model.namespace;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.math.BigInteger;
+import java.util.Arrays;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
-import io.proximax.sdk.model.namespace.NamespaceId;
-import io.proximax.sdk.model.namespace.NamespaceInfo;
-import io.proximax.sdk.model.namespace.NamespaceType;
-
-import java.math.BigInteger;
-import java.util.Arrays;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class NamespaceInfoTest {
 

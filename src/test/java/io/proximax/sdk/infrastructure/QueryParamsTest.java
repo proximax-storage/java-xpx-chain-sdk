@@ -16,12 +16,10 @@
 
 package io.proximax.sdk.infrastructure;
 
-import org.junit.jupiter.api.Test;
-
-import io.proximax.sdk.infrastructure.QueryParams;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 class QueryParamsTest {
 

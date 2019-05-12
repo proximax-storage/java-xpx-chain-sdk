@@ -414,12 +414,21 @@ class MosaicAliasTransactionMapping extends TransactionMapping {
                 Optional.of(new MosaicId(extractBigInteger(transaction.getJsonArray("mosaicId")))),
                 Optional.empty(),
                 new NamespaceId(extractBigInteger(transaction.getJsonArray("namespaceId"))),
-                AliasAction.getBycode(transaction.getInteger("aliasAction")),
+                extractAliasAction(transaction),
                 transaction.getString("signature"),
                 new PublicAccount(transaction.getString("signer"), extractNetworkType(version)),
                 transactionInfo
         );
     }
+    
+   private static AliasAction extractAliasAction(JsonObject json) {
+      Integer aliasCode = json.getInteger("aliasAction");
+      // try action field if alias action is missing
+      if (aliasCode == null) {
+         aliasCode = json.getInteger("action");
+      }
+      return AliasAction.getBycode(aliasCode);
+   }
 }
 
 /**

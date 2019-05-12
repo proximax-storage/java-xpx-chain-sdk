@@ -19,7 +19,11 @@ package io.proximax.core.crypto.ed25519;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-import io.proximax.core.crypto.*;
+import io.proximax.core.crypto.CryptoException;
+import io.proximax.core.crypto.DsaSigner;
+import io.proximax.core.crypto.Hashes;
+import io.proximax.core.crypto.KeyPair;
+import io.proximax.core.crypto.Signature;
 import io.proximax.core.crypto.ed25519.arithmetic.Ed25519EncodedFieldElement;
 import io.proximax.core.crypto.ed25519.arithmetic.Ed25519EncodedGroupElement;
 import io.proximax.core.crypto.ed25519.arithmetic.Ed25519Group;

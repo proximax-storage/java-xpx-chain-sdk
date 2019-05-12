@@ -24,9 +24,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import io.proximax.sdk.model.account.AccountInfo;
-import io.proximax.sdk.model.account.Address;
-import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.Mosaic;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;

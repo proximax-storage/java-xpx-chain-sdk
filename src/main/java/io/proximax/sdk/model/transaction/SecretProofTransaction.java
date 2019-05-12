@@ -27,7 +27,6 @@ import com.google.flatbuffers.FlatBufferBuilder;
 import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
-import io.proximax.sdk.model.transaction.SecretProofTransactionBuffer;
 
 public class SecretProofTransaction extends Transaction {
     private final HashType hashType;

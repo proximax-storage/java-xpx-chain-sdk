@@ -16,17 +16,11 @@
 
 package io.proximax.sdk.model.transaction;
 
-import javax.swing.text.html.Option;
+import java.math.BigInteger;
+import java.util.Optional;
 
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
-import io.proximax.sdk.model.transaction.Deadline;
-import io.proximax.sdk.model.transaction.Transaction;
-import io.proximax.sdk.model.transaction.TransactionInfo;
-import io.proximax.sdk.model.transaction.TransactionType;
-
-import java.math.BigInteger;
-import java.util.Optional;
 
 public class FakeTransferTransaction extends Transaction {
 

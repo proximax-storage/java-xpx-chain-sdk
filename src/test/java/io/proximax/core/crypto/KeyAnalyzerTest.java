@@ -16,14 +16,9 @@
 
 package io.proximax.core.crypto;
 
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.IsEqual;
-import org.junit.Assert;
-import org.junit.Test;
-
-import io.proximax.core.crypto.CryptoEngine;
-import io.proximax.core.crypto.KeyAnalyzer;
-import io.proximax.core.crypto.KeyPair;
-import io.proximax.core.crypto.PublicKey;
+import org.junit.jupiter.api.Test;
 
 public abstract class KeyAnalyzerTest {
 
@@ -34,7 +29,7 @@ public abstract class KeyAnalyzerTest {
         final KeyPair keyPair = this.getCryptoEngine().createKeyGenerator().generateKeyPair();
 
         // Act + Assert:
-        Assert.assertThat(analyzer.isKeyCompressed(keyPair.getPublicKey()), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(analyzer.isKeyCompressed(keyPair.getPublicKey()), IsEqual.equalTo(true));
     }
 
     @Test
@@ -45,7 +40,7 @@ public abstract class KeyAnalyzerTest {
         final PublicKey key = new PublicKey(new byte[keyPair.getPublicKey().getRaw().length + 1]);
 
         // Act + Assert:
-        Assert.assertThat(analyzer.isKeyCompressed(key), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(analyzer.isKeyCompressed(key), IsEqual.equalTo(false));
     }
 
     protected KeyAnalyzer getKeyAnalyzer() {

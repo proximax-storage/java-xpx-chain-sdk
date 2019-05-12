@@ -16,6 +16,9 @@
 
 package io.proximax.sdk.infrastructure;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -26,9 +29,6 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.reactivex.core.Vertx;
 import io.vertx.reactivex.ext.web.client.HttpResponse;
 import io.vertx.reactivex.ext.web.client.WebClient;
-
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class Http {
     protected final WebClient client;

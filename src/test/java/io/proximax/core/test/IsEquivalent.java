@@ -16,11 +16,11 @@
 
 package io.proximax.core.test;
 
-import org.hamcrest.core.IsEqual;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+
+import org.hamcrest.core.IsEqual;
 
 /**
  * Matcher that checks the equivalency of a collection to another collection or array.

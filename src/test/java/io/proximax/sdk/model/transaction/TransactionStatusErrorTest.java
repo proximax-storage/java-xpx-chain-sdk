@@ -16,14 +16,11 @@
 
 package io.proximax.sdk.model.transaction;
 
-import org.junit.jupiter.api.Test;
-
-import io.proximax.sdk.model.transaction.Deadline;
-import io.proximax.sdk.model.transaction.TransactionStatusError;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigInteger;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 class TransactionStatusErrorTest {
 

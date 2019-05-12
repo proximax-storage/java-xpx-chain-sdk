@@ -16,19 +16,16 @@
 
 package io.proximax.core.crypto;
 
-import io.proximax.core.crypto.CryptoEngine;
-import io.proximax.core.crypto.CryptoException;
-import io.proximax.core.crypto.DsaSigner;
-import io.proximax.core.crypto.KeyPair;
-import io.proximax.core.crypto.Signature;
-import io.proximax.core.test.Utils;
-
-import org.hamcrest.core.IsEqual;
-import org.junit.Assert;
-import org.junit.Test;
-import org.mockito.Mockito;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigInteger;
+
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.core.IsEqual;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import io.proximax.core.test.Utils;
 
 public abstract class DsaSignerTest {
 
@@ -44,7 +41,7 @@ public abstract class DsaSignerTest {
         final Signature signature = dsaSigner.sign(input);
 
         // Assert:
-        Assert.assertThat(dsaSigner.verify(input, signature), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(dsaSigner.verify(input, signature), IsEqual.equalTo(true));
     }
 
     @Test
@@ -62,10 +59,10 @@ public abstract class DsaSignerTest {
         final Signature signature2 = dsaSigner2.sign(input);
 
         // Assert:
-        Assert.assertThat(dsaSigner1.verify(input, signature1), IsEqual.equalTo(true));
-        Assert.assertThat(dsaSigner1.verify(input, signature2), IsEqual.equalTo(false));
-        Assert.assertThat(dsaSigner2.verify(input, signature1), IsEqual.equalTo(false));
-        Assert.assertThat(dsaSigner2.verify(input, signature2), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(dsaSigner1.verify(input, signature1), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(dsaSigner1.verify(input, signature2), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(dsaSigner2.verify(input, signature1), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(dsaSigner2.verify(input, signature2), IsEqual.equalTo(true));
     }
 
     @Test
@@ -81,10 +78,10 @@ public abstract class DsaSignerTest {
         final Signature signature2 = dsaSigner.sign(input);
 
         // Assert:
-        Assert.assertThat(signature1, IsEqual.equalTo(signature2));
+        MatcherAssert.assertThat(signature1, IsEqual.equalTo(signature2));
     }
 
-    @Test(expected = CryptoException.class)
+    @Test
     public void cannotSignPayloadWithoutPrivateKey() {
         // Arrange:
         final CryptoEngine engine = this.getCryptoEngine();
@@ -93,7 +90,7 @@ public abstract class DsaSignerTest {
         final byte[] input = Utils.generateRandomBytes();
 
         // Act:
-        dsaSigner.sign(input);
+        assertThrows(CryptoException.class, () -> dsaSigner.sign(input));
     }
 
     @Test
@@ -108,7 +105,7 @@ public abstract class DsaSignerTest {
         final Signature signature = dsaSigner.sign(input);
 
         // Assert:
-        Assert.assertThat(dsaSigner.isCanonicalSignature(signature), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(dsaSigner.isCanonicalSignature(signature), IsEqual.equalTo(true));
     }
 
     @Test

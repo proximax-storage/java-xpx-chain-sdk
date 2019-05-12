@@ -18,8 +18,6 @@ package io.proximax.sdk.model.transaction;
 
 import java.time.temporal.ChronoUnit;
 
-import io.proximax.sdk.model.transaction.Deadline;
-
 public class FakeDeadline extends Deadline {
 
     public FakeDeadline() {

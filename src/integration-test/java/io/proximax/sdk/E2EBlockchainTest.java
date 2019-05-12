@@ -15,7 +15,7 @@
  */
 package io.proximax.sdk;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
 import java.util.concurrent.TimeUnit;

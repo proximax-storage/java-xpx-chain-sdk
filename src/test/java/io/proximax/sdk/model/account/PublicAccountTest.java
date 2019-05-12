@@ -16,13 +16,12 @@
 
 package io.proximax.sdk.model.account;
 
-import org.junit.jupiter.api.Test;
-
-import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
+import org.junit.jupiter.api.Test;
+
+import io.proximax.sdk.model.blockchain.NetworkType;
 
 class PublicAccountTest {
     private final String publicKey = "b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf";

@@ -16,14 +16,13 @@
 
 package io.proximax.core.utils;
 
-import io.proximax.core.test.ExceptionAssert;
-import io.proximax.core.utils.MustBe;
-
-import org.junit.Test;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.regex.Pattern;
+
+import org.junit.jupiter.api.Test;
+
+import io.proximax.core.test.ExceptionAssert;
 
 public class MustBeTest {
 

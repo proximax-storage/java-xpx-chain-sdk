@@ -16,6 +16,11 @@
 
 package io.proximax.sdk.model.transaction;
 
+import java.math.BigInteger;
+import java.util.Optional;
+
+import org.apache.commons.lang3.Validate;
+
 import com.google.flatbuffers.FlatBufferBuilder;
 
 import io.proximax.sdk.infrastructure.utils.UInt64Utils;
@@ -23,12 +28,6 @@ import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicSupplyType;
-import io.proximax.sdk.model.transaction.MosaicSupplyChangeTransactionBuffer;
-
-import org.apache.commons.lang3.Validate;
-
-import java.math.BigInteger;
-import java.util.Optional;
 
 /**
  * In case a mosaic has the flag 'supplyMutable' set to true, the creator of the mosaic can change the supply,

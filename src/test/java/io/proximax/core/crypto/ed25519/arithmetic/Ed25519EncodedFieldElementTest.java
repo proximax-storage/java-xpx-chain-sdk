@@ -16,17 +16,15 @@
 
 package io.proximax.core.crypto.ed25519.arithmetic;
 
-import org.hamcrest.core.IsEqual;
-import org.hamcrest.core.IsNot;
-import org.junit.Assert;
-import org.junit.Test;
-
-import io.proximax.core.crypto.ed25519.arithmetic.Ed25519EncodedFieldElement;
-import io.proximax.core.crypto.ed25519.arithmetic.Ed25519Field;
-import io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldElement;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.core.IsEqual;
+import org.hamcrest.core.IsNot;
+import org.junit.jupiter.api.Test;
 
 public class Ed25519EncodedFieldElementTest {
 
@@ -44,10 +42,10 @@ public class Ed25519EncodedFieldElementTest {
         new Ed25519EncodedFieldElement(new byte[64]);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void cannotBeCreatedFromArrayWithIncorrectLength() {
         // Assert:
-        new Ed25519EncodedFieldElement(new byte[50]);
+       assertThrows(IllegalArgumentException.class, () -> new Ed25519EncodedFieldElement(new byte[50]));
     }
 
     // endregion
@@ -60,7 +58,7 @@ public class Ed25519EncodedFieldElementTest {
         final Ed25519EncodedFieldElement encoded = new Ed25519EncodedFieldElement(new byte[32]);
 
         // Assert:
-        Assert.assertThat(encoded.isNonZero(), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(encoded.isNonZero(), IsEqual.equalTo(false));
     }
 
     @Test
@@ -71,7 +69,7 @@ public class Ed25519EncodedFieldElementTest {
         final Ed25519EncodedFieldElement encoded = new Ed25519EncodedFieldElement(values);
 
         // Assert:
-        Assert.assertThat(encoded.isNonZero(), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(encoded.isNonZero(), IsEqual.equalTo(true));
     }
 
     // endregion
@@ -88,7 +86,7 @@ public class Ed25519EncodedFieldElementTest {
         final Ed25519EncodedFieldElement encoded = new Ed25519EncodedFieldElement(values);
 
         // Assert:
-        Assert.assertThat(values, IsEqual.equalTo(encoded.getRaw()));
+        MatcherAssert.assertThat(values, IsEqual.equalTo(encoded.getRaw()));
     }
 
     // endregion
@@ -104,7 +102,7 @@ public class Ed25519EncodedFieldElementTest {
             final Ed25519EncodedFieldElement encoded = original.decode().encode();
 
             // Assert:
-            Assert.assertThat(encoded, IsEqual.equalTo(original));
+            MatcherAssert.assertThat(encoded, IsEqual.equalTo(original));
         }
     }
 
@@ -123,9 +121,9 @@ public class Ed25519EncodedFieldElementTest {
             final Ed25519EncodedFieldElement reduced2 = MathUtils.reduceModGroupOrder(encoded);
 
             // Assert:
-            Assert.assertThat(MathUtils.toBigInteger(reduced1).compareTo(Ed25519Field.P), IsEqual.equalTo(-1));
-            Assert.assertThat(MathUtils.toBigInteger(reduced1).compareTo(new BigInteger("-1")), IsEqual.equalTo(1));
-            Assert.assertThat(reduced1, IsEqual.equalTo(reduced2));
+            MatcherAssert.assertThat(MathUtils.toBigInteger(reduced1).compareTo(Ed25519Field.P), IsEqual.equalTo(-1));
+            MatcherAssert.assertThat(MathUtils.toBigInteger(reduced1).compareTo(new BigInteger("-1")), IsEqual.equalTo(1));
+            MatcherAssert.assertThat(reduced1, IsEqual.equalTo(reduced2));
         }
     }
 
@@ -142,9 +140,9 @@ public class Ed25519EncodedFieldElementTest {
             final Ed25519EncodedFieldElement result2 = MathUtils.multiplyAndAddModGroupOrder(encoded1, encoded2, encoded3);
 
             // Assert:
-            Assert.assertThat(MathUtils.toBigInteger(result1).compareTo(Ed25519Field.P), IsEqual.equalTo(-1));
-            Assert.assertThat(MathUtils.toBigInteger(result1).compareTo(new BigInteger("-1")), IsEqual.equalTo(1));
-            Assert.assertThat(result1, IsEqual.equalTo(result2));
+            MatcherAssert.assertThat(MathUtils.toBigInteger(result1).compareTo(Ed25519Field.P), IsEqual.equalTo(-1));
+            MatcherAssert.assertThat(MathUtils.toBigInteger(result1).compareTo(new BigInteger("-1")), IsEqual.equalTo(1));
+            MatcherAssert.assertThat(result1, IsEqual.equalTo(result2));
         }
     }
 
@@ -166,8 +164,8 @@ public class Ed25519EncodedFieldElementTest {
         final Ed25519EncodedFieldElement encoded2 = fieldElement2.encode();
 
         // Assert:
-        Assert.assertThat(encoded1, IsEqual.equalTo(MathUtils.toEncodedFieldElement(BigInteger.ZERO)));
-        Assert.assertThat(encoded2, IsEqual.equalTo(MathUtils.toEncodedFieldElement(BigInteger.ONE)));
+        MatcherAssert.assertThat(encoded1, IsEqual.equalTo(MathUtils.toEncodedFieldElement(BigInteger.ZERO)));
+        MatcherAssert.assertThat(encoded2, IsEqual.equalTo(MathUtils.toEncodedFieldElement(BigInteger.ONE)));
     }
 
     @Test
@@ -184,7 +182,7 @@ public class Ed25519EncodedFieldElementTest {
                 final Ed25519EncodedFieldElement encoded = fieldElement.encode();
 
                 // Assert:
-                Assert.assertThat(encoded, IsEqual.equalTo(MathUtils.toEncodedFieldElement(b)));
+                MatcherAssert.assertThat(encoded, IsEqual.equalTo(MathUtils.toEncodedFieldElement(b)));
             }
         }
     }
@@ -205,7 +203,7 @@ public class Ed25519EncodedFieldElementTest {
             final Ed25519EncodedFieldElement encoded = fieldElement.encode();
 
             // Assert:
-            Assert.assertThat(encoded, IsEqual.equalTo(MathUtils.toEncodedFieldElement(b.mod(Ed25519Field.P))));
+            MatcherAssert.assertThat(encoded, IsEqual.equalTo(MathUtils.toEncodedFieldElement(b.mod(Ed25519Field.P))));
         }
     }
 
@@ -223,7 +221,7 @@ public class Ed25519EncodedFieldElementTest {
             final boolean isNegative = MathUtils.toBigInteger(encoded).mod(Ed25519Field.P).mod(new BigInteger("2")).equals(BigInteger.ONE);
 
             // Assert:
-            Assert.assertThat(encoded.isNegative(), IsEqual.equalTo(isNegative));
+            MatcherAssert.assertThat(encoded.isNegative(), IsEqual.equalTo(isNegative));
         }
     }
 
@@ -240,10 +238,10 @@ public class Ed25519EncodedFieldElementTest {
         final Ed25519EncodedFieldElement encoded4 = MathUtils.getRandomEncodedFieldElement(32);
 
         // Assert:
-        Assert.assertThat(encoded1, IsEqual.equalTo(encoded2));
-        Assert.assertThat(encoded1, IsNot.not(IsEqual.equalTo(encoded3)));
-        Assert.assertThat(encoded1, IsNot.not(IsEqual.equalTo(encoded4)));
-        Assert.assertThat(encoded3, IsNot.not(IsEqual.equalTo(encoded4)));
+        MatcherAssert.assertThat(encoded1, IsEqual.equalTo(encoded2));
+        MatcherAssert.assertThat(encoded1, IsNot.not(IsEqual.equalTo(encoded3)));
+        MatcherAssert.assertThat(encoded1, IsNot.not(IsEqual.equalTo(encoded4)));
+        MatcherAssert.assertThat(encoded3, IsNot.not(IsEqual.equalTo(encoded4)));
     }
 
     @Test
@@ -255,10 +253,10 @@ public class Ed25519EncodedFieldElementTest {
         final Ed25519EncodedFieldElement encoded4 = MathUtils.getRandomEncodedFieldElement(32);
 
         // Assert:
-        Assert.assertThat(encoded1.hashCode(), IsEqual.equalTo(encoded2.hashCode()));
-        Assert.assertThat(encoded1.hashCode(), IsNot.not(IsEqual.equalTo(encoded3.hashCode())));
-        Assert.assertThat(encoded1.hashCode(), IsNot.not(IsEqual.equalTo(encoded4.hashCode())));
-        Assert.assertThat(encoded3.hashCode(), IsNot.not(IsEqual.equalTo(encoded4.hashCode())));
+        MatcherAssert.assertThat(encoded1.hashCode(), IsEqual.equalTo(encoded2.hashCode()));
+        MatcherAssert.assertThat(encoded1.hashCode(), IsNot.not(IsEqual.equalTo(encoded3.hashCode())));
+        MatcherAssert.assertThat(encoded1.hashCode(), IsNot.not(IsEqual.equalTo(encoded4.hashCode())));
+        MatcherAssert.assertThat(encoded3.hashCode(), IsNot.not(IsEqual.equalTo(encoded4.hashCode())));
     }
 
     // endregion
@@ -282,7 +280,7 @@ public class Ed25519EncodedFieldElementTest {
         }
 
         // Assert:
-        Assert.assertThat(encodedAsString, IsEqual.equalTo(builder.toString()));
+        MatcherAssert.assertThat(encodedAsString, IsEqual.equalTo(builder.toString()));
     }
 
     // endregion

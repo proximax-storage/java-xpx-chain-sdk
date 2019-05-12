@@ -14,42 +14,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
- ext {
-    classpathSeparator = System.properties['os.name'].toLowerCase().contains('windows')?";":":"
-}
 
- sourceSets {
+sourceSets {
     integrationTest {
-        java {
-            compileClasspath += main.output + test.output
-            runtimeClasspath += main.output + test.output
-            srcDir file('src/integration-test/java')
-        }
-        resources.srcDir file('src/integration-test/resources')
+        java.srcDir 'src/integration-test/java'
+        resources.srcDir 'src/integration-test/resources'
     }
 }
- 
- configurations {
-    integrationTestCompile.extendsFrom testCompile
-    integrationTestRuntime.extendsFrom testRuntime
-    sharedCompile
+
+dependencies {
+    // use main output
+    integrationTestCompile sourceSets.main.output
+    // at compile time provide to compile and test compile dependencies
+    integrationTestCompile configurations.api
+    integrationTestCompile configurations.implementation
+    integrationTestCompile configurations.testImplementation
+    // at runtime provide access to runtime and test runtime dependencies
+    integrationTestRuntime configurations.runtime
+    integrationTestRuntime configurations.testRuntimeOnly
 }
 
-def integrationTest = task('integrationTest',
-        type: JavaExec,
-        group: 'Verification') {
-    description = 'Runs integration tests.'
-    dependsOn testClasses
-    shouldRunAfter test
-    classpath = sourceSets.integrationTest.runtimeClasspath
+task integrationTest(type: Test) {
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+    description = 'Runs the integration tests.' 
+	// use JUnit5
+    useJUnitPlatform()
 
-    main = 'org.junit.platform.console.ConsoleLauncher'
-    args = ['--scan-class-path',
-            sourceSets.integrationTest.output.classesDirs.join(classpathSeparator),
-            '--reports-dir', "${buildDir}/test-results/junit-integrationTest"]
+	// test location
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    // test classpath
+    classpath = sourceSets.integrationTest.runtimeClasspath 
+
+    // first run jUni tests then integration tests
+    mustRunAfter tasks.test 
 }
 
-check {
-    dependsOn integrationTest
-}
+// include integration tests to junit
+check.dependsOn integrationTest 

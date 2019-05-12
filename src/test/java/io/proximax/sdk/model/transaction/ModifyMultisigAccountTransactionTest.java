@@ -16,15 +16,9 @@
 
 package io.proximax.sdk.model.transaction;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
-import io.proximax.sdk.model.transaction.Deadline;
-import io.proximax.sdk.model.transaction.ModifyMultisigAccountTransaction;
-import io.proximax.sdk.model.transaction.MultisigCosignatoryModification;
-import io.proximax.sdk.model.transaction.MultisigCosignatoryModificationType;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
@@ -32,7 +26,11 @@ import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import io.proximax.sdk.model.account.PublicAccount;
+import io.proximax.sdk.model.blockchain.NetworkType;
 
 class ModifyMultisigAccountTransactionTest {
 

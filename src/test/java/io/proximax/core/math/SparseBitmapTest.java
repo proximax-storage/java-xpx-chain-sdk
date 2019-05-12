@@ -16,19 +16,18 @@
 
 package io.proximax.core.math;
 
-import io.proximax.core.math.SparseBitmap;
-import io.proximax.core.test.ExceptionAssert;
-
-import org.hamcrest.core.IsEqual;
-import org.hamcrest.core.IsNot;
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.core.IsEqual;
+import org.hamcrest.core.IsNot;
+import org.junit.jupiter.api.Test;
+
+import io.proximax.core.test.ExceptionAssert;
 
 /**
  * Test for SparseBitmap, our wrapper for EWAHCompressedBitmap.
@@ -56,8 +55,8 @@ public class SparseBitmapTest {
         final SparseBitmap sb = SparseBitmap.createEmpty();
 
         // Assert:
-        Assert.assertThat(sb.cardinality(), IsEqual.equalTo(0));
-        Assert.assertThat(sb.get(0), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(sb.cardinality(), IsEqual.equalTo(0));
+        MatcherAssert.assertThat(sb.get(0), IsEqual.equalTo(false));
     }
 
     @Test
@@ -66,8 +65,8 @@ public class SparseBitmapTest {
         final SparseBitmap sb = SparseBitmap.createFromUnsortedData();
 
         // Assert:
-        Assert.assertThat(sb.cardinality(), IsEqual.equalTo(0));
-        Assert.assertThat(sb.get(0), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(sb.cardinality(), IsEqual.equalTo(0));
+        MatcherAssert.assertThat(sb.get(0), IsEqual.equalTo(false));
     }
 
     @Test
@@ -76,12 +75,12 @@ public class SparseBitmapTest {
         final SparseBitmap sb = SparseBitmap.createFromUnsortedData(0, 1, 3);
 
         // Assert:
-        Assert.assertThat(sb.cardinality(), IsEqual.equalTo(3));
-        Assert.assertThat(sb.get(0), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(1), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(2), IsEqual.equalTo(false));
-        Assert.assertThat(sb.get(3), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(4), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(sb.cardinality(), IsEqual.equalTo(3));
+        MatcherAssert.assertThat(sb.get(0), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(1), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(2), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(sb.get(3), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(4), IsEqual.equalTo(false));
     }
 
     @Test
@@ -90,12 +89,12 @@ public class SparseBitmapTest {
         final SparseBitmap sb = SparseBitmap.createFromUnsortedData(0, 1, 1, 3);
 
         // Assert:
-        Assert.assertThat(sb.cardinality(), IsEqual.equalTo(3));
-        Assert.assertThat(sb.get(0), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(1), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(2), IsEqual.equalTo(false));
-        Assert.assertThat(sb.get(3), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(4), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(sb.cardinality(), IsEqual.equalTo(3));
+        MatcherAssert.assertThat(sb.get(0), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(1), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(2), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(sb.get(3), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(4), IsEqual.equalTo(false));
     }
 
     //endregion
@@ -108,12 +107,12 @@ public class SparseBitmapTest {
         final SparseBitmap sb = SparseBitmap.createFromUnsortedData(1, 0, 3);
 
         // Assert:
-        Assert.assertThat(sb.cardinality(), IsEqual.equalTo(3));
-        Assert.assertThat(sb.get(0), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(1), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(2), IsEqual.equalTo(false));
-        Assert.assertThat(sb.get(3), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(4), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(sb.cardinality(), IsEqual.equalTo(3));
+        MatcherAssert.assertThat(sb.get(0), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(1), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(2), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(sb.get(3), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(4), IsEqual.equalTo(false));
     }
 
     @Test
@@ -122,8 +121,8 @@ public class SparseBitmapTest {
         final SparseBitmap sb = SparseBitmap.createFromSortedData();
 
         // Assert:
-        Assert.assertThat(sb.cardinality(), IsEqual.equalTo(0));
-        Assert.assertThat(sb.get(0), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(sb.cardinality(), IsEqual.equalTo(0));
+        MatcherAssert.assertThat(sb.get(0), IsEqual.equalTo(false));
     }
 
     @Test
@@ -132,12 +131,12 @@ public class SparseBitmapTest {
         final SparseBitmap sb = SparseBitmap.createFromUnsortedData(0, 1, 3);
 
         // Assert:
-        Assert.assertThat(sb.cardinality(), IsEqual.equalTo(3));
-        Assert.assertThat(sb.get(0), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(1), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(2), IsEqual.equalTo(false));
-        Assert.assertThat(sb.get(3), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(4), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(sb.cardinality(), IsEqual.equalTo(3));
+        MatcherAssert.assertThat(sb.get(0), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(1), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(2), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(sb.get(3), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(4), IsEqual.equalTo(false));
     }
 
     //endregion
@@ -150,12 +149,12 @@ public class SparseBitmapTest {
         final SparseBitmap sb = SparseBitmap.createFromSortedData(0, 1, 1, 3);
 
         // Assert:
-        Assert.assertThat(sb.cardinality(), IsEqual.equalTo(3));
-        Assert.assertThat(sb.get(0), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(1), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(2), IsEqual.equalTo(false));
-        Assert.assertThat(sb.get(3), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(4), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(sb.cardinality(), IsEqual.equalTo(3));
+        MatcherAssert.assertThat(sb.get(0), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(1), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(2), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(sb.get(3), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(4), IsEqual.equalTo(false));
     }
 
     @Test
@@ -164,10 +163,10 @@ public class SparseBitmapTest {
         final SparseBitmap sb = SparseBitmap.createFromUnsortedData(0, 1, 3);
 
         // Assert:
-        Assert.assertThat(sb.get(-1000), IsEqual.equalTo(false));
-        Assert.assertThat(sb.get(-1), IsEqual.equalTo(false));
-        Assert.assertThat(sb.get(4), IsEqual.equalTo(false));
-        Assert.assertThat(sb.get(1000), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(sb.get(-1000), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(sb.get(-1), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(sb.get(4), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(sb.get(1000), IsEqual.equalTo(false));
     }
 
     @Test
@@ -180,10 +179,10 @@ public class SparseBitmapTest {
         sb.set(2000000);
 
         // Assert:
-        Assert.assertThat(sb.get(0), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(100), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(2000000), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(3), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(sb.get(0), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(100), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(2000000), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(3), IsEqual.equalTo(false));
     }
 
     @Test
@@ -207,10 +206,10 @@ public class SparseBitmapTest {
         sb.setWithoutAscendingCheck(2000000);
 
         // Assert:
-        Assert.assertThat(sb.get(0), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(100), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(2000000), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(3), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(sb.get(0), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(100), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(2000000), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(3), IsEqual.equalTo(false));
     }
 
     //endregion
@@ -227,10 +226,10 @@ public class SparseBitmapTest {
         sb.setWithoutAscendingCheck(0);
 
         // Assert: the correct bits are set
-        Assert.assertThat(sb.cardinality(), IsEqual.equalTo(3));
-        Assert.assertThat(sb.get(0), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(100), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(2000000), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.cardinality(), IsEqual.equalTo(3));
+        MatcherAssert.assertThat(sb.get(0), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(100), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(2000000), IsEqual.equalTo(true));
     }
 
     @Test
@@ -242,10 +241,10 @@ public class SparseBitmapTest {
         sb.clear();
 
         // Assert:
-        Assert.assertThat(sb.cardinality(), IsEqual.equalTo(0));
-        Assert.assertThat(sb.get(4), IsEqual.equalTo(false));
-        Assert.assertThat(sb.get(5), IsEqual.equalTo(false));
-        Assert.assertThat(sb.get(6), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(sb.cardinality(), IsEqual.equalTo(0));
+        MatcherAssert.assertThat(sb.get(4), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(sb.get(5), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(sb.get(6), IsEqual.equalTo(false));
     }
 
     //endregion
@@ -262,11 +261,11 @@ public class SparseBitmapTest {
         sb.set(3);
 
         // Assert:
-        Assert.assertThat(sb.cardinality(), IsEqual.equalTo(1));
-        Assert.assertThat(sb.get(4), IsEqual.equalTo(false));
-        Assert.assertThat(sb.get(5), IsEqual.equalTo(false));
-        Assert.assertThat(sb.get(6), IsEqual.equalTo(false));
-        Assert.assertThat(sb.get(3), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.cardinality(), IsEqual.equalTo(1));
+        MatcherAssert.assertThat(sb.get(4), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(sb.get(5), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(sb.get(6), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(sb.get(3), IsEqual.equalTo(true));
     }
 
     @Test
@@ -275,7 +274,7 @@ public class SparseBitmapTest {
         final SparseBitmap sb = SparseBitmap.createFromSortedData();
 
         // Assert:
-        Assert.assertThat(sb.getHighestBit(), IsEqual.equalTo(0));
+        MatcherAssert.assertThat(sb.getHighestBit(), IsEqual.equalTo(0));
     }
 
     //endregion
@@ -288,7 +287,7 @@ public class SparseBitmapTest {
         final SparseBitmap sb = SparseBitmap.createFromUnsortedData(0, 1, 7);
 
         // Assert:
-        Assert.assertThat(sb.getHighestBit(), IsEqual.equalTo(7));
+        MatcherAssert.assertThat(sb.getHighestBit(), IsEqual.equalTo(7));
     }
 
     @Test
@@ -297,7 +296,7 @@ public class SparseBitmapTest {
         final SparseBitmap sb = SparseBitmap.batchOr();
 
         // Assert:
-        Assert.assertThat(sb.cardinality(), IsEqual.equalTo(0));
+        MatcherAssert.assertThat(sb.cardinality(), IsEqual.equalTo(0));
     }
 
     @Test
@@ -306,9 +305,9 @@ public class SparseBitmapTest {
         final SparseBitmap sb = SparseBitmap.batchOr(SparseBitmap.createFromSortedData(1, 3));
 
         // Assert:
-        Assert.assertThat(sb.cardinality(), IsEqual.equalTo(2));
-        Assert.assertThat(sb.get(1), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(3), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.cardinality(), IsEqual.equalTo(2));
+        MatcherAssert.assertThat(sb.get(1), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(3), IsEqual.equalTo(true));
     }
 
     //endregion
@@ -324,13 +323,13 @@ public class SparseBitmapTest {
                 SparseBitmap.createFromSortedData(2, 7));
 
         // Assert:
-        Assert.assertThat(sb.cardinality(), IsEqual.equalTo(6));
-        Assert.assertThat(sb.get(1), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(3), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(5), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(6), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(2), IsEqual.equalTo(true));
-        Assert.assertThat(sb.get(7), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.cardinality(), IsEqual.equalTo(6));
+        MatcherAssert.assertThat(sb.get(1), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(3), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(5), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(6), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(2), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(sb.get(7), IsEqual.equalTo(true));
     }
 
     @Test
@@ -339,7 +338,7 @@ public class SparseBitmapTest {
         final SparseBitmap sb = SparseBitmap.createFromSortedData(100, 200, 300);
 
         // Assert:
-        Assert.assertThat(sb.toList(), IsEqual.equalTo(Arrays.asList(100, 200, 300)));
+        MatcherAssert.assertThat(sb.toList(), IsEqual.equalTo(Arrays.asList(100, 200, 300)));
     }
 
     //endregion
@@ -352,7 +351,7 @@ public class SparseBitmapTest {
         final SparseBitmap sb = SparseBitmap.createFromSortedData(100, 200, 300);
 
         // Assert:
-        Assert.assertThat(
+        MatcherAssert.assertThat(
                 StreamSupport.stream(sb.spliterator(), false).collect(Collectors.toList()),
                 IsEqual.equalTo(Arrays.asList(100, 200, 300)));
     }
@@ -368,12 +367,12 @@ public class SparseBitmapTest {
 
         // Assert:
 
-        Assert.assertThat(result.cardinality(), IsEqual.equalTo(5));
-        Assert.assertThat(result.get(2), IsEqual.equalTo(true));
-        Assert.assertThat(result.get(4), IsEqual.equalTo(true));
-        Assert.assertThat(result.get(8), IsEqual.equalTo(true));
-        Assert.assertThat(result.get(16), IsEqual.equalTo(true));
-        Assert.assertThat(result.get(256), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(result.cardinality(), IsEqual.equalTo(5));
+        MatcherAssert.assertThat(result.get(2), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(result.get(4), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(result.get(8), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(result.get(16), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(result.get(256), IsEqual.equalTo(true));
     }
 
     @Test
@@ -387,8 +386,8 @@ public class SparseBitmapTest {
 
         // Assert:
 
-        Assert.assertThat(result.cardinality(), IsEqual.equalTo(1));
-        Assert.assertThat(result.get(4), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(result.cardinality(), IsEqual.equalTo(1));
+        MatcherAssert.assertThat(result.get(4), IsEqual.equalTo(true));
     }
 
     //endregion
@@ -406,9 +405,9 @@ public class SparseBitmapTest {
 
         // Assert:
 
-        Assert.assertThat(result.cardinality(), IsEqual.equalTo(2));
-        Assert.assertThat(result.get(2), IsEqual.equalTo(true));
-        Assert.assertThat(result.get(8), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(result.cardinality(), IsEqual.equalTo(2));
+        MatcherAssert.assertThat(result.get(2), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(result.get(8), IsEqual.equalTo(true));
     }
 
     @Test
@@ -417,7 +416,7 @@ public class SparseBitmapTest {
         final SparseBitmap sb = SparseBitmap.createFromSortedData(100, 200, 300, 400, 1337);
 
         // Assert:
-        Assert.assertThat(sb.cardinality(), IsEqual.equalTo(5));
+        MatcherAssert.assertThat(sb.cardinality(), IsEqual.equalTo(5));
     }
 
     //endregion
@@ -434,7 +433,7 @@ public class SparseBitmapTest {
         final int result = sb1.andCardinality(sb2);
 
         // Assert:
-        Assert.assertThat(result, IsEqual.equalTo(2));
+        MatcherAssert.assertThat(result, IsEqual.equalTo(2));
     }
 
     @Test
@@ -443,7 +442,7 @@ public class SparseBitmapTest {
         final SparseBitmap sb = SparseBitmap.createFromSortedData();
 
         // Assert:
-        Assert.assertThat(sb.toString(), IsEqual.equalTo("{}"));
+        MatcherAssert.assertThat(sb.toString(), IsEqual.equalTo("{}"));
     }
 
     //endregion
@@ -456,7 +455,7 @@ public class SparseBitmapTest {
         final SparseBitmap sb = SparseBitmap.createFromSortedData(100, 200, 300, 400, 1337);
 
         // Assert:
-        Assert.assertThat(sb.toString(), IsEqual.equalTo("{100,200,300,400,1337}"));
+        MatcherAssert.assertThat(sb.toString(), IsEqual.equalTo("{100,200,300,400,1337}"));
     }
 
     @Test
@@ -465,12 +464,12 @@ public class SparseBitmapTest {
         final SparseBitmap sb = SparseBitmap.createFromSortedData(4, 8, 16);
 
         // Assert:
-        Assert.assertThat(DESC_TO_SB_MAP.get("default"), IsEqual.equalTo(sb));
-        Assert.assertThat(DESC_TO_SB_MAP.get("diff-short"), IsNot.not(IsEqual.equalTo(sb)));
-        Assert.assertThat(DESC_TO_SB_MAP.get("diff-long"), IsNot.not(IsEqual.equalTo(sb)));
-        Assert.assertThat(DESC_TO_SB_MAP.get("diff-values"), IsNot.not(IsEqual.equalTo(sb)));
-        Assert.assertThat(null, IsNot.not(IsEqual.equalTo(sb)));
-        Assert.assertThat(8, IsNot.not(IsEqual.equalTo((Object) sb)));
+        MatcherAssert.assertThat(DESC_TO_SB_MAP.get("default"), IsEqual.equalTo(sb));
+        MatcherAssert.assertThat(DESC_TO_SB_MAP.get("diff-short"), IsNot.not(IsEqual.equalTo(sb)));
+        MatcherAssert.assertThat(DESC_TO_SB_MAP.get("diff-long"), IsNot.not(IsEqual.equalTo(sb)));
+        MatcherAssert.assertThat(DESC_TO_SB_MAP.get("diff-values"), IsNot.not(IsEqual.equalTo(sb)));
+        MatcherAssert.assertThat(null, IsNot.not(IsEqual.equalTo(sb)));
+        MatcherAssert.assertThat(8, IsNot.not(IsEqual.equalTo((Object) sb)));
     }
 
     @Test
@@ -480,10 +479,10 @@ public class SparseBitmapTest {
         final int hashCode = sb.hashCode();
 
         // Assert:
-        Assert.assertThat(DESC_TO_SB_MAP.get("default").hashCode(), IsEqual.equalTo(hashCode));
-        Assert.assertThat(DESC_TO_SB_MAP.get("diff-short").hashCode(), IsNot.not(IsEqual.equalTo(hashCode)));
-        Assert.assertThat(DESC_TO_SB_MAP.get("diff-long").hashCode(), IsNot.not(IsEqual.equalTo(hashCode)));
-        Assert.assertThat(DESC_TO_SB_MAP.get("diff-values").hashCode(), IsNot.not(IsEqual.equalTo(hashCode)));
+        MatcherAssert.assertThat(DESC_TO_SB_MAP.get("default").hashCode(), IsEqual.equalTo(hashCode));
+        MatcherAssert.assertThat(DESC_TO_SB_MAP.get("diff-short").hashCode(), IsNot.not(IsEqual.equalTo(hashCode)));
+        MatcherAssert.assertThat(DESC_TO_SB_MAP.get("diff-long").hashCode(), IsNot.not(IsEqual.equalTo(hashCode)));
+        MatcherAssert.assertThat(DESC_TO_SB_MAP.get("diff-values").hashCode(), IsNot.not(IsEqual.equalTo(hashCode)));
     }
 
     // endregion

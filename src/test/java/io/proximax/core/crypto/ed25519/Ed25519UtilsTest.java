@@ -16,15 +16,14 @@
 
 package io.proximax.core.crypto.ed25519;
 
-import io.proximax.core.crypto.PrivateKey;
-import io.proximax.core.crypto.ed25519.Ed25519Utils;
-import io.proximax.core.test.Utils;
-
-import org.hamcrest.core.IsEqual;
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.math.BigInteger;
+
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.core.IsEqual;
+import org.junit.jupiter.api.Test;
+
+import io.proximax.core.crypto.PrivateKey;
+import io.proximax.core.test.Utils;
 
 public class Ed25519UtilsTest {
 
@@ -39,9 +38,9 @@ public class Ed25519UtilsTest {
         final byte[] a = Ed25519Utils.prepareForScalarMultiply(privateKey).getRaw();
 
         // Assert:
-        Assert.assertThat(a[31] & 0x40, IsEqual.equalTo(0x40));
-        Assert.assertThat(a[31] & 0x80, IsEqual.equalTo(0x0));
-        Assert.assertThat(a[0] & 0x7, IsEqual.equalTo(0x0));
+        MatcherAssert.assertThat(a[31] & 0x40, IsEqual.equalTo(0x40));
+        MatcherAssert.assertThat(a[31] & 0x80, IsEqual.equalTo(0x0));
+        MatcherAssert.assertThat(a[0] & 0x7, IsEqual.equalTo(0x0));
     }
 
     //endregion

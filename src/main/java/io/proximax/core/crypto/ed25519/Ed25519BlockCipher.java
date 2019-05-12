@@ -16,6 +16,9 @@
 
 package io.proximax.core.crypto.ed25519;
 
+import java.security.SecureRandom;
+import java.util.Arrays;
+
 import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.InvalidCipherTextException;
@@ -27,12 +30,13 @@ import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
 
-import io.proximax.core.crypto.*;
+import io.proximax.core.crypto.BlockCipher;
+import io.proximax.core.crypto.Hashes;
+import io.proximax.core.crypto.KeyPair;
+import io.proximax.core.crypto.PrivateKey;
+import io.proximax.core.crypto.PublicKey;
 import io.proximax.core.crypto.ed25519.arithmetic.Ed25519EncodedGroupElement;
 import io.proximax.core.crypto.ed25519.arithmetic.Ed25519GroupElement;
-
-import java.security.SecureRandom;
-import java.util.Arrays;
 
 /**
  * Implementation of the block cipher for Ed25519.

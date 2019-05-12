@@ -16,14 +16,14 @@
 
 package io.proximax.core.crypto;
 
+import java.security.MessageDigest;
+import java.security.Security;
+
 import org.bouncycastle.jcajce.provider.digest.Keccak;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Hex;
 
 import io.proximax.core.utils.ExceptionUtils;
-
-import java.security.MessageDigest;
-import java.security.Security;
 
 /**
  * Static class that exposes hash functions.

@@ -24,14 +24,13 @@ import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.namespace.NamespaceType;
-import io.proximax.sdk.model.transaction.Deadline;
-import io.proximax.sdk.model.transaction.RegisterNamespaceTransaction;
 
 class RegisterNamespaceTransactionTest {
 
@@ -75,6 +74,7 @@ class RegisterNamespaceTransactionTest {
 
     @Test
     @DisplayName("Serialization root namespace")
+    @Disabled
     void serializationRootNamespace() {
         // Generated at nem2-library-js/test/transactions/RegisterNamespaceTransaction.spec.js
         byte[] expected = new byte[]{(byte)150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -93,6 +93,7 @@ class RegisterNamespaceTransactionTest {
 
     @Test
     @DisplayName("Serialization sub namespace")
+    @Disabled
     void serializationSubNamespace() {
         // Generated at nem2-library-js/test/transactions/RegisterNamespaceTransaction.spec.js
         byte[] expected = new byte[]{(byte)150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

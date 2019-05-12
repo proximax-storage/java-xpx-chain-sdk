@@ -16,16 +16,11 @@
 
 package io.proximax.core.crypto;
 
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.IsEqual;
 import org.hamcrest.core.IsNot;
 import org.hamcrest.core.IsNull;
-import org.junit.Assert;
-import org.junit.Test;
-
-import io.proximax.core.crypto.CryptoEngine;
-import io.proximax.core.crypto.KeyGenerator;
-import io.proximax.core.crypto.KeyPair;
-import io.proximax.core.crypto.PublicKey;
+import org.junit.jupiter.api.Test;
 
 public abstract class KeyGeneratorTest {
 
@@ -38,9 +33,9 @@ public abstract class KeyGeneratorTest {
         final KeyPair kp = generator.generateKeyPair();
 
         // Assert:
-        Assert.assertThat(kp.hasPrivateKey(), IsEqual.equalTo(true));
-        Assert.assertThat(kp.getPrivateKey(), IsNull.notNullValue());
-        Assert.assertThat(kp.getPublicKey(), IsNull.notNullValue());
+        MatcherAssert.assertThat(kp.hasPrivateKey(), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(kp.getPrivateKey(), IsNull.notNullValue());
+        MatcherAssert.assertThat(kp.getPublicKey(), IsNull.notNullValue());
     }
 
     @Test
@@ -53,8 +48,8 @@ public abstract class KeyGeneratorTest {
         final PublicKey publicKey = generator.derivePublicKey(kp.getPrivateKey());
 
         // Assert:
-        Assert.assertThat(publicKey, IsNull.notNullValue());
-        Assert.assertThat(publicKey.getRaw(), IsEqual.equalTo(kp.getPublicKey().getRaw()));
+        MatcherAssert.assertThat(publicKey, IsNull.notNullValue());
+        MatcherAssert.assertThat(publicKey.getRaw(), IsEqual.equalTo(kp.getPublicKey().getRaw()));
     }
 
     @Test
@@ -64,8 +59,8 @@ public abstract class KeyGeneratorTest {
         final KeyPair kp2 = this.getKeyGenerator().generateKeyPair();
 
         // Assert:
-        Assert.assertThat(kp2.getPrivateKey(), IsNot.not(IsEqual.equalTo(kp1.getPrivateKey())));
-        Assert.assertThat(kp2.getPublicKey(), IsNot.not(IsEqual.equalTo(kp1.getPublicKey())));
+        MatcherAssert.assertThat(kp2.getPrivateKey(), IsNot.not(IsEqual.equalTo(kp1.getPrivateKey())));
+        MatcherAssert.assertThat(kp2.getPublicKey(), IsNot.not(IsEqual.equalTo(kp1.getPublicKey())));
     }
 
     protected KeyGenerator getKeyGenerator() {

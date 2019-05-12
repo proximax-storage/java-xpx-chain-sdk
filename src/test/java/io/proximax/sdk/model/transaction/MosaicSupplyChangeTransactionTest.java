@@ -16,20 +16,20 @@
 
 package io.proximax.sdk.model.transaction;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.math.BigInteger;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicSupplyType;
-import io.proximax.sdk.model.transaction.Deadline;
-import io.proximax.sdk.model.transaction.MosaicSupplyChangeTransaction;
-
-import java.math.BigInteger;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class MosaicSupplyChangeTransactionTest {
 

@@ -16,14 +16,10 @@
 
 package io.proximax.core.crypto;
 
-import io.proximax.core.crypto.BlockCipher;
-import io.proximax.core.crypto.Cipher;
-import io.proximax.core.crypto.CryptoEngine;
-import io.proximax.core.crypto.KeyPair;
-import io.proximax.core.test.Utils;
-
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import io.proximax.core.test.Utils;
 
 public class CipherTest {
 

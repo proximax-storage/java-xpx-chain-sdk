@@ -16,11 +16,11 @@
 
 package io.proximax.core.math;
 
-import com.googlecode.javaewah.EWAHCompressedBitmap;
-
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
+import com.googlecode.javaewah.EWAHCompressedBitmap;
 
 /**
  * This is a wrapper for the EWAHCompressedBitmap.

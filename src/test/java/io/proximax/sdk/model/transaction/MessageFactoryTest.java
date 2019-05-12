@@ -1,20 +1,15 @@
 package io.proximax.sdk.model.transaction;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import org.junit.jupiter.api.Test;
 
 import io.proximax.core.crypto.KeyPair;
 import io.proximax.core.crypto.PrivateKey;
 import io.proximax.core.crypto.PublicKey;
-import io.proximax.sdk.model.transaction.Message;
-import io.proximax.sdk.model.transaction.MessageFactory;
-import io.proximax.sdk.model.transaction.MessageType;
-import io.proximax.sdk.model.transaction.PlainMessage;
-import io.proximax.sdk.model.transaction.SecureMessage;
-
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 public class MessageFactoryTest {
 

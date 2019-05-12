@@ -16,18 +16,17 @@
 
 package io.proximax.core.utils;
 
-import io.proximax.core.test.IsEquivalent;
-import io.proximax.core.utils.AbstractTwoLevelMap;
-
-import org.hamcrest.core.IsNot;
-import org.hamcrest.core.IsNull;
-import org.hamcrest.core.IsSame;
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.core.IsNot;
+import org.hamcrest.core.IsNull;
+import org.hamcrest.core.IsSame;
+import org.junit.jupiter.api.Test;
+
+import io.proximax.core.test.IsEquivalent;
 
 public class AbstractTwoLevelMapTest {
 
@@ -40,7 +39,7 @@ public class AbstractTwoLevelMapTest {
         final MockValue value = map.getItem("foo", "bar");
 
         // Assert:
-        Assert.assertThat(value, IsNull.notNullValue());
+        MatcherAssert.assertThat(value, IsNull.notNullValue());
     }
 
     @Test
@@ -53,7 +52,7 @@ public class AbstractTwoLevelMapTest {
         final MockValue value2 = map.getItem("foo", "bar");
 
         // Assert:
-        Assert.assertThat(value2, IsSame.sameInstance(value1));
+        MatcherAssert.assertThat(value2, IsSame.sameInstance(value1));
     }
 
     @Test
@@ -66,7 +65,7 @@ public class AbstractTwoLevelMapTest {
         final MockValue value2 = map.getItem("bar", "foo");
 
         // Assert:
-        Assert.assertThat(value2, IsNot.not(IsSame.sameInstance(value1)));
+        MatcherAssert.assertThat(value2, IsNot.not(IsSame.sameInstance(value1)));
     }
 
     @Test
@@ -78,7 +77,7 @@ public class AbstractTwoLevelMapTest {
         final Map<String, MockValue> values = map.getItems("foo");
 
         // Assert:
-        Assert.assertThat(values, IsNull.notNullValue());
+        MatcherAssert.assertThat(values, IsNull.notNullValue());
     }
 
     @Test
@@ -91,7 +90,7 @@ public class AbstractTwoLevelMapTest {
         final MockValue value2 = map.getItems("foo").get("bar");
 
         // Assert:
-        Assert.assertThat(value2, IsSame.sameInstance(value1));
+        MatcherAssert.assertThat(value2, IsSame.sameInstance(value1));
     }
 
     @Test
@@ -103,13 +102,13 @@ public class AbstractTwoLevelMapTest {
         map.getItems("baz");
 
         // Sanity:
-        Assert.assertThat(map.keySet(), IsEquivalent.equivalentTo(Arrays.asList("foo", "bar", "baz")));
+        MatcherAssert.assertThat(map.keySet(), IsEquivalent.equivalentTo(Arrays.asList("foo", "bar", "baz")));
 
         // Act:
         map.remove("bar");
 
         // Assert:
-        Assert.assertThat(map.keySet(), IsEquivalent.equivalentTo(Arrays.asList("foo", "baz")));
+        MatcherAssert.assertThat(map.keySet(), IsEquivalent.equivalentTo(Arrays.asList("foo", "baz")));
     }
 
     @Test
@@ -121,14 +120,14 @@ public class AbstractTwoLevelMapTest {
         map.getItems("baz");
 
         // Sanity:
-        Assert.assertThat(map.keySet(), IsEquivalent.equivalentTo(Arrays.asList("foo", "bar", "baz")));
+        MatcherAssert.assertThat(map.keySet(), IsEquivalent.equivalentTo(Arrays.asList("foo", "bar", "baz")));
 
         // Act:
         map.remove("qux");
         map.remove("alice");
 
         // Assert:
-        Assert.assertThat(map.keySet(), IsEquivalent.equivalentTo(Arrays.asList("foo", "bar", "baz")));
+        MatcherAssert.assertThat(map.keySet(), IsEquivalent.equivalentTo(Arrays.asList("foo", "bar", "baz")));
     }
 
     @Test
@@ -140,7 +139,7 @@ public class AbstractTwoLevelMapTest {
         map.getItems("baz");
 
         // Assert:
-        Assert.assertThat(map.keySet(), IsEquivalent.equivalentTo(Arrays.asList("foo", "bar", "baz")));
+        MatcherAssert.assertThat(map.keySet(), IsEquivalent.equivalentTo(Arrays.asList("foo", "bar", "baz")));
     }
 
     @Test
@@ -149,7 +148,7 @@ public class AbstractTwoLevelMapTest {
         final AbstractTwoLevelMap<String, MockValue> map = new MockTwoLevelMap();
 
         // Assert:
-        Assert.assertThat(map.keySet(), IsEquivalent.equivalentTo(Collections.emptyList()));
+        MatcherAssert.assertThat(map.keySet(), IsEquivalent.equivalentTo(Collections.emptyList()));
     }
 
     private static class MockValue {
