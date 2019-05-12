@@ -27,7 +27,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 group 'io.proximax'
-version '0.1.0'
+version '0.1.0-alpha'
 
 sourceCompatibility = 1.8
 
@@ -139,7 +139,6 @@ artifacts {
 }
 
 signing {
-    required false
     sign configurations.archives
 }
 
