@@ -16,26 +16,54 @@
 
 package io.proximax.sdk.model.mosaic;
 
-import org.junit.jupiter.api.Test;
-
-import io.proximax.sdk.model.mosaic.MosaicId;
-import io.proximax.sdk.model.mosaic.MosaicName;
-import io.proximax.sdk.model.namespace.NamespaceId;
-
-import java.math.BigInteger;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class MosaicNameTest {
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.Test;
+
+import io.proximax.sdk.ResourceBasedTest;
+import io.proximax.sdk.infrastructure.model.UInt64DTO;
+import io.proximax.sdk.infrastructure.utils.UInt64Utils;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
+
+class MosaicNameTest extends ResourceBasedTest {
 
     @Test
     void createAMosaicName() {
-        NamespaceId namespaceId = new NamespaceId(new BigInteger("-8884663987180930485"));
-        MosaicId mosaicId = new MosaicId(new BigInteger("-3087871471161192663"));
-        MosaicName mosaicName = new MosaicName(mosaicId, "xem", namespaceId);
+        MosaicId mosaicId = new MosaicId(BigInteger.valueOf(-3087871471161192663l));
+        MosaicNames mosaicName = new MosaicNames(mosaicId, Arrays.asList("xem"));
 
         assertEquals(mosaicId, mosaicName.getMosaicId());
-        assertEquals("xem", mosaicName.getName());
-        assertEquals(namespaceId, mosaicName.getParentId());
+        assertEquals(Arrays.asList("xem"), mosaicName.getNames());
+    }
+    
+    @Test
+    void validateMapper() {
+       long count = getResources("mosaic_names", "dtos", "names").stream()
+       .map(obj -> (JsonObject)obj)
+       .map(json -> new MosaicNames(
+             getMosaicID(json),
+             getNames(json)))
+       .count();
+       assertEquals(1, count);
+    }
+    
+    private static MosaicId getMosaicID(JsonObject json) {
+       JsonArray ints = json.getJsonArray("mosaicId");
+       UInt64DTO dto = new UInt64DTO();
+       dto.add(ints.getLong(0));
+       dto.add(ints.getLong(1));
+       return new MosaicId(UInt64Utils.toBigInt(dto));
+    }
+    
+    private static List<String> getNames(JsonObject json) {
+       return json.getJsonArray("names").stream()
+             .map(obj -> (String)obj)
+             .collect(Collectors.toList());
     }
 }

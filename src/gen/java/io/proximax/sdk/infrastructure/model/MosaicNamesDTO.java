@@ -24,40 +24,21 @@ import io.proximax.sdk.infrastructure.model.UInt64DTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * MosaicNameDTO
+ * MosaicNamesDTO
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-05-10T01:03:53.323+02:00")
-public class MosaicNameDTO {
-  @SerializedName("parentId")
-  private UInt64DTO parentId = null;
-
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-05-11T21:53:24.048+02:00")
+public class MosaicNamesDTO {
   @SerializedName("mosaicId")
   private UInt64DTO mosaicId = null;
 
-  @SerializedName("name")
-  private String name = null;
+  @SerializedName("names")
+  private List<String> names = new ArrayList<String>();
 
-  public MosaicNameDTO parentId(UInt64DTO parentId) {
-    this.parentId = parentId;
-    return this;
-  }
-
-   /**
-   * Get parentId
-   * @return parentId
-  **/
-  @ApiModelProperty(required = true, value = "")
-  public UInt64DTO getParentId() {
-    return parentId;
-  }
-
-  public void setParentId(UInt64DTO parentId) {
-    this.parentId = parentId;
-  }
-
-  public MosaicNameDTO mosaicId(UInt64DTO mosaicId) {
+  public MosaicNamesDTO mosaicId(UInt64DTO mosaicId) {
     this.mosaicId = mosaicId;
     return this;
   }
@@ -75,22 +56,27 @@ public class MosaicNameDTO {
     this.mosaicId = mosaicId;
   }
 
-  public MosaicNameDTO name(String name) {
-    this.name = name;
+  public MosaicNamesDTO names(List<String> names) {
+    this.names = names;
+    return this;
+  }
+
+  public MosaicNamesDTO addNamesItem(String namesItem) {
+    this.names.add(namesItem);
     return this;
   }
 
    /**
-   * Get name
-   * @return name
+   * Get names
+   * @return names
   **/
   @ApiModelProperty(required = true, value = "")
-  public String getName() {
-    return name;
+  public List<String> getNames() {
+    return names;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setNames(List<String> names) {
+    this.names = names;
   }
 
 
@@ -102,26 +88,24 @@ public class MosaicNameDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    MosaicNameDTO mosaicNameDTO = (MosaicNameDTO) o;
-    return Objects.equals(this.parentId, mosaicNameDTO.parentId) &&
-        Objects.equals(this.mosaicId, mosaicNameDTO.mosaicId) &&
-        Objects.equals(this.name, mosaicNameDTO.name);
+    MosaicNamesDTO mosaicNamesDTO = (MosaicNamesDTO) o;
+    return Objects.equals(this.mosaicId, mosaicNamesDTO.mosaicId) &&
+        Objects.equals(this.names, mosaicNamesDTO.names);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(parentId, mosaicId, name);
+    return Objects.hash(mosaicId, names);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class MosaicNameDTO {\n");
+    sb.append("class MosaicNamesDTO {\n");
     
-    sb.append("    parentId: ").append(toIndentedString(parentId)).append("\n");
     sb.append("    mosaicId: ").append(toIndentedString(mosaicId)).append("\n");
-    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    names: ").append(toIndentedString(names)).append("\n");
     sb.append("}");
     return sb.toString();
   }

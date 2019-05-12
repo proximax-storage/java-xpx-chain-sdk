@@ -958,7 +958,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/MosaicNameDTO'
+              $ref: '#/definitions/MosaicNamesDTO'
         '400':
           description: invalid content
         '409':
@@ -1733,19 +1733,18 @@ definitions:
       - 0
     - - 0
       - 0
-  MosaicNameDTO:
+  MosaicNamesDTO:
     type: object
     required:
-    - parentId
     - mosaicId
-    - name
+    - names
     properties:
-      parentId:
-        $ref: '#/definitions/UInt64DTO'
       mosaicId:
         $ref: '#/definitions/UInt64DTO'
-      name:
-        type: string
+      names:
+        type: array
+        items:
+          type: string
   BlockInfoDTO:
     type: object
     required:

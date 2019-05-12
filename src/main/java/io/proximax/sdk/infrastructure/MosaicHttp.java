@@ -25,15 +25,14 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import io.proximax.sdk.infrastructure.model.MosaicInfoDTO;
-import io.proximax.sdk.infrastructure.model.MosaicNameDTO;
+import io.proximax.sdk.infrastructure.model.MosaicNamesDTO;
 import io.proximax.sdk.infrastructure.model.MosaicPropertiesDTO;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicInfo;
-import io.proximax.sdk.model.mosaic.MosaicName;
+import io.proximax.sdk.model.mosaic.MosaicNames;
 import io.proximax.sdk.model.mosaic.MosaicProperties;
-import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.transaction.UInt64Id;
 import io.reactivex.Observable;
 import io.vertx.core.json.JsonObject;
@@ -103,7 +102,7 @@ public class MosaicHttp extends Http implements MosaicRepository {
     }
 
     @Override
-    public Observable<List<MosaicName>> getMosaicNames(List<UInt64Id> mosaicIds) {
+    public Observable<List<MosaicNames>> getMosaicNames(List<UInt64Id> mosaicIds) {
         JsonObject requestBody = new JsonObject();
         requestBody.put("mosaicIds", mosaicIds.stream().map(UInt64Id::getIdAsHex).collect(Collectors.toList()));
         return this.client
@@ -112,12 +111,13 @@ public class MosaicHttp extends Http implements MosaicRepository {
                 .rxSendJson(requestBody)
                 .toObservable()
                 .map(Http::mapJsonArrayOrError)
-                .map(json -> objectMapper.<List<MosaicNameDTO>>readValue(json.toString(), new TypeReference<List<MosaicNameDTO>>() {
-                }))
+                .map(json -> {
+                   System.out.println(json);
+                   return objectMapper.<List<MosaicNamesDTO>>readValue(json.toString(), new TypeReference<List<MosaicNamesDTO>>() {});
+                })
                 .flatMapIterable(item -> item)
-                .map(mosaicNameDTO -> new MosaicName(new MosaicId(toBigInt(mosaicNameDTO.getMosaicId())),
-                        mosaicNameDTO.getName(),
-                        new NamespaceId(toBigInt(mosaicNameDTO.getParentId()))))
+                .map(mosaicNameDTO -> new MosaicNames(new MosaicId(toBigInt(mosaicNameDTO.getMosaicId())),
+                        mosaicNameDTO.getNames()))
                 .toList()
                 .toObservable();
     }

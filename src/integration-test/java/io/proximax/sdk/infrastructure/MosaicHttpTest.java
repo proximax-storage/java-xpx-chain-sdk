@@ -33,7 +33,7 @@ import org.junit.jupiter.api.TestInstance;
 import io.proximax.sdk.BaseTest;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicInfo;
-import io.proximax.sdk.model.mosaic.MosaicName;
+import io.proximax.sdk.model.mosaic.MosaicNames;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.reactivex.schedulers.Schedulers;
 
@@ -70,12 +70,12 @@ class MosaicHttpTest extends BaseTest {
     @Test
     @Disabled("not implemented yet")
     void getMosaicNames() throws ExecutionException, InterruptedException {
-        List<MosaicName> mosaicNames = mosaicHttp
+        List<MosaicNames> mosaicNames = mosaicHttp
                 .getMosaicNames(Collections.singletonList(NetworkCurrencyMosaic.ID))
                 .toFuture()
                 .get();
 
-        assertEquals("xpx", mosaicNames.get(0).getName());
+        assertEquals("xpx", mosaicNames.get(0).getNames().get(0));
         assertEquals(NetworkCurrencyMosaic.ID, mosaicNames.get(0).getMosaicId());
     }
 
