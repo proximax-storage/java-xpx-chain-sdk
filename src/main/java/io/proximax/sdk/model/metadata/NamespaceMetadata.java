@@ -23,11 +23,13 @@ import io.proximax.sdk.model.namespace.NamespaceId;
  * Namespace metadata defining numeric ID
  */
 public class NamespaceMetadata extends Metadata {
-   private NamespaceId id;
+   private final NamespaceId id;
 
    /**
-    * @param fields
-    * @param id
+    * new instance
+    * 
+    * @param fields list of metadata fields associated with given namespace
+    * @param id id of the namespace
     */
    public NamespaceMetadata(List<Field> fields, NamespaceId id) {
       super(MetadataType.NAMESPACE, fields);
@@ -35,17 +37,10 @@ public class NamespaceMetadata extends Metadata {
    }
 
    /**
-    * @return the id
+    * @return the id id of the namespace
     */
    public NamespaceId getId() {
       return id;
-   }
-
-   /**
-    * @param id the id to set
-    */
-   public void setId(NamespaceId id) {
-      this.id = id;
    }
 
 }

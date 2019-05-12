@@ -16,19 +16,17 @@
 
 package io.proximax.sdk.model.transaction;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.Test;
 
 import io.proximax.core.crypto.KeyPair;
 import io.proximax.core.crypto.PrivateKey;
 import io.proximax.core.crypto.PublicKey;
-import io.proximax.sdk.model.transaction.MessagePayloadDecodeFailureException;
-import io.proximax.sdk.model.transaction.MessageType;
-import io.proximax.sdk.model.transaction.SecureMessage;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SecureMessageTest {
 
@@ -121,6 +119,23 @@ class SecureMessageTest {
         ));
     }
 
+    @Test
+   void decodeFromNis1() {
+      String recipientPrivateKeyHex = "9f5db5ba1b77c19f4f12a5236b7804687bad9ab0e1db2fe3fa09f1f31c0f3b96";
+      String senderPublicKeyHex = "c735e505512414216a8cf54e25b3a444b16194c1df908ef25b9fdc70b91a84c4";
+      PrivateKey recipientPrivateKey = PrivateKey.fromHexString(recipientPrivateKeyHex);
+      PublicKey senderPublicKey = PublicKey.fromHexString(senderPublicKeyHex);
+      // do some basic test
+      String testStr = SecureMessage.create(recipientPrivateKey, senderPublicKey, "ahoj")
+            .decrypt(new KeyPair(recipientPrivateKey), new KeyPair(senderPublicKey));
+      assertEquals("ahoj", testStr);
+      // now try actual message from nis1
+      String encryptedMessage = "ffe377bc09e4e44afb4ba8a5fd68b618ffe32b10b8568484a3f65fe41178e7d90662134149c34104c90de6c0db0a10f1eb0db76b7d28c49804a5af859c470b89";
+      SecureMessage secMsg = SecureMessage.createFromEncodedPayload(Hex.decode(encryptedMessage));
+      String decryptedMessage = secMsg.decrypt(new KeyPair(recipientPrivateKey), new KeyPair(senderPublicKey));
+      assertEquals("secret message", decryptedMessage);
+   }
+    
     private byte[] sampleEncodedPayload() {
         return SecureMessage.create(
                 PrivateKey.fromHexString(TEST_SENDER_PRIVATE_KEY),

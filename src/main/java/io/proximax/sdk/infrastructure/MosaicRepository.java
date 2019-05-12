@@ -42,7 +42,7 @@ public interface MosaicRepository {
      * Gets MosaicInfo for different mosaicIds.
      *
      * @param mosaicIds List of BigInteger
-     * @return Observable of List<{@link MosaicInfo}>
+     * @return Observable of {@link MosaicInfo} list
      */
     Observable<List<MosaicInfo>> getMosaics(List<UInt64Id> mosaicIds);
 
@@ -50,7 +50,7 @@ public interface MosaicRepository {
      * Gets list of MosaicName for different mosaicIds.
      *
      * @param mosaicIds List of BigInteger
-     * @return Observable of List<{@link MosaicNames}>
+     * @return Observable of {@link MosaicNames} list
      */
     Observable<List<MosaicNames>> getMosaicNames(List<UInt64Id> mosaicIds);
 }

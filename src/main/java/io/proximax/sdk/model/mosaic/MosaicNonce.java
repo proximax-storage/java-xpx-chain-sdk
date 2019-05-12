@@ -53,7 +53,7 @@ public class MosaicNonce {
    /**
     * Create MosaicNonce from byte array
     *
-    * @param nonce
+    * @param nonce byte array with nonce bytes
     */
    public MosaicNonce(byte[] nonce) {
       Validate.notNull(nonce, "Nonce must not be null");
@@ -78,9 +78,11 @@ public class MosaicNonce {
    /**
     * Create a MosaicNonce from hexadecimal notation.
     *
-    * @param hex
-    * @throws IllegalIdentifierException
-    * @return MosaicNonce
+    * @param hex hex representation of nonce bytes
+    * 
+    * @throws IllegalIdentifierException thrown when number of bytes does not mat expectation or hex contains invalid
+    *          hexadecimal string
+    * @return MosaicNonce nonce defined by hex string
     */
    public static MosaicNonce createFromHex(String hex) {
       byte[] bytes;
@@ -100,8 +102,8 @@ public class MosaicNonce {
     *
     * BEWARE this uses little endian while getNonceAsInt uses big endian. do not mix the two
     * 
-    * @param number
-    * @return MosaicNonce
+    * @param number numeric representation of nonce bytes
+    * @return MosaicNonce the nonce
     */
    public static MosaicNonce createFromBigInteger(BigInteger number) {
       return new MosaicNonce(ByteUtils.bigIntToBytesOfSize(number, 4));

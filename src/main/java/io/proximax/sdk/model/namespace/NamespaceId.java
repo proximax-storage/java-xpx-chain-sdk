@@ -36,7 +36,7 @@ public class NamespaceId implements UInt64Id {
     /**
      * Create NamespaceId from namespace string name (ex: nem or domain.subdom.subdome)
      *
-     * @param id
+     * @param id string representing domain levels
      */
     public NamespaceId(String id) {
         this.id = IdGenerator.generateNamespaceId(id);
@@ -46,7 +46,7 @@ public class NamespaceId implements UInt64Id {
     /**
      * Create NamespaceId from biginteger id
      *
-     * @param id
+     * @param id numeric id
      */
     public NamespaceId(BigInteger id) {
         this.id = id;

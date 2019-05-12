@@ -16,12 +16,16 @@
 
 package io.proximax.sdk.infrastructure;
 
-import io.proximax.sdk.model.account.*;
+import java.util.List;
+
+import io.proximax.sdk.model.account.AccountInfo;
+import io.proximax.sdk.model.account.Address;
+import io.proximax.sdk.model.account.MultisigAccountGraphInfo;
+import io.proximax.sdk.model.account.MultisigAccountInfo;
+import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
 import io.reactivex.Observable;
-
-import java.util.List;
 
 /**
  * Account interface repository.
@@ -41,7 +45,7 @@ public interface AccountRepository {
      * Gets AccountsInfo for different accounts.
      *
      * @param addresses List of Address
-     * @return Observable of List<{@link AccountInfo}>
+     * @return Observable of {@link AccountInfo} list
      */
     Observable<List<AccountInfo>> getAccountsInfo(List<Address> addresses);
 
@@ -65,7 +69,7 @@ public interface AccountRepository {
      * Gets an list of confirmed transactions for which an account is signer or receiver.
      *
      * @param publicAccount PublicAccount
-     * @return Observable of List<{@link Transaction}>
+     * @return Observable of {@link Transaction} list
      */
     Observable<List<Transaction>> transactions(PublicAccount publicAccount);
 
@@ -75,7 +79,7 @@ public interface AccountRepository {
      *
      * @param publicAccount PublicAccount
      * @param queryParams   QueryParams
-     * @return Observable of List<{@link Transaction}>
+     * @return Observable of {@link Transaction} list
      */
     Observable<List<Transaction>> transactions(PublicAccount publicAccount, QueryParams queryParams);
 
@@ -84,7 +88,7 @@ public interface AccountRepository {
      * A transaction is said to be incoming with respect to an account if the account is the recipient of a transaction.
      *
      * @param publicAccount PublicAccount
-     * @return Observable of List<{@link Transaction}>
+     * @return Observable of {@link Transaction} list
      */
     Observable<List<Transaction>> incomingTransactions(PublicAccount publicAccount);
 
@@ -95,7 +99,7 @@ public interface AccountRepository {
      *
      * @param publicAccount PublicAccount
      * @param queryParams   QueryParams
-     * @return Observable of List<{@link Transaction}>
+     * @return Observable of {@link Transaction} list
      */
     Observable<List<Transaction>> incomingTransactions(PublicAccount publicAccount, QueryParams queryParams);
 
@@ -104,7 +108,7 @@ public interface AccountRepository {
      * A transaction is said to be outgoing with respect to an account if the account is the sender of a transaction.
      *
      * @param publicAccount PublicAccount
-     * @return Observable of List<{@link Transaction}>
+     * @return Observable of {@link Transaction}
      */
     Observable<List<Transaction>> outgoingTransactions(PublicAccount publicAccount);
 
@@ -115,7 +119,7 @@ public interface AccountRepository {
      *
      * @param publicAccount PublicAccount
      * @param queryParams   QueryParams
-     * @return Observable of List<{@link Transaction}>
+     * @return Observable of {@link Transaction} list
      */
     Observable<List<Transaction>> outgoingTransactions(PublicAccount publicAccount, QueryParams queryParams);
 
@@ -124,7 +128,7 @@ public interface AccountRepository {
      * A transaction is said to be aggregate bonded with respect to an account if there are missing signatures.
      *
      * @param publicAccount PublicAccount
-     * @return Observable of List<{@link Transaction}>
+     * @return Observable of {@link Transaction} list
      */
     Observable<List<AggregateTransaction>> aggregateBondedTransactions(PublicAccount publicAccount);
 
@@ -135,7 +139,7 @@ public interface AccountRepository {
      *
      * @param publicAccount PublicAccount
      * @param queryParams   QueryParams
-     * @return Observable of List<{@link Transaction}>
+     * @return Observable of {@link Transaction} list
      */
     Observable<List<AggregateTransaction>> aggregateBondedTransactions(PublicAccount publicAccount, QueryParams queryParams);
 
@@ -145,7 +149,7 @@ public interface AccountRepository {
      * Unconfirmed transactions are not guaranteed to be included in any block.
      *
      * @param publicAccount PublicAccount
-     * @return Observable of List<{@link Transaction}>
+     * @return Observable of {@link Transaction} list
      */
     Observable<List<Transaction>> unconfirmedTransactions(PublicAccount publicAccount);
 
@@ -157,7 +161,7 @@ public interface AccountRepository {
      *
      * @param publicAccount PublicAccount
      * @param queryParams   QueryParams
-     * @return Observable of List<{@link Transaction}>
+     * @return Observable of {@link Transaction} list
      */
     Observable<List<Transaction>> unconfirmedTransactions(PublicAccount publicAccount, QueryParams queryParams);
 }

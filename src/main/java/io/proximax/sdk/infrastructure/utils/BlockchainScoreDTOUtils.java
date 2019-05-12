@@ -24,7 +24,7 @@ public class BlockchainScoreDTOUtils {
     /**
      * convert BlockchainScoreDTO to BigInteger instance
      * 
-     * @param dto BlockchainScoreDTO instance representing low and high score
+     * @param score BlockchainScoreDTO instance representing low and high score
      * @return BigInteger created from the low and high scores
      */
     public static BigInteger toBigInt(BlockchainScoreDTO score) {

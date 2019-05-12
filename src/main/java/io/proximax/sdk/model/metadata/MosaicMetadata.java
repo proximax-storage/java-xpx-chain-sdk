@@ -26,8 +26,8 @@ public class MosaicMetadata extends Metadata {
    private MosaicId id;
 
    /**
-    * @param fields
-    * @param id
+    * @param fields metadata fields associated with the mosaic
+    * @param id mosaic ID
     */
    public MosaicMetadata(List<Field> fields, MosaicId id) {
       super(MetadataType.MOSAIC, fields);

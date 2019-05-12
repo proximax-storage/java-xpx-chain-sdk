@@ -87,7 +87,7 @@ public class TransferTransaction extends Transaction {
     /**
      * Returns list of mosaic objects.
      *
-     * @return Link<{ @ link   Mosaic }>
+     * @return list of mosaics in the transfer
      */
     public List<Mosaic> getMosaics() {
         return mosaics;

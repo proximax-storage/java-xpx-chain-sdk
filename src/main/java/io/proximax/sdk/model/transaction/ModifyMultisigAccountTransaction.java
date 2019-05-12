@@ -16,20 +16,18 @@
 
 package io.proximax.sdk.model.transaction;
 
+import java.math.BigInteger;
+import java.util.List;
+import java.util.Optional;
+
+import org.apache.commons.lang3.Validate;
+
 import com.google.flatbuffers.FlatBufferBuilder;
 
 import io.proximax.core.utils.HexEncoder;
 import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
-import io.proximax.sdk.model.transaction.CosignatoryModificationBuffer;
-import io.proximax.sdk.model.transaction.TransferTransactionBuffer;
-
-import org.apache.commons.lang3.Validate;
-
-import java.math.BigInteger;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Modify multisig account transactions are part of the NEM's multisig account system.
@@ -97,7 +95,7 @@ public class ModifyMultisigAccountTransaction extends Transaction {
     /**
      * The List of cosigner accounts added or removed from the multi-signature account.
      *
-     * @return List<{ @ link   MultisigCosignatoryModification }>
+     * @return modifications in this transaction
      */
     public List<MultisigCosignatoryModification> getModifications() {
         return modifications;

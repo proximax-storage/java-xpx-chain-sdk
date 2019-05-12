@@ -70,9 +70,9 @@ public class MosaicDefinitionTransaction extends Transaction {
    /**
     * Create a mosaic creation transaction object.
     *
+    * @param nonce mosaic nonce allowing one account to have multiple mosaics
+    * @param mosaicId id of the mosaic to be created
     * @param deadline The deadline to include the transaction.
-    * @param mosaicName The mosaic name ex: xem.
-    * @param namespaceName The namespace where mosaic will be included ex: nem.
     * @param mosaicProperties The mosaic properties.
     * @param networkType The network type.
     * @return {@link MosaicDefinitionTransaction}

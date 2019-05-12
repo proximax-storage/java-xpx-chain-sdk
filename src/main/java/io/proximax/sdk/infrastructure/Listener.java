@@ -61,7 +61,8 @@ public class Listener {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     /**
-     * @param url nis host
+     * @param url server host
+     * @throws MalformedURLException when host URL is not valid
      */
     public Listener(final String url) throws MalformedURLException {
         this.url = new URL(url);

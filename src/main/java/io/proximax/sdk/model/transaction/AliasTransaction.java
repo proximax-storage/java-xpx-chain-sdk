@@ -73,10 +73,10 @@ public class AliasTransaction extends Transaction {
    /**
     * Create a mosaic creation transaction object.
     *
+    * @param mosaicId id of the mosaic
+    * @param namespaceId id of the namespace to be aliased
+    * @param action alias action to perform
     * @param deadline The deadline to include the transaction.
-    * @param mosaicName The mosaic name ex: xem.
-    * @param namespaceName The namespace where mosaic will be included ex: nem.
-    * @param mosaicProperties The mosaic properties.
     * @param networkType The network type.
     * @return {@link AliasTransaction}
     */

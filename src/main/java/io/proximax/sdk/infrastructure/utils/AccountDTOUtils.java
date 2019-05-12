@@ -47,10 +47,11 @@ public class AccountDTOUtils {
     }
     
     /**
+     * get address using the account DTO
      * 
-     * @param account
-     * @return
-     * @throws DecoderException
+     * @param account DTO of account
+     * @return encoded form of address
+     * @throws DecoderException when error occurred
      */
     public static String getAddressEncoded(AccountDTO account) throws DecoderException {
         return getAddressEncoded(account.getAddress());

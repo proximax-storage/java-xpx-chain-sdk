@@ -26,8 +26,8 @@ public class Field {
    private final Optional<String> value;
    
    /**
-    * @param key
-    * @param value
+    * @param key metadata key
+    * @param value metadata value
     */
    public Field(String key, String value) {
       this.key = key;
@@ -35,8 +35,7 @@ public class Field {
    }   
    
    /**
-    * @param key
-    * @param value
+    * @param key metadata key
     */
    public Field(String key) {
       this.key = key;
@@ -44,7 +43,7 @@ public class Field {
    }
    
    /**
-    * @return the key
+    * @return the key metadata key
     */
    public String getKey() {
       return key;
@@ -61,7 +60,7 @@ public class Field {
    
    /**
     * get value or throw runtime exception. Use {@link #hasValue()} to check for presence of value or
-    * use {@link #getValueOptional() to retrieve optional
+    * use {@link #getValueOptional()} to retrieve optional
     * 
     * @return the value
     */
