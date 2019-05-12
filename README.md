@@ -4,11 +4,11 @@
 
 Official ProximaX Sirius Blockchain SDK Library in Java.
 
-The ProximaX Sirius Catapult Chain Java SDK is a Java library for interacting with the Sirius Blockchain. It provides a complete library set coverage, and supports synchronous and asynchronous requests.
+The ProximaX Sirius Catapult Chain Java SDK is a Java library for interacting with the Sirius Blockchain. It provides a complete library set coverage, and supports synchronous and asynchronous requests. This SDK can be used with JVM-based languages like Java, Kotlin, Scala.
 
 ## Use the library ##
 
-This library requires use of Java8. To include library and its dependencies, add following to your build script:
+This library requires use of Java8. Library is published to [Maven Central](https://search.maven.org/). To include library and its dependencies, add following to your build script:
 
 ### Maven ###
 
@@ -30,7 +30,7 @@ compile 'io.proximax:java-xpx-catapult-sdk:0.1.0'
 
 For SDK documentation and examples see [wiki](https://github.com/proximax-storage/java-xpx-catapult-sdk/wiki)
 
-Check [integration tests](https://github.com/proximax-storage/java-xpx-catapult-sdk/tree/master/src/integration-test/java/io/proximax/sdk) for examples how to use the library.
+Check [integration tests](https://github.com/proximax-storage/java-xpx-catapult-sdk/tree/master/src/integration-test/java/io/proximax/sdk) for working examples how to use the library.
 
 ## Contribution ##
 
