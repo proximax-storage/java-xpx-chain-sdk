@@ -18,7 +18,7 @@
 plugins {
     id 'java-library'
     id 'jacoco'
-    id 'maven'
+    id 'maven-publish'
     id 'signing'
 }
 

@@ -46,10 +46,6 @@ task javadocJar(type: Jar) {
         )
     }
 }
-// add sources and javadoc to release artifacts
-artifacts {
-    archives javadocJar, sourcesJar
-}
 
 // adjust man jar file
 jar {
@@ -63,4 +59,11 @@ jar {
             'Build-OS'       : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}"
         )
     }
+}
+
+// add sources and javadoc to release artifacts
+artifacts {
+    archives jar
+    archives sourcesJar
+    archives javadocJar
 }
