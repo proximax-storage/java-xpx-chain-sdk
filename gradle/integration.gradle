@@ -48,6 +48,3 @@ task integrationTest(type: Test) {
     // first run jUni tests then integration tests
     mustRunAfter tasks.test 
 }
-
-// include integration tests to junit
-check.dependsOn integrationTest 
