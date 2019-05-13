@@ -16,11 +16,9 @@
 
 package io.proximax.core.utils;
 
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.IsEqual;
-import org.junit.Assert;
-import org.junit.Test;
-
-import io.proximax.core.utils.HexEncoder;
+import org.junit.jupiter.api.Test;
 
 public class HexEncoderTest {
 
@@ -31,7 +29,7 @@ public class HexEncoderTest {
         final byte[] output = HexEncoder.getBytes(input);
 
         // Assert:
-        Assert.assertThat(output, IsEqual.equalTo(expectedOutput));
+        MatcherAssert.assertThat(output, IsEqual.equalTo(expectedOutput));
     }
 
     private static void assertTryGetBytesConversion(final String input, final byte[] expectedOutput) {
@@ -39,7 +37,7 @@ public class HexEncoderTest {
         final byte[] output = HexEncoder.tryGetBytes(input);
 
         // Assert:
-        Assert.assertThat(output, IsEqual.equalTo(expectedOutput));
+        MatcherAssert.assertThat(output, IsEqual.equalTo(expectedOutput));
     }
 
     private static void assertGetStringConversion(final byte[] input, final String expectedOutput) {
@@ -47,7 +45,7 @@ public class HexEncoderTest {
         final String output = HexEncoder.getString(input);
 
         // Assert:
-        Assert.assertThat(output, IsEqual.equalTo(expectedOutput));
+        MatcherAssert.assertThat(output, IsEqual.equalTo(expectedOutput));
     }
 
 	/*@Test

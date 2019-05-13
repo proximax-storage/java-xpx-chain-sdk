@@ -16,10 +16,16 @@
 
 package io.proximax.sdk.model.account;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
+import java.math.BigInteger;
+import java.util.Collections;
+
+import org.junit.jupiter.api.Test;
+
 import io.proximax.core.crypto.KeyPair;
 import io.proximax.core.crypto.ed25519.Ed25519CryptoEngine;
-import io.proximax.sdk.model.account.Account;
-import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.Mosaic;
 import io.proximax.sdk.model.mosaic.MosaicId;
@@ -27,14 +33,6 @@ import io.proximax.sdk.model.transaction.FakeDeadline;
 import io.proximax.sdk.model.transaction.PlainMessage;
 import io.proximax.sdk.model.transaction.SignedTransaction;
 import io.proximax.sdk.model.transaction.TransferTransaction;
-
-import org.junit.jupiter.api.Test;
-
-import java.math.BigInteger;
-import java.util.Collections;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class AccountTest {
 

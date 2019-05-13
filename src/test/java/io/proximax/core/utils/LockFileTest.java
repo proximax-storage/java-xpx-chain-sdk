@@ -16,19 +16,17 @@
 
 package io.proximax.core.utils;
 
-import org.apache.commons.io.FileUtils;
-import org.hamcrest.core.IsEqual;
-import org.hamcrest.core.IsNull;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import io.proximax.core.utils.LockFile;
-
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.core.IsEqual;
+import org.hamcrest.core.IsNull;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 public class LockFileTest {
 
@@ -38,7 +36,7 @@ public class LockFileTest {
 
     //region BeforeClass / AfterClass
 
-    @BeforeClass
+    @BeforeAll
     public static void createTestFiles() throws IOException {
         final boolean result = TEST_FILE_DIRECTORY.mkdir() && TEST_EXISTING_FILE.createNewFile();
 
@@ -47,7 +45,7 @@ public class LockFileTest {
         }
     }
 
-    @AfterClass
+    @AfterAll
     public static void removeTestFiles() throws IOException {
         FileUtils.deleteDirectory(TEST_FILE_DIRECTORY);
     }
@@ -61,7 +59,7 @@ public class LockFileTest {
         // Act:
         try (final Closeable lock = LockFile.tryAcquireLock(new File("foo\u0000.lock"))) {
             // Assert:
-            Assert.assertThat(lock, IsNull.nullValue());
+            MatcherAssert.assertThat(lock, IsNull.nullValue());
         }
     }
 
@@ -70,7 +68,7 @@ public class LockFileTest {
         // Act:
         try (final Closeable lock = LockFile.tryAcquireLock(TEST_EXISTING_FILE)) {
             // Assert:
-            Assert.assertThat(lock, IsNull.notNullValue());
+            MatcherAssert.assertThat(lock, IsNull.notNullValue());
         }
     }
 
@@ -79,7 +77,7 @@ public class LockFileTest {
         // Act:
         try (final Closeable lock = LockFile.tryAcquireLock(new File(TEST_FILE_DIRECTORY, "tryAcquireLock_new.lock"))) {
             // Assert:
-            Assert.assertThat(lock, IsNull.notNullValue());
+            MatcherAssert.assertThat(lock, IsNull.notNullValue());
         }
     }
 
@@ -89,8 +87,8 @@ public class LockFileTest {
         try (final Closeable lock1 = LockFile.tryAcquireLock(TEST_EXISTING_FILE)) {
             try (final Closeable lock2 = LockFile.tryAcquireLock(TEST_EXISTING_FILE)) {
                 // Assert:
-                Assert.assertThat(lock1, IsNull.notNullValue());
-                Assert.assertThat(lock2, IsNull.nullValue());
+                MatcherAssert.assertThat(lock1, IsNull.notNullValue());
+                MatcherAssert.assertThat(lock2, IsNull.nullValue());
             }
         }
     }
@@ -105,7 +103,7 @@ public class LockFileTest {
         final boolean isLocked = LockFile.isLocked(new File("foo\u0000.lock"));
 
         // Assert:
-        Assert.assertThat(isLocked, IsEqual.equalTo(false));
+        MatcherAssert.assertThat(isLocked, IsEqual.equalTo(false));
     }
 
     @Test
@@ -114,7 +112,7 @@ public class LockFileTest {
         final boolean isLocked = LockFile.isLocked(TEST_EXISTING_FILE);
 
         // Assert:
-        Assert.assertThat(isLocked, IsEqual.equalTo(false));
+        MatcherAssert.assertThat(isLocked, IsEqual.equalTo(false));
     }
 
     @Test
@@ -125,7 +123,7 @@ public class LockFileTest {
             final boolean isLocked = LockFile.isLocked(TEST_EXISTING_FILE);
 
             // Assert:
-            Assert.assertThat(isLocked, IsEqual.equalTo(true));
+            MatcherAssert.assertThat(isLocked, IsEqual.equalTo(true));
         }
     }
 
@@ -136,8 +134,8 @@ public class LockFileTest {
 
         try (final Closeable lock = LockFile.tryAcquireLock(TEST_EXISTING_FILE)) {
             // Assert:
-            Assert.assertThat(isLocked, IsEqual.equalTo(false));
-            Assert.assertThat(lock, IsNull.notNullValue());
+            MatcherAssert.assertThat(isLocked, IsEqual.equalTo(false));
+            MatcherAssert.assertThat(lock, IsNull.notNullValue());
         }
     }
 

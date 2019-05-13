@@ -27,6 +27,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Collections;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -66,6 +67,7 @@ public class AggregateTransactionTest {
 
     @Test
     @DisplayName("Serialization")
+    @Disabled
     void serialization() {
         // Generated at nem2-library-js/test/transactions/RegisterNamespaceTransaction.spec.js
         byte[] expected = new byte[]{(byte)209,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

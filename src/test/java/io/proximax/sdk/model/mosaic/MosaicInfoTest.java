@@ -26,9 +26,6 @@ import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
-import io.proximax.sdk.model.mosaic.MosaicId;
-import io.proximax.sdk.model.mosaic.MosaicInfo;
-import io.proximax.sdk.model.mosaic.MosaicProperties;
 import io.proximax.sdk.model.namespace.NamespaceId;
 
 class MosaicInfoTest {

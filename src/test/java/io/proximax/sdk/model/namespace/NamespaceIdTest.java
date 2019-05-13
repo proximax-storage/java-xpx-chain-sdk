@@ -16,13 +16,13 @@
 
 package io.proximax.sdk.model.namespace;
 
-import org.junit.jupiter.api.Test;
-
-import io.proximax.sdk.model.namespace.NamespaceId;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 class NamespaceIdTest {
 

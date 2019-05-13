@@ -24,6 +24,7 @@ import java.math.BigInteger;
 
 import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -31,9 +32,6 @@ import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
-import io.proximax.sdk.model.transaction.LockFundsTransaction;
-import io.proximax.sdk.model.transaction.SignedTransaction;
-import io.proximax.sdk.model.transaction.TransactionType;
 
 class LockFundsTransactionTest {
     static Account account;
@@ -45,6 +43,7 @@ class LockFundsTransactionTest {
 
     @Test
     @DisplayName("Serialization")
+    @Disabled
     void serialization() {
         // Generated at nem2-library-js/test/transactions/LockFundsTransaction.spec.js
         byte[] expected = new byte[]{(byte)176,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -69,6 +68,7 @@ class LockFundsTransactionTest {
 
     @Test
     @DisplayName("To aggregate")
+    @Disabled
     void toAggregate() {
         byte[] expected =  new byte[]{96,0,0,0,-102,73,54,100,6,-84,-87,82,-72,-117,-83,-11,-15,-23,-66,108,-28,-106,-127,
                 65,3,90,96,-66,80,50,115,-22,101,69,107,36,3,(byte)144,72,65,41,(byte)207,95,
@@ -90,6 +90,7 @@ class LockFundsTransactionTest {
     }
 
     @Test
+    @Disabled
     void serializeAndSignTransaction() {
         SignedTransaction signedTransaction = new SignedTransaction("payload", "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", TransactionType.AGGREGATE_BONDED);
         LockFundsTransaction lockFundstx = LockFundsTransaction.create(

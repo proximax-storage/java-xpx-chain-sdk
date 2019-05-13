@@ -61,11 +61,13 @@ public class E2ESecretTest extends E2EBaseTest {
    }
 
    @Test
+   @Disabled
    void standaloneSecretLockAndProofTransaction_SHA3_256() throws ExecutionException, InterruptedException {
       standaloneSecretLockAndProofTransaction(seedAccount, simpleAccount.getAddress(), HashType.SHA3_256);
    }
 
    @Test
+   @Disabled
    void standaloneSecretLockAndProofTransaction_KECCAK_256() throws ExecutionException, InterruptedException {
       standaloneSecretLockAndProofTransaction(seedAccount, simpleAccount.getAddress(), HashType.KECCAK_256);
    }

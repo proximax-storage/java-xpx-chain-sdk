@@ -22,7 +22,7 @@ import java.util.Random;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 
 import io.proximax.core.utils.ByteUtils;
 

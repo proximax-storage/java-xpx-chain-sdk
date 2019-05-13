@@ -16,13 +16,9 @@
 
 package io.proximax.sdk.model.account;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import io.proximax.sdk.model.account.MultisigAccountGraphInfo;
-import io.proximax.sdk.model.account.MultisigAccountInfo;
-import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
-
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -30,10 +26,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+
+import io.proximax.sdk.model.blockchain.NetworkType;
 
 class MultisigAccountGraphInfoTest {
-
+   private static final List<PublicAccount> EMPTY_PUBKYES = new ArrayList<>(0);
     @Test
     void returnTheLevels() {
         Map<Integer, List<MultisigAccountInfo>> info = new HashMap<>();
@@ -42,7 +40,7 @@ class MultisigAccountGraphInfoTest {
                 1,
                 1,
                 Collections.singletonList(new PublicAccount("1674016C27FE2C2EB5DFA73996FA54A183B38AED0AA64F756A3918BAF08E061B", NetworkType.MIJIN_TEST)),
-                Collections.EMPTY_LIST);
+                EMPTY_PUBKYES);
         info.put(-3, Collections.singletonList(
                 multisigAccountInfo
         ));

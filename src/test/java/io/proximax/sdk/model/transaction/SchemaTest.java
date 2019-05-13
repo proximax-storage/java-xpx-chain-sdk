@@ -16,16 +16,13 @@
 
 package io.proximax.sdk.model.transaction;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import io.proximax.sdk.model.transaction.Schema;
-import io.proximax.sdk.model.transaction.SchemaAttribute;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 import java.util.Arrays;
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 class SchemaTest {
 

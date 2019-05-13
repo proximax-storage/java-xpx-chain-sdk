@@ -16,18 +16,12 @@
 
 package io.proximax.core.crypto;
 
-import io.proximax.core.crypto.CryptoEngine;
-import io.proximax.core.crypto.DsaSigner;
-import io.proximax.core.crypto.KeyAnalyzer;
-import io.proximax.core.crypto.KeyPair;
-import io.proximax.core.crypto.Signature;
-import io.proximax.core.crypto.Signer;
-import io.proximax.core.test.Utils;
+import java.math.BigInteger;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.math.BigInteger;
+import io.proximax.core.test.Utils;
 
 public class SignerTest {
 

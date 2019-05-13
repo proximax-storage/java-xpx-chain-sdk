@@ -16,11 +16,9 @@
 
 package io.proximax.sdk.model.blockchain;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
-
-import io.proximax.sdk.model.blockchain.NetworkType;
-
-import static junit.framework.TestCase.assertTrue;
 
 public class NetworkTypeTest {
 

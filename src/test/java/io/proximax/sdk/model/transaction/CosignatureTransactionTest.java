@@ -16,25 +16,20 @@
 
 package io.proximax.sdk.model.transaction;
 
-import io.proximax.sdk.infrastructure.TransactionMapping;
-import io.proximax.sdk.model.account.Account;
-import io.proximax.sdk.model.blockchain.NetworkType;
-import io.proximax.sdk.model.transaction.AggregateTransaction;
-import io.proximax.sdk.model.transaction.CosignatureSignedTransaction;
-import io.proximax.sdk.model.transaction.CosignatureTransaction;
-import io.proximax.sdk.model.transaction.Deadline;
-import io.vertx.core.json.JsonObject;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.Collections;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import io.proximax.sdk.infrastructure.TransactionMapping;
+import io.proximax.sdk.model.account.Account;
+import io.proximax.sdk.model.blockchain.NetworkType;
+import io.vertx.core.json.JsonObject;
 
 public class CosignatureTransactionTest {
     static Account account;

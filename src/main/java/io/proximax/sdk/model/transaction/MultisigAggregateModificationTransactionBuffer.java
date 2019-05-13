@@ -18,13 +18,11 @@
 
 package io.proximax.sdk.model.transaction;
 
-import com.google.flatbuffers.FlatBufferBuilder;
-import com.google.flatbuffers.Table;
-
-import io.proximax.sdk.model.transaction.CosignatoryModificationBuffer;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+
+import com.google.flatbuffers.FlatBufferBuilder;
+import com.google.flatbuffers.Table;
 
 @SuppressWarnings("unused")
 final class MultisigAggregateModificationTransactionBuffer extends Table {

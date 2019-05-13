@@ -16,11 +16,9 @@
 
 package io.proximax.sdk.model.blockchain;
 
-import org.junit.jupiter.api.Test;
-
-import io.proximax.sdk.model.blockchain.BlockchainStorageInfo;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 class BlockchainStorageInfoTest {
 

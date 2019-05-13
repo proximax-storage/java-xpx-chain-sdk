@@ -16,11 +16,9 @@
 
 package io.proximax.sdk.model.transaction;
 
-import org.junit.jupiter.api.Test;
-
-import io.proximax.sdk.model.transaction.CosignatureSignedTransaction;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 
 public class CosignatureSignedTransactionTest {
 

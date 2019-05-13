@@ -16,19 +16,14 @@
 
 package io.proximax.core.crypto;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.IsEqual;
 import org.hamcrest.core.IsNot;
 import org.hamcrest.core.IsNull;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import io.proximax.core.crypto.CryptoEngine;
-import io.proximax.core.crypto.KeyAnalyzer;
-import io.proximax.core.crypto.KeyGenerator;
-import io.proximax.core.crypto.KeyPair;
-import io.proximax.core.crypto.PrivateKey;
-import io.proximax.core.crypto.PublicKey;
 
 public class KeyPairTest {
 
@@ -40,9 +35,9 @@ public class KeyPairTest {
         final KeyPair kp = new KeyPair();
 
         // Assert:
-        Assert.assertThat(kp.hasPrivateKey(), IsEqual.equalTo(true));
-        Assert.assertThat(kp.getPrivateKey(), IsNull.notNullValue());
-        Assert.assertThat(kp.getPublicKey(), IsNull.notNullValue());
+        MatcherAssert.assertThat(kp.hasPrivateKey(), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(kp.getPrivateKey(), IsNull.notNullValue());
+        MatcherAssert.assertThat(kp.getPublicKey(), IsNull.notNullValue());
     }
 
     @Test
@@ -54,9 +49,9 @@ public class KeyPairTest {
         final KeyPair kp2 = new KeyPair(kp1.getPrivateKey());
 
         // Assert:
-        Assert.assertThat(kp2.hasPrivateKey(), IsEqual.equalTo(true));
-        Assert.assertThat(kp2.getPrivateKey(), IsEqual.equalTo(kp1.getPrivateKey()));
-        Assert.assertThat(kp2.getPublicKey(), IsEqual.equalTo(kp1.getPublicKey()));
+        MatcherAssert.assertThat(kp2.hasPrivateKey(), IsEqual.equalTo(true));
+        MatcherAssert.assertThat(kp2.getPrivateKey(), IsEqual.equalTo(kp1.getPrivateKey()));
+        MatcherAssert.assertThat(kp2.getPublicKey(), IsEqual.equalTo(kp1.getPublicKey()));
     }
 
     @Test
@@ -68,9 +63,9 @@ public class KeyPairTest {
         final KeyPair kp2 = new KeyPair(kp1.getPublicKey());
 
         // Assert:
-        Assert.assertThat(kp2.hasPrivateKey(), IsEqual.equalTo(false));
-        Assert.assertThat(kp2.getPrivateKey(), IsNull.nullValue());
-        Assert.assertThat(kp2.getPublicKey(), IsEqual.equalTo(kp1.getPublicKey()));
+        MatcherAssert.assertThat(kp2.hasPrivateKey(), IsEqual.equalTo(false));
+        MatcherAssert.assertThat(kp2.getPrivateKey(), IsNull.nullValue());
+        MatcherAssert.assertThat(kp2.getPublicKey(), IsEqual.equalTo(kp1.getPublicKey()));
     }
 
     //endregion
@@ -82,11 +77,11 @@ public class KeyPairTest {
         final KeyPair kp2 = new KeyPair();
 
         // Assert:
-        Assert.assertThat(kp2.getPrivateKey(), IsNot.not(IsEqual.equalTo(kp1.getPrivateKey())));
-        Assert.assertThat(kp2.getPublicKey(), IsNot.not(IsEqual.equalTo(kp1.getPublicKey())));
+        MatcherAssert.assertThat(kp2.getPrivateKey(), IsNot.not(IsEqual.equalTo(kp1.getPrivateKey())));
+        MatcherAssert.assertThat(kp2.getPublicKey(), IsNot.not(IsEqual.equalTo(kp1.getPublicKey())));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void ctorFailsIfPublicKeyIsNotCompressed() {
         // Arrange:
         final KeyPairContext context = new KeyPairContext();
@@ -94,7 +89,7 @@ public class KeyPairTest {
         Mockito.when(context.analyzer.isKeyCompressed(publicKey)).thenReturn(false);
 
         // Act:
-        new KeyPair(publicKey, context.engine);
+        assertThrows(IllegalArgumentException.class, () -> new KeyPair(publicKey, context.engine));
     }
 
     //region delegation

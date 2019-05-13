@@ -16,7 +16,13 @@
 
 package io.proximax.core.crypto.ed25519;
 
-import io.proximax.core.crypto.*;
+import io.proximax.core.crypto.BlockCipher;
+import io.proximax.core.crypto.CryptoEngine;
+import io.proximax.core.crypto.Curve;
+import io.proximax.core.crypto.DsaSigner;
+import io.proximax.core.crypto.KeyAnalyzer;
+import io.proximax.core.crypto.KeyGenerator;
+import io.proximax.core.crypto.KeyPair;
 
 /**
  * Class that wraps the Ed25519 specific implementation.

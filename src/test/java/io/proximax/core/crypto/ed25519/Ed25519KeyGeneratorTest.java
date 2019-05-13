@@ -16,13 +16,19 @@
 
 package io.proximax.core.crypto.ed25519;
 
-import io.proximax.core.crypto.*;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.core.IsEqual;
+import org.junit.jupiter.api.Test;
+
+import io.proximax.core.crypto.CryptoEngine;
+import io.proximax.core.crypto.CryptoEngines;
+import io.proximax.core.crypto.KeyGenerator;
+import io.proximax.core.crypto.KeyGeneratorTest;
+import io.proximax.core.crypto.KeyPair;
+import io.proximax.core.crypto.PrivateKey;
+import io.proximax.core.crypto.PublicKey;
 import io.proximax.core.crypto.ed25519.arithmetic.Ed25519EncodedGroupElement;
 import io.proximax.core.crypto.ed25519.arithmetic.MathUtils;
-
-import org.hamcrest.core.IsEqual;
-import org.junit.Assert;
-import org.junit.Test;
 
 public class Ed25519KeyGeneratorTest extends KeyGeneratorTest {
 
@@ -53,7 +59,7 @@ public class Ed25519KeyGeneratorTest extends KeyGeneratorTest {
             final PublicKey publicKey2 = MathUtils.derivePublicKey(kp.getPrivateKey());
 
             // Assert:
-            Assert.assertThat(publicKey1, IsEqual.equalTo(publicKey2));
+            MatcherAssert.assertThat(publicKey1, IsEqual.equalTo(publicKey2));
         }
     }
 
@@ -65,7 +71,7 @@ public class Ed25519KeyGeneratorTest extends KeyGeneratorTest {
         final PublicKey publicKey = generator.derivePublicKey(keyPair.getPrivateKey());
 
         final PublicKey expected = PublicKey.fromHexString("1026d70e1954775749c6811084d6450a3184d977383f0e4282cd47118af37755");
-        Assert.assertThat(publicKey, IsEqual.equalTo(expected));
+        MatcherAssert.assertThat(publicKey, IsEqual.equalTo(expected));
     }
 
     @Override

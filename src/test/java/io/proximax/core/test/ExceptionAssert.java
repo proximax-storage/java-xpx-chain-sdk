@@ -16,7 +16,7 @@
 
 package io.proximax.core.test;
 
-import org.junit.Assert;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.concurrent.CompletionException;
 import java.util.function.Consumer;
@@ -86,11 +86,10 @@ public class ExceptionAssert {
                 assertExceptionProperties.accept((T) ex);
                 return;
             }
-
-            Assert.fail(String.format("%sunexpected exception of type %s was thrown: '%s'", normalizedMessage, ex.getClass(), ex.getMessage()));
+            fail(String.format("%sunexpected exception of type %s was thrown: '%s'", normalizedMessage, ex.getClass(), ex.getMessage()));
         }
 
-        Assert.fail(String.format("%sexpected exception of type %s was not thrown", normalizedMessage, exceptionClass));
+        fail(String.format("%sexpected exception of type %s was not thrown", normalizedMessage, exceptionClass));
     }
 
     /**
@@ -109,9 +108,9 @@ public class ExceptionAssert {
                 return;
             }
 
-            Assert.fail(String.format("unexpected exception of type %s was thrown", ex.getClass()));
+            fail(String.format("unexpected exception of type %s was thrown", ex.getClass()));
         }
 
-        Assert.fail(String.format("expected exception of type %s was not thrown", exceptionClass));
+        fail(String.format("expected exception of type %s was not thrown", exceptionClass));
     }
 }

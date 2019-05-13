@@ -19,11 +19,14 @@ package io.proximax.core.crypto.ed25519;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
-import io.proximax.core.crypto.*;
+import io.proximax.core.crypto.CryptoEngines;
+import io.proximax.core.crypto.KeyGenerator;
+import io.proximax.core.crypto.KeyPair;
+import io.proximax.core.crypto.PrivateKey;
+import io.proximax.core.crypto.PublicKey;
 import io.proximax.core.crypto.ed25519.arithmetic.Ed25519EncodedFieldElement;
 import io.proximax.core.crypto.ed25519.arithmetic.Ed25519Group;
 import io.proximax.core.crypto.ed25519.arithmetic.Ed25519GroupElement;
-import io.proximax.core.utils.ArrayUtils;
 
 /**
  * Implementation of the key generator for Ed25519.

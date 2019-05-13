@@ -25,7 +25,6 @@ import org.apache.commons.codec.binary.Hex;
 import org.junit.jupiter.api.Test;
 
 import io.proximax.core.crypto.Hashes;
-import io.proximax.sdk.model.transaction.HashType;
 
 class HashTypeTest {
 

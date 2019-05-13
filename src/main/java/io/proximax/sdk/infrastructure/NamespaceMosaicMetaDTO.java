@@ -26,10 +26,11 @@
 
 package io.proximax.sdk.infrastructure;
 
-import com.google.gson.annotations.SerializedName;
-import io.swagger.annotations.ApiModelProperty;
-
 import java.util.Objects;
+
+import com.google.gson.annotations.SerializedName;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * NamespaceMosaicMetaDTO

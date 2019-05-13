@@ -16,13 +16,12 @@
 
 package io.proximax.sdk.model.transaction;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
-import io.proximax.sdk.model.transaction.AggregateTransactionCosignature;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AggregateTransactionCosignatureTest {
 

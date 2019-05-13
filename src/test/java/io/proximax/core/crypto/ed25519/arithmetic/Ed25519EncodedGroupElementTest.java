@@ -16,16 +16,12 @@
 
 package io.proximax.core.crypto.ed25519.arithmetic;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.IsEqual;
 import org.hamcrest.core.IsNot;
-import org.junit.Assert;
-import org.junit.Test;
-
-import io.proximax.core.crypto.ed25519.arithmetic.CoordinateSystem;
-import io.proximax.core.crypto.ed25519.arithmetic.Ed25519EncodedGroupElement;
-import io.proximax.core.crypto.ed25519.arithmetic.Ed25519Field;
-import io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldElement;
-import io.proximax.core.crypto.ed25519.arithmetic.Ed25519GroupElement;
+import org.junit.jupiter.api.Test;
 
 public class Ed25519EncodedGroupElementTest {
 
@@ -35,10 +31,10 @@ public class Ed25519EncodedGroupElementTest {
         new Ed25519EncodedGroupElement(new byte[32]);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void cannotBeCreatedFromArrayWithIncorrectLength() {
         // Assert:
-        new Ed25519EncodedGroupElement(new byte[30]);
+       assertThrows(IllegalArgumentException.class, () -> new Ed25519EncodedGroupElement(new byte[30]));
     }
 
     // region getRaw
@@ -53,7 +49,7 @@ public class Ed25519EncodedGroupElementTest {
         final Ed25519EncodedGroupElement encoded = new Ed25519EncodedGroupElement(values);
 
         // Assert:
-        Assert.assertThat(values, IsEqual.equalTo(encoded.getRaw()));
+        MatcherAssert.assertThat(values, IsEqual.equalTo(encoded.getRaw()));
     }
 
     // endregion
@@ -69,7 +65,7 @@ public class Ed25519EncodedGroupElementTest {
             final Ed25519EncodedGroupElement encoded = original.decode().encode();
 
             // Assert:
-            Assert.assertThat(encoded, IsEqual.equalTo(original));
+            MatcherAssert.assertThat(encoded, IsEqual.equalTo(original));
         }
     }
 
@@ -86,18 +82,18 @@ public class Ed25519EncodedGroupElementTest {
             final Ed25519FieldElement affineX2 = MathUtils.toRepresentation(encoded.decode(), CoordinateSystem.AFFINE).getX();
 
             // Assert:
-            Assert.assertThat(affineX1, IsEqual.equalTo(affineX2));
+            MatcherAssert.assertThat(affineX1, IsEqual.equalTo(affineX2));
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void getAffineXThrowsIfEncodedGroupElementIsInvalid() {
         // Arrange:
         final Ed25519GroupElement g = Ed25519GroupElement.p2(Ed25519Field.ONE, Ed25519Field.D, Ed25519Field.ONE);
         final Ed25519EncodedGroupElement encoded = g.encode();
 
         // Assert:
-        encoded.getAffineX();
+        assertThrows(IllegalArgumentException.class, () -> encoded.getAffineX());
     }
 
     @Test
@@ -111,7 +107,7 @@ public class Ed25519EncodedGroupElementTest {
             final Ed25519FieldElement affineY2 = MathUtils.toRepresentation(encoded.decode(), CoordinateSystem.AFFINE).getY();
 
             // Assert:
-            Assert.assertThat(affineY1, IsEqual.equalTo(affineY2));
+            MatcherAssert.assertThat(affineY1, IsEqual.equalTo(affineY2));
         }
     }
 
@@ -126,10 +122,10 @@ public class Ed25519EncodedGroupElementTest {
         final Ed25519EncodedGroupElement g4 = MathUtils.getRandomEncodedGroupElement();
 
         // Assert
-        Assert.assertThat(g2, IsEqual.equalTo(g1));
-        Assert.assertThat(g1, IsNot.not(IsEqual.equalTo(g3)));
-        Assert.assertThat(g2, IsNot.not(IsEqual.equalTo(g4)));
-        Assert.assertThat(g3, IsNot.not(IsEqual.equalTo(g4)));
+        MatcherAssert.assertThat(g2, IsEqual.equalTo(g1));
+        MatcherAssert.assertThat(g1, IsNot.not(IsEqual.equalTo(g3)));
+        MatcherAssert.assertThat(g2, IsNot.not(IsEqual.equalTo(g4)));
+        MatcherAssert.assertThat(g3, IsNot.not(IsEqual.equalTo(g4)));
     }
 
     @Test
@@ -141,10 +137,10 @@ public class Ed25519EncodedGroupElementTest {
         final Ed25519EncodedGroupElement g4 = MathUtils.getRandomEncodedGroupElement();
 
         // Assert
-        Assert.assertThat(g2.hashCode(), IsEqual.equalTo(g1.hashCode()));
-        Assert.assertThat(g1.hashCode(), IsNot.not(IsEqual.equalTo(g3.hashCode())));
-        Assert.assertThat(g2.hashCode(), IsNot.not(IsEqual.equalTo(g4.hashCode())));
-        Assert.assertThat(g3.hashCode(), IsNot.not(IsEqual.equalTo(g4.hashCode())));
+        MatcherAssert.assertThat(g2.hashCode(), IsEqual.equalTo(g1.hashCode()));
+        MatcherAssert.assertThat(g1.hashCode(), IsNot.not(IsEqual.equalTo(g3.hashCode())));
+        MatcherAssert.assertThat(g2.hashCode(), IsNot.not(IsEqual.equalTo(g4.hashCode())));
+        MatcherAssert.assertThat(g3.hashCode(), IsNot.not(IsEqual.equalTo(g4.hashCode())));
     }
 
     // endregion
@@ -163,7 +159,7 @@ public class Ed25519EncodedGroupElementTest {
                 "0100000000000000000000000000000000000000000000000000000000000000");
 
         // Assert:
-        Assert.assertThat(encodedAsString, IsEqual.equalTo(expectedString));
+        MatcherAssert.assertThat(encodedAsString, IsEqual.equalTo(expectedString));
     }
 
     // endregion

@@ -16,14 +16,14 @@
 
 package io.proximax.core.math;
 
-import org.apache.commons.math3.stat.descriptive.rank.Median;
-
-import io.proximax.core.utils.FormatUtils;
-
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.function.DoubleFunction;
 import java.util.function.Supplier;
+
+import org.apache.commons.math3.stat.descriptive.rank.Median;
+
+import io.proximax.core.utils.FormatUtils;
 
 /**
  * Represents a linear algebra vector.

@@ -1,0 +1,131 @@
+/*
+ * Copyright 2018 NEM
+ * Copyright 2019 ProximaX
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+publishing {
+    def nexusUser = project.hasProperty("nexusUsername") ? project.nexusUsername : ""
+    def nexusPass = project.hasProperty("nexusPassword") ? project.nexusPassword : ""
+    publications {
+        mavenJava(MavenPublication) {
+            customizePom(pom)
+            //groupId 'com.github.mautini'
+            //artifactId 'schemaorg-java'
+            //version '1.0.1'
+
+            from components.java
+
+            // create the sign pom artifact
+            pom.withXml {
+                def pomFile = file("${project.buildDir}/generated-pom.xml")
+                writeTo(pomFile)
+                def pomAscFile = signing.sign(pomFile).signatureFiles[0]
+                artifact(pomAscFile) {
+                    classifier = null
+                    extension = 'pom.asc'
+                }
+            }
+
+            artifact(sourcesJar) {
+                classifier = 'sources'
+            }
+            artifact(javadocJar) {
+                classifier = 'javadoc'
+            }
+
+            // create the signed artifacts
+            project.tasks.signArchives.signatureFiles.each {
+                artifact(it) {
+                    def matcher = it.file =~ /-(sources|javadoc)\.jar\.asc$/
+                    if (matcher.find()) {
+                        classifier = matcher.group(1)
+                    } else {
+                        classifier = null
+                    }
+                    extension = 'jar.asc'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            url "http://localhost:8081/repository/test/"
+            credentials {
+                username nexusUser
+                password nexusPass
+            }
+        }
+        maven {
+            url "http://localhost:8081/repository/test2/"
+            credentials {
+                username nexusUser
+                password nexusPass
+            }
+        }
+    }
+}
+
+// add extra info to the pom
+def customizePom(pom) {
+    pom.withXml {
+        def root = asNode()
+
+        // eliminate test-scoped dependencies (no need in maven central POMs)
+        root.dependencies.removeAll { dep ->
+            dep.scope == "test"
+        }
+
+        // add all items necessary for maven central publication
+        root.children().last() + {
+            resolveStrategy = Closure.DELEGATE_FIRST
+
+            name 'ProximaX Sirius Blockchain Java SDK'
+            description 'The ProximaX Sirius Catapult Chain Java SDK is a Java library for interacting with the Sirius Blockchain.'
+            url 'https://github.com/proximax-storage/java-xpx-catapult-sdk'
+            organization {
+                name 'ProximaX'
+                url 'https://github.com/proximax-storage'
+            }
+            issueManagement {
+                system 'GitHub'
+                url 'https://github.com/proximax-storage/java-xpx-catapult-sdk/issues'
+            }
+            licenses {
+                license {
+                    name 'Apache License 2.0'
+                    url 'https://github.com/proximax-storage/java-xpx-catapult-sdk/blob/master/LICENSE'
+                    distribution 'repo'
+                }
+            }
+            scm {
+                url 'https://github.com/proximax-storage/java-xpx-catapult-sdk'
+                connection 'scm:git:git://github.com/proximax-storage/java-xpx-catapult-sdk.git'
+            }
+        }
+    }
+}
+
+// sign everything
+model {
+    tasks.generatePomFileForMavenJavaPublication {
+        destination = file("$buildDir/generated-pom.xml")
+    }
+    tasks.publishMavenJavaPublicationToMavenLocal {
+        dependsOn project.tasks.signArchives
+    }
+    tasks.publishMavenJavaPublicationToMavenRepository {
+        dependsOn project.tasks.signArchives
+    }
+}

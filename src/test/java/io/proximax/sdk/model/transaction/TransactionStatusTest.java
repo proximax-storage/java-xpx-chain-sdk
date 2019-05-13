@@ -16,17 +16,14 @@
 
 package io.proximax.sdk.model.transaction;
 
-import org.junit.jupiter.api.Test;
-
-import io.proximax.sdk.model.transaction.Deadline;
-import io.proximax.sdk.model.transaction.TransactionStatus;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
 public class TransactionStatusTest {
 

@@ -20,14 +20,11 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Arrays;
 
-import io.proximax.core.crypto.*;
-import io.proximax.core.crypto.ed25519.arithmetic.CoordinateSystem;
-import io.proximax.core.crypto.ed25519.arithmetic.Ed25519EncodedFieldElement;
-import io.proximax.core.crypto.ed25519.arithmetic.Ed25519EncodedGroupElement;
-import io.proximax.core.crypto.ed25519.arithmetic.Ed25519Field;
-import io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldElement;
-import io.proximax.core.crypto.ed25519.arithmetic.Ed25519Group;
-import io.proximax.core.crypto.ed25519.arithmetic.Ed25519GroupElement;
+import io.proximax.core.crypto.Hashes;
+import io.proximax.core.crypto.KeyPair;
+import io.proximax.core.crypto.PrivateKey;
+import io.proximax.core.crypto.PublicKey;
+import io.proximax.core.crypto.Signature;
 import io.proximax.core.utils.ArrayUtils;
 
 /**

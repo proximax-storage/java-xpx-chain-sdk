@@ -16,12 +16,15 @@
 
 package io.proximax.core.crypto.ed25519;
 
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.IsNull;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import io.proximax.core.crypto.*;
-import io.proximax.core.crypto.ed25519.Ed25519BlockCipher;
+import io.proximax.core.crypto.BlockCipher;
+import io.proximax.core.crypto.BlockCipherTest;
+import io.proximax.core.crypto.CryptoEngine;
+import io.proximax.core.crypto.CryptoEngines;
+import io.proximax.core.crypto.KeyPair;
 
 public class Ed25519BlockCipherTest extends BlockCipherTest {
 
@@ -36,7 +39,7 @@ public class Ed25519BlockCipherTest extends BlockCipherTest {
         final byte[] decryptedBytes = blockCipher.decrypt(new byte[63]);
 
         // Assert:
-        Assert.assertThat(decryptedBytes, IsNull.nullValue());
+        MatcherAssert.assertThat(decryptedBytes, IsNull.nullValue());
     }
 
     @Override
