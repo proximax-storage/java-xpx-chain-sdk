@@ -36,7 +36,7 @@ public abstract class BaseTest {
    private static final Integer DEFAULT_WAIT_TIMEOUT_SECONDS = 30;
 
    // system environment property names
-   private static final String SYS_ENV_PRIVATE_KEY = "SEED_ACCOUNT_PRIVATE_KEY";
+   private static final String SYS_ENV_PRIVATE_KEY = "E2E_SEED_PRIVATE_KEY";
    private static final String SYS_ENV_NETWORK_TYPE = "E2E_NETWORK_TYPE";
    private static final String SYS_ENV_URL = "E2E_URL";
    private static final String SYS_ENV_TIMEOUT = "E2E_TIMEOUT";
