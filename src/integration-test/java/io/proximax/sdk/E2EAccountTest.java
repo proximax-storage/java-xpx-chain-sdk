@@ -42,7 +42,7 @@ class E2EAccountTest extends E2EBaseTest {
    /** logger */
    private static final Logger logger = LoggerFactory.getLogger(E2ETransferTest.class);
    
-   private final Account simpleAccount = new Account(new KeyPair(), NETWORK_TYPE);
+   private final Account simpleAccount = new Account(new KeyPair(), getNetworkType());
 
    @BeforeAll
    void addListener() {

@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import io.proximax.sdk.BaseTest;
-import io.proximax.sdk.infrastructure.NetworkHttp;
 import io.proximax.sdk.model.blockchain.NetworkType;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -39,9 +38,9 @@ class NetworkHttpTest extends BaseTest {
     }
 
     @Test
-    void getNetworkType() throws ExecutionException, InterruptedException {
+    void getNetworkTypeTest() throws ExecutionException, InterruptedException {
         NetworkType networkType = networkHttp.getNetworkType().toFuture().get();
 
-        assertEquals(NETWORK_TYPE.getValue(), networkType.getValue());
+        assertEquals(getNetworkType().getValue(), networkType.getValue());
     }
 }

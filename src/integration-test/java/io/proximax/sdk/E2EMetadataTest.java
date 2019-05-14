@@ -63,15 +63,15 @@ public class E2EMetadataTest extends E2EBaseTest {
    
    @Test
    void add01MetadataToAccount() {
-      Account target = Account.generateNewAccount(NETWORK_TYPE);
+      Account target = Account.generateNewAccount(getNetworkType());
       logger.info("Adding metadata to account {}", target);
       List<MetadataModification> mods = Arrays.asList(MetadataModification.add("tono", "a"));
       ModifyMetadataTransaction addMeta = ModifyMetadataTransaction
-            .createForAddress(getDeadline(), target.getAddress(), mods, NETWORK_TYPE);
+            .createForAddress(getDeadline(), target.getAddress(), mods, getNetworkType());
       SignedTransaction signedAddMeta = target.sign(addMeta);
       transactionHttp.announce(signedAddMeta).blockingFirst();
       logger.info("Transfer done. {}",
-            listener.confirmed(target.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(target.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
       // check the meta
       Metadata meta = metadataHttp.getMetadata(target.getAddress()).blockingFirst();
       checkMeta(meta, MetadataType.ADDRESS, new Field("tono", "a"));
@@ -90,17 +90,17 @@ public class E2EMetadataTest extends E2EBaseTest {
             id,
             getDeadline(),
             new MosaicProperties(true, true, false, 6, BigInteger.valueOf(20)),
-            NETWORK_TYPE).signWith(seedAccount);
-      Observable<Transaction> confirmation = listener.confirmed(seedAccount.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+            getNetworkType()).signWith(seedAccount);
+      Observable<Transaction> confirmation = listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS);
       transactionHttp.announce(mdt).blockingFirst();
       logger.info("Mosaic created. {}", confirmation.blockingFirst());
       // now add metadata to the mosaic
       List<MetadataModification> mods = Arrays.asList(MetadataModification.add("tono", "mosaic"));
-      SignedTransaction signedAddMeta = ModifyMetadataTransaction.createForMosaic(getDeadline(), id, mods, NETWORK_TYPE)
+      SignedTransaction signedAddMeta = ModifyMetadataTransaction.createForMosaic(getDeadline(), id, mods, getNetworkType())
             .signWith(seedAccount);
       transactionHttp.announce(signedAddMeta).blockingFirst();
       logger.info("Meta added to mosaic. {}",
-            listener.confirmed(seedAccount.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
       // check the meta
       Metadata meta = metadataHttp.getMetadata(id).blockingFirst();
       checkMeta(meta, MetadataType.MOSAIC, new Field("tono", "mosaic"));
@@ -115,19 +115,19 @@ public class E2EMetadataTest extends E2EBaseTest {
       logger.info("Going to create namespace {}", rootId);
       // create root namespace
       RegisterNamespaceTransaction registerNamespaceTransaction = RegisterNamespaceTransaction
-            .createRootNamespace(getDeadline(), name, BigInteger.valueOf(100), NETWORK_TYPE);
+            .createRootNamespace(getDeadline(), name, BigInteger.valueOf(100), getNetworkType());
       SignedTransaction signedTransaction = seedAccount.sign(registerNamespaceTransaction);
       transactionHttp.announce(signedTransaction).blockingFirst();
       logger.info("Registered namespace {}. {}",
             name,
-            listener.confirmed(seedAccount.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
       // now add metadata to the namespace
       List<MetadataModification> mods = Arrays.asList(MetadataModification.add("tono", "namespace"));
       SignedTransaction signedAddMeta = ModifyMetadataTransaction
-            .createForNamespace(getDeadline(), rootId, mods, NETWORK_TYPE).signWith(seedAccount);
+            .createForNamespace(getDeadline(), rootId, mods, getNetworkType()).signWith(seedAccount);
       transactionHttp.announce(signedAddMeta).blockingFirst();
       logger.info("Meta added to namespace. {}",
-            listener.confirmed(seedAccount.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
       // check the meta
       Metadata meta = metadataHttp.getMetadata(rootId).blockingFirst();
       checkMeta(meta, MetadataType.NAMESPACE, new Field("tono", "namespace"));

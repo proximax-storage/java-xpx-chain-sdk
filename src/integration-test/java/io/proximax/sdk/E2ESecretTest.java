@@ -50,7 +50,7 @@ public class E2ESecretTest extends E2EBaseTest {
    /** logger */
    private static final Logger logger = LoggerFactory.getLogger(E2ESecretTest.class);
 
-   private final Account simpleAccount = new Account(new KeyPair(), NETWORK_TYPE);
+   private final Account simpleAccount = new Account(new KeyPair(), getNetworkType());
 
    @BeforeAll
    void addListener() {
@@ -98,18 +98,18 @@ public class E2ESecretTest extends E2EBaseTest {
             hashType,
             secret,
             to,
-            NETWORK_TYPE);
+            getNetworkType());
       SignedTransaction secretLockTransactionSigned = from.sign(secretLocktx);
       transactionHttp.announce(secretLockTransactionSigned).blockingFirst();
       logger.info("Lock confirmed: {}",
-            listener.confirmed(from.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(from.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
 
       SecretProofTransaction secretProoftx = SecretProofTransaction
-            .create(getDeadline(), hashType, secret, proof, NETWORK_TYPE);
+            .create(getDeadline(), hashType, secret, proof, getNetworkType());
       SignedTransaction secretProoftxSigned = from.sign(secretProoftx);
       transactionHttp.announce(secretProoftxSigned).blockingFirst();
       logger.info("Proof confirmed: {}",
-            listener.confirmed(from.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(from.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
    }
 
    @Test
@@ -148,22 +148,22 @@ public class E2ESecretTest extends E2EBaseTest {
             hashType,
             secret,
             to,
-            NETWORK_TYPE);
+            getNetworkType());
       SignedTransaction lockFundsTransactionSigned = from.sign(secretLocktx);
       transactionHttp.announce(lockFundsTransactionSigned).blockingFirst();
       logger.info("Lock confirmed: {}",
-            listener.confirmed(from.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(from.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
 
       // create aggregate proof
       SecretProofTransaction secretProoftx = SecretProofTransaction
-            .create(getDeadline(), hashType, secret, proof, NETWORK_TYPE);
+            .create(getDeadline(), hashType, secret, proof, getNetworkType());
       AggregateTransaction secretProofAggregatetx = AggregateTransaction.createComplete(getDeadline(),
             Collections.singletonList(secretProoftx.toAggregate(from.getPublicAccount())),
-            NETWORK_TYPE);
+            getNetworkType());
       SignedTransaction secretProofTransactionSigned = from.sign(secretProofAggregatetx);
       transactionHttp.announce(secretProofTransactionSigned).blockingFirst();
 
       logger.info("Proof confirmed: {}",
-            listener.confirmed(from.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(from.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
    }
 }

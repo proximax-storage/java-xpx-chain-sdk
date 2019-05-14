@@ -16,7 +16,6 @@
 
 package io.proximax.sdk;
 
-import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,47 +27,89 @@ import io.proximax.sdk.model.namespace.NamespaceId;
 
 /**
  * base class for all integration tests
- *
- * @author tonowie
  */
 public abstract class BaseTest {
    protected static final String NAMESPACE_PRX_NAME = "cat";
    protected static final NamespaceId PROXIMA_NAMESPACE = new NamespaceId(NAMESPACE_PRX_NAME);
 
-   /** network type for IT tests */
-   protected static final NetworkType NETWORK_TYPE = NetworkType.TEST_NET;
    /** timeout in seconds to wait for response */
-   protected static final Integer WAIT_TIMEOUT_SECONDS = 30;
+   private static final Integer DEFAULT_WAIT_TIMEOUT_SECONDS = 30;
 
+   // system environment property names
    private static final String SYS_ENV_PRIVATE_KEY = "SEED_ACCOUNT_PRIVATE_KEY";
-
-   public String getNodeUrl() throws IOException {
-      String url = null;
-      final Properties properties = new Properties();
-      try (InputStream inputStream = BaseTest.class.getClassLoader().getResourceAsStream("config.properties")) {
-         if (inputStream == null) {
-            throw new IOException("config.properties not found");
-         }
-         properties.load(inputStream);
-         url = properties.getProperty("nem2sdk.conf.nodeurl");
-      } catch (IOException ignored) {
-      }
-      return url;
+   private static final String SYS_ENV_NETWORK_TYPE = "E2E_NETWORK_TYPE";
+   private static final String SYS_ENV_URL = "E2E_URL";
+   private static final String SYS_ENV_TIMEOUT = "E2E_TIMEOUT";
+   // config property file keys
+   private static final String PROP_KEY_URL = "nem2sdk.conf.url";
+   private static final String PROP_KEY_PRIVATE_KEY = "nem2sdk.conf.seed.private_key";
+   private static final String PROP_KEY_NETWORK_TYPE = "nem2sdk.conf.network_type";
+   private static final String PROP_KEY_TIMEOUT = "nem2sdk.conf.timeout";
+   
+   /**
+    * get node URL
+    * 
+    * @return the URL of the node to use for tests
+    */
+   protected String getNodeUrl() {
+      return getPropertyValue(SYS_ENV_URL, PROP_KEY_URL, "node url");
    }
 
    /**
+    * get network type
     * 
-    * @param networkType
-    * @return
+    * @return network type
     */
-   protected Account getSeedAccount(NetworkType networkType) {
-      String accountPk =  System.getenv(SYS_ENV_PRIVATE_KEY);
-      if (accountPk == null) {
-         fail("Seed account private key needs to be defined as env variable " + SYS_ENV_PRIVATE_KEY);
-      } else {
-         return new Account(accountPk, networkType);
-      }
-      // should never get here since fail throws exception
-      throw new IllegalStateException("Test was supposed to fail or return account");
+   protected NetworkType getNetworkType() {
+      String typeName = getPropertyValue(SYS_ENV_NETWORK_TYPE, PROP_KEY_NETWORK_TYPE, "network type");
+      return NetworkType.valueOf(typeName);
    }
+
+   /**
+    * timeout for requests. note that long timeout can make failed tests long before they fail
+    * 
+    * @return the timeout in seconds
+    */
+   protected Integer getTimeoutSeconds() {
+      String timeout = getPropertyValue(SYS_ENV_TIMEOUT, PROP_KEY_TIMEOUT, "request timeout");
+      return timeout == null ? DEFAULT_WAIT_TIMEOUT_SECONDS : Integer.valueOf(timeout);
+   }
+
+   /**
+    * seed account used as basis for all transfers
+    * 
+    * @return account
+    */
+   protected Account getSeedAccount() {
+      String accountPk = getPropertyValue(SYS_ENV_PRIVATE_KEY, PROP_KEY_PRIVATE_KEY, "seed account private key");
+      return new Account(accountPk, getNetworkType());
+   }
+   
+   /**
+    * get value of a property. first try environment variable and then config.properties
+    * 
+    * @param envVar name of environment variable to use
+    * @param confProperty key of the property in config.properties
+    * @param name description for potential error message
+    * @return the string value of the property
+    */
+   private String getPropertyValue(String  envVar, String confProperty, String name) {
+      // system variables have precedence
+      String value = System.getenv(envVar);
+      // if system does not provide the value then go for res bundle property
+      if (value == null) {
+         final Properties properties = new Properties();
+         try (InputStream inputStream = BaseTest.class.getClassLoader().getResourceAsStream("config.properties")) {
+            if (inputStream == null) {
+               throw new IOException("config.properties not found");
+            }
+            properties.load(inputStream);
+            value = properties.getProperty(confProperty);
+         } catch (IOException ignored) {
+         }
+      }
+      // return the value or null if nothing was found
+      return value;
+   }
+   
 }
