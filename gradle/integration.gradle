@@ -17,8 +17,8 @@
 
 sourceSets {
     integrationTest {
-        java.srcDir 'src/integration-test/java'
-        resources.srcDir 'src/integration-test/resources'
+        java.srcDir 'src/e2e/java'
+        resources.srcDir 'src/e2e/resources'
     }
 }
 
@@ -34,9 +34,9 @@ dependencies {
     integrationTestRuntime configurations.testRuntimeOnly
 }
 
-task integrationTest(type: Test) {
+task e2eTest(type: Test) {
     group = LifecycleBasePlugin.VERIFICATION_GROUP
-    description = 'Runs the integration tests.' 
+    description = 'Runs the e2e tests' 
 	// use JUnit5
     useJUnitPlatform()
 
