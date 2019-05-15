@@ -23,15 +23,11 @@ import java.util.Properties;
 
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.blockchain.NetworkType;
-import io.proximax.sdk.model.namespace.NamespaceId;
 
 /**
  * base class for all integration tests
  */
 public abstract class BaseTest {
-   protected static final String NAMESPACE_PRX_NAME = "cat";
-   protected static final NamespaceId PROXIMA_NAMESPACE = new NamespaceId(NAMESPACE_PRX_NAME);
-
    /** timeout in seconds to wait for response */
    private static final Integer DEFAULT_WAIT_TIMEOUT_SECONDS = 30;
 
