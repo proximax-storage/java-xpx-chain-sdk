@@ -37,7 +37,7 @@ public abstract class BaseTest {
    private static final String SYS_ENV_URL = "E2E_URL";
    private static final String SYS_ENV_TIMEOUT = "E2E_TIMEOUT";
    // config property file keys
-   private static final String PROP_KEY_URL = "nem2sdk.conf.url";
+   private static final String PROP_KEY_URL = "xpxsdk.conf.url";
    private static final String PROP_KEY_PRIVATE_KEY = "xpxsdk.conf.seed.private_key";
    private static final String PROP_KEY_NETWORK_TYPE = "xpxsdk.conf.network_type";
    private static final String PROP_KEY_TIMEOUT = "xpxsdk.conf.timeout";
