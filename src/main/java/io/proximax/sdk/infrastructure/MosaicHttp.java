@@ -24,9 +24,9 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import io.proximax.sdk.infrastructure.model.MosaicInfoDTO;
-import io.proximax.sdk.infrastructure.model.MosaicNamesDTO;
-import io.proximax.sdk.infrastructure.model.MosaicPropertiesDTO;
+import io.proximax.sdk.gen.model.MosaicInfoDTO;
+import io.proximax.sdk.gen.model.MosaicNamesDTO;
+import io.proximax.sdk.gen.model.MosaicPropertiesDTO;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.MosaicId;

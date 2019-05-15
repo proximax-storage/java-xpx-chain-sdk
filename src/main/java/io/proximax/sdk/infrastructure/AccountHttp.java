@@ -28,10 +28,10 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import io.proximax.sdk.infrastructure.model.AccountInfoDTO;
-import io.proximax.sdk.infrastructure.model.MultisigAccountGraphInfoDTO;
-import io.proximax.sdk.infrastructure.model.MultisigAccountInfoDTO;
-import io.proximax.sdk.infrastructure.model.MultisigDTO;
+import io.proximax.sdk.gen.model.AccountInfoDTO;
+import io.proximax.sdk.gen.model.MultisigAccountGraphInfoDTO;
+import io.proximax.sdk.gen.model.MultisigAccountInfoDTO;
+import io.proximax.sdk.gen.model.MultisigDTO;
 import io.proximax.sdk.model.account.AccountInfo;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.MultisigAccountGraphInfo;

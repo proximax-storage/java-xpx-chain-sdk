@@ -1,4 +1,4 @@
-namespace io.proximax.sdk.model.transaction;
+namespace io.proximax.sdk.gen.buffers;
 
 table AliasTransactionBuffer {
     size: uint;

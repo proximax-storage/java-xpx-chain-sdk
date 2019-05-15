@@ -18,8 +18,8 @@ Returns the current network type.
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.NetworkRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.NetworkRoutesApi;
 
 
 NetworkRoutesApi apiInstance = new NetworkRoutesApi();

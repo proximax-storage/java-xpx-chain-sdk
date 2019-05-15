@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.proximax.core.crypto.KeyPair;
+import io.proximax.sdk.gen.buffers.*;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.MultisigAccountGraphInfo;
 import io.proximax.sdk.model.account.MultisigAccountInfo;

@@ -27,7 +27,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import io.proximax.sdk.infrastructure.model.UInt64DTO;
+import io.proximax.sdk.gen.model.UInt64DTO;
 
 class UInt64Test {
 

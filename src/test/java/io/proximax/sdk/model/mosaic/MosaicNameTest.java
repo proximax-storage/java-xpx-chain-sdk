@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.ResourceBasedTest;
-import io.proximax.sdk.infrastructure.model.UInt64DTO;
+import io.proximax.sdk.gen.model.UInt64DTO;
 import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;

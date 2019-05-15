@@ -28,6 +28,7 @@ import org.bouncycastle.util.encoders.Hex;
 import com.google.flatbuffers.FlatBufferBuilder;
 
 import io.proximax.core.crypto.Signer;
+import io.proximax.sdk.gen.buffers.AggregateTransactionBuffer;
 import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.PublicAccount;

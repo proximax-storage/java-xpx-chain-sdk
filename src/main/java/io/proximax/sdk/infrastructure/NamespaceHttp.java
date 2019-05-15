@@ -26,8 +26,8 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import io.proximax.sdk.infrastructure.model.NamespaceInfoDTO;
-import io.proximax.sdk.infrastructure.model.NamespaceNameDTO;
+import io.proximax.sdk.gen.model.NamespaceInfoDTO;
+import io.proximax.sdk.gen.model.NamespaceNameDTO;
 import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;

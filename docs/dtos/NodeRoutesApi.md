@@ -19,8 +19,8 @@ Supplies additional information about the application running on a node.
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.NodeRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.NodeRoutesApi;
 
 
 NodeRoutesApi apiInstance = new NodeRoutesApi();
@@ -60,8 +60,8 @@ Supplies additional information about the application running on a node.
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.NodeRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.NodeRoutesApi;
 
 
 NodeRoutesApi apiInstance = new NodeRoutesApi();

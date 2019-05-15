@@ -5,7 +5,7 @@ package io.proximax.sdk.infrastructure.utils;
 
 import java.math.BigInteger;
 
-import io.proximax.sdk.infrastructure.model.BlockchainScoreDTO;
+import io.proximax.sdk.gen.model.BlockchainScoreDTO;
 
 /**
  * Utility class to manage BlockchainScoreDTO instances

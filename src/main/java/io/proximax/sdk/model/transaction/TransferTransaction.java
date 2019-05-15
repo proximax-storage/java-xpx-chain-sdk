@@ -26,6 +26,9 @@ import org.apache.commons.lang3.Validate;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 
+import io.proximax.sdk.gen.buffers.MessageBuffer;
+import io.proximax.sdk.gen.buffers.MosaicBuffer;
+import io.proximax.sdk.gen.buffers.TransferTransactionBuffer;
 import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;

@@ -24,7 +24,7 @@ import java.nio.IntBuffer;
 import org.apache.commons.lang3.ArrayUtils;
 import org.bouncycastle.util.Arrays;
 
-import io.proximax.sdk.infrastructure.model.UInt64DTO;
+import io.proximax.sdk.gen.model.UInt64DTO;
 
 /**
  * Utility class to handle conversions between BigInteger and int array

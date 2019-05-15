@@ -24,10 +24,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import io.proximax.sdk.infrastructure.model.BlockInfoDTO;
-import io.proximax.sdk.infrastructure.model.BlockchainScoreDTO;
-import io.proximax.sdk.infrastructure.model.BlockchainStorageInfoDTO;
-import io.proximax.sdk.infrastructure.model.HeightDTO;
+import io.proximax.sdk.gen.model.BlockInfoDTO;
+import io.proximax.sdk.gen.model.BlockchainScoreDTO;
+import io.proximax.sdk.gen.model.BlockchainStorageInfoDTO;
+import io.proximax.sdk.gen.model.HeightDTO;
 import io.proximax.sdk.infrastructure.utils.BlockchainScoreDTOUtils;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.BlockInfo;

@@ -26,8 +26,8 @@ Gets a block from the chain that has the given height.
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.BlockchainRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.BlockchainRoutesApi;
 
 
 BlockchainRoutesApi apiInstance = new BlockchainRoutesApi();
@@ -66,13 +66,13 @@ No authorization required
 
 Get receipts from a block
 
-Returns the [receipts](https://nemtech.github.io/concepts/receipt.html) linked to a block.
+Returns the [receipts](https://bcdocs.xpxsirius.io/concepts/receipt.html) linked to a block.
 
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.BlockchainRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.BlockchainRoutesApi;
 
 
 BlockchainRoutesApi apiInstance = new BlockchainRoutesApi();
@@ -111,13 +111,13 @@ No authorization required
 
 Get transactions from a block
 
-Returns an array of [transactions](https://nemtech.github.io/concepts/transaction.html) included in a block for a given block height.
+Returns an array of [transactions](https://bcdocs.xpxsirius.io/concepts/transaction.html) included in a block for a given block height.
 
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.BlockchainRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.BlockchainRoutesApi;
 
 
 BlockchainRoutesApi apiInstance = new BlockchainRoutesApi();
@@ -165,8 +165,8 @@ Returns the current height of the blockchain.
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.BlockchainRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.BlockchainRoutesApi;
 
 
 BlockchainRoutesApi apiInstance = new BlockchainRoutesApi();
@@ -206,8 +206,8 @@ Gets the current score of the blockchain. The higher the score, the better the c
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.BlockchainRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.BlockchainRoutesApi;
 
 
 BlockchainRoutesApi apiInstance = new BlockchainRoutesApi();
@@ -247,8 +247,8 @@ Gets up to limit number of blocks after given block height.
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.BlockchainRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.BlockchainRoutesApi;
 
 
 BlockchainRoutesApi apiInstance = new BlockchainRoutesApi();
@@ -294,8 +294,8 @@ Returns statistical information about the blockchain.
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.BlockchainRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.BlockchainRoutesApi;
 
 
 BlockchainRoutesApi apiInstance = new BlockchainRoutesApi();
@@ -330,13 +330,13 @@ No authorization required
 
 Get the merkle path for a given a receipt statement hash and block
 
-Returns the merkle path for a [receipt statement or resolution](https://nemtech.github.io/concepts/receipt.html) linked to a block. The path is the complementary data needed to calculate the merkle root. A client can compare if the calculated root equals the one recorded in the block header, verifying that the receipt was linked with the block.
+Returns the merkle path for a [receipt statement or resolution](https://bcdocs.xpxsirius.io/concepts/receipt.html) linked to a block. The path is the complementary data needed to calculate the merkle root. A client can compare if the calculated root equals the one recorded in the block header, verifying that the receipt was linked with the block.
 
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.BlockchainRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.BlockchainRoutesApi;
 
 
 BlockchainRoutesApi apiInstance = new BlockchainRoutesApi();
@@ -377,13 +377,13 @@ No authorization required
 
 Get the merkle path for a given a transaction and block
 
-Returns the merkle path for a [transaction](https://nemtech.github.io/concepts/transaction.html) included in a block. The path is the complementary data needed to calculate the merkle root. A client can compare if the calculated root equals the one recorded in the block header, verifying that the transaction was included in the block.
+Returns the merkle path for a [transaction](https://bcdocs.xpxsirius.io/concepts/transaction.html) included in a block. The path is the complementary data needed to calculate the merkle root. A client can compare if the calculated root equals the one recorded in the block header, verifying that the transaction was included in the block.
 
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.BlockchainRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.BlockchainRoutesApi;
 
 
 BlockchainRoutesApi apiInstance = new BlockchainRoutesApi();

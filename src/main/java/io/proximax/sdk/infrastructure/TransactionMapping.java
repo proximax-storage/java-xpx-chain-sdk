@@ -25,7 +25,8 @@ import java.util.stream.Collectors;
 
 import org.bouncycastle.util.encoders.Hex;
 
-import io.proximax.sdk.infrastructure.model.UInt64DTO;
+import io.proximax.sdk.gen.buffers.*;
+import io.proximax.sdk.gen.model.UInt64DTO;
 import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;

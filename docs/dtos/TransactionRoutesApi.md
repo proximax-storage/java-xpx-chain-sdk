@@ -19,17 +19,17 @@ Method | HTTP request | Description
 
 Announce a cosignature transaction
 
-Announces a [cosignature transaction](https://nemtech.github.io/concepts/aggregate-transaction.html#cosignature-transaction) to the network.
+Announces a [cosignature transaction](https://bcdocs.xpxsirius.io/concepts/aggregate-transaction.html#cosignature-transaction) to the network.
 
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.TransactionRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.TransactionRoutesApi;
 
 
 TransactionRoutesApi apiInstance = new TransactionRoutesApi();
-TransactionPayload payload = new TransactionPayload(); // TransactionPayload | The transaction [payload](https://nemtech.github.io/api.html#serialization).
+TransactionPayload payload = new TransactionPayload(); // TransactionPayload | The transaction [payload](https://bcdocs.xpxsirius.io/api.html#serialization).
 try {
     Object result = apiInstance.announceCosignatureTransaction(payload);
     System.out.println(result);
@@ -43,7 +43,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **payload** | [**TransactionPayload**](TransactionPayload.md)| The transaction [payload](https://nemtech.github.io/api.html#serialization). |
+ **payload** | [**TransactionPayload**](TransactionPayload.md)| The transaction [payload](https://bcdocs.xpxsirius.io/api.html#serialization). |
 
 ### Return type
 
@@ -64,17 +64,17 @@ No authorization required
 
 Announce an aggregate bonded transaction
 
-Announces an [aggregate bonded transaction](https://nemtech.github.io/concepts/aggregate-transaction.html#aggregate-bonded) to the network.
+Announces an [aggregate bonded transaction](https://bcdocs.xpxsirius.io/concepts/aggregate-transaction.html#aggregate-bonded) to the network.
 
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.TransactionRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.TransactionRoutesApi;
 
 
 TransactionRoutesApi apiInstance = new TransactionRoutesApi();
-TransactionPayload payload = new TransactionPayload(); // TransactionPayload | The transaction [payload](https://nemtech.github.io/api.html#serialization).
+TransactionPayload payload = new TransactionPayload(); // TransactionPayload | The transaction [payload](https://bcdocs.xpxsirius.io/api.html#serialization).
 try {
     Object result = apiInstance.announcePartialTransaction(payload);
     System.out.println(result);
@@ -88,7 +88,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **payload** | [**TransactionPayload**](TransactionPayload.md)| The transaction [payload](https://nemtech.github.io/api.html#serialization). |
+ **payload** | [**TransactionPayload**](TransactionPayload.md)| The transaction [payload](https://bcdocs.xpxsirius.io/api.html#serialization). |
 
 ### Return type
 
@@ -109,17 +109,17 @@ No authorization required
 
 Announce a new transaction
 
-Announces a transaction to the network. It is recommended to use the NEM2-SDK to announce transactions as they should be [serialized](https://nemtech.github.io/api.html#serialization).
+Announces a transaction to the network. It is recommended to use the NEM2-SDK to announce transactions as they should be [serialized](https://bcdocs.xpxsirius.io/api.html#serialization).
 
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.TransactionRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.TransactionRoutesApi;
 
 
 TransactionRoutesApi apiInstance = new TransactionRoutesApi();
-TransactionPayload payload = new TransactionPayload(); // TransactionPayload | The transaction [payload](https://nemtech.github.io/api.html#serialization).
+TransactionPayload payload = new TransactionPayload(); // TransactionPayload | The transaction [payload](https://bcdocs.xpxsirius.io/api.html#serialization).
 try {
     Object result = apiInstance.announceTransaction(payload);
     System.out.println(result);
@@ -133,7 +133,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **payload** | [**TransactionPayload**](TransactionPayload.md)| The transaction [payload](https://nemtech.github.io/api.html#serialization). |
+ **payload** | [**TransactionPayload**](TransactionPayload.md)| The transaction [payload](https://bcdocs.xpxsirius.io/api.html#serialization). |
 
 ### Return type
 
@@ -159,8 +159,8 @@ Returns transaction information given a transactionId or hash.
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.TransactionRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.TransactionRoutesApi;
 
 
 TransactionRoutesApi apiInstance = new TransactionRoutesApi();
@@ -204,8 +204,8 @@ Returns the transaction status for a given hash.
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.TransactionRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.TransactionRoutesApi;
 
 
 TransactionRoutesApi apiInstance = new TransactionRoutesApi();
@@ -249,8 +249,8 @@ Returns transactions information for a given array of transactionIds.
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.TransactionRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.TransactionRoutesApi;
 
 
 TransactionRoutesApi apiInstance = new TransactionRoutesApi();
@@ -294,8 +294,8 @@ Returns an array of transaction statuses for a given array of transaction hashes
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.TransactionRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.TransactionRoutesApi;
 
 
 TransactionRoutesApi apiInstance = new TransactionRoutesApi();

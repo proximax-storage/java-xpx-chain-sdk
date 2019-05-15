@@ -22,8 +22,8 @@ Gets the metadata for a given accountId.
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.MetadataRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.MetadataRoutesApi;
 
 
 MetadataRoutesApi apiInstance = new MetadataRoutesApi();
@@ -67,8 +67,8 @@ Gets the metadata(AccountMetadataIndo, MosaicMetadataInfo or NamespaceMetadataIn
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.MetadataRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.MetadataRoutesApi;
 
 
 MetadataRoutesApi apiInstance = new MetadataRoutesApi();
@@ -112,8 +112,8 @@ Gets an array of metadata.
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.MetadataRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.MetadataRoutesApi;
 
 
 MetadataRoutesApi apiInstance = new MetadataRoutesApi();
@@ -157,8 +157,8 @@ Gets the metadata for a given mosaicId.
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.MetadataRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.MetadataRoutesApi;
 
 
 MetadataRoutesApi apiInstance = new MetadataRoutesApi();
@@ -202,8 +202,8 @@ Gets the metadata for a given namespaceId.
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.MetadataRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.MetadataRoutesApi;
 
 
 MetadataRoutesApi apiInstance = new MetadataRoutesApi();

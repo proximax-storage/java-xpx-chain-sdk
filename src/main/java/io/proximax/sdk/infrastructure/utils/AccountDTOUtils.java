@@ -19,7 +19,7 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base32;
 import org.apache.commons.codec.binary.Hex;
 
-import io.proximax.sdk.infrastructure.model.AccountDTO;
+import io.proximax.sdk.gen.model.AccountDTO;
 
 /**
  * utility class providing service methods to handle AccountDTOs

@@ -32,7 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.proximax.core.crypto.KeyPair;
-import io.proximax.sdk.infrastructure.model.UInt64DTO;
+import io.proximax.sdk.gen.model.UInt64DTO;
 import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.alias.AliasAction;

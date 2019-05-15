@@ -28,8 +28,8 @@ Returns the account information.
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.AccountRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.AccountRoutesApi;
 
 
 AccountRoutesApi apiInstance = new AccountRoutesApi();
@@ -68,13 +68,13 @@ No authorization required
 
 Get multisig account information
 
-Returns the [multisig account](https://nemtech.github.io/concepts/multisig-account.html) information.
+Returns the [multisig account](https://bcdocs.xpxsirius.io/concepts/multisig-account.html) information.
 
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.AccountRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.AccountRoutesApi;
 
 
 AccountRoutesApi apiInstance = new AccountRoutesApi();
@@ -113,13 +113,13 @@ No authorization required
 
 Get multisig account graph information
 
-Returns the [multisig account](https://nemtech.github.io/concepts/multisig-account.html) graph.
+Returns the [multisig account](https://bcdocs.xpxsirius.io/concepts/multisig-account.html) graph.
 
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.AccountRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.AccountRoutesApi;
 
 
 AccountRoutesApi apiInstance = new AccountRoutesApi();
@@ -158,13 +158,13 @@ No authorization required
 
 Get account configurable properties information
 
-Returns the [configurable properties](https://nemtech.github.io/concepts/account-filter.html) for a given account. 
+Returns the [configurable properties](https://bcdocs.xpxsirius.io/concepts/account-filter.html) for a given account. 
 
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.AccountRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.AccountRoutesApi;
 
 
 AccountRoutesApi apiInstance = new AccountRoutesApi();
@@ -203,13 +203,13 @@ No authorization required
 
 Get account properties for given array of addresses
 
-Returns the [configurable properties](https://nemtech.github.io/concepts/account-filter.html) for a given array of addresses. 
+Returns the [configurable properties](https://bcdocs.xpxsirius.io/concepts/account-filter.html) for a given array of addresses. 
 
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.AccountRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.AccountRoutesApi;
 
 
 AccountRoutesApi apiInstance = new AccountRoutesApi();
@@ -253,8 +253,8 @@ Returns the account information for an array of accounts.
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.AccountRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.AccountRoutesApi;
 
 
 AccountRoutesApi apiInstance = new AccountRoutesApi();
@@ -298,8 +298,8 @@ Gets an array of incoming transactions. A transaction is said to be incoming wit
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.AccountRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.AccountRoutesApi;
 
 
 AccountRoutesApi apiInstance = new AccountRoutesApi();
@@ -349,8 +349,8 @@ Gets an array of outgoing transactions. A transaction is said to be outgoing wit
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.AccountRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.AccountRoutesApi;
 
 
 AccountRoutesApi apiInstance = new AccountRoutesApi();
@@ -395,13 +395,13 @@ No authorization required
 
 Get aggregate bonded transactions information
 
-Gets an array of [aggregate bonded transactions](https://nemtech.github.io/concepts/aggregate-transaction.html) where the account is the sender or requires to cosign the transaction. 
+Gets an array of [aggregate bonded transactions](https://bcdocs.xpxsirius.io/concepts/aggregate-transaction.html) where the account is the sender or requires to cosign the transaction. 
 
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.AccountRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.AccountRoutesApi;
 
 
 AccountRoutesApi apiInstance = new AccountRoutesApi();
@@ -451,8 +451,8 @@ Gets an array of transactions for which an account is the sender or receiver.
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.AccountRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.AccountRoutesApi;
 
 
 AccountRoutesApi apiInstance = new AccountRoutesApi();
@@ -502,8 +502,8 @@ Gets the array of transactions not included in a block where an account is the s
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.AccountRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.AccountRoutesApi;
 
 
 AccountRoutesApi apiInstance = new AccountRoutesApi();

@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import io.proximax.sdk.infrastructure.model.TransactionStatusDTO;
+import io.proximax.sdk.gen.model.TransactionStatusDTO;
 import io.proximax.sdk.model.transaction.CosignatureSignedTransaction;
 import io.proximax.sdk.model.transaction.Deadline;
 import io.proximax.sdk.model.transaction.SignedTransaction;

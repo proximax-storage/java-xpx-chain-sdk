@@ -19,7 +19,7 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import io.proximax.sdk.infrastructure.model.UInt64DTO;
+import io.proximax.sdk.gen.model.UInt64DTO;
 import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.mosaic.MosaicId;

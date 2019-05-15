@@ -33,6 +33,7 @@ import org.junit.jupiter.api.TestInstance;
 
 import io.proximax.core.crypto.Hashes;
 import io.proximax.sdk.BaseTest;
+import io.proximax.sdk.gen.buffers.*;
 import io.proximax.sdk.infrastructure.Listener;
 import io.proximax.sdk.infrastructure.TransactionHttp;
 import io.proximax.sdk.model.account.Account;
