@@ -36,8 +36,8 @@ Check [integration tests](https://github.com/proximax-storage/java-xpx-catapult-
 
 We'd love to get more people involved in the project. Please feel free to [raise issue](https://github.com/proximax-storage/java-xpx-catapult-sdk/issues/new) or PR and we'll review your contribution.
     
-Copyright (c) 2019 ProximaX Limited
-
 ## License ##
 
 Project is licensed under Apache License Version 2.0. See [LICENSE](https://github.com/proximax-storage/java-xpx-catapult-sdk/blob/master/LICENSE) file for details.
+
+<p align="right"><i><sub>Copyright (c) 2019 ProximaX Limited</sub></i></p>

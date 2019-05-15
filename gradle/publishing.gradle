@@ -20,46 +20,51 @@ publishing {
     def nexusPass = project.hasProperty("nexusPassword") ? project.nexusPassword : ""
     publications {
         mavenJava(MavenPublication) {
-            customizePom(pom)
-            //groupId 'com.github.mautini'
-            //artifactId 'schemaorg-java'
-            //version '1.0.1'
-
+            //artifactId = 'my-library'
             from components.java
-
-            // create the sign pom artifact
-            pom.withXml {
-                def pomFile = file("${project.buildDir}/generated-pom.xml")
-                writeTo(pomFile)
-                def pomAscFile = signing.sign(pomFile).signatureFiles[0]
-                artifact(pomAscFile) {
-                    classifier = null
-                    extension = 'pom.asc'
+            artifact sourcesJar
+            artifact javadocJar
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
                 }
             }
-
-            artifact(sourcesJar) {
-                classifier = 'sources'
-            }
-            artifact(javadocJar) {
-                classifier = 'javadoc'
-            }
-
-            // create the signed artifacts
-            project.tasks.signArchives.signatureFiles.each {
-                artifact(it) {
-                    def matcher = it.file =~ /-(sources|javadoc)\.jar\.asc$/
-                    if (matcher.find()) {
-                        classifier = matcher.group(1)
-                    } else {
-                        classifier = null
+            pom {
+                name = 'ProximaX Sirius Blockchain Java SDK'
+                description = 'The ProximaX Sirius Catapult Chain Java SDK is a Java library for interacting with the Sirius Blockchain.'
+                url = 'https://github.com/proximax-storage/java-xpx-catapult-sdk'
+                organization {
+                    name = 'ProximaX'
+                    url = 'https://github.com/proximax-storage'
+                }
+                issueManagement {
+                    system = 'GitHub'
+                    url = 'https://github.com/proximax-storage/java-xpx-catapult-sdk/issues'
+                }
+                licenses {
+                    license {
+                        name = 'Apache License 2.0'
+                        url = 'https://github.com/proximax-storage/java-xpx-catapult-sdk/blob/master/LICENSE'
+                        distribution = 'repo'
                     }
-                    extension = 'jar.asc'
+                }
+                scm {
+                    url = 'https://github.com/proximax-storage/java-xpx-catapult-sdk'
+                    connection = 'scm:git:git://github.com/proximax-storage/java-xpx-catapult-sdk.git'
                 }
             }
         }
     }
     repositories {
+        maven {
+            // change URLs to point to your repos, e.g. http://my.org/repo
+            def releasesRepoUrl = "$buildDir/repos/releases"
+            def snapshotsRepoUrl = "$buildDir/repos/snapshots"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+        }
         maven {
             url "http://localhost:8081/repository/test/"
             credentials {
@@ -77,55 +82,14 @@ publishing {
     }
 }
 
-// add extra info to the pom
-def customizePom(pom) {
-    pom.withXml {
-        def root = asNode()
-
-        // eliminate test-scoped dependencies (no need in maven central POMs)
-        root.dependencies.removeAll { dep ->
-            dep.scope == "test"
-        }
-
-        // add all items necessary for maven central publication
-        root.children().last() + {
-            resolveStrategy = Closure.DELEGATE_FIRST
-
-            name 'ProximaX Sirius Blockchain Java SDK'
-            description 'The ProximaX Sirius Catapult Chain Java SDK is a Java library for interacting with the Sirius Blockchain.'
-            url 'https://github.com/proximax-storage/java-xpx-catapult-sdk'
-            organization {
-                name 'ProximaX'
-                url 'https://github.com/proximax-storage'
-            }
-            issueManagement {
-                system 'GitHub'
-                url 'https://github.com/proximax-storage/java-xpx-catapult-sdk/issues'
-            }
-            licenses {
-                license {
-                    name 'Apache License 2.0'
-                    url 'https://github.com/proximax-storage/java-xpx-catapult-sdk/blob/master/LICENSE'
-                    distribution 'repo'
-                }
-            }
-            scm {
-                url 'https://github.com/proximax-storage/java-xpx-catapult-sdk'
-                connection 'scm:git:git://github.com/proximax-storage/java-xpx-catapult-sdk.git'
-            }
-        }
-    }
+// sign the publishing
+signing {
+    sign publishing.publications.mavenJava
 }
 
-// sign everything
-model {
-    tasks.generatePomFileForMavenJavaPublication {
-        destination = file("$buildDir/generated-pom.xml")
-    }
-    tasks.publishMavenJavaPublicationToMavenLocal {
-        dependsOn project.tasks.signArchives
-    }
-    tasks.publishMavenJavaPublicationToMavenRepository {
-        dependsOn project.tasks.signArchives
+// add HTML5 flag for java9 javadoc
+javadoc {
+    if(JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
     }
 }

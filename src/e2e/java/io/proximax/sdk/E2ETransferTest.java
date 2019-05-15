@@ -54,7 +54,7 @@ public class E2ETransferTest extends E2EBaseTest {
    /** logger */
    private static final Logger logger = LoggerFactory.getLogger(E2ETransferTest.class);
 
-   private final Account simpleAccount = new Account(new KeyPair(), NETWORK_TYPE);
+   private final Account simpleAccount = new Account(new KeyPair(), getNetworkType());
 
    @BeforeAll
    void addListener() {
@@ -72,7 +72,7 @@ public class E2ETransferTest extends E2EBaseTest {
             new PlainMessage("money back guarantee"));
       logger.info("Returning funds. {}", transactionHttp.announce(signedTransaction).blockingFirst());
       logger.info("Returned funds. {}",
-            listener.confirmed(simpleAccount.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(simpleAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
       // check that target account has expected number of incoming transactions
       int transactions = accountHttp.incomingTransactions(simpleAccount.getPublicAccount()).blockingFirst().size();
       // TODO why 2? we did 4 transfers but 2 were aggregate?
@@ -108,7 +108,7 @@ public class E2ETransferTest extends E2EBaseTest {
     */
    private SignedTransaction signTransfer(Account signerAccount, Address target, Mosaic amount, Message message) {
       TransferTransaction transaction = TransferTransaction
-            .create(getDeadline(), target, Collections.singletonList(amount), message, NETWORK_TYPE);
+            .create(getDeadline(), target, Collections.singletonList(amount), message, getNetworkType());
       return signerAccount.sign(transaction);
    }
 
@@ -124,11 +124,11 @@ public class E2ETransferTest extends E2EBaseTest {
    private SignedTransaction signAggregateTransfer(Account signerAccount, Address target, Mosaic amount,
          Message message) {
       TransferTransaction transfer = TransferTransaction
-            .create(getDeadline(), target, Collections.singletonList(amount), message, NETWORK_TYPE);
+            .create(getDeadline(), target, Collections.singletonList(amount), message, getNetworkType());
       // add the modification to the aggregate transaction. has to be bonded because we are going to test the lock
       AggregateTransaction aggregateTransaction = AggregateTransaction.createComplete(Deadline.create(2, HOURS),
             Arrays.asList(transfer.toAggregate(signerAccount.getPublicAccount())),
-            NETWORK_TYPE);
+            getNetworkType());
       return signerAccount.sign(aggregateTransaction);
    }
 
@@ -147,11 +147,11 @@ public class E2ETransferTest extends E2EBaseTest {
       SignedTransaction signedTransaction = signTransfer(from, to, mosaic, message);
       logger.info("Transfer announced. {}", transactionHttp.announce(signedTransaction).blockingFirst());
       logger.info("Transfer done. {}",
-            listener.confirmed(from.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(from.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
       SignedTransaction signedAggregateTransaction = signAggregateTransfer(from, to, mosaic, message);
       logger.info("Transfer announced. {}", transactionHttp.announce(signedAggregateTransaction).blockingFirst());
       logger.info("Transfer done. {}",
-            listener.confirmed(from.getAddress()).timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(from.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
 
    }
 

@@ -38,7 +38,7 @@ public class E2EBlockchainTest extends E2EBaseTest {
    void blocksShouldBeAdded() {
       BigInteger height1 = blockchainHttp.getBlockchainHeight().blockingFirst();
       logger.info("Waiting for next block");
-      listener.newBlock().timeout(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS).blockingFirst();
+      listener.newBlock().timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
       BigInteger height2 = blockchainHttp.getBlockchainHeight().blockingFirst();
       // it should go up
       assertTrue(height1.compareTo(height2) < 0);

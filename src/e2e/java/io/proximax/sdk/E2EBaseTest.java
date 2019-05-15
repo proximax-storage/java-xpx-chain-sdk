@@ -78,7 +78,7 @@ public class E2EBaseTest extends BaseTest {
    @BeforeAll
    void setup() throws ExecutionException, InterruptedException, IOException {
       String nodeUrl = this.getNodeUrl();
-      logger.info("Preparing tests for {} using {}", NETWORK_TYPE, nodeUrl);
+      logger.info("Preparing tests for {} using {}", getNetworkType(), nodeUrl);
       // create HTTP APIs
       networkHttp = new NetworkHttp(nodeUrl);
       transactionHttp = new TransactionHttp(nodeUrl, networkHttp);
@@ -93,7 +93,7 @@ public class E2EBaseTest extends BaseTest {
       listener.open().get();
       logger.info("Created listener");
       // retrieve the seed account which has for tests
-      seedAccount = getSeedAccount(NETWORK_TYPE);
+      seedAccount = getSeedAccount();
       logger.info("Seed account: {}", seedAccount);
       // add listener to see account
       disposables.add(listener.status(seedAccount.getAddress())
@@ -145,7 +145,7 @@ public class E2EBaseTest extends BaseTest {
       BigInteger bigAmount = BigInteger.valueOf(amount);
       Mosaic mosaicToTransfer = NetworkCurrencyMosaic.createRelative(bigAmount);
       TransferTransaction transfer = TransferTransaction
-            .create(getDeadline(), recipient, Collections.singletonList(mosaicToTransfer), PlainMessage.Empty, NETWORK_TYPE);
+            .create(getDeadline(), recipient, Collections.singletonList(mosaicToTransfer), PlainMessage.Empty, getNetworkType());
       SignedTransaction signedTransfer = sender.sign(transfer);
       logger.info("Sent XPX to {}: {}", recipient.pretty(), transactionHttp.announce(signedTransfer).blockingFirst());
       logger.info("request confirmed: {}", listener.confirmed(sender.getAddress()).timeout(1, TimeUnit.MINUTES).blockingFirst());

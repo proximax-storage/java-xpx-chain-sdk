@@ -30,7 +30,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import io.proximax.sdk.BaseTest;
-import io.proximax.sdk.infrastructure.NamespaceHttp;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.namespace.NamespaceId;
@@ -41,30 +40,33 @@ import io.reactivex.schedulers.Schedulers;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class NamespaceHttpTest extends BaseTest {
+   protected static final String NAMESPACE_CATAPULT_NAME = "cat";
+   protected static final NamespaceId CATAPULT_NAMESPACE_ID = new NamespaceId(NAMESPACE_CATAPULT_NAME);
+   
    private NamespaceHttp namespaceHttp;
    private Account seedAccount;
    private Address king = Address
-         .createFromPublicKey("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", NETWORK_TYPE);
+         .createFromPublicKey("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", getNetworkType());
 
    @BeforeAll
    void setup() throws IOException {
       namespaceHttp = new NamespaceHttp(this.getNodeUrl());
-      seedAccount = getSeedAccount(NETWORK_TYPE);
+      seedAccount = getSeedAccount();
    }
 
    @Test
    void getNamespace() throws ExecutionException, InterruptedException {
-      NamespaceInfo namespaceInfo = namespaceHttp.getNamespace(PROXIMA_NAMESPACE).toFuture().get();
+      NamespaceInfo namespaceInfo = namespaceHttp.getNamespace(CATAPULT_NAMESPACE_ID).toFuture().get();
 
       assertEquals(new BigInteger("1"), namespaceInfo.getStartHeight());
       assertEquals(new BigInteger("-1"), namespaceInfo.getEndHeight());
-      assertEquals(PROXIMA_NAMESPACE, namespaceInfo.getLevels().get(0));
+      assertEquals(CATAPULT_NAMESPACE_ID, namespaceInfo.getLevels().get(0));
    }
 
    @Test
    void getVerifyNamespaceIdGenerator() throws ExecutionException, InterruptedException {
-      NamespaceInfo namespaceInfoByNum = namespaceHttp.getNamespace(PROXIMA_NAMESPACE).toFuture().get();
-      NamespaceInfo namespaceInfoByName = namespaceHttp.getNamespace(new NamespaceId(NAMESPACE_PRX_NAME)).toFuture().get();
+      NamespaceInfo namespaceInfoByNum = namespaceHttp.getNamespace(CATAPULT_NAMESPACE_ID).toFuture().get();
+      NamespaceInfo namespaceInfoByName = namespaceHttp.getNamespace(new NamespaceId(NAMESPACE_CATAPULT_NAME)).toFuture().get();
 
       assertEquals(namespaceInfoByNum.getOwner(), namespaceInfoByName.getOwner());
    }
@@ -77,7 +79,7 @@ class NamespaceHttpTest extends BaseTest {
       assertEquals(3, namespacesInfo.size());
       assertEquals(new BigInteger("1"), namespacesInfo.get(0).getStartHeight());
       assertEquals(new BigInteger("-1"), namespacesInfo.get(0).getEndHeight());
-      assertEquals(PROXIMA_NAMESPACE, namespacesInfo.get(0).getLevels().get(0));
+      assertEquals(CATAPULT_NAMESPACE_ID, namespacesInfo.get(0).getLevels().get(0));
    }
 
    @Test
@@ -88,17 +90,17 @@ class NamespaceHttpTest extends BaseTest {
       assertEquals(3, namespacesInfo.size());
       assertEquals(new BigInteger("1"), namespacesInfo.get(0).getStartHeight());
       assertEquals(new BigInteger("-1"), namespacesInfo.get(0).getEndHeight());
-      assertEquals(PROXIMA_NAMESPACE, namespacesInfo.get(0).getLevels().get(0));
+      assertEquals(CATAPULT_NAMESPACE_ID, namespacesInfo.get(0).getLevels().get(0));
    }
 
    @Test
    void getNamespaceNames() throws ExecutionException, InterruptedException {
-      List<NamespaceName> namespaceNames = namespaceHttp.getNamespaceNames(Collections.singletonList(PROXIMA_NAMESPACE))
+      List<NamespaceName> namespaceNames = namespaceHttp.getNamespaceNames(Collections.singletonList(CATAPULT_NAMESPACE_ID))
             .toFuture().get();
 
       assertEquals(1, namespaceNames.size());
-      assertEquals(NAMESPACE_PRX_NAME, namespaceNames.get(0).getName());
-      assertEquals(PROXIMA_NAMESPACE, namespaceNames.get(0).getNamespaceId());
+      assertEquals(NAMESPACE_CATAPULT_NAME, namespaceNames.get(0).getName());
+      assertEquals(CATAPULT_NAMESPACE_ID, namespaceNames.get(0).getNamespaceId());
    }
 
    @Test
