@@ -17,14 +17,13 @@
 package io.proximax.sdk.model.transaction;
 
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-import org.apache.commons.codec.binary.Base32;
 import org.apache.commons.lang3.Validate;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 
+import io.proximax.core.utils.Base32Encoder;
 import io.proximax.sdk.gen.buffers.AliasTransactionBuffer;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
@@ -107,7 +106,7 @@ public class AliasTransaction extends Transaction {
 
       byte[] aliasIdBytes;
       if (address.isPresent()) {
-         aliasIdBytes = new Base32().decode(address.get().plain().getBytes(StandardCharsets.UTF_8));
+         aliasIdBytes = Base32Encoder.getBytes(address.get().plain());
       } else if (mosaicId.isPresent()) {
          aliasIdBytes = UInt64Utils.getBytes(mosaicId.get().getId());
       } else {

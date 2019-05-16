@@ -15,10 +15,8 @@
  */
 package io.proximax.sdk.utils.dto;
 
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Base32;
-import org.apache.commons.codec.binary.Hex;
-
+import io.proximax.core.utils.Base32Encoder;
+import io.proximax.core.utils.HexEncoder;
 import io.proximax.sdk.gen.model.AccountDTO;
 
 /**
@@ -40,10 +38,9 @@ public class AccountDTOUtils {
 	 * 
 	 * @param address hexadecimal representation of address
 	 * @return Base32 encoded address
-	 * @throws DecoderException if provided address is not valid hexadecimal string
 	 */
-    public static String getAddressEncoded(String address) throws DecoderException {
-        return new String(new Base32().encode(Hex.decodeHex(address)));
+    public static String getAddressEncoded(String address) {
+       return Base32Encoder.getString(HexEncoder.getBytes(address));
     }
     
     /**
@@ -51,9 +48,8 @@ public class AccountDTOUtils {
      * 
      * @param account DTO of account
      * @return encoded form of address
-     * @throws DecoderException when error occurred
      */
-    public static String getAddressEncoded(AccountDTO account) throws DecoderException {
+    public static String getAddressEncoded(AccountDTO account) {
         return getAddressEncoded(account.getAddress());
     }
     

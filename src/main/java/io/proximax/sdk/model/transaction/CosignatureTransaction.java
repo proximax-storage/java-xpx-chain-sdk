@@ -16,7 +16,7 @@
 
 package io.proximax.sdk.model.transaction;
 
-import org.bouncycastle.util.encoders.Hex;
+import org.spongycastle.util.encoders.Hex;
 
 import io.proximax.core.crypto.Signer;
 import io.proximax.sdk.model.account.Account;

@@ -22,11 +22,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigInteger;
 
-import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.spongycastle.util.encoders.Hex;
 
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;

@@ -26,7 +26,7 @@ import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.bouncycastle.util.encoders.Hex;
+import org.spongycastle.util.encoders.Hex;
 
 import io.proximax.core.crypto.Hashes;
 import io.proximax.sdk.model.mosaic.IllegalIdentifierException;

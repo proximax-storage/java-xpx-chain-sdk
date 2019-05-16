@@ -16,58 +16,56 @@
 
 package io.proximax.core.utils;
 
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
+import org.spongycastle.util.encoders.DecoderException;
+import org.spongycastle.util.encoders.Hex;
+
+import io.proximax.core.crypto.CryptoException;
 
 /**
  * Static class that contains utility functions for converting hex strings to and from bytes.
  */
 public class HexEncoder {
 
-    /**
-     * Converts a hex string to a byte array.
-     *
-     * @param hexString The input hex string.
-     * @return The output byte array.
-     */
-    public static byte[] getBytes(final String hexString) {
-        try {
-            return getBytesInternal(hexString);
-        } catch (final DecoderException e) {
-            throw new IllegalArgumentException(e);
-        }
-    }
+   /**
+    * hidden utility constructor
+    */
+   private HexEncoder() {
+      // nothing to do
+   }
 
-    /**
-     * Tries to convert a hex string to a byte array.
-     *
-     * @param hexString The input hex string.
-     * @return The output byte array or null if the input string is malformed.
-     */
-    public static byte[] tryGetBytes(final String hexString) {
-        try {
-            return getBytesInternal(hexString);
-        } catch (final DecoderException e) {
-            return null;
-        }
-    }
+   /**
+    * Converts a hex string to a byte array.
+    *
+    * @param hexString The input hex string.
+    * @return The output byte array.
+    */
+   public static byte[] getBytes(final String hexString) {
+      String padded;
+      // prefix 0 if string has invalid length
+      if (hexString.length() % 2 == 1) {
+         padded = "0" + hexString;
+      } else {
+         padded = hexString;
+      }
+      // simply decode the string
+      try {
+         return Hex.decode(padded);
+      } catch (DecoderException e) {
+         throw new CryptoException("Failed to decode hex string", e);
+      }
+   }
 
-    private static byte[] getBytesInternal(final String hexString) throws DecoderException {
-        final Hex codec = new Hex();
-        final String paddedHexString = 0 == hexString.length() % 2 ? hexString : "0" + hexString;
-        final byte[] encodedBytes = StringEncoder.getBytes(paddedHexString);
-        return codec.decode(encodedBytes);
-    }
-
-    /**
-     * Converts a byte array to a hex string.
-     *
-     * @param bytes The input byte array.
-     * @return The output hex string.
-     */
-    public static String getString(final byte[] bytes) {
-        final Hex codec = new Hex();
-        final byte[] decodedBytes = codec.encode(bytes);
-        return StringEncoder.getString(decodedBytes);
-    }
+   /**
+    * Converts a byte array to a hex string.
+    *
+    * @param bytes The input byte array.
+    * @return The output hex string.
+    */
+   public static String getString(final byte[] bytes) {
+      try {
+         return Hex.toHexString(bytes);
+      } catch (DecoderException e) {
+         throw new CryptoException("Failed to generate hex string", e);
+      }
+   }
 }

@@ -26,11 +26,11 @@ import java.util.Collections;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
-import org.apache.commons.codec.binary.Hex;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.spongycastle.util.encoders.Hex;
 
 import io.proximax.core.crypto.Hashes;
 import io.proximax.sdk.BaseTest;
@@ -429,7 +429,7 @@ class E2ETest extends BaseTest {
         byte[] secretBytes = new byte[20];
         new Random().nextBytes(secretBytes);
         byte[] result = Hashes.sha3_256(secretBytes);
-        String secret = Hex.encodeHexString(result);
+        String secret = Hex.toHexString(result);
         SecretLockTransaction secretLocktx = SecretLockTransaction.create(
                 new Deadline(2, HOURS),
                 NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
@@ -452,7 +452,7 @@ class E2ETest extends BaseTest {
         byte[] secretBytes = new byte[20];
         new Random().nextBytes(secretBytes);
         byte[] result = Hashes.sha3_256(secretBytes);
-        String secret = Hex.encodeHexString(result);
+        String secret = Hex.toHexString(result);
         SecretLockTransaction secretLocktx = SecretLockTransaction.create(
                 new Deadline(2, HOURS),
                 NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
@@ -482,8 +482,8 @@ class E2ETest extends BaseTest {
         byte[] secretBytes = new byte[20];
         new Random().nextBytes(secretBytes);
         byte[] result = Hashes.sha3_256(secretBytes);
-        String secret = Hex.encodeHexString(result);
-        String proof = Hex.encodeHexString(secretBytes);
+        String secret = Hex.toHexString(result);
+        String proof = Hex.toHexString(secretBytes);
         SecretLockTransaction secretLocktx = SecretLockTransaction.create(
                 new Deadline(2, HOURS),
                 NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
@@ -520,8 +520,8 @@ class E2ETest extends BaseTest {
         byte[] secretBytes = new byte[20];
         new Random().nextBytes(secretBytes);
         byte[] result = Hashes.sha3_256(secretBytes);
-        String secret = Hex.encodeHexString(result);
-        String proof = Hex.encodeHexString(secretBytes);
+        String secret = Hex.toHexString(result);
+        String proof = Hex.toHexString(secretBytes);
         SecretLockTransaction secretLocktx = SecretLockTransaction.create(
                 new Deadline(2, HOURS),
                 NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),

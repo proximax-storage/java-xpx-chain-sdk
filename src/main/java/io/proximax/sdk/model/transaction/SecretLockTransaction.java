@@ -17,15 +17,14 @@
 package io.proximax.sdk.model.transaction;
 
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-import org.apache.commons.codec.binary.Base32;
 import org.apache.commons.lang3.Validate;
-import org.bouncycastle.util.encoders.Hex;
+import org.spongycastle.util.encoders.Hex;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 
+import io.proximax.core.utils.Base32Encoder;
 import io.proximax.sdk.gen.buffers.SecretLockTransactionBuffer;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
@@ -134,7 +133,7 @@ public class SecretLockTransaction extends Transaction {
         int durationVector = SecretLockTransactionBuffer.createDurationVector(builder, UInt64Utils.fromBigInteger(duration));
         int secretVector = SecretLockTransactionBuffer.createSecretVector(builder, Hex.decode(secret));
 
-        byte[] address = new Base32().decode(getRecipient().plain().getBytes(StandardCharsets.UTF_8));
+        byte[] address = Base32Encoder.getBytes(getRecipient().plain());
         int recipientVector = SecretLockTransactionBuffer.createRecipientVector(builder, address);
 
         SecretLockTransactionBuffer.startSecretLockTransactionBuffer(builder);

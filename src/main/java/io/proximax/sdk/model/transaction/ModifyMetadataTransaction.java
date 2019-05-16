@@ -23,11 +23,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.codec.binary.Base32;
 import org.apache.commons.lang3.Validate;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 
+import io.proximax.core.utils.Base32Encoder;
 import io.proximax.sdk.gen.buffers.MetadataModificationBuffer;
 import io.proximax.sdk.gen.buffers.ModifyMetadataTransactionBuffer;
 import io.proximax.sdk.model.account.Address;
@@ -109,7 +109,7 @@ public class ModifyMetadataTransaction extends Transaction {
             .parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
       byte[] metadataIdBytes;
       if (address.isPresent()) {
-         metadataIdBytes = new Base32().decode(address.get().plain().getBytes(StandardCharsets.UTF_8));
+         metadataIdBytes = Base32Encoder.getBytes(address.get().plain());
       } else if (metadataId.isPresent()) {
          metadataIdBytes = UInt64Utils.getBytes(metadataId.get().getId());
       } else {

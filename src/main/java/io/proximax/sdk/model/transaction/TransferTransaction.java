@@ -17,15 +17,14 @@
 package io.proximax.sdk.model.transaction;
 
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.codec.binary.Base32;
 import org.apache.commons.lang3.Validate;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 
+import io.proximax.core.utils.Base32Encoder;
 import io.proximax.sdk.gen.buffers.MessageBuffer;
 import io.proximax.sdk.gen.buffers.MosaicBuffer;
 import io.proximax.sdk.gen.buffers.TransferTransactionBuffer;
@@ -131,7 +130,7 @@ public class TransferTransaction extends Transaction {
             mosaicBuffers[i] = MosaicBuffer.endMosaicBuffer(builder);
         }
 
-        byte[] address = new Base32().decode(getRecipient().plain().getBytes(StandardCharsets.UTF_8));
+        byte[] address = Base32Encoder.getBytes(getRecipient().plain());
         // Create Vectors
         int signatureVector = TransferTransactionBuffer.createSignatureVector(builder, new byte[64]);
         int signerVector = TransferTransactionBuffer.createSignerVector(builder, new byte[32]);

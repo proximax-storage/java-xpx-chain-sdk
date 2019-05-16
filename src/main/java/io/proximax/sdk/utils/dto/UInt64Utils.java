@@ -22,7 +22,7 @@ import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.bouncycastle.util.Arrays;
+import org.spongycastle.util.Arrays;
 
 import io.proximax.sdk.gen.model.UInt64DTO;
 

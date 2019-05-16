@@ -78,9 +78,9 @@ dependencies {
     // Logging facade
 	implementation 'org.slf4j:slf4j-api:1.7.26'
 	// crypto utilities, Hex
-    implementation 'org.bouncycastle:bcprov-jdk15on:1.58'
-    // Base32, Base64, Hex
-    implementation 'commons-codec:commons-codec:1.11'
+//    implementation 'org.bouncycastle:bcprov-jdk15on:1.58'
+    implementation 'com.madgag.spongycastle:prov:1.58.0.0'
+
     // validations
     implementation 'org.apache.commons:commons-lang3:3.9'
     implementation 'org.apache.commons:commons-math3:3.2'
@@ -96,7 +96,7 @@ dependencies {
 	implementation 'com.squareup.okhttp3:logging-interceptor:3.14.1'
 	// backport of jsr310
 	implementation 'org.threeten:threetenbp:1.4.0'
-	// object mapping
+	// object mapping from json to DTO
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
 
 	// file utils

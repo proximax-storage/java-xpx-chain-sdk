@@ -19,9 +19,9 @@ package io.proximax.core.crypto;
 import java.security.MessageDigest;
 import java.security.Security;
 
-import org.bouncycastle.jcajce.provider.digest.Keccak;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.util.encoders.Hex;
+import org.spongycastle.jcajce.provider.digest.Keccak;
+import org.spongycastle.jce.provider.BouncyCastleProvider;
+import org.spongycastle.util.encoders.Hex;
 
 import io.proximax.core.utils.ExceptionUtils;
 
@@ -144,7 +144,7 @@ public class Hashes {
     private static byte[] hash(final String algorithm, final byte[]... inputs) {
         return ExceptionUtils.propagate(
                 () -> {
-                    final MessageDigest digest = MessageDigest.getInstance(algorithm, "BC");
+                    final MessageDigest digest = MessageDigest.getInstance(algorithm, "SC");
 
                     for (final byte[] input : inputs) {
                         digest.update(input);

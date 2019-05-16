@@ -25,8 +25,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
-import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.Test;
+import org.spongycastle.util.encoders.Hex;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

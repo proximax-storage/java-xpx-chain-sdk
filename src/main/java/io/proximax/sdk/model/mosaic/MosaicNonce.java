@@ -20,11 +20,11 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Random;
 
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.Validate;
 
+import io.proximax.core.crypto.CryptoException;
 import io.proximax.core.utils.ByteUtils;
+import io.proximax.core.utils.HexEncoder;
 
 public class MosaicNonce {
    private static final int NONCE_BYTES = 4;
@@ -81,20 +81,19 @@ public class MosaicNonce {
     * @param hex hex representation of nonce bytes
     * 
     * @throws IllegalIdentifierException thrown when number of bytes does not mat expectation or hex contains invalid
-    *          hexadecimal string
+    * hexadecimal string
     * @return MosaicNonce nonce defined by hex string
     */
    public static MosaicNonce createFromHex(String hex) {
-      byte[] bytes;
       try {
-         bytes = Hex.decodeHex(hex);
+         byte[] bytes = HexEncoder.getBytes(hex);
          if (bytes.length != 4) {
             throw new IllegalIdentifierException("Expected 4 bytes for Nonce but got " + bytes.length + " instead.");
          }
-      } catch (DecoderException e) {
-         throw new IllegalIdentifierException("DecoderException:" + e);
+         return new MosaicNonce(bytes);
+      } catch (CryptoException e) {
+         throw new IllegalIdentifierException("Failed to parse nonce", e);
       }
-      return new MosaicNonce(bytes);
    }
 
    /**
@@ -109,7 +108,6 @@ public class MosaicNonce {
       return new MosaicNonce(ByteUtils.bigIntToBytesOfSize(number, 4));
    }
 
-   
    @Override
    public int hashCode() {
       final int prime = 31;

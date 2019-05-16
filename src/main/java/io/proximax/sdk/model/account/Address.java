@@ -19,13 +19,10 @@ package io.proximax.sdk.model.account;
 import java.util.Arrays;
 import java.util.Objects;
 
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Base32;
-import org.apache.commons.codec.binary.Hex;
-
 import io.proximax.core.crypto.Hashes;
 import io.proximax.core.utils.ArrayUtils;
 import io.proximax.core.utils.Base32Encoder;
+import io.proximax.core.utils.HexEncoder;
 import io.proximax.sdk.model.blockchain.NetworkType;
 
 /**
@@ -98,11 +95,7 @@ public class Address {
      * @return {@link Address}
      */
     public static Address createFromEncoded(String encodedAddress) {
-        try {
-            return Address.createFromRawAddress(new String(new Base32().encode(Hex.decodeHex(encodedAddress))));
-        } catch (DecoderException e) {
-            throw new RuntimeException(e.getCause());
-        }
+        return Address.createFromRawAddress(Base32Encoder.getString(HexEncoder.getBytes(encodedAddress)));
     }
 
     /**
@@ -118,13 +111,7 @@ public class Address {
 
     private static String generateEncoded(final byte version, final String publicKey) {
         // step 1: sha3 hash of the public key
-        byte[] publicKeyBytes;
-        try {
-            publicKeyBytes = Hex.decodeHex(publicKey);
-        } catch (DecoderException e) {
-            throw new RuntimeException("public key is not valid");
-        }
-        final byte[] sha3PublicKeyHash = Hashes.sha3_256(publicKeyBytes);
+        final byte[] sha3PublicKeyHash = Hashes.sha3_256(HexEncoder.getBytes(publicKey));
 
         // step 2: ripemd160 hash of (1)
         final byte[] ripemd160StepOneHash = Hashes.ripemd160(sha3PublicKeyHash);
