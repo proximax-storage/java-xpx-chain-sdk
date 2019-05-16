@@ -67,9 +67,10 @@ test {
 
 // versions of dependencies
 ext {
-    rxjavaVersion = "2.1.7"
-    junitVersion = "5.4.2"
-    junitPlatformVersion = "1.4.2"
+    okHttp3Version = '3.14.1'
+    rxjavaVersion = '2.1.7'
+    junitVersion = '5.4.2'
+    junitPlatformVersion = '1.4.2'
 }
 
 dependencies {
@@ -78,7 +79,6 @@ dependencies {
     // Logging facade
 	implementation 'org.slf4j:slf4j-api:1.7.26'
 	// crypto utilities, Hex
-//    implementation 'org.bouncycastle:bcprov-jdk15on:1.58'
     implementation 'com.madgag.spongycastle:prov:1.58.0.0'
 
     // validations
@@ -92,10 +92,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.2'
 	implementation 'io.gsonfire:gson-fire:1.8.3'
     implementation 'io.swagger:swagger-annotations:1.5.22'
-    implementation 'com.squareup.okhttp3:okhttp:3.14.1'
-	implementation 'com.squareup.okhttp3:logging-interceptor:3.14.1'
-	// backport of jsr310
-	implementation 'org.threeten:threetenbp:1.4.0'
+    implementation "com.squareup.okhttp3:okhttp:${okHttp3Version}"
+	implementation "com.squareup.okhttp3:logging-interceptor:${okHttp3Version}"
 	// object mapping from json to DTO
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
 
