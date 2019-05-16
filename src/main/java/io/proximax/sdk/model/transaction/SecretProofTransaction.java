@@ -25,9 +25,9 @@ import org.bouncycastle.util.encoders.Hex;
 import com.google.flatbuffers.FlatBufferBuilder;
 
 import io.proximax.sdk.gen.buffers.SecretProofTransactionBuffer;
-import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 
 public class SecretProofTransaction extends Transaction {
     private final HashType hashType;

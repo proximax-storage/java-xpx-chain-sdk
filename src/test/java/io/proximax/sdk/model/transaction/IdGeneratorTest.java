@@ -25,8 +25,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.mosaic.IllegalIdentifierException;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 
 class IdGeneratorTest {
 

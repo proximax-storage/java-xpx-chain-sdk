@@ -23,11 +23,11 @@ import org.apache.commons.lang3.Validate;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 
-import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.namespace.NamespaceType;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
  * Accounts can rent a namespace for an amount of blocks and after a this renew the contract.

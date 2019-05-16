@@ -22,12 +22,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.bouncycastle.util.encoders.Hex;
 
-import io.proximax.sdk.gen.buffers.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import io.proximax.sdk.gen.model.UInt64DTO;
-import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.alias.AliasAction;
@@ -43,15 +47,14 @@ import io.proximax.sdk.model.mosaic.MosaicSupplyType;
 import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.namespace.NamespaceType;
 import io.proximax.sdk.model.transaction.*;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 import io.reactivex.functions.Function;
-import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
 
 public class TransactionMapping implements Function<JsonObject, Transaction> {
     @Override
    public Transaction apply(JsonObject input) {
-      JsonObject transaction = input.getJsonObject("transaction");
-      int type = transaction.getInteger("type");
+      JsonObject transaction = input.getAsJsonObject("transaction");
+      int type = transaction.get("type").getAsInt();
 
       switch (TransactionType.rawValueOf(type)) {
       case TRANSFER:
@@ -89,12 +92,12 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
     /**
      * take array of unsigned integers and combine them to BigInteger
      * 
-     * @param input json array
+     * @param input JSON array
      * @return big integer represented by the array
      */
     public static BigInteger extractBigInteger(JsonArray input) {
         UInt64DTO uInt64DTO = new UInt64DTO();
-        input.stream().forEach(item -> uInt64DTO.add(Long.parseLong(item.toString())));
+        stream(input).forEach(item -> uInt64DTO.add(item.getAsLong()));
         return UInt64Utils.toBigInt(uInt64DTO);
     }
 
@@ -104,7 +107,8 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
      * @param version version field of transaction
      * @return transaction version
      */
-    Integer extractTransactionVersion(int version) {
+    Integer extractTransactionVersion(JsonElement elem) {
+       int version = elem.getAsInt();
     	// take second most significant byte of a version and return it as a number
         return (int) Long.parseLong(Integer.toHexString(version).substring(2, 4), 16);
     }
@@ -115,7 +119,8 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
      * @param version version field of transaction
      * @return transaction network type
      */
-    NetworkType extractNetworkType(int version) {
+    NetworkType extractNetworkType(JsonElement elem) {
+       int version = elem.getAsInt();
     	// take most significant byte of a version and return it as a number
         int networkType = (int) Long.parseLong(Integer.toHexString(version).substring(0, 2), 16);
         return NetworkType.rawValueOf(networkType);
@@ -130,20 +135,16 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
      */
    public static BigInteger extractFee(JsonObject transaction) {
       // first get value from a field
-      Object feeObj = transaction.getValue("maxFee");
-      if (feeObj == null) {
-         feeObj = transaction.getValue("fee");
+      JsonElement feeElement = transaction.get("maxFee");
+      if (feeElement == null) {
+         feeElement = transaction.get("fee");
       }
       // based on the retrieved value create big integer instance
-      if (feeObj instanceof String) {
-         return new BigInteger((String) feeObj);
-      } else if (feeObj instanceof Long) {
-         return BigInteger.valueOf((Long) feeObj);
-      } else if (feeObj instanceof JsonArray) {
-         return extractBigInteger((JsonArray) feeObj);
+      if (feeElement instanceof JsonArray) {
+         return extractBigInteger((JsonArray) feeElement);
+      } else {
+         return new BigInteger(feeElement.getAsString());
       }
-      // throw error
-      throw new IllegalArgumentException("Unable to get fee from " + transaction.encode());
    }
    
     /**
@@ -154,26 +155,36 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
      */
     public TransactionInfo createTransactionInfo(JsonObject jsonObject) {
     	// hash and id indicate standard transaction info
-        if (jsonObject.containsKey("hash") && jsonObject.containsKey("id")) {
+        if (jsonObject.has("hash") && jsonObject.has("id")) {
             return TransactionInfo.create(
-            		extractBigInteger(jsonObject.getJsonArray("height")),
-                    jsonObject.getInteger("index"),
-                    jsonObject.getString("id"),
-                    jsonObject.getString("hash"),
-                    jsonObject.getString("merkleComponentHash"));
+            		extractBigInteger(jsonObject.getAsJsonArray("height")),
+                    jsonObject.get("index").getAsInt(),
+                    jsonObject.get("id").getAsString(),
+                    jsonObject.get("hash").getAsString(),
+                    jsonObject.get("merkleComponentHash").getAsString());
         }
     	// agrregateHash and id indicate aggregate transaction
-        if (jsonObject.containsKey("aggregateHash") && jsonObject.containsKey("id")) {
-            return TransactionInfo.createAggregate(extractBigInteger(jsonObject.getJsonArray("height")),
-                    jsonObject.getInteger("index"),
-                    jsonObject.getString("id"),
-                    jsonObject.getString("aggregateHash"),
-                    jsonObject.getString("aggregateId"));
+        if (jsonObject.has("aggregateHash") && jsonObject.has("id")) {
+            return TransactionInfo.createAggregate(extractBigInteger(jsonObject.getAsJsonArray("height")),
+                    jsonObject.get("index").getAsInt(),
+                    jsonObject.get("id").getAsString(),
+                    jsonObject.get("aggregateHash").getAsString(),
+                    jsonObject.get("aggregateId").getAsString());
         }
         // transaction with missing id
-        return TransactionInfo.create(extractBigInteger(jsonObject.getJsonArray("height")),
-        		jsonObject.getString("hash"),
-                jsonObject.getString("merkleComponentHash"));
+        return TransactionInfo.create(extractBigInteger(jsonObject.getAsJsonArray("height")),
+        		jsonObject.get("hash").getAsString(),
+                jsonObject.get("merkleComponentHash").getAsString());
+    }
+    
+    /**
+     * convert JSON array to stream of JSON elements
+     * 
+     * @param jsonArr array with elements
+     * @return stream of elements
+     */
+    static Stream<JsonElement> stream(JsonArray jsonArr) {
+       return StreamSupport.stream(jsonArr.spliterator(), false);
     }
 }
 
@@ -185,49 +196,47 @@ class TransferTransactionMapping extends TransactionMapping {
     @Override
     public TransferTransaction apply(JsonObject input) {
     	// retrieve transaction info from meta field
-        TransactionInfo transactionInfo = createTransactionInfo(input.getJsonObject("meta"));
+        TransactionInfo transactionInfo = createTransactionInfo(input.getAsJsonObject("meta"));
         // retrieve transaction data from transaction field
-        JsonObject transaction = input.getJsonObject("transaction");
+        JsonObject transaction = input.getAsJsonObject("transaction");
         // deadline
-        Deadline deadline = new Deadline(extractBigInteger(transaction.getJsonArray("deadline")));
+        Deadline deadline = new Deadline(extractBigInteger(transaction.getAsJsonArray("deadline")));
         // mosaics
         List<Mosaic> mosaics;
-        if (transaction.getJsonArray("mosaics") != null) {
-            mosaics = transaction
-                    .getJsonArray("mosaics")
-                    .stream()
+        if (transaction.getAsJsonArray("mosaics") != null) {
+            mosaics = stream(transaction.getAsJsonArray("mosaics"))
                     .map(item -> (JsonObject) item)
                     .map(mosaic -> new Mosaic(
-                            new MosaicId(extractBigInteger(mosaic.getJsonArray("id"))),
-                            extractBigInteger(mosaic.getJsonArray("amount"))))
+                            new MosaicId(extractBigInteger(mosaic.getAsJsonArray("id"))),
+                            extractBigInteger(mosaic.getAsJsonArray("amount"))))
                     .collect(Collectors.toList());
         } else {
         	mosaics = new ArrayList<>();
         }
         // message
         Message message;
-        if (transaction.getJsonObject("message") != null) {
-            final JsonObject messageObj = transaction.getJsonObject("message");
-            int messageType = messageObj.getInteger("type");
-            String messagePayload = messageObj.getString("payload");
+        if (transaction.getAsJsonObject("message") != null) {
+            final JsonObject messageObj = transaction.getAsJsonObject("message");
+            int messageType = messageObj.get("type").getAsInt();
+            String messagePayload = messageObj.get("payload").getAsString();
             message = MessageFactory.createMessage(messageType, Hex.decode(messagePayload));
         } else {
         	message = PlainMessage.Empty;
         }
 
         // version
-        int version = transaction.getInteger("version");
+        JsonElement version = transaction.get("version");
         // create transfer transaction instance
         return new TransferTransaction(
                 extractNetworkType(version),
                 extractTransactionVersion(version),
                 deadline,
                 extractFee(transaction),
-                Address.createFromEncoded(transaction.getString("recipient")),
+                Address.createFromEncoded(transaction.get("recipient").getAsString()),
                 mosaics,
                 message,
-                transaction.getString("signature"),
-                new PublicAccount(transaction.getString("signer"), extractNetworkType(version)),
+                transaction.get("signature").getAsString(),
+                new PublicAccount(transaction.get("signer").getAsString(), extractNetworkType(version)),
                 transactionInfo
         );
     }
@@ -241,41 +250,41 @@ class ModifyMetadataTransactionMapping extends TransactionMapping {
    @Override
    public ModifyMetadataTransaction apply(JsonObject input) {
       // retrieve transaction info from meta field
-      TransactionInfo transactionInfo = createTransactionInfo(input.getJsonObject("meta"));
+      TransactionInfo transactionInfo = createTransactionInfo(input.getAsJsonObject("meta"));
       // retrieve transaction data from transaction field
-      JsonObject transaction = input.getJsonObject("transaction");
+      JsonObject transaction = input.getAsJsonObject("transaction");
       // deadline
-      Deadline deadline = new Deadline(extractBigInteger(transaction.getJsonArray("deadline")));
+      Deadline deadline = new Deadline(extractBigInteger(transaction.getAsJsonArray("deadline")));
       // version
-      int version = transaction.getInteger("version");
+      JsonElement version = transaction.get("version");
       // transaction type
-      TransactionType type = TransactionType.rawValueOf(transaction.getInteger("type"));
+      TransactionType type = TransactionType.rawValueOf(transaction.get("type").getAsInt());
       // modifications
-      List<MetadataModification> modifications = transaction.getJsonArray("modifications").stream()
+      List<MetadataModification> modifications = stream(transaction.getAsJsonArray("modifications"))
             .map(obj -> (JsonObject) obj).map(ModifyMetadataTransactionMapping::mapModFromJson)
             .collect(Collectors.toList());
       // signer
-      PublicAccount signer = new PublicAccount(transaction.getString("signer"), extractNetworkType(version));
+      PublicAccount signer = new PublicAccount(transaction.get("signer").getAsString(), extractNetworkType(version));
       // signature
-      String signature = transaction.getString("signature");
+      String signature = transaction.get("signature").getAsString();
       // metadata type
-      MetadataType metadataType = MetadataType.getByCode(transaction.getInteger("metadataType"));
+      MetadataType metadataType = MetadataType.getByCode(transaction.get("metadataType").getAsInt());
       // create instance of transaction
       switch (type) {
       case MODIFY_ADDRESS_METADATA:
          return new ModifyMetadataTransaction(type, extractNetworkType(version), extractTransactionVersion(version),
                deadline, extractFee(transaction), Optional.empty(),
-               Optional.of(Address.createFromEncoded(transaction.getString("metadataId"))), metadataType, modifications,
+               Optional.of(Address.createFromEncoded(transaction.get("metadataId").getAsString())), metadataType, modifications,
                signature, signer, transactionInfo);
       case MODIFY_MOSAIC_METADATA:
          return new ModifyMetadataTransaction(type, extractNetworkType(version), extractTransactionVersion(version),
                deadline, extractFee(transaction),
-               Optional.of(new MosaicId(extractBigInteger(transaction.getJsonArray("metadataId")))), Optional.empty(),
+               Optional.of(new MosaicId(extractBigInteger(transaction.getAsJsonArray("metadataId")))), Optional.empty(),
                metadataType, modifications, signature, signer, transactionInfo);
       case MODIFY_NAMESPACE_METADATA:
          return new ModifyMetadataTransaction(type, extractNetworkType(version), extractTransactionVersion(version),
                deadline, extractFee(transaction),
-               Optional.of(new NamespaceId(extractBigInteger(transaction.getJsonArray("metadataId")))),
+               Optional.of(new NamespaceId(extractBigInteger(transaction.getAsJsonArray("metadataId")))),
                Optional.empty(), metadataType, modifications, signature, signer, transactionInfo);
       default:
          throw new IllegalArgumentException("unsupported transaction type " + type);
@@ -289,11 +298,11 @@ class ModifyMetadataTransactionMapping extends TransactionMapping {
     * @return metadata modification
     */
    static MetadataModification mapModFromJson(JsonObject json) {
-      MetadataModificationType type = MetadataModificationType.getByCode(json.getInteger("modificationType"));
-      String key = json.getString("key");
+      MetadataModificationType type = MetadataModificationType.getByCode(json.get("modificationType").getAsInt());
+      String key = json.get("key").getAsString();
       switch (type) {
       case ADD:
-         return MetadataModification.add(key, json.getString("value"));
+         return MetadataModification.add(key, json.get("value").getAsString());
       case REMOVE:
          return MetadataModification.remove(key);
       default:
@@ -310,28 +319,28 @@ class NamespaceCreationTransactionMapping extends TransactionMapping {
     @Override
     public RegisterNamespaceTransaction apply(JsonObject input) {
     	// get transaction info and data
-        TransactionInfo transactionInfo = this.createTransactionInfo(input.getJsonObject("meta"));
-        JsonObject transaction = input.getJsonObject("transaction");
+        TransactionInfo transactionInfo = this.createTransactionInfo(input.getAsJsonObject("meta"));
+        JsonObject transaction = input.getAsJsonObject("transaction");
         // retrieve fields
-        Deadline deadline = new Deadline(extractBigInteger(transaction.getJsonArray("deadline")));
-        NamespaceType namespaceType = NamespaceType.rawValueOf(transaction.getInteger("namespaceType"));
-        NamespaceId namespaceId = new NamespaceId(extractBigInteger(transaction.getJsonArray("namespaceId")));
-        Optional<BigInteger> namespaceDuration = namespaceType == NamespaceType.RootNamespace ? Optional.of(extractBigInteger(transaction.getJsonArray("duration"))) : Optional.empty();
-        Optional<NamespaceId> namespaceParentId = namespaceType == NamespaceType.SubNamespace ? Optional.of(new NamespaceId(extractBigInteger(transaction.getJsonArray("parentId")))) : Optional.empty();
-        int version = transaction.getInteger("version");
+        Deadline deadline = new Deadline(extractBigInteger(transaction.getAsJsonArray("deadline")));
+        NamespaceType namespaceType = NamespaceType.rawValueOf(transaction.get("namespaceType").getAsInt());
+        NamespaceId namespaceId = new NamespaceId(extractBigInteger(transaction.getAsJsonArray("namespaceId")));
+        Optional<BigInteger> namespaceDuration = namespaceType == NamespaceType.RootNamespace ? Optional.of(extractBigInteger(transaction.getAsJsonArray("duration"))) : Optional.empty();
+        Optional<NamespaceId> namespaceParentId = namespaceType == NamespaceType.SubNamespace ? Optional.of(new NamespaceId(extractBigInteger(transaction.getAsJsonArray("parentId")))) : Optional.empty();
+        JsonElement version = transaction.get("version");
         // return the register namespace transaction
         return new RegisterNamespaceTransaction(
                 extractNetworkType(version),
                 extractTransactionVersion(version),
                 deadline,
                 extractFee(transaction),
-                transaction.getString("name"),
+                transaction.get("name").getAsString(),
                 namespaceId,
                 namespaceType,
                 namespaceDuration,
                 namespaceParentId,
-                transaction.getString("signature"),
-                new PublicAccount(transaction.getString("signer"), extractNetworkType(version)),
+                transaction.get("signature").getAsString(),
+                new PublicAccount(transaction.get("signer").getAsString(), extractNetworkType(version)),
                 transactionInfo
         );
     }
@@ -345,20 +354,20 @@ class MosaicCreationTransactionMapping extends TransactionMapping {
     @Override
     public MosaicDefinitionTransaction apply(JsonObject input) {
     	// load transaction info and data
-        TransactionInfo transactionInfo = this.createTransactionInfo(input.getJsonObject("meta"));
-        JsonObject transaction = input.getJsonObject("transaction");
+        TransactionInfo transactionInfo = this.createTransactionInfo(input.getAsJsonObject("meta"));
+        JsonObject transaction = input.getAsJsonObject("transaction");
         // load data fields
-        Deadline deadline = new Deadline(extractBigInteger(transaction.getJsonArray("deadline")));
+        Deadline deadline = new Deadline(extractBigInteger(transaction.getAsJsonArray("deadline")));
         // construct properties
-        JsonArray mosaicProperties = transaction.getJsonArray("properties");
-        String flags = "00" + Integer.toBinaryString(extractBigInteger(mosaicProperties.getJsonObject(0).getJsonArray("value")).intValue());
+        JsonArray mosaicProperties = transaction.getAsJsonArray("properties");
+        String flags = "00" + Integer.toBinaryString(extractBigInteger(mosaicProperties.get(0).getAsJsonObject().getAsJsonArray("value")).intValue());
         String bitMapFlags = flags.substring(flags.length() - 3, flags.length());
         MosaicProperties properties = new MosaicProperties(bitMapFlags.charAt(2) == '1',
                 bitMapFlags.charAt(1) == '1',
                 bitMapFlags.charAt(0) == '1',
-                extractBigInteger(mosaicProperties.getJsonObject(1).getJsonArray("value")).intValue(),
-                mosaicProperties.size() == 3 ? extractBigInteger(mosaicProperties.getJsonObject(2).getJsonArray("value")) : BigInteger.valueOf(0));
-        int version = transaction.getInteger("version");
+                extractBigInteger(mosaicProperties.get(1).getAsJsonObject().getAsJsonArray("value")).intValue(),
+                mosaicProperties.size() == 3 ? extractBigInteger(mosaicProperties.get(2).getAsJsonObject().getAsJsonArray("value")) : BigInteger.valueOf(0));
+        JsonElement version = transaction.get("version");
         // return instance of mosaic definition transaction
         return new MosaicDefinitionTransaction(
                 extractNetworkType(version),
@@ -366,10 +375,10 @@ class MosaicCreationTransactionMapping extends TransactionMapping {
                 deadline,
                 extractFee(transaction),
                 extractNonce(transaction),
-                new MosaicId(extractBigInteger(transaction.getJsonArray("mosaicId"))),
+                new MosaicId(extractBigInteger(transaction.getAsJsonArray("mosaicId"))),
                 properties,
-                transaction.getString("signature"),
-                new PublicAccount(transaction.getString("signer"), extractNetworkType(version)),
+                transaction.get("signature").getAsString(),
+                new PublicAccount(transaction.get("signer").getAsString(), extractNetworkType(version)),
                 transactionInfo
         );
     }
@@ -382,10 +391,10 @@ class MosaicCreationTransactionMapping extends TransactionMapping {
      * @return value of the fee
      */
     public static MosaicNonce extractNonce(JsonObject transaction) {
-      if (transaction.containsKey("mosaicNonce")) {
-         return MosaicNonce.createFromBigInteger(BigInteger.valueOf(transaction.getInteger("mosaicNonce")));
-      } else if (transaction.containsKey("nonce")) {
-         return MosaicNonce.createFromBigInteger(BigInteger.valueOf(transaction.getInteger("nonce")));
+      if (transaction.has("mosaicNonce")) {
+         return MosaicNonce.createFromBigInteger(transaction.get("mosaicNonce").getAsBigInteger());
+      } else if (transaction.has("nonce")) {
+         return MosaicNonce.createFromBigInteger(transaction.get("nonce").getAsBigInteger());
       } else {
          throw new IllegalArgumentException("Fee is missing in the transaction description");
       }
@@ -400,11 +409,11 @@ class MosaicAliasTransactionMapping extends TransactionMapping {
     @Override
     public AliasTransaction apply(JsonObject input) {
       // load transaction info and data
-        TransactionInfo transactionInfo = this.createTransactionInfo(input.getJsonObject("meta"));
-        JsonObject transaction = input.getJsonObject("transaction");
+        TransactionInfo transactionInfo = this.createTransactionInfo(input.getAsJsonObject("meta"));
+        JsonObject transaction = input.getAsJsonObject("transaction");
         // load data fields
-        Deadline deadline = new Deadline(extractBigInteger(transaction.getJsonArray("deadline")));
-        int version = transaction.getInteger("version");
+        Deadline deadline = new Deadline(extractBigInteger(transaction.getAsJsonArray("deadline")));
+        JsonElement version = transaction.get("version");
         // return instance of mosaic alias definition transaction
         return new AliasTransaction(
                 TransactionType.MOSAIC_ALIAS,
@@ -412,21 +421,24 @@ class MosaicAliasTransactionMapping extends TransactionMapping {
                 extractTransactionVersion(version),
                 deadline,
                 extractFee(transaction),
-                Optional.of(new MosaicId(extractBigInteger(transaction.getJsonArray("mosaicId")))),
+                Optional.of(new MosaicId(extractBigInteger(transaction.getAsJsonArray("mosaicId")))),
                 Optional.empty(),
-                new NamespaceId(extractBigInteger(transaction.getJsonArray("namespaceId"))),
+                new NamespaceId(extractBigInteger(transaction.getAsJsonArray("namespaceId"))),
                 extractAliasAction(transaction),
-                transaction.getString("signature"),
-                new PublicAccount(transaction.getString("signer"), extractNetworkType(version)),
+                transaction.get("signature").getAsString(),
+                new PublicAccount(transaction.get("signer").getAsString(), extractNetworkType(version)),
                 transactionInfo
         );
     }
     
    private static AliasAction extractAliasAction(JsonObject json) {
-      Integer aliasCode = json.getInteger("aliasAction");
-      // try action field if alias action is missing
-      if (aliasCode == null) {
-         aliasCode = json.getInteger("action");
+      Integer aliasCode;
+      // try aliasAction field
+      if (json.has("aliasAction")) {
+         aliasCode = json.get("aliasAction").getAsInt();
+      } else {
+         // try alias
+         aliasCode = json.get("action").getAsInt();
       }
       return AliasAction.getBycode(aliasCode);
    }
@@ -440,11 +452,11 @@ class AddressAliasTransactionMapping extends TransactionMapping {
     @Override
     public AliasTransaction apply(JsonObject input) {
       // load transaction info and data
-        TransactionInfo transactionInfo = this.createTransactionInfo(input.getJsonObject("meta"));
-        JsonObject transaction = input.getJsonObject("transaction");
+        TransactionInfo transactionInfo = this.createTransactionInfo(input.getAsJsonObject("meta"));
+        JsonObject transaction = input.getAsJsonObject("transaction");
         // load data fields
-        Deadline deadline = new Deadline(extractBigInteger(transaction.getJsonArray("deadline")));
-        int version = transaction.getInteger("version");
+        Deadline deadline = new Deadline(extractBigInteger(transaction.getAsJsonArray("deadline")));
+        JsonElement version = transaction.get("version");
         // return instance of mosaic alias definition transaction
         return new AliasTransaction(
                 TransactionType.ADDRESS_ALIAS,
@@ -453,11 +465,11 @@ class AddressAliasTransactionMapping extends TransactionMapping {
                 deadline,
                 extractFee(transaction),
                 Optional.empty(),
-                Optional.of(Address.createFromEncoded(transaction.getString("address"))),
-                new NamespaceId(extractBigInteger(transaction.getJsonArray("namespaceId"))),
-                AliasAction.getBycode(transaction.getInteger("aliasAction")),
-                transaction.getString("signature"),
-                new PublicAccount(transaction.getString("signer"), extractNetworkType(version)),
+                Optional.of(Address.createFromEncoded(transaction.get("address").getAsString())),
+                new NamespaceId(extractBigInteger(transaction.getAsJsonArray("namespaceId"))),
+                AliasAction.getBycode(transaction.get("aliasAction").getAsInt()),
+                transaction.get("signature").getAsString(),
+                new PublicAccount(transaction.get("signer").getAsString(), extractNetworkType(version)),
                 transactionInfo
         );
     }
@@ -467,21 +479,21 @@ class MosaicSupplyChangeTransactionMapping extends TransactionMapping {
 
     @Override
     public MosaicSupplyChangeTransaction apply(JsonObject input) {
-        TransactionInfo transactionInfo = this.createTransactionInfo(input.getJsonObject("meta"));
+        TransactionInfo transactionInfo = this.createTransactionInfo(input.getAsJsonObject("meta"));
 
-        JsonObject transaction = input.getJsonObject("transaction");
-        Deadline deadline = new Deadline(extractBigInteger(transaction.getJsonArray("deadline")));
+        JsonObject transaction = input.getAsJsonObject("transaction");
+        Deadline deadline = new Deadline(extractBigInteger(transaction.getAsJsonArray("deadline")));
 
         return new MosaicSupplyChangeTransaction(
-                extractNetworkType(transaction.getInteger("version")),
-                extractTransactionVersion(transaction.getInteger("version")),
+                extractNetworkType(transaction.get("version")),
+                extractTransactionVersion(transaction.get("version")),
                 deadline,
                 extractFee(transaction),
-                new MosaicId(extractBigInteger(transaction.getJsonArray("mosaicId"))),
-                MosaicSupplyType.rawValueOf(transaction.getInteger("direction")),
-                extractBigInteger(transaction.getJsonArray("delta")),
-                transaction.getString("signature"),
-                new PublicAccount(transaction.getString("signer"), extractNetworkType(transaction.getInteger("version"))),
+                new MosaicId(extractBigInteger(transaction.getAsJsonArray("mosaicId"))),
+                MosaicSupplyType.rawValueOf(transaction.get("direction").getAsInt()),
+                extractBigInteger(transaction.getAsJsonArray("delta")),
+                transaction.get("signature").getAsString(),
+                new PublicAccount(transaction.get("signer").getAsString(), extractNetworkType(transaction.get("version"))),
                 transactionInfo
         );
     }
@@ -491,31 +503,29 @@ class MultisigModificationTransactionMapping extends TransactionMapping {
 
     @Override
     public ModifyMultisigAccountTransaction apply(JsonObject input) {
-        TransactionInfo transactionInfo = this.createTransactionInfo(input.getJsonObject("meta"));
+        TransactionInfo transactionInfo = this.createTransactionInfo(input.getAsJsonObject("meta"));
 
-        JsonObject transaction = input.getJsonObject("transaction");
-        Deadline deadline = new Deadline(extractBigInteger(transaction.getJsonArray("deadline")));
-        NetworkType networkType = extractNetworkType(transaction.getInteger("version"));
+        JsonObject transaction = input.getAsJsonObject("transaction");
+        Deadline deadline = new Deadline(extractBigInteger(transaction.getAsJsonArray("deadline")));
+        NetworkType networkType = extractNetworkType(transaction.get("version"));
 
-        List<MultisigCosignatoryModification> modifications = transaction.containsKey("modifications") ? transaction
-                .getJsonArray("modifications")
-                .stream()
+        List<MultisigCosignatoryModification> modifications = transaction.has("modifications") ? stream(transaction.getAsJsonArray("modifications"))
                 .map(item -> (JsonObject) item)
                 .map(multisigModification -> new MultisigCosignatoryModification(
-                        MultisigCosignatoryModificationType.rawValueOf(multisigModification.getInteger("type")),
-                        PublicAccount.createFromPublicKey(multisigModification.getString("cosignatoryPublicKey"), networkType)))
+                        MultisigCosignatoryModificationType.rawValueOf(multisigModification.get("type").getAsInt()),
+                        PublicAccount.createFromPublicKey(multisigModification.get("cosignatoryPublicKey").getAsString(), networkType)))
                 .collect(Collectors.toList()) : Collections.emptyList();
 
         return new ModifyMultisigAccountTransaction(
                 networkType,
-                extractTransactionVersion(transaction.getInteger("version")),
+                extractTransactionVersion(transaction.get("version")),
                 deadline,
                 extractFee(transaction),
-                transaction.getInteger("minApprovalDelta"),
-                transaction.getInteger("minRemovalDelta"),
+                transaction.get("minApprovalDelta").getAsInt(),
+                transaction.get("minRemovalDelta").getAsInt(),
                 modifications,
-                transaction.getString("signature"),
-                new PublicAccount(transaction.getString("signer"), networkType),
+                transaction.get("signature").getAsString(),
+                new PublicAccount(transaction.get("signer").getAsString(), networkType),
                 transactionInfo
         );
     }
@@ -525,47 +535,47 @@ class AggregateTransactionMapping extends TransactionMapping {
 
     @Override
     public AggregateTransaction apply(JsonObject input) {
-        TransactionInfo transactionInfo = this.createTransactionInfo(input.getJsonObject("meta"));
+       
+        TransactionInfo transactionInfo = this.createTransactionInfo(input.getAsJsonObject("meta"));
 
-        JsonObject transaction = input.getJsonObject("transaction");
-        Deadline deadline = new Deadline(extractBigInteger(transaction.getJsonArray("deadline")));
-        NetworkType networkType = extractNetworkType(transaction.getInteger("version"));
+        JsonObject transaction = input.getAsJsonObject("transaction");
+        Deadline deadline = new Deadline(extractBigInteger(transaction.getAsJsonArray("deadline")));
+        NetworkType networkType = extractNetworkType(transaction.get("version"));
 
         List<Transaction> transactions = new ArrayList<>();
-        for (int i = 0; i < transaction.getJsonArray("transactions").getList().size(); i++) {
-            JsonObject innerTransaction = transaction.getJsonArray("transactions").getJsonObject(i);
-            innerTransaction.getJsonObject("transaction").put("deadline", transaction.getJsonArray("deadline"));
-            setFee(innerTransaction.getJsonObject("transaction"), transaction);
-            innerTransaction.getJsonObject("transaction").put("fee", transaction.getJsonArray("fee"));
-            innerTransaction.getJsonObject("transaction").put("signature", transaction.getString("signature"));
-            if (!innerTransaction.containsKey("meta")) {
-                innerTransaction.put("meta", input.getJsonObject("meta"));
+        for (int i = 0; i < transaction.getAsJsonArray("transactions").size(); i++) {
+            JsonObject innerTransaction = transaction.getAsJsonArray("transactions").get(i).getAsJsonObject();
+            innerTransaction.getAsJsonObject("transaction").add("deadline", transaction.getAsJsonArray("deadline"));
+            setFee(innerTransaction.getAsJsonObject("transaction"), transaction);
+            innerTransaction.getAsJsonObject("transaction").add("fee", transaction.getAsJsonArray("fee"));
+            innerTransaction.getAsJsonObject("transaction").add("signature", transaction.get("signature"));
+            if (!innerTransaction.has("meta")) {
+                innerTransaction.add("meta", input.getAsJsonObject("meta"));
             }
             transactions.add(new TransactionMapping().apply(innerTransaction));
         }
 
         List<AggregateTransactionCosignature> cosignatures = new ArrayList<>();
-        if (transaction.getJsonArray("cosignatures") != null) {
-            cosignatures = transaction
-                    .getJsonArray("cosignatures")
-                    .stream()
+        if (transaction.getAsJsonArray("cosignatures") != null) {
+            cosignatures = stream(transaction
+                    .getAsJsonArray("cosignatures"))
                     .map(item -> (JsonObject) item)
                     .map(aggregateCosignature -> new AggregateTransactionCosignature(
-                            aggregateCosignature.getString("signature"),
-                            new PublicAccount(aggregateCosignature.getString("signer"), networkType)))
+                            aggregateCosignature.get("signature").getAsString(),
+                            new PublicAccount(aggregateCosignature.get("signer").getAsString(), networkType)))
                     .collect(Collectors.toList());
         }
 
         return new AggregateTransaction(
                 networkType,
-                TransactionType.rawValueOf(transaction.getInteger("type")),
-                extractTransactionVersion(transaction.getInteger("version")),
+                TransactionType.rawValueOf(transaction.get("type").getAsInt()),
+                extractTransactionVersion(transaction.get("version")),
                 deadline,
                 extractFee(transaction),
                 transactions,
                 cosignatures,
-                transaction.getString("signature"),
-                new PublicAccount(transaction.getString("signer"), networkType),
+                transaction.get("signature").getAsString(),
+                new PublicAccount(transaction.get("signer").getAsString(), networkType),
                 transactionInfo
         );
     }
@@ -577,10 +587,10 @@ class AggregateTransactionMapping extends TransactionMapping {
      * @param source JSON object to take the fee from
      */
     private void setFee(JsonObject target, JsonObject source) {
-       if (source.containsKey("maxFee")) {
-          target.put("maxFee", source.getValue("maxFee"));
-       } else if (source.containsKey("fee")) {
-          target.put("fee", source.getValue("fee"));
+       if (source.has("maxFee")) {
+          target.add("maxFee", source.get("maxFee"));
+       } else if (source.has("fee")) {
+          target.add("fee", source.get("fee"));
        } else {
           throw new IllegalArgumentException("Fee is missing in the transaction description");
        }
@@ -591,27 +601,27 @@ class LockFundsTransactionMapping extends TransactionMapping {
 
     @Override
     public LockFundsTransaction apply(JsonObject input) {
-        TransactionInfo transactionInfo = this.createTransactionInfo(input.getJsonObject("meta"));
+        TransactionInfo transactionInfo = this.createTransactionInfo(input.getAsJsonObject("meta"));
 
-        JsonObject transaction = input.getJsonObject("transaction");
-        Deadline deadline = new Deadline(extractBigInteger(transaction.getJsonArray("deadline")));
-        NetworkType networkType = extractNetworkType(transaction.getInteger("version"));
+        JsonObject transaction = input.getAsJsonObject("transaction");
+        Deadline deadline = new Deadline(extractBigInteger(transaction.getAsJsonArray("deadline")));
+        NetworkType networkType = extractNetworkType(transaction.get("version"));
         Mosaic mosaic;
-        if (transaction.containsKey("mosaicId")) {
-            mosaic = new Mosaic(new MosaicId(extractBigInteger(transaction.getJsonArray("mosaicId"))), extractBigInteger(transaction.getJsonArray("amount")));
+        if (transaction.has("mosaicId")) {
+            mosaic = new Mosaic(new MosaicId(extractBigInteger(transaction.getAsJsonArray("mosaicId"))), extractBigInteger(transaction.getAsJsonArray("amount")));
         } else {
-            mosaic = new Mosaic(new MosaicId(extractBigInteger(transaction.getJsonObject("mosaic").getJsonArray("id"))), extractBigInteger(transaction.getJsonObject("mosaic").getJsonArray("amount")));
+            mosaic = new Mosaic(new MosaicId(extractBigInteger(transaction.getAsJsonObject("mosaic").getAsJsonArray("id"))), extractBigInteger(transaction.getAsJsonObject("mosaic").getAsJsonArray("amount")));
         }
         return new LockFundsTransaction(
                 networkType,
-                extractTransactionVersion(transaction.getInteger("version")),
+                extractTransactionVersion(transaction.get("version")),
                 deadline,
                 extractFee(transaction),
                 mosaic,
-                extractBigInteger(transaction.getJsonArray("duration")),
-                new SignedTransaction("", transaction.getString("hash"), TransactionType.AGGREGATE_BONDED),
-                transaction.getString("signature"),
-                new PublicAccount(transaction.getString("signer"), networkType),
+                extractBigInteger(transaction.getAsJsonArray("duration")),
+                new SignedTransaction("", transaction.get("hash").getAsString(), TransactionType.AGGREGATE_BONDED),
+                transaction.get("signature").getAsString(),
+                new PublicAccount(transaction.get("signer").getAsString(), networkType),
                 transactionInfo
         );
     }
@@ -621,29 +631,29 @@ class SecretLockTransactionMapping extends TransactionMapping {
 
     @Override
     public SecretLockTransaction apply(JsonObject input) {
-        TransactionInfo transactionInfo = this.createTransactionInfo(input.getJsonObject("meta"));
+        TransactionInfo transactionInfo = this.createTransactionInfo(input.getAsJsonObject("meta"));
 
-        JsonObject transaction = input.getJsonObject("transaction");
-        Deadline deadline = new Deadline(extractBigInteger(transaction.getJsonArray("deadline")));
-        NetworkType networkType = extractNetworkType(transaction.getInteger("version"));
+        JsonObject transaction = input.getAsJsonObject("transaction");
+        Deadline deadline = new Deadline(extractBigInteger(transaction.getAsJsonArray("deadline")));
+        NetworkType networkType = extractNetworkType(transaction.get("version"));
         Mosaic mosaic;
-        if (transaction.containsKey("mosaicId")) {
-            mosaic = new Mosaic(new MosaicId(extractBigInteger(transaction.getJsonArray("mosaicId"))), extractBigInteger(transaction.getJsonArray("amount")));
+        if (transaction.has("mosaicId")) {
+            mosaic = new Mosaic(new MosaicId(extractBigInteger(transaction.getAsJsonArray("mosaicId"))), extractBigInteger(transaction.getAsJsonArray("amount")));
         } else {
-            mosaic = new Mosaic(new MosaicId(extractBigInteger(transaction.getJsonObject("mosaic").getJsonArray("id"))), extractBigInteger(transaction.getJsonObject("mosaic").getJsonArray("amount")));
+            mosaic = new Mosaic(new MosaicId(extractBigInteger(transaction.getAsJsonObject("mosaic").getAsJsonArray("id"))), extractBigInteger(transaction.getAsJsonObject("mosaic").getAsJsonArray("amount")));
         }
         return new SecretLockTransaction(
                 networkType,
-                extractTransactionVersion(transaction.getInteger("version")),
+                extractTransactionVersion(transaction.get("version")),
                 deadline,
                 extractFee(transaction),
                 mosaic,
-                extractBigInteger(transaction.getJsonArray("duration")),
-                HashType.rawValueOf(transaction.getInteger("hashAlgorithm")),
-                transaction.getString("secret"),
-                Address.createFromEncoded(transaction.getString("recipient")),
-                transaction.getString("signature"),
-                new PublicAccount(transaction.getString("signer"), networkType),
+                extractBigInteger(transaction.getAsJsonArray("duration")),
+                HashType.rawValueOf(transaction.get("hashAlgorithm").getAsInt()),
+                transaction.get("secret").getAsString(),
+                Address.createFromEncoded(transaction.get("recipient").getAsString()),
+                transaction.get("signature").getAsString(),
+                new PublicAccount(transaction.get("signer").getAsString(), networkType),
                 transactionInfo
         );
     }
@@ -653,22 +663,22 @@ class SecretProofTransactionMapping extends TransactionMapping {
 
     @Override
     public SecretProofTransaction apply(JsonObject input) {
-        TransactionInfo transactionInfo = this.createTransactionInfo(input.getJsonObject("meta"));
+        TransactionInfo transactionInfo = this.createTransactionInfo(input.getAsJsonObject("meta"));
 
-        JsonObject transaction = input.getJsonObject("transaction");
-        Deadline deadline = new Deadline(extractBigInteger(transaction.getJsonArray("deadline")));
-        NetworkType networkType = extractNetworkType(transaction.getInteger("version"));
+        JsonObject transaction = input.getAsJsonObject("transaction");
+        Deadline deadline = new Deadline(extractBigInteger(transaction.getAsJsonArray("deadline")));
+        NetworkType networkType = extractNetworkType(transaction.get("version"));
 
         return new SecretProofTransaction(
                 networkType,
-                extractTransactionVersion(transaction.getInteger("version")),
+                extractTransactionVersion(transaction.get("version")),
                 deadline,
                 extractFee(transaction),
-                HashType.rawValueOf(transaction.getInteger("hashAlgorithm")),
-                transaction.getString("secret"),
-                transaction.getString("proof"),
-                transaction.getString("signature"),
-                new PublicAccount(transaction.getString("signer"), networkType),
+                HashType.rawValueOf(transaction.get("hashAlgorithm").getAsInt()),
+                transaction.get("secret").getAsString(),
+                transaction.get("proof").getAsString(),
+                transaction.get("signature").getAsString(),
+                new PublicAccount(transaction.get("signer").getAsString(), networkType),
                 transactionInfo
         );
     }

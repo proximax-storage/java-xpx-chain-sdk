@@ -13,29 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.proximax.sdk.model.metadata;
+package io.proximax.sdk.infrastructure;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.junit.jupiter.api.Test;
-
-import com.google.gson.JsonElement;
-
-import io.proximax.sdk.ResourceBasedTest;
-import io.proximax.sdk.utils.GsonUtils;
+import java.io.IOException;
 
 /**
- * test for metadata mapper
+ * TODO add proper description
  */
-class MetadataMapperTest extends ResourceBasedTest {
-
-   @Test
-   void test() {
-      long count = GsonUtils.stream(getResources("metadata", "dtos", "metadatas"))
-         .map(JsonElement::getAsJsonObject)
-         .map(MetadataMapper::mapToObject)
-         .count();
-      assertEquals(3, count);
-   }
-
+public interface HttpResponse {
+   int getCode();
+   String getStatusMessage();
+   String getBodyString() throws IOException;
 }

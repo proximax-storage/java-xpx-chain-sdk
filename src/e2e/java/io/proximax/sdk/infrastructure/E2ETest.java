@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.URL;
 import java.util.Collections;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
@@ -33,9 +34,8 @@ import org.junit.jupiter.api.TestInstance;
 
 import io.proximax.core.crypto.Hashes;
 import io.proximax.sdk.BaseTest;
-import io.proximax.sdk.gen.buffers.*;
-import io.proximax.sdk.infrastructure.Listener;
-import io.proximax.sdk.infrastructure.TransactionHttp;
+import io.proximax.sdk.BlockchainApi;
+import io.proximax.sdk.TransactionRepository;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
@@ -49,7 +49,7 @@ import io.proximax.sdk.model.transaction.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Disabled("replaced by other tests")
 class E2ETest extends BaseTest {
-    private TransactionHttp transactionHttp;
+    private TransactionRepository transactionHttp;
     private Account account;
     private Account multisigAccount;
     private Account cosignatoryAccount;
@@ -61,7 +61,7 @@ class E2ETest extends BaseTest {
 
     @BeforeAll
     void setup() throws ExecutionException, InterruptedException, IOException {
-        transactionHttp = new TransactionHttp(this.getNodeUrl());
+        transactionHttp = new BlockchainApi(new URL(this.getNodeUrl()), getNetworkType()).createTransactionRepository();
         account = new Account("787225aaff3d2c71f4ffa32d4f19ec4922f3cd869747f267378f81f8e3fcb12d", NetworkType.MIJIN_TEST);
         multisigAccount = new Account("5edebfdbeb32e9146d05ffd232c8af2cf9f396caf9954289daa0362d097fff3b", NetworkType.MIJIN_TEST);
         cosignatoryAccount = new Account("2a2b1f5d366a5dd5dc56c3c757cf4fe6c66e2787087692cf329d7a49a594658b", NetworkType.MIJIN_TEST);

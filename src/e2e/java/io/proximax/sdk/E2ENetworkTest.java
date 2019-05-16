@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 NEM
+ * Copyright 2019 ProximaX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,34 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package io.proximax.sdk.infrastructure;
+package io.proximax.sdk;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
-
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import io.proximax.sdk.BaseTest;
-import io.proximax.sdk.model.blockchain.NetworkType;
-
+/**
+ * E2E tests that demonstrate transfers
+ */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class NetworkHttpTest extends BaseTest {
-    private NetworkHttp networkHttp;
+public class E2ENetworkTest extends E2EBaseTest {
 
-    @BeforeAll
-    void setup() throws IOException {
-        networkHttp = new NetworkHttp(this.getNodeUrl());
-    }
+   @Test
+   void nemesisNotEmpty() {
+      assertEquals(getNetworkType(), networkHttp.getNetworkType().blockingFirst());
+   }
 
-    @Test
-    void getNetworkTypeTest() throws ExecutionException, InterruptedException {
-        NetworkType networkType = networkHttp.getNetworkType().toFuture().get();
 
-        assertEquals(getNetworkType().getValue(), networkType.getValue());
-    }
 }

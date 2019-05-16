@@ -16,65 +16,41 @@
 
 package io.proximax.sdk.infrastructure;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.io.IOException;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.proximax.sdk.model.blockchain.NetworkType;
-import io.reactivex.Observable;
-import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
-import io.vertx.reactivex.core.Vertx;
-import io.vertx.reactivex.ext.web.client.HttpResponse;
-import io.vertx.reactivex.ext.web.client.WebClient;
+import io.proximax.sdk.BlockchainApi;
 
 public class Http {
-    protected final WebClient client;
-    protected final URL url;
-    protected final ObjectMapper objectMapper = new ObjectMapper();
-
-    private NetworkHttp networkHttp;
-    private NetworkType networkType;
-
-    Http(String host, NetworkHttp networkHttp) throws MalformedURLException {
-        this.url = new URL(host);
-        final Vertx vertx = Vertx.vertx();
-        this.client = WebClient.create(vertx);
-        objectMapper.configure(DeserializationFeature.USE_LONG_FOR_INTS, true);
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        this.networkHttp = networkHttp;
+    protected final BlockchainApi api;
+    protected final HttpClient client;
+    protected final ObjectMapper objectMapper;
+    
+    Http(BlockchainApi api) {
+        this.api = api;
+        this.client = new OkHttpHttpClient(api);
+        // init the object mapper
+        this.objectMapper = new ObjectMapper();
+        this.objectMapper.configure(DeserializationFeature.USE_LONG_FOR_INTS, true);
+        this.objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    Http(String host) throws MalformedURLException {
-        this(host, null);
-    }
-
-    Observable<NetworkType> getNetworkTypeObservable() {
-        Observable<NetworkType> networkTypeResolve;
-        if (this.networkType == null) {
-            networkTypeResolve = networkHttp.getNetworkType().map(networkType -> {
-                this.networkType = networkType;
-                return networkType;
-            });
-        } else {
-            networkTypeResolve = Observable.just(networkType);
-        }
-        return networkTypeResolve;
-    }
-
-    static JsonObject mapJsonObjectOrError(final HttpResponse<JsonObject> response) {
-        if (response.statusCode() < 200 || response.statusCode() > 299) {
-            throw new RuntimeException(response.statusMessage());
-        }
-        return response.body();
-    }
-
-    static JsonArray mapJsonArrayOrError(final HttpResponse<JsonArray> response) {
-        if (response.statusCode() < 200 || response.statusCode() > 299) {
-            throw new RuntimeException(response.statusMessage());
-        }
-        return response.body();
-    }
+    /**
+     * throw RuntimeException on error or return body of the response
+     * 
+     * @param response
+     * @return
+     */
+    static String mapStringOrError(final HttpResponse response) {
+       if (response.getCode() < 200 || response.getCode() > 299) {
+           throw new RuntimeException(response.getStatusMessage());
+       }
+       try {
+           return response.getBodyString();
+       } catch (IOException e) {
+           throw new RuntimeException(e.getMessage());
+       }
+   }
 }

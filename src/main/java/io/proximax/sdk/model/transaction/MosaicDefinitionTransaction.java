@@ -24,12 +24,12 @@ import org.apache.commons.lang3.Validate;
 import com.google.flatbuffers.FlatBufferBuilder;
 
 import io.proximax.sdk.gen.buffers.MosaicDefinitionTransactionBuffer;
-import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicNonce;
 import io.proximax.sdk.model.mosaic.MosaicProperties;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
  * Before a mosaic can be created or transferred, a corresponding definition of the mosaic has to be created and

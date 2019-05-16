@@ -23,9 +23,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import io.proximax.sdk.infrastructure.TransactionMappingTest;
-import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
+import io.proximax.sdk.utils.GsonUtils;
 
 /**
  * base for tests that run from resource bundles
@@ -54,9 +56,9 @@ public class ResourceBasedTest {
       try (Stream<String> stream = Files.lines(Paths.get(resourceUri), StandardCharsets.UTF_8)) {
          StringBuilder contentBuilder = new StringBuilder();
          stream.forEach(s -> contentBuilder.append(s).append("\n"));
-         JsonObject obj = new JsonObject(contentBuilder.toString());
+         JsonObject obj = GsonUtils.mapToJsonObject(contentBuilder.toString());
          // retrieve transactions as an array
-         return obj.getJsonArray(field);
+         return obj.get(field).getAsJsonArray();
       } catch (IOException e) {
          throw new RuntimeException("Failed to load resources from " + name, e);
       }
@@ -71,7 +73,7 @@ public class ResourceBasedTest {
       // take bundle names and create stream of transactions in those bundles
       return Stream.of(bundles)
             // map from bundle name to stream of JsonObjects
-            .map(bundle -> getTransactions(bundle).stream())
+            .map(bundle -> GsonUtils.stream(getTransactions(bundle)))
             // concatenate the streams
             .reduce(Stream::concat)
             // return empty stream if there was nothing to concatenate

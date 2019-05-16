@@ -16,29 +16,28 @@
 
 package io.proximax.sdk.infrastructure;
 
-import static io.proximax.sdk.infrastructure.utils.UInt64Utils.toBigInt;
+import static io.proximax.sdk.utils.GsonUtils.getJsonArray;
+import static io.proximax.sdk.utils.dto.UInt64Utils.toBigInt;
 
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.google.gson.JsonObject;
 
+import io.proximax.sdk.BlockchainApi;
+import io.proximax.sdk.NamespaceRepository;
 import io.proximax.sdk.gen.model.NamespaceInfoDTO;
 import io.proximax.sdk.gen.model.NamespaceNameDTO;
-import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.namespace.NamespaceInfo;
 import io.proximax.sdk.model.namespace.NamespaceName;
 import io.proximax.sdk.model.namespace.NamespaceType;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 import io.reactivex.Observable;
-import io.vertx.core.json.JsonObject;
-import io.vertx.reactivex.ext.web.codec.BodyCodec;
 
 /**
  * Namespace http repository.
@@ -46,26 +45,19 @@ import io.vertx.reactivex.ext.web.codec.BodyCodec;
  * @since 1.0
  */
 public class NamespaceHttp extends Http implements NamespaceRepository {
-
-    public NamespaceHttp(String host) throws MalformedURLException {
-        this(host, new NetworkHttp(host));
-    }
-
-    public NamespaceHttp(String host, NetworkHttp networkHttp) throws MalformedURLException {
-        super(host, networkHttp);
+   private static final String NS_ROUTE = "/namespace/";
+   private static final String ACC_ROUTE = "/account/";
+   
+    public NamespaceHttp(BlockchainApi api) {
+        super(api);
     }
 
     @Override
     public Observable<NamespaceInfo> getNamespace(NamespaceId namespaceId) {
-        Observable<NetworkType> networkTypeResolve = getNetworkTypeObservable();
-        return networkTypeResolve
-                .flatMap(networkType -> this.client
-                        .getAbs(this.url + "/namespace/" + namespaceId.getIdAsHex())
-                        .as(BodyCodec.jsonObject())
-                        .rxSend()
-                        .toObservable()
-                        .map(Http::mapJsonObjectOrError)
-                        .map(json -> objectMapper.readValue(json.toString(), NamespaceInfoDTO.class))
+        return this.client
+                        .get(NS_ROUTE + namespaceId.getIdAsHex())
+                        .map(Http::mapStringOrError)
+                        .map(str -> objectMapper.readValue(str, NamespaceInfoDTO.class))
                         .map(namespaceInfoDTO -> new NamespaceInfo(namespaceInfoDTO.getMeta().isActive(),
                                 namespaceInfoDTO.getMeta().getIndex(),
                                 namespaceInfoDTO.getMeta().getId(),
@@ -73,10 +65,10 @@ public class NamespaceHttp extends Http implements NamespaceRepository {
                                 namespaceInfoDTO.getNamespace().getDepth(),
                                 extractLevels(namespaceInfoDTO),
                                 new NamespaceId(toBigInt(namespaceInfoDTO.getNamespace().getParentId())),
-                                new PublicAccount(namespaceInfoDTO.getNamespace().getOwner(), networkType),
+                                new PublicAccount(namespaceInfoDTO.getNamespace().getOwner(), api.getNetworkType()),
                                 toBigInt(namespaceInfoDTO.getNamespace().getStartHeight()),
                                 toBigInt(namespaceInfoDTO.getNamespace().getEndHeight())
-                        )));
+                        ));
     }
 
     @Override
@@ -90,16 +82,10 @@ public class NamespaceHttp extends Http implements NamespaceRepository {
     }
 
     private Observable<List<NamespaceInfo>> getNamespacesFromAccount(Address address, Optional<QueryParams> queryParams) {
-        Observable<NetworkType> networkTypeResolve = getNetworkTypeObservable();
-        return networkTypeResolve
-                .flatMap(networkType -> this.client
-                        .getAbs(this.url + "/account/" + address.plain() + "/namespaces" + (queryParams.isPresent() ? queryParams.get().toUrl() : ""))
-                        .as(BodyCodec.jsonArray())
-                        .rxSend()
-                        .toObservable()
-                        .map(Http::mapJsonArrayOrError)
-                        .map(json -> objectMapper.<List<NamespaceInfoDTO>>readValue(json.toString(), new TypeReference<List<NamespaceInfoDTO>>() {
-                        }))
+        return this.client
+                        .get(ACC_ROUTE + address.plain() + "/namespaces" + (queryParams.isPresent() ? queryParams.get().toUrl() : ""))
+                        .map(Http::mapStringOrError)
+                        .map(json -> objectMapper.<List<NamespaceInfoDTO>>readValue(json.toString(), new TypeReference<List<NamespaceInfoDTO>>() { }))
                         .flatMapIterable(item -> item)
                         .map(namespaceInfoDTO -> new NamespaceInfo(namespaceInfoDTO.getMeta().isActive(),
                                 namespaceInfoDTO.getMeta().getIndex(),
@@ -108,12 +94,12 @@ public class NamespaceHttp extends Http implements NamespaceRepository {
                                 namespaceInfoDTO.getNamespace().getDepth(),
                                 extractLevels(namespaceInfoDTO),
                                 new NamespaceId(toBigInt(namespaceInfoDTO.getNamespace().getParentId())),
-                                new PublicAccount(namespaceInfoDTO.getNamespace().getOwner(), networkType),
+                                new PublicAccount(namespaceInfoDTO.getNamespace().getOwner(), api.getNetworkType()),
                                 toBigInt(namespaceInfoDTO.getNamespace().getStartHeight()),
                                 toBigInt(namespaceInfoDTO.getNamespace().getEndHeight())
                         ))
                         .toList()
-                        .toObservable());
+                        .toObservable();
     }
 
     @Override
@@ -128,16 +114,11 @@ public class NamespaceHttp extends Http implements NamespaceRepository {
 
     private Observable<List<NamespaceInfo>> getNamespacesFromAccounts(List<Address> addresses, Optional<QueryParams> queryParams) {
         JsonObject requestBody = new JsonObject();
-        requestBody.put("addresses", addresses.stream().map(Address::plain).collect(Collectors.toList()));
-        Observable<NetworkType> networkTypeResolve = getNetworkTypeObservable();
-        return networkTypeResolve
-                .flatMap(networkType -> this.client
-                        .postAbs(this.url + "/account/namespaces" + (queryParams.isPresent() ? queryParams.get().toUrl() : ""))
-                        .as(BodyCodec.jsonArray())
-                        .rxSendJson(requestBody)
-                        .toObservable()
-                        .map(Http::mapJsonArrayOrError)
-                        .map(json -> objectMapper.<List<NamespaceInfoDTO>>readValue(json.toString(), new TypeReference<List<NamespaceInfoDTO>>() {
+        requestBody.add("addresses", getJsonArray(addresses, Address::plain));
+        return this.client
+                        .post("/account/namespaces" + (queryParams.isPresent() ? queryParams.get().toUrl() : ""), requestBody)
+                        .map(Http::mapStringOrError)
+                        .map(str -> objectMapper.<List<NamespaceInfoDTO>>readValue(str, new TypeReference<List<NamespaceInfoDTO>>() {
                         }))
                         .flatMapIterable(item -> item)
                         .map(namespaceInfoDTO -> new NamespaceInfo(namespaceInfoDTO.getMeta().isActive(),
@@ -147,25 +128,22 @@ public class NamespaceHttp extends Http implements NamespaceRepository {
                                 namespaceInfoDTO.getNamespace().getDepth(),
                                 extractLevels(namespaceInfoDTO),
                                 new NamespaceId(toBigInt(namespaceInfoDTO.getNamespace().getParentId())),
-                                new PublicAccount(namespaceInfoDTO.getNamespace().getOwner(), networkType),
+                                new PublicAccount(namespaceInfoDTO.getNamespace().getOwner(), api.getNetworkType()),
                                 toBigInt(namespaceInfoDTO.getNamespace().getStartHeight()),
                                 toBigInt(namespaceInfoDTO.getNamespace().getEndHeight())
                         ))
                         .toList()
-                        .toObservable());
+                        .toObservable();
     }
 
     @Override
     public Observable<List<NamespaceName>> getNamespaceNames(List<NamespaceId> namespaceIds) {
         JsonObject requestBody = new JsonObject();
-        requestBody.put("namespaceIds", namespaceIds.stream().map(id -> UInt64Utils.bigIntegerToHex(id.getId())).collect(Collectors.toList()));
+        requestBody.add("namespaceIds", getJsonArray(namespaceIds, id -> UInt64Utils.bigIntegerToHex(id.getId())));
         return this.client
-                .postAbs(this.url + "/namespace/names")
-                .as(BodyCodec.jsonArray())
-                .rxSendJson(requestBody)
-                .toObservable()
-                .map(Http::mapJsonArrayOrError)
-                .map(json -> objectMapper.<List<NamespaceNameDTO>>readValue(json.toString(), new TypeReference<List<NamespaceNameDTO>>() {
+                .post("/namespace/names", requestBody)
+                .map(Http::mapStringOrError)
+                .map(str -> objectMapper.<List<NamespaceNameDTO>>readValue(str, new TypeReference<List<NamespaceNameDTO>>() {
                 }))
                 .flatMapIterable(item -> item)
                 .map(namespaceNameDTO -> {

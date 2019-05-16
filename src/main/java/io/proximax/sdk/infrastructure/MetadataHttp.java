@@ -16,10 +16,15 @@
 
 package io.proximax.sdk.infrastructure;
 
-import java.net.MalformedURLException;
-import java.util.List;
-import java.util.stream.Collectors;
+import static io.proximax.sdk.utils.GsonUtils.getJsonArray;
 
+import java.util.List;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import io.proximax.sdk.BlockchainApi;
+import io.proximax.sdk.MetadataRepository;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.metadata.AddressMetadata;
 import io.proximax.sdk.model.metadata.Metadata;
@@ -29,10 +34,8 @@ import io.proximax.sdk.model.metadata.NamespaceMetadata;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.transaction.UInt64Id;
+import io.proximax.sdk.utils.GsonUtils;
 import io.reactivex.Observable;
-import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
-import io.vertx.reactivex.ext.web.codec.BodyCodec;
 
 /**
  * Metadata http repository.
@@ -45,22 +48,16 @@ public class MetadataHttp extends Http implements MetadataRepository {
    
    private static final String URL_SUFFIX_METADATA = "/metadata";
 
-   public MetadataHttp(String host) throws MalformedURLException {
-      this(host, new NetworkHttp(host));
-   }
-
-   public MetadataHttp(String host, NetworkHttp networkHttp) throws MalformedURLException {
-      super(host, networkHttp);
+   public MetadataHttp(BlockchainApi api) {
+      super(api);
    }
 
    @Override
    public Observable<Metadata> getMetadata(String metadataId) {
       return this.client
-         .getAbs(this.url + URL_METADATA + metadataId)
-         .as(BodyCodec.jsonObject())
-         .rxSend()
-         .toObservable()
-         .map(Http::mapJsonObjectOrError)
+         .get(URL_METADATA + metadataId)
+         .map(Http::mapStringOrError)
+         .map(GsonUtils::mapToJsonObject)
          .map(MetadataMapper::mapToObject);
    }
 
@@ -77,26 +74,22 @@ public class MetadataHttp extends Http implements MetadataRepository {
    @Override
    public Observable<Metadata> getMetadata(List<String> metadataIds) {
       JsonObject requestBody = new JsonObject();
-      requestBody.put("metadataIds", metadataIds);
+      requestBody.add("metadataIds", getJsonArray(metadataIds));
       return this.client
-            .postAbs(this.url + URL_METADATA)
-            .as(BodyCodec.jsonArray())
-            .rxSendJson(requestBody)
-            .toObservable()
-            .map(Http::mapJsonArrayOrError)
-            .map(json -> new JsonArray(json.toString()).stream().map(s -> (JsonObject) s).collect(Collectors.toList()))
+            .post(URL_METADATA, requestBody)
+            .map(Http::mapStringOrError)
+            .map(GsonUtils::mapToJsonArray)
             .flatMapIterable(item -> item)
+            .map(JsonElement::getAsJsonObject)
             .map(MetadataMapper::mapToObject);
    }
 
    @Override
    public Observable<AddressMetadata> getMetadataFromAddress(Address address) {
       return this.client
-            .getAbs(this.url + URL_ACCOUNT + AddressMetadata.getIdFromAddress(address) + URL_SUFFIX_METADATA)
-            .as(BodyCodec.jsonObject())
-            .rxSend()
-            .toObservable()
-            .map(Http::mapJsonObjectOrError)
+            .get(URL_ACCOUNT + AddressMetadata.getIdFromAddress(address) + URL_SUFFIX_METADATA)
+            .map(Http::mapStringOrError)
+            .map(GsonUtils::mapToJsonObject)
             .map(MetadataMapper::mapToObject)
             .map(meta -> (AddressMetadata)meta);
       }
@@ -104,11 +97,9 @@ public class MetadataHttp extends Http implements MetadataRepository {
    @Override
    public Observable<MosaicMetadata> getMetadataFromMosaic(MosaicId mosaicId) {
       return this.client
-            .getAbs(this.url + URL_MOSAIC + mosaicId.getIdAsHex() + URL_SUFFIX_METADATA)
-            .as(BodyCodec.jsonObject())
-            .rxSend()
-            .toObservable()
-            .map(Http::mapJsonObjectOrError)
+            .get(URL_MOSAIC + mosaicId.getIdAsHex() + URL_SUFFIX_METADATA)
+            .map(Http::mapStringOrError)
+            .map(GsonUtils::mapToJsonObject)
             .map(MetadataMapper::mapToObject)
             .map(meta -> (MosaicMetadata)meta);
       }
@@ -116,11 +107,9 @@ public class MetadataHttp extends Http implements MetadataRepository {
    @Override
    public Observable<NamespaceMetadata> getMetadataFromNamespace(NamespaceId namespaceId) {
       return this.client
-            .getAbs(this.url + URL_NAMESPACE + namespaceId.getIdAsHex() + URL_SUFFIX_METADATA)
-            .as(BodyCodec.jsonObject())
-            .rxSend()
-            .toObservable()
-            .map(Http::mapJsonObjectOrError)
+            .get(URL_NAMESPACE + namespaceId.getIdAsHex() + URL_SUFFIX_METADATA)
+            .map(Http::mapStringOrError)
+            .map(GsonUtils::mapToJsonObject)
             .map(MetadataMapper::mapToObject)
             .map(meta -> (NamespaceMetadata)meta);
       }

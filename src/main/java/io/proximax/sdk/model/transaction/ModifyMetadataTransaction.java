@@ -30,7 +30,6 @@ import com.google.flatbuffers.FlatBufferBuilder;
 
 import io.proximax.sdk.gen.buffers.MetadataModificationBuffer;
 import io.proximax.sdk.gen.buffers.ModifyMetadataTransactionBuffer;
-import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
@@ -40,6 +39,7 @@ import io.proximax.sdk.model.metadata.MetadataModificationType;
 import io.proximax.sdk.model.metadata.MetadataType;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.namespace.NamespaceId;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
  * Transaction requesting modification of metadata

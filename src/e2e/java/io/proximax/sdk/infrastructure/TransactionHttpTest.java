@@ -20,6 +20,7 @@ package io.proximax.sdk.infrastructure;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -31,7 +32,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import io.proximax.sdk.BaseTest;
-import io.proximax.sdk.infrastructure.TransactionHttp;
+import io.proximax.sdk.BlockchainApi;
+import io.proximax.sdk.TransactionRepository;
 import io.proximax.sdk.model.transaction.Transaction;
 import io.proximax.sdk.model.transaction.TransactionStatus;
 import io.proximax.sdk.model.transaction.TransactionType;
@@ -41,13 +43,13 @@ import io.reactivex.schedulers.Schedulers;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Disabled("partially replaced by other tests")
 public class TransactionHttpTest extends BaseTest {
-    private TransactionHttp transactionHttp;
+    private TransactionRepository transactionHttp;
     private static final String TRANSACTION_HASH = "CFF075FD2A496D474775ACCDE4877901023ECE8466590A7B48C5D3E8F098F106";
     private static final String TRANSACTION_HASH_NOT_EXISTING = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
     @BeforeAll
     public void setup() throws IOException {
-        transactionHttp = new TransactionHttp(this.getNodeUrl());
+        transactionHttp = new BlockchainApi(new URL(getNodeUrl()), getNetworkType()).createTransactionRepository();
     }
 
     @Test

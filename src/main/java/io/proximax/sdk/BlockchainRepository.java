@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package io.proximax.sdk.infrastructure;
+package io.proximax.sdk;
 
 import java.math.BigInteger;
 import java.util.List;
 
+import io.proximax.sdk.infrastructure.QueryParams;
 import io.proximax.sdk.model.blockchain.BlockInfo;
 import io.proximax.sdk.model.blockchain.BlockchainStorageInfo;
 import io.proximax.sdk.model.transaction.Transaction;

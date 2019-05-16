@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.proximax.sdk.infrastructure.utils;
+package io.proximax.sdk.utils.dto;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base32;

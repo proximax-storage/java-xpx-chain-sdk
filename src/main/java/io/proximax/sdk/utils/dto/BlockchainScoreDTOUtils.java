@@ -1,7 +1,7 @@
 /**
  * 
  */
-package io.proximax.sdk.infrastructure.utils;
+package io.proximax.sdk.utils.dto;
 
 import java.math.BigInteger;
 

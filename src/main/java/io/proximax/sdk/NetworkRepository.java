@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.proximax.sdk.infrastructure;
+package io.proximax.sdk;
 
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.reactivex.Observable;

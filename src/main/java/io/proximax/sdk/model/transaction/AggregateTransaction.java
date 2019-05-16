@@ -29,10 +29,10 @@ import com.google.flatbuffers.FlatBufferBuilder;
 
 import io.proximax.core.crypto.Signer;
 import io.proximax.sdk.gen.buffers.AggregateTransactionBuffer;
-import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
  * The aggregate innerTransactions contain multiple innerTransactions that can be initiated by different accounts.

@@ -17,11 +17,11 @@
 package io.proximax.sdk.infrastructure;
 
 
-import java.net.MalformedURLException;
-
+import io.proximax.sdk.BlockchainApi;
+import io.proximax.sdk.NetworkRepository;
 import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.utils.GsonUtils;
 import io.reactivex.Observable;
-import io.vertx.reactivex.ext.web.codec.BodyCodec;
 
 /**
  * Network http repository.
@@ -29,18 +29,16 @@ import io.vertx.reactivex.ext.web.codec.BodyCodec;
  * @since 1.0
  */
 public class NetworkHttp extends Http implements NetworkRepository {
-    public NetworkHttp(String host) throws MalformedURLException {
-        super(host + "/network");
+    public NetworkHttp(BlockchainApi api) {
+        super(api);
     }
 
     public Observable<NetworkType> getNetworkType() {
         return this.client
-                .getAbs(this.url.toString())
-                .as(BodyCodec.jsonObject())
-                .rxSend()
-                .toObservable()
-                .map(Http::mapJsonObjectOrError)
-                .map(json -> json.getString("name"))
+                .get("/network")
+                .map(Http::mapStringOrError)
+                .map(GsonUtils::mapToJsonObject)
+                .map(obj -> obj.get("name").getAsString())
                 .map(name -> {
                     if (name.equalsIgnoreCase("mijinTest"))
                         return NetworkType.MIJIN_TEST;

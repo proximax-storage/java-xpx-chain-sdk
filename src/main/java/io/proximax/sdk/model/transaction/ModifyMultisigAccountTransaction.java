@@ -27,9 +27,9 @@ import com.google.flatbuffers.FlatBufferBuilder;
 import io.proximax.core.utils.HexEncoder;
 import io.proximax.sdk.gen.buffers.CosignatoryModificationBuffer;
 import io.proximax.sdk.gen.buffers.TransferTransactionBuffer;
-import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
  * Modify multisig account transactions are part of the NEM's multisig account system.

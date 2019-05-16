@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package io.proximax.sdk.infrastructure;
+package io.proximax.sdk;
 
 import java.util.List;
 
+import io.proximax.sdk.infrastructure.QueryParams;
 import io.proximax.sdk.model.account.AccountInfo;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.MultisigAccountGraphInfo;

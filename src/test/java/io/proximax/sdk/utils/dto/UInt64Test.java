@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.proximax.sdk.infrastructure.utils;
+package io.proximax.sdk.utils.dto;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,6 +28,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import io.proximax.sdk.gen.model.UInt64DTO;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 
 class UInt64Test {
 
