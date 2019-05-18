@@ -23,11 +23,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.proximax.sdk.BlockchainApi;
 
+/**
+ * base HTTP repository implementation, keeping track of the API, HTTP client and mapper
+ */
 public class Http {
     protected final BlockchainApi api;
     protected final HttpClient client;
     protected final ObjectMapper objectMapper;
     
+    /**
+     * create and initialize new instance for specified API
+     * 
+     * @param api the main API
+     */
     Http(BlockchainApi api) {
         this.api = api;
         this.client = new OkHttpHttpClient(api);
@@ -40,8 +48,8 @@ public class Http {
     /**
      * throw RuntimeException on error or return body of the response
      * 
-     * @param response
-     * @return
+     * @param response response to examine
+     * @return body of the response as string
      */
     static String mapStringOrError(final HttpResponse response) {
        if (response.getCode() < 200 || response.getCode() > 299) {

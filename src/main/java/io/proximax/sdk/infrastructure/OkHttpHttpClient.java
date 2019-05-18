@@ -29,7 +29,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 /**
- * TODO add proper description
+ * HTTP client implementation using OK HTTP3
  */
 public class OkHttpHttpClient implements HttpClient {
    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
@@ -37,6 +37,11 @@ public class OkHttpHttpClient implements HttpClient {
    private final BlockchainApi api;
    private OkHttpClient client;
 
+   /**
+    * create new HTTP client for specified API
+    * 
+    * @param api the main API of the network
+    */
    public OkHttpHttpClient(BlockchainApi api) {
       this.api = api;
       client = new OkHttpClient();
@@ -51,7 +56,6 @@ public class OkHttpHttpClient implements HttpClient {
    @Override
    public Observable<HttpResponse> getAbs(String absoluteUrl) {
       final Request request = new Request.Builder().get().url(absoluteUrl).build();
-
       return createHttpResponseObservable(request);
    }
 
@@ -66,26 +70,28 @@ public class OkHttpHttpClient implements HttpClient {
    public Observable<HttpResponse> put(String path, JsonObject jsonObject) {
       String absoluteUrl = api.getUrl().toExternalForm() + path;
       return putAbs(absoluteUrl, jsonObject);
-
    }
 
    @Override
    public Observable<HttpResponse> postAbs(String absoluteUrl, JsonObject jsonObject) {
       RequestBody body = RequestBody.create(JSON, jsonObject.toString());
       final Request request = new Request.Builder().post(body).url(absoluteUrl).build();
-
       return createHttpResponseObservable(request);
-
    }
 
    @Override
    public Observable<HttpResponse> putAbs(String absoluteUrl, JsonObject jsonObject) {
       RequestBody body = RequestBody.create(JSON, jsonObject.toString());
       final Request request = new Request.Builder().put(body).url(absoluteUrl).build();
-
       return createHttpResponseObservable(request);
    }
 
+   /**
+    * use okhttp client to execute provided request and return Observable for the response
+    * 
+    * @param request the HTTP request to execute
+    * @return observable response
+    */
    private Observable<HttpResponse> createHttpResponseObservable(Request request) {
       return Observable.create(emitter -> {
          try {
@@ -98,7 +104,10 @@ public class OkHttpHttpClient implements HttpClient {
       });
    }
 
-   class OkHttpResponse implements HttpResponse {
+   /**
+    * HTTP response implementation for OK HTTP3
+    */
+   private static class OkHttpResponse implements HttpResponse {
       final Response response;
 
       OkHttpResponse(Response response) {

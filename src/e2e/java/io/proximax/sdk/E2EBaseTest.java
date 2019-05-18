@@ -85,7 +85,7 @@ public class E2EBaseTest extends BaseTest {
       metadataHttp = api.createMetadataRepository();
       logger.info("Created HTTP interfaces");
       // prepare listener
-      listener = new Listener(nodeUrl);
+      listener = api.createListener();
       listener.open().get();
       logger.info("Created listener");
       // retrieve the seed account which has for tests

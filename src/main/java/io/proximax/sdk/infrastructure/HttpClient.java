@@ -19,11 +19,68 @@ import com.google.gson.JsonObject;
 
 import io.reactivex.Observable;
 
+/**
+ * generic HTTP client API
+ * 
+ * get/post/put methods taking relative path parameter assume that client implementation is aware of the base URL
+ */
 public interface HttpClient {
+   
+   /**
+    * make GET request with path relative to the base URL
+    * 
+    * throws {@link UnsupportedOperationException} when client implementation is not aware of base URL
+    * 
+    * @param path path relative to the base URL
+    * @return observable response
+    */
    Observable<HttpResponse> get(String path);
+   
+   /**
+    * make POST request with path relative to the base URL
+    * 
+    * throws {@link UnsupportedOperationException} when client implementation is not aware of base URL
+    * 
+    * @param path path relative to the base URL
+    * @param body request body
+    * @return observable response
+    */
+   Observable<HttpResponse> post(String path, JsonObject body);
+   
+   /**
+    * make PUT request with path relative to the base URL
+    * 
+    * throws {@link UnsupportedOperationException} when client implementation is not aware of base URL
+    * 
+    * @param path path relative to the base URL
+    * @param body request body
+    * @return observable response
+    */
+   Observable<HttpResponse> put(String path, JsonObject body);
+
+   /**
+    * make GET request with path relative to the base URL
+    * 
+    * @param absoluteUrl path relative to the base URL
+    * @return observable response
+    */
    Observable<HttpResponse> getAbs(String absoluteUrl);
-   Observable<HttpResponse> postAbs(String absoluteUrl, JsonObject jsonObject);
-   Observable<HttpResponse> putAbs(String absoluteUrl, JsonObject jsonObject);
-   Observable<HttpResponse> post(String path, JsonObject jsonObject);
-   Observable<HttpResponse> put(String path, JsonObject jsonObject);
+
+   /**
+    * make POST request with path relative to the base URL
+    * 
+    * @param absoluteUrl path relative to the base URL
+    * @param body request body
+    * @return observable response
+    */
+   Observable<HttpResponse> postAbs(String absoluteUrl, JsonObject body);
+
+   /**
+    * make PUT request with path relative to the base URL
+    * 
+    * @param absoluteUrl path relative to the base URL
+    * @param body request body
+    * @return observable response
+    */
+   Observable<HttpResponse> putAbs(String absoluteUrl, JsonObject body);
 }

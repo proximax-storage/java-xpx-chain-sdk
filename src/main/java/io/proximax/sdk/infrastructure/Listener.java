@@ -17,7 +17,6 @@
 package io.proximax.sdk.infrastructure;
 
 import java.math.BigInteger;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -65,10 +64,12 @@ public class Listener {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     /**
+     * create new listener for specified node
+     * 
      * @param url nis host
      */
-    public Listener(final String url) throws MalformedURLException {
-        this.url = new URL(url);
+    public Listener(final URL url) {
+        this.url = url;
         this.messageSubject = PublishSubject.create();
     }
 

@@ -13,33 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.proximax.sdk.infrastructure;
+package io.proximax.sdk;
 
-import java.io.IOException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.junit.jupiter.api.Test;
+
+import io.proximax.sdk.model.blockchain.NetworkType;
 
 /**
- * generic interface for HTTP responses
+ * test main API
  */
-public interface HttpResponse {
-   /**
-    * response code
-    * 
-    * @return HTTP response code
-    */
-   int getCode();
-   
-   /**
-    * response status message
-    * 
-    * @return the string representation of response code
-    */
-   String getStatusMessage();
-   
-   /**
-    * response body
-    * 
-    * @return response body as string
-    * @throws IOException if body can not be retrieved from the response
-    */
-   String getBodyString() throws IOException;
+class BlockchainApiTest {
+
+   @Test
+   void testApiConstructor() throws MalformedURLException {
+      BlockchainApi api = new BlockchainApi(new URL("http://localhost:3000"), NetworkType.MAIN_NET);
+      assertEquals(new URL("http://localhost:3000"), api.getUrl());
+      assertEquals(NetworkType.MAIN_NET, api.getNetworkType());
+   }
+
 }
