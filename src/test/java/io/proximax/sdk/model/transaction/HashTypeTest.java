@@ -82,7 +82,7 @@ class HashTypeTest {
     }
 
     @Test
-    void HASH_160ShouldBeExactly40CharactersLength() {
+    void HASH_160ShouldHaveValidLength() {
         byte[] secretBytes = new byte[20];
         new Random().nextBytes(secretBytes);
         byte[] result = Hashes.hash160(secretBytes);
@@ -95,10 +95,10 @@ class HashTypeTest {
     void HASH_160ShouldReturnFalseIfItIsNot40CharsLength() {
         byte[] secretBytes = new byte[20];
         new Random().nextBytes(secretBytes);
-        byte[] result = Hashes.sha3_256(secretBytes);
+        byte[] result = Hashes.hash160(secretBytes);
         String secret = Hex.toHexString(result);
 
-        assertFalse(HashType.HASH_160.validate(secret));
+        assertFalse(HashType.HASH_160.validate(secret + "00"));
     }
 
     @Test
