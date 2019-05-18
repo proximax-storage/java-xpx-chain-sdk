@@ -31,7 +31,7 @@ import io.proximax.sdk.BlockchainApi;
 import io.proximax.sdk.TransactionRepository;
 import io.proximax.sdk.gen.model.TransactionStatusDTO;
 import io.proximax.sdk.model.transaction.CosignatureSignedTransaction;
-import io.proximax.sdk.model.transaction.Deadline;
+import io.proximax.sdk.model.transaction.DeadlineBP;
 import io.proximax.sdk.model.transaction.SignedTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
 import io.proximax.sdk.model.transaction.TransactionAnnounceResponse;
@@ -88,7 +88,7 @@ public class TransactionHttp extends Http implements TransactionRepository {
                 .map(transactionStatusDTO -> new TransactionStatus(transactionStatusDTO.getGroup(),
                         transactionStatusDTO.getStatus(),
                         transactionStatusDTO.getHash(),
-                        new Deadline(toBigInt(transactionStatusDTO.getDeadline())),
+                        new DeadlineBP(toBigInt(transactionStatusDTO.getDeadline())),
                         toBigInt(transactionStatusDTO.getHeight())));
     }
 
@@ -105,7 +105,7 @@ public class TransactionHttp extends Http implements TransactionRepository {
                 .map(transactionStatusDTO -> new TransactionStatus(transactionStatusDTO.getGroup(),
                         transactionStatusDTO.getStatus(),
                         transactionStatusDTO.getHash(),
-                        new Deadline(toBigInt(transactionStatusDTO.getDeadline())),
+                        new DeadlineBP(toBigInt(transactionStatusDTO.getDeadline())),
                         toBigInt(transactionStatusDTO.getHeight())))
                 .toList()
                 .toObservable();

@@ -27,10 +27,10 @@ public class TransactionStatus {
     private final String group;
     private final String status;
     private final String hash;
-    private final Deadline deadline;
+    private final TransactionDeadline deadline;
     private final BigInteger height;
 
-    public TransactionStatus(String group, String status, String hash, Deadline deadline, BigInteger height) {
+    public TransactionStatus(String group, String status, String hash, TransactionDeadline deadline, BigInteger height) {
         this.group = group;
         this.status = status;
         this.hash = hash;
@@ -70,7 +70,7 @@ public class TransactionStatus {
      *
      * @return transaction deadline
      */
-    public Deadline getDeadline() {
+    public TransactionDeadline getDeadline() {
         return deadline;
     }
 

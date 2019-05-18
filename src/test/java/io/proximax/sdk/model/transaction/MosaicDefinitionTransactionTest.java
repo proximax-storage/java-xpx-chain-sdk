@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import org.junit.jupiter.api.Disabled;
@@ -47,7 +46,8 @@ class MosaicDefinitionTransactionTest {
 
         assertEquals(NetworkType.TEST_NET, mosaicCreationTx.getNetworkType());
         assertEquals(TransactionVersion.MOSAIC_DEFINITION.getValue(), mosaicCreationTx.getVersion());
-        assertTrue(LocalDateTime.now().isBefore(mosaicCreationTx.getDeadline().getLocalDateTime()));
+        long nowSinceNemesis = new Deadline(0, ChronoUnit.SECONDS).getInstant();
+        assertTrue(nowSinceNemesis < mosaicCreationTx.getDeadline().getInstant());
         assertEquals(BigInteger.valueOf(0), mosaicCreationTx.getFee());
         assertEquals(BigInteger.valueOf(992621222383397347l), mosaicCreationTx.getMosaicId().getId());
         assertEquals(true, mosaicCreationTx.getMosaicProperties().isSupplyMutable());

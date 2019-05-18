@@ -45,15 +45,15 @@ public class TransferTransaction extends Transaction {
     private final Message message;
     private final Schema schema = new TransferTransactionSchema();
 
-    public TransferTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, Address recipient, List<Mosaic> mosaics, Message message, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
+    public TransferTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, Address recipient, List<Mosaic> mosaics, Message message, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
         this(networkType, version, deadline, fee, recipient, mosaics, message, Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo));
     }
 
-    public TransferTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, Address recipient, List<Mosaic> mosaics, Message message) {
+    public TransferTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, Address recipient, List<Mosaic> mosaics, Message message) {
         this(networkType, version, deadline, fee, recipient, mosaics, message, Optional.empty(), Optional.empty(), Optional.empty());
     }
 
-    private TransferTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, Address recipient, List<Mosaic> mosaics, Message message, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
+    private TransferTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, Address recipient, List<Mosaic> mosaics, Message message, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
         super(TransactionType.TRANSFER, networkType, version, deadline, fee, signature, signer, transactionInfo);
         Validate.notNull(recipient, "Recipient must not be null");
         Validate.notNull(mosaics, "Mosaics must not be null");
@@ -73,7 +73,7 @@ public class TransferTransaction extends Transaction {
      * @param networkType - The network type.
      * @return a TransferTransaction instance
      */
-    public static TransferTransaction create(Deadline deadline, Address recipient, List<Mosaic> mosaics, Message message, NetworkType networkType) {
+    public static TransferTransaction create(TransactionDeadline deadline, Address recipient, List<Mosaic> mosaics, Message message, NetworkType networkType) {
         return new TransferTransaction(networkType, 3, deadline, BigInteger.valueOf(0), recipient, mosaics, message);
     }
 

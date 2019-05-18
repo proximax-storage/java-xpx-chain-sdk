@@ -76,6 +76,10 @@ ext {
 dependencies {
     // ReactiveX async processing
     api "io.reactivex.rxjava2:rxjava:${rxjavaVersion}"
+    
+    // backport of java.time to support old android devices - removed from dependencies to avoid classpath polution
+	compileOnly 'org.threeten:threetenbp:1.4.0'
+
     // Logging facade
 	implementation 'org.slf4j:slf4j-api:1.7.26'
 	// crypto utilities, Hex
@@ -98,9 +102,11 @@ dependencies {
 	implementation "com.squareup.okhttp3:logging-interceptor:${okHttp3Version}"
 	// object mapping from json to DTO
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
-
+	
 	// file utils
 	testImplementation 'commons-io:commons-io:2.4'
+    // backport of java.time to support old android devices
+	testImplementation 'org.threeten:threetenbp:1.4.0'
 	
     testImplementation 'org.hamcrest:hamcrest-core:1.3'
     testImplementation 'org.hamcrest:hamcrest-library:1.3'

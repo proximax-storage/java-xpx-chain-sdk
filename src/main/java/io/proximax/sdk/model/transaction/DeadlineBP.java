@@ -17,16 +17,17 @@
 package io.proximax.sdk.model.transaction;
 
 import java.math.BigInteger;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+
+import org.threeten.bp.Instant;
+import org.threeten.bp.temporal.ChronoUnit;
 
 /**
  * The deadline of the transaction. The deadline is given as the number of seconds elapsed since the creation of the nemesis block.
  * If a transaction does not get included in a block before the deadline is reached, it is deleted.
  *
- * @since 1.0
+ * this implementation uses back-port library of JSR-310 to support older android devices
  */
-public class Deadline implements TransactionDeadline {
+public class DeadlineBP implements TransactionDeadline {
 
     /**
      * Nemesis block timestamp.
@@ -40,7 +41,7 @@ public class Deadline implements TransactionDeadline {
      * @param units      int
      * @param chronoUnit Chrono unit
      */
-    public Deadline(int units, ChronoUnit chronoUnit) {
+    public DeadlineBP(int units, ChronoUnit chronoUnit) {
         instant = Instant.now().plus(units, chronoUnit);
     }
 
@@ -49,7 +50,7 @@ public class Deadline implements TransactionDeadline {
      *
      * @param input Deadline in BigInteger format
      */
-    public Deadline(BigInteger input) {
+    public DeadlineBP(BigInteger input) {
         instant = Instant.ofEpochMilli(input.longValue());
     }
 
@@ -58,15 +59,19 @@ public class Deadline implements TransactionDeadline {
      *
      * @param units      int
      * @param chronoUnit Chrono unit
-     * @return {@link Deadline}
+     * @return {@link DeadlineBP}
      */
-    public static Deadline create(int units, ChronoUnit chronoUnit) {
-        return new Deadline(units, chronoUnit);
+    public static DeadlineBP create(int units, ChronoUnit chronoUnit) {
+        return new DeadlineBP(units, chronoUnit);
     }
 
-    @Override
+    /**
+     * Returns number of seconds elapsed since the creation of the nemesis block.
+     *
+     * @return long
+     */
     public long getInstant() {
-       return instant.toEpochMilli() - Deadline.TIMESTAMP_NEMSIS_BLOCK.toEpochMilli();
+        return instant.toEpochMilli() - DeadlineBP.TIMESTAMP_NEMSIS_BLOCK.toEpochMilli();
     }
 
    @Override

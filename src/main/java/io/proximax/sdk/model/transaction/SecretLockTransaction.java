@@ -40,15 +40,15 @@ public class SecretLockTransaction extends Transaction {
     private final Address recipient;
     private final Schema schema = new SecretLockTransactionSchema();
 
-    public SecretLockTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, Mosaic mosaic, BigInteger duration, HashType hashType, String secret, Address recipient, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
+    public SecretLockTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, Mosaic mosaic, BigInteger duration, HashType hashType, String secret, Address recipient, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
         this(networkType, version, deadline, fee, mosaic, duration, hashType, secret, recipient, Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo));
     }
 
-    public SecretLockTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, Mosaic mosaic, BigInteger duration, HashType hashType, String secret, Address recipient) {
+    public SecretLockTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, Mosaic mosaic, BigInteger duration, HashType hashType, String secret, Address recipient) {
         this(networkType, version, deadline, fee, mosaic, duration, hashType, secret, recipient, Optional.empty(), Optional.empty(), Optional.empty());
     }
 
-    public SecretLockTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, Mosaic mosaic, BigInteger duration, HashType hashType, String secret, Address recipient, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
+    public SecretLockTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, Mosaic mosaic, BigInteger duration, HashType hashType, String secret, Address recipient, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
         super(TransactionType.SECRET_LOCK, networkType, version, deadline, fee, signature, signer, transactionInfo);
         Validate.notNull(mosaic, "Mosaic must not be null");
         Validate.notNull(duration, "Duration must not be null");
@@ -77,7 +77,7 @@ public class SecretLockTransaction extends Transaction {
      *
      * @return a SecretLockTransaction instance
      */
-    public static SecretLockTransaction create(Deadline deadline, Mosaic mosaic, BigInteger duration, HashType hashType, String secret, Address recipient, NetworkType networkType) {
+    public static SecretLockTransaction create(TransactionDeadline deadline, Mosaic mosaic, BigInteger duration, HashType hashType, String secret, Address recipient, NetworkType networkType) {
         return new SecretLockTransaction(networkType, 1, deadline, BigInteger.valueOf(0), mosaic, duration, hashType, secret, recipient);
     }
 

@@ -42,15 +42,15 @@ public class LockFundsTransaction extends Transaction {
     private final SignedTransaction signedTransaction;
     private final Schema schema = new LockFundsTransactionSchema();
 
-    public LockFundsTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, Mosaic mosaic, BigInteger duration, SignedTransaction signedTransaction, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
+    public LockFundsTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, Mosaic mosaic, BigInteger duration, SignedTransaction signedTransaction, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
         this(networkType, version, deadline, fee, mosaic, duration, signedTransaction, Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo));
     }
 
-    public LockFundsTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, Mosaic mosaic, BigInteger duration, SignedTransaction signedTransaction) {
+    public LockFundsTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, Mosaic mosaic, BigInteger duration, SignedTransaction signedTransaction) {
         this(networkType, version, deadline, fee, mosaic, duration, signedTransaction, Optional.empty(), Optional.empty(), Optional.empty());
     }
 
-    private LockFundsTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, Mosaic mosaic, BigInteger duration, SignedTransaction signedTransaction, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
+    private LockFundsTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, Mosaic mosaic, BigInteger duration, SignedTransaction signedTransaction, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
         super(TransactionType.LOCK, networkType, version, deadline, fee, signature, signer, transactionInfo);
         Validate.notNull(mosaic, "Mosaic must not be null");
         Validate.notNull(duration, "Duration must not be null");
@@ -72,7 +72,7 @@ public class LockFundsTransaction extends Transaction {
      * @param networkType       The network type.
      * @return a LockFundsTransaction instance
      */
-    public static LockFundsTransaction create(Deadline deadline, Mosaic mosaic, BigInteger duration, SignedTransaction signedTransaction, NetworkType networkType) {
+    public static LockFundsTransaction create(TransactionDeadline deadline, Mosaic mosaic, BigInteger duration, SignedTransaction signedTransaction, NetworkType networkType) {
         return new LockFundsTransaction(networkType, 1, deadline, BigInteger.valueOf(0), mosaic, duration, signedTransaction);
     }
 

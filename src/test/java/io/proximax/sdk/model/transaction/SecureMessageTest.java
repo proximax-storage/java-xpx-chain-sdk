@@ -121,7 +121,7 @@ class SecureMessageTest {
     }
 
    @Test
-   @Disabled("Data from NIS1 are not upported (yet?)")
+   @Disabled("Data from NIS1 are not supported (yet?)")
    void decodeFromNis1() {
       String recipientPrivateKeyHex = "9f5db5ba1b77c19f4f12a5236b7804687bad9ab0e1db2fe3fa09f1f31c0f3b96";
       String senderPublicKeyHex = "c735e505512414216a8cf54e25b3a444b16194c1df908ef25b9fdc70b91a84c4";

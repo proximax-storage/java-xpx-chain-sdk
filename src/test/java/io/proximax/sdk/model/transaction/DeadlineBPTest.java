@@ -18,18 +18,17 @@ package io.proximax.sdk.model.transaction;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.temporal.ChronoUnit;
-
 import org.junit.jupiter.api.Test;
+import org.threeten.bp.temporal.ChronoUnit;
 
-class DeadlineTest {
+class DeadlineBPTest {
    private static final long HOUR_MILLIS = 3600_000;
    private static final long SECOND_MILLIS = 1_000;
    
     @Test
     void shouldCreateADeadlineForTwoHoursFromNow() {
-        long nowSinceNemesis = new Deadline(0, ChronoUnit.SECONDS).getInstant();
-        Deadline deadline = new Deadline(2, ChronoUnit.HOURS);
+        long nowSinceNemesis = new DeadlineBP(0, ChronoUnit.SECONDS).getInstant();
+        DeadlineBP deadline = new DeadlineBP(2, ChronoUnit.HOURS);
         assertTrue(nowSinceNemesis < deadline.getInstant(), "now is before deadline localtime");
         assertTrue((nowSinceNemesis + 2 * HOUR_MILLIS - SECOND_MILLIS) < deadline.getInstant(), "now plus 2 hours is before deadline localtime");
         assertTrue((nowSinceNemesis + 2 * HOUR_MILLIS + 2 * SECOND_MILLIS) > deadline.getInstant(), "now plus 2 hours and 2 seconds is after deadline localtime");
@@ -38,8 +37,8 @@ class DeadlineTest {
 
     @Test
     void shouldCreateADeadlineForTwoHoursFromNowWithStaticConstructor() {
-       long nowSinceNemesis = new Deadline(0, ChronoUnit.SECONDS).getInstant();
-       Deadline deadline = Deadline.create(2, ChronoUnit.HOURS);
+       long nowSinceNemesis = new DeadlineBP(0, ChronoUnit.SECONDS).getInstant();
+       DeadlineBP deadline = DeadlineBP.create(2, ChronoUnit.HOURS);
        assertTrue(nowSinceNemesis < deadline.getInstant(), "now is before deadline localtime");
        assertTrue((nowSinceNemesis + 2 * HOUR_MILLIS - SECOND_MILLIS) < deadline.getInstant(), "now plus 2 hours is before deadline localtime");
        assertTrue((nowSinceNemesis + 2 * HOUR_MILLIS + 2 * SECOND_MILLIS) > deadline.getInstant(), "now plus 2 hours and 2 seconds is after deadline localtime");

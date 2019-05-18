@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Collections;
@@ -62,7 +61,8 @@ public class AggregateTransactionTest {
 
         assertEquals(NetworkType.MIJIN_TEST, aggregateTx.getNetworkType());
         assertTrue(2 == aggregateTx.getVersion());
-        assertTrue(LocalDateTime.now().isBefore(aggregateTx.getDeadline().getLocalDateTime()));
+        long nowSinceNemesis = new Deadline(0, ChronoUnit.SECONDS).getInstant();
+        assertTrue(nowSinceNemesis < aggregateTx.getDeadline().getInstant());
         assertEquals(BigInteger.valueOf(0), aggregateTx.getFee());
         assertEquals(1, aggregateTx.getInnerTransactions().size());
     }

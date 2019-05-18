@@ -43,15 +43,15 @@ public class MosaicSupplyChangeTransaction extends Transaction {
     private final Schema schema = new MosaicSupplyChangeTransactionSchema();
 
 
-    public MosaicSupplyChangeTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, MosaicId mosaicId, MosaicSupplyType mosaicSupplyType, BigInteger delta, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
+    public MosaicSupplyChangeTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, MosaicId mosaicId, MosaicSupplyType mosaicSupplyType, BigInteger delta, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
         this(networkType, version, deadline, fee, mosaicId, mosaicSupplyType, delta, Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo));
     }
 
-    public MosaicSupplyChangeTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, MosaicId mosaicId, MosaicSupplyType mosaicSupplyType, BigInteger delta) {
+    public MosaicSupplyChangeTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, MosaicId mosaicId, MosaicSupplyType mosaicSupplyType, BigInteger delta) {
         this(networkType, version, deadline, fee, mosaicId, mosaicSupplyType, delta, Optional.empty(), Optional.empty(), Optional.empty());
     }
 
-    private MosaicSupplyChangeTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, MosaicId mosaicId, MosaicSupplyType mosaicSupplyType, BigInteger delta, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
+    private MosaicSupplyChangeTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, MosaicId mosaicId, MosaicSupplyType mosaicSupplyType, BigInteger delta, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
         super(TransactionType.MOSAIC_SUPPLY_CHANGE, networkType, version, deadline, fee, signature, signer, transactionInfo);
         Validate.notNull(mosaicId, "MosaicId must not be null");
         Validate.notNull(mosaicSupplyType, "MosaicSupplyType must not be null");
@@ -71,7 +71,7 @@ public class MosaicSupplyChangeTransaction extends Transaction {
      * @param networkType      The network type.
      * @return {@link MosaicSupplyChangeTransaction}
      */
-    public static MosaicSupplyChangeTransaction create(Deadline deadline, MosaicId mosaicId, MosaicSupplyType mosaicSupplyType, BigInteger delta, NetworkType networkType) {
+    public static MosaicSupplyChangeTransaction create(TransactionDeadline deadline, MosaicId mosaicId, MosaicSupplyType mosaicSupplyType, BigInteger delta, NetworkType networkType) {
         return new MosaicSupplyChangeTransaction(networkType, 2, deadline, BigInteger.valueOf(0), mosaicId, mosaicSupplyType, delta);
     }
 

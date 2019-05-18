@@ -15,7 +15,6 @@
  */
 package io.proximax.sdk;
 
-import static java.time.temporal.ChronoUnit.HOURS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigInteger;
@@ -37,7 +36,6 @@ import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.mosaic.Mosaic;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
-import io.proximax.sdk.model.transaction.Deadline;
 import io.proximax.sdk.model.transaction.Message;
 import io.proximax.sdk.model.transaction.PlainMessage;
 import io.proximax.sdk.model.transaction.SecureMessage;
@@ -126,7 +124,7 @@ public class E2ETransferTest extends E2EBaseTest {
       TransferTransaction transfer = TransferTransaction
             .create(getDeadline(), target, Collections.singletonList(amount), message, getNetworkType());
       // add the modification to the aggregate transaction. has to be bonded because we are going to test the lock
-      AggregateTransaction aggregateTransaction = AggregateTransaction.createComplete(Deadline.create(2, HOURS),
+      AggregateTransaction aggregateTransaction = AggregateTransaction.createComplete(getDeadline(),
             Arrays.asList(transfer.toAggregate(signerAccount.getPublicAccount())),
             getNetworkType());
       return signerAccount.sign(aggregateTransaction);

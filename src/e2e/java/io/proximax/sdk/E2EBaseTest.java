@@ -41,6 +41,7 @@ import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.transaction.Deadline;
 import io.proximax.sdk.model.transaction.PlainMessage;
 import io.proximax.sdk.model.transaction.SignedTransaction;
+import io.proximax.sdk.model.transaction.TransactionDeadline;
 import io.proximax.sdk.model.transaction.TransferTransaction;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -109,7 +110,7 @@ public class E2EBaseTest extends BaseTest {
     * 
     * @return deadline
     */
-   protected Deadline getDeadline() {
+   protected TransactionDeadline getDeadline() {
       return new Deadline(5, ChronoUnit.MINUTES);
    }
    

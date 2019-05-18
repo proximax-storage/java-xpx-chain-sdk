@@ -37,7 +37,7 @@ import io.proximax.sdk.model.blockchain.BlockInfo;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.CosignatureSignedTransaction;
-import io.proximax.sdk.model.transaction.Deadline;
+import io.proximax.sdk.model.transaction.DeadlineBP;
 import io.proximax.sdk.model.transaction.Transaction;
 import io.proximax.sdk.model.transaction.TransactionStatusError;
 import io.proximax.sdk.model.transaction.TransferTransaction;
@@ -142,7 +142,7 @@ public class Listener {
                             new TransactionStatusError(
                                     message.get("hash").getAsString(),
                                     message.get("status").getAsString(),
-                                    new Deadline(extractBigInteger(message.getAsJsonArray("deadline")))
+                                    new DeadlineBP(extractBigInteger(message.getAsJsonArray("deadline")))
                             )
                     ));
                 } else if (message.has("meta")) {
