@@ -76,6 +76,9 @@ public class E2EBaseTest extends BaseTest {
       logger.info("Preparing tests for {} using {}", getNetworkType(), nodeUrl);
       // create HTTP APIs
       BlockchainApi api = new BlockchainApi(new URL(nodeUrl), getNetworkType());
+      // make sure all is OK
+      assertTrue(api.isNetworkTypeValid());
+      // create services
       blockchainHttp = api.createBlockchainRepository();
       networkHttp = api.createNetworkRepository();
       accountHttp = api.createAccountRepository();
