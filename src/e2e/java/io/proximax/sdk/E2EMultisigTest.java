@@ -275,7 +275,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       SignedTransaction signedTransaction = cosig1.sign(aggregateTransaction);
       // lock 10 of XPX (required to prevent spamming)
       LockFundsTransaction lockFundsTransaction = LockFundsTransaction.create(getDeadline(),
-            NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
+            NetworkCurrencyMosaic.createRelative(BigInteger.TEN),
             BigInteger.valueOf(480),
             signedTransaction,
             getNetworkType());
