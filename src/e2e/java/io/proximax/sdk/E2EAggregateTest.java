@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.slf4j.Logger;
@@ -161,7 +162,7 @@ public class E2EAggregateTest extends E2EBaseTest {
    }
    
    @Test
-//   @Disabled("not enough funds to cosig by bob?")
+   @Disabled("not enough funds to cosig by bob?")
    void escrowBetweenThreeParties() {
       returnAllToSeed(alice);
       returnAllToSeed(bob);
