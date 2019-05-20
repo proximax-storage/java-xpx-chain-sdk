@@ -146,7 +146,7 @@ public class Listener {
                                     new DeadlineBP(extractBigInteger(message.getAsJsonArray("deadline")))
                             )
                     ));
-                } else if (message.has("meta")) {
+                } else if (message.has("meta") && message.get("meta").getAsJsonObject().has("hash")) {
                     Listener.this.messageSubject.onNext(new ListenerMessage(
                             ListenerChannel.rawValueOf(message.getAsJsonObject("meta").get("channelName").getAsString()),
                             message.get("meta").getAsJsonObject().get("hash").getAsString()
@@ -155,7 +155,7 @@ public class Listener {
                     Listener.this.messageSubject.onNext(new ListenerMessage(
                             ListenerChannel.COSIGNATURE,
                             new CosignatureSignedTransaction(
-                                    message.get("parenthash").getAsString(),
+                                    message.get("parentHash").getAsString(),
                                     message.get("signature").getAsString(),
                                     message.get("signer").getAsString()
                             )
@@ -321,7 +321,7 @@ public class Listener {
      * @return an observable stream of {@link CosignatureSignedTransaction}
      */
     public Observable<CosignatureSignedTransaction> cosignatureAdded(Address address) {
-        this.subscribeTo(ListenerChannel.CONFIRMED_ADDED + "/" + address.plain());
+        this.subscribeTo(ListenerChannel.COSIGNATURE + "/" + address.plain());
         return this.messageSubject
                 .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.COSIGNATURE))
                 .map(rawMessage -> (CosignatureSignedTransaction) rawMessage.getMessage());
