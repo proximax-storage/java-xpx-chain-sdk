@@ -16,6 +16,7 @@
 package io.proximax.sdk;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -24,6 +25,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -143,14 +145,43 @@ public class E2EBaseTest extends BaseTest {
    protected void sendSomeCash(Account sender, Address recipient, long amount) {
       BigInteger bigAmount = BigInteger.valueOf(amount);
       Mosaic mosaicToTransfer = NetworkCurrencyMosaic.createRelative(bigAmount);
-      TransferTransaction transfer = TransferTransaction
-            .create(getDeadline(), recipient, Collections.singletonList(mosaicToTransfer), PlainMessage.Empty, getNetworkType());
-      SignedTransaction signedTransfer = sender.sign(transfer);
-      logger.info("Sent XPX to {}: {}", recipient.pretty(), transactionHttp.announce(signedTransfer).blockingFirst());
-      logger.info("request confirmed: {}", listener.confirmed(sender.getAddress()).timeout(1, TimeUnit.MINUTES).blockingFirst());
+      sendMosaic(sender, recipient, mosaicToTransfer);
       BigInteger endAmount = accountHttp.getAccountInfo(recipient).map(acct -> acct.getMosaics().get(0).getAmount())
             .blockingFirst();
       BigInteger mosaicScale = mosaicToTransfer.getAmount().divide(bigAmount);
       assertTrue(bigAmount.multiply(mosaicScale).compareTo(endAmount) <= 0);
+   }
+   
+   /**
+    * send XPX from account to recipient
+    * 
+    * @param recipient address who gets the funds
+    * @param amount amount of XPX taking the divisibility into account
+    */
+   protected void sendMosaic(Account sender, Address recipient, Mosaic mosaicToTransfer) {
+      TransferTransaction transfer = TransferTransaction
+            .create(getDeadline(), recipient, Collections.singletonList(mosaicToTransfer), PlainMessage.Empty, getNetworkType());
+      SignedTransaction signedTransfer = sender.sign(transfer);
+      logger.info("Sent XPX to {}: {}", recipient.pretty(), transactionHttp.announce(signedTransfer).blockingFirst());
+      logger.info("request confirmed: {}", listener.confirmed(sender.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+   }
+   
+   /**
+    * return all mosaics to seed account
+    * 
+    * @param from account to be cleaned
+    */
+   protected void returnAllToSeed(Account from) {
+      logger.info("removing mosaics from {}", from.getPublicAccount());
+      try {
+         List<Mosaic> mosaics = accountHttp.getAccountInfo(from.getAddress()).blockingFirst().getMosaics();
+         mosaics.forEach(mosaic -> {
+            sendMosaic(from, seedAccount.getAddress(), mosaic);
+         });
+      } catch (RuntimeException e) {
+         if (!"Not Found".equals(e.getMessage())) {
+            fail(e);
+         }
+      }
    }
 }
