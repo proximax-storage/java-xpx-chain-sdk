@@ -38,6 +38,7 @@ import org.junit.jupiter.api.TestInstance;
 import io.proximax.sdk.AccountRepository;
 import io.proximax.sdk.BaseTest;
 import io.proximax.sdk.BlockchainApi;
+import io.proximax.sdk.ListenerRepository;
 import io.proximax.sdk.TransactionRepository;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
@@ -78,7 +79,8 @@ class ListenerTest extends BaseTest {
 
     @Test
     void shouldConnectToWebSocket() throws ExecutionException, InterruptedException, IOException {
-        Listener listener = new Listener(new URL(getNodeUrl()));
+       BlockchainApi api = new BlockchainApi(new URL(this.getNodeUrl()), getNetworkType());
+       ListenerRepository listener = api.createListener();
         CompletableFuture<Void> connected = listener.open();
         connected.get();
         assertTrue(connected.isDone());
@@ -87,7 +89,8 @@ class ListenerTest extends BaseTest {
 
     @Test
     void shouldReturnNewBlockViaListener() throws ExecutionException, InterruptedException, IOException {
-        Listener listener = new Listener(new URL(getNodeUrl()));
+       BlockchainApi api = new BlockchainApi(new URL(this.getNodeUrl()), getNetworkType());
+       ListenerRepository listener = api.createListener();
         listener.open().get();
 
         this.announceStandaloneTransferTransaction();
@@ -99,7 +102,8 @@ class ListenerTest extends BaseTest {
 
     @Test
     void shouldReturnConfirmedTransactionAddressSignerViaListener() throws ExecutionException, InterruptedException, IOException {
-        Listener listener = new Listener(new URL(getNodeUrl()));
+       BlockchainApi api = new BlockchainApi(new URL(this.getNodeUrl()), getNetworkType());
+       ListenerRepository listener = api.createListener();
         listener.open().get();
 
         SignedTransaction signedTransaction = this.announceStandaloneTransferTransaction();
@@ -110,7 +114,8 @@ class ListenerTest extends BaseTest {
 
     @Test
     void shouldReturnConfirmedTransactionAddressRecipientViaListener() throws ExecutionException, InterruptedException, IOException {
-        Listener listener = new Listener(new URL(getNodeUrl()));
+       BlockchainApi api = new BlockchainApi(new URL(this.getNodeUrl()), getNetworkType());
+       ListenerRepository listener = api.createListener();
         listener.open().get();
 
         SignedTransaction signedTransaction = this.announceStandaloneTransferTransaction();
@@ -122,7 +127,8 @@ class ListenerTest extends BaseTest {
 
     @Test
     void shouldReturnUnconfirmedAddedTransactionViaListener() throws ExecutionException, InterruptedException, IOException {
-        Listener listener = new Listener(new URL(getNodeUrl()));
+       BlockchainApi api = new BlockchainApi(new URL(this.getNodeUrl()), getNetworkType());
+       ListenerRepository listener = api.createListener();
         listener.open().get();
 
         SignedTransaction signedTransaction = this.announceStandaloneTransferTransaction();
@@ -133,7 +139,8 @@ class ListenerTest extends BaseTest {
 
     @Test
     void shouldReturnUnconfirmedRemovedTransactionViaListener() throws ExecutionException, InterruptedException, IOException {
-        Listener listener = new Listener(new URL(getNodeUrl()));
+       BlockchainApi api = new BlockchainApi(new URL(this.getNodeUrl()), getNetworkType());
+       ListenerRepository listener = api.createListener();
         listener.open().get();
 
         SignedTransaction signedTransaction = this.announceStandaloneTransferTransaction();
@@ -145,7 +152,8 @@ class ListenerTest extends BaseTest {
     @Disabled
     @Test
     void shouldReturnAggregateBondedAddedTransactionViaListener() throws ExecutionException, InterruptedException, IOException {
-        Listener listener = new Listener(new URL(getNodeUrl()));
+       BlockchainApi api = new BlockchainApi(new URL(this.getNodeUrl()), getNetworkType());
+       ListenerRepository listener = api.createListener();
         listener.open().get();
 
         SignedTransaction signedTransaction = this.announceAggregateBondedTransaction();
@@ -157,7 +165,8 @@ class ListenerTest extends BaseTest {
     @Disabled
     @Test
     void shouldReturnAggregateBondedRemovedTransactionViaListener() throws ExecutionException, InterruptedException, IOException {
-        Listener listener = new Listener(new URL(getNodeUrl()));
+       BlockchainApi api = new BlockchainApi(new URL(this.getNodeUrl()), getNetworkType());
+       ListenerRepository listener = api.createListener();
         listener.open().get();
 
         SignedTransaction signedTransaction = this.announceAggregateBondedTransaction();
@@ -169,7 +178,8 @@ class ListenerTest extends BaseTest {
     @Disabled
     @Test
     void shouldReturnCosignatureAddedViaListener() throws ExecutionException, InterruptedException, IOException {
-        Listener listener = new Listener(new URL(getNodeUrl()));
+       BlockchainApi api = new BlockchainApi(new URL(this.getNodeUrl()), getNetworkType());
+       ListenerRepository listener = api.createListener();
         listener.open().get();
 
         SignedTransaction signedTransaction = this.announceAggregateBondedTransaction();
@@ -192,7 +202,8 @@ class ListenerTest extends BaseTest {
 
     @Test
     void shouldReturnTransactionStatusGivenAddedViaListener() throws ExecutionException, InterruptedException, IOException {
-        Listener listener = new Listener(new URL(getNodeUrl()));
+       BlockchainApi api = new BlockchainApi(new URL(this.getNodeUrl()), getNetworkType());
+       ListenerRepository listener = api.createListener();
         listener.open().get();
 
         SignedTransaction signedTransaction = this.announceStandaloneTransferTransactionWithInsufficientBalance();

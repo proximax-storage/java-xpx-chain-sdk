@@ -16,16 +16,16 @@
 
 package io.proximax.sdk.infrastructure;
 
-import java.net.URL;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import io.proximax.sdk.BlockchainApi;
+import io.proximax.sdk.ListenerRepository;
 import io.proximax.sdk.infrastructure.listener.ListenerChannel;
 import io.proximax.sdk.infrastructure.listener.ListenerMessage;
 import io.proximax.sdk.infrastructure.listener.ListenerMessageMapping;
@@ -46,31 +46,25 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 
 /**
- * Listener
- *
- * @since 1.0
+ * Listener repository implementation
  */
-public class Listener {
-    private final URL url;
+public class Listener extends Http implements ListenerRepository {
     private final Subject<ListenerMessage> messageSubject;
     private String uid;
     private WebSocket webSocket;
-    private ObjectMapper objectMapper = new ObjectMapper();
     private final ListenerMessageMapping mapping = new ListenerMessageMapping();
 
     /**
-     * create new listener for specified node
+     * create new listener for specified API
      * 
-     * @param url nis host
+     * @param api blockchain API
      */
-    public Listener(final URL url) {
-        this.url = url;
+    public Listener(BlockchainApi api) {
+        super(api);
         this.messageSubject = PublishSubject.create();
     }
 
-    /**
-     * @return a {@link CompletableFuture} that resolves when the websocket connection is opened
-     */
+    @Override
     public CompletableFuture<Void> open() {
         CompletableFuture<Void> future = new CompletableFuture<>();
         if (this.webSocket != null) {
@@ -78,7 +72,7 @@ public class Listener {
         }
 
         Request request = new Request.Builder()
-                .url(this.url.toString() + "/ws")
+                .url(api.getUrl().toString() + "/ws")
                 .build();
 
         OkHttpClient client = new OkHttpClient.Builder().build();
@@ -100,29 +94,17 @@ public class Listener {
         return future;
     }
 
-    /**
-     * UID of the listener as registered on server
-     * 
-     * @return the UID connected to
-     */
+    @Override
     public String getUID() {
         return uid;
     }
 
-    /**
-     * Close webSocket connection
-     */
+    @Override
     public void close() {
         this.webSocket.close(1000, "Closed.");
     }
 
-    /**
-     * Returns an observable stream of BlockInfo.
-     * Each time a new Block is added into the blockchain,
-     * it emits a new BlockInfo in the event stream.
-     *
-     * @return an observable stream of BlockInfo
-     */
+    @Override
     public Observable<BlockInfo> newBlock() {
         this.subscribeTo(ListenerChannel.BLOCK);
         return this.messageSubject
@@ -130,14 +112,7 @@ public class Listener {
                 .map(rawMessage -> (BlockInfo) rawMessage.getMessage());
     }
 
-    /**
-     * Returns an observable stream of Transaction for a specific address.
-     * Each time a transaction is in confirmed state an it involves the address,
-     * it emits a new Transaction in the event stream.
-     *
-     * @param address address we listen when a transaction is in confirmed state
-     * @return an observable stream of Transaction with state confirmed
-     */
+    @Override
     public Observable<Transaction> confirmed(final Address address) {
         this.subscribeTo(ListenerChannel.CONFIRMED_ADDED, address);
         return this.messageSubject
@@ -146,15 +121,8 @@ public class Listener {
                 .filter(transaction -> this.transactionFromAddress(transaction, address));
     }
 
-    /**
-     * Returns an observable stream of Transaction for a specific address.
-     * Each time a transaction is in unconfirmed state an it involves the address,
-     * it emits a new Transaction in the event stream.
-     *
-     * @param address address we listen when a transaction is in unconfirmed state
-     * @return an observable stream of Transaction with state unconfirmed
-     */
-    public Observable<Transaction> unconfirmedAdded(Address address) {
+    @Override
+    public Observable<Transaction> unconfirmedAdded(final Address address) {
         this.subscribeTo(ListenerChannel.UNCONFIRMED_ADDED, address);
         return this.messageSubject
                 .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.UNCONFIRMED_ADDED))
@@ -162,30 +130,16 @@ public class Listener {
                 .filter(transaction -> this.transactionFromAddress(transaction, address));
     }
 
-    /**
-     * Returns an observable stream of Transaction Hashes for specific address.
-     * Each time a transaction with state unconfirmed changes its state,
-     * it emits a new message with the transaction hash in the event stream.
-     *
-     * @param address address we listen when a transaction is removed from unconfirmed state
-     * @return an observable stream of Strings with the transaction hash
-     */
-    public Observable<String> unconfirmedRemoved(Address address) {
+    @Override
+    public Observable<String> unconfirmedRemoved(final Address address) {
         this.subscribeTo(ListenerChannel.UNCONFIRMED_REMOVED, address);
         return this.messageSubject
                 .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.UNCONFIRMED_REMOVED))
                 .map(rawMessage -> (String) rawMessage.getMessage());
     }
 
-    /**
-     * Return an observable of {@link AggregateTransaction} for specific address.
-     * Each time an aggregate bonded transaction is announced,
-     * it emits a new {@link AggregateTransaction} in the event stream.
-     *
-     * @param address address we listen when a transaction with missing signatures state
-     * @return an observable stream of AggregateTransaction with missing signatures state
-     */
-    public Observable<AggregateTransaction> aggregateBondedAdded(Address address) {
+    @Override
+    public Observable<AggregateTransaction> aggregateBondedAdded(final Address address) {
         this.subscribeTo(ListenerChannel.AGGREGATE_BONDED_ADDED, address);
         return this.messageSubject
                 .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.AGGREGATE_BONDED_ADDED))
@@ -193,44 +147,23 @@ public class Listener {
                 .filter(transaction -> this.transactionFromAddress(transaction, address));
     }
 
-    /**
-     * Returns an observable stream of Transaction Hashes for specific address.
-     * Each time an aggregate bonded transaction is announced,
-     * it emits a new message with the transaction hash in the event stream.
-     *
-     * @param address address we listen when a transaction is confirmed or rejected
-     * @return an observable stream of Strings with the transaction hash
-     */
-    public Observable<String> aggregateBondedRemoved(Address address) {
+    @Override
+    public Observable<String> aggregateBondedRemoved(final Address address) {
         this.subscribeTo(ListenerChannel.AGGREGATE_BONDED_REMOVED, address);
         return this.messageSubject
                 .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.AGGREGATE_BONDED_REMOVED))
                 .map(rawMessage -> (String) rawMessage.getMessage());
     }
 
-    /**
-     * Returns an observable stream of {@link TransactionStatusError} for specific address.
-     * Each time a transaction contains an error,
-     * it emits a new message with the transaction status error in the event stream.
-     *
-     * @param address address we listen to be notified when some error happened
-     * @return an observable stream of {@link TransactionStatusError}
-     */
-    public Observable<TransactionStatusError> status(Address address) {
+    @Override
+    public Observable<TransactionStatusError> status(final Address address) {
         this.subscribeTo(ListenerChannel.STATUS, address);
         return this.messageSubject
                 .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.STATUS))
                 .map(rawMessage -> (TransactionStatusError) rawMessage.getMessage());
     }
 
-    /**
-     * Returns an observable stream of {@link CosignatureSignedTransaction} for specific address.
-     * Each time a cosigner signs a transaction the address initialized,
-     * it emits a new message with the cosignatory signed transaction in the even stream.
-     *
-     * @param address address we listen when a cosignatory is added to some transaction address sent
-     * @return an observable stream of {@link CosignatureSignedTransaction}
-     */
+    @Override
     public Observable<CosignatureSignedTransaction> cosignatureAdded(final Address address) {
         this.subscribeTo(ListenerChannel.COSIGNATURE, address);
         return this.messageSubject
@@ -257,12 +190,16 @@ public class Listener {
     }
     
     private void subscribeTo(ListenerChannel channel, Optional<Address> address) {
-      String channelPath;
-      if (address.isPresent()) {
-         channelPath = channel.getCode() + '/' + address.get().plain();
-      } else {
-         channelPath = channel.getCode();
-      }
+       String channelPath;
+       if (address.isPresent()) {
+          channelPath = channel.getCode() + '/' + address.get().plain();
+       } else {
+          channelPath = channel.getCode();
+       }
+       subscribeTo(channelPath);
+    }
+    
+    private void subscribeTo(String channelPath) {
       final ListenerSubscribeMessage subscribeMessage = new ListenerSubscribeMessage(this.uid, channelPath);
       String json;
       try {

@@ -35,7 +35,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.proximax.sdk.infrastructure.Listener;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.mosaic.Mosaic;
@@ -66,7 +65,7 @@ public class E2EBaseTest extends BaseTest {
    protected NamespaceRepository namespaceHttp;
    protected MetadataRepository metadataHttp;
    
-   protected Listener listener;
+   protected ListenerRepository listener;
 
    protected Account seedAccount;
 
