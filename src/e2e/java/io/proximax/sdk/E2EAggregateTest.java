@@ -238,6 +238,7 @@ public class E2EAggregateTest extends E2EBaseTest {
       // wait for cosig event
       listener.cosignatureAdded(mike.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
 
+      logger.info("waiting for transaction confirmation");
       // wait for the transaction confirmation
       listener.confirmed(alice.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
       

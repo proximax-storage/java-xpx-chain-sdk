@@ -98,6 +98,7 @@ public class Listener {
             @Override
             public void onMessage(WebSocket webSocket, String text) {
                 super.onMessage(webSocket, text);
+                System.out.println("server: " + text);
                 JsonObject message = new Gson().fromJson(text, JsonObject.class);
                 if (message.has("uid")) {
                     Listener.this.UID = message.get("uid").getAsString();
@@ -154,11 +155,7 @@ public class Listener {
                 } else if (message.has("parentHash")) {
                     Listener.this.messageSubject.onNext(new ListenerMessage(
                             ListenerChannel.COSIGNATURE,
-                            new CosignatureSignedTransaction(
-                                    message.get("parentHash").getAsString(),
-                                    message.get("signature").getAsString(),
-                                    message.get("signer").getAsString()
-                            )
+                            message
                     ));
                 }
 
@@ -320,11 +317,21 @@ public class Listener {
      * @param address address we listen when a cosignatory is added to some transaction address sent
      * @return an observable stream of {@link CosignatureSignedTransaction}
      */
-    public Observable<CosignatureSignedTransaction> cosignatureAdded(Address address) {
+    public Observable<CosignatureSignedTransaction> cosignatureAdded(final Address address) {
         this.subscribeTo(ListenerChannel.COSIGNATURE + "/" + address.plain());
         return this.messageSubject
+                // filter to cosignatures
                 .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.COSIGNATURE))
-                .map(rawMessage -> (CosignatureSignedTransaction) rawMessage.getMessage());
+                // pull the JSON out of listener message
+                .map(rawMessage -> (JsonObject)rawMessage.getMessage())
+                // filter for this address
+                .filter(json -> Address.createFromEncoded(json.get("meta").getAsJsonObject().get("address").getAsString()).equals(address))
+                // create transaction object
+                .map(json -> new CosignatureSignedTransaction(
+                      json.get("parentHash").getAsString(),
+                      json.get("signature").getAsString(),
+                      json.get("signer").getAsString()
+                ));
     }
 
     private void subscribeTo(String channel) {
