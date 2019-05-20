@@ -26,7 +26,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.slf4j.Logger;
@@ -74,6 +73,10 @@ public class E2EAggregateTest extends E2EBaseTest {
       logger.info("Mosaic X: {}", mosaicX.getIdAsHex());
       logger.info("Mosaic Y: {}", mosaicY.getIdAsHex());
       logger.info("Network currency is: {}", NetworkCurrencyMosaic.ID.getIdAsHex());
+      // signup for all events for addresses
+      signup(alice.getAddress());
+      signup(bob.getAddress());
+      signup(mike.getAddress());
    }
 
    @AfterAll
@@ -129,6 +132,7 @@ public class E2EAggregateTest extends E2EBaseTest {
       transactionHttp.announceAggregateBonded(signedEscrow).blockingFirst();
       // wait for escrow confirmation
       listener.aggregateBondedAdded(alice.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+
       // bob sign the escrow
       AggregateTransaction pendingEscrow = accountHttp.aggregateBondedTransactions(bob.getPublicAccount()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst().get(0);
       CosignatureSignedTransaction signedCosig = CosignatureTransaction.create(pendingEscrow).signWith(bob);
@@ -162,7 +166,6 @@ public class E2EAggregateTest extends E2EBaseTest {
    }
    
    @Test
-   @Disabled("not enough funds to cosig by bob?")
    void escrowBetweenThreeParties() {
       returnAllToSeed(alice);
       returnAllToSeed(bob);
@@ -171,7 +174,7 @@ public class E2EAggregateTest extends E2EBaseTest {
       sendMosaic(seedAccount, alice.getAddress(), NetworkCurrencyMosaic.createRelative(BigInteger.ONE));
       sendMosaic(seedAccount, bob.getAddress(), new Mosaic(mosaicY, BigInteger.TEN));
       sendMosaic(seedAccount, mike.getAddress(), NetworkCurrencyMosaic.createRelative(BigInteger.ONE));
-      logger.info("Escrow between {} and {}", alice, bob);
+      logger.info("Escrow between {}, {} and {}", alice, bob, mike);
       // send mosaic X from alice to bob
       TransferTransaction aliceToBob = TransferTransaction.create(getDeadline(),
             bob.getAddress(),
@@ -190,7 +193,7 @@ public class E2EAggregateTest extends E2EBaseTest {
             Arrays.asList(NetworkCurrencyMosaic.createRelative(BigInteger.ONE)),
             PlainMessage.Empty,
             getNetworkType());
-      // aggregate bonded with the 2 transactions - escrow
+      // aggregate bonded with the 3 transactions - escrow
       AggregateTransaction escrow = AggregateTransaction.createBonded(getDeadline(),
             Arrays.asList(
                   aliceToBob.toAggregate(alice.getPublicAccount()),
@@ -223,24 +226,23 @@ public class E2EAggregateTest extends E2EBaseTest {
       // bob announce the cosignature
       logger.info("announcing cosig bob");
       transactionHttp.announceAggregateBondedCosignature(signedCosigBob).blockingFirst();
-      // bob wait for cosignature
-      listener.confirmed(bob.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
       
-      // bob sign the escrow
+      // mike sign the escrow
       AggregateTransaction pendingEscrowMike = accountHttp.aggregateBondedTransactions(mike.getPublicAccount()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst().get(0);
       CosignatureSignedTransaction signedCosigMike = CosignatureTransaction.create(pendingEscrowMike).signWith(mike);
-      // bob announce the cosignature
+      // mike announce the cosignature
       logger.info("announcing cosig mike");
       transactionHttp.announceAggregateBondedCosignature(signedCosigMike).blockingFirst();
-      // bob wait for cosignature
-      listener.confirmed(mike.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
 
+      // wait for the transaction confirmation
+      listener.confirmed(alice.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      
       // test that alice has 11M X and 10 Y
       List<Mosaic> aliceMosaics = accountHttp.getAccountInfo(alice.getAddress()).blockingFirst().getMosaics();
       assertEquals(2, aliceMosaics.size());
       aliceMosaics.forEach(mosaic -> {
          if (mosaic.getId().getId().equals(mosaicX.getId())) {
-            assertEquals(BigInteger.valueOf(10_000_000), mosaic.getAmount());
+            assertEquals(BigInteger.valueOf(11_000_000), mosaic.getAmount());
          } else if (mosaic.getId().getId().equals(mosaicY.getId())) {
             assertEquals(BigInteger.TEN, mosaic.getAmount());
          } else {
@@ -257,7 +259,7 @@ public class E2EAggregateTest extends E2EBaseTest {
             fail("unexpected mosaic " + mosaic);
          }
       });
-      // test that bob got the 1M X
+      // test that mike has nothing
       List<Mosaic> mikeMosaics = accountHttp.getAccountInfo(mike.getAddress()).blockingFirst().getMosaics();
       assertTrue(mikeMosaics.isEmpty());
    }
