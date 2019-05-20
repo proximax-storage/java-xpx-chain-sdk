@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.proximax.sdk.infrastructure;
+package io.proximax.sdk.infrastructure.listener;
 
 public class ListenerMessage {
     private final ListenerChannel channel;

@@ -16,40 +16,34 @@
 
 package io.proximax.sdk.infrastructure;
 
-import java.math.BigInteger;
 import java.net.URL;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.StreamSupport;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import io.proximax.sdk.gen.model.UInt64DTO;
+import io.proximax.sdk.infrastructure.listener.ListenerChannel;
+import io.proximax.sdk.infrastructure.listener.ListenerMessage;
+import io.proximax.sdk.infrastructure.listener.ListenerMessageMapping;
+import io.proximax.sdk.infrastructure.listener.ListenerSubscribeMessage;
 import io.proximax.sdk.model.account.Address;
-import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.BlockInfo;
-import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.CosignatureSignedTransaction;
-import io.proximax.sdk.model.transaction.DeadlineBP;
 import io.proximax.sdk.model.transaction.Transaction;
 import io.proximax.sdk.model.transaction.TransactionStatusError;
 import io.proximax.sdk.model.transaction.TransferTransaction;
-import io.proximax.sdk.utils.dto.UInt64Utils;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
-import okio.ByteString;
 
 /**
  * Listener
@@ -59,9 +53,10 @@ import okio.ByteString;
 public class Listener {
     private final URL url;
     private final Subject<ListenerMessage> messageSubject;
-    private String UID;
+    private String uid;
     private WebSocket webSocket;
     private ObjectMapper objectMapper = new ObjectMapper();
+    private final ListenerMessageMapping mapping = new ListenerMessageMapping();
 
     /**
      * create new listener for specified node
@@ -86,113 +81,32 @@ public class Listener {
                 .url(this.url.toString() + "/ws")
                 .build();
 
-        OkHttpClient client = new OkHttpClient.Builder()
-                .build();
+        OkHttpClient client = new OkHttpClient.Builder().build();
 
         webSocket = client.newWebSocket(request, new WebSocketListener() {
-            @Override
-            public void onOpen(WebSocket webSocket, Response response) {
-                super.onOpen(webSocket, response);
-            }
-
-            @Override
-            public void onMessage(WebSocket webSocket, String text) {
-                super.onMessage(webSocket, text);
-                System.out.println("server: " + text);
-                JsonObject message = new Gson().fromJson(text, JsonObject.class);
-                if (message.has("uid")) {
-                    Listener.this.UID = message.get("uid").getAsString();
-                    future.complete(null);
-                } else if (message.has("transaction")) {
-                    Listener.this.messageSubject.onNext(new ListenerMessage(
-                            ListenerChannel.rawValueOf(message.getAsJsonObject("meta").get("channelName").getAsString()),
-                            new TransactionMapping().apply(new Gson().fromJson(message.toString(), com.google.gson.JsonObject.class))
-                    ));
-                } else if (message.has("block")) {
-                    final JsonObject meta = message.getAsJsonObject("meta");
-                    final JsonObject block = message.getAsJsonObject("block");
-                    int rawNetworkType = (int) Long.parseLong(Integer.toHexString(block.get("version").getAsInt()).substring(0, 2), 16);
-                    final NetworkType networkType;
-                    if (rawNetworkType == NetworkType.MIJIN_TEST.getValue()) networkType = NetworkType.MIJIN_TEST;
-                    else if (rawNetworkType == NetworkType.MIJIN.getValue()) networkType = NetworkType.MIJIN;
-                    else if (rawNetworkType == NetworkType.MAIN_NET.getValue()) networkType = NetworkType.MAIN_NET;
-                    else networkType = NetworkType.TEST_NET;
-
-                    final int version = (int) Long.parseLong(Integer.toHexString(block.get("version").getAsInt()).substring(2, 4), 16);
-                    Listener.this.messageSubject.onNext(new ListenerMessage(
-                            ListenerChannel.BLOCK,
-                            new BlockInfo(
-                                    meta.get("hash").getAsString(),
-                                    meta.get("generationHash").getAsString(),
-                                    Optional.empty(),
-                                    Optional.empty(),
-                                    block.get("signature").getAsString(),
-                                    new PublicAccount(block.get("signer").getAsString(), networkType),
-                                    networkType,
-                                    version,
-                                    block.get("type").getAsInt(),
-                                    extractBigInteger(block.getAsJsonArray("height")),
-                                    extractBigInteger(block.getAsJsonArray("timestamp")),
-                                    extractBigInteger(block.getAsJsonArray("difficulty")),
-                                    block.get("previousBlockHash").getAsString(),
-                                    block.get("blockTransactionsHash").getAsString()
-                            )
-                    ));
-                } else if (message.has("status")) {
-                    Listener.this.messageSubject.onNext(new ListenerMessage(
-                            ListenerChannel.STATUS,
-                            new TransactionStatusError(
-                                    message.get("hash").getAsString(),
-                                    message.get("status").getAsString(),
-                                    new DeadlineBP(extractBigInteger(message.getAsJsonArray("deadline")))
-                            )
-                    ));
-                } else if (message.has("meta") && message.get("meta").getAsJsonObject().has("hash")) {
-                    Listener.this.messageSubject.onNext(new ListenerMessage(
-                            ListenerChannel.rawValueOf(message.getAsJsonObject("meta").get("channelName").getAsString()),
-                            message.get("meta").getAsJsonObject().get("hash").getAsString()
-                    ));
-                } else if (message.has("parentHash")) {
-                    Listener.this.messageSubject.onNext(new ListenerMessage(
-                            ListenerChannel.COSIGNATURE,
-                            message
-                    ));
-                }
-
-            }
-
-            @Override
-            public void onMessage(WebSocket webSocket, ByteString bytes) {
-                super.onMessage(webSocket, bytes);
-            }
-
-            @Override
-            public void onClosing(WebSocket webSocket, int code, String reason) {
-                super.onClosing(webSocket, code, reason);
-
-            }
-
-            @Override
-            public void onClosed(WebSocket webSocket, int code, String reason) {
-                super.onClosed(webSocket, code, reason);
-            }
-
-            @Override
-            public void onFailure(WebSocket webSocket, Throwable t, Response response) {
-                super.onFailure(webSocket, t, response);
-            }
+           @Override
+           public void onMessage(WebSocket webSocket, String text) {
+               System.out.println("server: " + text);
+               JsonObject message = new Gson().fromJson(text, JsonObject.class);
+               if (message.has("uid")) {
+                   Listener.this.uid = message.get("uid").getAsString();
+                   future.complete(null);
+               } else {
+                  Listener.this.messageSubject.onNext(mapping.getMessage(text, message));
+               }
+           }
         });
 
         return future;
     }
 
     /**
-     * // TODO: should we remove it?
-     *
+     * UID of the listener as registered on server
+     * 
      * @return the UID connected to
      */
     public String getUID() {
-        return UID;
+        return uid;
     }
 
     /**
@@ -210,7 +124,7 @@ public class Listener {
      * @return an observable stream of BlockInfo
      */
     public Observable<BlockInfo> newBlock() {
-        this.subscribeTo(ListenerChannel.BLOCK.toString());
+        this.subscribeTo(ListenerChannel.BLOCK);
         return this.messageSubject
                 .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.BLOCK))
                 .map(rawMessage -> (BlockInfo) rawMessage.getMessage());
@@ -225,7 +139,7 @@ public class Listener {
      * @return an observable stream of Transaction with state confirmed
      */
     public Observable<Transaction> confirmed(final Address address) {
-        this.subscribeTo(ListenerChannel.CONFIRMED_ADDED.toString() + "/" + address.plain());
+        this.subscribeTo(ListenerChannel.CONFIRMED_ADDED, address);
         return this.messageSubject
                 .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.CONFIRMED_ADDED))
                 .map(rawMessage -> (Transaction) rawMessage.getMessage())
@@ -241,7 +155,7 @@ public class Listener {
      * @return an observable stream of Transaction with state unconfirmed
      */
     public Observable<Transaction> unconfirmedAdded(Address address) {
-        this.subscribeTo(ListenerChannel.UNCONFIRMED_ADDED + "/" + address.plain());
+        this.subscribeTo(ListenerChannel.UNCONFIRMED_ADDED, address);
         return this.messageSubject
                 .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.UNCONFIRMED_ADDED))
                 .map(rawMessage -> (Transaction) rawMessage.getMessage())
@@ -257,7 +171,7 @@ public class Listener {
      * @return an observable stream of Strings with the transaction hash
      */
     public Observable<String> unconfirmedRemoved(Address address) {
-        this.subscribeTo(ListenerChannel.UNCONFIRMED_REMOVED + "/" + address.plain());
+        this.subscribeTo(ListenerChannel.UNCONFIRMED_REMOVED, address);
         return this.messageSubject
                 .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.UNCONFIRMED_REMOVED))
                 .map(rawMessage -> (String) rawMessage.getMessage());
@@ -272,7 +186,7 @@ public class Listener {
      * @return an observable stream of AggregateTransaction with missing signatures state
      */
     public Observable<AggregateTransaction> aggregateBondedAdded(Address address) {
-        this.subscribeTo(ListenerChannel.AGGREGATE_BONDED_ADDED + "/" + address.plain());
+        this.subscribeTo(ListenerChannel.AGGREGATE_BONDED_ADDED, address);
         return this.messageSubject
                 .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.AGGREGATE_BONDED_ADDED))
                 .map(rawMessage -> (AggregateTransaction) rawMessage.getMessage())
@@ -288,7 +202,7 @@ public class Listener {
      * @return an observable stream of Strings with the transaction hash
      */
     public Observable<String> aggregateBondedRemoved(Address address) {
-        this.subscribeTo(ListenerChannel.AGGREGATE_BONDED_REMOVED + "/" + address.plain());
+        this.subscribeTo(ListenerChannel.AGGREGATE_BONDED_REMOVED, address);
         return this.messageSubject
                 .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.AGGREGATE_BONDED_REMOVED))
                 .map(rawMessage -> (String) rawMessage.getMessage());
@@ -303,7 +217,7 @@ public class Listener {
      * @return an observable stream of {@link TransactionStatusError}
      */
     public Observable<TransactionStatusError> status(Address address) {
-        this.subscribeTo(ListenerChannel.STATUS + "/" + address.plain());
+        this.subscribeTo(ListenerChannel.STATUS, address);
         return this.messageSubject
                 .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.STATUS))
                 .map(rawMessage -> (TransactionStatusError) rawMessage.getMessage());
@@ -318,7 +232,7 @@ public class Listener {
      * @return an observable stream of {@link CosignatureSignedTransaction}
      */
     public Observable<CosignatureSignedTransaction> cosignatureAdded(final Address address) {
-        this.subscribeTo(ListenerChannel.COSIGNATURE + "/" + address.plain());
+        this.subscribeTo(ListenerChannel.COSIGNATURE, address);
         return this.messageSubject
                 // filter to cosignatures
                 .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.COSIGNATURE))
@@ -334,22 +248,30 @@ public class Listener {
                 ));
     }
 
-    private void subscribeTo(String channel) {
-        final ListenerSubscribeMessage subscribeMessage = new ListenerSubscribeMessage(this.UID, channel);
-        String json;
-        try {
-            json = objectMapper.writeValueAsString(subscribeMessage);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e.getCause());
-        }
-        this.webSocket.send(json);
+    private void subscribeTo(ListenerChannel channel) {
+       subscribeTo(channel, Optional.empty());
     }
-
-    private BigInteger extractBigInteger(JsonArray input) {
-        UInt64DTO uInt64DTO = new UInt64DTO();
-        StreamSupport.stream(input.spliterator(), false).forEach(item -> uInt64DTO.add(new Long(item.toString())));
-        return UInt64Utils.toBigInt(uInt64DTO);
+    
+    private void subscribeTo(ListenerChannel channel, Address address) {
+       subscribeTo(channel, Optional.of(address));
     }
+    
+    private void subscribeTo(ListenerChannel channel, Optional<Address> address) {
+      String channelPath;
+      if (address.isPresent()) {
+         channelPath = channel.getCode() + '/' + address.get().plain();
+      } else {
+         channelPath = channel.getCode();
+      }
+      final ListenerSubscribeMessage subscribeMessage = new ListenerSubscribeMessage(this.uid, channelPath);
+      String json;
+      try {
+         json = objectMapper.writeValueAsString(subscribeMessage);
+      } catch (JsonProcessingException e) {
+         throw new RuntimeException(e.getCause());
+      }
+      this.webSocket.send(json);
+   }
 
     private boolean transactionFromAddress(final Transaction transaction, final Address address) {
         AtomicBoolean transactionFromAddress = new AtomicBoolean(this.transactionHasSignerOrReceptor(transaction, address));

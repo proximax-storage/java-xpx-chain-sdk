@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.proximax.sdk.infrastructure;
+package io.proximax.sdk.infrastructure.listener;
 
 public class ListenerSubscribeMessage {
     final private String uid;
