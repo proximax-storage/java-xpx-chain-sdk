@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 
@@ -58,7 +57,8 @@ class TransferTransactionTest {
 
         assertEquals(NetworkType.MIJIN_TEST, transferTx.getNetworkType());
         assertTrue(3 == transferTx.getVersion());
-        assertTrue(LocalDateTime.now().isBefore(transferTx.getDeadline().getLocalDateTime()));
+        long nowSinceNemesis = new Deadline(0, ChronoUnit.SECONDS).getInstant();
+        assertTrue(nowSinceNemesis < transferTx.getDeadline().getInstant());
         assertEquals(BigInteger.valueOf(0), transferTx.getFee());
         assertTrue(new Address("SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.MIJIN_TEST)
                 .equals(transferTx.getRecipient()));

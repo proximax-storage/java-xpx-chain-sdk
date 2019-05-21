@@ -18,14 +18,18 @@ package io.proximax.sdk.model.metadata;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
-import io.proximax.sdk.infrastructure.model.UInt64DTO;
-import io.proximax.sdk.infrastructure.utils.UInt64Utils;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import io.proximax.sdk.gen.model.UInt64DTO;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.namespace.NamespaceId;
-import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
  * Mapper for metadata types
@@ -53,9 +57,9 @@ public class MetadataMapper {
     * @return metadata instance
     */
    public static Metadata mapToObject(JsonObject json) {
-      JsonObject meta = json.getJsonObject(META_KEY_METADATA);
-      MetadataType type = MetadataType.getByCode(meta.getInteger(META_KEY_TYPE));
-      List<Field> fields = loadFields(meta.getJsonArray(META_KEY_FIELDS));
+      JsonObject meta = json.getAsJsonObject(META_KEY_METADATA);
+      MetadataType type = MetadataType.getByCode(meta.get(META_KEY_TYPE).getAsInt());
+      List<Field> fields = loadFields(meta.getAsJsonArray(META_KEY_FIELDS));
       switch (type) {
       case NONE:
          return getNoneMetadata(fields);
@@ -87,7 +91,7 @@ public class MetadataMapper {
     * @return the metadata instance
     */
    private static Metadata getAddressMetadata(List<Field> fields, JsonObject json) {
-      return new AddressMetadata(fields, Address.createFromEncoded(json.getString(META_KEY_ID)));
+      return new AddressMetadata(fields, Address.createFromEncoded(json.get(META_KEY_ID).getAsString()));
    }
    
    /**
@@ -97,7 +101,7 @@ public class MetadataMapper {
     * @return the metadata instance
     */
    private static Metadata getMosaicMetadata(List<Field> fields, JsonObject json) {
-      return new MosaicMetadata(fields, new MosaicId(extractBigInteger(json.getJsonArray(META_KEY_ID))));
+      return new MosaicMetadata(fields, new MosaicId(extractBigInteger(json.getAsJsonArray(META_KEY_ID))));
    }
    
    /**
@@ -107,7 +111,7 @@ public class MetadataMapper {
     * @return the metadata instance
     */
    private static Metadata getNamespaceMetadata(List<Field> fields, JsonObject json) {
-      return new NamespaceMetadata(fields, new NamespaceId(extractBigInteger(json.getJsonArray(META_KEY_ID))));
+      return new NamespaceMetadata(fields, new NamespaceId(extractBigInteger(json.getAsJsonArray(META_KEY_ID))));
    }
    
    /**
@@ -118,8 +122,8 @@ public class MetadataMapper {
     */
    private static BigInteger extractBigInteger(JsonArray json) {
       UInt64DTO uint = new UInt64DTO();
-      uint.add(json.getLong(0));
-      uint.add(json.getLong(1));
+      uint.add(json.get(0).getAsLong());
+      uint.add(json.get(1).getAsLong());
       return UInt64Utils.toBigInt(uint);
    }
    
@@ -130,9 +134,19 @@ public class MetadataMapper {
     * @return List of fields
     */
    private static List<Field> loadFields(JsonArray jsonFields) {
-      return jsonFields.stream()
-         .map( obj -> (JsonObject)obj)
-         .map(json -> new Field(json.getString(META_KEY_FIELD_KEY), json.getString(META_KEY_FIELD_VALUE)))
+      return stream(jsonFields)
+         .map( obj -> obj.getAsJsonObject())
+         .map(json -> new Field(json.get(META_KEY_FIELD_KEY).getAsString(), json.get(META_KEY_FIELD_VALUE).getAsString()))
          .collect(Collectors.toList());
+   }
+   
+   /**
+    * convert JSON array to stream of JSON elements
+    * 
+    * @param jsonArr array with elements
+    * @return stream of elements
+    */
+   public static Stream<JsonElement> stream(JsonArray jsonArr) {
+      return StreamSupport.stream(jsonArr.spliterator(), false);
    }
 }

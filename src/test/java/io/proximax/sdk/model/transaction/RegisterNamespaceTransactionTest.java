@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import org.junit.jupiter.api.Disabled;
@@ -45,7 +44,8 @@ class RegisterNamespaceTransactionTest {
 
         assertEquals(NetworkType.MIJIN_TEST, registerNamespaceTransaction.getNetworkType());
         assertTrue(2 == registerNamespaceTransaction.getVersion());
-        assertTrue(LocalDateTime.now().isBefore(registerNamespaceTransaction.getDeadline().getLocalDateTime()));
+        long nowSinceNemesis = new Deadline(0, ChronoUnit.SECONDS).getInstant();
+        assertTrue(nowSinceNemesis < registerNamespaceTransaction.getDeadline().getInstant());
         assertEquals(BigInteger.valueOf(0), registerNamespaceTransaction.getFee());
         assertEquals("prx", registerNamespaceTransaction.getNamespaceName());
         assertEquals(NamespaceType.RootNamespace, registerNamespaceTransaction.getNamespaceType());
@@ -64,7 +64,8 @@ class RegisterNamespaceTransactionTest {
 
         assertEquals(NetworkType.MIJIN_TEST, registerNamespaceTransaction.getNetworkType());
         assertTrue(2 == registerNamespaceTransaction.getVersion());
-        assertTrue(LocalDateTime.now().isBefore(registerNamespaceTransaction.getDeadline().getLocalDateTime()));
+        long nowSinceNemesis = new Deadline(0, ChronoUnit.SECONDS).getInstant();
+        assertTrue(nowSinceNemesis < registerNamespaceTransaction.getDeadline().getInstant());
         assertEquals(BigInteger.valueOf(0), registerNamespaceTransaction.getFee());
         assertEquals("newnamespace", registerNamespaceTransaction.getNamespaceName());
         assertEquals(NamespaceType.SubNamespace, registerNamespaceTransaction.getNamespaceType());

@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -30,6 +31,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import io.proximax.sdk.BaseTest;
+import io.proximax.sdk.BlockchainApi;
+import io.proximax.sdk.NamespaceRepository;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.namespace.NamespaceId;
@@ -43,14 +46,14 @@ class NamespaceHttpTest extends BaseTest {
    protected static final String NAMESPACE_CATAPULT_NAME = "cat";
    protected static final NamespaceId CATAPULT_NAMESPACE_ID = new NamespaceId(NAMESPACE_CATAPULT_NAME);
    
-   private NamespaceHttp namespaceHttp;
+   private NamespaceRepository namespaceHttp;
    private Account seedAccount;
    private Address king = Address
          .createFromPublicKey("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", getNetworkType());
 
    @BeforeAll
    void setup() throws IOException {
-      namespaceHttp = new NamespaceHttp(this.getNodeUrl());
+      namespaceHttp = new BlockchainApi(new URL(getNodeUrl()), getNetworkType()).createNamespaceRepository();
       seedAccount = getSeedAccount();
    }
 

@@ -19,9 +19,8 @@ package io.proximax.core.crypto;
 import java.security.MessageDigest;
 import java.security.Security;
 
-import org.bouncycastle.jcajce.provider.digest.Keccak;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.util.encoders.Hex;
+import org.spongycastle.jcajce.provider.digest.Keccak;
+import org.spongycastle.jce.provider.BouncyCastleProvider;
 
 import io.proximax.core.utils.ExceptionUtils;
 
@@ -122,9 +121,11 @@ public class Hashes {
      */
     public static byte[] hash160(final byte[]... inputs) {
 
-        byte[] hashed_sha256 = hash("SHA256", inputs);
-
-        return hash("RIPEMD160", Hex.toHexString(hashed_sha256).getBytes() );
+        byte[] hashedSha256 = hash("SHA256", inputs);
+        byte[] hashedRimemd160 = hash("RIPEMD160", hashedSha256);
+        byte[] result = new byte[32];
+        System.arraycopy(hashedRimemd160, 0, result, 0, hashedRimemd160.length);
+        return result;
     }
 
     /**
@@ -135,16 +136,13 @@ public class Hashes {
      * @throws CryptoException if the hash operation failed.
      */
     public static byte[] hash256(final byte[]... inputs) {
-
-        byte[] hashed_sha256 = hash("SHA256", inputs);
-
-        return hash("SHA256", Hex.toHexString(hashed_sha256).getBytes() );
+        return hash("SHA256", hash("SHA256", inputs));
     }
 
     private static byte[] hash(final String algorithm, final byte[]... inputs) {
         return ExceptionUtils.propagate(
                 () -> {
-                    final MessageDigest digest = MessageDigest.getInstance(algorithm, "BC");
+                    final MessageDigest digest = MessageDigest.getInstance(algorithm, "SC");
 
                     for (final byte[] input : inputs) {
                         digest.update(input);

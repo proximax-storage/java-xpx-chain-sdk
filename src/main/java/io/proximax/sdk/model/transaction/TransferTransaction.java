@@ -17,20 +17,22 @@
 package io.proximax.sdk.model.transaction;
 
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.codec.binary.Base32;
 import org.apache.commons.lang3.Validate;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 
-import io.proximax.sdk.infrastructure.utils.UInt64Utils;
+import io.proximax.core.utils.Base32Encoder;
+import io.proximax.sdk.gen.buffers.MessageBuffer;
+import io.proximax.sdk.gen.buffers.MosaicBuffer;
+import io.proximax.sdk.gen.buffers.TransferTransactionBuffer;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.Mosaic;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
  * The transfer transactions object contain data about transfers of mosaics and message to another account.
@@ -43,15 +45,15 @@ public class TransferTransaction extends Transaction {
     private final Message message;
     private final Schema schema = new TransferTransactionSchema();
 
-    public TransferTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, Address recipient, List<Mosaic> mosaics, Message message, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
+    public TransferTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, Address recipient, List<Mosaic> mosaics, Message message, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
         this(networkType, version, deadline, fee, recipient, mosaics, message, Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo));
     }
 
-    public TransferTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, Address recipient, List<Mosaic> mosaics, Message message) {
+    public TransferTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, Address recipient, List<Mosaic> mosaics, Message message) {
         this(networkType, version, deadline, fee, recipient, mosaics, message, Optional.empty(), Optional.empty(), Optional.empty());
     }
 
-    private TransferTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, Address recipient, List<Mosaic> mosaics, Message message, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
+    private TransferTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, Address recipient, List<Mosaic> mosaics, Message message, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
         super(TransactionType.TRANSFER, networkType, version, deadline, fee, signature, signer, transactionInfo);
         Validate.notNull(recipient, "Recipient must not be null");
         Validate.notNull(mosaics, "Mosaics must not be null");
@@ -71,7 +73,7 @@ public class TransferTransaction extends Transaction {
      * @param networkType - The network type.
      * @return a TransferTransaction instance
      */
-    public static TransferTransaction create(Deadline deadline, Address recipient, List<Mosaic> mosaics, Message message, NetworkType networkType) {
+    public static TransferTransaction create(TransactionDeadline deadline, Address recipient, List<Mosaic> mosaics, Message message, NetworkType networkType) {
         return new TransferTransaction(networkType, 3, deadline, BigInteger.valueOf(0), recipient, mosaics, message);
     }
 
@@ -128,7 +130,7 @@ public class TransferTransaction extends Transaction {
             mosaicBuffers[i] = MosaicBuffer.endMosaicBuffer(builder);
         }
 
-        byte[] address = new Base32().decode(getRecipient().plain().getBytes(StandardCharsets.UTF_8));
+        byte[] address = Base32Encoder.getBytes(getRecipient().plain());
         // Create Vectors
         int signatureVector = TransferTransactionBuffer.createSignatureVector(builder, new byte[64]);
         int signerVector = TransferTransactionBuffer.createSignerVector(builder, new byte[32]);

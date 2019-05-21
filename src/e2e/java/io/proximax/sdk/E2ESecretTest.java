@@ -22,13 +22,12 @@ import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.codec.binary.Hex;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.spongycastle.util.encoders.Hex;
 
 import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.model.account.Account;
@@ -71,13 +70,11 @@ public class E2ESecretTest extends E2EBaseTest {
    }
 
    @Test
-   @Disabled("not supported at the moment")
    void standaloneSecretLockAndProofTransaction_HASH_160() throws ExecutionException, InterruptedException {
       standaloneSecretLockAndProofTransaction(seedAccount, simpleAccount.getAddress(), HashType.HASH_160);
    }
 
    @Test
-   @Disabled("not supported at the moment")
    void standaloneSecretLockAndProofTransaction_HASH_256() throws ExecutionException, InterruptedException {
       standaloneSecretLockAndProofTransaction(seedAccount, simpleAccount.getAddress(), HashType.HASH_256);
    }
@@ -87,8 +84,8 @@ public class E2ESecretTest extends E2EBaseTest {
       byte[] secretBytes = new byte[20];
       new Random().nextBytes(secretBytes);
       byte[] result = hashType.hashValue(secretBytes);
-      String secret = Hex.encodeHexString(result);
-      String proof = Hex.encodeHexString(secretBytes);
+      String secret = Hex.toHexString(result);
+      String proof = Hex.toHexString(secretBytes);
       // make a secret lock moving mosaic to the target account
       SecretLockTransaction secretLocktx = SecretLockTransaction.create(getDeadline(),
             NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(1)),
@@ -121,13 +118,11 @@ public class E2ESecretTest extends E2EBaseTest {
    }
    
    @Test
-   @Disabled("not supported at the moment")
    void aggregateSecretLockAndProofTransaction_HASH_160() {
       aggregateSecretLockAndProofTransaction(seedAccount, simpleAccount.getAddress(), HashType.HASH_160);
    }
    
    @Test
-   @Disabled("not supported at the moment")
    void aggregateSecretLockAndProofTransaction_HASH_256() {
       aggregateSecretLockAndProofTransaction(seedAccount, simpleAccount.getAddress(), HashType.HASH_256);
    }
@@ -137,8 +132,8 @@ public class E2ESecretTest extends E2EBaseTest {
       byte[] secretBytes = new byte[20];
       new Random().nextBytes(secretBytes);
       byte[] result = hashType.hashValue(secretBytes);
-      String secret = Hex.encodeHexString(result);
-      String proof = Hex.encodeHexString(secretBytes);
+      String secret = Hex.toHexString(result);
+      String proof = Hex.toHexString(secretBytes);
       // make a secret lock moving mosaic to the target account
       SecretLockTransaction secretLocktx = SecretLockTransaction.create(getDeadline(),
             NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(1)),

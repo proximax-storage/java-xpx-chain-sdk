@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import org.junit.jupiter.api.Test;
@@ -34,7 +33,8 @@ public class TransactionStatusTest {
         assertEquals("confirmed", transactionStatus.getGroup());
         assertEquals("Success", transactionStatus.getStatus());
         assertEquals("B6C7648A3DDF71415650805E9E7801424FE03BBEE7D21F9C57B60220D3E95B2F", transactionStatus.getHash());
-        assertTrue(LocalDateTime.now().isBefore(transactionStatus.getDeadline().getLocalDateTime()));
+        long nowSinceNemesis = new Deadline(0, ChronoUnit.SECONDS).getInstant();
+        assertTrue(nowSinceNemesis < transactionStatus.getDeadline().getInstant());
         assertEquals(new BigInteger("121855"), transactionStatus.getHeight());
     }
 }

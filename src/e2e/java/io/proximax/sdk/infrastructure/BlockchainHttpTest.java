@@ -16,37 +16,36 @@
 
 package io.proximax.sdk.infrastructure;
 
-import io.proximax.sdk.BaseTest;
-import io.proximax.sdk.infrastructure.BlockchainHttp;
-import io.proximax.sdk.infrastructure.QueryParams;
-import io.proximax.sdk.model.blockchain.BlockInfo;
-import io.proximax.sdk.model.blockchain.BlockchainStorageInfo;
-import io.proximax.sdk.model.mosaic.MosaicId;
-import io.proximax.sdk.model.mosaic.MosaicInfo;
-import io.proximax.sdk.model.transaction.Transaction;
-import io.reactivex.observers.TestObserver;
-import io.reactivex.schedulers.Schedulers;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.IOException;
+import java.math.BigInteger;
+import java.net.URL;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import java.io.IOException;
-import java.math.BigInteger;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import io.proximax.sdk.BaseTest;
+import io.proximax.sdk.BlockchainApi;
+import io.proximax.sdk.BlockchainRepository;
+import io.proximax.sdk.model.blockchain.BlockInfo;
+import io.proximax.sdk.model.blockchain.BlockchainStorageInfo;
+import io.proximax.sdk.model.transaction.Transaction;
+import io.reactivex.observers.TestObserver;
+import io.reactivex.schedulers.Schedulers;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class BlockchainHttpTest extends BaseTest {
-    private BlockchainHttp blockchainHttp;
+    private BlockchainRepository blockchainHttp;
 
     @BeforeAll
     void setup() throws IOException {
-        blockchainHttp = new BlockchainHttp(this.getNodeUrl());
+        blockchainHttp = new BlockchainApi(new URL(this.getNodeUrl()), getNetworkType()).createBlockchainRepository();
     }
 
     @Test

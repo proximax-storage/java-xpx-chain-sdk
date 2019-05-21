@@ -20,13 +20,14 @@ import java.math.BigInteger;
 import java.util.Optional;
 
 import org.apache.commons.lang3.Validate;
-import org.bouncycastle.util.encoders.Hex;
+import org.spongycastle.util.encoders.Hex;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 
-import io.proximax.sdk.infrastructure.utils.UInt64Utils;
+import io.proximax.sdk.gen.buffers.SecretProofTransactionBuffer;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 
 public class SecretProofTransaction extends Transaction {
     private final HashType hashType;
@@ -34,15 +35,15 @@ public class SecretProofTransaction extends Transaction {
     private final String proof;
     private final Schema schema = new SecretProofTransactionSchema();
 
-    public SecretProofTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, HashType hashType, String secret, String proof, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
+    public SecretProofTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, HashType hashType, String secret, String proof, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
         this(networkType, version, deadline, fee, hashType, secret, proof, Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo));
     }
 
-    public SecretProofTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, HashType hashType, String secret, String proof) {
+    public SecretProofTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, HashType hashType, String secret, String proof) {
         this(networkType, version, deadline, fee, hashType, secret, proof, Optional.empty(), Optional.empty(), Optional.empty());
     }
 
-    public SecretProofTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, HashType hashType, String secret, String proof, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
+    public SecretProofTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, HashType hashType, String secret, String proof, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
         super(TransactionType.SECRET_PROOF, networkType, version, deadline, fee, signature, signer, transactionInfo);
         Validate.notNull(secret, "Secret must not be null");
         Validate.notNull(proof, "Proof must not be null");
@@ -65,7 +66,7 @@ public class SecretProofTransaction extends Transaction {
      *
      * @return a SecretLockTransaction instance
      */
-    public static SecretProofTransaction create(Deadline deadline, HashType hashType, String secret, String proof, NetworkType networkType) {
+    public static SecretProofTransaction create(TransactionDeadline deadline, HashType hashType, String secret, String proof, NetworkType networkType) {
         return new SecretProofTransaction(networkType, 1, deadline, BigInteger.valueOf(0), hashType, secret, proof);
     }
 

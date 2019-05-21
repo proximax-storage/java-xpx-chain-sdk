@@ -23,15 +23,16 @@ import java.util.Optional;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Validate;
-import org.bouncycastle.util.encoders.Hex;
+import org.spongycastle.util.encoders.Hex;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 
 import io.proximax.core.crypto.Signer;
-import io.proximax.sdk.infrastructure.utils.UInt64Utils;
+import io.proximax.sdk.gen.buffers.AggregateTransactionBuffer;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
  * The aggregate innerTransactions contain multiple innerTransactions that can be initiated by different accounts.
@@ -43,15 +44,15 @@ public class AggregateTransaction extends Transaction {
     private final List<AggregateTransactionCosignature> cosignatures;
     private final Schema schema = new AggregateTransactionSchema();
 
-    public AggregateTransaction(NetworkType networkType, TransactionType transactionType, Integer version, Deadline deadline, BigInteger fee, List<Transaction> innerTransactions, List<AggregateTransactionCosignature> cosignatures, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
+    public AggregateTransaction(NetworkType networkType, TransactionType transactionType, Integer version, TransactionDeadline deadline, BigInteger fee, List<Transaction> innerTransactions, List<AggregateTransactionCosignature> cosignatures, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
         this(networkType, transactionType, version, deadline, fee, innerTransactions, cosignatures, Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo));
     }
 
-    public AggregateTransaction(NetworkType networkType, TransactionType transactionType, Integer version, Deadline deadline, BigInteger fee, List<Transaction> innerTransactions, List<AggregateTransactionCosignature> cosignatures) {
+    public AggregateTransaction(NetworkType networkType, TransactionType transactionType, Integer version, TransactionDeadline deadline, BigInteger fee, List<Transaction> innerTransactions, List<AggregateTransactionCosignature> cosignatures) {
         this(networkType, transactionType, version, deadline, fee, innerTransactions, cosignatures, Optional.empty(), Optional.empty(), Optional.empty());
     }
 
-    private AggregateTransaction(NetworkType networkType, TransactionType transactionType, Integer version, Deadline deadline, BigInteger fee, List<Transaction> innerTransactions, List<AggregateTransactionCosignature> cosignatures, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
+    private AggregateTransaction(NetworkType networkType, TransactionType transactionType, Integer version, TransactionDeadline deadline, BigInteger fee, List<Transaction> innerTransactions, List<AggregateTransactionCosignature> cosignatures, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
         super(transactionType, networkType, version, deadline, fee, signature, signer, transactionInfo);
         Validate.notNull(innerTransactions, "InnerTransactions must not be null");
         Validate.notNull(cosignatures, "Cosignatures must not be null");
@@ -67,7 +68,7 @@ public class AggregateTransaction extends Transaction {
      * @param networkType       The network type.
      * @return {@link AggregateTransaction}
      */
-    public static AggregateTransaction createComplete(Deadline deadline, List<Transaction> innerTransactions, NetworkType networkType) {
+    public static AggregateTransaction createComplete(TransactionDeadline deadline, List<Transaction> innerTransactions, NetworkType networkType) {
         return new AggregateTransaction(networkType, TransactionType.AGGREGATE_COMPLETE,2, deadline, BigInteger.valueOf(0), innerTransactions, new ArrayList<>());
     }
 
@@ -79,7 +80,7 @@ public class AggregateTransaction extends Transaction {
      * @param networkType       The network type.
      * @return {@link AggregateTransaction}
      */
-    public static AggregateTransaction createBonded(Deadline deadline, List<Transaction> innerTransactions, NetworkType networkType) {
+    public static AggregateTransaction createBonded(TransactionDeadline deadline, List<Transaction> innerTransactions, NetworkType networkType) {
         return new AggregateTransaction(networkType, TransactionType.AGGREGATE_BONDED,2, deadline, BigInteger.valueOf(0), innerTransactions, new ArrayList<>());
     }
 

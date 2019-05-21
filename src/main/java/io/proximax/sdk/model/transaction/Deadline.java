@@ -18,8 +18,6 @@ package io.proximax.sdk.model.transaction;
 
 import java.math.BigInteger;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 
 /**
@@ -28,12 +26,12 @@ import java.time.temporal.ChronoUnit;
  *
  * @since 1.0
  */
-public class Deadline {
+public class Deadline implements TransactionDeadline {
 
     /**
      * Nemesis block timestamp.
      */
-    public static Instant TIMESTAMP_NEMSIS_BLOCK = Instant.ofEpochSecond(1459468800);
+    public static final Instant TIMESTAMP_NEMSIS_BLOCK = Instant.ofEpochSecond(MILLIS_OF_NEMESIS);
     private final Instant instant;
 
     /**
@@ -66,32 +64,9 @@ public class Deadline {
         return new Deadline(units, chronoUnit);
     }
 
-    /**
-     * Returns number of seconds elapsed since the creation of the nemesis block.
-     *
-     * @return long
-     */
+    @Override
     public long getInstant() {
-        return instant.toEpochMilli() - Deadline.TIMESTAMP_NEMSIS_BLOCK.toEpochMilli();
-    }
-
-    /**
-     * Returns deadline as local date time in a given timezone.
-     *
-     * @param zoneId Timezone
-     * @return LocalDateTime
-     */
-    public LocalDateTime getLocalDateTime(ZoneId zoneId) {
-        return LocalDateTime.ofInstant(instant, zoneId);
-    }
-
-    /**
-     * Returns deadline as local date time.
-     *
-     * @return LocalDateTime
-     */
-    public LocalDateTime getLocalDateTime() {
-        return getLocalDateTime(ZoneId.systemDefault());
+       return instant.toEpochMilli() - Deadline.TIMESTAMP_NEMSIS_BLOCK.toEpochMilli();
     }
 
    @Override

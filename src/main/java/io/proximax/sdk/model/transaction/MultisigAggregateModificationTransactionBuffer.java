@@ -24,6 +24,8 @@ import java.nio.ByteOrder;
 import com.google.flatbuffers.FlatBufferBuilder;
 import com.google.flatbuffers.Table;
 
+import io.proximax.sdk.gen.buffers.CosignatoryModificationBuffer;
+
 @SuppressWarnings("unused")
 final class MultisigAggregateModificationTransactionBuffer extends Table {
     public static MultisigAggregateModificationTransactionBuffer getRootAsMultisigAggregateModificationTransactionBuffer(ByteBuffer _bb) {

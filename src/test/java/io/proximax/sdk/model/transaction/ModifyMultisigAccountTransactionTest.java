@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Collections;
@@ -49,7 +48,8 @@ class ModifyMultisigAccountTransactionTest {
 
         assertEquals(NetworkType.MIJIN_TEST, modifyMultisigAccountTransaction.getNetworkType());
         assertTrue(3 == modifyMultisigAccountTransaction.getVersion());
-        assertTrue(LocalDateTime.now().isBefore(modifyMultisigAccountTransaction.getDeadline().getLocalDateTime()));
+        long nowSinceNemesis = new Deadline(0, ChronoUnit.SECONDS).getInstant();
+        assertTrue(nowSinceNemesis < modifyMultisigAccountTransaction.getDeadline().getInstant());
         assertEquals(BigInteger.valueOf(0), modifyMultisigAccountTransaction.getFee());
         assertEquals(2, modifyMultisigAccountTransaction.getMinApprovalDelta());
         assertEquals(1, modifyMultisigAccountTransaction.getMinRemovalDelta());

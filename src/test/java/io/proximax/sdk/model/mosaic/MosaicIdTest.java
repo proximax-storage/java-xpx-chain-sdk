@@ -23,7 +23,7 @@ import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
 
-import io.proximax.sdk.infrastructure.utils.UInt64Utils;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 
 class MosaicIdTest {
 	private static final MosaicNonce NONCE = new MosaicNonce(new byte[4]);

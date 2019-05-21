@@ -19,8 +19,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import com.google.gson.JsonElement;
+
 import io.proximax.sdk.ResourceBasedTest;
-import io.vertx.core.json.JsonObject;
+import io.proximax.sdk.utils.GsonUtils;
 
 /**
  * test for metadata mapper
@@ -29,8 +31,8 @@ class MetadataMapperTest extends ResourceBasedTest {
 
    @Test
    void test() {
-      long count = getResources("metadata", "dtos", "metadatas").stream()
-         .map(obj -> (JsonObject)obj)
+      long count = GsonUtils.stream(getResources("metadata", "dtos", "metadatas"))
+         .map(JsonElement::getAsJsonObject)
          .map(MetadataMapper::mapToObject)
          .count();
       assertEquals(3, count);

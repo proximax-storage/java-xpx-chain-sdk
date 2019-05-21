@@ -21,7 +21,7 @@ import java.util.Optional;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Validate;
-import org.bouncycastle.util.encoders.Hex;
+import org.spongycastle.util.encoders.Hex;
 
 import io.proximax.core.crypto.Hashes;
 import io.proximax.core.crypto.Signature;
@@ -39,7 +39,7 @@ public abstract class Transaction {
     private final TransactionType type;
     private final NetworkType networkType;
     private final Integer version;
-    private final Deadline deadline;
+    private final TransactionDeadline deadline;
     private final BigInteger fee;
     private final Optional<String> signature;
     private Optional<PublicAccount> signer;
@@ -57,7 +57,7 @@ public abstract class Transaction {
      * @param signer          Transaction signer.
      * @param transactionInfo Transaction meta data info.
      */
-    public Transaction(TransactionType type, NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
+    public Transaction(TransactionType type, NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
         Validate.notNull(type, "Type must not be null");
         Validate.notNull(networkType, "NetworkType must not be null");
         Validate.notNull(version, "Version must not be null");
@@ -122,7 +122,7 @@ public abstract class Transaction {
      *
      * @return deadline to include transaction into a block.
      */
-    public Deadline getDeadline() {
+    public TransactionDeadline getDeadline() {
         return deadline;
     }
 

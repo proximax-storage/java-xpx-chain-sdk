@@ -16,6 +16,7 @@
 
 package io.proximax.sdk.model.mosaic;
 
+import static io.proximax.sdk.utils.GsonUtils.stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigInteger;
@@ -25,11 +26,13 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import io.proximax.sdk.ResourceBasedTest;
-import io.proximax.sdk.infrastructure.model.UInt64DTO;
-import io.proximax.sdk.infrastructure.utils.UInt64Utils;
-import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
+import io.proximax.sdk.gen.model.UInt64DTO;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 
 class MosaicNameTest extends ResourceBasedTest {
 
@@ -44,8 +47,8 @@ class MosaicNameTest extends ResourceBasedTest {
     
     @Test
     void validateMapper() {
-       long count = getResources("mosaic_names", "dtos", "names").stream()
-       .map(obj -> (JsonObject)obj)
+       long count = stream(getResources("mosaic_names", "dtos", "names"))
+       .map(JsonElement::getAsJsonObject)
        .map(json -> new MosaicNames(
              getMosaicID(json),
              getNames(json)))
@@ -54,16 +57,16 @@ class MosaicNameTest extends ResourceBasedTest {
     }
     
     private static MosaicId getMosaicID(JsonObject json) {
-       JsonArray ints = json.getJsonArray("mosaicId");
+       JsonArray ints = json.get("mosaicId").getAsJsonArray();
        UInt64DTO dto = new UInt64DTO();
-       dto.add(ints.getLong(0));
-       dto.add(ints.getLong(1));
+       dto.add(ints.get(0).getAsLong());
+       dto.add(ints.get(1).getAsLong());
        return new MosaicId(UInt64Utils.toBigInt(dto));
     }
     
     private static List<String> getNames(JsonObject json) {
-       return json.getJsonArray("names").stream()
-             .map(obj -> (String)obj)
+       return stream(json.get("names").getAsJsonArray())
+             .map(el -> el.getAsString())
              .collect(Collectors.toList());
     }
 }

@@ -17,21 +17,21 @@
 package io.proximax.sdk.model.transaction;
 
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-import org.apache.commons.codec.binary.Base32;
 import org.apache.commons.lang3.Validate;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 
-import io.proximax.sdk.infrastructure.utils.UInt64Utils;
+import io.proximax.core.utils.Base32Encoder;
+import io.proximax.sdk.gen.buffers.AliasTransactionBuffer;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.alias.AliasAction;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.namespace.NamespaceId;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
  * Transaction defining alias for mosaic or for account
@@ -43,20 +43,20 @@ public class AliasTransaction extends Transaction {
    private final AliasAction aliasAction;
    private final Schema schema = new AliasTransactionSchema();
 
-   public AliasTransaction(TransactionType transactionType, NetworkType networkType, Integer version, Deadline deadline, BigInteger fee,
+   public AliasTransaction(TransactionType transactionType, NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee,
          Optional<MosaicId> mosaicId, Optional<Address> address, NamespaceId namespaceId, AliasAction action, String signature, PublicAccount signer,
          TransactionInfo transactionInfo) {
       this(transactionType, networkType, version, deadline, fee, mosaicId, address, namespaceId, action, Optional.of(signature),
             Optional.of(signer), Optional.of(transactionInfo));
    }
 
-   public AliasTransaction(TransactionType transactionType, NetworkType networkType, Integer version, Deadline deadline, BigInteger fee,
+   public AliasTransaction(TransactionType transactionType, NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee,
          Optional<MosaicId> mosaicId, Optional<Address> address, NamespaceId namespaceId, AliasAction action) {
       this(transactionType, networkType, version, deadline, fee, mosaicId, address, namespaceId, action, Optional.empty(), Optional.empty(),
             Optional.empty());
    }
 
-   private AliasTransaction(TransactionType transactionType, NetworkType networkType, Integer version, Deadline deadline, BigInteger fee,
+   private AliasTransaction(TransactionType transactionType, NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee,
          Optional<MosaicId> mosaicId, Optional<Address> address, NamespaceId namespaceId, AliasAction action, Optional<String> signature,
          Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
       super(transactionType, networkType, version, deadline, fee, signature, signer, transactionInfo);
@@ -81,7 +81,7 @@ public class AliasTransaction extends Transaction {
     * @return {@link AliasTransaction}
     */
    public static AliasTransaction create(MosaicId mosaicId, NamespaceId namespaceId, AliasAction action,
-         Deadline deadline, NetworkType networkType) {
+         TransactionDeadline deadline, NetworkType networkType) {
       Validate.notNull(mosaicId, "mosaicId must not be null");
       Validate.notNull(namespaceId, "namespaceId must not be null");
       return new AliasTransaction(TransactionType.MOSAIC_ALIAS, networkType, TransactionVersion.MOSAIC_ALIAS.getValue(), deadline,
@@ -89,7 +89,7 @@ public class AliasTransaction extends Transaction {
    }
 
    public static AliasTransaction create(Address address, NamespaceId namespaceId, AliasAction action,
-         Deadline deadline, NetworkType networkType) {
+         TransactionDeadline deadline, NetworkType networkType) {
       Validate.notNull(address, "address must not be null");
       Validate.notNull(namespaceId, "namespaceId must not be null");
       return new AliasTransaction(TransactionType.ADDRESS_ALIAS, networkType, TransactionVersion.ADDRESS_ALIAS.getValue(), deadline,
@@ -106,7 +106,7 @@ public class AliasTransaction extends Transaction {
 
       byte[] aliasIdBytes;
       if (address.isPresent()) {
-         aliasIdBytes = new Base32().decode(address.get().plain().getBytes(StandardCharsets.UTF_8));
+         aliasIdBytes = Base32Encoder.getBytes(address.get().plain());
       } else if (mosaicId.isPresent()) {
          aliasIdBytes = UInt64Utils.getBytes(mosaicId.get().getId());
       } else {

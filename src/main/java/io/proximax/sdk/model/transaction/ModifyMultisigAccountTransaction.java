@@ -25,9 +25,11 @@ import org.apache.commons.lang3.Validate;
 import com.google.flatbuffers.FlatBufferBuilder;
 
 import io.proximax.core.utils.HexEncoder;
-import io.proximax.sdk.infrastructure.utils.UInt64Utils;
+import io.proximax.sdk.gen.buffers.CosignatoryModificationBuffer;
+import io.proximax.sdk.gen.buffers.TransferTransactionBuffer;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
  * Modify multisig account transactions are part of the NEM's multisig account system.
@@ -41,15 +43,15 @@ public class ModifyMultisigAccountTransaction extends Transaction {
     private final List<MultisigCosignatoryModification> modifications;
     private final Schema schema = new ModifyMultisigAccountTransactionSchema();
 
-    public ModifyMultisigAccountTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, int minApprovalDelta, int minRemovalDelta, List<MultisigCosignatoryModification> modifications, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
+    public ModifyMultisigAccountTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, int minApprovalDelta, int minRemovalDelta, List<MultisigCosignatoryModification> modifications, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
         this(networkType, version, deadline, fee, minApprovalDelta, minRemovalDelta, modifications, Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo));
     }
 
-    public ModifyMultisigAccountTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, int minApprovalDelta, int minRemovalDelta, List<MultisigCosignatoryModification> modifications) {
+    public ModifyMultisigAccountTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, int minApprovalDelta, int minRemovalDelta, List<MultisigCosignatoryModification> modifications) {
         this(networkType, version, deadline, fee, minApprovalDelta, minRemovalDelta, modifications, Optional.empty(), Optional.empty(), Optional.empty());
     }
 
-    private ModifyMultisigAccountTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, int minApprovalDelta, int minRemovalDelta, List<MultisigCosignatoryModification> modifications, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
+    private ModifyMultisigAccountTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, int minApprovalDelta, int minRemovalDelta, List<MultisigCosignatoryModification> modifications, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
         super(TransactionType.MODIFY_MULTISIG_ACCOUNT, networkType, version, deadline, fee, signature, signer, transactionInfo);
         Validate.notNull(modifications, "Modifications must not be null");
         this.minApprovalDelta = minApprovalDelta;
@@ -68,7 +70,7 @@ public class ModifyMultisigAccountTransaction extends Transaction {
      * @return {@link ModifyMultisigAccountTransaction}
      */
 
-    public static ModifyMultisigAccountTransaction create(Deadline deadline, int minApprovalDelta, int minRemovalDelta, List<MultisigCosignatoryModification> modifications, NetworkType networkType) {
+    public static ModifyMultisigAccountTransaction create(TransactionDeadline deadline, int minApprovalDelta, int minRemovalDelta, List<MultisigCosignatoryModification> modifications, NetworkType networkType) {
         return new ModifyMultisigAccountTransaction(networkType, 3, deadline, BigInteger.valueOf(0), minApprovalDelta, minRemovalDelta, modifications);
     }
 

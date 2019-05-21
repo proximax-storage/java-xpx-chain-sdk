@@ -20,8 +20,8 @@ Gets the mosaic definition for a given mosaicId.
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.MosaicRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.MosaicRoutesApi;
 
 
 MosaicRoutesApi apiInstance = new MosaicRoutesApi();
@@ -65,8 +65,8 @@ Gets an array of mosaic definition.
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.MosaicRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.MosaicRoutesApi;
 
 
 MosaicRoutesApi apiInstance = new MosaicRoutesApi();
@@ -110,8 +110,8 @@ Returns friendly names for mosaics.
 ### Example
 ```java
 // Import classes:
-//import io.proximax.sdk.api.ApiException;
-//import io.proximax.sdk.api.swagger.MosaicRoutesApi;
+//import io.proximax.sdk.gen.ApiException;
+//import io.proximax.sdk.gen.api.MosaicRoutesApi;
 
 
 MosaicRoutesApi apiInstance = new MosaicRoutesApi();

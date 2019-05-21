@@ -36,18 +36,14 @@ public enum HashType {
      */
     KECCAK_256(1, Hashes::keccak256, "-?[0-9a-fA-F]+", 64),
     /**
-     * hashed twice: first with SHA-256 and then with RIPEMD-160
+     * hashed twice: first with SHA-256, then with RIPEMD-160, then add 12 bytes of 0s
      * (BTC Compat)
-     * @deprecated This is currently not supported by Sirius platform
      */
-    @Deprecated
-    HASH_160(2, Hashes::hash160, "-?[0-9a-fA-F]+", 40),
+    HASH_160(2, Hashes::hash160, "-?[0-9a-fA-F]+", 64),
     /**
      * Hashed twice with SHA-256
      * (BTC Compat)
-     * @deprecated This is currently not supported by Sirius platform
      */
-    @Deprecated
     HASH_256(3, Hashes::hash256,"-?[0-9a-fA-F]+", 64);
 
     private final int value;

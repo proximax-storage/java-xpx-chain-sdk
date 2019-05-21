@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.URL;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Collections;
@@ -32,14 +33,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.proximax.sdk.infrastructure.AccountHttp;
-import io.proximax.sdk.infrastructure.BlockchainHttp;
 import io.proximax.sdk.infrastructure.Listener;
-import io.proximax.sdk.infrastructure.MetadataHttp;
-import io.proximax.sdk.infrastructure.MosaicHttp;
-import io.proximax.sdk.infrastructure.NamespaceHttp;
-import io.proximax.sdk.infrastructure.NetworkHttp;
-import io.proximax.sdk.infrastructure.TransactionHttp;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.mosaic.Mosaic;
@@ -47,6 +41,7 @@ import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.transaction.Deadline;
 import io.proximax.sdk.model.transaction.PlainMessage;
 import io.proximax.sdk.model.transaction.SignedTransaction;
+import io.proximax.sdk.model.transaction.TransactionDeadline;
 import io.proximax.sdk.model.transaction.TransferTransaction;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -61,13 +56,13 @@ public class E2EBaseTest extends BaseTest {
    /** logger */
    private static final Logger logger = LoggerFactory.getLogger(E2EBaseTest.class);
 
-   protected NetworkHttp networkHttp;
-   protected BlockchainHttp blockchainHttp;
-   protected AccountHttp accountHttp;
-   protected TransactionHttp transactionHttp;
-   protected MosaicHttp mosaicHttp;
-   protected NamespaceHttp namespaceHttp;
-   protected MetadataHttp metadataHttp;
+   protected NetworkRepository networkHttp;
+   protected BlockchainRepository blockchainHttp;
+   protected AccountRepository accountHttp;
+   protected TransactionRepository transactionHttp;
+   protected MosaicRepository mosaicHttp;
+   protected NamespaceRepository namespaceHttp;
+   protected MetadataRepository metadataHttp;
    
    protected Listener listener;
 
@@ -80,16 +75,20 @@ public class E2EBaseTest extends BaseTest {
       String nodeUrl = this.getNodeUrl();
       logger.info("Preparing tests for {} using {}", getNetworkType(), nodeUrl);
       // create HTTP APIs
-      networkHttp = new NetworkHttp(nodeUrl);
-      transactionHttp = new TransactionHttp(nodeUrl, networkHttp);
-      accountHttp = new AccountHttp(nodeUrl, networkHttp);
-      blockchainHttp = new BlockchainHttp(nodeUrl, networkHttp);
-      mosaicHttp = new MosaicHttp(nodeUrl, networkHttp);
-      namespaceHttp = new NamespaceHttp(nodeUrl, networkHttp);
-      metadataHttp = new MetadataHttp(nodeUrl, networkHttp);
+      BlockchainApi api = new BlockchainApi(new URL(nodeUrl), getNetworkType());
+      // make sure all is OK
+      assertTrue(api.isNetworkTypeValid());
+      // create services
+      blockchainHttp = api.createBlockchainRepository();
+      networkHttp = api.createNetworkRepository();
+      accountHttp = api.createAccountRepository();
+      transactionHttp = api.createTransactionRepository();
+      mosaicHttp = api.createMosaicRepository();
+      namespaceHttp = api.createNamespaceRepository();
+      metadataHttp = api.createMetadataRepository();
       logger.info("Created HTTP interfaces");
       // prepare listener
-      listener = new Listener(nodeUrl);
+      listener = api.createListener();
       listener.open().get();
       logger.info("Created listener");
       // retrieve the seed account which has for tests
@@ -114,7 +113,7 @@ public class E2EBaseTest extends BaseTest {
     * 
     * @return deadline
     */
-   protected Deadline getDeadline() {
+   protected TransactionDeadline getDeadline() {
       return new Deadline(5, ChronoUnit.MINUTES);
    }
    

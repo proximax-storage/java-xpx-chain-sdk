@@ -18,30 +18,30 @@ package io.proximax.sdk.model.transaction;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 
 import org.junit.jupiter.api.Test;
 
 class DeadlineTest {
-
+   private static final long HOUR_MILLIS = 3600_000;
+   private static final long SECOND_MILLIS = 1_000;
+   
     @Test
     void shouldCreateADeadlineForTwoHoursFromNow() {
-        LocalDateTime now = LocalDateTime.now(ZoneId.systemDefault());
+        long nowSinceNemesis = new Deadline(0, ChronoUnit.SECONDS).getInstant();
         Deadline deadline = new Deadline(2, ChronoUnit.HOURS);
-        assertTrue(now.isBefore(deadline.getLocalDateTime()), "now is before deadline localtime");
-        assertTrue(now.plusHours(2).minusSeconds(1).isBefore(deadline.getLocalDateTime()), "now plus 2 hours is before deadline localtime");
-        assertTrue(now.plusMinutes(2 * 60 + 2).isAfter(deadline.getLocalDateTime()), "now plus 2 hours and 2 seconds is after deadline localtime");
+        assertTrue(nowSinceNemesis < deadline.getInstant(), "now is before deadline localtime");
+        assertTrue((nowSinceNemesis + 2 * HOUR_MILLIS - SECOND_MILLIS) < deadline.getInstant(), "now plus 2 hours is before deadline localtime");
+        assertTrue((nowSinceNemesis + 2 * HOUR_MILLIS + 2 * SECOND_MILLIS) > deadline.getInstant(), "now plus 2 hours and 2 seconds is after deadline localtime");
     }
 
 
     @Test
     void shouldCreateADeadlineForTwoHoursFromNowWithStaticConstructor() {
-        LocalDateTime now = LocalDateTime.now(ZoneId.systemDefault());
-        Deadline deadline = Deadline.create(2, ChronoUnit.HOURS);
-        assertTrue(now.isBefore(deadline.getLocalDateTime()), "now is before deadline localtime");
-        assertTrue(now.plusHours(2).minusSeconds(1).isBefore(deadline.getLocalDateTime()), "now plus 2 hours is before deadline localtime");
-        assertTrue(now.plusMinutes(2 * 60 + 2).isAfter(deadline.getLocalDateTime()), "now plus 2 hours and 2 seconds is after deadline localtime");
+       long nowSinceNemesis = new Deadline(0, ChronoUnit.SECONDS).getInstant();
+       Deadline deadline = Deadline.create(2, ChronoUnit.HOURS);
+       assertTrue(nowSinceNemesis < deadline.getInstant(), "now is before deadline localtime");
+       assertTrue((nowSinceNemesis + 2 * HOUR_MILLIS - SECOND_MILLIS) < deadline.getInstant(), "now plus 2 hours is before deadline localtime");
+       assertTrue((nowSinceNemesis + 2 * HOUR_MILLIS + 2 * SECOND_MILLIS) > deadline.getInstant(), "now plus 2 hours and 2 seconds is after deadline localtime");
     }
 }

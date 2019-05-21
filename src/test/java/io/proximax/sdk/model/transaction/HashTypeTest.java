@@ -21,8 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
 
-import org.apache.commons.codec.binary.Hex;
 import org.junit.jupiter.api.Test;
+import org.spongycastle.util.encoders.Hex;
 
 import io.proximax.core.crypto.Hashes;
 
@@ -33,7 +33,7 @@ class HashTypeTest {
         byte[] secretBytes = new byte[20];
         new Random().nextBytes(secretBytes);
         byte[] result = Hashes.sha3_256(secretBytes);
-        String secret = Hex.encodeHexString(result);
+        String secret = Hex.toHexString(result);
 
         assertTrue(HashType.SHA3_256.validate(secret));
     }
@@ -43,7 +43,7 @@ class HashTypeTest {
         byte[] secretBytes = new byte[20];
         new Random().nextBytes(secretBytes);
         byte[] result = Hashes.sha3_512(secretBytes);
-        String secret = Hex.encodeHexString(result);
+        String secret = Hex.toHexString(result);
 
         assertFalse(HashType.SHA3_256.validate(secret));
     }
@@ -60,7 +60,7 @@ class HashTypeTest {
         byte[] secretBytes = new byte[20];
         new Random().nextBytes(secretBytes);
         byte[] result = Hashes.keccak256(secretBytes);
-        String secret = Hex.encodeHexString(result);
+        String secret = Hex.toHexString(result);
 
         assertTrue(HashType.KECCAK_256.validate(secret));
     }
@@ -70,7 +70,7 @@ class HashTypeTest {
         byte[] secretBytes = new byte[20];
         new Random().nextBytes(secretBytes);
         byte[] result = Hashes.ripemd160(secretBytes);
-        String secret = Hex.encodeHexString(result);
+        String secret = Hex.toHexString(result);
 
         assertFalse(HashType.KECCAK_256.validate(secret));
     }
@@ -82,11 +82,11 @@ class HashTypeTest {
     }
 
     @Test
-    void HASH_160ShouldBeExactly40CharactersLength() {
+    void HASH_160ShouldHaveValidLength() {
         byte[] secretBytes = new byte[20];
         new Random().nextBytes(secretBytes);
         byte[] result = Hashes.hash160(secretBytes);
-        String secret = Hex.encodeHexString(result);
+        String secret = Hex.toHexString(result);
 
         assertTrue(HashType.HASH_160.validate(secret));
     }
@@ -95,10 +95,10 @@ class HashTypeTest {
     void HASH_160ShouldReturnFalseIfItIsNot40CharsLength() {
         byte[] secretBytes = new byte[20];
         new Random().nextBytes(secretBytes);
-        byte[] result = Hashes.sha3_256(secretBytes);
-        String secret = Hex.encodeHexString(result);
+        byte[] result = Hashes.hash160(secretBytes);
+        String secret = Hex.toHexString(result);
 
-        assertFalse(HashType.HASH_160.validate(secret));
+        assertFalse(HashType.HASH_160.validate(secret + "00"));
     }
 
     @Test
@@ -112,7 +112,7 @@ class HashTypeTest {
         byte[] secretBytes = new byte[20];
         new Random().nextBytes(secretBytes);
         byte[] result = Hashes.hash256(secretBytes);
-        String secret = Hex.encodeHexString(result);
+        String secret = Hex.toHexString(result);
 
         assertTrue(HashType.HASH_256.validate(secret));
     }
@@ -122,7 +122,7 @@ class HashTypeTest {
         byte[] secretBytes = new byte[20];
         new Random().nextBytes(secretBytes);
         byte[] result = Hashes.ripemd160(secretBytes);
-        String secret = Hex.encodeHexString(result);
+        String secret = Hex.toHexString(result);
 
         assertFalse(HashType.HASH_256.validate(secret));
     }

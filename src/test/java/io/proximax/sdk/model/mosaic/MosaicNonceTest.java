@@ -89,9 +89,6 @@ class MosaicNonceTest {
       assertThrows(IllegalIdentifierException.class, () -> {
          MosaicNonce.createFromHex("FF0000");
       });
-      assertThrows(IllegalIdentifierException.class, () -> {
-         MosaicNonce.createFromHex("FFaaaaa");
-      });
       assertEquals(1, MosaicNonce.createFromHex("00000001").getNonceAsInt());
       assertEquals(new MosaicNonce(new byte[] {0,0,0,1}), MosaicNonce.createFromHex("00000001"));
    }

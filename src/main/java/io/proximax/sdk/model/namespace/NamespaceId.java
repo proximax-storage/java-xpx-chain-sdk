@@ -20,9 +20,9 @@ import java.math.BigInteger;
 import java.util.Objects;
 import java.util.Optional;
 
-import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.transaction.IdGenerator;
 import io.proximax.sdk.model.transaction.UInt64Id;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
  * The namespace id structure describes namespace id

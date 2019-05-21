@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -31,6 +32,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import io.proximax.sdk.BaseTest;
+import io.proximax.sdk.BlockchainApi;
+import io.proximax.sdk.MosaicRepository;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicInfo;
 import io.proximax.sdk.model.mosaic.MosaicNames;
@@ -39,11 +42,11 @@ import io.reactivex.schedulers.Schedulers;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MosaicHttpTest extends BaseTest {
-    private MosaicHttp mosaicHttp;
+    private MosaicRepository mosaicHttp;
 
     @BeforeAll
     void setup() throws IOException {
-        mosaicHttp = new MosaicHttp(this.getNodeUrl());
+        mosaicHttp = new BlockchainApi(new URL(getNodeUrl()), getNetworkType()).createMosaicRepository();
     }
 
     @Test

@@ -16,25 +16,28 @@
 
 package io.proximax.sdk.infrastructure;
 
-import static io.proximax.sdk.infrastructure.utils.UInt64Utils.toBigInt;
+import static io.proximax.sdk.utils.GsonUtils.getJsonArray;
+import static io.proximax.sdk.utils.GsonUtils.getJsonPrimitive;
+import static io.proximax.sdk.utils.GsonUtils.stream;
+import static io.proximax.sdk.utils.dto.UInt64Utils.toBigInt;
 
-import java.net.MalformedURLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.google.gson.JsonObject;
 
-import io.proximax.sdk.infrastructure.model.TransactionStatusDTO;
+import io.proximax.sdk.BlockchainApi;
+import io.proximax.sdk.TransactionRepository;
+import io.proximax.sdk.gen.model.TransactionStatusDTO;
 import io.proximax.sdk.model.transaction.CosignatureSignedTransaction;
-import io.proximax.sdk.model.transaction.Deadline;
+import io.proximax.sdk.model.transaction.DeadlineBP;
 import io.proximax.sdk.model.transaction.SignedTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
 import io.proximax.sdk.model.transaction.TransactionAnnounceResponse;
 import io.proximax.sdk.model.transaction.TransactionStatus;
+import io.proximax.sdk.utils.GsonUtils;
 import io.reactivex.Observable;
-import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
-import io.vertx.reactivex.ext.web.codec.BodyCodec;
 
 /**
  * Transaction http repository.
@@ -42,40 +45,33 @@ import io.vertx.reactivex.ext.web.codec.BodyCodec;
  * @since 1.0
  */
 public class TransactionHttp extends Http implements TransactionRepository {
-	/** JSON key containing the message */
-	private static final String KEY_MESSAGE = "message";
+	private static final String ROUTE = "/transaction/";
+   private static final String KEY_MESSAGE = "message";
+   private static final String KEY_PAYLOAD = "payload";
 	
-    public TransactionHttp(String host) throws MalformedURLException {
-        this(host, new NetworkHttp(host));
-    }
-
-    public TransactionHttp(String host, NetworkHttp networkHttp) throws MalformedURLException {
-        super(host + "/transaction/", networkHttp);
+    public TransactionHttp(BlockchainApi api) {
+        super(api);
     }
 
     @Override
     public Observable<Transaction> getTransaction(String transactionHash) {
         return this.client
-                .getAbs(this.url + transactionHash)
-                .as(BodyCodec.jsonObject())
-                .rxSend()
-                .toObservable()
-                .map(Http::mapJsonObjectOrError)
-                .map(json -> new JsonObject(json.toString()))
+                .get(ROUTE + transactionHash)
+                .map(Http::mapStringOrError)
+                .map(GsonUtils::mapToJsonObject)
                 .map(new TransactionMapping());
     }
 
     @Override
     public Observable<List<Transaction>> getTransactions(List<String> transactionHashes) {
-        JsonObject requestBody = new JsonObject();
-        requestBody.put("transactionIds", transactionHashes);
+
+       JsonObject requestBody = new JsonObject();
+       requestBody.add("transactionIds", getJsonArray(transactionHashes));
         return this.client
-                .postAbs(this.url.toString())
-                .as(BodyCodec.jsonArray())
-                .rxSendJson(requestBody)
-                .toObservable()
-                .map(Http::mapJsonArrayOrError)
-                .map(json -> new JsonArray(json.toString()).stream().map(s -> (JsonObject) s).collect(Collectors.toList()))
+                .post(ROUTE, requestBody)
+                .map(Http::mapStringOrError)
+                .map(GsonUtils::mapToJsonArray)
+                .map(arr -> stream(arr).map(s -> (JsonObject) s).collect(Collectors.toList()))
                 .flatMapIterable(item -> item)
                 .map(new TransactionMapping())
                 .toList()
@@ -86,36 +82,30 @@ public class TransactionHttp extends Http implements TransactionRepository {
     @Override
     public Observable<TransactionStatus> getTransactionStatus(String transactionHash) {
         return this.client
-                .getAbs(this.url + transactionHash + "/status")
-                .as(BodyCodec.jsonObject())
-                .rxSend()
-                .toObservable()
-                .map(Http::mapJsonObjectOrError)
-                .map(json -> objectMapper.readValue(json.toString(), TransactionStatusDTO.class))
+                .get(ROUTE + transactionHash + "/status")
+                .map(Http::mapStringOrError)
+                .map(str -> objectMapper.readValue(str, TransactionStatusDTO.class))
                 .map(transactionStatusDTO -> new TransactionStatus(transactionStatusDTO.getGroup(),
                         transactionStatusDTO.getStatus(),
                         transactionStatusDTO.getHash(),
-                        new Deadline(toBigInt(transactionStatusDTO.getDeadline())),
+                        new DeadlineBP(toBigInt(transactionStatusDTO.getDeadline())),
                         toBigInt(transactionStatusDTO.getHeight())));
     }
 
     @Override
     public Observable<List<TransactionStatus>> getTransactionStatuses(List<String> transactionHashes) {
         JsonObject requestBody = new JsonObject();
-        requestBody.put("hashes", transactionHashes);
+        requestBody.add("hashes", getJsonArray(transactionHashes));
         return this.client
-                .postAbs(this.url + "/statuses")
-                .as(BodyCodec.jsonArray())
-                .rxSendJson(requestBody)
-                .toObservable()
-                .map(Http::mapJsonArrayOrError)
-                .map(json -> objectMapper.<List<TransactionStatusDTO>>readValue(json.toString(), new TypeReference<List<TransactionStatusDTO>>() {
+                .post(ROUTE + "/statuses", requestBody)
+                .map(Http::mapStringOrError)
+                .map(str -> objectMapper.<List<TransactionStatusDTO>>readValue(str, new TypeReference<List<TransactionStatusDTO>>() {
                 }))
                 .flatMapIterable(item -> item)
                 .map(transactionStatusDTO -> new TransactionStatus(transactionStatusDTO.getGroup(),
                         transactionStatusDTO.getStatus(),
                         transactionStatusDTO.getHash(),
-                        new Deadline(toBigInt(transactionStatusDTO.getDeadline())),
+                        new DeadlineBP(toBigInt(transactionStatusDTO.getDeadline())),
                         toBigInt(transactionStatusDTO.getHeight())))
                 .toList()
                 .toObservable();
@@ -124,41 +114,35 @@ public class TransactionHttp extends Http implements TransactionRepository {
     @Override
     public Observable<TransactionAnnounceResponse> announce(SignedTransaction signedTransaction) {
         JsonObject requestBody = new JsonObject();
-        requestBody.put("payload", signedTransaction.getPayload());
+        requestBody.add(KEY_PAYLOAD, getJsonPrimitive(signedTransaction.getPayload()));
         return this.client
-                .putAbs(this.url.toString())
-                .as(BodyCodec.jsonObject())
-                .rxSendJson(requestBody)
-                .toObservable()
-                .map(Http::mapJsonObjectOrError)
-                .map(json -> new TransactionAnnounceResponse(new JsonObject(json.toString()).getString(KEY_MESSAGE)));
+                .put(ROUTE, requestBody)
+                .map(Http::mapStringOrError)
+                .map(GsonUtils::mapToJsonObject)
+                .map(json -> new TransactionAnnounceResponse(json.get(KEY_MESSAGE).getAsString()));
     }
 
     @Override
     public Observable<TransactionAnnounceResponse> announceAggregateBonded(SignedTransaction signedTransaction) {
         JsonObject requestBody = new JsonObject();
-        requestBody.put("payload", signedTransaction.getPayload());
+        requestBody.add(KEY_PAYLOAD, getJsonPrimitive(signedTransaction.getPayload()));
         return this.client
-                .putAbs(this.url + "/partial")
-                .as(BodyCodec.jsonObject())
-                .rxSendJson(requestBody)
-                .toObservable()
-                .map(Http::mapJsonObjectOrError)
-                .map(json -> new TransactionAnnounceResponse(new JsonObject(json.toString()).getString(KEY_MESSAGE)));
+                .put(ROUTE + "/partial", requestBody)
+                .map(Http::mapStringOrError)
+                .map(GsonUtils::mapToJsonObject)
+                .map(json -> new TransactionAnnounceResponse(json.get(KEY_MESSAGE).getAsString()));
     }
 
     @Override
     public Observable<TransactionAnnounceResponse> announceAggregateBondedCosignature(CosignatureSignedTransaction cosignatureSignedTransaction) {
         JsonObject requestBody = new JsonObject();
-        requestBody.put("parentHash", cosignatureSignedTransaction.getParentHash());
-        requestBody.put("signature", cosignatureSignedTransaction.getSignature());
-        requestBody.put("signer", cosignatureSignedTransaction.getSigner());
+        requestBody.add("parentHash", getJsonPrimitive(cosignatureSignedTransaction.getParentHash()));
+        requestBody.add("signature", getJsonPrimitive(cosignatureSignedTransaction.getSignature()));
+        requestBody.add("signer", getJsonPrimitive(cosignatureSignedTransaction.getSigner()));
         return this.client
-                .putAbs(this.url + "/cosignature")
-                .as(BodyCodec.jsonObject())
-                .rxSendJson(requestBody)
-                .toObservable()
-                .map(Http::mapJsonObjectOrError)
-                .map(json -> new TransactionAnnounceResponse(new JsonObject(json.toString()).getString(KEY_MESSAGE)));
+                .put(ROUTE + "/cosignature", requestBody)
+                .map(Http::mapStringOrError)
+                .map(GsonUtils::mapToJsonObject)
+                .map(json -> new TransactionAnnounceResponse(json.get(KEY_MESSAGE).getAsString()));
     }
 }

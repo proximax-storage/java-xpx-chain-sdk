@@ -18,9 +18,9 @@ package io.proximax.sdk.model.metadata;
 import java.math.BigInteger;
 import java.util.Optional;
 
-import io.proximax.sdk.infrastructure.utils.UInt64Utils;
 import io.proximax.sdk.model.mosaic.IllegalIdentifierException;
 import io.proximax.sdk.model.transaction.UInt64Id;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
  * Numeric representation of metadata ID for mosaic and namespace

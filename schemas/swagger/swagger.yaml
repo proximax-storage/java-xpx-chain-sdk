@@ -12,31 +12,31 @@ host: 'localhost:3000'
 tags:
 - name: Account routes
   description: |
-    [Account](https://nemtech.github.io/concepts/account.html) related endpoints.
+    [Account](https://bcdocs.xpxsirius.io/concepts/account.html) related endpoints.
 - name: Blockchain routes
   description: |
-    [Block](https://nemtech.github.io/concepts/block.html) related endpoints.
+    [Block](https://bcdocs.xpxsirius.io/concepts/block.html) related endpoints.
 - name: Contract routes
   description: |
-    [Contract TODO](https://nemtech.github.io/concepts/mosaic.html) related endpoints.
+    [Contract TODO](https://bcdocs.xpxsirius.io/concepts/mosaic.html) related endpoints.
 - name: Metadata routes
   description: |
-    [Metadata TODO](https://nemtech.github.io/concepts/mosaic.html) related endpoints.
+    [Metadata TODO](https://bcdocs.xpxsirius.io/concepts/mosaic.html) related endpoints.
 - name: Mosaic routes
   description: |
-    [Mosaic](https://nemtech.github.io/concepts/mosaic.html) related endpoints.
+    [Mosaic](https://bcdocs.xpxsirius.io/concepts/mosaic.html) related endpoints.
 - name: Namespace routes
   description: |
-    [Namespace](https://nemtech.github.io/concepts/mosaic.html) related endpoints.
+    [Namespace](https://bcdocs.xpxsirius.io/concepts/mosaic.html) related endpoints.
 - name: Transaction routes
   description: |
-    [Transaction](https://nemtech.github.io/concepts/transaction.html) related endpoints.
+    [Transaction](https://bcdocs.xpxsirius.io/concepts/transaction.html) related endpoints.
 - name: Network routes
   description: |
     Network related endpoints.
 - name: Node routes
   description: |
-    [Node](https://nemtech.github.io/concepts/node.html) related endpoints.
+    [Node](https://bcdocs.xpxsirius.io/concepts/node.html) related endpoints.
 
 schemes:
 - http
@@ -276,7 +276,7 @@ paths:
       - Account routes
       summary: Get aggregate bonded transactions information
       description: |
-        Gets an array of [aggregate bonded transactions](https://nemtech.github.io/concepts/aggregate-transaction.html) where the account is the sender or requires to cosign the transaction.
+        Gets an array of [aggregate bonded transactions](https://bcdocs.xpxsirius.io/concepts/aggregate-transaction.html) where the account is the sender or requires to cosign the transaction.
       operationId: partialTransactions
       produces:
       - application/json
@@ -322,7 +322,7 @@ paths:
       - Account routes
       summary: Get account configurable properties information
       description: |
-        Returns the [configurable properties](https://nemtech.github.io/concepts/account-filter.html) for a given account.
+        Returns the [configurable properties](https://bcdocs.xpxsirius.io/concepts/account-filter.html) for a given account.
       operationId: getAccountProperties
       produces:
       - application/json
@@ -347,7 +347,7 @@ paths:
       - Account routes
       summary: Get account properties for given array of addresses
       description: |
-        Returns the [configurable properties](https://nemtech.github.io/concepts/account-filter.html) for a given array of addresses.
+        Returns the [configurable properties](https://bcdocs.xpxsirius.io/concepts/account-filter.html) for a given array of addresses.
       operationId: getAccountPropertiesFromAccounts
       produces:
       - application/json
@@ -374,7 +374,7 @@ paths:
       tags:
       - Account routes
       summary: Get multisig account information
-      description: Returns the [multisig account](https://nemtech.github.io/concepts/multisig-account.html) information.
+      description: Returns the [multisig account](https://bcdocs.xpxsirius.io/concepts/multisig-account.html) information.
       operationId: getAccountMultisig
       produces:
       - application/json
@@ -398,7 +398,7 @@ paths:
       tags:
       - Account routes
       summary: Get multisig account graph information
-      description: Returns the [multisig account](https://nemtech.github.io/concepts/multisig-account.html) graph.
+      description: Returns the [multisig account](https://bcdocs.xpxsirius.io/concepts/multisig-account.html) graph.
       operationId: getAccountMultisigGraph
       produces:
       - application/json
@@ -482,7 +482,7 @@ paths:
       tags:
       - Blockchain routes
       summary: Get transactions from a block
-      description: Returns an array of [transactions](https://nemtech.github.io/concepts/transaction.html) included in a block for a given block height.
+      description: Returns an array of [transactions](https://bcdocs.xpxsirius.io/concepts/transaction.html) included in a block for a given block height.
       operationId: getBlockTransactions
       produces:
       - application/json
@@ -521,7 +521,7 @@ paths:
       tags:
       - Blockchain routes
       summary: Get the merkle path for a given a transaction and block
-      description: Returns the merkle path for a [transaction](https://nemtech.github.io/concepts/transaction.html) included in a block. The path is the complementary data needed to calculate the merkle root. A client can compare if the calculated root equals the one recorded in the block header, verifying that the transaction was included in the block.
+      description: Returns the merkle path for a [transaction](https://bcdocs.xpxsirius.io/concepts/transaction.html) included in a block. The path is the complementary data needed to calculate the merkle root. A client can compare if the calculated root equals the one recorded in the block header, verifying that the transaction was included in the block.
       operationId: getMerkleTransaction
       produces:
       - application/json
@@ -552,7 +552,7 @@ paths:
       tags:
       - Blockchain routes
       summary: Get receipts from a block
-      description: Returns the [receipts](https://nemtech.github.io/concepts/receipt.html) linked to a block.
+      description: Returns the [receipts](https://bcdocs.xpxsirius.io/concepts/receipt.html) linked to a block.
       operationId: getBlockReceipts
       produces:
       - application/json
@@ -580,7 +580,7 @@ paths:
       tags:
       - Blockchain routes
       summary: Get the merkle path for a given a receipt statement hash and block
-      description: Returns the merkle path for a [receipt statement or resolution](https://nemtech.github.io/concepts/receipt.html) linked to a block. The path is the complementary data needed to calculate the merkle root. A client can compare if the calculated root equals the one recorded in the block header, verifying that the receipt was linked with the block.
+      description: Returns the merkle path for a [receipt statement or resolution](https://bcdocs.xpxsirius.io/concepts/receipt.html) linked to a block. The path is the complementary data needed to calculate the merkle root. A client can compare if the calculated root equals the one recorded in the block header, verifying that the receipt was linked with the block.
       operationId: getMerkleReceipts
       produces:
       - application/json
@@ -1137,14 +1137,14 @@ paths:
       tags:
       - Transaction routes
       summary: Announce a new transaction
-      description: Announces a transaction to the network. It is recommended to use the NEM2-SDK to announce transactions as they should be [serialized](https://nemtech.github.io/api.html#serialization).
+      description: Announces a transaction to the network. It is recommended to use the NEM2-SDK to announce transactions as they should be [serialized](https://bcdocs.xpxsirius.io/api.html#serialization).
       operationId: announceTransaction
       produces:
       - application/json
       parameters:
       - name: payload
         in: body
-        description: The transaction [payload](https://nemtech.github.io/api.html#serialization).
+        description: The transaction [payload](https://bcdocs.xpxsirius.io/api.html#serialization).
         required: true
         schema:
           $ref: '#/definitions/transactionPayload'
@@ -1164,14 +1164,14 @@ paths:
       tags:
       - Transaction routes
       summary: Announce an aggregate bonded transaction
-      description: Announces an [aggregate bonded transaction](https://nemtech.github.io/concepts/aggregate-transaction.html#aggregate-bonded) to the network.
+      description: Announces an [aggregate bonded transaction](https://bcdocs.xpxsirius.io/concepts/aggregate-transaction.html#aggregate-bonded) to the network.
       operationId: announcePartialTransaction
       produces:
       - application/json
       parameters:
       - name: payload
         in: body
-        description: The transaction [payload](https://nemtech.github.io/api.html#serialization).
+        description: The transaction [payload](https://bcdocs.xpxsirius.io/api.html#serialization).
         required: true
         schema:
           $ref: '#/definitions/transactionPayload'
@@ -1191,14 +1191,14 @@ paths:
       tags:
       - Transaction routes
       summary: Announce a cosignature transaction
-      description: Announces a [cosignature transaction](https://nemtech.github.io/concepts/aggregate-transaction.html#cosignature-transaction) to the network.
+      description: Announces a [cosignature transaction](https://bcdocs.xpxsirius.io/concepts/aggregate-transaction.html#cosignature-transaction) to the network.
       operationId: announceCosignatureTransaction
       produces:
       - application/json
       parameters:
       - name: payload
         in: body
-        description: The transaction [payload](https://nemtech.github.io/api.html#serialization).
+        description: The transaction [payload](https://bcdocs.xpxsirius.io/api.html#serialization).
         required: true
         schema:
           $ref: '#/definitions/transactionPayload'

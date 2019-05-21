@@ -30,7 +30,7 @@ public class HashesTest {
     private static final HashTester SHA3_256_TESTER = new HashTester(Hashes::sha3_256, 32);
     private static final HashTester SHA3_512_TESTER = new HashTester(Hashes::sha3_512, 64);
     private static final HashTester RIPEMD160_TESTER = new HashTester(Hashes::ripemd160, 20);
-    private static final HashTester HASH_160_TESTER = new HashTester(Hashes::hash160, 20);
+    private static final HashTester HASH_160_TESTER = new HashTester(Hashes::hash160, 32);
     private static final HashTester HASH_256_TESTER = new HashTester(Hashes::hash256, 32);
 
     private static final HashTester KECCAK_256_TESTER = new HashTester(Hashes::keccak256, 32);

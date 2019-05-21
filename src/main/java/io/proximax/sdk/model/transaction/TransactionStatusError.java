@@ -24,9 +24,9 @@ package io.proximax.sdk.model.transaction;
 public class TransactionStatusError {
     private final String hash;
     private final String status;
-    private final Deadline deadline;
+    private final TransactionDeadline deadline;
 
-    public TransactionStatusError(String hash, String status, Deadline deadline) {
+    public TransactionStatusError(String hash, String status, TransactionDeadline deadline) {
         this.hash = hash;
         this.status = status;
         this.deadline = deadline;
@@ -55,7 +55,7 @@ public class TransactionStatusError {
      *
      * @return transaction deadline
      */
-    public Deadline getDeadline() {
+    public TransactionDeadline getDeadline() {
         return deadline;
     }
 

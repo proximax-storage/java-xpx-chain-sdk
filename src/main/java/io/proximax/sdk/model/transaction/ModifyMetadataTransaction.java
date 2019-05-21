@@ -23,12 +23,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.codec.binary.Base32;
 import org.apache.commons.lang3.Validate;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 
-import io.proximax.sdk.infrastructure.utils.UInt64Utils;
+import io.proximax.core.utils.Base32Encoder;
+import io.proximax.sdk.gen.buffers.MetadataModificationBuffer;
+import io.proximax.sdk.gen.buffers.ModifyMetadataTransactionBuffer;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
@@ -38,6 +39,7 @@ import io.proximax.sdk.model.metadata.MetadataModificationType;
 import io.proximax.sdk.model.metadata.MetadataType;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.namespace.NamespaceId;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
  * Transaction requesting modification of metadata
@@ -50,14 +52,14 @@ public class ModifyMetadataTransaction extends Transaction {
    private final Schema schema = new ModifyMetadataTransactionSchema();
 
    public ModifyMetadataTransaction(TransactionType transactionType, NetworkType networkType,
-         Integer transactionVersion, Deadline deadline, BigInteger fee, Optional<UInt64Id> metadataId,
+         Integer transactionVersion, TransactionDeadline deadline, BigInteger fee, Optional<UInt64Id> metadataId,
          Optional<Address> address, MetadataType metadataType, List<MetadataModification> modifications, String signature,
          PublicAccount signer, TransactionInfo transactionInfo) {
       this(transactionType, networkType, transactionVersion, deadline, fee, metadataId, address,
             metadataType, modifications, Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo));
    }
    
-   private ModifyMetadataTransaction(TransactionType transactionType, NetworkType networkType, Deadline deadline,
+   private ModifyMetadataTransaction(TransactionType transactionType, NetworkType networkType, TransactionDeadline deadline,
          Optional<UInt64Id> metadataId, Optional<Address> address, MetadataType metadataType,
          List<MetadataModification> modifications) {
       this(transactionType, networkType, TransactionVersion.METADATA_MODIFICATION.getValue(), deadline, BigInteger.ZERO,
@@ -65,7 +67,7 @@ public class ModifyMetadataTransaction extends Transaction {
    }
 
    private ModifyMetadataTransaction(TransactionType transactionType, NetworkType networkType, Integer version,
-         Deadline deadline, BigInteger fee, Optional<UInt64Id> metadataId, Optional<Address> address,
+         TransactionDeadline deadline, BigInteger fee, Optional<UInt64Id> metadataId, Optional<Address> address,
          MetadataType metadataType, List<MetadataModification> modifications, Optional<String> signature,
          Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
       super(transactionType, networkType, version, deadline, fee, signature, signer, transactionInfo);
@@ -80,19 +82,19 @@ public class ModifyMetadataTransaction extends Transaction {
       this.modifications = modifications;
    }
 
-   public static ModifyMetadataTransaction createForMosaic(Deadline deadline, MosaicId mosaicId,
+   public static ModifyMetadataTransaction createForMosaic(TransactionDeadline deadline, MosaicId mosaicId,
          List<MetadataModification> modifications, NetworkType networkType) {
       return new ModifyMetadataTransaction(TransactionType.MODIFY_MOSAIC_METADATA, networkType, deadline,
             Optional.of(mosaicId), Optional.empty(), MetadataType.MOSAIC, modifications);
    }
 
-   public static ModifyMetadataTransaction createForNamespace(Deadline deadline, NamespaceId namespaceId,
+   public static ModifyMetadataTransaction createForNamespace(TransactionDeadline deadline, NamespaceId namespaceId,
          List<MetadataModification> modifications, NetworkType networkType) {
       return new ModifyMetadataTransaction(TransactionType.MODIFY_NAMESPACE_METADATA, networkType, deadline,
             Optional.of(namespaceId), Optional.empty(), MetadataType.NAMESPACE, modifications);
    }
 
-   public static ModifyMetadataTransaction createForAddress(Deadline deadline, Address address,
+   public static ModifyMetadataTransaction createForAddress(TransactionDeadline deadline, Address address,
          List<MetadataModification> modifications, NetworkType networkType) {
       return new ModifyMetadataTransaction(TransactionType.MODIFY_ADDRESS_METADATA, networkType, deadline,
             Optional.empty(), Optional.of(address), MetadataType.ADDRESS, modifications);
@@ -107,7 +109,7 @@ public class ModifyMetadataTransaction extends Transaction {
             .parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
       byte[] metadataIdBytes;
       if (address.isPresent()) {
-         metadataIdBytes = new Base32().decode(address.get().plain().getBytes(StandardCharsets.UTF_8));
+         metadataIdBytes = Base32Encoder.getBytes(address.get().plain());
       } else if (metadataId.isPresent()) {
          metadataIdBytes = UInt64Utils.getBytes(metadataId.get().getId());
       } else {
