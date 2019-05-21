@@ -63,14 +63,8 @@ public class E2ETransferTest extends E2EBaseTest {
 
    @AfterAll
    void closeDown() {
-      // return the XPX
-      SignedTransaction signedTransaction = signTransfer(simpleAccount,
-            seedAccount.getAddress(),
-            NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(4)),
-            new PlainMessage("money back guarantee"));
-      logger.info("Returning funds. {}", transactionHttp.announce(signedTransaction).blockingFirst());
-      logger.info("Returned funds. {}",
-            listener.confirmed(simpleAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      // return the funds
+      returnAllToSeed(simpleAccount);
       // check that target account has expected number of incoming transactions
       int transactions = accountHttp.incomingTransactions(simpleAccount.getPublicAccount()).blockingFirst().size();
       // TODO why 2? we did 4 transfers but 2 were aggregate?
@@ -95,6 +89,16 @@ public class E2ETransferTest extends E2EBaseTest {
       transfer(seedAccount, simpleAccount.getAddress(), NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1)), secureMessage);
    }
 
+   @Test
+   void insufficientFunds() {
+      transactionHttp.announce(simpleAccount.sign(TransferTransaction.create(getDeadline(),
+            seedAccount.getAddress(),
+            Arrays.asList(NetworkCurrencyMosaic.createRelative(BigInteger.TEN)),
+            PlainMessage.Empty,
+            getNetworkType()))).blockingFirst();
+      listener.status(simpleAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+   }
+   
    /**
     * return transactions as specified by arguments signed by the signer account
     * 

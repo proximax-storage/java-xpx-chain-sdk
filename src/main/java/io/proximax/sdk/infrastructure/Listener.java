@@ -18,7 +18,6 @@ package io.proximax.sdk.infrastructure;
 
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
@@ -26,21 +25,24 @@ import com.google.gson.JsonObject;
 
 import io.proximax.sdk.BlockchainApi;
 import io.proximax.sdk.ListenerRepository;
+import io.proximax.sdk.infrastructure.listener.BlockChannelMessage;
+import io.proximax.sdk.infrastructure.listener.CosignatureChannelMessage;
 import io.proximax.sdk.infrastructure.listener.ListenerChannel;
 import io.proximax.sdk.infrastructure.listener.ListenerMessage;
 import io.proximax.sdk.infrastructure.listener.ListenerMessageMapping;
-import io.proximax.sdk.infrastructure.listener.ListenerSubscribeMessage;
+import io.proximax.sdk.infrastructure.listener.ListenerSubscribtionMessage;
+import io.proximax.sdk.infrastructure.listener.SimpleChannelMessage;
+import io.proximax.sdk.infrastructure.listener.StatusChannelMessage;
+import io.proximax.sdk.infrastructure.listener.TransactionChannelMessage;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.blockchain.BlockInfo;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.CosignatureSignedTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
 import io.proximax.sdk.model.transaction.TransactionStatusError;
-import io.proximax.sdk.model.transaction.TransferTransaction;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
@@ -49,158 +51,158 @@ import okhttp3.WebSocketListener;
  * Listener repository implementation
  */
 public class Listener extends Http implements ListenerRepository {
-    private final Subject<ListenerMessage> messageSubject;
-    private String uid;
-    private WebSocket webSocket;
-    private final ListenerMessageMapping mapping = new ListenerMessageMapping();
+   private final Subject<ListenerMessage> messageSubject;
+   private String uid;
+   private WebSocket webSocket;
+   private final ListenerMessageMapping mapping = new ListenerMessageMapping();
 
-    /**
-     * create new listener for specified API
-     * 
-     * @param api blockchain API
-     */
-    public Listener(BlockchainApi api) {
-        super(api);
-        this.messageSubject = PublishSubject.create();
-    }
+   /**
+    * create new listener for specified API
+    * 
+    * @param api blockchain API
+    */
+   public Listener(BlockchainApi api) {
+      super(api);
+      this.messageSubject = PublishSubject.create();
+   }
 
-    @Override
-    public CompletableFuture<Void> open() {
-        CompletableFuture<Void> future = new CompletableFuture<>();
-        if (this.webSocket != null) {
-            return CompletableFuture.completedFuture(null);
-        }
+   @Override
+   public CompletableFuture<Void> open() {
+      // return immediately if websocket is already opened
+      if (this.webSocket != null) {
+         return CompletableFuture.completedFuture(null);
+      }
 
-        Request request = new Request.Builder()
-                .url(api.getUrl().toString() + "/ws")
-                .build();
+      // prepare the future that will indicate that socket was opened
+      CompletableFuture<Void> future = new CompletableFuture<>();
 
-        OkHttpClient client = new OkHttpClient.Builder().build();
+      // prepare the request for the websocket registration
+      Request request = new Request.Builder().url(api.getUrl().toString() + "/ws").build();
 
-        webSocket = client.newWebSocket(request, new WebSocketListener() {
-           @Override
-           public void onMessage(WebSocket webSocket, String text) {
-               System.out.println("server: " + text);
-               JsonObject message = new Gson().fromJson(text, JsonObject.class);
-               if (message.has("uid")) {
-                   Listener.this.uid = message.get("uid").getAsString();
-                   future.complete(null);
-               } else {
+      // create the websocket connection
+      webSocket = client.newWebSocket(request, new WebSocketListener() {
+         @Override
+         public void onMessage(WebSocket webSocket, String text) {
+            onNewEventReceived(webSocket, text);
+            // parse the event text
+            JsonObject message = new Gson().fromJson(text, JsonObject.class);
+            // for for UID complete the socket initialization
+            if (message.has("uid")) {
+               Listener.this.uid = message.get("uid").getAsString();
+               future.complete(null);
+            } else {
+               // non-UID events need to be mapped to listener events
+               try {
                   Listener.this.messageSubject.onNext(mapping.getMessage(text, message));
+               } catch (RuntimeException e) {
+                  Listener.this.messageSubject.onError(e);
                }
-           }
-        });
+            }
+         }
+      });
 
-        return future;
-    }
+      return future;
+   }
 
-    @Override
-    public String getUID() {
-        return uid;
-    }
+   @Override
+   public String getUID() {
+      return uid;
+   }
 
-    @Override
-    public void close() {
-        this.webSocket.close(1000, "Closed.");
-    }
+   @Override
+   public void close() {
+      this.webSocket.close(1000, "Closed.");
+   }
 
-    @Override
-    public Observable<BlockInfo> newBlock() {
-        this.subscribeTo(ListenerChannel.BLOCK);
-        return this.messageSubject
-                .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.BLOCK))
-                .map(rawMessage -> (BlockInfo) rawMessage.getMessage());
-    }
+   @Override
+   public Observable<BlockInfo> newBlock() {
+      this.subscribeTo(ListenerChannel.BLOCK);
+      return BlockChannelMessage.subscribeTo(messageSubject);
+   }
 
-    @Override
-    public Observable<Transaction> confirmed(final Address address) {
-        this.subscribeTo(ListenerChannel.CONFIRMED_ADDED, address);
-        return this.messageSubject
-                .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.CONFIRMED_ADDED))
-                .map(rawMessage -> (Transaction) rawMessage.getMessage())
-                .filter(transaction -> this.transactionFromAddress(transaction, address));
-    }
+   @Override
+   public Observable<Transaction> confirmed(final Address address) {
+      ListenerChannel channel = ListenerChannel.CONFIRMED_ADDED;
+      this.subscribeTo(channel, address);
+      return TransactionChannelMessage.subscribeTo(messageSubject, channel, address);
+   }
 
-    @Override
-    public Observable<Transaction> unconfirmedAdded(final Address address) {
-        this.subscribeTo(ListenerChannel.UNCONFIRMED_ADDED, address);
-        return this.messageSubject
-                .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.UNCONFIRMED_ADDED))
-                .map(rawMessage -> (Transaction) rawMessage.getMessage())
-                .filter(transaction -> this.transactionFromAddress(transaction, address));
-    }
+   @Override
+   public Observable<Transaction> unconfirmedAdded(final Address address) {
+      ListenerChannel channel = ListenerChannel.UNCONFIRMED_ADDED;
+      this.subscribeTo(channel, address);
+      return TransactionChannelMessage.subscribeTo(messageSubject, channel, address);
+   }
 
-    @Override
-    public Observable<String> unconfirmedRemoved(final Address address) {
-        this.subscribeTo(ListenerChannel.UNCONFIRMED_REMOVED, address);
-        return this.messageSubject
-                .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.UNCONFIRMED_REMOVED))
-                .map(rawMessage -> (String) rawMessage.getMessage());
-    }
+   @Override
+   public Observable<String> unconfirmedRemoved(final Address address) {
+      ListenerChannel channel = ListenerChannel.UNCONFIRMED_REMOVED;
+      this.subscribeTo(channel, address);
+      return SimpleChannelMessage.subscribeTo(messageSubject, channel, address);
+   }
 
-    @Override
-    public Observable<AggregateTransaction> aggregateBondedAdded(final Address address) {
-        this.subscribeTo(ListenerChannel.AGGREGATE_BONDED_ADDED, address);
-        return this.messageSubject
-                .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.AGGREGATE_BONDED_ADDED))
-                .map(rawMessage -> (AggregateTransaction) rawMessage.getMessage())
-                .filter(transaction -> this.transactionFromAddress(transaction, address));
-    }
+   @Override
+   public Observable<AggregateTransaction> aggregateBondedAdded(final Address address) {
+      ListenerChannel channel = ListenerChannel.AGGREGATE_BONDED_ADDED;
+      this.subscribeTo(channel, address);
+      return TransactionChannelMessage.subscribeTo(messageSubject, channel, address)
+            .map(transaction -> (AggregateTransaction)transaction);
+   }
 
-    @Override
-    public Observable<String> aggregateBondedRemoved(final Address address) {
-        this.subscribeTo(ListenerChannel.AGGREGATE_BONDED_REMOVED, address);
-        return this.messageSubject
-                .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.AGGREGATE_BONDED_REMOVED))
-                .map(rawMessage -> (String) rawMessage.getMessage());
-    }
+   @Override
+   public Observable<String> aggregateBondedRemoved(final Address address) {
+      ListenerChannel channel = ListenerChannel.AGGREGATE_BONDED_REMOVED;
+      this.subscribeTo(channel, address);
+      return SimpleChannelMessage.subscribeTo(messageSubject, channel, address);
+   }
 
-    @Override
-    public Observable<TransactionStatusError> status(final Address address) {
-        this.subscribeTo(ListenerChannel.STATUS, address);
-        return this.messageSubject
-                .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.STATUS))
-                .map(rawMessage -> (TransactionStatusError) rawMessage.getMessage());
-    }
+   @Override
+   public Observable<TransactionStatusError> status(final Address address) {
+      this.subscribeTo(ListenerChannel.STATUS, address);
+      return StatusChannelMessage.subscribeTo(messageSubject, address);
+   }
 
-    @Override
-    public Observable<CosignatureSignedTransaction> cosignatureAdded(final Address address) {
-        this.subscribeTo(ListenerChannel.COSIGNATURE, address);
-        return this.messageSubject
-                // filter to cosignatures
-                .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.COSIGNATURE))
-                // pull the JSON out of listener message
-                .map(rawMessage -> (JsonObject)rawMessage.getMessage())
-                // filter for this address
-                .filter(json -> Address.createFromEncoded(json.get("meta").getAsJsonObject().get("address").getAsString()).equals(address))
-                // create transaction object
-                .map(json -> new CosignatureSignedTransaction(
-                      json.get("parentHash").getAsString(),
-                      json.get("signature").getAsString(),
-                      json.get("signer").getAsString()
-                ));
-    }
+   @Override
+   public Observable<CosignatureSignedTransaction> cosignatureAdded(final Address address) {
+      this.subscribeTo(ListenerChannel.COSIGNATURE, address);
+      return CosignatureChannelMessage.subscribeTo(messageSubject, address);
+   }
 
-    private void subscribeTo(ListenerChannel channel) {
-       subscribeTo(channel, Optional.empty());
-    }
-    
-    private void subscribeTo(ListenerChannel channel, Address address) {
-       subscribeTo(channel, Optional.of(address));
-    }
-    
-    private void subscribeTo(ListenerChannel channel, Optional<Address> address) {
-       String channelPath;
-       if (address.isPresent()) {
-          channelPath = channel.getCode() + '/' + address.get().plain();
-       } else {
-          channelPath = channel.getCode();
-       }
-       subscribeTo(channelPath);
-    }
-    
-    private void subscribeTo(String channelPath) {
-      final ListenerSubscribeMessage subscribeMessage = new ListenerSubscribeMessage(this.uid, channelPath);
+   /**
+    * override this method to get notification about every event received from the server
+    * 
+    * @param webSocket socket which produced the event
+    * @param text event text
+    */
+   protected void onNewEventReceived(WebSocket webSocket, String text) {
+      // do nothing in default implementation
+   }
+   
+   private void subscribeTo(ListenerChannel channel) {
+      subscribeTo(channel, Optional.empty());
+   }
+
+   private void subscribeTo(ListenerChannel channel, Address address) {
+      subscribeTo(channel, Optional.of(address));
+   }
+
+   private void subscribeTo(ListenerChannel channel, Optional<Address> address) {
+      String channelPath;
+      if (address.isPresent()) {
+         channelPath = channel.getCode() + '/' + address.get().plain();
+      } else {
+         channelPath = channel.getCode();
+      }
+      subscribeTo(channelPath);
+   }
+
+   /**
+    * submit subscription for specified path to the server
+    * 
+    * @param channelPath path to subscribe to (typically channel/address)
+    */
+   private void subscribeTo(String channelPath) {
+      final ListenerSubscribtionMessage subscribeMessage = new ListenerSubscribtionMessage(this.uid, channelPath);
       String json;
       try {
          json = objectMapper.writeValueAsString(subscribeMessage);
@@ -209,31 +211,4 @@ public class Listener extends Http implements ListenerRepository {
       }
       this.webSocket.send(json);
    }
-
-    private boolean transactionFromAddress(final Transaction transaction, final Address address) {
-        AtomicBoolean transactionFromAddress = new AtomicBoolean(this.transactionHasSignerOrReceptor(transaction, address));
-
-        if (transaction instanceof AggregateTransaction) {
-            final AggregateTransaction aggregateTransaction = (AggregateTransaction) transaction;
-            aggregateTransaction.getCosignatures().forEach(cosignature -> {
-                if (cosignature.getSigner().getAddress().equals(address)) {
-                    transactionFromAddress.set(true);
-                }
-            });
-            aggregateTransaction.getInnerTransactions().forEach(innerTransaction -> {
-                if (this.transactionHasSignerOrReceptor(innerTransaction, address)) {
-                    transactionFromAddress.set(true);
-                }
-            });
-        }
-        return transactionFromAddress.get();
-    }
-
-    private boolean transactionHasSignerOrReceptor(final Transaction transaction, final Address address) {
-        boolean isReceptor = false;
-        if (transaction instanceof TransferTransaction) {
-            isReceptor = ((TransferTransaction) transaction).getRecipient().equals(address);
-        }
-        return transaction.getSigner().get().getAddress().equals(address) || isReceptor;
-    }
 }

@@ -16,20 +16,35 @@
 
 package io.proximax.sdk.infrastructure.listener;
 
-public class ListenerSubscribeMessage {
-    final private String uid;
-    final private String subscribe;
+/**
+ * message submitted to server to establish subscription
+ */
+public class ListenerSubscribtionMessage {
+    private final String uid;
+    private final String subscription;
 
-    public ListenerSubscribeMessage(String uid, String subscribe) {
+    /**
+     * create new subscription message
+     * 
+     * @param uid UID of the listener
+     * @param subscription identification of the subscription. 
+     */
+    public ListenerSubscribtionMessage(String uid, String subscription) {
         this.uid = uid;
-        this.subscribe = subscribe;
+        this.subscription = subscription;
     }
 
+    /**
+     * @return UID of the listener
+     */
     public String getUid() {
         return uid;
     }
 
-    public String getSubscribe() {
-        return subscribe;
+    /**
+     * @return desired subscription identification
+     */
+    public String getSubscription() {
+        return subscription;
     }
 }

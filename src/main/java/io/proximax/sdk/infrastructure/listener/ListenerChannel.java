@@ -49,7 +49,7 @@ public enum ListenerChannel {
       }
       throw new IllegalArgumentException(code + " is not valid listener channel");
    }
-
+   
    /**
     * get the code of this channel
     * 

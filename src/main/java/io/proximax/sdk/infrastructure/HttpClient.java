@@ -18,6 +18,9 @@ package io.proximax.sdk.infrastructure;
 import com.google.gson.JsonObject;
 
 import io.reactivex.Observable;
+import okhttp3.Request;
+import okhttp3.WebSocket;
+import okhttp3.WebSocketListener;
 
 /**
  * generic HTTP client API
@@ -83,4 +86,11 @@ public interface HttpClient {
     * @return observable response
     */
    Observable<HttpResponse> putAbs(String absoluteUrl, JsonObject body);
+
+   /**
+    * @param request
+    * @param webSocketListener
+    * @return
+    */
+   WebSocket newWebSocket(Request request, WebSocketListener webSocketListener);
 }

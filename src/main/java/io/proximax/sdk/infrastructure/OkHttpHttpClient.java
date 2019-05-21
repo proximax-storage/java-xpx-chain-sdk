@@ -27,6 +27,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import okhttp3.WebSocket;
+import okhttp3.WebSocketListener;
 
 /**
  * HTTP client implementation using OK HTTP3
@@ -86,6 +88,12 @@ public class OkHttpHttpClient implements HttpClient {
       return createHttpResponseObservable(request);
    }
 
+
+   @Override
+   public WebSocket newWebSocket(Request request, WebSocketListener webSocketListener) {
+      return client.newWebSocket(request, webSocketListener);
+   }
+   
    /**
     * use okhttp client to execute provided request and return Observable for the response
     * 
