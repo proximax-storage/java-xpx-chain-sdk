@@ -16,35 +16,39 @@
 
 package io.proximax.sdk.infrastructure.listener;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * message submitted to server to establish subscription
  */
 public class ListenerSubscribtionMessage {
-    private final String uid;
-    private final String subscription;
+   @JsonProperty("uid")
+   private final String uid;
+   @JsonProperty("subscribe")
+   private final String subscription;
 
-    /**
-     * create new subscription message
-     * 
-     * @param uid UID of the listener
-     * @param subscription identification of the subscription. 
-     */
-    public ListenerSubscribtionMessage(String uid, String subscription) {
-        this.uid = uid;
-        this.subscription = subscription;
-    }
+   /**
+    * create new subscription message
+    * 
+    * @param uid UID of the listener
+    * @param subscription identification of the subscription.
+    */
+   public ListenerSubscribtionMessage(String uid, String subscription) {
+      this.uid = uid;
+      this.subscription = subscription;
+   }
 
-    /**
-     * @return UID of the listener
-     */
-    public String getUid() {
-        return uid;
-    }
+   /**
+    * @return UID of the listener
+    */
+   public String getUid() {
+      return uid;
+   }
 
-    /**
-     * @return desired subscription identification
-     */
-    public String getSubscription() {
-        return subscription;
-    }
+   /**
+    * @return desired subscription identification
+    */
+   public String getSubscription() {
+      return subscription;
+   }
 }
