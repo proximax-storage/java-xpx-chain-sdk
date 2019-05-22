@@ -68,12 +68,12 @@ public class UInt64Utils {
         return new int[]{lower, higher};
     }
 
-	/**
-	 * reconstruct BigInteger from int array
-	 * 
-	 * @param input array of int values
-	 * @return BigInt instance representing the value
-	 */
+   /**
+    * reconstruct BigInteger from int array
+    * 
+    * @param input array of int values
+    * @return BigInt instance representing the value
+    */
     public static BigInteger fromIntArray(int[] input) {
         if (input.length != 2) {
             throw new IllegalArgumentException("input must have length 2");
@@ -85,6 +85,25 @@ public class UInt64Utils {
         ibuf.put(input);
         return new BigInteger(array);
     }
+
+    /**
+     * reconstruct BigInteger from long array
+     * 
+     * @param input array of long values
+     * @return BigInt instance representing the value
+     */
+     public static BigInteger fromLongArray(long[] input) {
+         if (input.length != 2) {
+             throw new IllegalArgumentException("input must have length 2");
+         }
+         ArrayUtils.reverse(input);
+         byte[] array = new byte[input.length * 4];
+         ByteBuffer bbuf = ByteBuffer.wrap(array);
+         IntBuffer ibuf = bbuf.asIntBuffer();
+         ibuf.put((int)input[0]);
+         ibuf.put((int)input[1]);
+         return new BigInteger(array);
+     }
 
     /**
      * convert DTO representing array of unsigned integers to BigInteger instance
