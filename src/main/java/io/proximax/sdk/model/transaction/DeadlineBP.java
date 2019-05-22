@@ -22,57 +22,57 @@ import org.threeten.bp.Instant;
 import org.threeten.bp.temporal.ChronoUnit;
 
 /**
- * The deadline of the transaction. The deadline is given as the number of seconds elapsed since the creation of the nemesis block.
- * If a transaction does not get included in a block before the deadline is reached, it is deleted.
+ * The deadline of the transaction. The deadline is given as the number of seconds elapsed since the creation of the
+ * nemesis block. If a transaction does not get included in a block before the deadline is reached, it is deleted.
  *
  * this implementation uses back-port library of JSR-310 to support older android devices
  */
 public class DeadlineBP implements TransactionDeadline {
 
-    /**
-     * Nemesis block timestamp.
-     */
-    public static final Instant TIMESTAMP_NEMSIS_BLOCK = Instant.ofEpochSecond(MILLIS_OF_NEMESIS);
-    private final Instant instant;
+   /**
+    * epoch of the network is hard-coded value and all times are relative to that
+    */
+   public static final Instant NETWORK_EPOCH = Instant.ofEpochMilli(NETWORK_EPOCH_START_MILLIS);
+   private final Instant instant;
 
-    /**
-     * Constructor
-     *
-     * @param units      int
-     * @param chronoUnit Chrono unit
-     */
-    public DeadlineBP(int units, ChronoUnit chronoUnit) {
-        instant = Instant.now().plus(units, chronoUnit);
-    }
+   /**
+    * Constructor
+    *
+    * @param units int
+    * @param chronoUnit Chrono unit
+    */
+   public DeadlineBP(int units, ChronoUnit chronoUnit) {
+      instant = Instant.now().plus(units, chronoUnit);
+   }
 
-    /**
-     * Constructor
-     *
-     * @param input Deadline in BigInteger format
-     */
-    public DeadlineBP(BigInteger input) {
-        instant = Instant.ofEpochMilli(input.longValue());
-    }
+   /**
+    * Constructor
+    *
+    * @param input Deadline in BigInteger format
+    */
+   public DeadlineBP(BigInteger input) {
+      instant = Instant.ofEpochMilli(input.longValue() + NETWORK_EPOCH_START_MILLIS);
+   }
 
-    /**
-     * Create deadline model.
-     *
-     * @param units      int
-     * @param chronoUnit Chrono unit
-     * @return {@link DeadlineBP}
-     */
-    public static DeadlineBP create(int units, ChronoUnit chronoUnit) {
-        return new DeadlineBP(units, chronoUnit);
-    }
+   /**
+    * Create deadline model.
+    *
+    * @param units int
+    * @param chronoUnit Chrono unit
+    * @return {@link DeadlineBP}
+    */
+   public static DeadlineBP create(int units, ChronoUnit chronoUnit) {
+      return new DeadlineBP(units, chronoUnit);
+   }
 
-    /**
-     * Returns number of seconds elapsed since the creation of the nemesis block.
-     *
-     * @return long
-     */
-    public long getInstant() {
-        return instant.toEpochMilli() - DeadlineBP.TIMESTAMP_NEMSIS_BLOCK.toEpochMilli();
-    }
+   /**
+    * Returns number of seconds elapsed since the creation of the nemesis block.
+    *
+    * @return long
+    */
+   public long getInstant() {
+      return instant.toEpochMilli() - DeadlineBP.NETWORK_EPOCH.toEpochMilli();
+   }
 
    @Override
    public String toString() {

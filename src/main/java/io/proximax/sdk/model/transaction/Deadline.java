@@ -21,53 +21,53 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
 /**
- * The deadline of the transaction. The deadline is given as the number of seconds elapsed since the creation of the nemesis block.
- * If a transaction does not get included in a block before the deadline is reached, it is deleted.
+ * The deadline of the transaction. The deadline is given as the number of seconds elapsed since the creation of the
+ * nemesis block. If a transaction does not get included in a block before the deadline is reached, it is deleted.
  *
  * @since 1.0
  */
 public class Deadline implements TransactionDeadline {
 
-    /**
-     * Nemesis block timestamp.
-     */
-    public static final Instant TIMESTAMP_NEMSIS_BLOCK = Instant.ofEpochSecond(MILLIS_OF_NEMESIS);
-    private final Instant instant;
+   /**
+    * epoch of the network is hard-coded value and all times are relative to that
+    */
+   public static final Instant NETWORK_EPOCH = Instant.ofEpochMilli(NETWORK_EPOCH_START_MILLIS);
+   private final Instant instant;
 
-    /**
-     * Constructor
-     *
-     * @param units      int
-     * @param chronoUnit Chrono unit
-     */
-    public Deadline(int units, ChronoUnit chronoUnit) {
-        instant = Instant.now().plus(units, chronoUnit);
-    }
+   /**
+    * Constructor
+    *
+    * @param units int
+    * @param chronoUnit Chrono unit
+    */
+   public Deadline(int units, ChronoUnit chronoUnit) {
+      instant = Instant.now().plus(units, chronoUnit);
+   }
 
-    /**
-     * Constructor
-     *
-     * @param input Deadline in BigInteger format
-     */
-    public Deadline(BigInteger input) {
-        instant = Instant.ofEpochMilli(input.longValue());
-    }
+   /**
+    * Constructor
+    *
+    * @param input Deadline in BigInteger format
+    */
+   public Deadline(BigInteger input) {
+      instant = Instant.ofEpochMilli(input.longValue() + NETWORK_EPOCH_START_MILLIS);
+   }
 
-    /**
-     * Create deadline model.
-     *
-     * @param units      int
-     * @param chronoUnit Chrono unit
-     * @return {@link Deadline}
-     */
-    public static Deadline create(int units, ChronoUnit chronoUnit) {
-        return new Deadline(units, chronoUnit);
-    }
+   /**
+    * Create deadline model.
+    *
+    * @param units int
+    * @param chronoUnit Chrono unit
+    * @return {@link Deadline}
+    */
+   public static Deadline create(int units, ChronoUnit chronoUnit) {
+      return new Deadline(units, chronoUnit);
+   }
 
-    @Override
-    public long getInstant() {
-       return instant.toEpochMilli() - Deadline.TIMESTAMP_NEMSIS_BLOCK.toEpochMilli();
-    }
+   @Override
+   public long getInstant() {
+      return instant.toEpochMilli() - Deadline.NETWORK_EPOCH.toEpochMilli();
+   }
 
    @Override
    public String toString() {

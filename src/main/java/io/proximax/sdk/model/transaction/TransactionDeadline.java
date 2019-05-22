@@ -16,16 +16,17 @@
 package io.proximax.sdk.model.transaction;
 
 /**
- * TODO add proper description
+ * common interface for deadline implementations
  */
 public interface TransactionDeadline {
-   
-   public static final long MILLIS_OF_NEMESIS = 1459468800l;
-   
+
+   /** Fri Apr 01 2016 00:00:00 UTC is the start of network epoch */
+   public static final long NETWORK_EPOCH_START_MILLIS = 1459468800000l;
+
    /**
-    * Returns number of milliseconds elapsed since the creation of the nemesis block.
+    * Returns number of milliseconds elapsed since the network epoch
     *
-    * @return long
+    * @return long millis
     */
    long getInstant();
 }
