@@ -137,8 +137,8 @@ public class BlockchainApi {
     * 
     * @return the network listener
     */
-   public Listener createListener() {
-      return new Listener(url);
+   public ListenerRepository createListener() {
+      return new Listener(this);
    }
    
    /**

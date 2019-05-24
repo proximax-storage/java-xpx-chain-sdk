@@ -35,6 +35,7 @@ import org.spongycastle.util.encoders.Hex;
 import io.proximax.core.crypto.Hashes;
 import io.proximax.sdk.BaseTest;
 import io.proximax.sdk.BlockchainApi;
+import io.proximax.sdk.ListenerRepository;
 import io.proximax.sdk.TransactionRepository;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
@@ -55,20 +56,23 @@ class E2ETest extends BaseTest {
     private Account cosignatoryAccount;
     private Account cosignatoryAccount2;
     private NamespaceId namespaceId = new NamespaceId(new BigInteger("-1999805136990834023")); // This namespace is created in functional testing
-    private String namespaceName = "nem2-tests";
     private MosaicId mosaicId = new MosaicId(new BigInteger("4532189107927582222")); // This mosaic is created in functional testing
-    private Listener listener;
+    private ListenerRepository listener;
 
     @BeforeAll
-    void setup() throws ExecutionException, InterruptedException, IOException {
-        transactionHttp = new BlockchainApi(new URL(this.getNodeUrl()), getNetworkType()).createTransactionRepository();
-        account = new Account("787225aaff3d2c71f4ffa32d4f19ec4922f3cd869747f267378f81f8e3fcb12d", NetworkType.MIJIN_TEST);
-        multisigAccount = new Account("5edebfdbeb32e9146d05ffd232c8af2cf9f396caf9954289daa0362d097fff3b", NetworkType.MIJIN_TEST);
-        cosignatoryAccount = new Account("2a2b1f5d366a5dd5dc56c3c757cf4fe6c66e2787087692cf329d7a49a594658b", NetworkType.MIJIN_TEST);
-        cosignatoryAccount2 = new Account("b8afae6f4ad13a1b8aad047b488e0738a437c7389d4ff30c359ac068910c1d59", NetworkType.MIJIN_TEST);
-        listener = new Listener(new URL(getNodeUrl()));
-        listener.open().get();
-    }
+   void setup() throws ExecutionException, InterruptedException, IOException {
+      BlockchainApi api = new BlockchainApi(new URL(this.getNodeUrl()), getNetworkType());
+      transactionHttp = api.createTransactionRepository();
+      account = new Account("787225aaff3d2c71f4ffa32d4f19ec4922f3cd869747f267378f81f8e3fcb12d", NetworkType.MIJIN_TEST);
+      multisigAccount = new Account("5edebfdbeb32e9146d05ffd232c8af2cf9f396caf9954289daa0362d097fff3b",
+            NetworkType.MIJIN_TEST);
+      cosignatoryAccount = new Account("2a2b1f5d366a5dd5dc56c3c757cf4fe6c66e2787087692cf329d7a49a594658b",
+            NetworkType.MIJIN_TEST);
+      cosignatoryAccount2 = new Account("b8afae6f4ad13a1b8aad047b488e0738a437c7389d4ff30c359ac068910c1d59",
+            NetworkType.MIJIN_TEST);
+      listener = api.createListener();
+      listener.open().get();
+   }
 
     @Test
     void standaloneTransferTransaction() throws ExecutionException, InterruptedException {

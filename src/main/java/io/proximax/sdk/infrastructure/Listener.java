@@ -16,365 +16,199 @@
 
 package io.proximax.sdk.infrastructure;
 
-import java.math.BigInteger;
-import java.net.URL;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.StreamSupport;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import io.proximax.sdk.gen.model.UInt64DTO;
+import io.proximax.sdk.BlockchainApi;
+import io.proximax.sdk.ListenerRepository;
+import io.proximax.sdk.infrastructure.listener.BlockChannelMessage;
+import io.proximax.sdk.infrastructure.listener.CosignatureChannelMessage;
+import io.proximax.sdk.infrastructure.listener.ListenerChannel;
+import io.proximax.sdk.infrastructure.listener.ListenerMessage;
+import io.proximax.sdk.infrastructure.listener.ListenerMessageMapping;
+import io.proximax.sdk.infrastructure.listener.ListenerSubscribtionMessage;
+import io.proximax.sdk.infrastructure.listener.SimpleChannelMessage;
+import io.proximax.sdk.infrastructure.listener.StatusChannelMessage;
+import io.proximax.sdk.infrastructure.listener.TransactionChannelMessage;
 import io.proximax.sdk.model.account.Address;
-import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.BlockInfo;
-import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.CosignatureSignedTransaction;
-import io.proximax.sdk.model.transaction.DeadlineBP;
 import io.proximax.sdk.model.transaction.Transaction;
 import io.proximax.sdk.model.transaction.TransactionStatusError;
-import io.proximax.sdk.model.transaction.TransferTransaction;
-import io.proximax.sdk.utils.dto.UInt64Utils;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
-import okio.ByteString;
 
 /**
- * Listener
- *
- * @since 1.0
+ * Listener repository implementation
  */
-public class Listener {
-    private final URL url;
-    private final Subject<ListenerMessage> messageSubject;
-    private String UID;
-    private WebSocket webSocket;
-    private ObjectMapper objectMapper = new ObjectMapper();
+public class Listener extends Http implements ListenerRepository {
+   private final Subject<ListenerMessage> messageSubject;
+   private String uid;
+   private WebSocket webSocket;
+   private final ListenerMessageMapping mapping = new ListenerMessageMapping();
 
-    /**
-     * create new listener for specified node
-     * 
-     * @param url nis host
-     */
-    public Listener(final URL url) {
-        this.url = url;
-        this.messageSubject = PublishSubject.create();
-    }
+   /**
+    * create new listener for specified API
+    * 
+    * @param api blockchain API
+    */
+   public Listener(BlockchainApi api) {
+      super(api);
+      this.messageSubject = PublishSubject.create();
+   }
 
-    /**
-     * @return a {@link CompletableFuture} that resolves when the websocket connection is opened
-     */
-    public CompletableFuture<Void> open() {
-        CompletableFuture<Void> future = new CompletableFuture<>();
-        if (this.webSocket != null) {
-            return CompletableFuture.completedFuture(null);
-        }
+   @Override
+   public CompletableFuture<Void> open() {
+      // return immediately if websocket is already opened
+      if (this.webSocket != null) {
+         return CompletableFuture.completedFuture(null);
+      }
 
-        Request request = new Request.Builder()
-                .url(this.url.toString() + "/ws")
-                .build();
+      // prepare the future that will indicate that socket was opened
+      CompletableFuture<Void> future = new CompletableFuture<>();
 
-        OkHttpClient client = new OkHttpClient.Builder()
-                .build();
+      // prepare the request for the websocket registration
+      Request request = new Request.Builder().url(api.getUrl().toString() + "/ws").build();
 
-        webSocket = client.newWebSocket(request, new WebSocketListener() {
-            @Override
-            public void onOpen(WebSocket webSocket, Response response) {
-                super.onOpen(webSocket, response);
+      // create the websocket connection
+      webSocket = client.newWebSocket(request, new WebSocketListener() {
+         @Override
+         public void onMessage(WebSocket webSocket, String text) {
+            onNewEventReceived(webSocket, text);
+            // parse the event text
+            JsonObject message = new Gson().fromJson(text, JsonObject.class);
+            // for for UID complete the socket initialization
+            if (message.has("uid")) {
+               Listener.this.uid = message.get("uid").getAsString();
+               future.complete(null);
+            } else {
+               // non-UID events need to be mapped to listener events
+               try {
+                  Listener.this.messageSubject.onNext(mapping.getMessage(text, message));
+               } catch (RuntimeException e) {
+                  Listener.this.messageSubject.onError(e);
+               }
             }
+         }
+      });
 
-            @Override
-            public void onMessage(WebSocket webSocket, String text) {
-                super.onMessage(webSocket, text);
-                System.out.println("server: " + text);
-                JsonObject message = new Gson().fromJson(text, JsonObject.class);
-                if (message.has("uid")) {
-                    Listener.this.UID = message.get("uid").getAsString();
-                    future.complete(null);
-                } else if (message.has("transaction")) {
-                    Listener.this.messageSubject.onNext(new ListenerMessage(
-                            ListenerChannel.rawValueOf(message.getAsJsonObject("meta").get("channelName").getAsString()),
-                            new TransactionMapping().apply(new Gson().fromJson(message.toString(), com.google.gson.JsonObject.class))
-                    ));
-                } else if (message.has("block")) {
-                    final JsonObject meta = message.getAsJsonObject("meta");
-                    final JsonObject block = message.getAsJsonObject("block");
-                    int rawNetworkType = (int) Long.parseLong(Integer.toHexString(block.get("version").getAsInt()).substring(0, 2), 16);
-                    final NetworkType networkType;
-                    if (rawNetworkType == NetworkType.MIJIN_TEST.getValue()) networkType = NetworkType.MIJIN_TEST;
-                    else if (rawNetworkType == NetworkType.MIJIN.getValue()) networkType = NetworkType.MIJIN;
-                    else if (rawNetworkType == NetworkType.MAIN_NET.getValue()) networkType = NetworkType.MAIN_NET;
-                    else networkType = NetworkType.TEST_NET;
+      return future;
+   }
 
-                    final int version = (int) Long.parseLong(Integer.toHexString(block.get("version").getAsInt()).substring(2, 4), 16);
-                    Listener.this.messageSubject.onNext(new ListenerMessage(
-                            ListenerChannel.BLOCK,
-                            new BlockInfo(
-                                    meta.get("hash").getAsString(),
-                                    meta.get("generationHash").getAsString(),
-                                    Optional.empty(),
-                                    Optional.empty(),
-                                    block.get("signature").getAsString(),
-                                    new PublicAccount(block.get("signer").getAsString(), networkType),
-                                    networkType,
-                                    version,
-                                    block.get("type").getAsInt(),
-                                    extractBigInteger(block.getAsJsonArray("height")),
-                                    extractBigInteger(block.getAsJsonArray("timestamp")),
-                                    extractBigInteger(block.getAsJsonArray("difficulty")),
-                                    block.get("previousBlockHash").getAsString(),
-                                    block.get("blockTransactionsHash").getAsString()
-                            )
-                    ));
-                } else if (message.has("status")) {
-                    Listener.this.messageSubject.onNext(new ListenerMessage(
-                            ListenerChannel.STATUS,
-                            new TransactionStatusError(
-                                    message.get("hash").getAsString(),
-                                    message.get("status").getAsString(),
-                                    new DeadlineBP(extractBigInteger(message.getAsJsonArray("deadline")))
-                            )
-                    ));
-                } else if (message.has("meta") && message.get("meta").getAsJsonObject().has("hash")) {
-                    Listener.this.messageSubject.onNext(new ListenerMessage(
-                            ListenerChannel.rawValueOf(message.getAsJsonObject("meta").get("channelName").getAsString()),
-                            message.get("meta").getAsJsonObject().get("hash").getAsString()
-                    ));
-                } else if (message.has("parentHash")) {
-                    Listener.this.messageSubject.onNext(new ListenerMessage(
-                            ListenerChannel.COSIGNATURE,
-                            message
-                    ));
-                }
+   @Override
+   public String getUID() {
+      return uid;
+   }
 
-            }
+   @Override
+   public void close() {
+      this.webSocket.close(1000, "Closed.");
+   }
 
-            @Override
-            public void onMessage(WebSocket webSocket, ByteString bytes) {
-                super.onMessage(webSocket, bytes);
-            }
+   @Override
+   public Observable<BlockInfo> newBlock() {
+      this.subscribeTo(ListenerChannel.BLOCK);
+      return BlockChannelMessage.subscribeTo(messageSubject);
+   }
 
-            @Override
-            public void onClosing(WebSocket webSocket, int code, String reason) {
-                super.onClosing(webSocket, code, reason);
+   @Override
+   public Observable<Transaction> confirmed(final Address address) {
+      ListenerChannel channel = ListenerChannel.CONFIRMED_ADDED;
+      this.subscribeTo(channel, address);
+      return TransactionChannelMessage.subscribeTo(messageSubject, channel, address);
+   }
 
-            }
+   @Override
+   public Observable<Transaction> unconfirmedAdded(final Address address) {
+      ListenerChannel channel = ListenerChannel.UNCONFIRMED_ADDED;
+      this.subscribeTo(channel, address);
+      return TransactionChannelMessage.subscribeTo(messageSubject, channel, address);
+   }
 
-            @Override
-            public void onClosed(WebSocket webSocket, int code, String reason) {
-                super.onClosed(webSocket, code, reason);
-            }
+   @Override
+   public Observable<String> unconfirmedRemoved(final Address address) {
+      ListenerChannel channel = ListenerChannel.UNCONFIRMED_REMOVED;
+      this.subscribeTo(channel, address);
+      return SimpleChannelMessage.subscribeTo(messageSubject, channel, address);
+   }
 
-            @Override
-            public void onFailure(WebSocket webSocket, Throwable t, Response response) {
-                super.onFailure(webSocket, t, response);
-            }
-        });
+   @Override
+   public Observable<AggregateTransaction> aggregateBondedAdded(final Address address) {
+      ListenerChannel channel = ListenerChannel.AGGREGATE_BONDED_ADDED;
+      this.subscribeTo(channel, address);
+      return TransactionChannelMessage.subscribeTo(messageSubject, channel, address)
+            .map(transaction -> (AggregateTransaction)transaction);
+   }
 
-        return future;
-    }
+   @Override
+   public Observable<String> aggregateBondedRemoved(final Address address) {
+      ListenerChannel channel = ListenerChannel.AGGREGATE_BONDED_REMOVED;
+      this.subscribeTo(channel, address);
+      return SimpleChannelMessage.subscribeTo(messageSubject, channel, address);
+   }
 
-    /**
-     * // TODO: should we remove it?
-     *
-     * @return the UID connected to
-     */
-    public String getUID() {
-        return UID;
-    }
+   @Override
+   public Observable<TransactionStatusError> status(final Address address) {
+      this.subscribeTo(ListenerChannel.STATUS, address);
+      return StatusChannelMessage.subscribeTo(messageSubject, address);
+   }
 
-    /**
-     * Close webSocket connection
-     */
-    public void close() {
-        this.webSocket.close(1000, "Closed.");
-    }
+   @Override
+   public Observable<CosignatureSignedTransaction> cosignatureAdded(final Address address) {
+      this.subscribeTo(ListenerChannel.COSIGNATURE, address);
+      return CosignatureChannelMessage.subscribeTo(messageSubject, address);
+   }
 
-    /**
-     * Returns an observable stream of BlockInfo.
-     * Each time a new Block is added into the blockchain,
-     * it emits a new BlockInfo in the event stream.
-     *
-     * @return an observable stream of BlockInfo
-     */
-    public Observable<BlockInfo> newBlock() {
-        this.subscribeTo(ListenerChannel.BLOCK.toString());
-        return this.messageSubject
-                .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.BLOCK))
-                .map(rawMessage -> (BlockInfo) rawMessage.getMessage());
-    }
+   /**
+    * override this method to get notification about every event received from the server
+    * 
+    * @param webSocket socket which produced the event
+    * @param text event text
+    */
+   protected void onNewEventReceived(WebSocket webSocket, String text) {
+      // do nothing in default implementation
+   }
+   
+   private void subscribeTo(ListenerChannel channel) {
+      subscribeTo(channel, Optional.empty());
+   }
 
-    /**
-     * Returns an observable stream of Transaction for a specific address.
-     * Each time a transaction is in confirmed state an it involves the address,
-     * it emits a new Transaction in the event stream.
-     *
-     * @param address address we listen when a transaction is in confirmed state
-     * @return an observable stream of Transaction with state confirmed
-     */
-    public Observable<Transaction> confirmed(final Address address) {
-        this.subscribeTo(ListenerChannel.CONFIRMED_ADDED.toString() + "/" + address.plain());
-        return this.messageSubject
-                .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.CONFIRMED_ADDED))
-                .map(rawMessage -> (Transaction) rawMessage.getMessage())
-                .filter(transaction -> this.transactionFromAddress(transaction, address));
-    }
+   private void subscribeTo(ListenerChannel channel, Address address) {
+      subscribeTo(channel, Optional.of(address));
+   }
 
-    /**
-     * Returns an observable stream of Transaction for a specific address.
-     * Each time a transaction is in unconfirmed state an it involves the address,
-     * it emits a new Transaction in the event stream.
-     *
-     * @param address address we listen when a transaction is in unconfirmed state
-     * @return an observable stream of Transaction with state unconfirmed
-     */
-    public Observable<Transaction> unconfirmedAdded(Address address) {
-        this.subscribeTo(ListenerChannel.UNCONFIRMED_ADDED + "/" + address.plain());
-        return this.messageSubject
-                .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.UNCONFIRMED_ADDED))
-                .map(rawMessage -> (Transaction) rawMessage.getMessage())
-                .filter(transaction -> this.transactionFromAddress(transaction, address));
-    }
+   private void subscribeTo(ListenerChannel channel, Optional<Address> address) {
+      String channelPath;
+      if (address.isPresent()) {
+         channelPath = channel.getCode() + '/' + address.get().plain();
+      } else {
+         channelPath = channel.getCode();
+      }
+      subscribeTo(channelPath);
+   }
 
-    /**
-     * Returns an observable stream of Transaction Hashes for specific address.
-     * Each time a transaction with state unconfirmed changes its state,
-     * it emits a new message with the transaction hash in the event stream.
-     *
-     * @param address address we listen when a transaction is removed from unconfirmed state
-     * @return an observable stream of Strings with the transaction hash
-     */
-    public Observable<String> unconfirmedRemoved(Address address) {
-        this.subscribeTo(ListenerChannel.UNCONFIRMED_REMOVED + "/" + address.plain());
-        return this.messageSubject
-                .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.UNCONFIRMED_REMOVED))
-                .map(rawMessage -> (String) rawMessage.getMessage());
-    }
-
-    /**
-     * Return an observable of {@link AggregateTransaction} for specific address.
-     * Each time an aggregate bonded transaction is announced,
-     * it emits a new {@link AggregateTransaction} in the event stream.
-     *
-     * @param address address we listen when a transaction with missing signatures state
-     * @return an observable stream of AggregateTransaction with missing signatures state
-     */
-    public Observable<AggregateTransaction> aggregateBondedAdded(Address address) {
-        this.subscribeTo(ListenerChannel.AGGREGATE_BONDED_ADDED + "/" + address.plain());
-        return this.messageSubject
-                .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.AGGREGATE_BONDED_ADDED))
-                .map(rawMessage -> (AggregateTransaction) rawMessage.getMessage())
-                .filter(transaction -> this.transactionFromAddress(transaction, address));
-    }
-
-    /**
-     * Returns an observable stream of Transaction Hashes for specific address.
-     * Each time an aggregate bonded transaction is announced,
-     * it emits a new message with the transaction hash in the event stream.
-     *
-     * @param address address we listen when a transaction is confirmed or rejected
-     * @return an observable stream of Strings with the transaction hash
-     */
-    public Observable<String> aggregateBondedRemoved(Address address) {
-        this.subscribeTo(ListenerChannel.AGGREGATE_BONDED_REMOVED + "/" + address.plain());
-        return this.messageSubject
-                .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.AGGREGATE_BONDED_REMOVED))
-                .map(rawMessage -> (String) rawMessage.getMessage());
-    }
-
-    /**
-     * Returns an observable stream of {@link TransactionStatusError} for specific address.
-     * Each time a transaction contains an error,
-     * it emits a new message with the transaction status error in the event stream.
-     *
-     * @param address address we listen to be notified when some error happened
-     * @return an observable stream of {@link TransactionStatusError}
-     */
-    public Observable<TransactionStatusError> status(Address address) {
-        this.subscribeTo(ListenerChannel.STATUS + "/" + address.plain());
-        return this.messageSubject
-                .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.STATUS))
-                .map(rawMessage -> (TransactionStatusError) rawMessage.getMessage());
-    }
-
-    /**
-     * Returns an observable stream of {@link CosignatureSignedTransaction} for specific address.
-     * Each time a cosigner signs a transaction the address initialized,
-     * it emits a new message with the cosignatory signed transaction in the even stream.
-     *
-     * @param address address we listen when a cosignatory is added to some transaction address sent
-     * @return an observable stream of {@link CosignatureSignedTransaction}
-     */
-    public Observable<CosignatureSignedTransaction> cosignatureAdded(final Address address) {
-        this.subscribeTo(ListenerChannel.COSIGNATURE + "/" + address.plain());
-        return this.messageSubject
-                // filter to cosignatures
-                .filter(rawMessage -> rawMessage.getChannel().equals(ListenerChannel.COSIGNATURE))
-                // pull the JSON out of listener message
-                .map(rawMessage -> (JsonObject)rawMessage.getMessage())
-                // filter for this address
-                .filter(json -> Address.createFromEncoded(json.get("meta").getAsJsonObject().get("address").getAsString()).equals(address))
-                // create transaction object
-                .map(json -> new CosignatureSignedTransaction(
-                      json.get("parentHash").getAsString(),
-                      json.get("signature").getAsString(),
-                      json.get("signer").getAsString()
-                ));
-    }
-
-    private void subscribeTo(String channel) {
-        final ListenerSubscribeMessage subscribeMessage = new ListenerSubscribeMessage(this.UID, channel);
-        String json;
-        try {
-            json = objectMapper.writeValueAsString(subscribeMessage);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e.getCause());
-        }
-        this.webSocket.send(json);
-    }
-
-    private BigInteger extractBigInteger(JsonArray input) {
-        UInt64DTO uInt64DTO = new UInt64DTO();
-        StreamSupport.stream(input.spliterator(), false).forEach(item -> uInt64DTO.add(new Long(item.toString())));
-        return UInt64Utils.toBigInt(uInt64DTO);
-    }
-
-    private boolean transactionFromAddress(final Transaction transaction, final Address address) {
-        AtomicBoolean transactionFromAddress = new AtomicBoolean(this.transactionHasSignerOrReceptor(transaction, address));
-
-        if (transaction instanceof AggregateTransaction) {
-            final AggregateTransaction aggregateTransaction = (AggregateTransaction) transaction;
-            aggregateTransaction.getCosignatures().forEach(cosignature -> {
-                if (cosignature.getSigner().getAddress().equals(address)) {
-                    transactionFromAddress.set(true);
-                }
-            });
-            aggregateTransaction.getInnerTransactions().forEach(innerTransaction -> {
-                if (this.transactionHasSignerOrReceptor(innerTransaction, address)) {
-                    transactionFromAddress.set(true);
-                }
-            });
-        }
-        return transactionFromAddress.get();
-    }
-
-    private boolean transactionHasSignerOrReceptor(final Transaction transaction, final Address address) {
-        boolean isReceptor = false;
-        if (transaction instanceof TransferTransaction) {
-            isReceptor = ((TransferTransaction) transaction).getRecipient().equals(address);
-        }
-        return transaction.getSigner().get().getAddress().equals(address) || isReceptor;
-    }
+   /**
+    * submit subscription for specified path to the server
+    * 
+    * @param channelPath path to subscribe to (typically channel/address)
+    */
+   private void subscribeTo(String channelPath) {
+      final ListenerSubscribtionMessage subscribeMessage = new ListenerSubscribtionMessage(this.uid, channelPath);
+      String json;
+      try {
+         json = objectMapper.writeValueAsString(subscribeMessage);
+      } catch (JsonProcessingException e) {
+         throw new RuntimeException(e.getCause());
+      }
+      this.webSocket.send(json);
+   }
 }
