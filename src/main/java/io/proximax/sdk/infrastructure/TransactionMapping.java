@@ -34,6 +34,9 @@ import com.google.gson.JsonObject;
 import io.proximax.sdk.gen.model.UInt64DTO;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
+import io.proximax.sdk.model.account.props.AccountPropertyModification;
+import io.proximax.sdk.model.account.props.AccountPropertyModificationType;
+import io.proximax.sdk.model.account.props.AccountPropertyType;
 import io.proximax.sdk.model.alias.AliasAction;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.metadata.MetadataModification;
@@ -84,6 +87,8 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
       case MODIFY_MOSAIC_METADATA:
       case MODIFY_NAMESPACE_METADATA:
          return new ModifyMetadataTransactionMapping().apply(input);
+      case ACCOUNT_PROPERTIES_ADDRESS:
+         return new ModifyAccountPropertiesTransactionMapping().apply(input);
       default:
          throw new UnsupportedOperationException("Unimplemented transaction type " + type);
       }
@@ -243,7 +248,7 @@ class TransferTransactionMapping extends TransactionMapping {
 }
 
 /**
- * mapping for transfer transaction
+ * mapping for metadata transaction
  */
 class ModifyMetadataTransactionMapping extends TransactionMapping {
 
@@ -307,6 +312,68 @@ class ModifyMetadataTransactionMapping extends TransactionMapping {
          return MetadataModification.remove(key);
       default:
          throw new IllegalArgumentException("modification type not supported: " + type);
+      }
+   }
+}
+
+/**
+ * mapping for metadata transaction
+ */
+class ModifyAccountPropertiesTransactionMapping extends TransactionMapping {
+
+   @Override
+   public ModifyAccountPropertyTransaction<?> apply(JsonObject input) {
+      // retrieve transaction info from meta field
+      TransactionInfo transactionInfo = createTransactionInfo(input.getAsJsonObject("meta"));
+      // retrieve transaction data from transaction field
+      JsonObject transaction = input.getAsJsonObject("transaction");
+      // deadline
+      DeadlineBP deadline = new DeadlineBP(extractBigInteger(transaction.getAsJsonArray("deadline")));
+      // version
+      JsonElement version = transaction.get("version");
+      // transaction type
+      TransactionType type = TransactionType.rawValueOf(transaction.get("type").getAsInt());
+      // modifications
+      List<AccountPropertyModification<Address>> modifications = stream(transaction.getAsJsonArray("modifications"))
+            .map(obj -> (JsonObject) obj).map(json -> mapModFromJson(type, json))
+            .collect(Collectors.toList());
+      // signer
+      PublicAccount signer = new PublicAccount(transaction.get("signer").getAsString(), extractNetworkType(version));
+      // signature
+      String signature = transaction.get("signature").getAsString();
+      // metadata type
+      AccountPropertyType propertyType = AccountPropertyType.getByCode(transaction.get("propertyType").getAsInt());
+      // create instance of transaction
+      switch (type) {
+      case ACCOUNT_PROPERTIES_ADDRESS:
+         return new ModifyAccountPropertyTransaction.AddressModification(
+               extractNetworkType(version), 
+               extractTransactionVersion(version),
+               deadline, 
+               extractFee(transaction), 
+               propertyType, 
+               modifications,
+               Optional.of(signature), 
+               Optional.of(signer), 
+               Optional.of(transactionInfo));
+      default:
+         throw new IllegalArgumentException("unsupported transaction type " + type);
+      }
+   }
+   
+   /**
+    * transform JSON object into metadata modification instance
+    * 
+    * @param json JSON representation of the modification
+    * @return metadata modification
+    */
+   static AccountPropertyModification<Address> mapModFromJson(TransactionType transType, JsonObject json) {
+      AccountPropertyModificationType modType = AccountPropertyModificationType.getByCode(json.get("modificationType").getAsInt());
+      switch (transType) {
+      case ACCOUNT_PROPERTIES_ADDRESS:
+         return new AccountPropertyModification<>(modType, Address.createFromEncoded(json.get("value").getAsString()));
+      default:
+         throw new UnsupportedOperationException("unsupported transaction type " + transType);
       }
    }
 }

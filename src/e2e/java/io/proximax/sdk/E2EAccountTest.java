@@ -19,6 +19,7 @@ package io.proximax.sdk;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -35,6 +36,12 @@ import io.proximax.sdk.infrastructure.QueryParams;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.AccountInfo;
 import io.proximax.sdk.model.account.Address;
+import io.proximax.sdk.model.account.props.AccountProperties;
+import io.proximax.sdk.model.account.props.AccountProperty;
+import io.proximax.sdk.model.account.props.AccountPropertyModification;
+import io.proximax.sdk.model.account.props.AccountPropertyModificationType;
+import io.proximax.sdk.model.account.props.AccountPropertyType;
+import io.proximax.sdk.model.transaction.ModifyAccountPropertyTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -47,14 +54,39 @@ class E2EAccountTest extends E2EBaseTest {
    @BeforeAll
    void addListener() {
       logger.info("Sending transactions to {}", simpleAccount);
-      listener.status(simpleAccount.getAddress()).doOnNext(err -> logger.info("Error on recipient: {}", err))
-            .doOnError(exception -> logger.error("Failure on recipient: {}", exception))
-            .doOnComplete(() -> logger.info("done with recipient {}", simpleAccount));
+      signup(simpleAccount.getAddress());
       // make transfer to and from the test account to make sure it has public key announced
       sendSomeCash(seedAccount, simpleAccount.getAddress(), 1);
       sendSomeCash(simpleAccount, seedAccount.getAddress(), 1);
    }
 
+   
+   @Test
+   void addBlockAccountProperty() {
+      Account blocked = new Account(new KeyPair(), getNetworkType());
+      signup(blocked.getAddress());
+      logger.info("going to block {} by {}", blocked.getPublicAccount(), simpleAccount.getPublicAccount());
+      ModifyAccountPropertyTransaction<Address> trans = ModifyAccountPropertyTransaction.createForAddress(
+            getDeadline(),
+            BigInteger.ZERO,
+            AccountPropertyType.BLOCK_ADDRESS,
+            Arrays.asList(new AccountPropertyModification<>(AccountPropertyModificationType.ADD, blocked.getAddress())),
+            getNetworkType());
+      // announce the transaction
+      transactionHttp.announce(trans.signWith(simpleAccount)).blockingFirst();
+      logger.info("Waiting for  confirmation");
+      listener.confirmed(simpleAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      // now check for the block
+      //23:16:55.006 INFO  going to block PublicAccount [address=Address [address=SCWH75VDZQ7IS32FUCT7ZV47KDJW4UOZUYPNFMWQ, networkType=MIJIN_TEST], publicKey=E36A049A8BA31BF6737053B7AD1D2E7299AFB5011EC5AE0726CD4225F0E5FBAE] by PublicAccount [address=Address [address=SCDNOAG4ONQFCSADAKJWGFXBLUBKWKTONSGALJO2, networkType=MIJIN_TEST], publicKey=EF84BC4E34B190B17F951E779D135BB1A48FBF8252A26C67D9E39C5F7132EEEA]
+      AccountProperties aps = accountHttp.getAccountProperty(simpleAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      boolean gotMatch = false;
+      for (AccountProperty ap: aps.getProperties()) {
+         if (ap.getPropertyType().equals(AccountPropertyType.BLOCK_ADDRESS)) {
+            gotMatch = true;
+         }
+      }
+   }
+   
     @Test
     void getAccountInfo() throws ExecutionException, InterruptedException {
         AccountInfo accountInfo = accountHttp

@@ -19,7 +19,6 @@ package io.proximax.sdk.infrastructure;
 import static io.proximax.sdk.utils.GsonUtils.stream;
 import static io.proximax.sdk.utils.dto.UInt64Utils.toBigInt;
 
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +33,7 @@ import com.google.gson.JsonObject;
 import io.proximax.sdk.AccountRepository;
 import io.proximax.sdk.BlockchainApi;
 import io.proximax.sdk.gen.model.AccountInfoDTO;
+import io.proximax.sdk.gen.model.AccountPropertiesInfoDTO;
 import io.proximax.sdk.gen.model.MultisigAccountGraphInfoDTO;
 import io.proximax.sdk.gen.model.MultisigAccountInfoDTO;
 import io.proximax.sdk.gen.model.MultisigDTO;
@@ -42,6 +42,9 @@ import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.MultisigAccountGraphInfo;
 import io.proximax.sdk.model.account.MultisigAccountInfo;
 import io.proximax.sdk.model.account.PublicAccount;
+import io.proximax.sdk.model.account.props.AccountProperties;
+import io.proximax.sdk.model.account.props.AccountProperty;
+import io.proximax.sdk.model.account.props.AccountPropertyType;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.Mosaic;
 import io.proximax.sdk.model.mosaic.MosaicId;
@@ -59,15 +62,18 @@ import io.reactivex.functions.Function;
 public class AccountHttp extends Http implements AccountRepository {
 
    private static final String ROUTE = "/account/";
-
+   private static final String PROPERTIES_SUFFIX = "/properties";
+   
    public AccountHttp(BlockchainApi api) {
       super(api);
    }
 
    @Override
    public Observable<AccountInfo> getAccountInfo(Address address) {
-      return this.client.get(ROUTE + address.plain()).map(Http::mapStringOrError)
-            .map(str -> objectMapper.readValue(str, AccountInfoDTO.class)).map(AccountInfoDTO::getAccount)
+      return this.client.get(ROUTE + address.plain())
+            .map(Http::mapStringOrError)
+            .map(str -> objectMapper.readValue(str, AccountInfoDTO.class))
+            .map(AccountInfoDTO::getAccount)
             .map(accountDTO -> new AccountInfo(
                   Address.createFromRawAddress(AccountDTOUtils.getAddressEncoded(accountDTO)),
                   toBigInt(accountDTO.getAddressHeight()), accountDTO.getPublicKey(),
@@ -131,6 +137,21 @@ public class AccountHttp extends Http implements AccountRepository {
             });
    }
 
+   @Override
+   public Observable<AccountProperties> getAccountProperty(Address address) {
+      return this.client.get(ROUTE + address.plain() + PROPERTIES_SUFFIX)
+            .map(Http::mapStringOrError)
+            .map(str -> objectMapper.readValue(str, AccountPropertiesInfoDTO.class))
+            .map(dto -> new AccountProperties(
+                  Address.createFromEncoded(dto.getAccountProperties().getAddress()),
+                  dto.getAccountProperties().getProperties().stream()
+                     .map(propDto -> new AccountProperty(
+                           AccountPropertyType.getByCode(propDto.getPropertyType()), 
+                           propDto.getValues()
+                      )).collect(Collectors.toList())
+                  ));
+   }
+   
    @Override
    public Observable<List<Transaction>> transactions(PublicAccount publicAccount) {
       return this.transactions(publicAccount, Optional.empty());
@@ -233,5 +254,4 @@ public class AccountHttp extends Http implements AccountRepository {
                   .map(multisigAccount -> new PublicAccount(multisigAccount, networkType))
                   .collect(Collectors.toList()));
    }
-
 }
