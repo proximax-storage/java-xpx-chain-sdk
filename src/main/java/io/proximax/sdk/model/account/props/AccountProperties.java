@@ -18,7 +18,9 @@
 package io.proximax.sdk.model.account.props;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import io.proximax.sdk.gen.model.AccountPropertiesDTO;
 import io.proximax.sdk.model.account.Address;
 
 /**
@@ -52,5 +54,15 @@ public class AccountProperties {
     */
    public List<AccountProperty> getProperties() {
       return properties;
+   }
+   
+   public static AccountProperties fromDto(AccountPropertiesDTO dto) {
+      return new AccountProperties(
+            Address.createFromEncoded(dto.getAddress()),
+            dto.getProperties().stream()
+                  .map(propDto -> new AccountProperty(
+                        AccountPropertyType.getByCode(propDto.getPropertyType()),
+                        propDto.getValues()))
+                  .collect(Collectors.toList()));
    }
 }

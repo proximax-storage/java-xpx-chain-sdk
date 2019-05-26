@@ -71,9 +71,17 @@ public interface AccountRepository {
      * Get properties associated with specified address
      * 
      * @param address the address to check
-     * @return account properties describing account properties
+     * @return account properties
      */
-    Observable<AccountProperties> getAccountProperty(Address address);
+    Observable<AccountProperties> getAccountProperties(Address address);
+
+    /**
+     * Get properties associated with specified addresses
+     * 
+     * @param addresses the addresses to check
+     * @return list of account properties
+     */
+    Observable<List<AccountProperties>> getAccountProperties(List<Address> addresses);
 
     /**
      * Gets an list of confirmed transactions for which an account is signer or receiver.

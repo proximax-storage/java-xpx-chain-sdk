@@ -25,7 +25,7 @@ import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
- * Modify address account properties
+ * Transaction to modify account properties
  */
 public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
    private final ModifyAccountPropertyTransactionSchema schema = new ModifyAccountPropertyTransactionSchema();
@@ -33,10 +33,24 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
    private final AccountPropertyType propertyType;
    private final List<AccountPropertyModification<T>> modifications;
    
-   public ModifyAccountPropertyTransaction(TransactionType transactionType, NetworkType networkType, Integer version,
-         TransactionDeadline deadline, BigInteger fee, AccountPropertyType propertyType, List<AccountPropertyModification<T>> propertyModifications, Optional<String> signature,
+   /**
+    * Create new transaction to modify account property
+    * 
+    * @param transactionType transaction type
+    * @param networkType network type
+    * @param version version
+    * @param deadline deadline
+    * @param maxFee max fee
+    * @param propertyType type of the account property
+    * @param propertyModifications modifications to the account property
+    * @param signature optional signature
+    * @param signer optional signer
+    * @param transactionInfo optional transaction info
+    */
+   private ModifyAccountPropertyTransaction(TransactionType transactionType, NetworkType networkType, Integer version,
+         TransactionDeadline deadline, BigInteger maxFee, AccountPropertyType propertyType, List<AccountPropertyModification<T>> propertyModifications, Optional<String> signature,
          Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
-      super(transactionType, networkType, version, deadline, fee, signature, signer, transactionInfo);
+      super(transactionType, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
       Validate.notNull(propertyType, "propertyType must not be null");
       Validate.notEmpty(propertyModifications, "modifications must not be empty");
       this.propertyType = propertyType;
@@ -46,17 +60,17 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
    /**
     * create new transaction to modify address account properties
     * 
-    * @param networkType
-    * @param deadline
-    * @param fee
-    * @param propertyType
-    * @param propertyModifications
+    * @param networkType network type
+    * @param deadline transaction deadline
+    * @param maxFee maximum fee
+    * @param propertyType property type
+    * @param propertyModifications property modifications
     * @return the transaction instance
     */
-   public static ModifyAccountPropertyTransaction<Address> createForAddress(TransactionDeadline deadline, BigInteger fee,
+   public static ModifyAccountPropertyTransaction<Address> createForAddress(TransactionDeadline deadline, BigInteger maxFee,
          AccountPropertyType propertyType,
          List<AccountPropertyModification<Address>> propertyModifications, NetworkType networkType) {
-      return new AddressModification(networkType, TransactionVersion.ACCOUNT_PROPERTIES_ADDRESS.getValue(), deadline, fee, propertyType, propertyModifications, Optional.empty(), Optional.empty(), Optional.empty());
+      return new AddressModification(networkType, TransactionVersion.ACCOUNT_PROPERTIES_ADDRESS.getValue(), deadline, maxFee, propertyType, propertyModifications, Optional.empty(), Optional.empty(), Optional.empty());
    }
    
    /**
@@ -74,9 +88,9 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
    }
    
    /**
-    * serialize account property modification value to byte array
+    * <p>serialize account property modification value to byte array</p>
     * 
-    * NOTE that implementation should also verify that the size of byte array is expected per server requirements
+    * <p>NOTE that implementation should also verify that the size of byte array is expected per server requirements</p>
     * 
     * @param mod account property modification
     * @return byte array of expected size
@@ -92,7 +106,7 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
       int version = (int) Long
             .parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
 
-      // track the size of the whole metadata modification
+      // track the size of the whole transaction
       int totalSize = 0;
       // load modifications
       int[] modificationOffsets = new int[modifications.size()];
@@ -155,34 +169,43 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
    public static class AddressModification extends ModifyAccountPropertyTransaction<Address> {
 
       /**
-       * @param networkType
-       * @param version
-       * @param deadline
-       * @param fee
-       * @param propertyType
-       * @param propertyModifications
-       * @param signature
-       * @param signer
-       * @param transactionInfo
+       * <p>Account property modification for address</p>
+       * 
+       * <p>use
+       * {@link ModifyAccountPropertyTransaction#createForAddress(TransactionDeadline, BigInteger, AccountPropertyType, List, NetworkType)}
+       * to create new transaction to modify account property</p>
+       * 
+       * @param networkType networkType
+       * @param version version
+       * @param deadline deadline
+       * @param maxFee max fee
+       * @param propertyType property type
+       * @param propertyModifications list of property modifications
+       * @param signature optional signature
+       * @param signer optional signer
+       * @param transactionInfo optional transaction info
        */
-      public AddressModification(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee,
-            AccountPropertyType propertyType,
-            List<AccountPropertyModification<Address>> propertyModifications,
-            Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
-         super(TransactionType.ACCOUNT_PROPERTIES_ADDRESS, networkType, version, deadline, fee, propertyType, propertyModifications, signature, signer, transactionInfo);
+      public AddressModification(NetworkType networkType, Integer version, TransactionDeadline deadline,
+            BigInteger maxFee, AccountPropertyType propertyType,
+            List<AccountPropertyModification<Address>> propertyModifications, Optional<String> signature,
+            Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
+         super(TransactionType.ACCOUNT_PROPERTIES_ADDRESS, networkType, version, deadline, maxFee, propertyType,
+               propertyModifications, signature, signer, transactionInfo);
       }
 
       @Override
-      protected byte[] getValueBytesFromModification(
-            AccountPropertyModification<Address> mod) {
+      protected byte[] getValueBytesFromModification(AccountPropertyModification<Address> mod) {
          // get the bytes from string
          byte[] valueBytes = Base32Encoder.getBytes(mod.getValue().plain());
          // check that length is 25 bytes
-         Validate.isTrue(valueBytes.length == 25, "Address should be serialized to %d bytes but was %d from %s", 25, valueBytes.length, mod.getValue());
+         Validate.isTrue(valueBytes.length == 25,
+               "Address should be serialized to %d bytes but was %d from %s",
+               25,
+               valueBytes.length,
+               mod.getValue());
          // return the value
          return valueBytes;
       }
 
-      
    }
 }

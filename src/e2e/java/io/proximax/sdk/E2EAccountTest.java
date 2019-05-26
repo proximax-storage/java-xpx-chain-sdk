@@ -66,8 +66,7 @@ class E2EAccountTest extends E2EBaseTest {
       Account blocked = new Account(new KeyPair(), getNetworkType());
       signup(blocked.getAddress());
       logger.info("going to block {} by {}", blocked.getPublicAccount(), simpleAccount.getPublicAccount());
-      ModifyAccountPropertyTransaction<Address> trans = ModifyAccountPropertyTransaction.createForAddress(
-            getDeadline(),
+      ModifyAccountPropertyTransaction<Address> trans = ModifyAccountPropertyTransaction.createForAddress(getDeadline(),
             BigInteger.ZERO,
             AccountPropertyType.BLOCK_ADDRESS,
             Arrays.asList(new AccountPropertyModification<>(AccountPropertyModificationType.ADD, blocked.getAddress())),
@@ -76,15 +75,37 @@ class E2EAccountTest extends E2EBaseTest {
       transactionHttp.announce(trans.signWith(simpleAccount)).blockingFirst();
       logger.info("Waiting for  confirmation");
       listener.confirmed(simpleAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
-      // now check for the block
-      //23:16:55.006 INFO  going to block PublicAccount [address=Address [address=SCWH75VDZQ7IS32FUCT7ZV47KDJW4UOZUYPNFMWQ, networkType=MIJIN_TEST], publicKey=E36A049A8BA31BF6737053B7AD1D2E7299AFB5011EC5AE0726CD4225F0E5FBAE] by PublicAccount [address=Address [address=SCDNOAG4ONQFCSADAKJWGFXBLUBKWKTONSGALJO2, networkType=MIJIN_TEST], publicKey=EF84BC4E34B190B17F951E779D135BB1A48FBF8252A26C67D9E39C5F7132EEEA]
-      AccountProperties aps = accountHttp.getAccountProperty(simpleAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      // now check for the block via GET
+      AccountProperties aps = accountHttp.getAccountProperties(simpleAccount.getAddress())
+            .timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      testAccountPropertiesOnSimpleAccount(aps, blocked.getAddress());
+      // check for block via POST
+      List<AccountProperties> apsList = accountHttp.getAccountProperties(Arrays.asList(simpleAccount.getAddress()))
+            .timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      assertEquals(1, apsList.size());
+      testAccountPropertiesOnSimpleAccount(apsList.get(0), blocked.getAddress());
+   }
+   
+   /**
+    * check that simple account has block as expected
+    * 
+    * @param aps account properties
+    * @param blockedAddress address that is blocked
+    */
+   private void testAccountPropertiesOnSimpleAccount(AccountProperties aps, Address blockedAddress) {
       boolean gotMatch = false;
       for (AccountProperty ap: aps.getProperties()) {
          if (ap.getPropertyType().equals(AccountPropertyType.BLOCK_ADDRESS)) {
-            gotMatch = true;
+            for (Object value: ap.getValues()) {
+               // value should be string and should represent encoded address of the blocked account
+               if (value instanceof String && blockedAddress.equals(Address.createFromEncoded((String)value))) {
+                     gotMatch = true;
+               }
+            }
+            
          }
       }
+      assertTrue(gotMatch);
    }
    
     @Test

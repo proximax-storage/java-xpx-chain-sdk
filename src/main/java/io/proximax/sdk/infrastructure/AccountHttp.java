@@ -43,8 +43,6 @@ import io.proximax.sdk.model.account.MultisigAccountGraphInfo;
 import io.proximax.sdk.model.account.MultisigAccountInfo;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.account.props.AccountProperties;
-import io.proximax.sdk.model.account.props.AccountProperty;
-import io.proximax.sdk.model.account.props.AccountPropertyType;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.Mosaic;
 import io.proximax.sdk.model.mosaic.MosaicId;
@@ -138,18 +136,31 @@ public class AccountHttp extends Http implements AccountRepository {
    }
 
    @Override
-   public Observable<AccountProperties> getAccountProperty(Address address) {
+   public Observable<AccountProperties> getAccountProperties(Address address) {
       return this.client.get(ROUTE + address.plain() + PROPERTIES_SUFFIX)
             .map(Http::mapStringOrError)
             .map(str -> objectMapper.readValue(str, AccountPropertiesInfoDTO.class))
-            .map(dto -> new AccountProperties(
-                  Address.createFromEncoded(dto.getAccountProperties().getAddress()),
-                  dto.getAccountProperties().getProperties().stream()
-                     .map(propDto -> new AccountProperty(
-                           AccountPropertyType.getByCode(propDto.getPropertyType()), 
-                           propDto.getValues()
-                      )).collect(Collectors.toList())
-                  ));
+            .map(AccountPropertiesInfoDTO::getAccountProperties)
+            .map(AccountProperties::fromDto);
+   }
+   
+   @Override
+   public Observable<List<AccountProperties>> getAccountProperties(List<Address> addresses) {
+      // prepare JSON array with addresses
+      JsonArray arr = new JsonArray(addresses.size());
+      addresses.stream().map(Address::plain).forEachOrdered(addr -> arr.add(addr));
+
+      JsonObject requestBody = new JsonObject();
+      requestBody.add("addresses", arr);
+      // post to the API
+      return this.client.post(ROUTE + PROPERTIES_SUFFIX, requestBody)
+            .map(Http::mapStringOrError)
+            .map(str -> objectMapper.<List<AccountPropertiesInfoDTO>>readValue(str, new TypeReference<List<AccountPropertiesInfoDTO>>() {}))
+            .flatMapIterable(item -> item)
+            .map(AccountPropertiesInfoDTO::getAccountProperties)
+            .map(AccountProperties::fromDto)
+            .toList().toObservable();
+   
    }
    
    @Override
