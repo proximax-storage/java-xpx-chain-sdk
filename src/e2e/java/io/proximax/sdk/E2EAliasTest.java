@@ -35,7 +35,6 @@ import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.alias.AliasAction;
 import io.proximax.sdk.model.mosaic.MosaicId;
-import io.proximax.sdk.model.mosaic.MosaicInfo;
 import io.proximax.sdk.model.mosaic.MosaicNames;
 import io.proximax.sdk.model.mosaic.MosaicNonce;
 import io.proximax.sdk.model.mosaic.MosaicProperties;
@@ -80,26 +79,6 @@ public class E2EAliasTest extends E2EBaseTest {
    @AfterAll
    void closeDown() {
 
-   }
-
-   @Test
-   void test00GetMosaicsByAlias() {
-      // try to retrieve standard aliases and print them out
-      logAliasInfo(new NamespaceId("cat.currency"));
-      logAliasInfo(new NamespaceId("prx.xpx"));
-   }
-   
-   private void logAliasInfo(NamespaceId namespace) {
-      try {
-         MosaicInfo catCurrency = mosaicHttp.getMosaic(namespace).blockingFirst();
-         logger.info("{} => {}", namespace, catCurrency);
-      } catch (RuntimeException e) {
-         if (!"Not Found".equals(e.getMessage())) {
-            throw e;
-         } else {
-            logger.info("Alias by {} not found", namespace);
-         }
-      }
    }
    
    @Test
