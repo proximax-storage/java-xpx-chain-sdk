@@ -29,13 +29,19 @@ import org.apache.commons.lang3.Validate;
  * 0x80 + type The property is interpreted as a blocking operation.
  */
 public enum AccountPropertyType {
-
+   /** allow specified address and block all addresses that are not explicitly allowed */
    ALLOW_ADDRESS(0x01),
+   /** allow specified mosaic and block all mosaics that are not explicitly allowed */
    ALLOW_MOSAIC(0x02),
+   /** allow specified transaction type and block all transaction types that are not explicitly allowed */
    ALLOW_TRANSACTION(0x04),
+   /** this account property type is currently not supported */
    SENTINEL(0x05),
+   /** block specified address */
    BLOCK_ADDRESS(0x80 + 0x01),
+   /** block specified mosaic */
    BLOCK_MOSAIC(0x80 + 0x02),
+   /** block specified transaction type */
    BLOCK_TRANSACTION(0x80 + 0x04);
 
    private int code;

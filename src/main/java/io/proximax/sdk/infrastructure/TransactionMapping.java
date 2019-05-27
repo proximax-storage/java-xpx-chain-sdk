@@ -87,7 +87,7 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
       case MODIFY_MOSAIC_METADATA:
       case MODIFY_NAMESPACE_METADATA:
          return new ModifyMetadataTransactionMapping().apply(input);
-      case ACCOUNT_PROPERTIES_ADDRESS:
+      case ACCOUNT_PROPERTIES_ADDRESS: case ACCOUNT_PROPERTIES_MOSAIC: case ACCOUNT_PROPERTIES_ENTITY_TYPE:
          return new ModifyAccountPropertiesTransactionMapping().apply(input);
       default:
          throw new UnsupportedOperationException("Unimplemented transaction type " + type);
@@ -333,10 +333,6 @@ class ModifyAccountPropertiesTransactionMapping extends TransactionMapping {
       JsonElement version = transaction.get("version");
       // transaction type
       TransactionType type = TransactionType.rawValueOf(transaction.get("type").getAsInt());
-      // modifications
-      List<AccountPropertyModification<Address>> modifications = stream(transaction.getAsJsonArray("modifications"))
-            .map(obj -> (JsonObject) obj).map(json -> mapModFromJson(type, json))
-            .collect(Collectors.toList());
       // signer
       PublicAccount signer = new PublicAccount(transaction.get("signer").getAsString(), extractNetworkType(version));
       // signature
@@ -352,7 +348,29 @@ class ModifyAccountPropertiesTransactionMapping extends TransactionMapping {
                deadline, 
                extractFee(transaction), 
                propertyType, 
-               modifications,
+               getAddressMods(transaction),
+               Optional.of(signature), 
+               Optional.of(signer), 
+               Optional.of(transactionInfo));
+      case ACCOUNT_PROPERTIES_MOSAIC:
+         return new ModifyAccountPropertyTransaction.MosaicModification(
+               extractNetworkType(version), 
+               extractTransactionVersion(version),
+               deadline, 
+               extractFee(transaction), 
+               propertyType, 
+               getMosaicMods(transaction),
+               Optional.of(signature), 
+               Optional.of(signer), 
+               Optional.of(transactionInfo));
+      case ACCOUNT_PROPERTIES_ENTITY_TYPE:
+         return new ModifyAccountPropertyTransaction.EntityTypeModification(
+               extractNetworkType(version), 
+               extractTransactionVersion(version),
+               deadline, 
+               extractFee(transaction), 
+               propertyType, 
+               getEntityTypeMods(transaction),
                Optional.of(signature), 
                Optional.of(signer), 
                Optional.of(transactionInfo));
@@ -362,19 +380,47 @@ class ModifyAccountPropertiesTransactionMapping extends TransactionMapping {
    }
    
    /**
-    * transform JSON object into metadata modification instance
+    * create list of address account property modifications
     * 
-    * @param json JSON representation of the modification
-    * @return metadata modification
+    * @param transaction the transaction object to get data from
+    * @return the list of address account property modifications
     */
-   static AccountPropertyModification<Address> mapModFromJson(TransactionType transType, JsonObject json) {
-      AccountPropertyModificationType modType = AccountPropertyModificationType.getByCode(json.get("modificationType").getAsInt());
-      switch (transType) {
-      case ACCOUNT_PROPERTIES_ADDRESS:
+   static List<AccountPropertyModification<Address>> getAddressMods(JsonObject transaction) {
+      return stream(transaction.getAsJsonArray("modifications")).map(obj -> (JsonObject) obj).map(json -> {
+         AccountPropertyModificationType modType = AccountPropertyModificationType
+               .getByCode(json.get("modificationType").getAsInt());
          return new AccountPropertyModification<>(modType, Address.createFromEncoded(json.get("value").getAsString()));
-      default:
-         throw new UnsupportedOperationException("unsupported transaction type " + transType);
-      }
+      }).collect(Collectors.toList());
+   }
+   
+   /**
+    * create list of mosaic account property modifications
+    * 
+    * @param transaction the transaction object to get data from
+    * @return the list of mosaic account property modifications
+    */
+   static List<AccountPropertyModification<MosaicId>> getMosaicMods(JsonObject transaction) {
+      return stream(transaction.getAsJsonArray("modifications")).map(obj -> (JsonObject) obj).map(json -> {
+         AccountPropertyModificationType modType = AccountPropertyModificationType
+               .getByCode(json.get("modificationType").getAsInt());
+         return new AccountPropertyModification<>(modType,
+               new MosaicId(extractBigInteger(json.get("value").getAsJsonArray())));
+      }).collect(Collectors.toList());
+   }
+   
+   /**
+    * create list of entity type account property modifications
+    * 
+    * @param transaction the transaction object to get data from
+    * @return the list of entity type account property modifications
+    */
+   static List<AccountPropertyModification<TransactionType>> getEntityTypeMods(JsonObject transaction) {
+      return stream(transaction.getAsJsonArray("modifications")).map(obj -> (JsonObject) obj).map(json -> {
+         AccountPropertyModificationType modType = AccountPropertyModificationType
+               .getByCode(json.get("modificationType").getAsInt());
+         return new AccountPropertyModification<>(modType,
+               TransactionType.rawValueOf(json.get("value").getAsInt()));
+      }).collect(Collectors.toList());
    }
 }
 

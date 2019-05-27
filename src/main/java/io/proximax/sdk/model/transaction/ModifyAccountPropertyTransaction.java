@@ -6,6 +6,8 @@
 package io.proximax.sdk.model.transaction;
 
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +24,7 @@ import io.proximax.sdk.model.account.props.AccountPropertyModification;
 import io.proximax.sdk.model.account.props.AccountPropertyModificationType;
 import io.proximax.sdk.model.account.props.AccountPropertyType;
 import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
@@ -71,6 +74,38 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
          AccountPropertyType propertyType,
          List<AccountPropertyModification<Address>> propertyModifications, NetworkType networkType) {
       return new AddressModification(networkType, TransactionVersion.ACCOUNT_PROPERTIES_ADDRESS.getValue(), deadline, maxFee, propertyType, propertyModifications, Optional.empty(), Optional.empty(), Optional.empty());
+   }
+   
+   /**
+    * create new transaction to modify mosaic account properties
+    * 
+    * @param networkType network type
+    * @param deadline transaction deadline
+    * @param maxFee maximum fee
+    * @param propertyType property type
+    * @param propertyModifications property modifications
+    * @return the transaction instance
+    */
+   public static ModifyAccountPropertyTransaction<MosaicId> createForMosaic(TransactionDeadline deadline, BigInteger maxFee,
+         AccountPropertyType propertyType,
+         List<AccountPropertyModification<MosaicId>> propertyModifications, NetworkType networkType) {
+      return new MosaicModification(networkType, TransactionVersion.ACCOUNT_PROPERTIES_MOSAIC.getValue(), deadline, maxFee, propertyType, propertyModifications, Optional.empty(), Optional.empty(), Optional.empty());
+   }
+   
+   /**
+    * create new transaction to modify entity type account properties
+    * 
+    * @param networkType network type
+    * @param deadline transaction deadline
+    * @param maxFee maximum fee
+    * @param propertyType property type
+    * @param propertyModifications property modifications
+    * @return the transaction instance
+    */
+   public static ModifyAccountPropertyTransaction<TransactionType> createForEntityType(TransactionDeadline deadline, BigInteger maxFee,
+         AccountPropertyType propertyType,
+         List<AccountPropertyModification<TransactionType>> propertyModifications, NetworkType networkType) {
+      return new EntityTypeModification(networkType, TransactionVersion.ACCOUNT_PROPERTIES_MOSAIC.getValue(), deadline, maxFee, propertyType, propertyModifications, Optional.empty(), Optional.empty(), Optional.empty());
    }
    
    /**
@@ -167,6 +202,7 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
     * Address account property modification transaction implementation
     */
    public static class AddressModification extends ModifyAccountPropertyTransaction<Address> {
+      private static final int VALUE_BYTES_LENGTH = 25;
 
       /**
        * <p>Account property modification for address</p>
@@ -198,14 +234,98 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
          // get the bytes from string
          byte[] valueBytes = Base32Encoder.getBytes(mod.getValue().plain());
          // check that length is 25 bytes
-         Validate.isTrue(valueBytes.length == 25,
+         Validate.isTrue(valueBytes.length == VALUE_BYTES_LENGTH,
                "Address should be serialized to %d bytes but was %d from %s",
-               25,
+               VALUE_BYTES_LENGTH,
                valueBytes.length,
                mod.getValue());
          // return the value
          return valueBytes;
       }
+   }
+   
+   /**
+    * Mosaic account property modification transaction implementation
+    */
+   public static class MosaicModification extends ModifyAccountPropertyTransaction<MosaicId> {
+      private static final int VALUE_BYTES_LENGTH = 8;
+      /**
+       * <p>Account property modification for mosaic</p>
+       * 
+       * <p>use
+       * {@link ModifyAccountPropertyTransaction#createForMosaic(TransactionDeadline, BigInteger, AccountPropertyType, List, NetworkType)}
+       * to create new transaction to modify account property</p>
+       * 
+       * @param networkType networkType
+       * @param version version
+       * @param deadline deadline
+       * @param maxFee max fee
+       * @param propertyType property type
+       * @param propertyModifications list of property modifications
+       * @param signature optional signature
+       * @param signer optional signer
+       * @param transactionInfo optional transaction info
+       */
+      public MosaicModification(NetworkType networkType, Integer version, TransactionDeadline deadline,
+            BigInteger maxFee, AccountPropertyType propertyType,
+            List<AccountPropertyModification<MosaicId>> propertyModifications, Optional<String> signature,
+            Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
+         super(TransactionType.ACCOUNT_PROPERTIES_MOSAIC, networkType, version, deadline, maxFee, propertyType,
+               propertyModifications, signature, signer, transactionInfo);
+      }
 
+      @Override
+      protected byte[] getValueBytesFromModification(AccountPropertyModification<MosaicId> mod) {
+         // get the bytes from string
+         byte[] valueBytes = UInt64Utils.getBytes(mod.getValue().getId());
+         // check that length is as expected
+         Validate.isTrue(valueBytes.length == VALUE_BYTES_LENGTH,
+               "MosaicId should be serialized to %d bytes but was %d from %s",
+               VALUE_BYTES_LENGTH,
+               valueBytes.length,
+               mod.getValue());
+         // return the value
+         return valueBytes;
+      }
+   }
+   
+   /**
+    * Transaction type account property modification transaction implementation
+    */
+   public static class EntityTypeModification extends ModifyAccountPropertyTransaction<TransactionType> {
+      private static final int VALUE_BYTES_LENGTH = 2;
+      /**
+       * <p>Account property modification for mosaic</p>
+       * 
+       * <p>use
+       * {@link ModifyAccountPropertyTransaction#createForMosaic(TransactionDeadline, BigInteger, AccountPropertyType, List, NetworkType)}
+       * to create new transaction to modify account property</p>
+       * 
+       * @param networkType networkType
+       * @param version version
+       * @param deadline deadline
+       * @param maxFee max fee
+       * @param propertyType property type
+       * @param propertyModifications list of property modifications
+       * @param signature optional signature
+       * @param signer optional signer
+       * @param transactionInfo optional transaction info
+       */
+      public EntityTypeModification(NetworkType networkType, Integer version, TransactionDeadline deadline,
+            BigInteger maxFee, AccountPropertyType propertyType,
+            List<AccountPropertyModification<TransactionType>> propertyModifications, Optional<String> signature,
+            Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
+         super(TransactionType.ACCOUNT_PROPERTIES_ENTITY_TYPE, networkType, version, deadline, maxFee, propertyType,
+               propertyModifications, signature, signer, transactionInfo);
+      }
+
+      @Override
+      protected byte[] getValueBytesFromModification(AccountPropertyModification<TransactionType> mod) {
+         // get the bytes from string
+         byte[] valueBytes = new byte[VALUE_BYTES_LENGTH];
+         ByteBuffer.wrap(valueBytes).order(ByteOrder.LITTLE_ENDIAN).putShort((short)mod.getValue().getValue());
+         // return the value
+         return valueBytes;
+      }
    }
 }
