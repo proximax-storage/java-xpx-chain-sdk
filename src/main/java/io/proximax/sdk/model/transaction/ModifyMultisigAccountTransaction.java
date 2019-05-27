@@ -26,6 +26,7 @@ import com.google.flatbuffers.FlatBufferBuilder;
 
 import io.proximax.core.utils.HexEncoder;
 import io.proximax.sdk.gen.buffers.CosignatoryModificationBuffer;
+import io.proximax.sdk.gen.buffers.ModifyMultisigAccountTransactionBuffer;
 import io.proximax.sdk.gen.buffers.TransferTransactionBuffer;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
@@ -122,28 +123,28 @@ public class ModifyMultisigAccountTransaction extends Transaction {
         }
 
         // Create Vectors
-        int signatureVector = MultisigAggregateModificationTransactionBuffer.createSignatureVector(builder, new byte[64]);
-        int signerVector = MultisigAggregateModificationTransactionBuffer.createSignerVector(builder, new byte[32]);
-        int deadlineVector = MultisigAggregateModificationTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
-        int feeVector = MultisigAggregateModificationTransactionBuffer.createFeeVector(builder, fee);
+        int signatureVector = ModifyMultisigAccountTransactionBuffer.createSignatureVector(builder, new byte[64]);
+        int signerVector = ModifyMultisigAccountTransactionBuffer.createSignerVector(builder, new byte[32]);
+        int deadlineVector = ModifyMultisigAccountTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
+        int feeVector = ModifyMultisigAccountTransactionBuffer.createFeeVector(builder, fee);
         int modificationsVector = TransferTransactionBuffer.createMosaicsVector(builder, modificationsBuffers);
 
         int fixSize = 123; // replace by the all numbers sum or add a comment explaining this
 
-        MultisigAggregateModificationTransactionBuffer.startMultisigAggregateModificationTransactionBuffer(builder);
-        MultisigAggregateModificationTransactionBuffer.addSize(builder, fixSize + (33 * modifications.size()));
-        MultisigAggregateModificationTransactionBuffer.addSignature(builder, signatureVector);
-        MultisigAggregateModificationTransactionBuffer.addSigner(builder, signerVector);
-        MultisigAggregateModificationTransactionBuffer.addVersion(builder, version);
-        MultisigAggregateModificationTransactionBuffer.addType(builder, getType().getValue());
-        MultisigAggregateModificationTransactionBuffer.addFee(builder, feeVector);
-        MultisigAggregateModificationTransactionBuffer.addDeadline(builder, deadlineVector);
-        MultisigAggregateModificationTransactionBuffer.addMinApprovalDelta(builder, minApprovalDelta);
-        MultisigAggregateModificationTransactionBuffer.addMinRemovalDelta(builder, minRemovalDelta);
-        MultisigAggregateModificationTransactionBuffer.addNumModifications(builder, modifications.size());
-        MultisigAggregateModificationTransactionBuffer.addModifications(builder, modificationsVector);
+        ModifyMultisigAccountTransactionBuffer.startModifyMultisigAccountTransactionBuffer(builder);
+        ModifyMultisigAccountTransactionBuffer.addSize(builder, fixSize + (33 * modifications.size()));
+        ModifyMultisigAccountTransactionBuffer.addSignature(builder, signatureVector);
+        ModifyMultisigAccountTransactionBuffer.addSigner(builder, signerVector);
+        ModifyMultisigAccountTransactionBuffer.addVersion(builder, version);
+        ModifyMultisigAccountTransactionBuffer.addType(builder, getType().getValue());
+        ModifyMultisigAccountTransactionBuffer.addFee(builder, feeVector);
+        ModifyMultisigAccountTransactionBuffer.addDeadline(builder, deadlineVector);
+        ModifyMultisigAccountTransactionBuffer.addMinApprovalDelta(builder, (byte)minApprovalDelta);
+        ModifyMultisigAccountTransactionBuffer.addMinRemovalDelta(builder, (byte)minRemovalDelta);
+        ModifyMultisigAccountTransactionBuffer.addNumModifications(builder, modifications.size());
+        ModifyMultisigAccountTransactionBuffer.addModifications(builder, modificationsVector);
 
-        int codedTransaction = MultisigAggregateModificationTransactionBuffer.endMultisigAggregateModificationTransactionBuffer(builder);
+        int codedTransaction = ModifyMultisigAccountTransactionBuffer.endModifyMultisigAccountTransactionBuffer(builder);
         builder.finish(codedTransaction);
 
         return schema.serialize(builder.sizedByteArray());
