@@ -6,7 +6,6 @@
 package io.proximax.sdk.model.transaction;
 
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,7 +82,7 @@ public class ModifyContractTransaction extends Transaction {
       int[] verifiersBuffer = createCosigModificationVector(builder, verifiersModifications);
 
       // serialize content hash to byte array
-      byte[] contentHashBytes = contentHash.getBytes(StandardCharsets.UTF_8);
+      byte[] contentHashBytes = HexEncoder.getBytes(contentHash);
       
       // Create Vectors
       int signatureOffset = ModifyContractTransactionBuffer.createSignatureVector(builder, new byte[64]);
