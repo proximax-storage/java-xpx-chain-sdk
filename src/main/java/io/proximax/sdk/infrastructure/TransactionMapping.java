@@ -31,7 +31,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import io.proximax.sdk.gen.model.UInt64DTO;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.alias.AliasAction;
@@ -47,7 +46,7 @@ import io.proximax.sdk.model.mosaic.MosaicSupplyType;
 import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.namespace.NamespaceType;
 import io.proximax.sdk.model.transaction.*;
-import io.proximax.sdk.utils.dto.UInt64Utils;
+import io.proximax.sdk.utils.GsonUtils;
 import io.reactivex.functions.Function;
 
 public class TransactionMapping implements Function<JsonObject, Transaction> {
@@ -96,9 +95,7 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
      * @return big integer represented by the array
      */
     public static BigInteger extractBigInteger(JsonArray input) {
-        UInt64DTO uInt64DTO = new UInt64DTO();
-        stream(input).forEach(item -> uInt64DTO.add(item.getAsLong()));
-        return UInt64Utils.toBigInt(uInt64DTO);
+        return GsonUtils.getBigInteger(input);
     }
 
     /**

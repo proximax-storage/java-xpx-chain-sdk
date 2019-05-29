@@ -23,135 +23,140 @@ package io.proximax.sdk.model.transaction;
  */
 public enum TransactionType {
 
-    // Mosaic
-    /**
-     * Mosaic definition transaction type.
-     */
-    MOSAIC_DEFINITION(0x414D),
+   // Mosaic
+   /**
+    * Mosaic definition transaction type.
+    */
+   MOSAIC_DEFINITION(0x414D),
 
-    /**
-     * Mosaic supply change transaction.
-     */
-    MOSAIC_SUPPLY_CHANGE(0x424D),
+   /**
+    * Mosaic supply change transaction.
+    */
+   MOSAIC_SUPPLY_CHANGE(0x424D),
 
-    // Namespace
-    /**
-     * Register namespace transaction type.
-     */
-    REGISTER_NAMESPACE(0x414E),
+   // Namespace
+   /**
+    * Register namespace transaction type.
+    */
+   REGISTER_NAMESPACE(0x414E),
 
-    /**
-     * Address alias transaction type.
-     */
-    ADDRESS_ALIAS(0x424E),
+   /**
+    * Address alias transaction type.
+    */
+   ADDRESS_ALIAS(0x424E),
 
-    /**
-     * Mosaic alias transaction type.
-     */
-    MOSAIC_ALIAS(0x434E),
+   /**
+    * Mosaic alias transaction type.
+    */
+   MOSAIC_ALIAS(0x434E),
 
-    // Transfer
-    /**
-     * Transfer Transaction transaction type.
-     */
-    TRANSFER(0x4154),
+   // Transfer
+   /**
+    * Transfer Transaction transaction type.
+    */
+   TRANSFER(0x4154),
 
-    // Multisignature
-    /**
-     * Modify multisig account transaction type.
-     */
-    MODIFY_MULTISIG_ACCOUNT(0x4155),
+   // Multisignature
+   /**
+    * Modify multisig account transaction type.
+    */
+   MODIFY_MULTISIG_ACCOUNT(0x4155),
 
-    /**
-     * Aggregate complete transaction type.
-     */
-    AGGREGATE_COMPLETE(0x4141),
+   /**
+    * Aggregate complete transaction type.
+    */
+   AGGREGATE_COMPLETE(0x4141),
 
-    /**
-     * Aggregate bonded transaction type
-     */
-    AGGREGATE_BONDED(0x4241),
+   /**
+    * Aggregate bonded transaction type
+    */
+   AGGREGATE_BONDED(0x4241),
 
-    /**
-     * Hash Lock transaction type
-     */
-    LOCK(0x4148),
+   /**
+    * Hash Lock transaction type
+    */
+   LOCK(0x4148),
 
-    // Account filters
-    /**
-     * Account properties address transaction type
-     */
-    ACCOUNT_PROPERTIES_ADDRESS(0x4150),
+   // Account filters
+   /**
+    * Account properties address transaction type
+    */
+   ACCOUNT_PROPERTIES_ADDRESS(0x4150),
 
-    /**
-     * Account properties mosaic transaction type
-     */
-    ACCOUNT_PROPERTIES_MOSAIC(0x4250),
+   /**
+    * Account properties mosaic transaction type
+    */
+   ACCOUNT_PROPERTIES_MOSAIC(0x4250),
 
-    /**
-     * Account properties entity type transaction type
-     */
-    ACCOUNT_PROPERTIES_ENTITY_TYPE(0x4350),
+   /**
+    * Account properties entity type transaction type
+    */
+   ACCOUNT_PROPERTIES_ENTITY_TYPE(0x4350),
 
-    // Cross-chain swaps
-    /**
-     * Secret Lock Transaction type
-     */
-    SECRET_LOCK(0x4152),
+   // Cross-chain swaps
+   /**
+    * Secret Lock Transaction type
+    */
+   SECRET_LOCK(0x4152),
 
-    /**
-     * Secret Proof transaction type
-     */
-    SECRET_PROOF(0x4252),
+   /**
+    * Secret Proof transaction type
+    */
+   SECRET_PROOF(0x4252),
 
-    // Remote harvesting
-    /**
-     * Account link transaction type
-     */
-    ACCOUNT_LINK(0x414C),
+   // Remote harvesting
+   /**
+    * Account link transaction type
+    */
+   ACCOUNT_LINK(0x414C),
 
-    /**
-     * transaction to modify address meta datata
-     */
-     MODIFY_ADDRESS_METADATA(0x413d),
+   /**
+    * transaction to modify address meta datata
+    */
+   MODIFY_ADDRESS_METADATA(0x413d),
 
    /**
     * transaction to modify mosaic meta datata
     */
-    MODIFY_MOSAIC_METADATA(0x423d),
+   MODIFY_MOSAIC_METADATA(0x423d),
 
-    /**
-     * transaction to modify namespace meta datata
-     */
-     MODIFY_NAMESPACE_METADATA(0x433d);
+   /**
+    * transaction to modify namespace meta datata
+    */
+   MODIFY_NAMESPACE_METADATA(0x433d),
 
-    private int value;
+   /**
+    * transaction to modify account contract
+    */
+   MODIFY_CONTRACT(0x4157);
 
-    TransactionType(int value) {
-        this.value = value;
-    }
+   private int value;
 
-    /**
-     * Returns enum value.
-     *
-     * @return enum value
-     */
-    public int getValue() {
-        return this.value;
-    }
+   TransactionType(int value) {
+      this.value = value;
+   }
 
-    /**
-     * retrieve transaction type by the code
-     * 
-     * @param code of the transaction type
-     * @return transaction type
-     */
-    public static TransactionType rawValueOf(int code) {
-       for (TransactionType type : TransactionType.values()) {
-          if (code == type.value) {
-             return type;
-          }
-       }
-       throw new IllegalArgumentException("Unsupported transaction type code " + code);
-    }
+   /**
+    * Returns enum value.
+    *
+    * @return enum value
+    */
+   public int getValue() {
+      return this.value;
+   }
+
+   /**
+    * retrieve transaction type by the code
+    * 
+    * @param code of the transaction type
+    * @return transaction type
+    */
+   public static TransactionType rawValueOf(int code) {
+      for (TransactionType type : TransactionType.values()) {
+         if (code == type.value) {
+            return type;
+         }
+      }
+      throw new IllegalArgumentException("Unsupported transaction type code " + code);
+   }
 }

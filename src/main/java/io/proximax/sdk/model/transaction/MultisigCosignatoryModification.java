@@ -51,6 +51,26 @@ public class MultisigCosignatoryModification {
     public PublicAccount getCosignatoryPublicAccount() {
         return cosignatoryPublicAccount;
     }
+    
+    /**
+     * create modification to add public account
+     * 
+     * @param publicAccount public account to add
+     * @return the modification to add
+     */
+    public static MultisigCosignatoryModification add(PublicAccount publicAccount) {
+       return new MultisigCosignatoryModification(MultisigCosignatoryModificationType.ADD, publicAccount);
+    }
+    
+    /**
+     * create modification to remove public account
+     * 
+     * @param publicAccount public account to remove
+     * @return the modification to remove
+     */
+    public static MultisigCosignatoryModification remove(PublicAccount publicAccount) {
+       return new MultisigCosignatoryModification(MultisigCosignatoryModificationType.REMOVE, publicAccount);
+    }
 }
 
 

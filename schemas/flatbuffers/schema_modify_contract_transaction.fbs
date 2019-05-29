@@ -11,7 +11,7 @@ table ModifyContractTransactionBuffer {
     signer: [ubyte];
     version: ushort;
     type: ushort;
-    fee: [uint];
+    maxFee: [uint];
     deadline:[uint];
     durationDelta: [uint];
     hash: [ubyte];

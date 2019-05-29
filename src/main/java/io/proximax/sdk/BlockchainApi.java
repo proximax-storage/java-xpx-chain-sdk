@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.proximax.sdk.infrastructure.AccountHttp;
 import io.proximax.sdk.infrastructure.BlockchainHttp;
+import io.proximax.sdk.infrastructure.ContractHttp;
 import io.proximax.sdk.infrastructure.Listener;
 import io.proximax.sdk.infrastructure.MetadataHttp;
 import io.proximax.sdk.infrastructure.MosaicHttp;
@@ -87,6 +88,15 @@ public class BlockchainApi {
       return new BlockchainHttp(this);
    }
 
+   /**
+    * create contract repository
+    * 
+    * @return the contract repository
+    */
+   public ContractRepository createContractRepository() {
+      return new ContractHttp(this);
+   }
+   
    /**
     * create metadata repository
     * 

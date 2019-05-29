@@ -116,7 +116,12 @@ public enum TransactionVersion {
    /**
     * modification of metadata
     */
-   METADATA_MODIFICATION(1);
+   METADATA_MODIFICATION(1),
+   
+   /**
+    * contract modification transaction version
+    */
+   MODIFY_CONTRACT(3);
 
    private Integer code;
 
