@@ -83,6 +83,8 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
       case MODIFY_MOSAIC_METADATA:
       case MODIFY_NAMESPACE_METADATA:
          return new ModifyMetadataTransactionMapping().apply(input);
+      case MODIFY_CONTRACT:
+         return new ModifyContractTransactionMapping().apply(input);         
       default:
          throw new UnsupportedOperationException("Unimplemented transaction type " + type);
       }
@@ -498,34 +500,87 @@ class MosaicSupplyChangeTransactionMapping extends TransactionMapping {
 
 class MultisigModificationTransactionMapping extends TransactionMapping {
 
-    @Override
-    public ModifyMultisigAccountTransaction apply(JsonObject input) {
-        TransactionInfo transactionInfo = this.createTransactionInfo(input.getAsJsonObject("meta"));
+   @Override
+   public ModifyMultisigAccountTransaction apply(JsonObject input) {
+       TransactionInfo transactionInfo = this.createTransactionInfo(input.getAsJsonObject("meta"));
 
-        JsonObject transaction = input.getAsJsonObject("transaction");
-        DeadlineBP deadline = new DeadlineBP(extractBigInteger(transaction.getAsJsonArray("deadline")));
-        NetworkType networkType = extractNetworkType(transaction.get("version"));
+       JsonObject transaction = input.getAsJsonObject("transaction");
+       DeadlineBP deadline = new DeadlineBP(extractBigInteger(transaction.getAsJsonArray("deadline")));
+       NetworkType networkType = extractNetworkType(transaction.get("version"));
 
-        List<MultisigCosignatoryModification> modifications = transaction.has("modifications") ? stream(transaction.getAsJsonArray("modifications"))
-                .map(item -> (JsonObject) item)
-                .map(multisigModification -> new MultisigCosignatoryModification(
-                        MultisigCosignatoryModificationType.rawValueOf(multisigModification.get("type").getAsInt()),
-                        PublicAccount.createFromPublicKey(multisigModification.get("cosignatoryPublicKey").getAsString(), networkType)))
-                .collect(Collectors.toList()) : Collections.emptyList();
+       List<MultisigCosignatoryModification> modifications = transaction.has("modifications") ? stream(transaction.getAsJsonArray("modifications"))
+               .map(item -> (JsonObject) item)
+               .map(multisigModification -> new MultisigCosignatoryModification(
+                       MultisigCosignatoryModificationType.rawValueOf(multisigModification.get("type").getAsInt()),
+                       PublicAccount.createFromPublicKey(multisigModification.get("cosignatoryPublicKey").getAsString(), networkType)))
+               .collect(Collectors.toList()) : Collections.emptyList();
 
-        return new ModifyMultisigAccountTransaction(
-                networkType,
-                extractTransactionVersion(transaction.get("version")),
-                deadline,
-                extractFee(transaction),
-                transaction.get("minApprovalDelta").getAsInt(),
-                transaction.get("minRemovalDelta").getAsInt(),
-                modifications,
-                transaction.get("signature").getAsString(),
-                new PublicAccount(transaction.get("signer").getAsString(), networkType),
-                transactionInfo
-        );
-    }
+       return new ModifyMultisigAccountTransaction(
+               networkType,
+               extractTransactionVersion(transaction.get("version")),
+               deadline,
+               extractFee(transaction),
+               transaction.get("minApprovalDelta").getAsInt(),
+               transaction.get("minRemovalDelta").getAsInt(),
+               modifications,
+               transaction.get("signature").getAsString(),
+               new PublicAccount(transaction.get("signer").getAsString(), networkType),
+               transactionInfo
+       );
+   }
+}
+
+/**
+ * Modify contract transaction mapping from JSON to Transaction instance
+ */
+class ModifyContractTransactionMapping extends TransactionMapping {
+
+   @Override
+   public ModifyContractTransaction apply(JsonObject input) {
+       TransactionInfo transactionInfo = this.createTransactionInfo(input.getAsJsonObject("meta"));
+
+       JsonObject transaction = input.getAsJsonObject("transaction");
+       DeadlineBP deadline = new DeadlineBP(extractBigInteger(transaction.getAsJsonArray("deadline")));
+       NetworkType networkType = extractNetworkType(transaction.get("version"));
+
+       return new ModifyContractTransaction(
+               networkType,
+               extractTransactionVersion(transaction.get("version")),
+               deadline,
+               extractFee(transaction),
+               Optional.of(transaction.get("signature").getAsString()),
+               Optional.of(new PublicAccount(transaction.get("signer").getAsString(), networkType)),
+               Optional.of(transactionInfo),
+               extractBigInteger(transaction.get("duration").getAsJsonArray()),
+               transaction.get("hash").getAsString(),
+               extractModifications(networkType, transaction, "customers"),
+               extractModifications(networkType, transaction, "executors"),
+               extractModifications(networkType, transaction, "verifiers")
+       );
+   }
+
+   /**
+    * extract multisig modifications from the transaction and specified field name
+    * 
+    * @param networkType network type
+    * @param transaction transaction JSON object
+    * @param fieldName name of the field to get the modifications from
+    * @return the list of multisig modifications
+    */
+   private List<MultisigCosignatoryModification> extractModifications(NetworkType networkType, JsonObject transaction,
+         String fieldName) {
+      // if there is no such field then return empty list
+      if (!transaction.has(fieldName)) {
+         return Collections.emptyList();
+      }
+      // load items from the field
+      return stream(transaction.getAsJsonArray(fieldName)).map(item -> (JsonObject) item)
+            .map(multisigModification -> new MultisigCosignatoryModification(
+                  MultisigCosignatoryModificationType.rawValueOf(multisigModification.get("type").getAsInt()),
+                  PublicAccount.createFromPublicKey(multisigModification.get("cosignatoryPublicKey").getAsString(),
+                        networkType)))
+            .collect(Collectors.toList());
+   }
 }
 
 class AggregateTransactionMapping extends TransactionMapping {

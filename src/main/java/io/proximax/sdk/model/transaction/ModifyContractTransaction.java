@@ -47,13 +47,13 @@ public class ModifyContractTransaction extends Transaction {
     * @param executorsModifications
     * @param verifiersModifications
     */
-   public ModifyContractTransaction(NetworkType networkType,
+   public ModifyContractTransaction(NetworkType networkType, Integer transactionVersion,
          TransactionDeadline deadline, BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
          Optional<TransactionInfo> transactionInfo, BigInteger durationDelta, String contentHash,
          List<MultisigCosignatoryModification> customersModifications,
          List<MultisigCosignatoryModification> executorsModifications,
          List<MultisigCosignatoryModification> verifiersModifications) {
-      super(TransactionType.MODIFY_CONTRACT, networkType, TransactionVersion.MODIFY_CONTRACT.getValue(), deadline, maxFee, signature, signer, transactionInfo);
+      super(TransactionType.MODIFY_CONTRACT, networkType, transactionVersion, deadline, maxFee, signature, signer, transactionInfo);
       this.durationDelta = durationDelta;
       this.contentHash = contentHash;
       this.customersModifications = customersModifications;
@@ -65,7 +65,7 @@ public class ModifyContractTransaction extends Transaction {
          List<MultisigCosignatoryModification> customersModifications,
          List<MultisigCosignatoryModification> executorsModifications,
          List<MultisigCosignatoryModification> verifiersModifications, NetworkType networkType) {
-      return new ModifyContractTransaction(networkType, deadline, maxFee, Optional.empty(), Optional.empty(),
+      return new ModifyContractTransaction(networkType, TransactionVersion.MODIFY_CONTRACT.getValue(), deadline, maxFee, Optional.empty(), Optional.empty(),
             Optional.empty(), durationDelta, contentHash, customersModifications, executorsModifications,
             verifiersModifications);
    }
@@ -95,7 +95,7 @@ public class ModifyContractTransaction extends Transaction {
       int executorsOffset = ModifyContractTransactionBuffer.createExecutorsVector(builder, executorsBuffer);
       int verifiersOffset = ModifyContractTransactionBuffer.createVerifiersVector(builder, verifiersBuffer);
 
-      // standard fields + duration delta + hash length + 3 modification lengths + 33 bytes per every modification
+      // standard fields + duration delta + hash length + 3 modification lengths + 33 bytes per every modification (1 byte mod type + 32 bytes public key)
       int totalSize = 120 + 8 + contentHashBytes.length + 3 + 33 * (customersBuffer.length + executorsBuffer.length + verifiersBuffer.length);
 
       // standard transaction information
@@ -151,5 +151,47 @@ public class ModifyContractTransaction extends Transaction {
           modificationsBuffers[i] = CosignatoryModificationBuffer.endCosignatoryModificationBuffer(builder);
       }
       return modificationsBuffers;
+   }
+
+   /**
+    * @return the schema
+    */
+   public ModifyContractTransactionSchema getSchema() {
+      return schema;
+   }
+
+   /**
+    * @return the durationDelta
+    */
+   public BigInteger getDurationDelta() {
+      return durationDelta;
+   }
+
+   /**
+    * @return the contentHash
+    */
+   public String getContentHash() {
+      return contentHash;
+   }
+
+   /**
+    * @return the customersModifications
+    */
+   public List<MultisigCosignatoryModification> getCustomersModifications() {
+      return customersModifications;
+   }
+
+   /**
+    * @return the executorsModifications
+    */
+   public List<MultisigCosignatoryModification> getExecutorsModifications() {
+      return executorsModifications;
+   }
+
+   /**
+    * @return the verifiersModifications
+    */
+   public List<MultisigCosignatoryModification> getVerifiersModifications() {
+      return verifiersModifications;
    }
 }

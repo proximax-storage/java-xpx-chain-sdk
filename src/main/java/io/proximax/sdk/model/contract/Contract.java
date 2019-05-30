@@ -7,6 +7,7 @@ package io.proximax.sdk.model.contract;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import io.proximax.core.crypto.PublicKey;
@@ -29,6 +30,8 @@ public class Contract {
    private final List<PublicKey> verifiers;
 
    /**
+    * Create new contract instance
+    * 
     * @param multisig
     * @param multisigAddress
     * @param start
@@ -38,7 +41,7 @@ public class Contract {
     * @param executors
     * @param verifiers
     */
-   private Contract(String multisig, Address multisigAddress, BigInteger start, BigInteger duration, String contentHash,
+   public Contract(String multisig, Address multisigAddress, BigInteger start, BigInteger duration, String contentHash,
          List<PublicKey> customers, List<PublicKey> executors, List<PublicKey> verifiers) {
       this.multisig = multisig;
       this.multisigAddress = multisigAddress;
@@ -104,6 +107,27 @@ public class Contract {
     */
    public List<PublicKey> getVerifiers() {
       return verifiers;
+   }
+
+   
+   @Override
+   public int hashCode() {
+      return Objects.hash(contentHash, customers, duration, executors, multisig, multisigAddress, start, verifiers);
+   }
+
+   @Override
+   public boolean equals(Object obj) {
+      if (this == obj)
+         return true;
+      if (obj == null)
+         return false;
+      if (getClass() != obj.getClass())
+         return false;
+      Contract other = (Contract) obj;
+      return Objects.equals(contentHash, other.contentHash) && Objects.equals(customers, other.customers)
+            && Objects.equals(duration, other.duration) && Objects.equals(executors, other.executors)
+            && Objects.equals(multisig, other.multisig) && Objects.equals(multisigAddress, other.multisigAddress)
+            && Objects.equals(start, other.start) && Objects.equals(verifiers, other.verifiers);
    }
 
    /**

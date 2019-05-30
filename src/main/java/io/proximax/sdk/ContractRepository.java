@@ -28,13 +28,13 @@ import io.reactivex.Observable;
  */
 public interface ContractRepository {
     /**
-     * <p>Get contracts for specified address</p>
+     * <p>Get contract for specified address</p>
      * <p>GET '/contract/{accountId}'</p>
      * 
      * @param address the address to check
-     * @return observable list of contracts
+     * @return observable contract
      */
-    Observable<List<Contract>> getContracts(Address address);
+    Observable<Contract> getContract(Address address);
 
     /**
      * <p>Get contracts by addresses</p>
@@ -46,13 +46,13 @@ public interface ContractRepository {
     Observable<List<Contract>> getContracts(Address ... addresses);
 
     /**
-     * <p>Get contracts by public key</p>
+     * <p>Get contract by public key</p>
      * <p>GET '/account/{publicKey}/contracts'</p>
      * 
      * @param publicKey the public key to check
-     * @return observable list of contracts
+     * @return observable contract
      */
-    Observable<List<Contract>> getContracts(PublicKey publicKey);
+    Observable<Contract> getContract(PublicKey publicKey);
     
     /**
      * <p>Get contracts by public keys</p>
