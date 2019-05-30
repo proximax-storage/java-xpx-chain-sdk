@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * AccountPropertyDTO
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-05-15T22:01:02.543+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-05-31T00:16:53.236+02:00")
 public class AccountPropertyDTO {
   @SerializedName("propertyType")
   private Integer propertyType = null;

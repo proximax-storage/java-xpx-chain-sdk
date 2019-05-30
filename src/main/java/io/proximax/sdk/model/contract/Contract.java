@@ -6,8 +6,10 @@
 package io.proximax.sdk.model.contract;
 
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import io.proximax.core.crypto.PublicKey;
@@ -25,6 +27,7 @@ public class Contract {
    private final BigInteger start;
    private final BigInteger duration;
    private final String contentHash;
+   private final List<ContractContentHashRecord> contentHashRecords;
    private final List<PublicKey> customers;
    private final List<PublicKey> executors;
    private final List<PublicKey> verifiers;
@@ -41,13 +44,14 @@ public class Contract {
     * @param executors
     * @param verifiers
     */
-   public Contract(String multisig, Address multisigAddress, BigInteger start, BigInteger duration, String contentHash,
+   public Contract(String multisig, Address multisigAddress, BigInteger start, BigInteger duration, String contentHash, List<ContractContentHashRecord> contentHashRecords,
          List<PublicKey> customers, List<PublicKey> executors, List<PublicKey> verifiers) {
       this.multisig = multisig;
       this.multisigAddress = multisigAddress;
       this.start = start;
       this.duration = duration;
       this.contentHash = contentHash;
+      this.contentHashRecords = contentHashRecords;
       this.customers = customers;
       this.executors = executors;
       this.verifiers = verifiers;
@@ -89,6 +93,13 @@ public class Contract {
    }
 
    /**
+    * @return the contentHashRecords
+    */
+   public List<ContractContentHashRecord> getContentHashRecords() {
+      return contentHashRecords;
+   }
+
+   /**
     * @return the customers
     */
    public List<PublicKey> getCustomers() {
@@ -115,6 +126,7 @@ public class Contract {
       return Objects.hash(contentHash, customers, duration, executors, multisig, multisigAddress, start, verifiers);
    }
 
+   
    @Override
    public boolean equals(Object obj) {
       if (this == obj)
@@ -138,13 +150,16 @@ public class Contract {
     */
    public static Contract fromDto(ContractDTO dto) {
       return new Contract(
-            dto.getMultisig(), 
+            dto.getMultisig(),
             Address.createFromEncoded(dto.getMultisigAddress()),
-            UInt64Utils.toBigInt(dto.getStart()), 
-            UInt64Utils.toBigInt(dto.getDuration()), 
+            UInt64Utils.toBigInt(dto.getStart()),
+            UInt64Utils.toBigInt(dto.getDuration()),
             dto.getHash(),
-            getPublicKeys(dto.getCustomers()), 
-            getPublicKeys(dto.getExecutors()), 
+            Optional.ofNullable(dto.getHashes()).orElse(Collections.emptyList()).stream()
+                  .map(ContractContentHashRecord::fromDto)
+                  .collect(Collectors.toList()),
+            getPublicKeys(dto.getCustomers()),
+            getPublicKeys(dto.getExecutors()),
             getPublicKeys(dto.getVerifiers()));
    }
 

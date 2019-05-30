@@ -20,57 +20,56 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import io.proximax.sdk.gen.model.MosaicDefinitionDTO;
-import io.proximax.sdk.gen.model.MosaicMetaDTO;
+import io.proximax.sdk.gen.model.UInt64DTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * MosaicInfoDTO
+ * ContractHashRecordDTO
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-05-31T00:16:53.236+02:00")
-public class MosaicInfoDTO {
-  @SerializedName("meta")
-  private MosaicMetaDTO meta = null;
+public class ContractHashRecordDTO {
+  @SerializedName("hash")
+  private String hash = null;
 
-  @SerializedName("mosaic")
-  private MosaicDefinitionDTO mosaic = null;
+  @SerializedName("height")
+  private UInt64DTO height = null;
 
-  public MosaicInfoDTO meta(MosaicMetaDTO meta) {
-    this.meta = meta;
+  public ContractHashRecordDTO hash(String hash) {
+    this.hash = hash;
     return this;
   }
 
    /**
-   * Get meta
-   * @return meta
+   * Get hash
+   * @return hash
   **/
-  @ApiModelProperty(required = true, value = "")
-  public MosaicMetaDTO getMeta() {
-    return meta;
+  @ApiModelProperty(example = "D8E06B597BEE34263E9C970A50B5341783EFF67EF00637644C114447BE1905DA", required = true, value = "")
+  public String getHash() {
+    return hash;
   }
 
-  public void setMeta(MosaicMetaDTO meta) {
-    this.meta = meta;
+  public void setHash(String hash) {
+    this.hash = hash;
   }
 
-  public MosaicInfoDTO mosaic(MosaicDefinitionDTO mosaic) {
-    this.mosaic = mosaic;
+  public ContractHashRecordDTO height(UInt64DTO height) {
+    this.height = height;
     return this;
   }
 
    /**
-   * Get mosaic
-   * @return mosaic
+   * Get height
+   * @return height
   **/
   @ApiModelProperty(required = true, value = "")
-  public MosaicDefinitionDTO getMosaic() {
-    return mosaic;
+  public UInt64DTO getHeight() {
+    return height;
   }
 
-  public void setMosaic(MosaicDefinitionDTO mosaic) {
-    this.mosaic = mosaic;
+  public void setHeight(UInt64DTO height) {
+    this.height = height;
   }
 
 
@@ -82,24 +81,24 @@ public class MosaicInfoDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    MosaicInfoDTO mosaicInfoDTO = (MosaicInfoDTO) o;
-    return Objects.equals(this.meta, mosaicInfoDTO.meta) &&
-        Objects.equals(this.mosaic, mosaicInfoDTO.mosaic);
+    ContractHashRecordDTO contractHashRecordDTO = (ContractHashRecordDTO) o;
+    return Objects.equals(this.hash, contractHashRecordDTO.hash) &&
+        Objects.equals(this.height, contractHashRecordDTO.height);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(meta, mosaic);
+    return Objects.hash(hash, height);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class MosaicInfoDTO {\n");
+    sb.append("class ContractHashRecordDTO {\n");
     
-    sb.append("    meta: ").append(toIndentedString(meta)).append("\n");
-    sb.append("    mosaic: ").append(toIndentedString(mosaic)).append("\n");
+    sb.append("    hash: ").append(toIndentedString(hash)).append("\n");
+    sb.append("    height: ").append(toIndentedString(height)).append("\n");
     sb.append("}");
     return sb.toString();
   }
