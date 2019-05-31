@@ -17,8 +17,11 @@ import io.reactivex.subjects.Subject;
  */
 public class CosignatureChannelMessage extends ListenerMessage<CosignatureSignedTransaction> {
    private static final ListenerChannel CHANNEL = ListenerChannel.COSIGNATURE;
+
    /**
-    * @param message
+    * create new message for the cosignature channel
+    * 
+    * @param message JSON object representing the CosignatureSignedTransaction
     */
    public CosignatureChannelMessage(JsonObject message) {
       super(CHANNEL, getAddressFromMessage(message), getPayload(message));

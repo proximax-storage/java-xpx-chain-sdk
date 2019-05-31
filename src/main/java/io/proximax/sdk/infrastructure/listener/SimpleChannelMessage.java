@@ -17,7 +17,10 @@ import io.reactivex.subjects.Subject;
 public class SimpleChannelMessage extends ListenerMessage<String> {
 
    /**
-    * @param message
+    * create new message for any channel that is mapped only to the meta/hash field
+    * 
+    * @param channel the channel that produced this message
+    * @param message JSON object expected to have meta/hash field
     */
    public SimpleChannelMessage(ListenerChannel channel, JsonObject message) {
       super(channel, getAddressFromMessage(message), getMessageObject(message));

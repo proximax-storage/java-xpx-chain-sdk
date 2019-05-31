@@ -21,7 +21,8 @@ import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
- * Contract modification Transaction
+ * <p>Contract modification transaction can be used to create or change contract</p>
+ * <p>Contract changes contract account to N of N  multisignature account where cosignatories are the verifiers</p>
  */
 public class ModifyContractTransaction extends Transaction {
    
@@ -35,17 +36,20 @@ public class ModifyContractTransaction extends Transaction {
    private final List<MultisigCosignatoryModification> verifiersModifications;
    
    /**
-    * @param networkType
-    * @param deadline
-    * @param maxFee
-    * @param signature
-    * @param signer
-    * @param transactionInfo
-    * @param durationDelta
-    * @param contentHash
-    * @param customersModifications
-    * @param executorsModifications
-    * @param verifiersModifications
+    * create new contract modification transaction
+    * 
+    * @param networkType network type
+    * @param transactionVersion version of the transaction
+    * @param deadline transaction deadline
+    * @param maxFee maximum fee
+    * @param signature optional transaction signature
+    * @param signer optional signer of the transaction
+    * @param transactionInfo optional transaction info
+    * @param durationDelta change of the contract duration (+/-)
+    * @param contentHash contract content hash
+    * @param customersModifications changes to the list of customers
+    * @param executorsModifications changes to the list of executors
+    * @param verifiersModifications changes to the list of verifiers
     */
    public ModifyContractTransaction(NetworkType networkType, Integer transactionVersion,
          TransactionDeadline deadline, BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
@@ -61,6 +65,19 @@ public class ModifyContractTransaction extends Transaction {
       this.verifiersModifications = verifiersModifications;
    }
 
+   /**
+    * create new contract modification transaction
+    * 
+    * @param networkType network type
+    * @param deadline transaction deadline
+    * @param maxFee maximum fee
+    * @param durationDelta change of the contract duration (+/-)
+    * @param contentHash contract content hash
+    * @param customersModifications changes to the list of customers
+    * @param executorsModifications changes to the list of executors
+    * @param verifiersModifications changes to the list of verifiers
+    * @return the contract modification transaction ready to be signed and announced
+    */
    public static ModifyContractTransaction create(TransactionDeadline deadline, BigInteger maxFee, BigInteger durationDelta, String contentHash,
          List<MultisigCosignatoryModification> customersModifications,
          List<MultisigCosignatoryModification> executorsModifications,

@@ -88,9 +88,10 @@ public interface HttpClient {
    Observable<HttpResponse> putAbs(String absoluteUrl, JsonObject body);
 
    /**
-    * @param request
-    * @param webSocketListener
-    * @return
+    * create new web socket using the HTTP client
+    * @param request request sent to the server
+    * @param webSocketListener listener that will be notified about new events form the server
+    * @return the websocket
     */
    WebSocket newWebSocket(Request request, WebSocketListener webSocketListener);
 }

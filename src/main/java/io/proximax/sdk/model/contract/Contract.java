@@ -35,14 +35,15 @@ public class Contract {
    /**
     * Create new contract instance
     * 
-    * @param multisig
-    * @param multisigAddress
-    * @param start
-    * @param duration
-    * @param contentHash
-    * @param customers
-    * @param executors
-    * @param verifiers
+    * @param multisig public key of the contract account
+    * @param multisigAddress address of the contract account
+    * @param start block height when the contract was created
+    * @param duration number of blocks for which the contract is valid since the start
+    * @param contentHash hash of the contract content
+    * @param contentHashRecords history of content hashes
+    * @param customers list of public keys of customers
+    * @param executors list of public keys of executors
+    * @param verifiers list of public keys of verifiers
     */
    public Contract(String multisig, Address multisigAddress, BigInteger start, BigInteger duration, String contentHash, List<ContractContentHashRecord> contentHashRecords,
          List<PublicKey> customers, List<PublicKey> executors, List<PublicKey> verifiers) {

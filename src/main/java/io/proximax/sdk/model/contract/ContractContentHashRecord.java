@@ -12,15 +12,17 @@ import io.proximax.sdk.gen.model.ContractHashRecordDTO;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
- * record in the history of contract content hashes
+ * record in the history of contract content hashes. Tracks content hash against block height when it changed
  */
 public class ContractContentHashRecord {
    private final String contentHash;
    private final BigInteger blockHeight;
    
    /**
-    * @param contentHash
-    * @param blockHeight
+    * create new content hash record
+    * 
+    * @param contentHash new content hash
+    * @param blockHeight block height at the time of hash change
     */
    public ContractContentHashRecord(String contentHash, BigInteger blockHeight) {
       this.contentHash = contentHash;
