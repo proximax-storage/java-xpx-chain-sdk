@@ -35,8 +35,6 @@ import io.proximax.sdk.model.transaction.SignedTransaction;
 
 /**
  * E2E tests that demonstrate contracts
- * 
- * @author tonowie
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.Alphanumeric.class)
