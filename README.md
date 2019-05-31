@@ -8,6 +8,8 @@ The ProximaX Sirius Catapult Chain Java SDK is a Java library for interacting wi
 
 ## Use the library ##
 
+Current version of the library is <b>0.1.0</b>
+
 This library requires use of Java8. Library is published to [Maven Central](https://search.maven.org/). To include library and its dependencies, add following to your build script:
 
 ### Maven ###
@@ -16,21 +18,21 @@ This library requires use of Java8. Library is published to [Maven Central](http
 <dependency>
     <groupId>io.proximax</groupId>
     <artifactId>java-xpx-catapult-sdk</artifactId>
-    <version>0.1.0</version>
+    <version>${javaXpxVersion}</version>
 </dependency>
 ```
 
 ### Gradle ###
 
 ```gradle
-compile 'io.proximax:java-xpx-catapult-sdk:0.1.0'
+compile "io.proximax:java-xpx-catapult-sdk:${javaXpxVersion}"
 ```
 
 ## Wiki and Examples ##
 
 For SDK documentation and examples see [wiki](https://github.com/proximax-storage/java-xpx-catapult-sdk/wiki)
 
-Check [integration tests](https://github.com/proximax-storage/java-xpx-catapult-sdk/tree/master/src/integration-test/java/io/proximax/sdk) for working examples how to use the library.
+Check [integration tests](https://github.com/proximax-storage/java-xpx-catapult-sdk/tree/master/src/e2e/java/io/proximax/sdk) for working examples how to use the library.
 
 ## Contribution ##
 
