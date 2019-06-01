@@ -5,6 +5,8 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import java.nio.charset.StandardCharsets;
+
 import org.junit.jupiter.api.Test;
 
 import io.proximax.core.crypto.KeyPair;
@@ -20,11 +22,11 @@ public class MessageFactoryTest {
 
     @Test
     public void shouldCreatePlainMessage() {
-        final Message message = MessageFactory.createMessage(MessageType.PLAIN.getCode(), "test-message".getBytes());
+        final Message message = MessageFactory.createMessage(MessageType.PLAIN.getCode(), "test-message".getBytes(StandardCharsets.UTF_8));
 
         assertThat(message, is(notNullValue()));
         assertThat(message, is(instanceOf(PlainMessage.class)));
-        assertThat(message.getEncodedPayload(), is("test-message".getBytes()));
+        assertThat(message.getEncodedPayload(), is("test-message".getBytes(StandardCharsets.UTF_8)));
         assertThat(message.getPayload(), is("test-message"));
         assertThat(message.getTypeCode(), is(MessageType.PLAIN.getCode()));
     }
