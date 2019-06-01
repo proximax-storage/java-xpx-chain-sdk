@@ -66,14 +66,7 @@ publishing {
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
         }
         maven {
-            url "http://localhost:8081/repository/test/"
-            credentials {
-                username nexusUser
-                password nexusPass
-            }
-        }
-        maven {
-            url "http://localhost:8081/repository/test2/"
+            url "https://nexus.internal.proximax.io/repository/maven-releases"
             credentials {
                 username nexusUser
                 password nexusPass

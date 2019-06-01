@@ -31,7 +31,7 @@ plugins {
 // repository group
 group 'io.proximax'
 // current version
-version '0.1.0-alpha'
+version '0.1.0'
 
 // define contents of the build
 apply from: "$rootDir/gradle/content.gradle"
