@@ -19,6 +19,7 @@ package io.proximax.sdk;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -31,11 +32,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.proximax.core.crypto.KeyPair;
+import io.proximax.sdk.gen.model.UInt64DTO;
 import io.proximax.sdk.infrastructure.QueryParams;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.AccountInfo;
 import io.proximax.sdk.model.account.Address;
+import io.proximax.sdk.model.account.props.AccountProperties;
+import io.proximax.sdk.model.account.props.AccountProperty;
+import io.proximax.sdk.model.account.props.AccountPropertyModification;
+import io.proximax.sdk.model.account.props.AccountPropertyModificationType;
+import io.proximax.sdk.model.account.props.AccountPropertyType;
+import io.proximax.sdk.model.mosaic.MosaicId;
+import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
+import io.proximax.sdk.model.transaction.ModifyAccountPropertyTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
+import io.proximax.sdk.model.transaction.TransactionType;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class E2EAccountTest extends E2EBaseTest {
@@ -47,14 +59,177 @@ class E2EAccountTest extends E2EBaseTest {
    @BeforeAll
    void addListener() {
       logger.info("Sending transactions to {}", simpleAccount);
-      listener.status(simpleAccount.getAddress()).doOnNext(err -> logger.info("Error on recipient: {}", err))
-            .doOnError(exception -> logger.error("Failure on recipient: {}", exception))
-            .doOnComplete(() -> logger.info("done with recipient {}", simpleAccount));
+      signup(simpleAccount.getAddress());
       // make transfer to and from the test account to make sure it has public key announced
       sendSomeCash(seedAccount, simpleAccount.getAddress(), 1);
       sendSomeCash(simpleAccount, seedAccount.getAddress(), 1);
    }
 
+   
+   @Test
+   void addBlockAccountProperty() {
+      Account acct = new Account(new KeyPair(), getNetworkType());
+      Account blocked = new Account(new KeyPair(), getNetworkType());
+      signup(acct.getAddress());
+      signup(blocked.getAddress());
+      logger.info("going to block {} by {}", blocked.getPublicAccount(), acct.getPublicAccount());
+      ModifyAccountPropertyTransaction<Address> trans = ModifyAccountPropertyTransaction.createForAddress(getDeadline(),
+            BigInteger.ZERO,
+            AccountPropertyType.BLOCK_ADDRESS,
+            Arrays.asList(new AccountPropertyModification<>(AccountPropertyModificationType.ADD, blocked.getAddress())),
+            getNetworkType());
+      // announce the transaction
+      transactionHttp.announce(trans.signWith(acct)).blockingFirst();
+      logger.info("Waiting for  confirmation");
+      listener.confirmed(acct.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      // now check for the block via GET
+      AccountProperties aps = accountHttp.getAccountProperties(acct.getAddress())
+            .timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      testAccountProperties(aps, blocked.getAddress());
+      // check for block via POST
+      List<AccountProperties> apsList = accountHttp.getAccountProperties(Arrays.asList(acct.getAddress()))
+            .timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      assertEquals(1, apsList.size());
+      testAccountProperties(apsList.get(0), blocked.getAddress());
+   }
+   
+   @Test
+   void addAllowMosaicProperty() {
+      Account acct = new Account(new KeyPair(), getNetworkType());
+      signup(acct.getAddress());
+      MosaicId allowedMosaic = NetworkCurrencyMosaic.ID;
+      logger.info("going to allow {} by {}", allowedMosaic, acct.getPublicAccount());
+      ModifyAccountPropertyTransaction<MosaicId> trans = ModifyAccountPropertyTransaction.createForMosaic(getDeadline(),
+            BigInteger.ZERO,
+            AccountPropertyType.ALLOW_MOSAIC,
+            Arrays.asList(AccountPropertyModification.add(allowedMosaic)),
+            getNetworkType());
+      // announce the transaction
+      transactionHttp.announce(trans.signWith(acct)).blockingFirst();
+      logger.info("Waiting for  confirmation");
+      listener.confirmed(acct.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      // now check for the block via GET
+      AccountProperties aps = accountHttp.getAccountProperties(acct.getAddress())
+            .timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      testAccountPropertiesOnSimpleAccount(aps, allowedMosaic);
+      // check for block via POST
+      List<AccountProperties> apsList = accountHttp.getAccountProperties(Arrays.asList(acct.getAddress()))
+            .timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      assertEquals(1, apsList.size());
+      testAccountPropertiesOnSimpleAccount(apsList.get(0), allowedMosaic);
+   }
+   
+   @Test
+   void addAllowEntityTypeProperty() {
+      Account acct = new Account(new KeyPair(), getNetworkType());
+      signup(acct.getAddress());
+      TransactionType allowedTransType = TransactionType.ACCOUNT_PROPERTIES_ENTITY_TYPE;
+      logger.info("going to allow {} by {}", allowedTransType, acct.getPublicAccount());
+      ModifyAccountPropertyTransaction<TransactionType> trans = ModifyAccountPropertyTransaction.createForEntityType(getDeadline(),
+            BigInteger.ZERO,
+            AccountPropertyType.ALLOW_TRANSACTION,
+            Arrays.asList(AccountPropertyModification.add(allowedTransType)),
+            getNetworkType());
+      // announce the transaction
+      transactionHttp.announce(trans.signWith(acct)).blockingFirst();
+      logger.info("Waiting for  confirmation");
+      listener.confirmed(acct.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      // now check for the block via GET
+      AccountProperties aps = accountHttp.getAccountProperties(acct.getAddress())
+            .timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      testAccountPropertiesOnSimpleAccount(aps, allowedTransType);
+      // check for block via POST
+      List<AccountProperties> apsList = accountHttp.getAccountProperties(Arrays.asList(acct.getAddress()))
+            .timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      assertEquals(1, apsList.size());
+      testAccountPropertiesOnSimpleAccount(apsList.get(0), allowedTransType);
+   }
+   
+   /**
+    * check that address block is as expected
+    * 
+    * @param aps account properties
+    * @param blockedAddress address that is blocked
+    */
+   private void testAccountProperties(AccountProperties aps, Address blockedAddress) {
+      boolean gotMatch = false;
+      for (AccountProperty ap: aps.getProperties()) {
+         if (ap.getPropertyType().equals(AccountPropertyType.BLOCK_ADDRESS)) {
+            for (Object value: ap.getValues()) {
+               // value should be string and should represent encoded address of the blocked account
+               if (value instanceof String && blockedAddress.equals(Address.createFromEncoded((String)value))) {
+                     gotMatch = true;
+               }
+            }
+            
+         }
+      }
+      assertTrue(gotMatch);
+   }
+   
+   /**
+    * check that simple account has block as expected
+    * 
+    * @param aps account properties
+    * @param blockedAddress address that is blocked
+    */
+   private void testAccountPropertiesOnSimpleAccount(AccountProperties aps, MosaicId allowedMosaic) {
+      boolean gotMatch = false;
+      for (AccountProperty ap: aps.getProperties()) {
+         if (ap.getPropertyType().equals(AccountPropertyType.ALLOW_MOSAIC)) {
+            for (Object value: ap.getValues()) {
+               logger.info("{}", value);
+               // value should be string and should represent encoded address of the blocked account
+               if (value instanceof List) {
+                     UInt64DTO dto = new UInt64DTO();
+                     dto.addAll((List<Long>)value);
+                     MosaicId retrievedMosaic = new MosaicId(UInt64Utils.toBigInt(dto));
+                     if (retrievedMosaic.equals(allowedMosaic)) {
+                        gotMatch = true;
+                     }
+               }
+            }
+            
+         }
+      }
+      assertTrue(gotMatch);
+   }
+
+   /**
+    * check that simple account has block as expected
+    * 
+    * @param aps account properties
+    * @param blockedAddress address that is blocked
+    */
+   private void testAccountPropertiesOnSimpleAccount(AccountProperties aps, TransactionType allowedTransactionType) {
+      boolean gotMatch = false;
+      for (AccountProperty ap: aps.getProperties()) {
+         if (ap.getPropertyType().equals(AccountPropertyType.ALLOW_TRANSACTION)) {
+            for (Object value : ap.getValues()) {
+               try {
+                  if (value instanceof Long && isValidTransactionTypeCode(((Long) value).intValue())) {
+                     assertEquals(TransactionType.ACCOUNT_PROPERTIES_ENTITY_TYPE, TransactionType.rawValueOf(((Long) value).intValue()));
+                     gotMatch = true;
+                  }
+               } catch (RuntimeException e) {
+                  // do nothing just ignore
+               }
+            }
+            
+         }
+      }
+      assertTrue(gotMatch);
+   }
+   
+   private static boolean isValidTransactionTypeCode(int code) {
+      try {
+         TransactionType.rawValueOf(code);
+         return true;
+      } catch (RuntimeException e) {
+         return false;
+      }
+   }
+   
     @Test
     void getAccountInfo() throws ExecutionException, InterruptedException {
         AccountInfo accountInfo = accountHttp

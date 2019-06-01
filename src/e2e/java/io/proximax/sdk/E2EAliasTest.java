@@ -32,7 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.proximax.core.crypto.KeyPair;
-import io.proximax.sdk.gen.model.UInt64DTO;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.alias.AliasAction;
 import io.proximax.sdk.model.mosaic.MosaicId;
@@ -45,7 +44,6 @@ import io.proximax.sdk.model.transaction.MosaicDefinitionTransaction;
 import io.proximax.sdk.model.transaction.RegisterNamespaceTransaction;
 import io.proximax.sdk.model.transaction.SignedTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
-import io.proximax.sdk.utils.dto.UInt64Utils;
 import io.reactivex.Observable;
 
 /**
@@ -76,18 +74,13 @@ public class E2EAliasTest extends E2EBaseTest {
       mosaicNonce = MosaicNonce.createRandom();
       mosaicId = new MosaicId(mosaicNonce, seedAccount.getPublicKey());
       signup(seedAccount.getAddress());
-      UInt64DTO dto = new UInt64DTO();
-      dto.add(244048598l);
-      dto.add(73533943l);
-      System.out.println(new MosaicId(UInt64Utils.toBigInt(dto)).getIdAsHex());
-//      fail();
    }
 
    @AfterAll
    void closeDown() {
 
    }
-
+   
    @Test
    void test01PrepareData() {
       NamespaceId rootId = new NamespaceId(ROOT_NAME);

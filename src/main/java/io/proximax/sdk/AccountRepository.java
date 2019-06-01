@@ -24,6 +24,7 @@ import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.MultisigAccountGraphInfo;
 import io.proximax.sdk.model.account.MultisigAccountInfo;
 import io.proximax.sdk.model.account.PublicAccount;
+import io.proximax.sdk.model.account.props.AccountProperties;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
 import io.reactivex.Observable;
@@ -65,6 +66,22 @@ public interface AccountRepository {
      * @return Observable of {@link MultisigAccountGraphInfo}
      */
     Observable<MultisigAccountGraphInfo> getMultisigAccountGraphInfo(Address address);
+
+    /**
+     * Get properties associated with specified address
+     * 
+     * @param address the address to check
+     * @return account properties
+     */
+    Observable<AccountProperties> getAccountProperties(Address address);
+
+    /**
+     * Get properties associated with specified addresses
+     * 
+     * @param addresses the addresses to check
+     * @return list of account properties
+     */
+    Observable<List<AccountProperties>> getAccountProperties(List<Address> addresses);
 
     /**
      * Gets an list of confirmed transactions for which an account is signer or receiver.

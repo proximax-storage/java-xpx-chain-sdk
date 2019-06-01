@@ -19,6 +19,7 @@ package io.proximax.sdk.model.transaction;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -46,7 +47,7 @@ public class IdGenerator {
       ByteBuffer.wrap(parentIdBytes).put(parentId.toByteArray());
       ArrayUtils.reverse(parentIdBytes);
       // bytes from the mosaic name
-      byte[] nameBytes = name.getBytes();
+      byte[] nameBytes = name.getBytes(StandardCharsets.UTF_8);
       // get the ID
       return toBigInteger(IdGenerator::maskNamespace, parentIdBytes, nameBytes);
    }

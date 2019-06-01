@@ -23,6 +23,7 @@ import org.apache.commons.lang3.Validate;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 
+import io.proximax.sdk.gen.buffers.RegisterNamespaceTransactionBuffer;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.namespace.NamespaceId;
@@ -147,32 +148,32 @@ public class RegisterNamespaceTransaction extends Transaction {
         int version = (int) Long.parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
 
         // Create Vectors
-        int signatureVector = ProvisionNamespaceTransactionBuffer.createSignatureVector(builder, new byte[64]);
-        int signerVector = ProvisionNamespaceTransactionBuffer.createSignerVector(builder, new byte[32]);
-        int deadlineVector = ProvisionNamespaceTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
-        int feeVector = ProvisionNamespaceTransactionBuffer.createFeeVector(builder, fee);
-        int namespaceIdVector = ProvisionNamespaceTransactionBuffer.createNamespaceIdVector(builder, UInt64Utils.fromBigInteger(namespaceId.getId()));
-        int durationParentIdVector = ProvisionNamespaceTransactionBuffer.createDurationParentIdVector(builder, getNamespaceType() == NamespaceType.RootNamespace ? UInt64Utils.fromBigInteger(duration.get()) : UInt64Utils.fromBigInteger(parentId.get().getId()));
+        int signatureVector = RegisterNamespaceTransactionBuffer.createSignatureVector(builder, new byte[64]);
+        int signerVector = RegisterNamespaceTransactionBuffer.createSignerVector(builder, new byte[32]);
+        int deadlineVector = RegisterNamespaceTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
+        int feeVector = RegisterNamespaceTransactionBuffer.createFeeVector(builder, fee);
+        int namespaceIdVector = RegisterNamespaceTransactionBuffer.createNamespaceIdVector(builder, UInt64Utils.fromBigInteger(namespaceId.getId()));
+        int durationParentIdVector = RegisterNamespaceTransactionBuffer.createDurationParentIdVector(builder, getNamespaceType() == NamespaceType.RootNamespace ? UInt64Utils.fromBigInteger(duration.get()) : UInt64Utils.fromBigInteger(parentId.get().getId()));
 
         int fixSize = 138; // replace by the all numbers sum or add a comment explaining this
 
         int name = builder.createString(namespaceName);
 
-        ProvisionNamespaceTransactionBuffer.startProvisionNamespaceTransactionBuffer(builder);
-        ProvisionNamespaceTransactionBuffer.addSize(builder, fixSize + namespaceName.length());
-        ProvisionNamespaceTransactionBuffer.addSignature(builder, signatureVector);
-        ProvisionNamespaceTransactionBuffer.addSigner(builder, signerVector);
-        ProvisionNamespaceTransactionBuffer.addVersion(builder, version);
-        ProvisionNamespaceTransactionBuffer.addType(builder, getType().getValue());
-        ProvisionNamespaceTransactionBuffer.addFee(builder, feeVector);
-        ProvisionNamespaceTransactionBuffer.addDeadline(builder, deadlineVector);
-        ProvisionNamespaceTransactionBuffer.addNamespaceType(builder, getNamespaceType().getValue());
-        ProvisionNamespaceTransactionBuffer.addDurationParentId(builder, durationParentIdVector);
-        ProvisionNamespaceTransactionBuffer.addNamespaceId(builder, namespaceIdVector);
-        ProvisionNamespaceTransactionBuffer.addNamespaceNameSize(builder, namespaceName.length());
-        ProvisionNamespaceTransactionBuffer.addNamespaceName(builder, name);
+        RegisterNamespaceTransactionBuffer.startRegisterNamespaceTransactionBuffer(builder);
+        RegisterNamespaceTransactionBuffer.addSize(builder, fixSize + namespaceName.length());
+        RegisterNamespaceTransactionBuffer.addSignature(builder, signatureVector);
+        RegisterNamespaceTransactionBuffer.addSigner(builder, signerVector);
+        RegisterNamespaceTransactionBuffer.addVersion(builder, version);
+        RegisterNamespaceTransactionBuffer.addType(builder, getType().getValue());
+        RegisterNamespaceTransactionBuffer.addFee(builder, feeVector);
+        RegisterNamespaceTransactionBuffer.addDeadline(builder, deadlineVector);
+        RegisterNamespaceTransactionBuffer.addNamespaceType(builder, getNamespaceType().getValue());
+        RegisterNamespaceTransactionBuffer.addDurationParentId(builder, durationParentIdVector);
+        RegisterNamespaceTransactionBuffer.addNamespaceId(builder, namespaceIdVector);
+        RegisterNamespaceTransactionBuffer.addNamespaceNameSize(builder, namespaceName.length());
+        RegisterNamespaceTransactionBuffer.addNamespaceName(builder, name);
 
-        int codedTransaction = ProvisionNamespaceTransactionBuffer.endProvisionNamespaceTransactionBuffer(builder);
+        int codedTransaction = RegisterNamespaceTransactionBuffer.endRegisterNamespaceTransactionBuffer(builder);
         builder.finish(codedTransaction);
 
         return schema.serialize(builder.sizedByteArray());
