@@ -28,87 +28,55 @@ import io.proximax.sdk.BlockchainApi;
 import io.proximax.sdk.MosaicRepository;
 import io.proximax.sdk.gen.model.MosaicInfoDTO;
 import io.proximax.sdk.gen.model.MosaicNamesDTO;
-import io.proximax.sdk.gen.model.MosaicPropertiesDTO;
-import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicInfo;
 import io.proximax.sdk.model.mosaic.MosaicNames;
-import io.proximax.sdk.model.mosaic.MosaicProperties;
 import io.proximax.sdk.model.transaction.UInt64Id;
 import io.reactivex.Observable;
+
+
 /**
- * Mosaic http repository.
- *
- * @since 1.0
+ * Mosaic HTTP repository.
  */
 public class MosaicHttp extends Http implements MosaicRepository {
 
-   private static final String ROUTE ="/mosaic/";
-   
-    public MosaicHttp(BlockchainApi api) {
-        super(api);
-    }
+   private static final String ROUTE = "/mosaic/";
+   private static final String NAMES_ROUTE = "/mosaic/names";
 
-    @Override
-    public Observable<MosaicInfo> getMosaic(UInt64Id mosaicId) {
-        return this.client
-                        .get(ROUTE + mosaicId.getIdAsHex())
-                        .map(Http::mapStringOrError)
-                        .map(str -> objectMapper.readValue(str, MosaicInfoDTO.class))
-                        .map(mosaicInfoDTO -> new MosaicInfo(
-                                mosaicInfoDTO.getMeta().getId(),
-                                new MosaicId(toBigInt(mosaicInfoDTO.getMosaic().getMosaicId())),
-                                toBigInt(mosaicInfoDTO.getMosaic().getSupply()),
-                                toBigInt(mosaicInfoDTO.getMosaic().getHeight()),
-                                new PublicAccount(mosaicInfoDTO.getMosaic().getOwner(), api.getNetworkType()),
-                                extractMosaicProperties(mosaicInfoDTO.getMosaic().getProperties())
-                        ));
-    }
+   public MosaicHttp(BlockchainApi api) {
+      super(api);
+   }
 
-    @Override
-    public Observable<List<MosaicInfo>> getMosaics(List<UInt64Id> mosaicIds) {
-        JsonObject requestBody = new JsonObject();
-        requestBody.add("mosaicIds", getJsonArray(mosaicIds, UInt64Id::getIdAsHex));
-        return this.client
-                        .post(ROUTE, requestBody)
-                        .map(Http::mapStringOrError)
-                        .map(str -> objectMapper.<List<MosaicInfoDTO>>readValue(str, new TypeReference<List<MosaicInfoDTO>>() {
-                        }))
-                        .flatMapIterable(item -> item)
-                        .map(mosaicInfoDTO -> new MosaicInfo(
-                                mosaicInfoDTO.getMeta().getId(),
-                                new MosaicId(toBigInt(mosaicInfoDTO.getMosaic().getMosaicId())),
-                                toBigInt(mosaicInfoDTO.getMosaic().getSupply()),
-                                toBigInt(mosaicInfoDTO.getMosaic().getHeight()),
-                                new PublicAccount(mosaicInfoDTO.getMosaic().getOwner(), api.getNetworkType()),
-                                extractMosaicProperties(mosaicInfoDTO.getMosaic().getProperties())
-                        ))
-                        .toList()
-                        .toObservable();
-    }
+   @Override
+   public Observable<MosaicInfo> getMosaic(MosaicId mosaicId) {
+      return this.client.get(ROUTE + mosaicId.getIdAsHex())
+            .map(Http::mapStringOrError)
+            .map(str -> objectMapper.readValue(str, MosaicInfoDTO.class))
+            .map(dto -> MosaicInfo.fromDto(dto, api.getNetworkType()));
+   }
 
-    @Override
-    public Observable<List<MosaicNames>> getMosaicNames(List<UInt64Id> mosaicIds) {
-        JsonObject requestBody = new JsonObject();
-        requestBody.add("mosaicIds", getJsonArray(mosaicIds, UInt64Id::getIdAsHex));
-        return this.client
-                .post("/mosaic/names", requestBody)
-                .map(Http::mapStringOrError)
-                .map(str -> objectMapper.<List<MosaicNamesDTO>>readValue(str, new TypeReference<List<MosaicNamesDTO>>() {}))
-                .flatMapIterable(item -> item)
-                .map(mosaicNameDTO -> new MosaicNames(new MosaicId(toBigInt(mosaicNameDTO.getMosaicId())),
-                        mosaicNameDTO.getNames()))
-                .toList()
-                .toObservable();
-    }
+   @Override
+   public Observable<List<MosaicInfo>> getMosaics(List<MosaicId> mosaicIds) {
+      JsonObject requestBody = new JsonObject();
+      requestBody.add("mosaicIds", getJsonArray(mosaicIds, UInt64Id::getIdAsHex));
+      return this.client.post(ROUTE, requestBody)
+            .map(Http::mapStringOrError)
+            .map(str -> objectMapper.<List<MosaicInfoDTO>>readValue(str, new TypeReference<List<MosaicInfoDTO>>() { }))
+            .flatMapIterable(item -> item)
+            .map(dto -> MosaicInfo.fromDto(dto, api.getNetworkType()))
+            .toList().toObservable();
+   }
 
-    private MosaicProperties extractMosaicProperties(MosaicPropertiesDTO mosaicPropertiesDTO) {
-        String flags = "00" + Integer.toBinaryString(toBigInt(mosaicPropertiesDTO.get(0)).intValue());
-        String bitMapFlags = flags.substring(flags.length() - 3, flags.length());
-        return new MosaicProperties(bitMapFlags.charAt(2) == '1',
-                bitMapFlags.charAt(1) == '1',
-                bitMapFlags.charAt(0) == '1',
-                toBigInt(mosaicPropertiesDTO.get(1)).intValue(),
-                toBigInt(mosaicPropertiesDTO.get(2)));
-    }
+   @Override
+   public Observable<List<MosaicNames>> getMosaicNames(List<MosaicId> mosaicIds) {
+      JsonObject requestBody = new JsonObject();
+      requestBody.add("mosaicIds", getJsonArray(mosaicIds, UInt64Id::getIdAsHex));
+      return this.client.post(NAMES_ROUTE, requestBody)
+            .map(Http::mapStringOrError)
+            .map(str -> objectMapper.<List<MosaicNamesDTO>>readValue(str, new TypeReference<List<MosaicNamesDTO>>() { }))
+            .flatMapIterable(item -> item)
+            .map(mosaicNameDTO -> new MosaicNames(new MosaicId(toBigInt(mosaicNameDTO.getMosaicId())),
+                  mosaicNameDTO.getNames()))
+            .toList().toObservable();
+   }
 }

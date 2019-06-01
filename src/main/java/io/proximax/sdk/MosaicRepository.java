@@ -18,9 +18,9 @@ package io.proximax.sdk;
 
 import java.util.List;
 
+import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicInfo;
 import io.proximax.sdk.model.mosaic.MosaicNames;
-import io.proximax.sdk.model.transaction.UInt64Id;
 import io.reactivex.Observable;
 
 /**
@@ -31,26 +31,29 @@ import io.reactivex.Observable;
 public interface MosaicRepository {
 
     /**
-     * Gets a MosaicInfo for a given mosaicId
-     *
+     * <p>Gets a MosaicInfo for a given mosaicId</p>
+     * <p>GET /mosaic/{hexMosaicId}
+     * 
      * @param mosaicId BigInteger
      * @return Observable of {@link MosaicInfo}
      */
-    Observable<MosaicInfo> getMosaic(UInt64Id mosaicId);
+    Observable<MosaicInfo> getMosaic(MosaicId mosaicId);
 
     /**
-     * Gets MosaicInfo for different mosaicIds.
+     * <p>Gets MosaicInfo for different mosaicIds.</p>
+     * <p>POST /mosaic</p>
      *
      * @param mosaicIds List of BigInteger
      * @return Observable of {@link MosaicInfo} list
      */
-    Observable<List<MosaicInfo>> getMosaics(List<UInt64Id> mosaicIds);
+    Observable<List<MosaicInfo>> getMosaics(List<MosaicId> mosaicIds);
 
     /**
-     * Gets list of MosaicName for different mosaicIds.
-     *
+     * <p>Gets list of MosaicName for different mosaicIds.<p>
+     * <p>POST /mosaic/names</p>
+     * 
      * @param mosaicIds List of BigInteger
      * @return Observable of {@link MosaicNames} list
      */
-    Observable<List<MosaicNames>> getMosaicNames(List<UInt64Id> mosaicIds);
+    Observable<List<MosaicNames>> getMosaicNames(List<MosaicId> mosaicIds);
 }
