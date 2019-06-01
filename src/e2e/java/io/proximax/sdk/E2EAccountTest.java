@@ -313,6 +313,7 @@ class E2EAccountTest extends E2EBaseTest {
 
     @Test
     void unconfirmedTransactions() throws ExecutionException, InterruptedException {
+       sleepForAWhile();
         List<Transaction> transactions = accountHttp
                 .unconfirmedTransactions(simpleAccount.getPublicAccount())
                 .toFuture()
