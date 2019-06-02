@@ -16,9 +16,14 @@
 
 package io.proximax.sdk.model.mosaic;
 
+import static io.proximax.sdk.utils.dto.UInt64Utils.toBigInt;
+
 import java.math.BigInteger;
 
+import io.proximax.sdk.gen.model.MosaicInfoDTO;
+import io.proximax.sdk.gen.model.MosaicPropertiesDTO;
 import io.proximax.sdk.model.account.PublicAccount;
+import io.proximax.sdk.model.blockchain.NetworkType;
 
 /**
  * The mosaic info structure contains its properties, the owner and the namespace to which it belongs to.
@@ -132,5 +137,39 @@ public class MosaicInfo {
 		return "MosaicInfo [metaId=" + metaId + ", mosaicId=" + mosaicId + ", supply=" + supply + ", height=" + height
 				+ ", owner=" + owner + ", properties=" + properties + "]";
 	}
+	
+	/**
+	 * create mosaic info instance from the DTO
+	 * 
+	 * @param dto mosaic info DTO
+	 * @param networkType network type
+	 * @return mosaic info
+	 */
+	public static MosaicInfo fromDto(MosaicInfoDTO dto, NetworkType networkType) {
+	   return new MosaicInfo(
+	         dto.getMeta().getId(),
+            new MosaicId(toBigInt(dto.getMosaic().getMosaicId())),
+            toBigInt(dto.getMosaic().getSupply()),
+            toBigInt(dto.getMosaic().getHeight()),
+            new PublicAccount(dto.getMosaic().getOwner(), networkType),
+            extractMosaicProperties(dto.getMosaic().getProperties())
+      );
+	}
+
+   /**
+    * Convert array of numbers into named properties
+    * 
+    * @param mosaicPropertiesDTO array of numeric values
+    * @return mosaic properties instance
+    */
+   private static MosaicProperties extractMosaicProperties(MosaicPropertiesDTO mosaicPropertiesDTO) {
+       String flags = "00" + Integer.toBinaryString(toBigInt(mosaicPropertiesDTO.get(0)).intValue());
+       String bitMapFlags = flags.substring(flags.length() - 3, flags.length());
+       return new MosaicProperties(bitMapFlags.charAt(2) == '1',
+               bitMapFlags.charAt(1) == '1',
+               bitMapFlags.charAt(0) == '1',
+               toBigInt(mosaicPropertiesDTO.get(1)).intValue(),
+               toBigInt(mosaicPropertiesDTO.get(2)));
+   }
 }
 
