@@ -5,7 +5,10 @@
 language: java
 
 jdk:
-- oraclejdk8
+  - oraclejdk8
+  - oraclejdk9
+  - openjdk8
 
+script: ./gradlew test
 after_success:
-- ./gradlew clean test jacocoTestReport coveralls
+- ./gradlew jacocoTestReport coveralls
