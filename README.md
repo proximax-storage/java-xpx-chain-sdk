@@ -34,9 +34,9 @@ This library requires use of Java8. Library is published to [Maven Central](http
 compile "io.proximax:java-xpx-catapult-sdk:${javaXpxVersion}"
 ```
 
-## Wiki and Examples ##
+## Documentation ##
 
-For SDK documentation and examples see [wiki](https://github.com/proximax-storage/java-xpx-catapult-sdk/wiki)
+For SDK documentation and examples see [wiki](https://github.com/proximax-storage/java-xpx-catapult-sdk/wiki) and [JavaDoc](https://proximax-storage.github.io/java-xpx-catapult-sdk/javadoc/).
 
 Check [integration tests](https://github.com/proximax-storage/java-xpx-catapult-sdk/tree/master/src/e2e/java/io/proximax/sdk) for working examples how to use the library.
 
