@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![star this repo](http://githubbadges.com/star.svg?user=proximax-storage&repo=java-xpx-catapult-sdk&style=flat)](https://github.com/proximax-storage/java-xpx-catapult-sdk)
 [![fork this repo](http://githubbadges.com/fork.svg?user=proximax-storage&repo=java-xpx-catapult-sdk&style=flat)](https://github.com/proximax-storage/java-xpx-catapult-sdk/fork)
-[![Coverage Status](https://coveralls.io/repos/proximax-storage/java-xpx-catapult-sdk/badge.svg)](https://coveralls.io/r/proximax-storage/java-xpx-catapult-sdk)
+[![Coverage Status](https://coveralls.io/repos/github/proximax-storage/java-xpx-catapult-sdk/badge.svg)](https://coveralls.io/github/proximax-storage/java-xpx-catapult-sdk)
 [![Build Status](https://travis-ci.com/proximax-storage/java-xpx-catapult-sdk.svg?branch=master)](https://travis-ci.com/proximax-storage/java-xpx-catapult-sdk)
 
 # ProximaX Sirius Blockchain Java SDK #
