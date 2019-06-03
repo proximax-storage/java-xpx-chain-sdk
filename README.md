@@ -1,5 +1,6 @@
 <p align="center"><a href="https://github.com/proximax-storage" target="_blank"><img width="150" src="https://github.com/proximax-storage/java-xpx-catapult-sdk/raw/master/docs/images/logo.jpg" alt="ProximaX Sirius Blockchain Java SDK"></a></p>
 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![star this repo](http://githubbadges.com/star.svg?user=proximax-storage&repo=java-xpx-catapult-sdk&style=flat)](https://github.com/proximax-storage/java-xpx-catapult-sdk)
 [![fork this repo](http://githubbadges.com/fork.svg?user=proximax-storage&repo=java-xpx-catapult-sdk&style=flat)](https://github.com/proximax-storage/java-xpx-catapult-sdk/fork)
 [![Coverage Status](https://coveralls.io/repos/proximax-storage/java-xpx-catapult-sdk/badge.svg)](https://coveralls.io/r/proximax-storage/java-xpx-catapult-sdk)
