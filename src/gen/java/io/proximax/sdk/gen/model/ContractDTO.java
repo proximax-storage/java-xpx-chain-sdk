@@ -20,6 +20,7 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import io.proximax.sdk.gen.model.ContractHashRecordDTO;
 import io.proximax.sdk.gen.model.UInt64DTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -30,7 +31,7 @@ import java.util.List;
 /**
  * ContractDTO
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-05-15T22:01:02.543+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-05-31T00:16:53.236+02:00")
 public class ContractDTO {
   @SerializedName("multisig")
   private String multisig = null;
@@ -46,6 +47,9 @@ public class ContractDTO {
 
   @SerializedName("hash")
   private String hash = null;
+
+  @SerializedName("hashes")
+  private List<ContractHashRecordDTO> hashes = null;
 
   @SerializedName("customers")
   private List<String> customers = new ArrayList<String>();
@@ -146,6 +150,32 @@ public class ContractDTO {
     this.hash = hash;
   }
 
+  public ContractDTO hashes(List<ContractHashRecordDTO> hashes) {
+    this.hashes = hashes;
+    return this;
+  }
+
+  public ContractDTO addHashesItem(ContractHashRecordDTO hashesItem) {
+    if (this.hashes == null) {
+      this.hashes = new ArrayList<ContractHashRecordDTO>();
+    }
+    this.hashes.add(hashesItem);
+    return this;
+  }
+
+   /**
+   * Get hashes
+   * @return hashes
+  **/
+  @ApiModelProperty(value = "")
+  public List<ContractHashRecordDTO> getHashes() {
+    return hashes;
+  }
+
+  public void setHashes(List<ContractHashRecordDTO> hashes) {
+    this.hashes = hashes;
+  }
+
   public ContractDTO customers(List<String> customers) {
     this.customers = customers;
     return this;
@@ -230,6 +260,7 @@ public class ContractDTO {
         Objects.equals(this.start, contractDTO.start) &&
         Objects.equals(this.duration, contractDTO.duration) &&
         Objects.equals(this.hash, contractDTO.hash) &&
+        Objects.equals(this.hashes, contractDTO.hashes) &&
         Objects.equals(this.customers, contractDTO.customers) &&
         Objects.equals(this.executors, contractDTO.executors) &&
         Objects.equals(this.verifiers, contractDTO.verifiers);
@@ -237,7 +268,7 @@ public class ContractDTO {
 
   @Override
   public int hashCode() {
-    return Objects.hash(multisig, multisigAddress, start, duration, hash, customers, executors, verifiers);
+    return Objects.hash(multisig, multisigAddress, start, duration, hash, hashes, customers, executors, verifiers);
   }
 
 
@@ -251,6 +282,7 @@ public class ContractDTO {
     sb.append("    start: ").append(toIndentedString(start)).append("\n");
     sb.append("    duration: ").append(toIndentedString(duration)).append("\n");
     sb.append("    hash: ").append(toIndentedString(hash)).append("\n");
+    sb.append("    hashes: ").append(toIndentedString(hashes)).append("\n");
     sb.append("    customers: ").append(toIndentedString(customers)).append("\n");
     sb.append("    executors: ").append(toIndentedString(executors)).append("\n");
     sb.append("    verifiers: ").append(toIndentedString(verifiers)).append("\n");

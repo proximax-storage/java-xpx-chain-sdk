@@ -65,6 +65,7 @@ public class E2ETransferTest extends E2EBaseTest {
    void closeDown() {
       // return the funds
       returnAllToSeed(simpleAccount);
+      sleepForAWhile();
       // check that target account has expected number of incoming transactions
       int transactions = accountHttp.incomingTransactions(simpleAccount.getPublicAccount()).blockingFirst().size();
       // TODO why 2? we did 4 transfers but 2 were aggregate?

@@ -20,7 +20,9 @@ public class StatusChannelMessage extends ListenerMessage<TransactionStatusError
    private static final ListenerChannel CHANNEL = ListenerChannel.STATUS;
    
    /**
-    * @param message
+    * create new message from the status channel
+    * 
+    * @param message JSON object representing data of the transaction status errors
     */
    public StatusChannelMessage(JsonObject message) {
       super(CHANNEL, getAddressFromMessage(message), getMessageObject(message));

@@ -26,7 +26,11 @@ import io.reactivex.subjects.Subject;
 public class TransactionChannelMessage extends ListenerMessage<Transaction> {
 
    /**
-    * @param message
+    * create new message from channels that are expected to use TransactionMapping to be mapped to Transaction
+    * 
+    * @param channel the channel that produced the message
+    * @param message JSON object representing the transaction
+    * @param text string representation of the message
     */
    public TransactionChannelMessage(ListenerChannel channel, JsonObject message, String text) {
       super(channel, getAddressFromMessage(message), getMessageObject(text));

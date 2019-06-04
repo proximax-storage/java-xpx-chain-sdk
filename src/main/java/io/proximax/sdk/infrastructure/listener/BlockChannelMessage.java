@@ -22,7 +22,9 @@ public class BlockChannelMessage extends ListenerMessage<BlockInfo> {
    public static final ListenerChannel CHANNEL = ListenerChannel.BLOCK;
    
    /**
-    * @param message
+    * create new message for the block channel
+    * 
+    * @param message JSON object representing the block info data
     */
    public BlockChannelMessage(JsonObject message) {
       super(CHANNEL, getMessageObject(message));

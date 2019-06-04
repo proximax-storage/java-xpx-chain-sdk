@@ -64,6 +64,7 @@ public class E2EBaseTest extends BaseTest {
    protected MosaicRepository mosaicHttp;
    protected NamespaceRepository namespaceHttp;
    protected MetadataRepository metadataHttp;
+   protected ContractRepository contractHttp;
    
    protected ListenerRepository listener;
 
@@ -87,6 +88,7 @@ public class E2EBaseTest extends BaseTest {
       mosaicHttp = api.createMosaicRepository();
       namespaceHttp = api.createNamespaceRepository();
       metadataHttp = api.createMetadataRepository();
+      contractHttp = api.createContractRepository();
       logger.info("Created HTTP interfaces");
       // prepare listener
       listener = api.createListener();
@@ -181,6 +183,17 @@ public class E2EBaseTest extends BaseTest {
          if (!"Not Found".equals(e.getMessage())) {
             fail(e);
          }
+      }
+   }
+   
+   /**
+    * convenience sleep needed to work around server listener synchronization issues
+    */
+   protected void sleepForAWhile() {
+      try {
+         Thread.sleep(10000l);
+      } catch (InterruptedException e) {
+         // do nothing
       }
    }
 }

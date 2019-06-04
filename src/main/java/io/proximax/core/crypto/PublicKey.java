@@ -58,6 +58,15 @@ public class PublicKey {
         return this.value;
     }
 
+    /**
+     * get public key as a hexadecimal string
+     * 
+     * @return hexadecimal string representing the public key
+     */
+    public String getHexString() {
+       return HexEncoder.getString(getRaw());
+    }
+    
     @Override
     public int hashCode() {
         return Arrays.hashCode(this.value);
