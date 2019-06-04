@@ -49,7 +49,7 @@ public interface MosaicRepository {
     Observable<List<MosaicInfo>> getMosaics(List<MosaicId> mosaicIds);
 
     /**
-     * <p>Gets list of MosaicName for different mosaicIds.<p>
+     * <p>Gets list of MosaicName for different mosaicIds.</p>
      * <p>POST /mosaic/names</p>
      * 
      * @param mosaicIds List of BigInteger

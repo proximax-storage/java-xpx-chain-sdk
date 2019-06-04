@@ -2,10 +2,11 @@
 
 package io.proximax.sdk.gen.buffers;
 
-import java.nio.*;
-import java.lang.*;
-import java.util.*;
-import com.google.flatbuffers.*;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
+import com.google.flatbuffers.FlatBufferBuilder;
+import com.google.flatbuffers.Table;
 
 @SuppressWarnings("unused")
 public final class PropertyModificationBuffer extends Table {
@@ -18,6 +19,9 @@ public final class PropertyModificationBuffer extends Table {
   /**
    * In case of address it is 25 bytes array. In case of mosaic it is 8 byte array(or 2 uint32 array).
    * In case of transaction it is 2 byte array(ushort)
+   * 
+   * @param j the j of course
+   * @return some number
    */
   public int value(int j) { int o = __offset(6); return o != 0 ? bb.get(__vector(o) + j * 1) & 0xFF : 0; }
   public int valueLength() { int o = __offset(6); return o != 0 ? __vector_len(o) : 0; }

@@ -25,8 +25,10 @@ public class AccountPropertyModification<T> {
    private final T value;
 
    /**
-    * @param type
-    * @param value
+    * create descriptor for generic account property modification
+    * 
+    * @param type type of the modification
+    * @param value generic value of the modification which depends on the account property type
     */
    public AccountPropertyModification(AccountPropertyModificationType type, T value) {
       this.type = type;
