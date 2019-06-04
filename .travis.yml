@@ -1,0 +1,27 @@
+# Copyright 2019 ProximaX Limited. All rights reserved.
+# Use of this source code is governed by the Apache 2.0
+# license that can be found in the LICENSE file.
+
+# we use java
+language: java
+
+# try build using both oracle and openjdk
+jdk:
+  - oraclejdk8
+  - openjdk8
+
+# cache maintenance for gradle builds to avoid upload of caches
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+# build and test the app
+script: ./gradlew test
+
+# produce coveralls report for gihub
+after_success:
+- ./gradlew jacocoTestReport coveralls

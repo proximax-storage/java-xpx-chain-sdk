@@ -20,12 +20,14 @@ plugins {
     id 'java-library'
     // distribution of library and dependencies
     id 'java-library-distribution'
-    // code coverage reporting
-    id 'jacoco'
     // publishing to maven repository
     id 'maven-publish'
     // sign the artifacts and pom
     id 'signing'
+    // code coverage reporting
+    id 'jacoco'
+    // integrate coverage with github
+    id 'com.github.kt3k.coveralls' version '2.8.4'
 }
 
 // repository group
