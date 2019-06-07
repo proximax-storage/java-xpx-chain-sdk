@@ -14,7 +14,7 @@ The ProximaX Sirius Catapult Chain Java SDK is a Java library for interacting wi
 
 ## Use the library ##
 
-Current version of the library is <b>0.1.0</b>
+Current version of the library is <b>0.2.0</b>
 
 This library requires use of Java8. Library is published to [Maven Central](https://search.maven.org/). To include library and its dependencies, add following to your build script:
 
