@@ -102,6 +102,7 @@ public class E2EMetadataTest extends E2EBaseTest {
       logger.info("Meta added to mosaic. {}",
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
       // check the meta
+      sleepForAWhile();
       Metadata meta = metadataHttp.getMetadata(id).blockingFirst();
       checkMeta(meta, MetadataType.MOSAIC, new Field("tono", "mosaic"));
       // add to the list of existing metadata items
@@ -129,6 +130,7 @@ public class E2EMetadataTest extends E2EBaseTest {
       logger.info("Meta added to namespace. {}",
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
       // check the meta
+      sleepForAWhile();
       Metadata meta = metadataHttp.getMetadata(rootId).blockingFirst();
       checkMeta(meta, MetadataType.NAMESPACE, new Field("tono", "namespace"));
       // add to the list of existing metadata items
@@ -137,6 +139,7 @@ public class E2EMetadataTest extends E2EBaseTest {
 
    @Test
    void testBulkRequest() {
+      sleepForAWhile();
       assertEquals(3, metadataHttp.getMetadata(metaIds).count().blockingGet());
    }
    

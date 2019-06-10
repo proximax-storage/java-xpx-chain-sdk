@@ -109,6 +109,7 @@ class E2EAccountTest extends E2EBaseTest {
       logger.info("Waiting for  confirmation");
       listener.confirmed(acct.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
       // now check for the block via GET
+      sleepForAWhile();
       AccountProperties aps = accountHttp.getAccountProperties(acct.getAddress())
             .timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
       testAccountPropertiesOnSimpleAccount(aps, allowedMosaic);

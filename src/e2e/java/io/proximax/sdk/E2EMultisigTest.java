@@ -33,7 +33,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.proximax.core.crypto.KeyPair;
-import io.proximax.sdk.gen.buffers.*;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.MultisigAccountGraphInfo;
 import io.proximax.sdk.model.account.MultisigAccountInfo;
@@ -335,6 +334,7 @@ public class E2EMultisigTest extends E2EBaseTest {
    void test04CosignNewCosignatory() {
       logger.info("Going to cosign the addition of cosignatory");
       cosignMultisigTransaction();
+      sleepForAWhile();
       testMultisigAccount(multisigAccount, true, 2, 1, 3, 2);
    }
 
@@ -356,6 +356,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       // verify that account is multisig
       logger.info("request o create multilevel multisig confirmed: {}",
             listener.confirmed(multiMultisigAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      sleepForAWhile();
       testMultisigAccount(multiMultisigAccount, true, 1, 1, 2, 3);
    }
    
