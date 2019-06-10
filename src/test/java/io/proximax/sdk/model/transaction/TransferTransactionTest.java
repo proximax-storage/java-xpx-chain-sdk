@@ -61,7 +61,7 @@ class TransferTransactionTest {
         assertTrue(nowSinceNemesis < transferTx.getDeadline().getInstant());
         assertEquals(BigInteger.valueOf(0), transferTx.getFee());
         assertTrue(new Address("SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.MIJIN_TEST)
-                .equals(transferTx.getRecipient()));
+                .equals(transferTx.getRecipient().getAddress().orElseThrow(RuntimeException::new)));
         assertEquals(0, transferTx.getMosaics().size());
         assertNotNull(transferTx.getMessage());
     }

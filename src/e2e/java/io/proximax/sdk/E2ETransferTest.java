@@ -142,7 +142,6 @@ public class E2ETransferTest extends E2EBaseTest {
     * @param to target address for the transfer
     * @param mosaic mosaic to transfer
     * @param message message for the transfer
-    * @return transaction announce response message
     * @throws InterruptedException
     * @throws ExecutionException
     */
