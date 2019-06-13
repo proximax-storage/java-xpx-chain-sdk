@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.alias.AliasAction;
+import io.proximax.sdk.model.mosaic.Mosaic;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicNames;
 import io.proximax.sdk.model.mosaic.MosaicNonce;
@@ -41,9 +42,11 @@ import io.proximax.sdk.model.mosaic.MosaicProperties;
 import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.transaction.AliasTransaction;
 import io.proximax.sdk.model.transaction.MosaicDefinitionTransaction;
+import io.proximax.sdk.model.transaction.PlainMessage;
 import io.proximax.sdk.model.transaction.RegisterNamespaceTransaction;
 import io.proximax.sdk.model.transaction.SignedTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
+import io.proximax.sdk.model.transaction.TransferTransaction;
 import io.reactivex.Observable;
 
 /**
@@ -78,7 +81,7 @@ public class E2EAliasTest extends E2EBaseTest {
 
    @AfterAll
    void closeDown() {
-
+      returnAllToSeed(account);
    }
    
    @Test
@@ -149,4 +152,15 @@ public class E2EAliasTest extends E2EBaseTest {
       assertEquals(ROOT_NAME+"."+CHILD1_NAME, name.getNames().get(0));
    }
    
+   @Test
+   void test05TransferUsingAliases() {
+      transactionHttp.announce(TransferTransaction.create(getDeadline(),
+            accNamespaceId,
+            Arrays.asList(new Mosaic(new NamespaceId("cat.currency"), BigInteger.valueOf(1_000_000))),
+            PlainMessage.Empty,
+            getNetworkType()).signWith(seedAccount)).blockingFirst();
+      logger.info("made transfer. {}",
+            listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS)
+                  .blockingFirst());
+   }
 }

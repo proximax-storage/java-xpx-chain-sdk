@@ -236,7 +236,7 @@ class TransferTransactionMapping extends TransactionMapping {
                 extractTransactionVersion(version),
                 deadline,
                 extractFee(transaction),
-                Address.createFromEncoded(transaction.get("recipient").getAsString()),
+                Recipient.from(Address.createFromEncoded(transaction.get("recipient").getAsString())),
                 mosaics,
                 message,
                 transaction.get("signature").getAsString(),

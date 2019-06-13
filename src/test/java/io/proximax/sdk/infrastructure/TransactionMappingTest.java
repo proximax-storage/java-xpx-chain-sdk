@@ -321,7 +321,7 @@ public class TransactionMappingTest extends ResourceBasedTest {
     }
 
     void validateTransferTx(TransferTransaction transaction, JsonObject transactionDTO) {
-        assertEquals(Address.createFromEncoded(getFieldOfObject(transactionDTO, "transaction", "recipient").getAsString()), transaction.getRecipient());
+        assertEquals(Address.createFromEncoded(getFieldOfObject(transactionDTO, "transaction", "recipient").getAsString()), transaction.getRecipient().getAddress().orElseThrow(RuntimeException::new));
 
         JsonArray mosaicsDTO = getFieldOfObject(transactionDTO, "transaction", "mosaics").getAsJsonArray();
         if (mosaicsDTO != null && mosaicsDTO.size() > 0) {

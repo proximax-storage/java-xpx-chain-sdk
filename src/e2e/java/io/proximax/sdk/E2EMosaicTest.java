@@ -98,6 +98,7 @@ public class E2EMosaicTest extends E2EBaseTest {
       logger.info("Supply changed. {}",
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
       // verify that mosaic looks fine
+      sleepForAWhile();
       MosaicInfo info = mosaicHttp.getMosaic(id).blockingFirst();
       assertEquals(BigInteger.TEN, info.getSupply());
    }
