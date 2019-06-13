@@ -22,6 +22,9 @@ import java.util.List;
 import io.proximax.sdk.infrastructure.QueryParams;
 import io.proximax.sdk.model.blockchain.BlockInfo;
 import io.proximax.sdk.model.blockchain.BlockchainStorageInfo;
+import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.blockchain.NodeInfo;
+import io.proximax.sdk.model.blockchain.NodeTime;
 import io.proximax.sdk.model.transaction.Transaction;
 import io.reactivex.Observable;
 
@@ -78,4 +81,25 @@ public interface BlockchainRepository {
      * @return Observable of {@link BlockchainStorageInfo}
      */
     Observable<BlockchainStorageInfo> getBlockchainStorage();
+    
+    /**
+     * retrieve node information
+     * 
+     * @return the node info
+     */
+    Observable<NodeInfo> getNodeInfo();
+    
+    /**
+     * retrieve node time
+     * 
+     * @return the node time
+     */
+    Observable<NodeTime> getNodeTime();
+    
+    /**
+     * Get current network type.
+     *
+     * @return network type enum.
+     */
+    Observable<NetworkType> getNetworkType();
 }

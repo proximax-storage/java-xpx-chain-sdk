@@ -57,7 +57,6 @@ public class E2EBaseTest extends BaseTest {
    /** logger */
    private static final Logger logger = LoggerFactory.getLogger(E2EBaseTest.class);
 
-   protected NetworkRepository networkHttp;
    protected BlockchainRepository blockchainHttp;
    protected AccountRepository accountHttp;
    protected TransactionRepository transactionHttp;
@@ -82,7 +81,6 @@ public class E2EBaseTest extends BaseTest {
       assertTrue(api.isNetworkTypeValid());
       // create services
       blockchainHttp = api.createBlockchainRepository();
-      networkHttp = api.createNetworkRepository();
       accountHttp = api.createAccountRepository();
       transactionHttp = api.createTransactionRepository();
       mosaicHttp = api.createMosaicRepository();

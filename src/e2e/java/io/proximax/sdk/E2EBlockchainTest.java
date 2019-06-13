@@ -15,6 +15,7 @@
  */
 package io.proximax.sdk;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
@@ -26,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * E2E tests that demonstrate transfers
+ * E2E tests that demonstrate blockchain repository
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class E2EBlockchainTest extends E2EBaseTest {
@@ -59,5 +60,18 @@ public class E2EBlockchainTest extends E2EBaseTest {
       assertTrue(!blockchainHttp.getBlockTransactions(BigInteger.ONE).blockingFirst().isEmpty());
    }
 
-
+   @Test
+   void retrieveNodeInfo() {
+      assertTrue(blockchainHttp.getNodeInfo().blockingFirst().getPublicKey()!=null);
+   }
+   
+   @Test
+   void retrieveNodeTime() {
+      assertTrue(blockchainHttp.getNodeTime().blockingFirst().getReceiveTimestamp()!=null);
+   }
+   
+   @Test
+   void networkTypeIsAsDeclared() {
+      assertEquals(getNetworkType(), blockchainHttp.getNetworkType().blockingFirst());
+   }
 }

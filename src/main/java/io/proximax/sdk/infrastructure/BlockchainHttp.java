@@ -34,10 +34,16 @@ import io.proximax.sdk.gen.model.BlockInfoDTO;
 import io.proximax.sdk.gen.model.BlockchainScoreDTO;
 import io.proximax.sdk.gen.model.BlockchainStorageInfoDTO;
 import io.proximax.sdk.gen.model.HeightDTO;
+import io.proximax.sdk.gen.model.NodeInfoDTO;
+import io.proximax.sdk.gen.model.NodeTimeDTO;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.BlockInfo;
 import io.proximax.sdk.model.blockchain.BlockchainStorageInfo;
+import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.blockchain.NodeInfo;
+import io.proximax.sdk.model.blockchain.NodeTime;
 import io.proximax.sdk.model.transaction.Transaction;
+import io.proximax.sdk.utils.GsonUtils;
 import io.proximax.sdk.utils.dto.BlockchainScoreDTOUtils;
 import io.reactivex.Observable;
 
@@ -121,4 +127,47 @@ public class BlockchainHttp extends Http implements BlockchainRepository {
                         blockchainStorageInfoDTO.getNumBlocks(),
                         blockchainStorageInfoDTO.getNumBlocks()));
     }
+
+   @Override
+   public Observable<NodeInfo> getNodeInfo() {
+      return this.client.get("/node/info")
+            .map(Http::mapStringOrError)
+            .map(str -> objectMapper.readValue(str, NodeInfoDTO.class))
+            .map(NodeInfo::fromDto);
+   }
+
+   @Override
+   public Observable<NodeTime> getNodeTime() {
+      return this.client.get("/node/time")
+            .map(Http::mapStringOrError)
+            .map(str -> objectMapper.readValue(str, NodeTimeDTO.class))
+            .map(NodeTime::fromDto);
+   }
+   
+   @Override
+   public Observable<NetworkType> getNetworkType() {
+      return this.client
+              .get("/network")
+              .map(Http::mapStringOrError)
+              .map(GsonUtils::mapToJsonObject)
+              .map(obj -> obj.get("name").getAsString())
+              .map(name -> {
+                  if (name.equalsIgnoreCase("mijinTest"))
+                      return NetworkType.MIJIN_TEST;
+                  else if (name.equalsIgnoreCase("mijin"))
+                      return NetworkType.MIJIN;
+                  else if (name.equalsIgnoreCase("publicTest"))
+                      return NetworkType.TEST_NET;
+                  else if (name.equalsIgnoreCase("public"))
+                      return NetworkType.MAIN_NET;
+                  else if (name.equalsIgnoreCase("privateTest"))
+                      return NetworkType.PRIVATE_TEST;
+                  else if (name.equalsIgnoreCase("private"))
+                      return NetworkType.PRIVATE;
+                  else {
+                      throw new IllegalArgumentException("Network " + name + " is not supported by the sdk");
+                  }
+              });
+  }
+
 }
