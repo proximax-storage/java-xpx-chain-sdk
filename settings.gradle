@@ -15,4 +15,4 @@
  * limitations under the License.
  */
 
-rootProject.name = 'java-xpx-catapult-sdk'
+rootProject.name = 'java-xpx-chain-sdk'
