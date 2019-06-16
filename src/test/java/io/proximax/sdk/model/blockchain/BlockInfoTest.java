@@ -55,12 +55,14 @@ class BlockInfoTest {
                 "FFEE401E933EB801824373E7537E51733E0F", blockInfo.getSignature());
         Assertions.assertEquals(new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", NetworkType.MIJIN_TEST), blockInfo.getSigner());
         assertEquals(NetworkType.MIJIN_TEST, blockInfo.getNetworkType());
-        assertTrue(3 == blockInfo.getVersion());
+        assertEquals(3, blockInfo.getVersion());
         assertEquals(32768, blockInfo.getType());
         assertEquals(UInt64Utils.fromIntArray(new int[]{1, 0}), blockInfo.getHeight());
         assertEquals(UInt64Utils.fromIntArray(new int[]{0, 0}), blockInfo.getTimestamp());
         assertEquals(UInt64Utils.fromIntArray(new int[]{276447232, 23283}), blockInfo.getDifficulty());
         assertEquals("702090BA31CEF9E90C62BBDECC0CCCC0F88192B6625839382850357F70DD68A0", blockInfo.getPreviousBlockHash());
         assertEquals("0000000000000000000000000000000000000000000000000000000000000000", blockInfo.getBlockTransactionsHash());
+        // test that toString does something
+        assertTrue(blockInfo.toString().startsWith("BlockInfo"));
     }
 }
