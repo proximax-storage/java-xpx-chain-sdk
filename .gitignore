@@ -6,3 +6,9 @@ build
 /.classpath
 /.settings
 /.vscode
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
