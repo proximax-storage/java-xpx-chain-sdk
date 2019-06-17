@@ -22,9 +22,12 @@ import java.util.List;
 import io.proximax.sdk.infrastructure.QueryParams;
 import io.proximax.sdk.model.blockchain.BlockInfo;
 import io.proximax.sdk.model.blockchain.BlockchainStorageInfo;
+import io.proximax.sdk.model.blockchain.BlocksLimit;
+import io.proximax.sdk.model.blockchain.MerklePath;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.blockchain.NodeInfo;
 import io.proximax.sdk.model.blockchain.NodeTime;
+import io.proximax.sdk.model.blockchain.Receipts;
 import io.proximax.sdk.model.transaction.Transaction;
 import io.reactivex.Observable;
 
@@ -102,4 +105,39 @@ public interface BlockchainRepository {
      * @return network type enum.
      */
     Observable<NetworkType> getNetworkType();
+    
+    /**
+     * Get block receipts
+     * 
+     * @param height height of the block to retrieve receipts
+     * @return observable receipts
+     */
+    Observable<Receipts> getBlockReceipts(BigInteger height);
+    
+    /**
+     * get the merkle path of receipt specified by the block height and hash
+     * 
+     * @param height height of the block to check
+     * @param receiptHash hash of the receipt
+     * @return the merkle path
+     */
+    Observable<MerklePath> getReceiptMerklePath(BigInteger height, String receiptHash);
+    
+    /**
+     * get the merkle path of transaction specified by the block height and hash
+     * 
+     * @param height height of the block to check
+     * @param transactionHash hash of the transaction
+     * @return the merkle path
+     */
+    Observable<MerklePath> getTransactionMerklePath(BigInteger height, String transactionHash);
+    
+    /**
+     * Gets up to limit number of blocks starting by given block height (i.e. inclusive of the specified height)
+     * 
+     * @param height block height to start from
+     * @param limit limit on number of blocks that get retrieved
+     * @return list of block info instances
+     */
+    Observable<List<BlockInfo>> getBlocksByHeightWithLimit(BigInteger height, BlocksLimit limit);
 }
