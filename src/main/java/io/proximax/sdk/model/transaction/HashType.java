@@ -27,7 +27,7 @@ import io.proximax.core.crypto.Hashes;
 public enum HashType {
     /**
      *  hashed using SHA3-256
-     *  (Catapult Native)
+     *  (Network Native)
      */
     SHA3_256(0, Hashes::sha3_256, "-?[0-9a-fA-F]+", 64),
     /**

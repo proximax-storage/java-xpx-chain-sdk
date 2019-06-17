@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   version: 1.0.13
-  title: Catapult REST API Reference
+  title: ProximaX Chain REST API Reference
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
@@ -1881,7 +1881,7 @@ definitions:
         example: mijinTest
       description:
         type: string
-        example: catapult development network
+        example: proximax development network
   NodeInfoDTO:
     type: object
     required:

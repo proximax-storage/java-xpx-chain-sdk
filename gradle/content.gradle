@@ -22,7 +22,7 @@ task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
     manifest {
         attributes(
-            'Built-By'       : 'https://github.com/proximax-storage/java-xpx-catapult-sdk',
+            'Built-By'       : 'https://github.com/proximax-storage/java-xpx-chain-sdk',
             'Build-Timestamp': new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
             'Build-Revision' : project.version,
             'Created-By'     : "Gradle ${gradle.gradleVersion}",
@@ -38,7 +38,7 @@ task javadocJar(type: Jar) {
     from javadoc
     manifest {
         attributes(
-            'Built-By'       : 'https://github.com/proximax-storage/java-xpx-catapult-sdk',
+            'Built-By'       : 'https://github.com/proximax-storage/java-xpx-chain-sdk',
             'Build-Timestamp': new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
             'Build-Revision' : project.version,
             'Created-By'     : "Gradle ${gradle.gradleVersion}",
@@ -48,11 +48,11 @@ task javadocJar(type: Jar) {
     }
 }
 
-// adjust man jar file
+// adjust main jar file
 jar {
     manifest {
         attributes(
-            'Built-By'       : 'https://github.com/proximax-storage/java-xpx-catapult-sdk',
+            'Built-By'       : 'https://github.com/proximax-storage/java-xpx-chain-sdk',
             'Build-Timestamp': new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
             'Build-Revision' : project.version,
             'Created-By'     : "Gradle ${gradle.gradleVersion}",
