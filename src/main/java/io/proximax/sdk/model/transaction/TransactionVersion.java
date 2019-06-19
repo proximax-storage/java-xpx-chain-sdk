@@ -16,13 +16,7 @@
 package io.proximax.sdk.model.transaction;
 
 /**
- * Enum containing transaction type versions.
- *
- * Transaction format versions are defined in catapult-server in each transaction's plugin source code.
- *
- * In [catapult-server](https://github.com/proximax-storage/catapult-server), the `DEFINE_TRANSACTION_CONSTANTS` macro is used to
- * define the `TYPE` and `VERSION` of the transaction format.
- *
+ * Enum containing transaction type versions. Version are declared by server plug-ins
  */
 public enum TransactionVersion {
 

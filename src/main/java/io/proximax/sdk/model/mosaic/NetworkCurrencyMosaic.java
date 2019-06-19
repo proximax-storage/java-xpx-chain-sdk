@@ -26,7 +26,7 @@ public class NetworkCurrencyMosaic extends Mosaic {
    /**
     * ID of network currency
     */
-   // TODO had to replace this by hard-coded mosaic ID because alias to currency namespace is not in the dev catapult
+   // TODO had to replace this by hard-coded mosaic ID because alias to currency namespace is not in the dev image
 //   public static final NamespaceId ID = new NamespaceId("prx.xpx");
    public static final MosaicId ID = new MosaicId(new BigInteger("0DC67FBE1CAD29E3", 16));
    /**
