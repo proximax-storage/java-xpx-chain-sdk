@@ -16,8 +16,7 @@
  */
 
 publishing {
-    def nexusUser = project.hasProperty("nexusUsername") ? project.nexusUsername : ""
-    def nexusPass = project.hasProperty("nexusPassword") ? project.nexusPassword : ""
+	def isSnapshot = project.version.endsWith('SNAPSHOT')
     publications {
         mavenJava(MavenPublication) {
             //artifactId = 'my-library'
@@ -60,16 +59,26 @@ publishing {
     }
     repositories {
         maven {
-            // change URLs to point to your repos, e.g. http://my.org/repo
+            name = 'local'
+            // publish to local repository
             def releasesRepoUrl = "$buildDir/repos/releases"
             def snapshotsRepoUrl = "$buildDir/repos/snapshots"
-            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            url = isSnapshot ? snapshotsRepoUrl : releasesRepoUrl
         }
         maven {
-            url "https://nexus.internal.proximax.io/repository/maven-releases"
+        	name = "internal"
+            url = "https://nexus.internal.proximax.io/repository/maven-releases"
             credentials {
-                username nexusUser
-                password nexusPass
+                username = project.hasProperty("nexusUsername") ? project.nexusUsername : ""
+                password = project.hasProperty("nexusPassword") ? project.nexusPassword : ""
+            }
+        }
+        maven {
+            name = 'mavenCentral'
+            url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            credentials {
+                username = project.hasProperty("sonatypeUsername") ? project.sonatypeUsername : ""
+                password = project.hasProperty("sonatypePassword") ? project.sonatypePassword : ""
             }
         }
     }

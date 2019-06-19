@@ -38,5 +38,4 @@ script:
 after_success:
   - travis/report_coveralls.sh
   - travis/publish_javadoc.sh
-  - travis/publish_internal.sh
   - travis/publish_public.sh
