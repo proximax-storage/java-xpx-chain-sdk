@@ -16,45 +16,31 @@
 
 package io.proximax.sdk.model.blockchain;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 public class NetworkTypeTest {
 
-    @Test
-    void MAIN_NETIs0x68() {
-        assertTrue(0xb8 == NetworkType.MAIN_NET.getValue());
-        assertTrue(184 == NetworkType.MAIN_NET.getValue());
-    }
+   @Test
+   void networkTypes() {
+      testNetworkType(NetworkType.MAIN_NET, 0xb8, 184);
+      testNetworkType(NetworkType.TEST_NET, 0xa8, 168);
+      testNetworkType(NetworkType.PRIVATE, 0xc8, 200);
+      testNetworkType(NetworkType.PRIVATE_TEST, 0xb0, 176);
+      testNetworkType(NetworkType.MIJIN, 0x60, 96);
+      testNetworkType(NetworkType.MIJIN_TEST, 0x90, 144);
+      // make sure we have them all
+      assertEquals(6, NetworkType.values().length);
+      // check that exception is thrown for invalid value
+      assertThrows(RuntimeException.class, () -> NetworkType.rawValueOf(-5678));
+   }
 
-    @Test
-    void TEST_NETIs0x96() {
-        assertTrue(0xa8 == NetworkType.TEST_NET.getValue());
-        assertTrue(168 == NetworkType.TEST_NET.getValue());
-    }
+   private void testNetworkType(NetworkType networkType, int hexaValue, int decimalValue) {
+      assertEquals(decimalValue, networkType.getValue());
+      assertEquals(networkType, NetworkType.rawValueOf(decimalValue));
+      assertEquals(decimalValue, hexaValue);
 
-    @Test
-    void PRIVATEIs0xc8() {
-        assertTrue(0xc8 == NetworkType.PRIVATE.getValue());
-        assertTrue(200 == NetworkType.PRIVATE.getValue());
-    }
-
-    @Test
-    void PRIVATE_TESTIs0xb0() {
-        assertTrue(0xb0 == NetworkType.PRIVATE_TEST.getValue());
-        assertTrue(176 == NetworkType.PRIVATE_TEST.getValue());
-    }
-
-    @Test
-    void MIJINIs0x60() {
-        assertTrue(0x60 == NetworkType.MIJIN.getValue());
-        assertTrue(96 == NetworkType.MIJIN.getValue());
-    }
-
-    @Test
-    void MIJIN_TESTIs0x90() {
-        assertTrue(0x90 == NetworkType.MIJIN_TEST.getValue());
-        assertTrue(144 == NetworkType.MIJIN_TEST.getValue());
-    }
+   }
 }

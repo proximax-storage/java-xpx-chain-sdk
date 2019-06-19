@@ -25,7 +25,6 @@ import io.proximax.sdk.infrastructure.Listener;
 import io.proximax.sdk.infrastructure.MetadataHttp;
 import io.proximax.sdk.infrastructure.MosaicHttp;
 import io.proximax.sdk.infrastructure.NamespaceHttp;
-import io.proximax.sdk.infrastructure.NetworkHttp;
 import io.proximax.sdk.infrastructure.TransactionHttp;
 import io.proximax.sdk.model.blockchain.NetworkType;
 
@@ -123,15 +122,6 @@ public class BlockchainApi {
    public NamespaceRepository createNamespaceRepository() {
       return new NamespaceHttp(this);
    }
-   
-   /**
-    * create network repository
-    * 
-    * @return the network repository
-    */
-   public NetworkRepository createNetworkRepository() {
-      return new NetworkHttp(this);
-   }
 
    /**
     * create transaction repository
@@ -178,6 +168,6 @@ public class BlockchainApi {
     * @return network type of the node
     */
    private NetworkType queryForNetowrkType() {
-      return createNetworkRepository().getNetworkType().timeout(30, TimeUnit.SECONDS).blockingFirst();
+      return createBlockchainRepository().getNetworkType().timeout(30, TimeUnit.SECONDS).blockingFirst();
    }
 }

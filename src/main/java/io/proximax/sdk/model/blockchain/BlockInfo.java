@@ -16,9 +16,12 @@
 
 package io.proximax.sdk.model.blockchain;
 
+import static io.proximax.sdk.utils.dto.UInt64Utils.toBigInt;
+
 import java.math.BigInteger;
 import java.util.Optional;
 
+import io.proximax.sdk.gen.model.BlockInfoDTO;
 import io.proximax.sdk.model.account.PublicAccount;
 
 /**
@@ -187,7 +190,30 @@ public class BlockInfo {
         return blockTransactionsHash;
     }
 
-
+    /**
+     * create new block info from the DTO
+     * 
+     * @param dto the DTO as received form the server
+     * @param networkType network type
+     * @return the block info represented by the DTO
+     */
+    public static BlockInfo fromDto(BlockInfoDTO dto, NetworkType networkType) {
+       return new BlockInfo(dto.getMeta().getHash(),
+             dto.getMeta().getGenerationHash(),
+             Optional.of(toBigInt(dto.getMeta().getTotalFee())),
+             Optional.of(dto.getMeta().getNumTransactions().intValue()),
+             dto.getBlock().getSignature(),
+             new PublicAccount(dto.getBlock().getSigner(), networkType),
+             networkType,
+             (int) Long.parseLong(Integer.toHexString(dto.getBlock().getVersion().intValue()).substring(2, 4), 16),
+             dto.getBlock().getType().intValue(),
+             toBigInt(dto.getBlock().getHeight()),
+             toBigInt(dto.getBlock().getTimestamp()),
+             toBigInt(dto.getBlock().getDifficulty()),
+             dto.getBlock().getPreviousBlockHash(),
+             dto.getBlock().getBlockTransactionsHash());
+    }
+    
     @Override
     public String toString() {
         return "BlockInfo{" +
