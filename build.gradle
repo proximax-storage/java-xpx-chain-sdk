@@ -43,6 +43,8 @@ apply from: "$rootDir/gradle/integration.gradle"
 apply from: "$rootDir/gradle/coverage.gradle"
 // loak setup for publishing
 apply from: "$rootDir/gradle/publishing.gradle"
+// load Travis CI specific support
+apply from "$rootDir/gradle/travis.gradle"
 
 // Java8
 sourceCompatibility = 1.8

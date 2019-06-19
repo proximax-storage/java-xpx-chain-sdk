@@ -4,8 +4,8 @@ if [ "$TRAVIS_PULL_REQUEST" != "false" ];
 then
     echo "Building pull request - skip e2e test?"
 #    ./gradlew clean build -x integrationTest
-    ./gradlew build
+    ./gradlew clean build
 else
     echo "building branch $TRAVIS_BRANCH"
-    ./gradlew build
+    ./gradlew clean build
 fi

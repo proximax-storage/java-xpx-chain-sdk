@@ -25,6 +25,9 @@ cache:
 # prepare for build
 before_install:
   - chmod -R ug+x travis
+  - travis/prepare_pgp.sh
+
+install:
   - travis/install.sh
 
 # build and test the app
