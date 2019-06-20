@@ -30,11 +30,6 @@ plugins {
     id 'com.github.kt3k.coveralls' version '2.8.4'
 }
 
-// repository group
-group 'io.proximax'
-// current version
-version '0.2.0'
-
 // define contents of the build
 apply from: "$rootDir/gradle/content.gradle"
 // load setup for integration tests

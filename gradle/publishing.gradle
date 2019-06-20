@@ -67,15 +67,23 @@ publishing {
         }
         maven {
         	name = "internal"
-            url = "https://nexus.internal.proximax.io/repository/maven-releases"
+            url = 'https://nexus.internal.proximax.io/repository/maven-releases'
             credentials {
                 username = project.hasProperty("nexusUsername") ? project.nexusUsername : ""
                 password = project.hasProperty("nexusPassword") ? project.nexusPassword : ""
             }
         }
         maven {
-            name = 'mavenCentral'
-            url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            name = 'release'
+            url 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
+            credentials {
+                username = project.hasProperty("sonatypeUsername") ? project.sonatypeUsername : ""
+                password = project.hasProperty("sonatypePassword") ? project.sonatypePassword : ""
+            }
+        }
+        maven {
+            name = 'snapshot'
+            url 'https://oss.sonatype.org/content/repositories/snapshots'
             credentials {
                 username = project.hasProperty("sonatypeUsername") ? project.sonatypeUsername : ""
                 password = project.hasProperty("sonatypePassword") ? project.sonatypePassword : ""
@@ -86,6 +94,13 @@ publishing {
 
 // sign the publishing
 signing {
+    // if in memory pgp keys are defined then use those. If not defined then use the default method using file
+	if (project.hasProperty("signingKey") && (project.hasProperty("signingPassword"))) {
+    	def signingKey = findProperty("signingKey")
+    	def signingPassword = findProperty("signingPassword")
+    	useInMemoryPgpKeys(signingKey, signingPassword)
+    }
+    // sign the publishing
     sign publishing.publications.mavenJava
 }
 
