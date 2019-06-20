@@ -37,9 +37,6 @@ jobs:
   include:
     - stage: publishing
       jdk: openjdk8
-      branches:
-        only:
-          - master
       script:
         - echo "Publishing build results"
         - travis/publish_javadoc.sh
