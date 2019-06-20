@@ -1,9 +1,7 @@
 #!/usr/bin/env sh
 
 # signing key needs to be decoded from base64 to PGP armored text format
-echo $GPG_SECRET_KEYS | base64 -d > secret.key
-cat secret.key
-export ORG_GRADLE_PROJECT_signingKey=`cat secret.key`
+export ORG_GRADLE_PROJECT_signingKey="`echo $GPG_SECRET_KEYS | base64 -d`"
 # password is used as is
 export ORG_GRADLE_PROJECT_signingPassword=$GPG_PASSPHRASE
 
