@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+export ORG_GRADLE_PROJECT_sonatypeUsername=$SONATYPE_USERNAME
+export ORG_GRADLE_PROJECT_sonatypePassword=$SONATYPE_PASSWORD
+
 if [ "$TRAVIS_BRANCH" = "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ];
 then
 	echo "publishing snapshot to public repository"
