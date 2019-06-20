@@ -9,8 +9,12 @@ export ORG_GRADLE_PROJECT_signingPassword=$GPG_PASSPHRASE
 export ORG_GRADLE_PROJECT_sonatypeUsername=$SONATYPE_USERNAME
 export ORG_GRADLE_PROJECT_sonatypePassword=$SONATYPE_PASSWORD
 
+	echo "publishing snapshot to public repository"
+	./gradlew publishAllPublicationsToSnapshotRepository
+
+
 # publish snapshot (using version in gradle.properties)
-if [ "$TRAVIS_BRANCH" = "master" ] && [ "$TRAVIS_PULL_REQUEST" = "true" ];
+if [ "$TRAVIS_BRANCH" = "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ];
 then
 	echo "publishing snapshot to public repository"
 	./gradlew publishAllPublicationsToSnapshotRepository
