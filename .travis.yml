@@ -8,6 +8,7 @@ language: java
 # try build using both oracle and openjdk
 jdk:
   - oraclejdk8
+  # openjdk build is used to publish artifacts and coverage report
   - openjdk8
 
 # cache maintenance for gradle builds to avoid upload of caches
@@ -29,9 +30,14 @@ install:
 # build and test the app
 script:
   - travis/build.sh
+  - travis/publish_coverage.sh
 
-# produce coveralls report for gihub
-after_success:
-  - travis/report_coveralls.sh
-  - travis/publish_javadoc.sh
-  - travis/publish_public.sh
+# add publishing stage that publishes data out
+jobs:
+  include:
+    - stage: publishing
+      jdk: openjdk8
+      script:
+        - echo "Publishing build results"
+        - travis/publish_javadoc.sh
+        - travis/publish_public.sh
