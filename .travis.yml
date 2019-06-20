@@ -8,7 +8,6 @@ language: java
 # try build using both oracle and openjdk
 jdk:
   - oraclejdk8
-  # openjdk build is used to publish artifacts and coverage report
   - openjdk8
 
 # cache maintenance for gradle builds to avoid upload of caches
@@ -29,15 +28,22 @@ install:
 
 # build and test the app
 script:
-  - travis/build.sh
-  - travis/publish_coverage.sh
+  - ./gradlew build jacocoTestReport coveralls
 
 # add publishing stage that publishes data out
 jobs:
   include:
-    - stage: publishing
+    - stage: push to master
       jdk: openjdk8
+      if: type = push AND branch = master
       script:
-        - echo "Publishing build results"
+        - echo "Publishing snapshot"
+        - ./gradlew publishAllPublicationsToSnapshotRepository
+        - echo "Publishing javadoc to pages"
         - travis/publish_javadoc.sh
-        - travis/publish_public.sh
+    - stage: releasing tag
+      jdk: openjdk8
+      if: tag IS present
+      script:
+        - echo "Publishing release $TRAVIS_TAG to public repository"
+        - ./gradlew publishAllPublicationsToReleaseRepository -Pversion=$TRAVIS_TAG
