@@ -12,5 +12,6 @@ fi
 if [ -n "$TRAVIS_TAG" ];
 then 
 	echo "publishing release $TRAVIS_TAG to public repository"
+	# NOTE that version is overriden here by the tag name
 	./gradlew publishAllPublicationsToReleaseRepository -Pversion=$TRAVIS_TAG
 fi
