@@ -13,8 +13,7 @@ jdk:
 # environment variables
 env:
   # set variables recognized by the signing plugin
-  - ORG_GRADLE_PROJECT_signingKey=$GPG_SECRET_KEYS
-  - ORG_GRADLE_PROJECT_signingPassword=$GPG_PASSPHRASE
+  - ORG_GRADLE_PROJECT_signingKey=$GPG_SECRET_KEYS ORG_GRADLE_PROJECT_signingPassword=$GPG_PASSPHRASE
 
 # cache maintenance for gradle builds to avoid upload of caches
 before_cache:
