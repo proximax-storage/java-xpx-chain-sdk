@@ -1,5 +1,6 @@
 /*
  * Copyright 2018 NEM
+ * Copyright 2019 ProximaX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,60 +18,43 @@
 package io.proximax.sdk.infrastructure;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 class QueryParamsTest {
-
+   private static final String ID = "5A2139FC71C1B9000147D624";
     @Test
     void shouldCreateQueryParamsViaCostructor() {
-        QueryParams queryParams = new QueryParams(15, "5A2139FC71C1B9000147D624");
-        assertTrue(15 == queryParams.getPageSize());
-        assertEquals("5A2139FC71C1B9000147D624", queryParams.getId());
+        QueryParams queryParams = new QueryParams(15, ID);
+        assertEquals(15, queryParams.getPageSize());
+        assertEquals(ID, queryParams.getId());
     }
 
     @Test
-    void shouldChangePageSizeTo10WhenSettingNegativeValue() {
-        QueryParams queryParams = new QueryParams(-1, "5A2139FC71C1B9000147D624");
-        assertTrue(10 == queryParams.getPageSize());
+    void rejectNegativePageSize() {
+       assertThrows(IllegalArgumentException.class, () -> new QueryParams(-1, ID));
     }
 
     @Test
-    void shouldChangePageSizeTo10WhenSettingValue1000() {
-        QueryParams queryParams = new QueryParams(1000, "5A2139FC71C1B9000147D624");
-        assertTrue(10 == queryParams.getPageSize());
-    }
-
-
-    @Test
-    void shouldGenerateCorrectQueryParamsUrlWhenIdNullAndPageSizeNull() {
-        QueryParams queryParams = new QueryParams(null, null);
-        assertEquals("?pageSize=10", queryParams.toUrl());
+    void reject9PageSize() {
+       assertThrows(IllegalArgumentException.class, () -> new QueryParams(9, ID));
     }
 
     @Test
-    void shouldGenerateCorrectQueryParamsUrlWhenIdEmptyStringAndPageSizeNull() {
-        QueryParams queryParams = new QueryParams(null, "");
-        assertEquals("?pageSize=10", queryParams.toUrl());
+    void reject101PageSize() {
+       assertThrows(IllegalArgumentException.class, () -> new QueryParams(101, ID));
     }
 
     @Test
-    void shouldGenerateCorrectQueryParamsUrlWhenIdNotNullAndPageSizeNull() {
-        QueryParams queryParams = new QueryParams(15, null);
-        assertEquals("?pageSize=15", queryParams.toUrl());
+    void rejectNullPageSize() {
+       assertThrows(NullPointerException.class, () -> new QueryParams(null, ID));
     }
 
     @Test
-    void shouldGenerateCorrectQueryParamsUrlWhenIdNullAndPageSizeNotNull() {
-        QueryParams queryParams = new QueryParams(null, "5A2139FC71C1B9000147D624");
-        assertEquals("?pageSize=10&id=5A2139FC71C1B9000147D624", queryParams.toUrl());
-    }
-
-    @Test
-    void shouldGenerateCorrectQueryParamUrlWhenIdNotNullAndPageSizeNotNull() {
-        QueryParams queryParams = new QueryParams(15, "5A2139FC71C1B9000147D624");
-        assertEquals("?pageSize=15&id=5A2139FC71C1B9000147D624", queryParams.toUrl());
-
+    void urlIsOK() {
+       assertEquals("?pageSize=10&id="+ID, new QueryParams(ID).toUrl());
+       assertEquals("?pageSize=15", new QueryParams(15).toUrl());
+       assertEquals("?pageSize=15&id="+ID, new QueryParams(15, ID).toUrl());
     }
 }

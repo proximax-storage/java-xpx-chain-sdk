@@ -27,10 +27,12 @@ import org.junit.jupiter.api.TestInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.proximax.sdk.infrastructure.QueryParams;
 import io.proximax.sdk.model.blockchain.BlockInfo;
 import io.proximax.sdk.model.blockchain.BlocksLimit;
 import io.proximax.sdk.model.blockchain.MerklePath;
 import io.proximax.sdk.model.blockchain.Receipts;
+import io.proximax.sdk.model.transaction.Transaction;
 
 /**
  * E2E tests that demonstrate blockchain repository
@@ -41,6 +43,20 @@ public class E2EBlockchainTest extends E2EBaseTest {
    /** logger */
    private static final Logger logger = LoggerFactory.getLogger(E2EBlockchainTest.class);
 
+   @Test
+   void blockByHeight() {
+      BlockInfo blockInfo = blockchainHttp.getBlockByHeight(BigInteger.ONE).blockingFirst();
+      assertEquals(BigInteger.ONE, blockInfo.getHeight());
+   }
+   
+   @Test
+   void listTransactions() {
+      QueryParams queryParams = new QueryParams(15);
+      List<Transaction> transactions = blockchainHttp.getBlockTransactions(BigInteger.ONE, queryParams).blockingFirst();
+      assertTrue(!transactions.isEmpty());
+      assertTrue(transactions.size() <= 15);
+   }
+   
    @Test
    void blocksShouldBeAdded() {
       BigInteger height1 = blockchainHttp.getBlockchainHeight().blockingFirst();

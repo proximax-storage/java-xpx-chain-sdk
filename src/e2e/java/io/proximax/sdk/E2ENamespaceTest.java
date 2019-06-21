@@ -40,6 +40,7 @@ import io.proximax.sdk.model.namespace.NamespaceName;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.RegisterNamespaceTransaction;
 import io.proximax.sdk.model.transaction.SignedTransaction;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * E2E tests that demonstrate transfers
@@ -146,6 +147,12 @@ public class E2ENamespaceTest extends E2EBaseTest {
             .filter(info -> nsId.getId().equals(info.getId().getId()))
             .count().blockingGet();
       assertEquals(1, nsCount);
+   }
+   
+   @Test
+   void throwExceptionWhenNamespaceDoesNotExists() {
+      namespaceHttp.getNamespace(new NamespaceId("nonregisterednamespace")).subscribeOn(Schedulers.single()).test()
+            .awaitDone(2, TimeUnit.SECONDS).assertFailure(RuntimeException.class);
    }
    
    /**
