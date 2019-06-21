@@ -10,6 +10,13 @@ jdk:
   - oraclejdk8
   - openjdk8
 
+env:
+  global:
+    - ORG_GRADLE_PROJECT_signingKey="`echo $GPG_SECRET_KEYS | base64 -d`"
+    - ORG_GRADLE_PROJECT_signingPassword=$GPG_PASSPHRASE
+    - ORG_GRADLE_PROJECT_sonatypeUsername=$SONATYPE_USERNAME
+    - ORG_GRADLE_PROJECT_sonatypePassword=$SONATYPE_PASSWORD
+
 # cache maintenance for gradle builds to avoid upload of caches
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -39,15 +46,13 @@ jobs:
       jdk: openjdk8
       if: type = push AND branch = master
       script:
-        - travis/prepare_secrets.sh
         - echo "Publishing snapshot"
         - ./gradlew publishAllPublicationsToSnapshotRepository
         - echo "Publishing javadoc to pages"
         - travis/publish_javadoc.sh
-    - stage: releasing tag
+    - stage: release tag
       jdk: openjdk8
       if: tag IS present
-      before_install: travis/prepare_secrets.sh
       script:
         - echo "Publishing release $TRAVIS_TAG to public repository"
         - ./gradlew publishAllPublicationsToReleaseRepository -Pversion=$TRAVIS_TAG
