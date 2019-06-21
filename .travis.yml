@@ -38,8 +38,8 @@ jobs:
     - stage: push to master
       jdk: openjdk8
       if: type = push AND branch = master
-      before_install: travis/prepare_secrets.sh
       script:
+        - travis/prepare_secrets.sh
         - echo "Publishing snapshot"
         - ./gradlew publishAllPublicationsToSnapshotRepository
         - echo "Publishing javadoc to pages"
