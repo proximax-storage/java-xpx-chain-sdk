@@ -21,13 +21,15 @@ cache:
 
 # prepare for build
 before_install:
+  # make sure all travis scripts are executable
   - chmod -R ug+x travis
 
 install:
-  - travis/install.sh
+  # download dependencies (at least most of them)
+  - ./gradlew downloadDependencies
 
-# build and test the app
 script:
+  # build and test the app
   - ./gradlew build jacocoTestReport coveralls
 
 # add publishing stage that publishes data out
@@ -36,6 +38,7 @@ jobs:
     - stage: push to master
       jdk: openjdk8
       if: type = push AND branch = master
+      before_install: travis/prepare_secrets.sh
       script:
         - echo "Publishing snapshot"
         - ./gradlew publishAllPublicationsToSnapshotRepository
@@ -44,6 +47,7 @@ jobs:
     - stage: releasing tag
       jdk: openjdk8
       if: tag IS present
+      before_install: travis/prepare_secrets.sh
       script:
         - echo "Publishing release $TRAVIS_TAG to public repository"
         - ./gradlew publishAllPublicationsToReleaseRepository -Pversion=$TRAVIS_TAG
