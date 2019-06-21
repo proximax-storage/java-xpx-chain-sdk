@@ -120,14 +120,13 @@ public class SecretLockTransaction extends Transaction {
     byte[] generateBytes() {
         FlatBufferBuilder builder = new FlatBufferBuilder();
         BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
-        int[] fee = new int[]{0, 0};
         int version = (int) Long.parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
 
         // Create Vectors
         int signatureVector = SecretLockTransactionBuffer.createSignatureVector(builder, new byte[64]);
         int signerVector = SecretLockTransactionBuffer.createSignerVector(builder, new byte[32]);
         int deadlineVector = SecretLockTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
-        int feeVector = SecretLockTransactionBuffer.createFeeVector(builder, fee);
+        int feeVector = SecretLockTransactionBuffer.createFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
         int mosaicIdVector = SecretLockTransactionBuffer.createMosaicIdVector(builder, UInt64Utils.fromBigInteger(mosaic.getId().getId()));
         int mosaicAmountVector = SecretLockTransactionBuffer.createMosaicAmountVector(builder, UInt64Utils.fromBigInteger(mosaic.getAmount()));
         int durationVector = SecretLockTransactionBuffer.createDurationVector(builder, UInt64Utils.fromBigInteger(duration));
