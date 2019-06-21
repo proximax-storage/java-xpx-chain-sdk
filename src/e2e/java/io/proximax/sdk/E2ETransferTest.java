@@ -154,7 +154,7 @@ public class E2ETransferTest extends E2EBaseTest {
       logger.info("Transfer announced. {}", transactionHttp.announce(signedAggregateTransaction).blockingFirst());
       logger.info("Transfer done. {}",
             listener.confirmed(from.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
-
+      sleepForAWhile();
    }
 
 }

@@ -77,6 +77,7 @@ public class E2ENamespaceTest extends E2EBaseTest {
       logger.info("Registered namespace {}. {}",
             ROOT_NAME,
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      sleepForAWhile();
       // check the namespace
       checkNamespace(ROOT_NAME, Optional.empty(), 100);
    }
@@ -94,6 +95,7 @@ public class E2ENamespaceTest extends E2EBaseTest {
       logger.info("Registered namespace {}. {}",
             CHILD1_NAME,
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      sleepForAWhile();
       // check the namespace
       checkNamespace(CHILD1_NAME, Optional.of(ROOT_NAME), 100);
    }
@@ -120,6 +122,7 @@ public class E2ENamespaceTest extends E2EBaseTest {
       logger.info("Registered namespaces {}. {}",
             CHILD1_NAME,
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      sleepForAWhile();
       // check the namespaces
       checkNamespace(aggRootName, Optional.empty(), 100);
       checkNamespace(CHILD1_NAME, Optional.of(aggRootName), 100);

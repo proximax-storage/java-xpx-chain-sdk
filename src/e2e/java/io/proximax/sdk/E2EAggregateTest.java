@@ -127,6 +127,7 @@ public class E2EAggregateTest extends E2EBaseTest {
       transactionHttp.announce(signedLock).blockingFirst();
       // wait for lock confirmation
       listener.confirmed(alice.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      sleepForAWhile();
       // announce escrow
       logger.info("announcing {}", escrow);
       transactionHttp.announceAggregateBonded(signedEscrow).blockingFirst();
@@ -142,6 +143,7 @@ public class E2EAggregateTest extends E2EBaseTest {
       // bob wait for cosignature
       listener.confirmed(bob.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
       // test that alice has 10M X and 10 Y
+      sleepForAWhile();
       List<Mosaic> aliceMosaics = accountHttp.getAccountInfo(alice.getAddress()).blockingFirst().getMosaics();
       assertEquals(2, aliceMosaics.size());
       aliceMosaics.forEach(mosaic -> {
@@ -215,6 +217,7 @@ public class E2EAggregateTest extends E2EBaseTest {
       transactionHttp.announce(signedLock).blockingFirst();
       // wait for lock confirmation
       listener.confirmed(alice.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      sleepForAWhile();
       // announce escrow
       logger.info("announcing {}", escrow);
       transactionHttp.announceAggregateBonded(signedEscrow).blockingFirst();
@@ -242,7 +245,7 @@ public class E2EAggregateTest extends E2EBaseTest {
       logger.info("waiting for transaction confirmation");
       // wait for the transaction confirmation
       listener.confirmed(alice.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
-      
+      sleepForAWhile();
       // test that alice has 11M X and 10 Y
       List<Mosaic> aliceMosaics = accountHttp.getAccountInfo(alice.getAddress()).blockingFirst().getMosaics();
       assertEquals(2, aliceMosaics.size());
@@ -308,6 +311,7 @@ public class E2EAggregateTest extends E2EBaseTest {
       transactionHttp.announce(signedLock).blockingFirst();
       // wait for lock confirmation
       listener.confirmed(alice.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      sleepForAWhile();
       // announce escrow
       logger.info("announcing {}", escrow);
       transactionHttp.announceAggregateBonded(signedEscrow).blockingFirst();

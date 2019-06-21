@@ -189,7 +189,7 @@ public class E2EBaseTest extends BaseTest {
     */
    protected void sleepForAWhile() {
       try {
-         Thread.sleep(10000l);
+         Thread.sleep(2000l);
       } catch (InterruptedException e) {
          // do nothing
       }

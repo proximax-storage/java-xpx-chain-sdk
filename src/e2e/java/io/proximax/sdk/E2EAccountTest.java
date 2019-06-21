@@ -82,6 +82,7 @@ class E2EAccountTest extends E2EBaseTest {
       transactionHttp.announce(trans.signWith(acct)).blockingFirst();
       logger.info("Waiting for  confirmation");
       listener.confirmed(acct.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      sleepForAWhile();
       // now check for the block via GET
       AccountProperties aps = accountHttp.getAccountProperties(acct.getAddress())
             .timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
@@ -136,6 +137,7 @@ class E2EAccountTest extends E2EBaseTest {
       logger.info("Waiting for  confirmation");
       listener.confirmed(acct.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
       // now check for the block via GET
+      sleepForAWhile();
       AccountProperties aps = accountHttp.getAccountProperties(acct.getAddress())
             .timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
       testAccountPropertiesOnSimpleAccount(aps, allowedTransType);

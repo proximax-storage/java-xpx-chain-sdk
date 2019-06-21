@@ -83,6 +83,7 @@ public class E2EMosaicTest extends E2EBaseTest {
       Observable<Transaction> confirmation = listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS);
       transactionHttp.announce(mdt).blockingFirst();
       logger.info("Mosaic created. {}", confirmation.blockingFirst());
+      sleepForAWhile();
       // verify that mosaic looks fine
       MosaicInfo info = mosaicHttp.getMosaic(id).blockingFirst();
       assertEquals(BigInteger.ZERO, info.getSupply());
@@ -150,6 +151,7 @@ public class E2EMosaicTest extends E2EBaseTest {
       // wait for acceptance
       logger.info("Aggregate mosaic done. {}",
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      sleepForAWhile();
       // verify that mosaic looks fine
       MosaicInfo info = mosaicHttp.getMosaic(aId).blockingFirst();
       assertEquals(BigInteger.valueOf(9), info.getSupply());
