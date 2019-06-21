@@ -28,10 +28,22 @@ install:
 
 # build and test the app
 script:
-  - travis/build.sh
+  - ./gradlew build jacocoTestReport coveralls
 
-# produce coveralls report for gihub
-after_success:
-  - travis/report_coveralls.sh
-  - travis/publish_javadoc.sh
-  - travis/publish_public.sh
+# add publishing stage that publishes data out
+jobs:
+  include:
+    - stage: push to master
+      jdk: openjdk8
+      if: type = push AND branch = master
+      script:
+        - echo "Publishing snapshot"
+        - ./gradlew publishAllPublicationsToSnapshotRepository
+        - echo "Publishing javadoc to pages"
+        - travis/publish_javadoc.sh
+    - stage: releasing tag
+      jdk: openjdk8
+      if: tag IS present
+      script:
+        - echo "Publishing release $TRAVIS_TAG to public repository"
+        - ./gradlew publishAllPublicationsToReleaseRepository -Pversion=$TRAVIS_TAG
