@@ -6,5 +6,6 @@ export ORG_GRADLE_PROJECT_signingKey="`echo $GPG_SECRET_KEYS | base64 -d`"
 export ORG_GRADLE_PROJECT_signingPassword=$GPG_PASSPHRASE
 
 # sonatype publishing credentials
+echo $SONATYPE_USERNAME
 export ORG_GRADLE_PROJECT_sonatypeUsername=$SONATYPE_USERNAME
 export ORG_GRADLE_PROJECT_sonatypePassword=$SONATYPE_PASSWORD
