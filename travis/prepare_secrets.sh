@@ -8,6 +8,3 @@ export ORG_GRADLE_PROJECT_signingPassword=$GPG_PASSPHRASE
 # sonatype publishing credentials
 export ORG_GRADLE_PROJECT_sonatypeUsername=$SONATYPE_USERNAME
 export ORG_GRADLE_PROJECT_sonatypePassword=$SONATYPE_PASSWORD
-
-# download dependencies (at least most of them)
-./gradlew downloadDependencies
