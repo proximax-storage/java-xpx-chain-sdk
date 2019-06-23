@@ -48,8 +48,15 @@ jobs:
       script:
         - echo "Publishing snapshot"
         - ./gradlew publishAllPublicationsToSnapshotRepository
-        - echo "Publishing javadoc to pages"
-        - travis/publish_javadoc.sh
+        - echo "Prepare github pages for deployment"
+        - travis/prepare_pages.sh
+      deploy:
+        provider: pages
+        skip_cleanup: true
+        keep_history: true
+        # Set in the settings page of your repository, as a secure variable
+        github_token: $PAGES_TOKEN
+        local_dir: "build/gh-pages"
     - stage: release tag
       jdk: openjdk8
       if: tag IS present
