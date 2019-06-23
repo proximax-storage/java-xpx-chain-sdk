@@ -75,6 +75,8 @@ jobs:
         provider: pages
         skip_cleanup: true
         keep_history: true
+        on:
+          all_branches: true
         # Set in the settings page of your repository, as a secure variable
         github_token: $PAGES_TOKEN
         local_dir: "build/gh-pages"
