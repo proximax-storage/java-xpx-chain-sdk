@@ -47,7 +47,7 @@ jobs:
       if: type = push AND branch = master
       script:
         - echo "Publishing snapshot"
-        - ./gradlew publishAllPublicationsToSnapshotRepository
+        - ./gradlew javadoc publishAllPublicationsToSnapshotRepository
         - echo "Prepare github pages for deployment"
         - travis/prepare_pages.sh
       deploy:
