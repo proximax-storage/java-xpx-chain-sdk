@@ -52,10 +52,16 @@ jobs:
         - travis/prepare_pages.sh
       deploy:
         provider: pages
+        # keep the build output
         skip_cleanup: true
+        # keep git history of the pages
         keep_history: true
+        # let stage control whether to deploy or not
+        on:
+          all_branches: true
         # Set in the settings page of your repository, as a secure variable
         github_token: $PAGES_TOKEN
+        # prepare_pages puts content to build/gh-pages
         local_dir: "build/gh-pages"
     - stage: release tag
       jdk: openjdk8
@@ -71,12 +77,3 @@ jobs:
         - ./gradlew javadoc 
         - echo "Prepare github pages for deployment"
         - travis/prepare_pages.sh
-      deploy:
-        provider: pages
-        skip_cleanup: true
-        keep_history: true
-        on:
-          all_branches: true
-        # Set in the settings page of your repository, as a secure variable
-        github_token: $PAGES_TOKEN
-        local_dir: "build/gh-pages"
