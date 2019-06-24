@@ -15,7 +15,11 @@
  */
 package io.proximax.sdk;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -23,10 +27,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
+import org.apache.commons.io.IOUtils;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import io.proximax.sdk.infrastructure.TransactionMappingTest;
 import io.proximax.sdk.utils.GsonUtils;
 
 /**
@@ -37,9 +42,10 @@ public class ResourceBasedTest {
    protected JsonArray getTransactions(String bundle) {
       return getResources(bundle, "transactions", "transactions");
    }
-   
+
    /**
     * load array of transactions from bundle with given name
+    * 
     * @param name
     * @return
     */
@@ -47,8 +53,7 @@ public class ResourceBasedTest {
       // first get URI from the classpath
       URI resourceUri;
       try {
-         resourceUri = TransactionMappingTest.class.getClassLoader().getResource(prefix + "/" + name + ".json")
-               .toURI();
+         resourceUri = ResourceBasedTest.class.getClassLoader().getResource(prefix + "/" + name + ".json").toURI();
       } catch (URISyntaxException e) {
          throw new RuntimeException("Failed to locate resource " + name, e);
       }
@@ -63,9 +68,10 @@ public class ResourceBasedTest {
          throw new RuntimeException("Failed to load resources from " + name, e);
       }
    }
-   
+
    /**
     * return stream of concatenated transaction bundles
+    * 
     * @param bundles
     * @return
     */
@@ -82,4 +88,27 @@ public class ResourceBasedTest {
             .map(obj -> (JsonObject) obj);
    }
 
+   /**
+    * save bytes to serialization folder in test resources. This is intended to build tests
+    * 
+    * @param name name of the resource
+    * @param bytes bytes to save
+    * @return the created file
+    * @throws FileNotFoundException if directory does not exist (it should...)
+    * @throws IOException if write failed
+    */
+   public static File saveBytes(String name, byte[] bytes) throws IOException {
+      File dest = new File("src/test/resources/serialization/" + name + ".bytes");
+      try (FileOutputStream fos = new FileOutputStream(dest)) {
+         fos.write(bytes);
+      }
+      return dest;
+   }
+
+   public static byte[] loadBytes(String name) throws IOException {
+      try (InputStream is = ResourceBasedTest.class.getClassLoader()
+            .getResource("serialization/" + name + ".bytes").openStream()) {
+         return IOUtils.toByteArray(is);
+      }
+   }
 }

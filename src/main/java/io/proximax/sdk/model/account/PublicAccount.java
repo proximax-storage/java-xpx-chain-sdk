@@ -44,21 +44,21 @@ public class PublicAccount {
     public static PublicAccount createFromPublicKey(String publicKey, NetworkType networkType) {
         return new PublicAccount(publicKey, networkType);
     }
-
-    /**
-     * Compares public accounts for equality.
-     *
-     * @param o PublicAccount
-     * @return boolean
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof PublicAccount)) return false;
-        PublicAccount that = (PublicAccount) o;
-        return Objects.equals(address, that.address) &&
-                Objects.equals(publicKey, that.publicKey);
-    }
+//
+//    /**
+//     * Compares public accounts for equality.
+//     *
+//     * @param o PublicAccount
+//     * @return boolean
+//     */
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (!(o instanceof PublicAccount)) return false;
+//        PublicAccount that = (PublicAccount) o;
+//        return Objects.equals(address, that.address) &&
+//                Objects.equals(publicKey, that.publicKey);
+//    }
 
     /**
      * Returns account address.
@@ -82,5 +82,22 @@ public class PublicAccount {
 	public String toString() {
 		return "PublicAccount [address=" + address + ", publicKey=" + publicKey + "]";
 	}
+
+   @Override
+   public int hashCode() {
+      return Objects.hash(address, publicKey);
+   }
+
+   @Override
+   public boolean equals(Object obj) {
+      if (this == obj)
+         return true;
+      if (obj == null)
+         return false;
+      if (getClass() != obj.getClass())
+         return false;
+      PublicAccount other = (PublicAccount) obj;
+      return Objects.equals(address, other.address) && Objects.equals(publicKey, other.publicKey);
+   }
 
 }
