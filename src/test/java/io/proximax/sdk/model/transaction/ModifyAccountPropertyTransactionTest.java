@@ -5,32 +5,33 @@
  */
 package io.proximax.sdk.model.transaction;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
 import java.math.BigInteger;
-import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-import io.proximax.core.crypto.KeyPair;
-import io.proximax.sdk.model.account.Account;
+import io.proximax.sdk.ResourceBasedTest;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.props.AccountPropertyModification;
 import io.proximax.sdk.model.account.props.AccountPropertyModificationType;
 import io.proximax.sdk.model.account.props.AccountPropertyType;
 import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.mosaic.MosaicId;
 
 /**
  * basic tests for account property modification transactions
  */
-class ModifyAccountPropertyTransactionTest {
+class ModifyAccountPropertyTransactionTest extends ResourceBasedTest {
 
    @Test
-   void testAddressAccountPropertyModificationTransaction() {
-      Address address = new Account(new KeyPair(), NetworkType.MIJIN_TEST).getAddress();
-      Deadline deadline = Deadline.create(10, ChronoUnit.MINUTES);
+   void serializationAddress() throws IOException {
+      Address address = Address.createFromRawAddress("SBMJIUDBTCFVS24UHGND2ZJ3OX5EFKIPESXCTWLO");
+      System.out.println(address);
+      Deadline deadline = new FakeDeadline();
       ModifyAccountPropertyTransaction<Address> trans = ModifyAccountPropertyTransaction.createForAddress(
             deadline,
             BigInteger.ZERO,
@@ -47,7 +48,54 @@ class ModifyAccountPropertyTransactionTest {
       assertEquals(1, trans.getPropertyModifications().size());
       assertEquals(address, trans.getPropertyModifications().get(0).getValue());
       // check that serialization does not fail
-      assertTrue(trans.generateBytes().length > 0);
+      byte[] actual = trans.generateBytes();
+      assertArrayEquals(loadBytes("account_property_address"), actual);
+   }
+
+   @Test
+   void serializationMosaic() throws IOException {
+      Deadline deadline = new FakeDeadline();
+      ModifyAccountPropertyTransaction<MosaicId> trans = ModifyAccountPropertyTransaction.createForMosaic(
+            deadline,
+            BigInteger.ZERO,
+            AccountPropertyType.ALLOW_MOSAIC,
+            Arrays.asList(new AccountPropertyModification<>(AccountPropertyModificationType.ADD, new MosaicId(BigInteger.ONE))),
+            NetworkType.MIJIN_TEST);
+      // check that values are as expected
+      assertEquals(BigInteger.ZERO, trans.getFee());
+      assertEquals(TransactionType.ACCOUNT_PROPERTIES_MOSAIC, trans.getType());
+      assertEquals(TransactionVersion.ACCOUNT_PROPERTIES_MOSAIC.getValue(), trans.getVersion());
+      assertEquals(deadline.getInstant(), trans.getDeadline().getInstant());
+      assertEquals(AccountPropertyType.ALLOW_MOSAIC, trans.getPropertyType());
+      assertEquals(NetworkType.MIJIN_TEST, trans.getNetworkType());
+      assertEquals(1, trans.getPropertyModifications().size());
+      assertEquals(new MosaicId(BigInteger.ONE), trans.getPropertyModifications().get(0).getValue());
+      // check that serialization does not fail
+      byte[] actual = trans.generateBytes();
+      assertArrayEquals(loadBytes("account_property_mosaic"), actual);
+   }
+
+   @Test
+   void serializationEntity() throws IOException {
+      Deadline deadline = new FakeDeadline();
+      ModifyAccountPropertyTransaction<TransactionType> trans = ModifyAccountPropertyTransaction.createForEntityType(
+            deadline,
+            BigInteger.ZERO,
+            AccountPropertyType.BLOCK_TRANSACTION,
+            Arrays.asList(new AccountPropertyModification<>(AccountPropertyModificationType.ADD, TransactionType.LOCK)),
+            NetworkType.MIJIN_TEST);
+      // check that values are as expected
+      assertEquals(BigInteger.ZERO, trans.getFee());
+      assertEquals(TransactionType.ACCOUNT_PROPERTIES_ENTITY_TYPE, trans.getType());
+      assertEquals(TransactionVersion.ACCOUNT_PROPERTIES_ENTITY_TYPE.getValue(), trans.getVersion());
+      assertEquals(deadline.getInstant(), trans.getDeadline().getInstant());
+      assertEquals(AccountPropertyType.BLOCK_TRANSACTION, trans.getPropertyType());
+      assertEquals(NetworkType.MIJIN_TEST, trans.getNetworkType());
+      assertEquals(1, trans.getPropertyModifications().size());
+      assertEquals(TransactionType.LOCK, trans.getPropertyModifications().get(0).getValue());
+      // check that serialization does not fail
+      byte[] actual = trans.generateBytes();
+      assertArrayEquals(loadBytes("account_property_entity"), actual);
    }
 
 }

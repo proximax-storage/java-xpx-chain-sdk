@@ -17,11 +17,8 @@
 package io.proximax.sdk.infrastructure;
 
 import static io.proximax.sdk.utils.GsonUtils.stream;
-import static io.proximax.sdk.utils.dto.UInt64Utils.toBigInt;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -36,21 +33,15 @@ import io.proximax.sdk.gen.model.AccountInfoDTO;
 import io.proximax.sdk.gen.model.AccountPropertiesInfoDTO;
 import io.proximax.sdk.gen.model.MultisigAccountGraphInfoDTO;
 import io.proximax.sdk.gen.model.MultisigAccountInfoDTO;
-import io.proximax.sdk.gen.model.MultisigDTO;
 import io.proximax.sdk.model.account.AccountInfo;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.MultisigAccountGraphInfo;
 import io.proximax.sdk.model.account.MultisigAccountInfo;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.account.props.AccountProperties;
-import io.proximax.sdk.model.blockchain.NetworkType;
-import io.proximax.sdk.model.mosaic.Mosaic;
-import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
-import io.proximax.sdk.utils.dto.AccountDTOUtils;
 import io.reactivex.Observable;
-import io.reactivex.functions.Function;
 
 /**
  * Account http repository.
@@ -61,25 +52,15 @@ public class AccountHttp extends Http implements AccountRepository {
 
    private static final String ROUTE = "/account/";
    private static final String PROPERTIES_SUFFIX = "/properties";
-   
+
    public AccountHttp(BlockchainApi api) {
       super(api);
    }
 
    @Override
    public Observable<AccountInfo> getAccountInfo(Address address) {
-      return this.client.get(ROUTE + address.plain())
-            .map(Http::mapStringOrError)
-            .map(str -> objectMapper.readValue(str, AccountInfoDTO.class))
-            .map(AccountInfoDTO::getAccount)
-            .map(accountDTO -> new AccountInfo(
-                  Address.createFromRawAddress(AccountDTOUtils.getAddressEncoded(accountDTO)),
-                  toBigInt(accountDTO.getAddressHeight()), accountDTO.getPublicKey(),
-                  toBigInt(accountDTO.getPublicKeyHeight()),
-                  accountDTO.getMosaics().stream()
-                        .map(mosaicDTO -> new Mosaic(new MosaicId(toBigInt(mosaicDTO.getId())),
-                              toBigInt(mosaicDTO.getAmount())))
-                        .collect(Collectors.toList())));
+      return this.client.get(ROUTE + address.plain()).map(Http::mapStringOrError)
+            .map(str -> objectMapper.readValue(str, AccountInfoDTO.class)).map(AccountInfo::fromDto);
    }
 
    @Override
@@ -92,58 +73,32 @@ public class AccountHttp extends Http implements AccountRepository {
       requestBody.add("addresses", arr);
       return this.client.post(ROUTE, requestBody).map(Http::mapStringOrError)
             .map(str -> objectMapper.<List<AccountInfoDTO>>readValue(str, new TypeReference<List<AccountInfoDTO>>() {
-            })).flatMapIterable(item -> item).map(AccountInfoDTO::getAccount).map(
-                  accountDTO -> new AccountInfo(
-                        Address.createFromRawAddress(AccountDTOUtils.getAddressEncoded(accountDTO)),
-                        toBigInt(accountDTO.getAddressHeight()), accountDTO.getPublicKey(),
-                        toBigInt(accountDTO.getPublicKeyHeight()),
-                        accountDTO.getMosaics().stream()
-                              .map(mosaicDTO -> new Mosaic(new MosaicId(toBigInt(mosaicDTO.getId())),
-                                    toBigInt(mosaicDTO.getAmount())))
-                              .collect(Collectors.toList())))
-            .toList().toObservable();
+            })).flatMapIterable(item -> item).map(AccountInfo::fromDto).toList().toObservable();
    }
 
    @Override
    public Observable<MultisigAccountInfo> getMultisigAccountInfo(Address address) {
       return this.client.get(ROUTE + address.plain() + "/multisig").map(Http::mapStringOrError)
             .map(str -> objectMapper.readValue(str, MultisigAccountInfoDTO.class))
-            .map(MultisigAccountInfoDTO::getMultisig).map(transfromMultisigAccountInfoDTO(api.getNetworkType()));
+            .map(dto -> MultisigAccountInfo.fromDto(dto, api.getNetworkType()));
    }
 
    @Override
    public Observable<MultisigAccountGraphInfo> getMultisigAccountGraphInfo(Address address) {
-      final NetworkType networkType = api.getNetworkType();
       return this.client.get(ROUTE + address.plain() + "/multisig/graph").map(Http::mapStringOrError)
             .map(str -> objectMapper.<List<MultisigAccountGraphInfoDTO>>readValue(str,
                   new TypeReference<List<MultisigAccountGraphInfoDTO>>() {
                   }))
-            .map(multisigAccountGraphInfoDTOList -> {
-               Map<Integer, List<MultisigAccountInfo>> multisigAccountInfoMap = new HashMap<>();
-               multisigAccountGraphInfoDTOList.forEach(item -> multisigAccountInfoMap.put(item.getLevel(),
-                     item.getMultisigEntries().stream().map(MultisigAccountInfoDTO::getMultisig)
-                           .map(item2 -> new MultisigAccountInfo(new PublicAccount(item2.getAccount(), networkType),
-                                 item2.getMinApproval(), item2.getMinRemoval(),
-                                 item2.getCosignatories().stream()
-                                       .map(cosigner -> new PublicAccount(cosigner, networkType))
-                                       .collect(Collectors.toList()),
-                                 item2.getMultisigAccounts().stream()
-                                       .map(multisigAccount -> new PublicAccount(multisigAccount, networkType))
-                                       .collect(Collectors.toList())))
-                           .collect(Collectors.toList())));
-               return new MultisigAccountGraphInfo(multisigAccountInfoMap);
-            });
+            .map(dto -> MultisigAccountGraphInfo.fromDto(dto, api.getNetworkType()));
    }
 
    @Override
    public Observable<AccountProperties> getAccountProperties(Address address) {
-      return this.client.get(ROUTE + address.plain() + PROPERTIES_SUFFIX)
-            .map(Http::mapStringOrError)
+      return this.client.get(ROUTE + address.plain() + PROPERTIES_SUFFIX).map(Http::mapStringOrError)
             .map(str -> objectMapper.readValue(str, AccountPropertiesInfoDTO.class))
-            .map(AccountPropertiesInfoDTO::getAccountProperties)
-            .map(AccountProperties::fromDto);
+            .map(AccountPropertiesInfoDTO::getAccountProperties).map(AccountProperties::fromDto);
    }
-   
+
    @Override
    public Observable<List<AccountProperties>> getAccountProperties(List<Address> addresses) {
       // prepare JSON array with addresses
@@ -153,16 +108,15 @@ public class AccountHttp extends Http implements AccountRepository {
       JsonObject requestBody = new JsonObject();
       requestBody.add("addresses", arr);
       // post to the API
-      return this.client.post(ROUTE + PROPERTIES_SUFFIX, requestBody)
-            .map(Http::mapStringOrError)
-            .map(str -> objectMapper.<List<AccountPropertiesInfoDTO>>readValue(str, new TypeReference<List<AccountPropertiesInfoDTO>>() {}))
-            .flatMapIterable(item -> item)
-            .map(AccountPropertiesInfoDTO::getAccountProperties)
-            .map(AccountProperties::fromDto)
-            .toList().toObservable();
-   
+      return this.client.post(ROUTE + PROPERTIES_SUFFIX, requestBody).map(Http::mapStringOrError)
+            .map(str -> objectMapper.<List<AccountPropertiesInfoDTO>>readValue(str,
+                  new TypeReference<List<AccountPropertiesInfoDTO>>() {
+                  }))
+            .flatMapIterable(item -> item).map(AccountPropertiesInfoDTO::getAccountProperties)
+            .map(AccountProperties::fromDto).toList().toObservable();
+
    }
-   
+
    @Override
    public Observable<List<Transaction>> transactions(PublicAccount publicAccount) {
       return this.transactions(publicAccount, Optional.empty());
@@ -248,21 +202,5 @@ public class AccountHttp extends Http implements AccountRepository {
             .map(str -> stream(new Gson().fromJson(str, JsonArray.class)).map(s -> (JsonObject) s)
                   .collect(Collectors.toList()))
             .flatMapIterable(item -> item).map(new TransactionMapping()).toList().toObservable();
-   }
-
-   /**
-    * return function that transforms MultisigDTO to MultisigAccountInfo
-    * 
-    * @param networkType
-    * @return
-    */
-   private Function<MultisigDTO, MultisigAccountInfo> transfromMultisigAccountInfoDTO(NetworkType networkType) {
-      return multisig -> new MultisigAccountInfo(new PublicAccount(multisig.getAccount(), networkType),
-            multisig.getMinApproval(), multisig.getMinRemoval(),
-            multisig.getCosignatories().stream().map(cosigner -> new PublicAccount(cosigner, networkType))
-                  .collect(Collectors.toList()),
-            multisig.getMultisigAccounts().stream()
-                  .map(multisigAccount -> new PublicAccount(multisigAccount, networkType))
-                  .collect(Collectors.toList()));
    }
 }

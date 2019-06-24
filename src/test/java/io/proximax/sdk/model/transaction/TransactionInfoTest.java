@@ -18,6 +18,7 @@ package io.proximax.sdk.model.transaction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
@@ -55,7 +56,7 @@ public class TransactionInfoTest {
         assertFalse(transactionInfo.getAggregateId().isPresent());
         assertTrue(transactionInfo.getHash().isPresent());
         assertTrue(transactionInfo.getMerkleComponentHash().isPresent());
-        assertTrue(1 == transactionInfo.getIndex().get());
+        assertEquals(1, transactionInfo.getIndex().get());
         assertEquals("5A3D23889CD1E800015929A9", transactionInfo.getId().get());
         assertEquals("B6C7648A3DDF71415650805E9E7801424FE03BBEE7D21F9C57B60220D3E95B2F", transactionInfo.getHash().get());
         assertEquals("B6C7648A3DDF71415650805E9E7801424FE03BBEE7D21F9C57B60220D3E95B2F", transactionInfo.getMerkleComponentHash().get());
@@ -74,10 +75,27 @@ public class TransactionInfoTest {
         assertFalse(transactionInfo.getMerkleComponentHash().isPresent());
         assertTrue(transactionInfo.getAggregateHash().isPresent());
         assertTrue(transactionInfo.getAggregateId().isPresent());
-        assertTrue(1 == transactionInfo.getIndex().get());
+        assertEquals(1, transactionInfo.getIndex().get());
         assertEquals("5A3D23889CD1E800015929A9", transactionInfo.getId().get());
         assertEquals("3D28C804EDD07D5A728E5C5FFEC01AB07AFA5766AE6997B38526D36015A4D006", transactionInfo.getAggregateHash().get());
         assertEquals("5A0069D83F17CF0001777E55", transactionInfo.getAggregateId().get());
     }
 
+    @Test
+    void testSupportingMethods() {
+       TransactionInfo transactionInfo1 = TransactionInfo.create(new BigInteger("121855"),1, "5A3D23889CD1E800015929A9",
+             "B6C7648A3DDF71415650805E9E7801424FE03BBEE7D21F9C57B60220D3E95B2F", "B6C7648A3DDF71415650805E9E7801424FE03BBEE7D21F9C57B60220D3E95B2F");
+       TransactionInfo transactionInfo2 = TransactionInfo.create(new BigInteger("121855"),1, "5A3D23889CD1E800015929A9",
+             "B6C7648A3DDF71415650805E9E7801424FE03BBEE7D21F9C57B60220D3E95B2F", "B6C7648A3DDF71415650805E9E7801424FE03BBEE7D21F9C57B60220D3E95B2C");
+       // tostring
+       assertTrue(transactionInfo1.toString().startsWith("TransactionInfo "));
+       // equals
+       assertEquals(transactionInfo1, transactionInfo1);
+       assertNotEquals(transactionInfo1, transactionInfo2);
+       assertNotEquals(transactionInfo1, null);
+       assertNotEquals(transactionInfo1, "hello");
+       // hashcode
+       assertEquals(transactionInfo1.hashCode(), transactionInfo1.hashCode());
+       assertNotEquals(transactionInfo1.hashCode(), transactionInfo2.hashCode());
+    }
 }

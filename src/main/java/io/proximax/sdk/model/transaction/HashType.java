@@ -74,19 +74,6 @@ public enum HashType {
     }
 
     /**
-     * Validate hash algorithm and hash have desired format
-     * @param hashType  Hash type
-     * @param input     Input hashed
-     * @return boolean when format is correct
-     * 
-     * @deprecated use {@link HashType#validate(String)}
-     */
-    @Deprecated
-    public static boolean Validator(HashType hashType, String input) {
-        return hashType.validate(input);
-    }
-
-    /**
      * validate that input is valid result of hashing using this hash type
      * 
      * @param input hashed value
