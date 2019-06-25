@@ -5,7 +5,7 @@
     <packaging>jar</packaging>
     <name>java-xpx-chain-sdk</name>
     <version>0.2.0</version>
-    <description>Proximax P2P File Storage Java SDK</description>
+    <description>ProximaX Blockchain Java SDK</description>
     <prerequisites>
         <maven>2.2.0</maven>
     </prerequisites>
