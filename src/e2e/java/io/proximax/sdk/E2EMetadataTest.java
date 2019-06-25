@@ -72,6 +72,7 @@ public class E2EMetadataTest extends E2EBaseTest {
       transactionHttp.announce(signedAddMeta).blockingFirst();
       logger.info("Transfer done. {}",
             listener.confirmed(target.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      sleepForAWhile();
       // check the meta
       Metadata meta = metadataHttp.getMetadata(target.getAddress()).blockingFirst();
       checkMeta(meta, MetadataType.ADDRESS, new Field("tono", "a"));
@@ -92,6 +93,7 @@ public class E2EMetadataTest extends E2EBaseTest {
             new MosaicProperties(true, true, false, 6, BigInteger.valueOf(20)),
             getNetworkType()).signWith(seedAccount);
       Observable<Transaction> confirmation = listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS);
+      sleepForAWhile();
       transactionHttp.announce(mdt).blockingFirst();
       logger.info("Mosaic created. {}", confirmation.blockingFirst());
       // now add metadata to the mosaic
@@ -122,6 +124,7 @@ public class E2EMetadataTest extends E2EBaseTest {
       logger.info("Registered namespace {}. {}",
             name,
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      sleepForAWhile();
       // now add metadata to the namespace
       List<MetadataModification> mods = Arrays.asList(MetadataModification.add("tono", "namespace"));
       SignedTransaction signedAddMeta = ModifyMetadataTransaction
@@ -129,6 +132,7 @@ public class E2EMetadataTest extends E2EBaseTest {
       transactionHttp.announce(signedAddMeta).blockingFirst();
       logger.info("Meta added to namespace. {}",
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      sleepForAWhile();
       // check the meta
       sleepForAWhile();
       Metadata meta = metadataHttp.getMetadata(rootId).blockingFirst();

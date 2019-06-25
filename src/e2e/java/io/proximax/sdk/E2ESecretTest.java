@@ -98,6 +98,7 @@ public class E2ESecretTest extends E2EBaseTest {
       transactionHttp.announce(secretLockTransactionSigned).blockingFirst();
       logger.info("Lock confirmed: {}",
             listener.confirmed(from.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      sleepForAWhile();
 
       SecretProofTransaction secretProoftx = SecretProofTransaction
             .create(getDeadline(), hashType, secret, proof, getNetworkType());
@@ -105,6 +106,7 @@ public class E2ESecretTest extends E2EBaseTest {
       transactionHttp.announce(secretProoftxSigned).blockingFirst();
       logger.info("Proof confirmed: {}",
             listener.confirmed(from.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      sleepForAWhile();
    }
 
    @Test
@@ -146,6 +148,7 @@ public class E2ESecretTest extends E2EBaseTest {
       transactionHttp.announce(lockFundsTransactionSigned).blockingFirst();
       logger.info("Lock confirmed: {}",
             listener.confirmed(from.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      sleepForAWhile();
 
       // create aggregate proof
       SecretProofTransaction secretProoftx = SecretProofTransaction
@@ -158,5 +161,6 @@ public class E2ESecretTest extends E2EBaseTest {
 
       logger.info("Proof confirmed: {}",
             listener.confirmed(from.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      sleepForAWhile();
    }
 }

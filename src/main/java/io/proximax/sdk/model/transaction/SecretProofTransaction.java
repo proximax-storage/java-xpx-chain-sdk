@@ -96,14 +96,13 @@ public class SecretProofTransaction extends Transaction {
     byte[] generateBytes() {
         FlatBufferBuilder builder = new FlatBufferBuilder();
         BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
-        int[] fee = new int[]{0, 0};
         int version = (int) Long.parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
 
         // Create Vectors
         int signatureVector = SecretProofTransactionBuffer.createSignatureVector(builder, new byte[64]);
         int signerVector = SecretProofTransactionBuffer.createSignerVector(builder, new byte[32]);
         int deadlineVector = SecretProofTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
-        int feeVector = SecretProofTransactionBuffer.createFeeVector(builder, fee);
+        int feeVector = SecretProofTransactionBuffer.createFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
         int secretVector = SecretProofTransactionBuffer.createSecretVector(builder, Hex.decode(secret));
         int proofVector = SecretProofTransactionBuffer.createProofVector(builder, Hex.decode(proof));
 

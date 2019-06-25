@@ -40,6 +40,7 @@ import io.proximax.sdk.model.namespace.NamespaceName;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.RegisterNamespaceTransaction;
 import io.proximax.sdk.model.transaction.SignedTransaction;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * E2E tests that demonstrate transfers
@@ -77,6 +78,7 @@ public class E2ENamespaceTest extends E2EBaseTest {
       logger.info("Registered namespace {}. {}",
             ROOT_NAME,
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      sleepForAWhile();
       // check the namespace
       checkNamespace(ROOT_NAME, Optional.empty(), 100);
    }
@@ -94,6 +96,7 @@ public class E2ENamespaceTest extends E2EBaseTest {
       logger.info("Registered namespace {}. {}",
             CHILD1_NAME,
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      sleepForAWhile();
       // check the namespace
       checkNamespace(CHILD1_NAME, Optional.of(ROOT_NAME), 100);
    }
@@ -120,6 +123,7 @@ public class E2ENamespaceTest extends E2EBaseTest {
       logger.info("Registered namespaces {}. {}",
             CHILD1_NAME,
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      sleepForAWhile();
       // check the namespaces
       checkNamespace(aggRootName, Optional.empty(), 100);
       checkNamespace(CHILD1_NAME, Optional.of(aggRootName), 100);
@@ -143,6 +147,12 @@ public class E2ENamespaceTest extends E2EBaseTest {
             .filter(info -> nsId.getId().equals(info.getId().getId()))
             .count().blockingGet();
       assertEquals(1, nsCount);
+   }
+   
+   @Test
+   void throwExceptionWhenNamespaceDoesNotExists() {
+      namespaceHttp.getNamespace(new NamespaceId("nonregisterednamespace")).subscribeOn(Schedulers.single()).test()
+            .awaitDone(2, TimeUnit.SECONDS).assertFailure(RuntimeException.class);
    }
    
    /**

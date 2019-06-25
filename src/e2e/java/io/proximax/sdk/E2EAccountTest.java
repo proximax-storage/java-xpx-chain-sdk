@@ -82,6 +82,7 @@ class E2EAccountTest extends E2EBaseTest {
       transactionHttp.announce(trans.signWith(acct)).blockingFirst();
       logger.info("Waiting for  confirmation");
       listener.confirmed(acct.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      sleepForAWhile();
       // now check for the block via GET
       AccountProperties aps = accountHttp.getAccountProperties(acct.getAddress())
             .timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
@@ -136,6 +137,7 @@ class E2EAccountTest extends E2EBaseTest {
       logger.info("Waiting for  confirmation");
       listener.confirmed(acct.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
       // now check for the block via GET
+      sleepForAWhile();
       AccountProperties aps = accountHttp.getAccountProperties(acct.getAddress())
             .timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
       testAccountPropertiesOnSimpleAccount(aps, allowedTransType);
@@ -276,7 +278,7 @@ class E2EAccountTest extends E2EBaseTest {
         assertEquals(2, transactions.size());
         // now make another request for page size 1 and start after first transaction ID in the list
         List<Transaction> nextTransactions = accountHttp
-                .transactions(simpleAccount.getPublicAccount(), new QueryParams(1, transactions.get(0).getTransactionInfo().get().getId().get()))
+                .transactions(simpleAccount.getPublicAccount(), new QueryParams(10, transactions.get(0).getTransactionInfo().get().getId().get()))
                 .toFuture()
                 .get();
         // the result should be page with one item which is the second transaction
@@ -284,7 +286,7 @@ class E2EAccountTest extends E2EBaseTest {
         assertEquals(transactions.get(1).getTransactionInfo().get().getHash(), nextTransactions.get(0).getTransactionInfo().get().getHash());
         // now try another request and start after second item which is last
         List<Transaction> noTransactions = accountHttp
-              .transactions(simpleAccount.getPublicAccount(), new QueryParams(1, transactions.get(1).getTransactionInfo().get().getId().get()))
+              .transactions(simpleAccount.getPublicAccount(), new QueryParams(10, transactions.get(1).getTransactionInfo().get().getId().get()))
               .toFuture()
               .get();
       // the result should be page with no items because we skipped both transactions

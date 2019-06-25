@@ -101,7 +101,6 @@ public class AggregateTransaction extends Transaction {
     byte[] generateBytes() {
         FlatBufferBuilder builder = new FlatBufferBuilder();
         BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
-        int[] fee = new int[]{0, 0};
         int version = (int) Long.parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
 
         byte[] transactionsBytes = new byte[0];
@@ -114,7 +113,7 @@ public class AggregateTransaction extends Transaction {
         int signatureVector = AggregateTransactionBuffer.createSignatureVector(builder, new byte[64]);
         int signerVector = AggregateTransactionBuffer.createSignerVector(builder, new byte[32]);
         int deadlineVector = AggregateTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
-        int feeVector = AggregateTransactionBuffer.createFeeVector(builder, fee);
+        int feeVector = AggregateTransactionBuffer.createFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
         int transactionsVector = AggregateTransactionBuffer.createTransactionsVector(builder, transactionsBytes);
 
         AggregateTransactionBuffer.startAggregateTransactionBuffer(builder);

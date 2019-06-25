@@ -98,6 +98,7 @@ public class E2EContractTest extends E2EBaseTest {
       // announce the transaction
       transactionHttp.announce(signedTrans).blockingFirst();
       ModifyContractTransaction contractConfirmation = (ModifyContractTransaction)listener.confirmed(accContract.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      sleepForAWhile();
       logger.info("Got contract confirmed: {}", contractConfirmation);
       // do couple sanity checks
       assertEquals(1, contractConfirmation.getCustomersModifications().size());

@@ -96,6 +96,7 @@ public class E2EAliasTest extends E2EBaseTest {
       logger.info("Registered namespace {}. {}",
             ROOT_NAME,
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      sleepForAWhile();
       // create child namespace for mosaic
       RegisterNamespaceTransaction registerChildNamespaceTransaction = RegisterNamespaceTransaction
             .createSubNamespace(getDeadline(), CHILD1_NAME, rootId, getNetworkType());
@@ -104,6 +105,7 @@ public class E2EAliasTest extends E2EBaseTest {
       logger.info("Registered namespace {}. {}",
             CHILD1_NAME,
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      sleepForAWhile();
       // create child namespace for account
       RegisterNamespaceTransaction accNamespace = RegisterNamespaceTransaction
             .createSubNamespace(getDeadline(), CHILD2_NAME, rootId, getNetworkType());
@@ -112,6 +114,7 @@ public class E2EAliasTest extends E2EBaseTest {
       logger.info("Registered namespace {}. {}",
             CHILD2_NAME,
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      sleepForAWhile();
       // create mosaic
       logger.info("Creating new mosaic");
       SignedTransaction mdt = MosaicDefinitionTransaction.create(mosaicNonce,
@@ -120,6 +123,7 @@ public class E2EAliasTest extends E2EBaseTest {
             new MosaicProperties(true, true, false, 6, BigInteger.valueOf(200)),
             getNetworkType()).signWith(seedAccount);
       Observable<Transaction> confirmation = listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS);
+      sleepForAWhile();
       transactionHttp.announce(mdt).blockingFirst();
       logger.info("Mosaic created. {}", confirmation.blockingFirst());
    }
@@ -131,6 +135,7 @@ public class E2EAliasTest extends E2EBaseTest {
       transactionHttp.announce(signed).blockingFirst();
       logger.info("created alias. {}",
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      sleepForAWhile();
    }
 
    @Test
@@ -143,6 +148,7 @@ public class E2EAliasTest extends E2EBaseTest {
       transactionHttp.announce(signed).blockingFirst();
       logger.info("created alias. {}",
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      sleepForAWhile();
    }
 
    @Test

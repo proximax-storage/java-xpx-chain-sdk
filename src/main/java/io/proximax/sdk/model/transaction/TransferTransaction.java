@@ -135,7 +135,6 @@ public class TransferTransaction extends Transaction {
     byte[] generateBytes() {
         FlatBufferBuilder builder = new FlatBufferBuilder();
         BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
-        int[] fee = new int[]{0, 0};
         int version = (int) Long.parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
 
         // Create Message
@@ -164,7 +163,7 @@ public class TransferTransaction extends Transaction {
         int signatureVector = TransferTransactionBuffer.createSignatureVector(builder, new byte[64]);
         int signerVector = TransferTransactionBuffer.createSignerVector(builder, new byte[32]);
         int deadlineVector = TransferTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
-        int feeVector = TransferTransactionBuffer.createFeeVector(builder, fee);
+        int feeVector = TransferTransactionBuffer.createFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
         int recipientVector = TransferTransactionBuffer.createRecipientVector(builder, recipientBytes);
         int mosaicsVector = TransferTransactionBuffer.createMosaicsVector(builder, mosaicBuffers);
 

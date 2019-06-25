@@ -105,14 +105,13 @@ public class MosaicSupplyChangeTransaction extends Transaction {
     byte[] generateBytes() {
         FlatBufferBuilder builder = new FlatBufferBuilder();
         BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
-        int[] fee = new int[]{0, 0};
         int version = (int) Long.parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
 
         // Create Vectors
         int signatureVector = MosaicSupplyChangeTransactionBuffer.createSignatureVector(builder, new byte[64]);
         int signerVector = MosaicSupplyChangeTransactionBuffer.createSignerVector(builder, new byte[32]);
         int deadlineVector = MosaicSupplyChangeTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
-        int feeVector = MosaicSupplyChangeTransactionBuffer.createFeeVector(builder, fee);
+        int feeVector = MosaicSupplyChangeTransactionBuffer.createFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
         int mosaicIdVector = MosaicSupplyChangeTransactionBuffer.createMosaicIdVector(builder, UInt64Utils.fromBigInteger(mosaicId.getId()));
         int deltaVector = MosaicSupplyChangeTransactionBuffer.createDeltaVector(builder, UInt64Utils.fromBigInteger(delta));
 

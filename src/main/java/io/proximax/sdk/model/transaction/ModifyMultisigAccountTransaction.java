@@ -107,7 +107,6 @@ public class ModifyMultisigAccountTransaction extends Transaction {
     byte[] generateBytes() {
         FlatBufferBuilder builder = new FlatBufferBuilder();
         BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
-        int[] fee = new int[]{0, 0};
         int version = (int) Long.parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
 
         // Create Modifications
@@ -126,7 +125,7 @@ public class ModifyMultisigAccountTransaction extends Transaction {
         int signatureVector = ModifyMultisigAccountTransactionBuffer.createSignatureVector(builder, new byte[64]);
         int signerVector = ModifyMultisigAccountTransactionBuffer.createSignerVector(builder, new byte[32]);
         int deadlineVector = ModifyMultisigAccountTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
-        int feeVector = ModifyMultisigAccountTransactionBuffer.createFeeVector(builder, fee);
+        int feeVector = ModifyMultisigAccountTransactionBuffer.createFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
         int modificationsVector = TransferTransactionBuffer.createMosaicsVector(builder, modificationsBuffers);
 
         int fixSize = 123; // replace by the all numbers sum or add a comment explaining this
