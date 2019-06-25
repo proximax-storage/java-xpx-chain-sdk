@@ -56,6 +56,21 @@ public class HexEncoder {
    }
 
    /**
+    * <p>Converts a byte array to a hex string of at minimum specified length prefixed by 0 characters as needed</p>
+    *
+    * <p>This implementation is specifically intended to make sure that if key is 32 bytes then output is 64
+    * hexadecimal characters even if first bytes were 0 and input was shorter</p>
+    * 
+    * @param bytes The input byte array
+    * @param targetByteCount prefix 0 to make the source desired size
+    * @return The output hex string.
+    */
+   public static String getString(final byte[] bytes, int targetByteCount) {
+      String hexString = getString(bytes);
+      return StringUtils.repeat("00", targetByteCount - bytes.length) + hexString;
+   }
+   
+   /**
     * Converts a byte array to a hex string.
     *
     * @param bytes The input byte array.

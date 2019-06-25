@@ -16,6 +16,7 @@
 
 package io.proximax.core.crypto;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigInteger;
@@ -134,9 +135,9 @@ public class PrivateKeyTest {
 
     @Test
     public void toStringReturnsHexRepresentation() {
-        // Assert:
-        MatcherAssert.assertThat(PrivateKey.fromHexString("2275").toString(), IsEqual.equalTo("2275"));
-        MatcherAssert.assertThat(PrivateKey.fromDecimalString("2275").toString(), IsEqual.equalTo("08e3"));
+       // private key is 32 bytes => 64 hexadecimal characters
+       assertEquals("0000000000000000000000000000000000000000000000000000000000002275", PrivateKey.fromHexString("2275").toString());
+       assertEquals("00000000000000000000000000000000000000000000000000000000000008e3", PrivateKey.fromDecimalString("2275").toString());
     }
 
     //endregion

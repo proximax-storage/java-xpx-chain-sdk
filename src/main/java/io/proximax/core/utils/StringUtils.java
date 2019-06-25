@@ -20,6 +20,10 @@ package io.proximax.core.utils;
  * Static class that contains string utility functions.
  */
 public class StringUtils {
+   
+   private StringUtils() {
+      // hiding implicit constructor for utility class
+   }
 
     /**
      * Determines if the specified string is null or empty.
@@ -51,6 +55,27 @@ public class StringUtils {
         return true;
     }
 
+    /**
+     * <p>Repeat a String {@code repeat} times to form a new String.</p>
+     *
+     * <pre>
+     * StringUtils.repeat(null, 2) = null
+     * StringUtils.repeat("", 0)   = ""
+     * StringUtils.repeat("", 2)   = ""
+     * StringUtils.repeat("a", 3)  = "aaa"
+     * StringUtils.repeat("ab", 2) = "abab"
+     * StringUtils.repeat("a", -2) = ""
+     * </pre>
+     *
+     * @param str  the String to repeat, may be null
+     * @param repeat  number of times to repeat str, negative treated as zero
+     * @return a new String consisting of the original String repeated,
+     *  {@code null} if null String input
+     */
+    public static String repeat(String str, int repeat) {
+       return org.apache.commons.lang3.StringUtils.repeat(str, repeat);
+    }
+    
     /**
      * Replaces a variable contained in a string with a value. A variable is defined as ${variable}.
      * This pattern is replaced by the given value.

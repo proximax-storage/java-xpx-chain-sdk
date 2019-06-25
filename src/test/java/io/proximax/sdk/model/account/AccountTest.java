@@ -74,7 +74,7 @@ class AccountTest {
         Account account = Account.generateNewAccount(NetworkType.MIJIN_TEST);
         assertNotEquals(account.getPrivateKey(),null);
         assertNotEquals(account.getPublicKey(), null);
-        assertEquals(64, account.getPrivateKey().toString().length());
+        assertEquals(64, account.getPrivateKey().length());
     }
 
     @Test
