@@ -79,7 +79,7 @@ public class E2EContractTest extends E2EBaseTest {
 
    @Test
    void test02CreateContract() {
-      logger.info("Creating constract");
+      logger.info("Creating contract");
       // prepare transaction
       ModifyContractTransaction trans = ModifyContractTransaction.create(getDeadline(),
             BigInteger.ZERO,
@@ -118,7 +118,7 @@ public class E2EContractTest extends E2EBaseTest {
 
    @Test
    void test03ChangeExistingContract() {
-      logger.info("Changing constract");
+      logger.info("Changing contract");
       // prepare transaction - add one block to duration, move executor2 to verifiers
       ModifyContractTransaction trans = ModifyContractTransaction.create(getDeadline(),
             BigInteger.ZERO,
