@@ -16,6 +16,8 @@
 
 package io.proximax.sdk.model.transaction;
 
+import java.util.Objects;
+
 import io.proximax.sdk.model.account.PublicAccount;
 
 /**
@@ -71,6 +73,23 @@ public class MultisigCosignatoryModification {
     public static MultisigCosignatoryModification remove(PublicAccount publicAccount) {
        return new MultisigCosignatoryModification(MultisigCosignatoryModificationType.REMOVE, publicAccount);
     }
+
+   @Override
+   public int hashCode() {
+      return Objects.hash(cosignatoryPublicAccount, type);
+   }
+
+   @Override
+   public boolean equals(Object obj) {
+      if (this == obj)
+         return true;
+      if (obj == null)
+         return false;
+      if (getClass() != obj.getClass())
+         return false;
+      MultisigCosignatoryModification other = (MultisigCosignatoryModification) obj;
+      return Objects.equals(cosignatoryPublicAccount, other.cosignatoryPublicAccount) && type == other.type;
+   }
 }
 
 

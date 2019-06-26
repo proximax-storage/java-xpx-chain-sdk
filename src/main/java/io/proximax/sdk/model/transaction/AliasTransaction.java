@@ -96,6 +96,34 @@ public class AliasTransaction extends Transaction {
             BigInteger.valueOf(0), Optional.empty(), Optional.of(address), namespaceId, action);
    }
 
+   /**
+    * @return the mosaicId
+    */
+   public Optional<MosaicId> getMosaicId() {
+      return mosaicId;
+   }
+
+   /**
+    * @return the address
+    */
+   public Optional<Address> getAddress() {
+      return address;
+   }
+
+   /**
+    * @return the namespaceId
+    */
+   public NamespaceId getNamespaceId() {
+      return namespaceId;
+   }
+
+   /**
+    * @return the aliasAction
+    */
+   public AliasAction getAliasAction() {
+      return aliasAction;
+   }
+
    byte[] generateBytes() {
       FlatBufferBuilder builder = new FlatBufferBuilder();
       

@@ -17,6 +17,7 @@
 package io.proximax.sdk.model.mosaic;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 import io.proximax.sdk.model.transaction.UInt64Id;
 
@@ -62,8 +63,26 @@ public class Mosaic {
       return id.getIdAsHex();
    }
 
+   
    @Override
    public String toString() {
       return "Mosaic [id=" + id + ", amount=" + amount + "]";
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hash(amount, id);
+   }
+
+   @Override
+   public boolean equals(Object obj) {
+      if (this == obj)
+         return true;
+      if (obj == null)
+         return false;
+      if (getClass() != obj.getClass())
+         return false;
+      Mosaic other = (Mosaic) obj;
+      return Objects.equals(amount, other.amount) && Objects.equals(id, other.id);
    }
 }

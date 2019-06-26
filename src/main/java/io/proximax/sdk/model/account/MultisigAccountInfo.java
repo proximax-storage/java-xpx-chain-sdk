@@ -17,6 +17,11 @@
 package io.proximax.sdk.model.account;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import io.proximax.sdk.gen.model.MultisigAccountInfoDTO;
+import io.proximax.sdk.gen.model.MultisigDTO;
+import io.proximax.sdk.model.blockchain.NetworkType;
 
 /**
  * The multisig account info structure describes information of a multisig account.
@@ -111,4 +116,23 @@ public class MultisigAccountInfo {
     public boolean isMultisig() {
         return minApproval != 0 && minRemoval != 0;
     }
+    
+
+    /**
+     * transform multisig account DTO to the multisig account info
+     * 
+     * @param dto DTO with data from server
+     * @param networkType network type
+     * @return the multisig account info
+     */
+   public static MultisigAccountInfo fromDto(MultisigAccountInfoDTO dto, NetworkType networkType) {
+      MultisigDTO multisig = dto.getMultisig();
+      return new MultisigAccountInfo(new PublicAccount(multisig.getAccount(), networkType), multisig.getMinApproval(),
+            multisig.getMinRemoval(),
+            multisig.getCosignatories().stream().map(cosigner -> new PublicAccount(cosigner, networkType))
+                  .collect(Collectors.toList()),
+            multisig.getMultisigAccounts().stream()
+                  .map(multisigAccount -> new PublicAccount(multisigAccount, networkType))
+                  .collect(Collectors.toList()));
+   }
 }

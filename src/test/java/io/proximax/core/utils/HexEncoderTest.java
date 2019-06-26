@@ -16,6 +16,8 @@
 
 package io.proximax.core.utils;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.Test;
@@ -84,5 +86,10 @@ public class HexEncoderTest {
                 "00000d465457");
     }
 
-    //endregion
+    @Test
+    void getStringOfGivenLength() {
+       assertEquals("01", HexEncoder.getString(new byte[] {1}, 1));
+       assertEquals("0001", HexEncoder.getString(new byte[] {1}, 2));
+       assertEquals("010101", HexEncoder.getString(new byte[] {1, 1, 1}, 2));
+    }
 }

@@ -171,13 +171,6 @@ public class ModifyContractTransaction extends Transaction {
    }
 
    /**
-    * @return the schema
-    */
-   public ModifyContractTransactionSchema getSchema() {
-      return schema;
-   }
-
-   /**
     * @return the durationDelta
     */
    public BigInteger getDurationDelta() {

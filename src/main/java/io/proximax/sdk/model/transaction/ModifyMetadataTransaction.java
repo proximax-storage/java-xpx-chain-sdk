@@ -100,6 +100,34 @@ public class ModifyMetadataTransaction extends Transaction {
             Optional.empty(), Optional.of(address), MetadataType.ADDRESS, modifications);
    }
 
+   /**
+    * @return the metadataType
+    */
+   public MetadataType getMetadataType() {
+      return metadataType;
+   }
+
+   /**
+    * @return the metadataId
+    */
+   public Optional<UInt64Id> getMetadataId() {
+      return metadataId;
+   }
+
+   /**
+    * @return the address
+    */
+   public Optional<Address> getAddress() {
+      return address;
+   }
+
+   /**
+    * @return the modifications
+    */
+   public List<MetadataModification> getModifications() {
+      return modifications;
+   }
+
    byte[] generateBytes() {
       FlatBufferBuilder builder = new FlatBufferBuilder();
 

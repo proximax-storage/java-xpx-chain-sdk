@@ -24,6 +24,12 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import io.proximax.core.utils.Base32Encoder;
+import io.proximax.core.utils.HexEncoder;
+import io.proximax.sdk.gen.model.AccountDTO;
+import io.proximax.sdk.gen.model.AccountInfoDTO;
+import io.proximax.sdk.gen.model.MosaicDTO;
+import io.proximax.sdk.gen.model.UInt64DTO;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.Mosaic;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
@@ -46,5 +52,34 @@ class AccountInfoTest {
         assertEquals(mosaics, accountInfo.getMosaics());
         assertEquals(PublicAccount.createFromPublicKey("cf893ffcc47c33e7f68ab1db56365c156b0736824a0c1e273f9e00b8df8f01eb", NetworkType.MIJIN_TEST), accountInfo.getPublicAccount());
 
+    }
+    
+    @Test
+    void fromDto() {
+       UInt64DTO uint = new UInt64DTO();
+       uint.add(10l);
+       uint.add(0l);
+
+       MosaicDTO mosaicDto = new MosaicDTO();
+       mosaicDto.setAmount(uint);
+       mosaicDto.setId(uint);
+
+       AccountDTO accountDto = new AccountDTO();
+       accountDto.setAddress("cf893ffcc47c33e7f68ab1db56365c156b0736824a0c1e273f9e00b8df8f01eb");
+       accountDto.setAddressHeight(uint);
+       accountDto.setPublicKeyHeight(uint);
+       accountDto.setMosaics(Arrays.asList(mosaicDto));
+
+       AccountInfoDTO dto = new AccountInfoDTO();
+       dto.setAccount(accountDto);
+
+       AccountInfo accountInfo = AccountInfo.fromDto(dto);
+       // assertions
+       assertEquals("cf893ffcc47c33e7f68ab1db56365c156b0736824a0c1e273f9e00b8df8f01eb", HexEncoder.getString(Base32Encoder.getBytes(accountInfo.getAddress().plain())));
+       assertEquals(BigInteger.TEN, accountInfo.getAddressHeight());
+       assertEquals(BigInteger.TEN, accountInfo.getPublicKeyHeight());
+       assertEquals(1, accountInfo.getMosaics().size());
+       assertEquals(BigInteger.TEN, accountInfo.getMosaics().get(0).getAmount());
+       assertEquals(BigInteger.TEN, accountInfo.getMosaics().get(0).getId().getId());
     }
 }

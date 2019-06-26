@@ -95,6 +95,6 @@ public class PrivateKey {
 
     @Override
     public String toString() {
-        return HexEncoder.getString(this.value.toByteArray());
+        return HexEncoder.getString(this.value.toByteArray(), 32);
     }
 }

@@ -17,6 +17,7 @@
 package io.proximax.sdk.model.transaction;
 
 import java.math.BigInteger;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.commons.lang3.Validate;
@@ -149,6 +150,26 @@ public class TransactionInfo {
     public Optional<String> getAggregateId() {
         return aggregateId;
     }
+
+    
+   @Override
+   public int hashCode() {
+      return Objects.hash(aggregateHash, aggregateId, hash, height, id, index, merkleComponentHash);
+   }
+
+   @Override
+   public boolean equals(Object obj) {
+      if (this == obj)
+         return true;
+      if (obj == null)
+         return false;
+      if (getClass() != obj.getClass())
+         return false;
+      TransactionInfo other = (TransactionInfo) obj;
+      return Objects.equals(aggregateHash, other.aggregateHash) && Objects.equals(aggregateId, other.aggregateId)
+            && Objects.equals(hash, other.hash) && Objects.equals(height, other.height) && Objects.equals(id, other.id)
+            && Objects.equals(index, other.index) && Objects.equals(merkleComponentHash, other.merkleComponentHash);
+   }
 
    @Override
    public String toString() {

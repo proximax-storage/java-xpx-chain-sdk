@@ -51,11 +51,9 @@ public interface UInt64Id {
     */
    Optional<String> getFullName();
 
-   /**
-    * Compares UInt64Ids for equality.
-    *
-    * @return boolean
-    */
    @Override
    boolean equals(Object o);
+   
+   @Override
+   int hashCode();
 }

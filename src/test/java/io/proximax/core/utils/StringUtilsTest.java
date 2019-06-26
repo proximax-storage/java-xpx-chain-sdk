@@ -16,6 +16,8 @@
 
 package io.proximax.core.utils;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.Test;
@@ -84,5 +86,15 @@ public class StringUtilsTest {
         MatcherAssert.assertThat(StringUtils.replaceVariable("quick ${color} ${color} fox", "color", "brown"), IsEqual.equalTo("quick brown brown fox"));
         MatcherAssert.assertThat(StringUtils.replaceVariable("Buffalo ${} Buffalo ${} ${} ${} Buffalo ${}", "", "buffalo"),
                 IsEqual.equalTo("Buffalo buffalo Buffalo buffalo buffalo buffalo Buffalo buffalo"));
+    }
+    
+    @Test
+    void repeat() {
+       assertEquals("", StringUtils.repeat("hello", 0));
+       assertEquals("", StringUtils.repeat("hello", -2));
+       assertEquals("", StringUtils.repeat("", 7));
+       assertEquals("aaa", StringUtils.repeat("a", 3));
+       assertEquals("abab", StringUtils.repeat("ab", 2));
+       assertEquals(null, StringUtils.repeat(null, 2));
     }
 }
