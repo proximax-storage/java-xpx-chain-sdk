@@ -35,11 +35,11 @@ before_install:
 
 install:
   # download dependencies (at least most of them)
-  - ./gradlew downloadDependencies
+  - ./gradlew downloadDependencies --console=plain
 
 script:
   # build and test the app
-  - ./gradlew build jacocoTestReport coveralls
+  - ./gradlew build jacocoTestReport coveralls --console=plain
 
 # add publishing stage that publishes data out
 jobs:
@@ -49,7 +49,7 @@ jobs:
       if: type = push AND branch = master
       script:
         - echo "Publishing snapshot"
-        - ./gradlew javadoc publishAllPublicationsToSnapshotRepository
+        - ./gradlew javadoc publishAllPublicationsToSnapshotRepository --console=plain
         - echo "Prepare github pages for deployment"
         - travis/prepare_pages.sh
       deploy:
@@ -70,12 +70,12 @@ jobs:
       if: tag IS present
       script:
         - echo "Publishing release $TRAVIS_TAG to public repository"
-        - ./gradlew publishAllPublicationsToReleaseRepository -Pversion=$TRAVIS_TAG
+        - ./gradlew publishAllPublicationsToReleaseRepository -Pversion=$TRAVIS_TAG --console=plain
     - stage: test things
       jdk: openjdk8
       if: type = pull_request
       script:
         - echo "generating javadoc"
-        - ./gradlew javadoc 
+        - ./gradlew javadoc --console=plain
         - echo "Prepare github pages for deployment"
         - travis/prepare_pages.sh
