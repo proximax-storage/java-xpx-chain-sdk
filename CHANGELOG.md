@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.3.0 Full Cow release support
+
+See [milestone](https://github.com/proximax-storage/java-xpx-chain-sdk/milestone/3?closed=1) for fixed issues
+* added support for missing end-points
+* transfers to accounts via alias
+* proper fee support
+* bugfixes, project automation, improved test coverage
+
 ## 0.2.0 Initial public release
 
 See [milestone](https://github.com/proximax-storage/java-xpx-chain-sdk/milestone/2?closed=1) for fixed issues
