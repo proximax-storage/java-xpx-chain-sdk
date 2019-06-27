@@ -50,6 +50,13 @@ publishing {
                         distribution = 'repo'
                     }
                 }
+                developers {
+                    developer {
+                        id = 'tonowie'
+                        name = 'Anton Wiedermann'
+                        email = 'sdkdevs@proximax.io'
+                    }
+                }
                 scm {
                     url = 'https://github.com/proximax-storage/java-xpx-chain-sdk'
                     connection = 'scm:git:git://github.com/proximax-storage/java-xpx-chain-sdk.git'

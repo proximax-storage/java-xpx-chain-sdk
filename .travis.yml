@@ -20,7 +20,10 @@ env:
 # cache maintenance for gradle builds to avoid upload of caches
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -f  $HOME/.gradle/caches/*/javaCompile/javaCompile.lock
+  - rm -f  $HOME/.gradle/caches/*/fileHashes/fileHashes.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+  - rm -fr $HOME/.gradle/caches/journal-1/
 cache:
   directories:
     - $HOME/.gradle/caches/
@@ -33,21 +36,27 @@ before_install:
 
 install:
   # download dependencies (at least most of them)
-  - ./gradlew downloadDependencies
+  - ./gradlew downloadDependencies --console=plain
 
 script:
   # build and test the app
-  - ./gradlew build jacocoTestReport coveralls
+  - ./gradlew build jacocoTestReport coveralls --console=plain
 
 # add publishing stage that publishes data out
 jobs:
   include:
-    - stage: push to master
+    - stage: publish snapshot
       jdk: openjdk8
       if: type = push AND branch = master
       script:
         - echo "Publishing snapshot"
-        - ./gradlew javadoc publishAllPublicationsToSnapshotRepository
+        - ./gradlew publishAllPublicationsToSnapshotRepository --console=plain
+    - stage: prepare release
+      jdk: openjdk8
+      if: tag IS present
+      script:
+        - echo "Publishing release $TRAVIS_TAG to public repository"
+        - ./gradlew javadoc publishAllPublicationsToReleaseRepository -Pversion=$TRAVIS_TAG --console=plain
         - echo "Prepare github pages for deployment"
         - travis/prepare_pages.sh
       deploy:
@@ -63,17 +72,3 @@ jobs:
         github_token: $PAGES_TOKEN
         # prepare_pages puts content to build/gh-pages
         local_dir: "build/gh-pages"
-    - stage: release tag
-      jdk: openjdk8
-      if: tag IS present
-      script:
-        - echo "Publishing release $TRAVIS_TAG to public repository"
-        - ./gradlew publishAllPublicationsToReleaseRepository -Pversion=$TRAVIS_TAG
-    - stage: test things
-      jdk: openjdk8
-      if: type = pull_request
-      script:
-        - echo "generating javadoc"
-        - ./gradlew javadoc 
-        - echo "Prepare github pages for deployment"
-        - travis/prepare_pages.sh
