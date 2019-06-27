@@ -45,12 +45,18 @@ script:
 # add publishing stage that publishes data out
 jobs:
   include:
-    - stage: push to master
+    - stage: publish snapshot
       jdk: openjdk8
       if: type = push AND branch = master
       script:
         - echo "Publishing snapshot"
-        - ./gradlew javadoc publishAllPublicationsToSnapshotRepository --console=plain
+        - ./gradlew publishAllPublicationsToSnapshotRepository --console=plain
+    - stage: prepare release
+      jdk: openjdk8
+      if: tag IS present
+      script:
+        - echo "Publishing release $TRAVIS_TAG to public repository"
+        - ./gradlew javadoc publishAllPublicationsToReleaseRepository -Pversion=$TRAVIS_TAG --console=plain
         - echo "Prepare github pages for deployment"
         - travis/prepare_pages.sh
       deploy:
@@ -66,17 +72,3 @@ jobs:
         github_token: $PAGES_TOKEN
         # prepare_pages puts content to build/gh-pages
         local_dir: "build/gh-pages"
-    - stage: release tag
-      jdk: openjdk8
-      if: tag IS present
-      script:
-        - echo "Publishing release $TRAVIS_TAG to public repository"
-        - ./gradlew publishAllPublicationsToReleaseRepository -Pversion=$TRAVIS_TAG --console=plain
-    - stage: test things
-      jdk: openjdk8
-      if: type = pull_request
-      script:
-        - echo "generating javadoc"
-        - ./gradlew javadoc --console=plain
-        - echo "Prepare github pages for deployment"
-        - travis/prepare_pages.sh
