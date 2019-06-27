@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 0.3.0 Full Cow release support
+## 0.3.1 Full Cow release support
 
 See [milestone](https://github.com/proximax-storage/java-xpx-chain-sdk/milestone/3?closed=1) for fixed issues
 * added support for missing end-points
