@@ -5,7 +5,6 @@
  */
 package io.proximax.sdk.model.contract;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -37,14 +36,6 @@ class ContractTest extends ResourceBasedTest {
             .map(ContractInfoDTO::getContract).map(Contract::fromDto).toList().blockingGet();
       // make sure that something was read from the bundle
       assertTrue(!items.isEmpty());
-      // check for specific data
-      assertEquals(2,
-            items.stream()
-                  .filter(contract -> contract.getMultisig()
-                        .equals("E0EA0A76100DE79C1693653E562542EE1DC791F447686AE82647712A2C42AA32"))
-                  .findFirst()
-                  .orElseThrow(() -> new RuntimeException("item missing"))
-                  .getContentHashRecords().size());
    }
 
 }

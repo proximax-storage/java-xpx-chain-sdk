@@ -206,7 +206,7 @@ public class BlockInfo {
              new PublicAccount(dto.getBlock().getSigner(), networkType),
              networkType,
              (int) Long.parseLong(Integer.toHexString(dto.getBlock().getVersion().intValue()).substring(2, 4), 16),
-             dto.getBlock().getType().intValue(),
+             dto.getBlock().getType().getValue(),
              toBigInt(dto.getBlock().getHeight()),
              toBigInt(dto.getBlock().getTimestamp()),
              toBigInt(dto.getBlock().getDifficulty()),

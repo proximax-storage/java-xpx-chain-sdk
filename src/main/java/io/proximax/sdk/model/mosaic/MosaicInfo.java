@@ -19,11 +19,13 @@ package io.proximax.sdk.model.mosaic;
 import static io.proximax.sdk.utils.dto.UInt64Utils.toBigInt;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import io.proximax.sdk.gen.model.MosaicInfoDTO;
-import io.proximax.sdk.gen.model.MosaicPropertiesDTO;
+import io.proximax.sdk.gen.model.MosaicPropertyDTO;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
  * The mosaic info structure contains its properties, the owner and the namespace to which it belongs to.
@@ -162,14 +164,14 @@ public class MosaicInfo {
     * @param mosaicPropertiesDTO array of numeric values
     * @return mosaic properties instance
     */
-   private static MosaicProperties extractMosaicProperties(MosaicPropertiesDTO mosaicPropertiesDTO) {
-       String flags = "00" + Integer.toBinaryString(toBigInt(mosaicPropertiesDTO.get(0)).intValue());
+   private static MosaicProperties extractMosaicProperties(List<MosaicPropertyDTO> mosaicPropertiesDTO) {
+       String flags = "00" + Integer.toBinaryString(UInt64Utils.toBigInt(mosaicPropertiesDTO.get(0).getValue()).intValue());
        String bitMapFlags = flags.substring(flags.length() - 3, flags.length());
        return new MosaicProperties(bitMapFlags.charAt(2) == '1',
                bitMapFlags.charAt(1) == '1',
                bitMapFlags.charAt(0) == '1',
-               toBigInt(mosaicPropertiesDTO.get(1)).intValue(),
-               toBigInt(mosaicPropertiesDTO.get(2)));
+               toBigInt(mosaicPropertiesDTO.get(1).getValue()).intValue(),
+               toBigInt(mosaicPropertiesDTO.get(2).getValue()));
    }
 }
 

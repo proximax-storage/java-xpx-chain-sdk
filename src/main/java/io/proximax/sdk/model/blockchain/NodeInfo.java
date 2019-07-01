@@ -97,6 +97,6 @@ public class NodeInfo {
     * @return the node info
     */
    public static NodeInfo fromDto(NodeInfoDTO dto) {
-      return new NodeInfo(dto.getPublicKey(), dto.getPort(), dto.getNetworkIdentifier(), dto.getVersion(), dto.getRoles(), dto.getHost(), dto.getFriendlyName());
+      return new NodeInfo(dto.getPublicKey(), dto.getPort(), dto.getNetworkIdentifier(), dto.getVersion(), dto.getRoles().getValue(), dto.getHost(), dto.getFriendlyName());
    }
 }

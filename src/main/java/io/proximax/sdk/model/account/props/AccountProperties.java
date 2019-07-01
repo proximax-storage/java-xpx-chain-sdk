@@ -61,7 +61,7 @@ public class AccountProperties {
             Address.createFromEncoded(dto.getAddress()),
             dto.getProperties().stream()
                   .map(propDto -> new AccountProperty(
-                        AccountPropertyType.getByCode(propDto.getPropertyType()),
+                        AccountPropertyType.getByCode(propDto.getPropertyType().getValue()),
                         propDto.getValues()))
                   .collect(Collectors.toList()));
    }

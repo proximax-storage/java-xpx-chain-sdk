@@ -28,6 +28,8 @@ plugins {
     id 'jacoco'
     // integrate coverage with github
     id 'com.github.kt3k.coveralls' version '2.8.4'
+    // generator for the DTOs
+    id "org.openapi.generator" version "4.0.2"
 }
 
 // define contents of the build
@@ -56,6 +58,19 @@ sourceSets {
     		srcDirs += [ 'src/gen/java' ]
     	}
     }
+}
+
+openApiGenerate {
+    generatorName = "java"
+    inputSpec = "$rootDir/schemas/swagger/swagger.yaml".toString()
+    outputDir = "$buildDir/generated".toString()
+    apiPackage = "io.proximax.sdk.gen.api"
+    invokerPackage = "io.proximax.sdk.gen.invoker"
+    modelPackage = "io.proximax.sdk.gen.model"
+    generateAliasAsModel = true
+    configOptions = [
+        dateLibrary: "java8"
+    ]
 }
 
 // testing details

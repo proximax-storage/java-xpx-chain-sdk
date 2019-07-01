@@ -11,7 +11,7 @@ import java.util.LinkedList;
 
 import org.junit.jupiter.api.Test;
 
-import io.proximax.sdk.gen.model.MerkleProofInfoPayload;
+import io.proximax.sdk.gen.model.MerkleProofInfo;
 
 /**
  * {@link MerklePath} tests
@@ -26,7 +26,7 @@ class MerklePathTest {
 
    @Test
    void testFromDto() {
-      MerkleProofInfoPayload dto = new MerkleProofInfoPayload();
+      MerkleProofInfo dto = new MerkleProofInfo();
       dto.setMerklePath(new LinkedList<>());
       MerklePath path = MerklePath.fromDto(dto);
       assertEquals(0, path.getItems().size());

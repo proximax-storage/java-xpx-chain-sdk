@@ -6,10 +6,8 @@
 package io.proximax.sdk.model.contract;
 
 import java.math.BigInteger;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import io.proximax.core.crypto.PublicKey;
@@ -27,7 +25,6 @@ public class Contract {
    private final BigInteger start;
    private final BigInteger duration;
    private final String contentHash;
-   private final List<ContractContentHashRecord> contentHashRecords;
    private final List<PublicKey> customers;
    private final List<PublicKey> executors;
    private final List<PublicKey> verifiers;
@@ -40,19 +37,17 @@ public class Contract {
     * @param start block height when the contract was created
     * @param duration number of blocks for which the contract is valid since the start
     * @param contentHash hash of the contract content
-    * @param contentHashRecords history of content hashes
     * @param customers list of public keys of customers
     * @param executors list of public keys of executors
     * @param verifiers list of public keys of verifiers
     */
-   public Contract(String multisig, Address multisigAddress, BigInteger start, BigInteger duration, String contentHash, List<ContractContentHashRecord> contentHashRecords,
+   public Contract(String multisig, Address multisigAddress, BigInteger start, BigInteger duration, String contentHash,
          List<PublicKey> customers, List<PublicKey> executors, List<PublicKey> verifiers) {
       this.multisig = multisig;
       this.multisigAddress = multisigAddress;
       this.start = start;
       this.duration = duration;
       this.contentHash = contentHash;
-      this.contentHashRecords = contentHashRecords;
       this.customers = customers;
       this.executors = executors;
       this.verifiers = verifiers;
@@ -91,13 +86,6 @@ public class Contract {
     */
    public String getContentHash() {
       return contentHash;
-   }
-
-   /**
-    * @return the contentHashRecords
-    */
-   public List<ContractContentHashRecord> getContentHashRecords() {
-      return contentHashRecords;
    }
 
    /**
@@ -156,9 +144,6 @@ public class Contract {
             UInt64Utils.toBigInt(dto.getStart()),
             UInt64Utils.toBigInt(dto.getDuration()),
             dto.getHash(),
-            Optional.ofNullable(dto.getHashes()).orElse(Collections.emptyList()).stream()
-                  .map(ContractContentHashRecord::fromDto)
-                  .collect(Collectors.toList()),
             getPublicKeys(dto.getCustomers()),
             getPublicKeys(dto.getExecutors()),
             getPublicKeys(dto.getVerifiers()));

@@ -16,8 +16,6 @@
 
 package io.proximax.sdk.infrastructure;
 
-import static io.proximax.sdk.utils.dto.UInt64Utils.toBigInt;
-
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
@@ -33,11 +31,11 @@ import io.proximax.sdk.BlockchainApi;
 import io.proximax.sdk.BlockchainRepository;
 import io.proximax.sdk.gen.model.BlockInfoDTO;
 import io.proximax.sdk.gen.model.BlockchainScoreDTO;
-import io.proximax.sdk.gen.model.BlockchainStorageInfoDTO;
-import io.proximax.sdk.gen.model.HeightDTO;
-import io.proximax.sdk.gen.model.MerkleProofInfoPayload;
+import io.proximax.sdk.gen.model.HeightInfoDTO;
+import io.proximax.sdk.gen.model.MerkleProofInfoDTO;
 import io.proximax.sdk.gen.model.NodeInfoDTO;
 import io.proximax.sdk.gen.model.NodeTimeDTO;
+import io.proximax.sdk.gen.model.StorageInfoDTO;
 import io.proximax.sdk.model.blockchain.BlockInfo;
 import io.proximax.sdk.model.blockchain.BlockchainStorageInfo;
 import io.proximax.sdk.model.blockchain.BlocksLimit;
@@ -49,6 +47,7 @@ import io.proximax.sdk.model.blockchain.Receipts;
 import io.proximax.sdk.model.transaction.Transaction;
 import io.proximax.sdk.utils.GsonUtils;
 import io.proximax.sdk.utils.dto.BlockchainScoreDTOUtils;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 import io.reactivex.Observable;
 
 /**
@@ -100,8 +99,8 @@ public class BlockchainHttp extends Http implements BlockchainRepository {
         return this.client
                 .get(CHAIN_HEIGHT)
                 .map(Http::mapStringOrError)
-                .map(str -> objectMapper.readValue(str, HeightDTO.class))
-                .map(blockchainHeight -> toBigInt(blockchainHeight.getHeight()));
+                .map(str -> objectMapper.readValue(str, HeightInfoDTO.class))
+                .map(blockchainHeight -> UInt64Utils.toBigInt(blockchainHeight.getHeight()));
     }
 
     public Observable<BigInteger> getBlockchainScore() {
@@ -117,10 +116,10 @@ public class BlockchainHttp extends Http implements BlockchainRepository {
         return this.client
                 .get("/diagnostic/storage")
                 .map(Http::mapStringOrError)
-                .map(str -> objectMapper.readValue(str, BlockchainStorageInfoDTO.class))
-                .map(blockchainStorageInfoDTO -> new BlockchainStorageInfo(blockchainStorageInfoDTO.getNumAccounts(),
-                        blockchainStorageInfoDTO.getNumBlocks(),
-                        blockchainStorageInfoDTO.getNumBlocks()));
+                .map(str -> objectMapper.readValue(str, StorageInfoDTO.class))
+                .map(storageInfo -> new BlockchainStorageInfo(storageInfo.getNumAccounts(),
+                        storageInfo.getNumBlocks(),
+                        storageInfo.getNumBlocks()));
     }
 
    @Override
@@ -178,7 +177,8 @@ public class BlockchainHttp extends Http implements BlockchainRepository {
    public Observable<MerklePath> getReceiptMerklePath(BigInteger height, String receiptHash) {
       return this.client.get(BLOCK + height.toString() + "/receipt/" + receiptHash + "/merkle")
             .map(Http::mapStringOrError)
-            .map(str -> objectMapper.readValue(str, MerkleProofInfoPayload.class))
+            .map(str -> objectMapper.readValue(str, MerkleProofInfoDTO.class))
+            .map(MerkleProofInfoDTO::getPayload)
             .map(MerklePath::fromDto);
    }
    
@@ -186,7 +186,8 @@ public class BlockchainHttp extends Http implements BlockchainRepository {
    public Observable<MerklePath> getTransactionMerklePath(BigInteger height, String trsansactionHash) {
       return this.client.get(BLOCK + height.toString() + "/transaction/" + trsansactionHash + "/merkle")
             .map(Http::mapStringOrError)
-            .map(str -> objectMapper.readValue(str, MerkleProofInfoPayload.class))
+            .map(str -> objectMapper.readValue(str, MerkleProofInfoDTO.class))
+            .map(MerkleProofInfoDTO::getPayload)
             .map(MerklePath::fromDto);
    }
 
