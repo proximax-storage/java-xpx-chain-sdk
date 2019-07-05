@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * TransactionHashes
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-07-01T21:35:58.261+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-07-05T16:42:36.122+02:00[Europe/Prague]")
 public class TransactionHashes {
   public static final String SERIALIZED_NAME_HASHES = "hashes";
   @SerializedName(SERIALIZED_NAME_HASHES)

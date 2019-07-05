@@ -738,8 +738,8 @@ paths:
     get:
       tags:
       - Contract routes
-      summary: Get contract of account
-      description: Gets the contract for a given publicKey.
+      summary: Get contracts of account
+      description: Gets all contracts where this account is involved.
       operationId: getAccountContract
       parameters:
       - name: publicKey
@@ -754,20 +754,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ContractInfoDTO'
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContractInfoDTO'
         '404':
           description: resource not found
         '409':
           description: invalid argument
-  '/contract/{accountId}':
+  '/contract/{contractId}':
     get:
       tags:
       - Contract routes
-      summary: Get contract of account
-      description: Gets the contract for a given accountId.
+      summary: Get contract by contractId
+      description: Gets the contract for a given contractId.
       operationId: getContract
       parameters:
-      - name: accountId
+      - name: contractId
         in: path
         description: The account identifier.
         required: true
@@ -788,7 +790,7 @@ paths:
     post:
       tags:
       - Contract routes
-      summary: Get contracts for an array of publicKeys
+      summary: Get contracts for an array of contract's publicKeys
       description: Gets an array of contracts.
       operationId: getAccountContracts
       requestBody:
@@ -1424,6 +1426,20 @@ components:
       required: true
   schemas:
     # Enumerations
+    AccountLinkTypeEnum:
+      type: integer
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      description: |
+        The account link types:
+        * 0 -  Unlinked. Account is not linked to another account.
+        * 1 -  Main. Account is a balance-holding account that is linked to a remote harvester account.
+        * 2 -  Remote. Account is a remote harvester account that is linked to a balance-holding account.
+        * 3 -  Remote_Unlinked. Account is a remote harvester eligible account that is unlinked.
+      example: 0
     AliasActionEnum:
       type: integer
       enum:
@@ -1719,9 +1735,12 @@ components:
           items:
             $ref: "#/components/schemas/MosaicDTO"
         accountType:
-          type: integer
+          $ref: "#/components/schemas/AccountLinkTypeEnum"
         linkedAccountKey:
+          description: |
+            The public key of a linked account. The linked account can use|provide balance for delegated harvesting.
           type: string
+          example: AC1A6E1D8DE5B17D2C6B1293F1CAD3829EEACF38D09311BB3C8E5A880092DE26
     AccountNamesDTO:
       type: object
       required:

@@ -28,7 +28,7 @@ import java.io.IOException;
 /**
  * AccountLinkTransactionBodyDTO
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-07-01T21:35:58.261+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-07-05T16:42:36.122+02:00[Europe/Prague]")
 public class AccountLinkTransactionBodyDTO {
   public static final String SERIALIZED_NAME_REMOTE_ACCOUNT_KEY = "remoteAccountKey";
   @SerializedName(SERIALIZED_NAME_REMOTE_ACCOUNT_KEY)

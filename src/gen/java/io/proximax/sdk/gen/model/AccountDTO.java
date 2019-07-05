@@ -13,18 +13,26 @@
 
 package io.proximax.sdk.gen.model;
 
+import java.util.Objects;
+import java.util.Arrays;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import io.proximax.sdk.gen.model.AccountLinkTypeEnum;
+import io.proximax.sdk.gen.model.MosaicDTO;
+import io.proximax.sdk.gen.model.UInt64DTO;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
-import com.google.gson.annotations.SerializedName;
-
-import io.swagger.annotations.ApiModelProperty;
 
 /**
  * AccountDTO
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-07-01T21:35:58.261+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-07-05T16:42:36.122+02:00[Europe/Prague]")
 public class AccountDTO {
   public static final String SERIALIZED_NAME_ADDRESS = "address";
   @SerializedName(SERIALIZED_NAME_ADDRESS)
@@ -48,7 +56,7 @@ public class AccountDTO {
 
   public static final String SERIALIZED_NAME_ACCOUNT_TYPE = "accountType";
   @SerializedName(SERIALIZED_NAME_ACCOUNT_TYPE)
-  private Integer accountType;
+  private AccountLinkTypeEnum accountType;
 
   public static final String SERIALIZED_NAME_LINKED_ACCOUNT_KEY = "linkedAccountKey";
   @SerializedName(SERIALIZED_NAME_LINKED_ACCOUNT_KEY)
@@ -149,7 +157,7 @@ public class AccountDTO {
     this.mosaics = mosaics;
   }
 
-  public AccountDTO accountType(Integer accountType) {
+  public AccountDTO accountType(AccountLinkTypeEnum accountType) {
     this.accountType = accountType;
     return this;
   }
@@ -159,11 +167,11 @@ public class AccountDTO {
    * @return accountType
   **/
   @ApiModelProperty(required = true, value = "")
-  public Integer getAccountType() {
+  public AccountLinkTypeEnum getAccountType() {
     return accountType;
   }
 
-  public void setAccountType(Integer accountType) {
+  public void setAccountType(AccountLinkTypeEnum accountType) {
     this.accountType = accountType;
   }
 
@@ -173,10 +181,10 @@ public class AccountDTO {
   }
 
    /**
-   * Get linkedAccountKey
+   * The public key of a linked account. The linked account can use|provide balance for delegated harvesting. 
    * @return linkedAccountKey
   **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(example = "AC1A6E1D8DE5B17D2C6B1293F1CAD3829EEACF38D09311BB3C8E5A880092DE26", required = true, value = "The public key of a linked account. The linked account can use|provide balance for delegated harvesting. ")
   public String getLinkedAccountKey() {
     return linkedAccountKey;
   }

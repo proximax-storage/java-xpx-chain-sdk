@@ -31,7 +31,7 @@ import java.util.List;
 /**
  * AccountPropertiesTransactionBodyDTO
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-07-01T21:35:58.261+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-07-05T16:42:36.122+02:00[Europe/Prague]")
 public class AccountPropertiesTransactionBodyDTO {
   public static final String SERIALIZED_NAME_PROPERTY_TYPE = "propertyType";
   @SerializedName(SERIALIZED_NAME_PROPERTY_TYPE)

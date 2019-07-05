@@ -13,20 +13,30 @@
 
 package io.proximax.sdk.gen.model;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-
+import java.util.Arrays;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
-
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import io.proximax.sdk.gen.model.AggregateTransactionBodyDTO;
+import io.proximax.sdk.gen.model.CosignatureDTO;
+import io.proximax.sdk.gen.model.EmbeddedTransactionInfoDTO;
+import io.proximax.sdk.gen.model.EntityTypeEnum;
+import io.proximax.sdk.gen.model.TransactionDTO;
+import io.proximax.sdk.gen.model.UInt64DTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Transaction that combines multiple transactions together.
  */
 @ApiModel(description = "Transaction that combines multiple transactions together.")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-07-01T21:35:58.261+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-07-05T16:42:36.122+02:00[Europe/Prague]")
 public class AggregateTransactionDTO {
   public static final String SERIALIZED_NAME_SIGNATURE = "signature";
   @SerializedName(SERIALIZED_NAME_SIGNATURE)

@@ -42,6 +42,8 @@ apply from: "$rootDir/gradle/coverage.gradle"
 apply from: "$rootDir/gradle/publishing.gradle"
 // load Travis CI specific support
 apply from: "$rootDir/gradle/travis.gradle"
+// load support for openapi code generator
+apply from: "$rootDir/gradle/openapi.gradle"
 
 // Java8
 sourceCompatibility = 1.8
@@ -58,19 +60,6 @@ sourceSets {
     		srcDirs += [ 'src/gen/java' ]
     	}
     }
-}
-
-openApiGenerate {
-    generatorName = "java"
-    inputSpec = "$rootDir/schemas/swagger/swagger.yaml".toString()
-    outputDir = "$buildDir/generated".toString()
-    apiPackage = "io.proximax.sdk.gen.api"
-    invokerPackage = "io.proximax.sdk.gen.invoker"
-    modelPackage = "io.proximax.sdk.gen.model"
-    generateAliasAsModel = true
-    configOptions = [
-        dateLibrary: "java8"
-    ]
 }
 
 // testing details

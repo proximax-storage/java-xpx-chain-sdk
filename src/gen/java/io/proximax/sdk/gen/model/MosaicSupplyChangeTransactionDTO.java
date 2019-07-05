@@ -33,7 +33,7 @@ import java.io.IOException;
  * Transaction to increase or decrease a mosaic’s supply.
  */
 @ApiModel(description = "Transaction to increase or decrease a mosaic’s supply.")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-07-01T21:35:58.261+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-07-05T16:42:36.122+02:00[Europe/Prague]")
 public class MosaicSupplyChangeTransactionDTO {
   public static final String SERIALIZED_NAME_SIGNATURE = "signature";
   @SerializedName(SERIALIZED_NAME_SIGNATURE)

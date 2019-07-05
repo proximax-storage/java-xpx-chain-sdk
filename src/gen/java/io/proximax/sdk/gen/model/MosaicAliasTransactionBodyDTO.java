@@ -29,7 +29,7 @@ import java.io.IOException;
 /**
  * MosaicAliasTransactionBodyDTO
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-07-01T21:35:58.261+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-07-05T16:42:36.122+02:00[Europe/Prague]")
 public class MosaicAliasTransactionBodyDTO {
   public static final String SERIALIZED_NAME_ALIAS_ACTION = "aliasAction";
   @SerializedName(SERIALIZED_NAME_ALIAS_ACTION)
