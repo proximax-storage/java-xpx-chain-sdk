@@ -35,6 +35,7 @@ import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.HashType;
+import io.proximax.sdk.model.transaction.Recipient;
 import io.proximax.sdk.model.transaction.SecretLockTransaction;
 import io.proximax.sdk.model.transaction.SecretProofTransaction;
 import io.proximax.sdk.model.transaction.SignedTransaction;
@@ -101,7 +102,7 @@ public class E2ESecretTest extends E2EBaseTest {
       sleepForAWhile();
 
       SecretProofTransaction secretProoftx = SecretProofTransaction
-            .create(getDeadline(), hashType, secret, proof, getNetworkType());
+            .create(getDeadline(), hashType, Recipient.from(to), secret, proof, getNetworkType());
       SignedTransaction secretProoftxSigned = api.sign(secretProoftx, from);
       transactionHttp.announce(secretProoftxSigned).blockingFirst();
       logger.info("Proof confirmed: {}",
@@ -152,7 +153,7 @@ public class E2ESecretTest extends E2EBaseTest {
 
       // create aggregate proof
       SecretProofTransaction secretProoftx = SecretProofTransaction
-            .create(getDeadline(), hashType, secret, proof, getNetworkType());
+            .create(getDeadline(), hashType, Recipient.from(to), secret, proof, getNetworkType());
       AggregateTransaction secretProofAggregatetx = AggregateTransaction.createComplete(getDeadline(),
             Collections.singletonList(secretProoftx.toAggregate(from.getPublicAccount())),
             getNetworkType());

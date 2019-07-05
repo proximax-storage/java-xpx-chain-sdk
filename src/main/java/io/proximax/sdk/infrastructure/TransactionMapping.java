@@ -840,6 +840,7 @@ class SecretProofTransactionMapping extends TransactionMapping {
                 deadline,
                 extractFee(transaction),
                 HashType.rawValueOf(transaction.get("hashAlgorithm").getAsInt()),
+                Recipient.from(Address.createFromEncoded(transaction.get("recipient").getAsString())),
                 transaction.get("secret").getAsString(),
                 transaction.get("proof").getAsString(),
                 transaction.get("signature").getAsString(),

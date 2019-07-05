@@ -26,10 +26,11 @@ class SecretProofTransactionSchema  extends Schema {
                 new ArrayAttribute("signer", Constants.SIZEOF_BYTE),
                 new ScalarAttribute("version", Constants.SIZEOF_SHORT),
                 new ScalarAttribute("type", Constants.SIZEOF_SHORT),
-                new ArrayAttribute("fee", Constants.SIZEOF_INT),
+                new ArrayAttribute("maxFee", Constants.SIZEOF_INT),
                 new ArrayAttribute("deadline", Constants.SIZEOF_INT),
                 new ScalarAttribute("hashAlgorithm", Constants.SIZEOF_BYTE),
                 new ArrayAttribute("secret", Constants.SIZEOF_BYTE),
+                new ArrayAttribute("recipient", Constants.SIZEOF_BYTE),
                 new ScalarAttribute("proofSize", Constants.SIZEOF_SHORT),
                 new ArrayAttribute("proof", Constants.SIZEOF_BYTE)
                 ));

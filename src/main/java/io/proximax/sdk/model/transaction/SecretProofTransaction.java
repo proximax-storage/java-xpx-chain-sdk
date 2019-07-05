@@ -33,25 +33,28 @@ public class SecretProofTransaction extends Transaction {
     private final HashType hashType;
     private final String secret;
     private final String proof;
+    private final Recipient recipient;
     private final Schema schema = new SecretProofTransactionSchema();
 
-    public SecretProofTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, HashType hashType, String secret, String proof, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
-        this(networkType, version, deadline, fee, hashType, secret, proof, Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo));
+    public SecretProofTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, HashType hashType, Recipient recipient, String secret, String proof, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
+        this(networkType, version, deadline, fee, hashType, recipient, secret, proof, Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo));
     }
 
-    public SecretProofTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, HashType hashType, String secret, String proof) {
-        this(networkType, version, deadline, fee, hashType, secret, proof, Optional.empty(), Optional.empty(), Optional.empty());
+    public SecretProofTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, HashType hashType, Recipient recipient, String secret, String proof) {
+        this(networkType, version, deadline, fee, hashType, recipient, secret, proof, Optional.empty(), Optional.empty(), Optional.empty());
     }
 
-    public SecretProofTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, HashType hashType, String secret, String proof, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
+    public SecretProofTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, HashType hashType, Recipient recipient, String secret, String proof, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
         super(TransactionType.SECRET_PROOF, networkType, version, deadline, fee, signature, signer, transactionInfo);
         Validate.notNull(secret, "Secret must not be null");
         Validate.notNull(proof, "Proof must not be null");
+        Validate.notNull(recipient, "Recipient must not be null");
         if (!hashType.validate(secret)) {
             throw new IllegalArgumentException("HashType and Secret have incompatible length or not hexadecimal string");
         }
         this.hashType = hashType;
         this.secret = secret;
+        this.recipient = recipient;
         this.proof = proof;
     }
 
@@ -66,8 +69,8 @@ public class SecretProofTransaction extends Transaction {
      *
      * @return a SecretLockTransaction instance
      */
-    public static SecretProofTransaction create(TransactionDeadline deadline, HashType hashType, String secret, String proof, NetworkType networkType) {
-        return new SecretProofTransaction(networkType, 1, deadline, BigInteger.valueOf(0), hashType, secret, proof);
+    public static SecretProofTransaction create(TransactionDeadline deadline, HashType hashType, Recipient recipient, String secret, String proof, NetworkType networkType) {
+        return new SecretProofTransaction(networkType, 1, deadline, BigInteger.valueOf(0), hashType, recipient, secret, proof);
     }
 
     /**
@@ -91,8 +94,14 @@ public class SecretProofTransaction extends Transaction {
      */
     public String getProof() { return proof; }
 
+    /**
+    * @return the recipient
+    */
+   public Recipient getRecipient() {
+      return recipient;
+   }
 
-    @Override
+   @Override
     byte[] generateBytes() {
         FlatBufferBuilder builder = new FlatBufferBuilder();
         BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
@@ -102,8 +111,9 @@ public class SecretProofTransaction extends Transaction {
         int signatureVector = SecretProofTransactionBuffer.createSignatureVector(builder, new byte[64]);
         int signerVector = SecretProofTransactionBuffer.createSignerVector(builder, new byte[32]);
         int deadlineVector = SecretProofTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
-        int feeVector = SecretProofTransactionBuffer.createFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
+        int feeVector = SecretProofTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
         int secretVector = SecretProofTransactionBuffer.createSecretVector(builder, Hex.decode(secret));
+        int recipientVector = SecretProofTransactionBuffer.createRecipientVector(builder, recipient.getBytes());
         int proofVector = SecretProofTransactionBuffer.createProofVector(builder, Hex.decode(proof));
 
         SecretProofTransactionBuffer.startSecretProofTransactionBuffer(builder);
@@ -112,10 +122,11 @@ public class SecretProofTransaction extends Transaction {
         SecretProofTransactionBuffer.addSigner(builder, signerVector);
         SecretProofTransactionBuffer.addVersion(builder, version);
         SecretProofTransactionBuffer.addType(builder, getType().getValue());
-        SecretProofTransactionBuffer.addFee(builder, feeVector);
+        SecretProofTransactionBuffer.addMaxFee(builder, feeVector);
         SecretProofTransactionBuffer.addDeadline(builder, deadlineVector);
         SecretProofTransactionBuffer.addHashAlgorithm(builder, hashType.getValue());
         SecretProofTransactionBuffer.addSecret(builder, secretVector);
+        SecretProofTransactionBuffer.addRecipient(builder, recipientVector);
         SecretProofTransactionBuffer.addProofSize(builder, Hex.decode(proof).length);
         SecretProofTransactionBuffer.addProof(builder, proofVector);
 
