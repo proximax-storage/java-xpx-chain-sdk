@@ -79,7 +79,7 @@ class E2EAccountTest extends E2EBaseTest {
             Arrays.asList(new AccountPropertyModification<>(AccountPropertyModificationType.ADD, blocked.getAddress())),
             getNetworkType());
       // announce the transaction
-      transactionHttp.announce(trans.signWith(acct)).blockingFirst();
+      transactionHttp.announce(trans.signWith(acct, api.getNetworkGenerationHash())).blockingFirst();
       logger.info("Waiting for  confirmation");
       listener.confirmed(acct.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
       sleepForAWhile();
@@ -106,7 +106,7 @@ class E2EAccountTest extends E2EBaseTest {
             Arrays.asList(AccountPropertyModification.add(allowedMosaic)),
             getNetworkType());
       // announce the transaction
-      transactionHttp.announce(trans.signWith(acct)).blockingFirst();
+      transactionHttp.announce(trans.signWith(acct, api.getNetworkGenerationHash())).blockingFirst();
       logger.info("Waiting for  confirmation");
       listener.confirmed(acct.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
       // now check for the block via GET
@@ -133,7 +133,7 @@ class E2EAccountTest extends E2EBaseTest {
             Arrays.asList(AccountPropertyModification.add(allowedTransType)),
             getNetworkType());
       // announce the transaction
-      transactionHttp.announce(trans.signWith(acct)).blockingFirst();
+      transactionHttp.announce(trans.signWith(acct, api.getNetworkGenerationHash())).blockingFirst();
       logger.info("Waiting for  confirmation");
       listener.confirmed(acct.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
       // now check for the block via GET

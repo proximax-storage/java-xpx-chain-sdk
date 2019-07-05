@@ -94,7 +94,7 @@ public class E2ESecretTest extends E2EBaseTest {
             secret,
             to,
             getNetworkType());
-      SignedTransaction secretLockTransactionSigned = from.sign(secretLocktx);
+      SignedTransaction secretLockTransactionSigned = api.sign(secretLocktx, from);
       transactionHttp.announce(secretLockTransactionSigned).blockingFirst();
       logger.info("Lock confirmed: {}",
             listener.confirmed(from.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
@@ -102,7 +102,7 @@ public class E2ESecretTest extends E2EBaseTest {
 
       SecretProofTransaction secretProoftx = SecretProofTransaction
             .create(getDeadline(), hashType, secret, proof, getNetworkType());
-      SignedTransaction secretProoftxSigned = from.sign(secretProoftx);
+      SignedTransaction secretProoftxSigned = api.sign(secretProoftx, from);
       transactionHttp.announce(secretProoftxSigned).blockingFirst();
       logger.info("Proof confirmed: {}",
             listener.confirmed(from.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
@@ -144,7 +144,7 @@ public class E2ESecretTest extends E2EBaseTest {
             secret,
             to,
             getNetworkType());
-      SignedTransaction lockFundsTransactionSigned = from.sign(secretLocktx);
+      SignedTransaction lockFundsTransactionSigned = api.sign(secretLocktx, from);
       transactionHttp.announce(lockFundsTransactionSigned).blockingFirst();
       logger.info("Lock confirmed: {}",
             listener.confirmed(from.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
@@ -156,7 +156,7 @@ public class E2ESecretTest extends E2EBaseTest {
       AggregateTransaction secretProofAggregatetx = AggregateTransaction.createComplete(getDeadline(),
             Collections.singletonList(secretProoftx.toAggregate(from.getPublicAccount())),
             getNetworkType());
-      SignedTransaction secretProofTransactionSigned = from.sign(secretProofAggregatetx);
+      SignedTransaction secretProofTransactionSigned = api.sign(secretProofAggregatetx, from);
       transactionHttp.announce(secretProofTransactionSigned).blockingFirst();
 
       logger.info("Proof confirmed: {}",

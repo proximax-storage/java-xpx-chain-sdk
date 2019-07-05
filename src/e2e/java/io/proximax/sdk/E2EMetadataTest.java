@@ -68,7 +68,7 @@ public class E2EMetadataTest extends E2EBaseTest {
       List<MetadataModification> mods = Arrays.asList(MetadataModification.add("tono", "a"));
       ModifyMetadataTransaction addMeta = ModifyMetadataTransaction
             .createForAddress(getDeadline(), target.getAddress(), mods, getNetworkType());
-      SignedTransaction signedAddMeta = target.sign(addMeta);
+      SignedTransaction signedAddMeta = api.sign(addMeta, target);
       transactionHttp.announce(signedAddMeta).blockingFirst();
       logger.info("Transfer done. {}",
             listener.confirmed(target.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
@@ -91,7 +91,7 @@ public class E2EMetadataTest extends E2EBaseTest {
             id,
             getDeadline(),
             new MosaicProperties(true, true, false, 6, BigInteger.valueOf(20)),
-            getNetworkType()).signWith(seedAccount);
+            getNetworkType()).signWith(seedAccount, api.getNetworkGenerationHash());
       Observable<Transaction> confirmation = listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS);
       sleepForAWhile();
       transactionHttp.announce(mdt).blockingFirst();
@@ -99,7 +99,7 @@ public class E2EMetadataTest extends E2EBaseTest {
       // now add metadata to the mosaic
       List<MetadataModification> mods = Arrays.asList(MetadataModification.add("tono", "mosaic"));
       SignedTransaction signedAddMeta = ModifyMetadataTransaction.createForMosaic(getDeadline(), id, mods, getNetworkType())
-            .signWith(seedAccount);
+            .signWith(seedAccount, api.getNetworkGenerationHash());
       transactionHttp.announce(signedAddMeta).blockingFirst();
       logger.info("Meta added to mosaic. {}",
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
@@ -119,7 +119,7 @@ public class E2EMetadataTest extends E2EBaseTest {
       // create root namespace
       RegisterNamespaceTransaction registerNamespaceTransaction = RegisterNamespaceTransaction
             .createRootNamespace(getDeadline(), name, BigInteger.valueOf(100), getNetworkType());
-      SignedTransaction signedTransaction = seedAccount.sign(registerNamespaceTransaction);
+      SignedTransaction signedTransaction = api.sign(registerNamespaceTransaction, seedAccount);
       transactionHttp.announce(signedTransaction).blockingFirst();
       logger.info("Registered namespace {}. {}",
             name,
@@ -128,7 +128,7 @@ public class E2EMetadataTest extends E2EBaseTest {
       // now add metadata to the namespace
       List<MetadataModification> mods = Arrays.asList(MetadataModification.add("tono", "namespace"));
       SignedTransaction signedAddMeta = ModifyMetadataTransaction
-            .createForNamespace(getDeadline(), rootId, mods, getNetworkType()).signWith(seedAccount);
+            .createForNamespace(getDeadline(), rootId, mods, getNetworkType()).signWith(seedAccount, api.getNetworkGenerationHash());
       transactionHttp.announce(signedAddMeta).blockingFirst();
       logger.info("Meta added to namespace. {}",
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());

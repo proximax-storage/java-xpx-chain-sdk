@@ -94,7 +94,7 @@ public class E2EContractTest extends E2EBaseTest {
                   MultisigCosignatoryModification.add(validator2.getPublicAccount())),
             getNetworkType());
       // sign the transaction
-      SignedTransaction signedTrans = accContract.sign(trans);
+      SignedTransaction signedTrans = api.sign(trans, accContract);
       // announce the transaction
       transactionHttp.announce(signedTrans).blockingFirst();
       ModifyContractTransaction contractConfirmation = (ModifyContractTransaction)listener.confirmed(accContract.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
@@ -136,7 +136,7 @@ public class E2EContractTest extends E2EBaseTest {
             Arrays.asList(trans.toAggregate(accContract.getPublicAccount())),
             getNetworkType());
       // sign the transaction
-      SignedTransaction signedTrans = validator1.signTransactionWithCosignatories(aggregateTrans,
+      SignedTransaction signedTrans = validator1.signTransactionWithCosignatories(aggregateTrans, api.getNetworkGenerationHash(),
             Arrays.asList(validator2));
       // announce the transaction
       transactionHttp.announce(signedTrans).blockingFirst();

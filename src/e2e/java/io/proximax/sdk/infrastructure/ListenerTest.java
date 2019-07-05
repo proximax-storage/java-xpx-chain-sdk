@@ -58,218 +58,217 @@ import io.proximax.sdk.model.transaction.TransferTransaction;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Disabled("listeners are used by other tests")
 class ListenerTest extends BaseTest {
-    private TransactionRepository transactionHttp;
-    private AccountRepository accountHttp;
-    private Account account;
-    private Account multisigAccount;
-    private Account cosignatoryAccount;
-    private Account cosignatoryAccount2;
+   private BlockchainApi api;
+   private TransactionRepository transactionHttp;
+   private AccountRepository accountHttp;
+   private Account account;
+   private Account multisigAccount;
+   private Account cosignatoryAccount;
+   private Account cosignatoryAccount2;
 
+   @BeforeAll
+   void setup() throws IOException {
+      api = new BlockchainApi(new URL(getNodeUrl()), getNetworkType());
+      transactionHttp = api.createTransactionRepository();
+      accountHttp = api.createAccountRepository();
+      account = new Account("787225aaff3d2c71f4ffa32d4f19ec4922f3cd869747f267378f81f8e3fcb12d", NetworkType.MIJIN_TEST);
+      multisigAccount = new Account("5edebfdbeb32e9146d05ffd232c8af2cf9f396caf9954289daa0362d097fff3b",
+            NetworkType.MIJIN_TEST);
+      cosignatoryAccount = new Account("2a2b1f5d366a5dd5dc56c3c757cf4fe6c66e2787087692cf329d7a49a594658b",
+            NetworkType.MIJIN_TEST);
+      cosignatoryAccount2 = new Account("b8afae6f4ad13a1b8aad047b488e0738a437c7389d4ff30c359ac068910c1d59",
+            NetworkType.MIJIN);
+   }
 
-    @BeforeAll
-    void setup() throws IOException {
-       BlockchainApi api = new BlockchainApi(new URL(getNodeUrl()), getNetworkType());
-        transactionHttp = api.createTransactionRepository();
-        accountHttp = api.createAccountRepository();
-        account = new Account("787225aaff3d2c71f4ffa32d4f19ec4922f3cd869747f267378f81f8e3fcb12d", NetworkType.MIJIN_TEST);
-        multisigAccount = new Account("5edebfdbeb32e9146d05ffd232c8af2cf9f396caf9954289daa0362d097fff3b", NetworkType.MIJIN_TEST);
-        cosignatoryAccount = new Account("2a2b1f5d366a5dd5dc56c3c757cf4fe6c66e2787087692cf329d7a49a594658b", NetworkType.MIJIN_TEST);
-        cosignatoryAccount2 = new Account("b8afae6f4ad13a1b8aad047b488e0738a437c7389d4ff30c359ac068910c1d59", NetworkType.MIJIN);
-    }
+   @Test
+   void shouldConnectToWebSocket() throws ExecutionException, InterruptedException, IOException {
+      ListenerRepository listener = api.createListener();
+      CompletableFuture<Void> connected = listener.open();
+      connected.get();
+      assertTrue(connected.isDone());
+      assertNotNull(listener.getUID());
+   }
 
-    @Test
-    void shouldConnectToWebSocket() throws ExecutionException, InterruptedException, IOException {
-       BlockchainApi api = new BlockchainApi(new URL(this.getNodeUrl()), getNetworkType());
-       ListenerRepository listener = api.createListener();
-        CompletableFuture<Void> connected = listener.open();
-        connected.get();
-        assertTrue(connected.isDone());
-        assertNotNull(listener.getUID());
-    }
+   @Test
+   void shouldReturnNewBlockViaListener() throws ExecutionException, InterruptedException, IOException {
+      ListenerRepository listener = api.createListener();
+      listener.open().get();
 
-    @Test
-    void shouldReturnNewBlockViaListener() throws ExecutionException, InterruptedException, IOException {
-       BlockchainApi api = new BlockchainApi(new URL(this.getNodeUrl()), getNetworkType());
-       ListenerRepository listener = api.createListener();
-        listener.open().get();
+      this.announceStandaloneTransferTransaction();
 
-        this.announceStandaloneTransferTransaction();
+      BlockInfo blockInfo = listener.newBlock().take(1).toFuture().get();
 
-        BlockInfo blockInfo = listener.newBlock().take(1).toFuture().get();
+      assertTrue(blockInfo.getHeight().intValue() > 0);
+   }
 
-        assertTrue(blockInfo.getHeight().intValue() > 0);
-    }
+   @Test
+   void shouldReturnConfirmedTransactionAddressSignerViaListener()
+         throws ExecutionException, InterruptedException, IOException {
+      ListenerRepository listener = api.createListener();
+      listener.open().get();
 
-    @Test
-    void shouldReturnConfirmedTransactionAddressSignerViaListener() throws ExecutionException, InterruptedException, IOException {
-       BlockchainApi api = new BlockchainApi(new URL(this.getNodeUrl()), getNetworkType());
-       ListenerRepository listener = api.createListener();
-        listener.open().get();
+      SignedTransaction signedTransaction = this.announceStandaloneTransferTransaction();
 
-        SignedTransaction signedTransaction = this.announceStandaloneTransferTransaction();
+      Transaction transaction = listener.confirmed(this.account.getAddress()).take(1).toFuture().get();
+      assertEquals(signedTransaction.getHash(), transaction.getTransactionInfo().get().getHash());
+   }
 
-        Transaction transaction = listener.confirmed(this.account.getAddress()).take(1).toFuture().get();
-        assertEquals(signedTransaction.getHash(), transaction.getTransactionInfo().get().getHash());
-    }
+   @Test
+   void shouldReturnConfirmedTransactionAddressRecipientViaListener()
+         throws ExecutionException, InterruptedException, IOException {
+      ListenerRepository listener = api.createListener();
+      listener.open().get();
 
-    @Test
-    void shouldReturnConfirmedTransactionAddressRecipientViaListener() throws ExecutionException, InterruptedException, IOException {
-       BlockchainApi api = new BlockchainApi(new URL(this.getNodeUrl()), getNetworkType());
-       ListenerRepository listener = api.createListener();
-        listener.open().get();
+      SignedTransaction signedTransaction = this.announceStandaloneTransferTransaction();
 
-        SignedTransaction signedTransaction = this.announceStandaloneTransferTransaction();
+      Transaction transaction = listener
+            .confirmed(Address.createFromRawAddress("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC")).take(1).toFuture()
+            .get();
+      assertEquals(signedTransaction.getHash(), transaction.getTransactionInfo().get().getHash());
 
-        Transaction transaction = listener.confirmed(Address.createFromRawAddress("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC")).take(1).toFuture().get();
-        assertEquals(signedTransaction.getHash(), transaction.getTransactionInfo().get().getHash());
+   }
 
-    }
+   @Test
+   void shouldReturnUnconfirmedAddedTransactionViaListener()
+         throws ExecutionException, InterruptedException, IOException {
+      ListenerRepository listener = api.createListener();
+      listener.open().get();
 
-    @Test
-    void shouldReturnUnconfirmedAddedTransactionViaListener() throws ExecutionException, InterruptedException, IOException {
-       BlockchainApi api = new BlockchainApi(new URL(this.getNodeUrl()), getNetworkType());
-       ListenerRepository listener = api.createListener();
-        listener.open().get();
+      SignedTransaction signedTransaction = this.announceStandaloneTransferTransaction();
 
-        SignedTransaction signedTransaction = this.announceStandaloneTransferTransaction();
+      Transaction transaction = listener.unconfirmedAdded(this.account.getAddress()).take(1).toFuture().get();
+      assertEquals(signedTransaction.getHash(), transaction.getTransactionInfo().get().getHash());
+   }
 
-        Transaction transaction = listener.unconfirmedAdded(this.account.getAddress()).take(1).toFuture().get();
-        assertEquals(signedTransaction.getHash(), transaction.getTransactionInfo().get().getHash());
-    }
+   @Test
+   void shouldReturnUnconfirmedRemovedTransactionViaListener()
+         throws ExecutionException, InterruptedException, IOException {
+      ListenerRepository listener = api.createListener();
+      listener.open().get();
 
-    @Test
-    void shouldReturnUnconfirmedRemovedTransactionViaListener() throws ExecutionException, InterruptedException, IOException {
-       BlockchainApi api = new BlockchainApi(new URL(this.getNodeUrl()), getNetworkType());
-       ListenerRepository listener = api.createListener();
-        listener.open().get();
+      SignedTransaction signedTransaction = this.announceStandaloneTransferTransaction();
 
-        SignedTransaction signedTransaction = this.announceStandaloneTransferTransaction();
+      String transactionHash = listener.unconfirmedRemoved(this.account.getAddress()).take(1).toFuture().get();
+      assertEquals(signedTransaction.getHash(), transactionHash);
+   }
 
-        String transactionHash = listener.unconfirmedRemoved(this.account.getAddress()).take(1).toFuture().get();
-        assertEquals(signedTransaction.getHash(), transactionHash);
-    }
+   @Disabled
+   @Test
+   void shouldReturnAggregateBondedAddedTransactionViaListener()
+         throws ExecutionException, InterruptedException, IOException {
+      ListenerRepository listener = api.createListener();
+      listener.open().get();
 
-    @Disabled
-    @Test
-    void shouldReturnAggregateBondedAddedTransactionViaListener() throws ExecutionException, InterruptedException, IOException {
-       BlockchainApi api = new BlockchainApi(new URL(this.getNodeUrl()), getNetworkType());
-       ListenerRepository listener = api.createListener();
-        listener.open().get();
+      SignedTransaction signedTransaction = this.announceAggregateBondedTransaction();
 
-        SignedTransaction signedTransaction = this.announceAggregateBondedTransaction();
+      AggregateTransaction aggregateTransaction = listener.aggregateBondedAdded(this.account.getAddress()).take(1)
+            .toFuture().get();
+      assertEquals(signedTransaction.getHash(), aggregateTransaction.getTransactionInfo().get().getHash());
+   }
 
-        AggregateTransaction aggregateTransaction = listener.aggregateBondedAdded(this.account.getAddress()).take(1).toFuture().get();
-        assertEquals(signedTransaction.getHash(), aggregateTransaction.getTransactionInfo().get().getHash());
-    }
+   @Disabled
+   @Test
+   void shouldReturnAggregateBondedRemovedTransactionViaListener()
+         throws ExecutionException, InterruptedException, IOException {
+      ListenerRepository listener = api.createListener();
+      listener.open().get();
 
-    @Disabled
-    @Test
-    void shouldReturnAggregateBondedRemovedTransactionViaListener() throws ExecutionException, InterruptedException, IOException {
-       BlockchainApi api = new BlockchainApi(new URL(this.getNodeUrl()), getNetworkType());
-       ListenerRepository listener = api.createListener();
-        listener.open().get();
+      SignedTransaction signedTransaction = this.announceAggregateBondedTransaction();
 
-        SignedTransaction signedTransaction = this.announceAggregateBondedTransaction();
+      String transactionHash = listener.aggregateBondedRemoved(this.account.getAddress()).take(1).toFuture().get();
+      assertEquals(signedTransaction.getHash(), transactionHash);
+   }
 
-        String transactionHash = listener.aggregateBondedRemoved(this.account.getAddress()).take(1).toFuture().get();
-        assertEquals(signedTransaction.getHash(), transactionHash);
-    }
+   @Disabled
+   @Test
+   void shouldReturnCosignatureAddedViaListener() throws ExecutionException, InterruptedException, IOException {
+      ListenerRepository listener = api.createListener();
+      listener.open().get();
 
-    @Disabled
-    @Test
-    void shouldReturnCosignatureAddedViaListener() throws ExecutionException, InterruptedException, IOException {
-       BlockchainApi api = new BlockchainApi(new URL(this.getNodeUrl()), getNetworkType());
-       ListenerRepository listener = api.createListener();
-        listener.open().get();
+      SignedTransaction signedTransaction = this.announceAggregateBondedTransaction();
 
-        SignedTransaction signedTransaction = this.announceAggregateBondedTransaction();
+      AggregateTransaction announcedTransaction = listener.aggregateBondedAdded(this.cosignatoryAccount.getAddress())
+            .take(1).toFuture().get();
 
-        AggregateTransaction announcedTransaction = listener.aggregateBondedAdded(this.cosignatoryAccount.getAddress()).take(1).toFuture().get();
+      assertEquals(signedTransaction.getHash(), announcedTransaction.getTransactionInfo().get().getHash());
 
-        assertEquals(signedTransaction.getHash(), announcedTransaction.getTransactionInfo().get().getHash());
+      List<AggregateTransaction> transactions = accountHttp
+            .aggregateBondedTransactions(this.cosignatoryAccount.getPublicAccount()).toFuture().get();
 
-        List<AggregateTransaction> transactions = accountHttp.aggregateBondedTransactions(this.cosignatoryAccount.getPublicAccount()).toFuture().get();
+      AggregateTransaction transactionToCosign = transactions.get(0);
 
-        AggregateTransaction transactionToCosign = transactions.get(0);
+      this.announceCosignatureTransaction(transactionToCosign);
 
-        this.announceCosignatureTransaction(transactionToCosign);
+      CosignatureSignedTransaction cosignatureSignedTransaction = listener
+            .cosignatureAdded(this.cosignatoryAccount.getAddress()).take(1).toFuture().get();
 
-        CosignatureSignedTransaction cosignatureSignedTransaction = listener.cosignatureAdded(this.cosignatoryAccount.getAddress()).take(1).toFuture().get();
+      assertEquals(cosignatureSignedTransaction.getSigner(), this.cosignatoryAccount2.getPublicKey());
+   }
 
-        assertEquals(cosignatureSignedTransaction.getSigner(), this.cosignatoryAccount2.getPublicKey());
-    }
+   @Test
+   void shouldReturnTransactionStatusGivenAddedViaListener()
+         throws ExecutionException, InterruptedException, IOException {
+      ListenerRepository listener = api.createListener();
+      listener.open().get();
 
+      SignedTransaction signedTransaction = this.announceStandaloneTransferTransactionWithInsufficientBalance();
 
-    @Test
-    void shouldReturnTransactionStatusGivenAddedViaListener() throws ExecutionException, InterruptedException, IOException {
-       BlockchainApi api = new BlockchainApi(new URL(this.getNodeUrl()), getNetworkType());
-       ListenerRepository listener = api.createListener();
-        listener.open().get();
+      TransactionStatusError transactionHash = listener.status(this.account.getAddress()).take(1).toFuture().get();
+      assertEquals(signedTransaction.getHash(), transactionHash.getHash());
+   }
 
-        SignedTransaction signedTransaction = this.announceStandaloneTransferTransactionWithInsufficientBalance();
+   private SignedTransaction announceStandaloneTransferTransaction() throws ExecutionException, InterruptedException {
+      TransferTransaction transferTransaction = TransferTransaction.create(new Deadline(2, HOURS),
+            new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST),
+            Arrays.asList(),
+            PlainMessage.create("test-message"),
+            NetworkType.MIJIN_TEST);
 
-        TransactionStatusError transactionHash = listener.status(this.account.getAddress()).take(1).toFuture().get();
-        assertEquals(signedTransaction.getHash(), transactionHash.getHash());
-    }
+      SignedTransaction signedTransaction = this.account.sign(transferTransaction, api.getNetworkGenerationHash());
+      transactionHttp.announce(signedTransaction).toFuture().get();
+      return signedTransaction;
+   }
 
-    private SignedTransaction announceStandaloneTransferTransaction() throws ExecutionException, InterruptedException {
-        TransferTransaction transferTransaction = TransferTransaction.create(
-                new Deadline(2, HOURS),
-                new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST),
-                Arrays.asList(),
-                PlainMessage.create("test-message"),
-                NetworkType.MIJIN_TEST
-        );
+   private SignedTransaction announceStandaloneTransferTransactionWithInsufficientBalance()
+         throws ExecutionException, InterruptedException {
+      TransferTransaction transferTransaction = TransferTransaction.create(new Deadline(2, HOURS),
+            new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST),
+            Arrays.asList(NetworkCurrencyMosaic.createRelative(new BigInteger("100000000000"))),
+            PlainMessage.create("test-message"),
+            NetworkType.MIJIN_TEST);
 
-        SignedTransaction signedTransaction = this.account.sign(transferTransaction);
-        transactionHttp.announce(signedTransaction).toFuture().get();
-        return signedTransaction;
-    }
+      SignedTransaction signedTransaction = this.account.sign(transferTransaction, api.getNetworkGenerationHash());
+      transactionHttp.announce(signedTransaction).toFuture().get();
+      return signedTransaction;
+   }
 
-    private SignedTransaction announceStandaloneTransferTransactionWithInsufficientBalance() throws ExecutionException, InterruptedException {
-        TransferTransaction transferTransaction = TransferTransaction.create(
-                new Deadline(2, HOURS),
-                new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST),
-                Arrays.asList(NetworkCurrencyMosaic.createRelative(new BigInteger("100000000000"))),
-                PlainMessage.create("test-message"),
-                NetworkType.MIJIN_TEST
-        );
+   private SignedTransaction announceAggregateBondedTransaction() throws ExecutionException, InterruptedException {
+      TransferTransaction transferTransaction = TransferTransaction.create(new Deadline(2, HOURS),
+            new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST),
+            Arrays.asList(),
+            PlainMessage.create("test-message"),
+            NetworkType.MIJIN_TEST);
 
-        SignedTransaction signedTransaction = this.account.sign(transferTransaction);
-        transactionHttp.announce(signedTransaction).toFuture().get();
-        return signedTransaction;
-    }
+      AggregateTransaction aggregateTransaction = AggregateTransaction.createComplete(new Deadline(2, HOURS),
+            Collections.singletonList(transferTransaction.toAggregate(this.multisigAccount.getPublicAccount())),
+            NetworkType.MIJIN_TEST);
 
-    private SignedTransaction announceAggregateBondedTransaction() throws ExecutionException, InterruptedException {
-        TransferTransaction transferTransaction = TransferTransaction.create(
-                new Deadline(2, HOURS),
-                new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST),
-                Arrays.asList(),
-                PlainMessage.create("test-message"),
-                NetworkType.MIJIN_TEST
-        );
+      SignedTransaction signedTransaction = this.cosignatoryAccount.sign(aggregateTransaction, api.getNetworkGenerationHash());
 
-        AggregateTransaction aggregateTransaction = AggregateTransaction.createComplete(
-                new Deadline(2, HOURS),
-                Collections.singletonList(
-                        transferTransaction.toAggregate(this.multisigAccount.getPublicAccount())
-                ),
-                NetworkType.MIJIN_TEST);
+      transactionHttp.announceAggregateBonded(signedTransaction).toFuture().get();
 
-        SignedTransaction signedTransaction = this.cosignatoryAccount.sign(aggregateTransaction);
+      return signedTransaction;
+   }
 
-        transactionHttp.announceAggregateBonded(signedTransaction).toFuture().get();
+   private CosignatureSignedTransaction announceCosignatureTransaction(AggregateTransaction transactionToCosign)
+         throws ExecutionException, InterruptedException {
+      CosignatureTransaction cosignatureTransaction = new CosignatureTransaction(transactionToCosign);
 
-        return signedTransaction;
-    }
+      CosignatureSignedTransaction cosignatureSignedTransaction = this.cosignatoryAccount2
+            .signCosignatureTransaction(cosignatureTransaction, api.getNetworkGenerationHash());
 
-    private CosignatureSignedTransaction announceCosignatureTransaction(AggregateTransaction transactionToCosign) throws ExecutionException, InterruptedException {
-        CosignatureTransaction cosignatureTransaction = new CosignatureTransaction(transactionToCosign);
+      transactionHttp.announceAggregateBondedCosignature(cosignatureSignedTransaction).toFuture().get();
 
-        CosignatureSignedTransaction cosignatureSignedTransaction = this.cosignatoryAccount2.signCosignatureTransaction(cosignatureTransaction);
-
-        transactionHttp.announceAggregateBondedCosignature(cosignatureSignedTransaction).toFuture().get();
-
-        return cosignatureSignedTransaction;
-    }
+      return cosignatureSignedTransaction;
+   }
 }

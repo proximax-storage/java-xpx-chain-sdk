@@ -137,11 +137,12 @@ public class AggregateTransaction extends Transaction {
      * Sign transaction with cosignatories creating a new SignedTransaction.
      *
      * @param initiatorAccount Initiator account
+     * @param generationHash network generation hash retrieved from block 1
      * @param cosignatories    The list of accounts that will cosign the transaction
      * @return {@link SignedTransaction}
      */
-    public SignedTransaction signTransactionWithCosigners(Account initiatorAccount, List<Account> cosignatories) {
-        SignedTransaction signedTransaction = this.signWith(initiatorAccount);
+    public SignedTransaction signTransactionWithCosigners(Account initiatorAccount, String generationHash, List<Account> cosignatories) {
+        SignedTransaction signedTransaction = this.signWith(initiatorAccount, generationHash);
         String payload = signedTransaction.getPayload();
 
         for (Account cosignatory : cosignatories) {

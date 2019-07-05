@@ -114,7 +114,7 @@ public class E2EAggregateTest extends E2EBaseTest {
                   bobToAlice.toAggregate(bob.getPublicAccount())),
             getNetworkType());
       // alice sign the escrow trans
-      SignedTransaction signedEscrow = alice.sign(escrow);
+      SignedTransaction signedEscrow = api.sign(escrow, alice);
       // lock funds for escrow
       LockFundsTransaction lock = LockFundsTransaction.create(getDeadline(),
             NetworkCurrencyMosaic.createRelative(BigInteger.TEN),
@@ -123,7 +123,7 @@ public class E2EAggregateTest extends E2EBaseTest {
             getNetworkType());
       // alice sign and announce the lock
       logger.info("announcing {}", lock);
-      SignedTransaction signedLock = alice.sign(lock);
+      SignedTransaction signedLock = api.sign(lock, alice);
       transactionHttp.announce(signedLock).blockingFirst();
       // wait for lock confirmation
       listener.confirmed(alice.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
@@ -136,7 +136,7 @@ public class E2EAggregateTest extends E2EBaseTest {
 
       // bob sign the escrow
       AggregateTransaction pendingEscrow = accountHttp.aggregateBondedTransactions(bob.getPublicAccount()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst().get(0);
-      CosignatureSignedTransaction signedCosig = CosignatureTransaction.create(pendingEscrow).signWith(bob);
+      CosignatureSignedTransaction signedCosig = CosignatureTransaction.create(pendingEscrow).signWith(bob, api.getNetworkGenerationHash());
       // bob announce the cosignature
       logger.info("announcing escrow");
       transactionHttp.announceAggregateBondedCosignature(signedCosig).blockingFirst();
@@ -204,7 +204,7 @@ public class E2EAggregateTest extends E2EBaseTest {
                   mikeToAlice.toAggregate(mike.getPublicAccount())),
             getNetworkType());
       // alice sign the escrow trans
-      SignedTransaction signedEscrow = alice.sign(escrow);
+      SignedTransaction signedEscrow = api.sign(escrow, alice);
       // lock funds for escrow
       LockFundsTransaction lock = LockFundsTransaction.create(getDeadline(),
             NetworkCurrencyMosaic.createRelative(BigInteger.TEN),
@@ -213,7 +213,7 @@ public class E2EAggregateTest extends E2EBaseTest {
             getNetworkType());
       // alice sign and announce the lock
       logger.info("announcing {}", lock);
-      SignedTransaction signedLock = alice.sign(lock);
+      SignedTransaction signedLock = api.sign(lock, alice);
       transactionHttp.announce(signedLock).blockingFirst();
       // wait for lock confirmation
       listener.confirmed(alice.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
@@ -226,7 +226,7 @@ public class E2EAggregateTest extends E2EBaseTest {
       
       // bob sign the escrow
       AggregateTransaction pendingEscrowBob = accountHttp.aggregateBondedTransactions(bob.getPublicAccount()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst().get(0);
-      CosignatureSignedTransaction signedCosigBob = CosignatureTransaction.create(pendingEscrowBob).signWith(bob);
+      CosignatureSignedTransaction signedCosigBob = CosignatureTransaction.create(pendingEscrowBob).signWith(bob, api.getNetworkGenerationHash());
       // bob announce the cosignature
       logger.info("announcing cosig bob");
       transactionHttp.announceAggregateBondedCosignature(signedCosigBob).blockingFirst();
@@ -235,7 +235,7 @@ public class E2EAggregateTest extends E2EBaseTest {
       
       // mike sign the escrow
       AggregateTransaction pendingEscrowMike = accountHttp.aggregateBondedTransactions(mike.getPublicAccount()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst().get(0);
-      CosignatureSignedTransaction signedCosigMike = CosignatureTransaction.create(pendingEscrowMike).signWith(mike);
+      CosignatureSignedTransaction signedCosigMike = CosignatureTransaction.create(pendingEscrowMike).signWith(mike, api.getNetworkGenerationHash());
       // mike announce the cosignature
       logger.info("announcing cosig mike");
       transactionHttp.announceAggregateBondedCosignature(signedCosigMike).blockingFirst();
@@ -298,7 +298,7 @@ public class E2EAggregateTest extends E2EBaseTest {
                   bobToAlice.toAggregate(bob.getPublicAccount())),
             getNetworkType());
       // alice sign the escrow trans
-      SignedTransaction signedEscrow = alice.sign(escrow);
+      SignedTransaction signedEscrow = api.sign(escrow, alice);
       // lock funds for escrow
       LockFundsTransaction lock = LockFundsTransaction.create(getDeadline(),
             NetworkCurrencyMosaic.createRelative(BigInteger.TEN),
@@ -307,7 +307,7 @@ public class E2EAggregateTest extends E2EBaseTest {
             getNetworkType());
       // alice sign and announce the lock
       logger.info("announcing {}", lock);
-      SignedTransaction signedLock = alice.sign(lock);
+      SignedTransaction signedLock = api.sign(lock, alice);
       transactionHttp.announce(signedLock).blockingFirst();
       // wait for lock confirmation
       listener.confirmed(alice.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
@@ -319,7 +319,7 @@ public class E2EAggregateTest extends E2EBaseTest {
       listener.aggregateBondedAdded(alice.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
       // bob sign the escrow
       AggregateTransaction pendingEscrow = accountHttp.aggregateBondedTransactions(bob.getPublicAccount()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst().get(0);
-      CosignatureSignedTransaction signedCosig = CosignatureTransaction.create(pendingEscrow).signWith(bob);
+      CosignatureSignedTransaction signedCosig = CosignatureTransaction.create(pendingEscrow).signWith(bob, api.getNetworkGenerationHash());
       // bob announce the cosignature
       logger.info("announcing escrow");
       transactionHttp.announceAggregateBondedCosignature(signedCosig).blockingFirst();

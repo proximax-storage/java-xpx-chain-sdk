@@ -91,7 +91,7 @@ public class E2EAliasTest extends E2EBaseTest {
       // create root namespace
       RegisterNamespaceTransaction registerNamespaceTransaction = RegisterNamespaceTransaction
             .createRootNamespace(getDeadline(), ROOT_NAME, BigInteger.valueOf(200), getNetworkType());
-      SignedTransaction signedTransaction = seedAccount.sign(registerNamespaceTransaction);
+      SignedTransaction signedTransaction = api.sign(registerNamespaceTransaction, seedAccount);
       transactionHttp.announce(signedTransaction).blockingFirst();
       logger.info("Registered namespace {}. {}",
             ROOT_NAME,
@@ -100,7 +100,7 @@ public class E2EAliasTest extends E2EBaseTest {
       // create child namespace for mosaic
       RegisterNamespaceTransaction registerChildNamespaceTransaction = RegisterNamespaceTransaction
             .createSubNamespace(getDeadline(), CHILD1_NAME, rootId, getNetworkType());
-      SignedTransaction signedChildTransaction = seedAccount.sign(registerChildNamespaceTransaction);
+      SignedTransaction signedChildTransaction = api.sign(registerChildNamespaceTransaction, seedAccount);
       transactionHttp.announce(signedChildTransaction).blockingFirst();
       logger.info("Registered namespace {}. {}",
             CHILD1_NAME,
@@ -109,7 +109,7 @@ public class E2EAliasTest extends E2EBaseTest {
       // create child namespace for account
       RegisterNamespaceTransaction accNamespace = RegisterNamespaceTransaction
             .createSubNamespace(getDeadline(), CHILD2_NAME, rootId, getNetworkType());
-      SignedTransaction accNamespaceSigned = seedAccount.sign(accNamespace);
+      SignedTransaction accNamespaceSigned = api.sign(accNamespace, seedAccount);
       transactionHttp.announce(accNamespaceSigned).blockingFirst();
       logger.info("Registered namespace {}. {}",
             CHILD2_NAME,
@@ -121,7 +121,7 @@ public class E2EAliasTest extends E2EBaseTest {
             mosaicId,
             getDeadline(),
             new MosaicProperties(true, true, false, 6, BigInteger.valueOf(200)),
-            getNetworkType()).signWith(seedAccount);
+            getNetworkType()).signWith(seedAccount, api.getNetworkGenerationHash());
       Observable<Transaction> confirmation = listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS);
       sleepForAWhile();
       transactionHttp.announce(mdt).blockingFirst();
@@ -131,7 +131,7 @@ public class E2EAliasTest extends E2EBaseTest {
    @Test
    void test02CreateMosaicAlias() {
       AliasTransaction alias = AliasTransaction.create(mosaicId, mosaNamespaceId, AliasAction.LINK, getDeadline(), getNetworkType());
-      SignedTransaction signed = seedAccount.sign(alias);
+      SignedTransaction signed = api.sign(alias, seedAccount);
       transactionHttp.announce(signed).blockingFirst();
       logger.info("created alias. {}",
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
@@ -144,7 +144,7 @@ public class E2EAliasTest extends E2EBaseTest {
       sendSomeCash(account, seedAccount.getAddress(), 1);
       logger.info("creating alias for address");
       AliasTransaction alias = AliasTransaction.create(account.getAddress(), accNamespaceId, AliasAction.LINK, getDeadline(), getNetworkType());
-      SignedTransaction signed = seedAccount.sign(alias);
+      SignedTransaction signed = api.sign(alias, seedAccount);
       transactionHttp.announce(signed).blockingFirst();
       logger.info("created alias. {}",
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
@@ -164,7 +164,7 @@ public class E2EAliasTest extends E2EBaseTest {
             accNamespaceId,
             Arrays.asList(new Mosaic(new NamespaceId("cat.currency"), BigInteger.valueOf(1_000_000))),
             PlainMessage.Empty,
-            getNetworkType()).signWith(seedAccount)).blockingFirst();
+            getNetworkType()).signWith(seedAccount, api.getNetworkGenerationHash())).blockingFirst();
       logger.info("made transfer. {}",
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS)
                   .blockingFirst());

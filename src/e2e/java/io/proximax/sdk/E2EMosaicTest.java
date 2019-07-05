@@ -79,7 +79,7 @@ public class E2EMosaicTest extends E2EBaseTest {
             id,
             getDeadline(),
             new MosaicProperties(true, true, false, 6, BigInteger.valueOf(20)),
-            getNetworkType()).signWith(seedAccount);
+            getNetworkType()).signWith(seedAccount, api.getNetworkGenerationHash());
       Observable<Transaction> confirmation = listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS);
       transactionHttp.announce(mdt).blockingFirst();
       logger.info("Mosaic created. {}", confirmation.blockingFirst());
@@ -94,7 +94,7 @@ public class E2EMosaicTest extends E2EBaseTest {
       logger.info("Changing supply");
       SignedTransaction supplychange = MosaicSupplyChangeTransaction
             .create(getDeadline(), id, MosaicSupplyType.INCREASE, BigInteger.TEN, getNetworkType())
-            .signWith(seedAccount);
+            .signWith(seedAccount, api.getNetworkGenerationHash());
       transactionHttp.announce(supplychange).blockingFirst();
       logger.info("Supply changed. {}",
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
@@ -109,7 +109,7 @@ public class E2EMosaicTest extends E2EBaseTest {
       logger.info("Changing supply");
       SignedTransaction supplychange = MosaicSupplyChangeTransaction
             .create(getDeadline(), id, MosaicSupplyType.DECREASE, BigInteger.ONE, getNetworkType())
-            .signWith(seedAccount);
+            .signWith(seedAccount, api.getNetworkGenerationHash());
       transactionHttp.announce(supplychange).blockingFirst();
       logger.info("Supply changed. {}",
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
@@ -145,7 +145,7 @@ public class E2EMosaicTest extends E2EBaseTest {
                   ),
             getNetworkType());
       // sign the transaction
-      SignedTransaction signedTransaction = seedAccount.sign(aggregateTransaction);
+      SignedTransaction signedTransaction = api.sign(aggregateTransaction, seedAccount);
       // announce the request
       transactionHttp.announce(signedTransaction).blockingFirst();
       // wait for acceptance

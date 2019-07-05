@@ -50,7 +50,7 @@ public class CosignatureTransactionTest {
 
         CosignatureTransaction cosignatureTransaction = CosignatureTransaction.create(aggregateTransaction);
 
-        CosignatureSignedTransaction cosignatureSignedTransaction = account.signCosignatureTransaction(cosignatureTransaction);
+        CosignatureSignedTransaction cosignatureSignedTransaction = account.signCosignatureTransaction(cosignatureTransaction, "7B631D803F912B00DC0CBED3014BBD17A302BA50B99D233B9C2D9533B842ABDF");
 
         assertTrue(aggregateTransaction.getTransactionInfo().get().getHash().isPresent());
         assertEquals(aggregateTransaction.getTransactionInfo().get().getHash().get(), cosignatureSignedTransaction.getParentHash());

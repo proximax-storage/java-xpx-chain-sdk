@@ -120,7 +120,7 @@ public class AggregateTransactionTest {
         Account cosignatoryAccount = new Account("2a2b1f5d366a5dd5dc56c3c757cf4fe6c66e2787087692cf329d7a49a594658b", NetworkType.MIJIN_TEST);
         Account cosignatoryAccount2 = new Account("b8afae6f4ad13a1b8aad047b488e0738a437c7389d4ff30c359ac068910c1d59", NetworkType.MIJIN_TEST); // TODO bug with private key
 
-        SignedTransaction signedTransaction = cosignatoryAccount.signTransactionWithCosignatories(aggregateTx, Arrays.asList(cosignatoryAccount2));
+        SignedTransaction signedTransaction = cosignatoryAccount.signTransactionWithCosignatories(aggregateTx, "7B631D803F912B00DC0CBED3014BBD17A302BA50B99D233B9C2D9533B842ABDF", Arrays.asList(cosignatoryAccount2));
 
         assertEquals("2d010000", signedTransaction.getPayload().substring(0, 8));
         assertEquals("5100000051000000", signedTransaction.getPayload().substring(240, 256));

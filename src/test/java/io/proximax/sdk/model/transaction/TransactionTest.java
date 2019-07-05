@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
+import org.spongycastle.util.encoders.Hex;
 
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
@@ -96,5 +97,10 @@ public class TransactionTest {
             new FakeDeadline(), BigInteger.valueOf(0), "signature", signer,
             TransactionInfo.create(BigInteger.valueOf(0), 1, "id_hash", "hash", "hash_2"));
       assertTrue(fakeTransaction.toString().startsWith("Transaction "));
+   }
+   
+   @Test
+   void testSign() {
+      System.out.println(Hex.decode("7B631D803F912B00DC0CBED3014BBD17A302BA50B99D233B9C2D9533B842ABDF").length);
    }
 }
