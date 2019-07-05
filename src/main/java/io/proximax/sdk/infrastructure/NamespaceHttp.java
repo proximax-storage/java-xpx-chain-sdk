@@ -19,12 +19,13 @@ package io.proximax.sdk.infrastructure;
 import static io.proximax.sdk.utils.GsonUtils.getJsonArray;
 import static io.proximax.sdk.utils.dto.UInt64Utils.toBigInt;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import io.proximax.sdk.BlockchainApi;
 import io.proximax.sdk.NamespaceRepository;
@@ -48,6 +49,9 @@ public class NamespaceHttp extends Http implements NamespaceRepository {
    private static final String NS_ROUTE = "/namespace/";
    private static final String ACC_ROUTE = "/account/";
    
+   private static final Type NAMESPACE_INFO_LIST_TYPE = new TypeToken<List<NamespaceInfoDTO>>(){}.getType();
+   private static final Type NAMESPACE_NAME_LIST_TYPE = new TypeToken<List<NamespaceNameDTO>>(){}.getType();
+
     public NamespaceHttp(BlockchainApi api) {
         super(api);
     }
@@ -57,7 +61,7 @@ public class NamespaceHttp extends Http implements NamespaceRepository {
         return this.client
                         .get(NS_ROUTE + namespaceId.getIdAsHex())
                         .map(Http::mapStringOrError)
-                        .map(str -> objectMapper.readValue(str, NamespaceInfoDTO.class))
+                        .map(str -> gson.fromJson(str, NamespaceInfoDTO.class))
                         .map(namespaceInfoDTO -> new NamespaceInfo(namespaceInfoDTO.getMeta().getActive(),
                                 namespaceInfoDTO.getMeta().getIndex(),
                                 namespaceInfoDTO.getMeta().getId(),
@@ -85,7 +89,7 @@ public class NamespaceHttp extends Http implements NamespaceRepository {
         return this.client
                         .get(ACC_ROUTE + address.plain() + "/namespaces" + (queryParams.isPresent() ? queryParams.get().toUrl() : ""))
                         .map(Http::mapStringOrError)
-                        .map(json -> objectMapper.<List<NamespaceInfoDTO>>readValue(json.toString(), new TypeReference<List<NamespaceInfoDTO>>() { }))
+                        .map(this::toNamespaceInfoList)
                         .flatMapIterable(item -> item)
                         .map(namespaceInfoDTO -> new NamespaceInfo(namespaceInfoDTO.getMeta().getActive(),
                                 namespaceInfoDTO.getMeta().getIndex(),
@@ -118,8 +122,7 @@ public class NamespaceHttp extends Http implements NamespaceRepository {
         return this.client
                         .post("/account/namespaces" + (queryParams.isPresent() ? queryParams.get().toUrl() : ""), requestBody)
                         .map(Http::mapStringOrError)
-                        .map(str -> objectMapper.<List<NamespaceInfoDTO>>readValue(str, new TypeReference<List<NamespaceInfoDTO>>() {
-                        }))
+                        .map(this::toNamespaceInfoList)
                         .flatMapIterable(item -> item)
                         .map(namespaceInfoDTO -> new NamespaceInfo(namespaceInfoDTO.getMeta().getActive(),
                                 namespaceInfoDTO.getMeta().getIndex(),
@@ -143,8 +146,7 @@ public class NamespaceHttp extends Http implements NamespaceRepository {
         return this.client
                 .post("/namespace/names", requestBody)
                 .map(Http::mapStringOrError)
-                .map(str -> objectMapper.<List<NamespaceNameDTO>>readValue(str, new TypeReference<List<NamespaceNameDTO>>() {
-                }))
+                .map(this::toNamespaceNameList)
                 .flatMapIterable(item -> item)
                 .map(namespaceNameDTO -> {
                     if (namespaceNameDTO.getParentId() != null) {
@@ -179,4 +181,11 @@ public class NamespaceHttp extends Http implements NamespaceRepository {
         return levels;
     }
 
+    private List<NamespaceInfoDTO> toNamespaceInfoList(String json) {
+       return gson.fromJson(json, NAMESPACE_INFO_LIST_TYPE);
+    }
+    
+    private List<NamespaceNameDTO> toNamespaceNameList(String json) {
+       return gson.fromJson(json, NAMESPACE_NAME_LIST_TYPE);
+    }
 }

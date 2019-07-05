@@ -4,12 +4,13 @@
  * license that can be found in the LICENSE file.
  */
 package io.proximax.sdk.infrastructure;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import io.proximax.core.crypto.PublicKey;
 import io.proximax.sdk.BlockchainApi;
@@ -29,6 +30,8 @@ public class ContractHttp extends Http implements ContractRepository {
    private static final String ACCOUNT_ROUTE = "/account/";
    private static final String ACCOUNT_CONTRACTS_ROUTE = "/account/contracts";
    
+   private static final Type CONTRACT_INFO_LIST_TYPE = new TypeToken<List<ContractInfoDTO>>(){}.getType();
+
    public ContractHttp(BlockchainApi api) {
       super(api);
    }
@@ -37,7 +40,7 @@ public class ContractHttp extends Http implements ContractRepository {
    public Observable<Contract> getContract(Address address) {
       return this.client.get(CONTRACT_ROUTE + address.plain())
             .map(Http::mapStringOrError)
-            .map(str -> objectMapper.readValue(str, ContractInfoDTO.class))
+            .map(str -> gson.fromJson(str, ContractInfoDTO.class))
             .map(ContractInfoDTO::getContract)
             .map(Contract::fromDto);
    }
@@ -52,7 +55,7 @@ public class ContractHttp extends Http implements ContractRepository {
       requestBody.add("addresses", arr);
       return this.client.post(CONTRACT_ROUTE, requestBody)
             .map(Http::mapStringOrError)
-            .map(str -> objectMapper.<List<ContractInfoDTO>>readValue(str, new TypeReference<List<ContractInfoDTO>>() {}))
+            .map(this::toContractInfoList)
             .flatMapIterable(item -> item)
             .map(ContractInfoDTO::getContract)
             .map(Contract::fromDto)
@@ -63,7 +66,7 @@ public class ContractHttp extends Http implements ContractRepository {
    public Observable<Contract> getContract(PublicKey publicKey) {
       return this.client.get(ACCOUNT_ROUTE + publicKey.getHexString() + CONTRACS_SUFFIX)
             .map(Http::mapStringOrError)
-            .map(str -> objectMapper.<List<ContractInfoDTO>>readValue(str, new TypeReference<List<ContractInfoDTO>>() {}))
+            .map(this::toContractInfoList)
             .flatMapIterable(item -> item)
             .map(ContractInfoDTO::getContract)
             .map(Contract::fromDto);
@@ -79,7 +82,7 @@ public class ContractHttp extends Http implements ContractRepository {
       requestBody.add("publicKeys", arr);
       return this.client.post(ACCOUNT_CONTRACTS_ROUTE, requestBody)
             .map(Http::mapStringOrError)
-            .map(str -> objectMapper.<List<ContractInfoDTO>>readValue(str, new TypeReference<List<ContractInfoDTO>>() {}))
+            .map(this::toContractInfoList)
             .flatMapIterable(item -> item)
             .map(ContractInfoDTO::getContract)
             .map(Contract::fromDto)
@@ -87,4 +90,7 @@ public class ContractHttp extends Http implements ContractRepository {
    
    }
 
+   private List<ContractInfoDTO> toContractInfoList(String json) {
+      return gson.fromJson(json, CONTRACT_INFO_LIST_TYPE);
+   }
 }

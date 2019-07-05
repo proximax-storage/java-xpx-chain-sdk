@@ -21,11 +21,12 @@ import static io.proximax.sdk.utils.GsonUtils.getJsonPrimitive;
 import static io.proximax.sdk.utils.GsonUtils.stream;
 import static io.proximax.sdk.utils.dto.UInt64Utils.toBigInt;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import io.proximax.sdk.BlockchainApi;
 import io.proximax.sdk.TransactionRepository;
@@ -49,6 +50,8 @@ public class TransactionHttp extends Http implements TransactionRepository {
    private static final String KEY_MESSAGE = "message";
    private static final String KEY_PAYLOAD = "payload";
 	
+   private static final Type TRANSACTION_STATUS_LIST_TYPE = new TypeToken<List<TransactionStatusDTO>>(){}.getType();
+
     public TransactionHttp(BlockchainApi api) {
         super(api);
     }
@@ -84,7 +87,7 @@ public class TransactionHttp extends Http implements TransactionRepository {
         return this.client
                 .get(ROUTE + transactionHash + "/status")
                 .map(Http::mapStringOrError)
-                .map(str -> objectMapper.readValue(str, TransactionStatusDTO.class))
+                .map(str -> gson.fromJson(str, TransactionStatusDTO.class))
                 .map(transactionStatusDTO -> new TransactionStatus(transactionStatusDTO.getGroup(),
                         transactionStatusDTO.getStatus(),
                         transactionStatusDTO.getHash(),
@@ -99,8 +102,7 @@ public class TransactionHttp extends Http implements TransactionRepository {
         return this.client
                 .post(ROUTE + "/statuses", requestBody)
                 .map(Http::mapStringOrError)
-                .map(str -> objectMapper.<List<TransactionStatusDTO>>readValue(str, new TypeReference<List<TransactionStatusDTO>>() {
-                }))
+                .map(this::toTransactionStatusList)
                 .flatMapIterable(item -> item)
                 .map(transactionStatusDTO -> new TransactionStatus(transactionStatusDTO.getGroup(),
                         transactionStatusDTO.getStatus(),
@@ -144,5 +146,9 @@ public class TransactionHttp extends Http implements TransactionRepository {
                 .map(Http::mapStringOrError)
                 .map(GsonUtils::mapToJsonObject)
                 .map(json -> new TransactionAnnounceResponse(json.get(KEY_MESSAGE).getAsString()));
+    }
+    
+    private List<TransactionStatusDTO> toTransactionStatusList(String json) {
+       return gson.fromJson(json, TRANSACTION_STATUS_LIST_TYPE);
     }
 }

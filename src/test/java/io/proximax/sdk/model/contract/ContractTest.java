@@ -11,8 +11,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
 import io.proximax.sdk.ResourceBasedTest;
@@ -27,13 +26,14 @@ class ContractTest extends ResourceBasedTest {
    @Test
    void testDeserialization() {
       // get the object mapper
-      final ObjectMapper objectMapper = new ObjectMapper();
-      objectMapper.configure(DeserializationFeature.USE_LONG_FOR_INTS, true);
-      objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+      final Gson gson = new Gson();
       // deserialize bundle items
       List<Contract> items = Observable.fromIterable(getResources("contracts", "dtos", "contracts"))
-            .map(JsonElement::toString).map(str -> objectMapper.readValue(str, ContractInfoDTO.class))
-            .map(ContractInfoDTO::getContract).map(Contract::fromDto).toList().blockingGet();
+            .map(JsonElement::toString)
+            .map(str -> gson.fromJson(str, ContractInfoDTO.class))
+            .map(ContractInfoDTO::getContract)
+            .map(Contract::fromDto)
+            .toList().blockingGet();
       // make sure that something was read from the bundle
       assertTrue(!items.isEmpty());
    }

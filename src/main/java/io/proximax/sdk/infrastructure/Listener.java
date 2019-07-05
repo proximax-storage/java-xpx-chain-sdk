@@ -19,7 +19,6 @@ package io.proximax.sdk.infrastructure;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -203,12 +202,7 @@ public class Listener extends Http implements ListenerRepository {
     */
    private void subscribeTo(String channelPath) {
       final ListenerSubscribtionMessage subscribeMessage = new ListenerSubscribtionMessage(this.uid, channelPath);
-      String json;
-      try {
-         json = objectMapper.writeValueAsString(subscribeMessage);
-      } catch (JsonProcessingException e) {
-         throw new RuntimeException(e.getCause());
-      }
+      String json = gson.toJson(subscribeMessage);
       this.webSocket.send(json);
    }
 }

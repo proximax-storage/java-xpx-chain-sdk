@@ -16,15 +16,15 @@
 
 package io.proximax.sdk.infrastructure.listener;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * message submitted to server to establish subscription
  */
 public class ListenerSubscribtionMessage {
-   @JsonProperty("uid")
+   @SerializedName("uid")
    private final String uid;
-   @JsonProperty("subscribe")
+   @SerializedName("subscribe")
    private final String subscription;
 
    /**
