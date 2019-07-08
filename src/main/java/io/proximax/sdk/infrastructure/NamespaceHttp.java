@@ -31,6 +31,7 @@ import io.proximax.sdk.BlockchainApi;
 import io.proximax.sdk.NamespaceRepository;
 import io.proximax.sdk.gen.model.NamespaceInfoDTO;
 import io.proximax.sdk.gen.model.NamespaceNameDTO;
+import io.proximax.sdk.gen.model.UInt64DTO;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.namespace.NamespaceId;
@@ -149,11 +150,12 @@ public class NamespaceHttp extends Http implements NamespaceRepository {
                 .map(this::toNamespaceNameList)
                 .flatMapIterable(item -> item)
                 .map(namespaceNameDTO -> {
-                    if (namespaceNameDTO.getParentId() != null) {
+                    UInt64DTO parentId = namespaceNameDTO.getParentId();
+                    if (parentId != null && !parentId.isEmpty()) {
                         return new NamespaceName(
                                 new NamespaceId(toBigInt(namespaceNameDTO.getNamespaceId())),
                                 namespaceNameDTO.getName(),
-                                new NamespaceId(toBigInt(namespaceNameDTO.getParentId())));
+                                new NamespaceId(toBigInt(parentId)));
                     } else {
                         return new NamespaceName(
                                 new NamespaceId(toBigInt(namespaceNameDTO.getNamespaceId())),
@@ -166,21 +168,18 @@ public class NamespaceHttp extends Http implements NamespaceRepository {
 
     private List<NamespaceId> extractLevels(NamespaceInfoDTO namespaceInfoDTO) {
         List<NamespaceId> levels = new ArrayList<>();
-        if (namespaceInfoDTO.getNamespace().getLevel0() != null) {
-            levels.add(new NamespaceId(toBigInt(namespaceInfoDTO.getNamespace().getLevel0())));
-        }
-
-        if (namespaceInfoDTO.getNamespace().getLevel1() != null) {
-            levels.add(new NamespaceId(toBigInt(namespaceInfoDTO.getNamespace().getLevel1())));
-        }
-
-        if (namespaceInfoDTO.getNamespace().getLevel2() != null) {
-            levels.add(new NamespaceId(toBigInt(namespaceInfoDTO.getNamespace().getLevel2())));
-        }
-
+        addLevel(levels, namespaceInfoDTO.getNamespace().getLevel0());
+        addLevel(levels, namespaceInfoDTO.getNamespace().getLevel1());
+        addLevel(levels, namespaceInfoDTO.getNamespace().getLevel2());
         return levels;
     }
 
+   private void addLevel(List<NamespaceId> levels, UInt64DTO levelDto) {
+      if (levelDto != null && !levelDto.isEmpty()) {
+         levels.add(new NamespaceId(toBigInt(levelDto)));
+      }
+   }
+    
     private List<NamespaceInfoDTO> toNamespaceInfoList(String json) {
        return gson.fromJson(json, NAMESPACE_INFO_LIST_TYPE);
     }

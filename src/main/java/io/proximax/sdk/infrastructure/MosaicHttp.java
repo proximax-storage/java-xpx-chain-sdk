@@ -89,6 +89,7 @@ public class MosaicHttp extends Http implements MosaicRepository {
    }
    
    private List<MosaicNamesDTO> toMosaicNamesList(String json) {
+      System.out.println(json);
       return gson.fromJson(json, MOSAIC_NAMES_LIST_TYPE);
    }
 }
