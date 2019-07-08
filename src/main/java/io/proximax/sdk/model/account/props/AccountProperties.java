@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 import io.proximax.sdk.gen.model.AccountPropertiesDTO;
 import io.proximax.sdk.model.account.Address;
+import io.proximax.sdk.utils.GsonUtils;
 
 /**
  * Account properties structure describes property information for an account.
@@ -62,7 +63,7 @@ public class AccountProperties {
             dto.getProperties().stream()
                   .map(propDto -> new AccountProperty(
                         AccountPropertyType.getByCode(propDto.getPropertyType().getValue()),
-                        propDto.getValues()))
+                        GsonUtils.ensureLongs(propDto.getValues())))
                   .collect(Collectors.toList()));
    }
 }
