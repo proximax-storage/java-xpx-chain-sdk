@@ -107,17 +107,27 @@ public class SecretProofTransaction extends Transaction {
         BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
         int version = (int) Long.parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
 
+        byte[] recipientBytes = recipient.getBytes();
+        byte[] proofBytes = Hex.decode(proof);
         // Create Vectors
         int signatureVector = SecretProofTransactionBuffer.createSignatureVector(builder, new byte[64]);
         int signerVector = SecretProofTransactionBuffer.createSignerVector(builder, new byte[32]);
         int deadlineVector = SecretProofTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
         int feeVector = SecretProofTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
         int secretVector = SecretProofTransactionBuffer.createSecretVector(builder, Hex.decode(secret));
-        int recipientVector = SecretProofTransactionBuffer.createRecipientVector(builder, recipient.getBytes());
-        int proofVector = SecretProofTransactionBuffer.createProofVector(builder, Hex.decode(proof));
+        int recipientVector = SecretProofTransactionBuffer.createRecipientVector(builder, recipientBytes);
+        int proofVector = SecretProofTransactionBuffer.createProofVector(builder, proofBytes);
 
+        int size =
+              // header
+              120 + 
+              35 + 
+              // recipient
+              recipientBytes.length + 
+              // proof length
+              proofBytes.length;
         SecretProofTransactionBuffer.startSecretProofTransactionBuffer(builder);
-        SecretProofTransactionBuffer.addSize(builder, 155 + Hex.decode(proof).length);
+        SecretProofTransactionBuffer.addSize(builder, size);
         SecretProofTransactionBuffer.addSignature(builder, signatureVector);
         SecretProofTransactionBuffer.addSigner(builder, signerVector);
         SecretProofTransactionBuffer.addVersion(builder, version);
@@ -127,12 +137,14 @@ public class SecretProofTransaction extends Transaction {
         SecretProofTransactionBuffer.addHashAlgorithm(builder, hashType.getValue());
         SecretProofTransactionBuffer.addSecret(builder, secretVector);
         SecretProofTransactionBuffer.addRecipient(builder, recipientVector);
-        SecretProofTransactionBuffer.addProofSize(builder, Hex.decode(proof).length);
+        SecretProofTransactionBuffer.addProofSize(builder, proofBytes.length);
         SecretProofTransactionBuffer.addProof(builder, proofVector);
 
         int codedSecretProof = SecretProofTransactionBuffer.endSecretProofTransactionBuffer(builder);
         builder.finish(codedSecretProof);
 
-        return schema.serialize(builder.sizedByteArray());
+        byte[] output = schema.serialize(builder.sizedByteArray());
+        Validate.isTrue(output.length == size, "Serialized secret proof has incorrect length");
+        return output;
     }
 }
