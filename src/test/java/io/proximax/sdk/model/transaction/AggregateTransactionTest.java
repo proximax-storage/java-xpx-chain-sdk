@@ -134,13 +134,13 @@ public class AggregateTransactionTest {
 
         AggregateTransaction aggregateTransferTransaction = (AggregateTransaction) new TransactionMapping().apply(aggregateTransferTransactionDTO);
 
-        assertTrue(aggregateTransferTransaction.signedByAccount(
+        assertTrue(aggregateTransferTransaction.isSignedByAccount(
                 PublicAccount.createFromPublicKey("A5F82EC8EBB341427B6785C8111906CD0DF18838FB11B51CE0E18B5E79DFF630",
                         NetworkType.MIJIN_TEST)));
-        assertTrue(aggregateTransferTransaction.signedByAccount(
+        assertTrue(aggregateTransferTransaction.isSignedByAccount(
                 PublicAccount.createFromPublicKey("7681ED5023141D9CDCF184E5A7B60B7D466739918ED5DA30F7E71EA7B86EFF2D",
                         NetworkType.MIJIN_TEST)));
-        assertFalse(aggregateTransferTransaction.signedByAccount(
+        assertFalse(aggregateTransferTransaction.isSignedByAccount(
                 PublicAccount.createFromPublicKey("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF",
                         NetworkType.MIJIN_TEST)));
 

@@ -140,11 +140,10 @@ public class Account {
     * Sign aggregate signature transaction.
     *
     * @param cosignatureTransaction The aggregate signature transaction.
-    * @param generationHash network generation hash retrieved from block 1
     * @return {@link CosignatureSignedTransaction}
     */
-   public CosignatureSignedTransaction signCosignatureTransaction(CosignatureTransaction cosignatureTransaction, String generationHash) {
-      return cosignatureTransaction.signWith(this, generationHash);
+   public CosignatureSignedTransaction signCosignatureTransaction(CosignatureTransaction cosignatureTransaction) {
+      return cosignatureTransaction.signWith(this);
    }
 
    /**

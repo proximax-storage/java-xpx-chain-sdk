@@ -17,6 +17,7 @@ package io.proximax.sdk;
 
 import java.math.BigInteger;
 import java.net.URL;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.proximax.sdk.infrastructure.AccountHttp;
@@ -29,6 +30,7 @@ import io.proximax.sdk.infrastructure.NamespaceHttp;
 import io.proximax.sdk.infrastructure.TransactionHttp;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.SignedTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
 
@@ -178,6 +180,18 @@ public class BlockchainApi {
     */
    public SignedTransaction sign(Transaction transaction, Account signer) {
       return transaction.signWith(signer, getNetworkGenerationHash());
+   }
+   
+   /**
+    * convenience method for signing of transactions
+    * 
+    * @param transaction the transaction to be signed
+    * @param signer signing account
+    * 
+    * @return signed transaction instance
+    */
+   public SignedTransaction signWithCosigners(AggregateTransaction transaction, Account initiator, List<Account> cosignatories) {
+      return transaction.signTransactionWithCosigners(initiator, getNetworkGenerationHash(), cosignatories);
    }
    
    /**

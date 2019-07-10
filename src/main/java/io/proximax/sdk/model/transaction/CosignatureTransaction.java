@@ -69,15 +69,25 @@ public class CosignatureTransaction {
     * Serialize and sign transaction creating a new SignedTransaction.
     *
     * @param account Account
-    * @param generationHash generation hash of the network
     * @return {@link CosignatureSignedTransaction}
     */
-   public CosignatureSignedTransaction signWith(Account account, String generationHash) {
-      // TODO sign using generation hash
-      Signer signer = new Signer(account.getKeyPair());
+   public CosignatureSignedTransaction signWith(Account account) {
       String hash = getHashOrFail(getTransactionToCosign());
-      byte[] bytes = Hex.decode(hash);
+      return new CosignatureSignedTransaction(hash, cosignTransaction(hash, account), account.getPublicKey());
+   }
+   
+   /**
+    * get cosignature for given transaction hash as hexadecimal string
+    * 
+    * @param transactionHash hash of the transaction that is being cosigned
+    * @param cosignatory the account to cosign the transaction
+    * @return hexadecimal string with signature
+    */
+   public static String cosignTransaction(String transactionHash, Account cosignatory) {
+      Signer signer = new Signer(cosignatory.getKeyPair());
+      byte[] bytes = Hex.decode(transactionHash);
       byte[] signatureBytes = signer.sign(bytes).getBytes();
-      return new CosignatureSignedTransaction(hash, Hex.toHexString(signatureBytes), account.getPublicKey());
+      return Hex.toHexString(signatureBytes);
+
    }
 }

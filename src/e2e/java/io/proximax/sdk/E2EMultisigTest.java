@@ -378,11 +378,11 @@ public class E2EMultisigTest extends E2EBaseTest {
     */
    private void cosignMultisigTransaction() {
       long count = accountHttp.aggregateBondedTransactions(multisigAccount.getPublicAccount()).flatMapIterable(tx -> tx)
-            .filter(tx -> !tx.signedByAccount(cosig2.getPublicAccount())).map(tx -> {
+            .filter(tx -> !tx.isSignedByAccount(cosig2.getPublicAccount())).map(tx -> {
                logger.info("Going to co-sign {}", tx);
                final CosignatureTransaction cosignatureTransaction = CosignatureTransaction.create(tx);
                final CosignatureSignedTransaction cosignatureSignedTransaction = cosig2
-                     .signCosignatureTransaction(cosignatureTransaction, api.getNetworkGenerationHash());
+                     .signCosignatureTransaction(cosignatureTransaction);
                return transactionHttp.announceAggregateBondedCosignature(cosignatureSignedTransaction).blockingFirst();
             }).count().blockingGet();
       // make sure that we co-signed exactly one transaction

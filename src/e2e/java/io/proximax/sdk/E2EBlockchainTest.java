@@ -117,14 +117,14 @@ public class E2EBlockchainTest extends E2EBaseTest {
    
    @Test
    void block2MerklePath() {
-      MerklePath p = blockchainHttp.getReceiptMerklePath(BigInteger.valueOf(2l), "4B92740450C7FB9027AFF3E38625274211A166A820CF41E796F6808C52968F4C").blockingFirst();
+      MerklePath p = blockchainHttp.getReceiptMerklePath(BigInteger.valueOf(2l), "7742BB5598E7EF994E9801C983030C9182356581D9DF96EE5E40E0DB16025A16").blockingFirst();
       // block 2 has something
       assertEquals(0, p.getItems().size());
    }
    
    @Test
    void block1TransactionMerklePath() {
-      MerklePath p = blockchainHttp.getTransactionMerklePath(BigInteger.valueOf(1l), "31537B377050C8CDF6E85B6D88A3B6BD94501B0A3C9387493B3973A4EDAD490E").blockingFirst();
+      MerklePath p = blockchainHttp.getTransactionMerklePath(BigInteger.valueOf(1l), "0840EC2C151AC2A5A711B7B8097307291BBCC157740AD24C6871FB84BC17FD0E").blockingFirst();
       // block 2 has something
       assertEquals(5, p.getItems().size());
    }

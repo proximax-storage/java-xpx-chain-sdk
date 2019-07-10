@@ -265,7 +265,7 @@ class ListenerTest extends BaseTest {
       CosignatureTransaction cosignatureTransaction = new CosignatureTransaction(transactionToCosign);
 
       CosignatureSignedTransaction cosignatureSignedTransaction = this.cosignatoryAccount2
-            .signCosignatureTransaction(cosignatureTransaction, api.getNetworkGenerationHash());
+            .signCosignatureTransaction(cosignatureTransaction);
 
       transactionHttp.announceAggregateBondedCosignature(cosignatureSignedTransaction).toFuture().get();
 
