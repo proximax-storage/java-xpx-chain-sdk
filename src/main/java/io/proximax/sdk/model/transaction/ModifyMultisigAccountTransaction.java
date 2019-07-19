@@ -27,7 +27,6 @@ import com.google.flatbuffers.FlatBufferBuilder;
 import io.proximax.core.utils.HexEncoder;
 import io.proximax.sdk.gen.buffers.CosignatoryModificationBuffer;
 import io.proximax.sdk.gen.buffers.ModifyMultisigAccountTransactionBuffer;
-import io.proximax.sdk.gen.buffers.TransferTransactionBuffer;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.utils.dto.UInt64Utils;
@@ -126,7 +125,7 @@ public class ModifyMultisigAccountTransaction extends Transaction {
         int signerVector = ModifyMultisigAccountTransactionBuffer.createSignerVector(builder, new byte[32]);
         int deadlineVector = ModifyMultisigAccountTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
         int feeVector = ModifyMultisigAccountTransactionBuffer.createFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
-        int modificationsVector = TransferTransactionBuffer.createMosaicsVector(builder, modificationsBuffers);
+        int modificationsVector = ModifyMultisigAccountTransactionBuffer.createModificationsVector(builder, modificationsBuffers);
 
         int fixSize = 123; // replace by the all numbers sum or add a comment explaining this
 
