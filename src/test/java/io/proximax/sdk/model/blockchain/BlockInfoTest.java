@@ -51,7 +51,8 @@ class BlockInfoTest {
                UInt64Utils.fromIntArray(new int[]{0, 0}),
                UInt64Utils.fromIntArray(new int[]{276447232, 23283}),
                "702090BA31CEF9E90C62BBDECC0CCCC0F88192B6625839382850357F70DD68A0",
-               "0000000000000000000000000000000000000000000000000000000000000000");
+               "0000000000000000000000000000000000000000000000000000000000000000",
+               Optional.of("1111111111111111111111111111111111111111111111111111111111111111"));
 
        assertEquals("24E92B511B54EDB48A4850F9B42485FDD1A30589D92C775632DDDD71D7D1D691", blockInfo.getHash());
        assertEquals("57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6", blockInfo.getGenerationHash());
@@ -68,6 +69,7 @@ class BlockInfoTest {
        assertEquals(UInt64Utils.fromIntArray(new int[]{276447232, 23283}), blockInfo.getDifficulty());
        assertEquals("702090BA31CEF9E90C62BBDECC0CCCC0F88192B6625839382850357F70DD68A0", blockInfo.getPreviousBlockHash());
        assertEquals("0000000000000000000000000000000000000000000000000000000000000000", blockInfo.getBlockTransactionsHash());
+       assertEquals(Optional.of("1111111111111111111111111111111111111111111111111111111111111111"), blockInfo.getBlockReceiptsHash());
        // test that toString does something
        assertTrue(blockInfo.toString().startsWith("BlockInfo"));
    }
@@ -89,6 +91,7 @@ class BlockInfoTest {
       blockDto.setDifficulty(getUint64Dto(4));
       blockDto.setPreviousBlockHash("702090BA31CEF9E90C62BBDECC0CCCC0F88192B6625839382850357F70DD68A0");
       blockDto.setBlockTransactionsHash("0000000000000000000000000000000000000000000000000000000000000000");
+      blockDto.setBlockReceiptsHash(    "1111111111111111111111111111111111111111111111111111111111111111");
       BlockInfoDTO dto = new BlockInfoDTO();
       dto.setBlock(blockDto);
       dto.setMeta(metaDto);
@@ -110,6 +113,7 @@ class BlockInfoTest {
        assertEquals(BigInteger.valueOf(4), blockInfo.getDifficulty());
        assertEquals("702090BA31CEF9E90C62BBDECC0CCCC0F88192B6625839382850357F70DD68A0", blockInfo.getPreviousBlockHash());
        assertEquals("0000000000000000000000000000000000000000000000000000000000000000", blockInfo.getBlockTransactionsHash());
+       assertEquals("1111111111111111111111111111111111111111111111111111111111111111", blockInfo.getBlockReceiptsHash().orElse("bad"));
        // test that toString does something
        assertTrue(blockInfo.toString().startsWith("BlockInfo"));
    }

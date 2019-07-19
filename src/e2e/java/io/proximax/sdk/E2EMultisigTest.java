@@ -25,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -324,6 +325,7 @@ public class E2EMultisigTest extends E2EBaseTest {
    }
 
    @Test
+   @Disabled
    void test05CreateMultilevelMultisig() throws InterruptedException, ExecutionException {
       // change the account to multisig with 1 of2 cosignatories
       ModifyMultisigAccountTransaction changeToMultisig = ModifyMultisigAccountTransaction.create(getDeadline(),
@@ -338,7 +340,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       AggregateTransaction agg = AggregateTransaction.createComplete(getDeadline(),
             Arrays.asList(changeToMultisig.toAggregate(multiMultisigAccount.getPublicAccount())),
             getNetworkType());
-      SignedTransaction signedChangeToMultisig = api.signWithCosigners(agg, multiMultisigAccount, Arrays.asList(cosig1, cosig2, cosig3));
+      SignedTransaction signedChangeToMultisig = api.signWithCosigners(agg, multiMultisigAccount, Arrays.asList(cosig1, cosig2));
       // announce the transaction
       logger.info("Sent request: {}", transactionHttp.announce(signedChangeToMultisig).toFuture().get());
       // verify that account is multisig

@@ -56,7 +56,8 @@ public class BlockChannelMessage extends ListenerMessage<BlockInfo> {
                       extractBigInteger(block.getAsJsonArray("timestamp")),
                       extractBigInteger(block.getAsJsonArray("difficulty")),
                       block.get("previousBlockHash").getAsString(),
-                      block.get("blockTransactionsHash").getAsString()
+                      block.get("blockTransactionsHash").getAsString(),
+                      Optional.empty()
       );
   
    }

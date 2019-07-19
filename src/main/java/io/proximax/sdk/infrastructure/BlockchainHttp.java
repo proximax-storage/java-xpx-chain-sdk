@@ -33,6 +33,7 @@ import io.proximax.sdk.BlockchainRepository;
 import io.proximax.sdk.gen.model.BlockInfoDTO;
 import io.proximax.sdk.gen.model.BlockchainScoreDTO;
 import io.proximax.sdk.gen.model.HeightInfoDTO;
+import io.proximax.sdk.gen.model.MerkleProofInfo;
 import io.proximax.sdk.gen.model.MerkleProofInfoDTO;
 import io.proximax.sdk.gen.model.NodeInfoDTO;
 import io.proximax.sdk.gen.model.NodeTimeDTO;
@@ -178,10 +179,10 @@ public class BlockchainHttp extends Http implements BlockchainRepository {
 
    @Override
    public Observable<MerklePath> getReceiptMerklePath(BigInteger height, String receiptHash) {
+      System.out.println("merkle path for "+height+ " "+receiptHash);
       return this.client.get(BLOCK + height.toString() + "/receipt/" + receiptHash + "/merkle")
             .map(Http::mapStringOrError)
-            .map(str -> gson.fromJson(str, MerkleProofInfoDTO.class))
-            .map(MerkleProofInfoDTO::getPayload)
+            .map(str -> gson.fromJson(str, MerkleProofInfo.class))
             .map(MerklePath::fromDto);
    }
    
