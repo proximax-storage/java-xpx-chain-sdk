@@ -77,7 +77,7 @@ public abstract class Transaction {
     /**
      * Generates hash for a serialized transaction payload.
      *
-     * @param payload Transaction payload
+     * @param payloadBytes Transaction payload as byte array
      * @param generationHashBytes the network generation hash
      * @return generated transaction hash.
      */

@@ -186,7 +186,8 @@ public class BlockchainApi {
     * convenience method for signing of transactions
     * 
     * @param transaction the transaction to be signed
-    * @param signer signing account
+    * @param initiator signing account that initiated the transaction
+    * @param cosignatories cosigning accounts
     * 
     * @return signed transaction instance
     */

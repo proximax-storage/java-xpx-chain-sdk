@@ -63,6 +63,7 @@ public class SecretProofTransaction extends Transaction {
      *
      * @param deadline          The deadline to include the transaction.
      * @param hashType          The hash algorithm secret is generated with.
+     * @param recipient         The recipient of the locked mosaic
      * @param secret            The seed proof hashed.
      * @param proof             The seed proof.
      * @param networkType       The network type.
