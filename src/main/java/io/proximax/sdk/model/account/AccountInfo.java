@@ -39,13 +39,15 @@ public class AccountInfo {
     private final String publicKey;
     private final BigInteger publicKeyHeight;
     private final List<Mosaic> mosaics;
+    private final String linkedAccountKey;
 
-    public AccountInfo(Address address, BigInteger addressHeight, String publicKey, BigInteger publicKeyHeight,List<Mosaic> mosaics) {
+    public AccountInfo(Address address, BigInteger addressHeight, String publicKey, BigInteger publicKeyHeight,List<Mosaic> mosaics, String linkedAccountKey) {
         this.address = address;
         this.addressHeight = addressHeight;
         this.publicKey = publicKey;
         this.publicKeyHeight = publicKeyHeight;
         this.mosaics = mosaics;
+        this.linkedAccountKey = linkedAccountKey;
     }
 
     /**
@@ -94,6 +96,13 @@ public class AccountInfo {
     }
 
     /**
+    * @return the linkedAccountKey
+    */
+   public String getLinkedAccountKey() {
+      return linkedAccountKey;
+   }
+
+   /**
      * Returns height when the address was published.
      *
      * @return {@link PublicAccount}
@@ -111,6 +120,7 @@ public class AccountInfo {
              accountDTO.getMosaics().stream()
                    .map(mosaicDTO -> new Mosaic(new MosaicId(toBigInt(mosaicDTO.getId())),
                          toBigInt(mosaicDTO.getAmount())))
-                   .collect(Collectors.toList()));
+                   .collect(Collectors.toList()),
+             accountDTO.getLinkedAccountKey());
     }
 }

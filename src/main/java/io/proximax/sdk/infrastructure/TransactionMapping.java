@@ -90,6 +90,8 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
          return new ModifyContractTransactionMapping().apply(input);         
       case ACCOUNT_PROPERTIES_ADDRESS: case ACCOUNT_PROPERTIES_MOSAIC: case ACCOUNT_PROPERTIES_ENTITY_TYPE:
          return new ModifyAccountPropertiesTransactionMapping().apply(input);
+      case ACCOUNT_LINK:
+         return new AccountLinkTransactionMapping().apply(input);
       default:
          throw new UnsupportedOperationException("Unimplemented transaction type " + type);
       }
@@ -848,5 +850,26 @@ class SecretProofTransactionMapping extends TransactionMapping {
                 transactionInfo
         );
     }
+
+
 }
 
+class AccountLinkTransactionMapping extends TransactionMapping {
+
+   @Override
+   public AccountLinkTransaction apply(JsonObject input) {
+      TransactionInfo transactionInfo = this.createTransactionInfo(input.getAsJsonObject("meta"));
+
+      JsonObject transaction = input.getAsJsonObject("transaction");
+      DeadlineBP deadline = new DeadlineBP(extractBigInteger(transaction.getAsJsonArray("deadline")));
+      NetworkType networkType = extractNetworkType(transaction.get("version"));
+
+      return new AccountLinkTransaction(
+            new PublicAccount(transaction.get("remoteAccountKey").getAsString(), networkType),
+            AccountLinkAction.getByCode(transaction.get("linkAction").getAsByte()), networkType,
+            extractTransactionVersion(transaction.get("version")), deadline, extractFee(transaction),
+            Optional.of(transaction.get("signature").getAsString()),
+            Optional.of(new PublicAccount(transaction.get("signer").getAsString(), networkType)),
+            Optional.of(transactionInfo));
+   }
+}

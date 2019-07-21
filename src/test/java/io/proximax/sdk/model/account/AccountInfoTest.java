@@ -43,13 +43,15 @@ class AccountInfoTest {
                 new BigInteger("964"),
                 "cf893ffcc47c33e7f68ab1db56365c156b0736824a0c1e273f9e00b8df8f01eb",
                 new BigInteger("966"),
-                mosaics);
+                mosaics,
+                "cf893ffcc47c33e7f68ab1db56365c156b0736824a0c1e273f9e00b8df8f01ea");
 
         assertEquals(Address.createFromRawAddress("SDGLFWDSHILTIUHGIBH5UGX2VYF5VNJEKCCDBR26"), accountInfo.getAddress());
         assertEquals(new BigInteger("964"), accountInfo.getAddressHeight());
         assertEquals("cf893ffcc47c33e7f68ab1db56365c156b0736824a0c1e273f9e00b8df8f01eb", accountInfo.getPublicKey());
         assertEquals(new BigInteger("966"), accountInfo.getPublicKeyHeight());
         assertEquals(mosaics, accountInfo.getMosaics());
+        assertEquals("cf893ffcc47c33e7f68ab1db56365c156b0736824a0c1e273f9e00b8df8f01ea", accountInfo.getLinkedAccountKey());
         assertEquals(PublicAccount.createFromPublicKey("cf893ffcc47c33e7f68ab1db56365c156b0736824a0c1e273f9e00b8df8f01eb", NetworkType.MIJIN_TEST), accountInfo.getPublicAccount());
 
     }
@@ -69,6 +71,7 @@ class AccountInfoTest {
        accountDto.setAddressHeight(uint);
        accountDto.setPublicKeyHeight(uint);
        accountDto.setMosaics(Arrays.asList(mosaicDto));
+       accountDto.setLinkedAccountKey("cf893ffcc47c33e7f68ab1db56365c156b0736824a0c1e273f9e00b8df8f01ea");
 
        AccountInfoDTO dto = new AccountInfoDTO();
        dto.setAccount(accountDto);
@@ -76,6 +79,7 @@ class AccountInfoTest {
        AccountInfo accountInfo = AccountInfo.fromDto(dto);
        // assertions
        assertEquals("cf893ffcc47c33e7f68ab1db56365c156b0736824a0c1e273f9e00b8df8f01eb", HexEncoder.getString(Base32Encoder.getBytes(accountInfo.getAddress().plain())));
+       assertEquals("cf893ffcc47c33e7f68ab1db56365c156b0736824a0c1e273f9e00b8df8f01ea", accountInfo.getLinkedAccountKey());
        assertEquals(BigInteger.TEN, accountInfo.getAddressHeight());
        assertEquals(BigInteger.TEN, accountInfo.getPublicKeyHeight());
        assertEquals(1, accountInfo.getMosaics().size());
