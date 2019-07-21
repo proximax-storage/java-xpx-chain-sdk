@@ -18,30 +18,46 @@ package io.proximax.sdk.model.mosaic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
 
 class NetworkCurrencyMosaicTest {
 
-    @Test
-    void shouldCreateViaConstructor() {
-        NetworkCurrencyMosaic mosaic = new NetworkCurrencyMosaic(BigInteger.valueOf(0));
-        assertEquals(BigInteger.valueOf(0), mosaic.getAmount());
-        assertEquals(NetworkCurrencyMosaic.ID, mosaic.getId());
-    }
+   @Test
+   void shouldCreateViaConstructor() {
+      NetworkCurrencyMosaic mosaic = new NetworkCurrencyMosaic(BigInteger.valueOf(0));
+      assertEquals(BigInteger.valueOf(0), mosaic.getAmount());
+      assertEquals(NetworkCurrencyMosaic.ID, mosaic.getId());
+   }
 
-    @Test
-    void shouldCreateRelative() {
-    	NetworkCurrencyMosaic mosaic = NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(1));
-        assertEquals(BigInteger.valueOf(1000000), mosaic.getAmount());
-        assertEquals(NetworkCurrencyMosaic.ID, mosaic.getId());
-    }
+   @Test
+   void createRelativeDecimal() {
+      NetworkCurrencyMosaic mosaic = NetworkCurrencyMosaic.createRelative(BigDecimal.valueOf(15, 1));
+      assertEquals(BigInteger.valueOf(1500000), mosaic.getAmount());
+      assertEquals(NetworkCurrencyMosaic.ID, mosaic.getId());
 
-    @Test
-    void shouldCreateAbsolute() {
-    	NetworkCurrencyMosaic mosaic = NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1));
-        assertEquals(BigInteger.valueOf(1), mosaic.getAmount());
-        assertEquals(NetworkCurrencyMosaic.ID, mosaic.getId());
-    }
+   }
+
+   @Test
+   void createRelativeDecimalWhole() {
+      NetworkCurrencyMosaic mosaic = NetworkCurrencyMosaic.createRelative(BigDecimal.valueOf(15));
+      assertEquals(BigInteger.valueOf(15000000), mosaic.getAmount());
+      assertEquals(NetworkCurrencyMosaic.ID, mosaic.getId());
+
+   }
+
+   @Test
+   void shouldCreateAbsolute() {
+      NetworkCurrencyMosaic mosaic = NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1));
+      assertEquals(BigInteger.valueOf(1), mosaic.getAmount());
+      assertEquals(NetworkCurrencyMosaic.ID, mosaic.getId());
+   }
+   
+   @Test
+   void testConstants() {
+      assertEquals(1000000l, NetworkCurrencyMosaic.ONE.getAmount().longValue());
+      assertEquals(10000000l, NetworkCurrencyMosaic.TEN.getAmount().longValue());
+   }
 }

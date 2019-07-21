@@ -142,7 +142,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       SignedTransaction signedTransaction = api.sign(aggregateTransaction, cosig1);
       // lock 10 of XPX (required to prevent spamming)
       LockFundsTransaction lockFundsTransaction = LockFundsTransaction.create(getDeadline(),
-            NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
+            NetworkCurrencyMosaic.TEN,
             BigInteger.valueOf(480),
             signedTransaction,
             getNetworkType());
@@ -222,7 +222,7 @@ public class E2EMultisigTest extends E2EBaseTest {
             Arrays.asList(cosig2));
       // lock 10 of XPX (required to prevent spamming)
       LockFundsTransaction lockFundsTransaction = LockFundsTransaction.create(getDeadline(),
-            NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
+            NetworkCurrencyMosaic.TEN,
             BigInteger.valueOf(480),
             signedTransaction,
             getNetworkType());
@@ -257,7 +257,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       SignedTransaction signedTransaction = api.sign(aggregateTransaction, cosig1);
       // lock 10 of XPX (required to prevent spamming)
       LockFundsTransaction lockFundsTransaction = LockFundsTransaction.create(getDeadline(),
-            NetworkCurrencyMosaic.createRelative(BigInteger.TEN),
+            NetworkCurrencyMosaic.TEN,
             BigInteger.valueOf(480),
             signedTransaction,
             getNetworkType());
@@ -296,7 +296,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       SignedTransaction signedTransaction = api.signWithCosigners(aggregateTransaction, cosig1, Arrays.asList(cosig3));
       // lock 10 of XPX (required to prevent spamming)
       LockFundsTransaction lockFundsTransaction = LockFundsTransaction.create(getDeadline(),
-            NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
+            NetworkCurrencyMosaic.TEN,
             BigInteger.valueOf(480),
             signedTransaction,
             getNetworkType());

@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
@@ -233,7 +233,7 @@ class ListenerTest extends BaseTest {
          throws ExecutionException, InterruptedException {
       TransferTransaction transferTransaction = TransferTransaction.create(new Deadline(2, HOURS),
             new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST),
-            Arrays.asList(NetworkCurrencyMosaic.createRelative(new BigInteger("100000000000"))),
+            Arrays.asList(NetworkCurrencyMosaic.createRelative(new BigDecimal("100000000000"))),
             PlainMessage.create("test-message"),
             NetworkType.MIJIN_TEST);
 

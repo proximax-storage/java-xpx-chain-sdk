@@ -37,14 +37,14 @@ public class SecretLockTransactionTest extends ResourceBasedTest {
    @Test
    void constructor() {
       String secret = "3fc8ba10229ab5778d05d9c4b7f56676a88bf9295c185acfc0f961db5408cafe";
-      SecretLockTransaction tx = new SecretLockTransaction(NetworkType.MIJIN, 23, new FakeDeadline(), BigInteger.ONE, NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
+      SecretLockTransaction tx = new SecretLockTransaction(NetworkType.MIJIN, 23, new FakeDeadline(), BigInteger.ONE, NetworkCurrencyMosaic.TEN,
             BigInteger.valueOf(100),
             HashType.SHA3_256,
             secret,
             Address.createFromRawAddress("SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM"),"signaturestring", new PublicAccount(new KeyPair().getPublicKey().getHexString(), NetworkType.MIJIN),
             TransactionInfo.create(BigInteger.ONE, "infohash", "merklehash"));
       // make assertions
-      assertEquals(NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)), tx.getMosaic());
+      assertEquals(NetworkCurrencyMosaic.TEN, tx.getMosaic());
       assertEquals(BigInteger.valueOf(100), tx.getDuration());
       assertEquals(HashType.SHA3_256, tx.getHashType());
       assertEquals(secret, tx.getSecret());
@@ -55,7 +55,7 @@ public class SecretLockTransactionTest extends ResourceBasedTest {
    void serialization() throws IOException {
       String secret = "3fc8ba10229ab5778d05d9c4b7f56676a88bf9295c185acfc0f961db5408cafe";
       SecretLockTransaction secretLocktx = SecretLockTransaction.create(new FakeDeadline(),
-            NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
+            NetworkCurrencyMosaic.TEN,
             BigInteger.valueOf(100),
             HashType.SHA3_256,
             secret,
@@ -69,7 +69,7 @@ public class SecretLockTransactionTest extends ResourceBasedTest {
    void shouldThrowErrorWhenSecretIsNotValid() {
       assertThrows(IllegalArgumentException.class, () -> {
          SecretLockTransaction secretLocktx = SecretLockTransaction.create(new FakeDeadline(),
-               NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(10)),
+               NetworkCurrencyMosaic.TEN,
                BigInteger.valueOf(100),
                HashType.SHA3_256,
                "non valid hash",

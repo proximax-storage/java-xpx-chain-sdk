@@ -92,14 +92,14 @@ public class E2EAggregateTest extends E2EBaseTest {
    void escrowBetweenTwoParties() {
       returnAllToSeed(alice);
       returnAllToSeed(bob);
-      sendMosaic(seedAccount, alice.getAddress(), NetworkCurrencyMosaic.createRelative(BigInteger.TEN));
-      sendMosaic(seedAccount, alice.getAddress(), NetworkCurrencyMosaic.createRelative(BigInteger.ONE));
+      sendMosaic(seedAccount, alice.getAddress(), NetworkCurrencyMosaic.TEN);
+      sendMosaic(seedAccount, alice.getAddress(), NetworkCurrencyMosaic.ONE);
       sendMosaic(seedAccount, bob.getAddress(), new Mosaic(mosaicY, BigInteger.TEN));
       logger.info("Escrow between {} and {}", alice, bob);
       // send mosaic X from alice to bob
       TransferTransaction aliceToBob = TransferTransaction.create(getDeadline(),
             bob.getAddress(),
-            Arrays.asList(NetworkCurrencyMosaic.createRelative(BigInteger.ONE)),
+            Arrays.asList(NetworkCurrencyMosaic.ONE),
             PlainMessage.Empty,
             getNetworkType());
       // send mosaic Y from bob to alice
@@ -117,7 +117,7 @@ public class E2EAggregateTest extends E2EBaseTest {
       SignedTransaction signedEscrow = api.sign(escrow, alice);
       // lock funds for escrow
       LockFundsTransaction lock = LockFundsTransaction.create(getDeadline(),
-            NetworkCurrencyMosaic.createRelative(BigInteger.TEN),
+            NetworkCurrencyMosaic.TEN,
             BigInteger.valueOf(480),
             signedEscrow,
             getNetworkType());
@@ -171,14 +171,14 @@ public class E2EAggregateTest extends E2EBaseTest {
    void escrowBetweenTwoPartiesComplete() {
       returnAllToSeed(alice);
       returnAllToSeed(bob);
-      sendMosaic(seedAccount, alice.getAddress(), NetworkCurrencyMosaic.createRelative(BigInteger.TEN));
-      sendMosaic(seedAccount, alice.getAddress(), NetworkCurrencyMosaic.createRelative(BigInteger.ONE));
+      sendMosaic(seedAccount, alice.getAddress(), NetworkCurrencyMosaic.TEN);
+      sendMosaic(seedAccount, alice.getAddress(), NetworkCurrencyMosaic.ONE);
       sendMosaic(seedAccount, bob.getAddress(), new Mosaic(mosaicY, BigInteger.TEN));
       logger.info("Escrow between {} and {}", alice, bob);
       // send mosaic X from alice to bob
       TransferTransaction aliceToBob = TransferTransaction.create(getDeadline(),
             bob.getAddress(),
-            Arrays.asList(NetworkCurrencyMosaic.createRelative(BigInteger.ONE)),
+            Arrays.asList(NetworkCurrencyMosaic.ONE),
             PlainMessage.Empty,
             getNetworkType());
       // send mosaic Y from bob to alice
@@ -229,16 +229,16 @@ public class E2EAggregateTest extends E2EBaseTest {
       returnAllToSeed(alice);
       returnAllToSeed(bob);
       returnAllToSeed(mike);
-      sendMosaic(seedAccount, alice.getAddress(), NetworkCurrencyMosaic.createRelative(BigInteger.TEN));
-      sendMosaic(seedAccount, alice.getAddress(), NetworkCurrencyMosaic.createRelative(BigInteger.ONE));
+      sendMosaic(seedAccount, alice.getAddress(), NetworkCurrencyMosaic.TEN);
+      sendMosaic(seedAccount, alice.getAddress(), NetworkCurrencyMosaic.ONE);
       sendMosaic(seedAccount, bob.getAddress(), new Mosaic(mosaicY, BigInteger.TEN));
-      sendMosaic(seedAccount, mike.getAddress(), NetworkCurrencyMosaic.createRelative(BigInteger.ONE));
+      sendMosaic(seedAccount, mike.getAddress(), NetworkCurrencyMosaic.ONE);
       sleepForAWhile();
       logger.info("Escrow between {}, {} and {}", alice, bob, mike);
       // send mosaic X from alice to bob
       TransferTransaction aliceToBob = TransferTransaction.create(getDeadline(),
             bob.getAddress(),
-            Arrays.asList(NetworkCurrencyMosaic.createRelative(BigInteger.ONE)),
+            Arrays.asList(NetworkCurrencyMosaic.ONE),
             PlainMessage.Empty,
             getNetworkType());
       // send mosaic Y from bob to alice
@@ -250,7 +250,7 @@ public class E2EAggregateTest extends E2EBaseTest {
       // send mosaic Y from bob to alice
       TransferTransaction mikeToAlice = TransferTransaction.create(getDeadline(),
             alice.getAddress(),
-            Arrays.asList(NetworkCurrencyMosaic.createRelative(BigInteger.ONE)),
+            Arrays.asList(NetworkCurrencyMosaic.ONE),
             PlainMessage.Empty,
             getNetworkType());
       // aggregate bonded with the 3 transactions - escrow
@@ -264,7 +264,7 @@ public class E2EAggregateTest extends E2EBaseTest {
       SignedTransaction signedEscrow = api.sign(escrow, alice);
       // lock funds for escrow
       LockFundsTransaction lock = LockFundsTransaction.create(getDeadline(),
-            NetworkCurrencyMosaic.createRelative(BigInteger.TEN),
+            NetworkCurrencyMosaic.TEN,
             BigInteger.valueOf(480),
             signedEscrow,
             getNetworkType());
@@ -334,7 +334,7 @@ public class E2EAggregateTest extends E2EBaseTest {
    void askforMoney() {
       returnAllToSeed(alice);
       returnAllToSeed(bob);
-      sendMosaic(seedAccount, alice.getAddress(), NetworkCurrencyMosaic.createRelative(BigInteger.TEN));
+      sendMosaic(seedAccount, alice.getAddress(), NetworkCurrencyMosaic.TEN);
       sendMosaic(seedAccount, bob.getAddress(), new Mosaic(mosaicY, BigInteger.TEN));
       logger.info("Alice asks for money");
       // send mosaic X from alice to bob
@@ -358,7 +358,7 @@ public class E2EAggregateTest extends E2EBaseTest {
       SignedTransaction signedEscrow = api.sign(escrow, alice);
       // lock funds for escrow
       LockFundsTransaction lock = LockFundsTransaction.create(getDeadline(),
-            NetworkCurrencyMosaic.createRelative(BigInteger.TEN),
+            NetworkCurrencyMosaic.TEN,
             BigInteger.valueOf(480),
             signedEscrow,
             getNetworkType());
