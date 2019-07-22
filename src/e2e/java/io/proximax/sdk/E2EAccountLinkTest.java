@@ -22,8 +22,10 @@ import java.math.BigInteger;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,8 +34,10 @@ import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.AccountInfo;
 import io.proximax.sdk.model.transaction.AccountLinkAction;
 import io.proximax.sdk.model.transaction.AccountLinkTransaction;
+import io.proximax.sdk.model.transaction.TransactionStatusError;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestMethodOrder(MethodOrderer.Alphanumeric.class)
 class E2EAccountLinkTest extends E2EBaseTest {
    /** logger */
    private static final Logger logger = LoggerFactory.getLogger(E2ETransferTest.class);
@@ -49,18 +53,55 @@ class E2EAccountLinkTest extends E2EBaseTest {
    }
 
    @Test
-   void linkAccounts() {
+   void test01linkAccounts() {
+      linkAndTestAccounts(localAccount, remoteAccount);
+   }
+
+   @Test
+   void test02unlinkAccounts() {
+      AccountLinkTransaction link = new AccountLinkTransaction(remoteAccount.getPublicAccount(),
+            AccountLinkAction.UNLINK, getNetworkType(), getDeadline(), BigInteger.ZERO);
+      transactionHttp.announce(api.sign(link, localAccount)).blockingFirst();
+      listener.confirmed(localAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+
+      sleepForAWhile();
+
+      // test for the result
+      AccountInfo localInfo = accountHttp.getAccountInfo(localAccount.getAddress()).blockingFirst();
+      AccountInfo remoteInfo = accountHttp.getAccountInfo(remoteAccount.getAddress()).blockingFirst();
+      assertEquals("0000000000000000000000000000000000000000000000000000000000000000",
+            remoteInfo.getLinkedAccountKey());
+      assertEquals("0000000000000000000000000000000000000000000000000000000000000000", localInfo.getLinkedAccountKey());
+   }
+
+   @Test
+   void test03relinkAccounts() {
+      linkAndTestAccounts(localAccount, remoteAccount);
+   }
+
+   @Test
+   void test04overLinkAccounts() {
+      Account remoteAccount2 = new Account(new KeyPair(), getNetworkType());
+      AccountLinkTransaction link = new AccountLinkTransaction(remoteAccount2.getPublicAccount(),
+            AccountLinkAction.LINK, getNetworkType(), getDeadline(), BigInteger.ZERO);
+      transactionHttp.announce(api.sign(link, localAccount)).blockingFirst();
+      TransactionStatusError error = listener.status(localAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      assertEquals("Failure_AccountLink_Link_Already_Exists", error.getStatus());
+   }
+
+   private void linkAndTestAccounts(Account localAccount, Account remoteAccount) {
       AccountLinkTransaction link = new AccountLinkTransaction(remoteAccount.getPublicAccount(), AccountLinkAction.LINK,
             getNetworkType(), getDeadline(), BigInteger.ZERO);
       transactionHttp.announce(api.sign(link, localAccount)).blockingFirst();
       listener.confirmed(localAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
-      
+
       sleepForAWhile();
-      
+
       // test for the result
       AccountInfo localInfo = accountHttp.getAccountInfo(localAccount.getAddress()).blockingFirst();
       AccountInfo remoteInfo = accountHttp.getAccountInfo(remoteAccount.getAddress()).blockingFirst();
       assertEquals(localAccount.getPublicKey(), remoteInfo.getLinkedAccountKey());
       assertEquals(remoteAccount.getPublicKey(), localInfo.getLinkedAccountKey());
    }
+
 }

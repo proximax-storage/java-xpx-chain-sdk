@@ -1,5 +1,6 @@
 /*
  * Copyright 2018 NEM
+ * Copyright 2019 ProximaX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +21,9 @@ package io.proximax.sdk.model.transaction;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Schema is used to convert flatbuffer serialization to format expected by the server
+ */
 class Schema {
     private final List<SchemaAttribute> schemaDefinition;
 

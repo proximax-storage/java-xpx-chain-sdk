@@ -18,6 +18,9 @@ package io.proximax.sdk.model.transaction;
 
 import java.util.Arrays;
 
+/**
+ * serialization schema for {@link AccountLinkTransaction}
+ */
 class AccountLinkTransactionSchema extends Schema {
     public AccountLinkTransactionSchema() {
         super(Arrays.asList(

@@ -854,6 +854,9 @@ class SecretProofTransactionMapping extends TransactionMapping {
 
 }
 
+/**
+ * Mapping from server response to an account link transaction instance
+ */
 class AccountLinkTransactionMapping extends TransactionMapping {
 
    @Override
@@ -868,8 +871,8 @@ class AccountLinkTransactionMapping extends TransactionMapping {
             new PublicAccount(transaction.get("remoteAccountKey").getAsString(), networkType),
             AccountLinkAction.getByCode(transaction.get("linkAction").getAsByte()), networkType,
             extractTransactionVersion(transaction.get("version")), deadline, extractFee(transaction),
-            Optional.of(transaction.get("signature").getAsString()),
-            Optional.of(new PublicAccount(transaction.get("signer").getAsString(), networkType)),
-            Optional.of(transactionInfo));
+            transaction.get("signature").getAsString(),
+            new PublicAccount(transaction.get("signer").getAsString(), networkType),
+            transactionInfo);
    }
 }
