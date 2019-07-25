@@ -185,7 +185,7 @@ public class AggregateTransaction extends Transaction {
       int signerVector = AggregateTransactionBuffer.createSignerVector(builder, new byte[32]);
       int deadlineVector = AggregateTransactionBuffer.createDeadlineVector(builder,
             UInt64Utils.fromBigInteger(deadlineBigInt));
-      int feeVector = AggregateTransactionBuffer.createFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
+      int feeVector = AggregateTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
       int transactionsVector = AggregateTransactionBuffer.createTransactionsVector(builder, transactionsBytes);
 
       AggregateTransactionBuffer.startAggregateTransactionBuffer(builder);
@@ -194,7 +194,7 @@ public class AggregateTransaction extends Transaction {
       AggregateTransactionBuffer.addSigner(builder, signerVector);
       AggregateTransactionBuffer.addVersion(builder, version);
       AggregateTransactionBuffer.addType(builder, getType().getValue());
-      AggregateTransactionBuffer.addFee(builder, feeVector);
+      AggregateTransactionBuffer.addMaxFee(builder, feeVector);
       AggregateTransactionBuffer.addDeadline(builder, deadlineVector);
       
       AggregateTransactionBuffer.addTransactionsSize(builder, transactionsBytes.length);

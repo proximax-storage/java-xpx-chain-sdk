@@ -1,20 +1,24 @@
 namespace io.proximax.sdk.gen.buffers;
 
+table MosaicProperty {
+    mosaicPropertyId:ubyte;
+    value:[uint];
+}
+
 table MosaicDefinitionTransactionBuffer {
     size: uint;
     signature: [ubyte];
     signer: [ubyte];
     version: ushort;
     type: ushort;
-    fee: [uint];
+    maxFee: [uint];
     deadline:[uint];
     mosaicNonce:uint;
     mosaicId:[uint];
     numOptionalProperties:ubyte;
     flags:ubyte;
     divisibility:ubyte;
-    indicateDuration:ubyte;
-    duration:[uint];
+    optionalProperties: [MosaicProperty];
 }
 
 root_type MosaicDefinitionTransactionBuffer;

@@ -19,18 +19,14 @@ package io.proximax.sdk.model.mosaic;
 import static io.proximax.sdk.utils.dto.UInt64Utils.toBigInt;
 
 import java.math.BigInteger;
-import java.util.List;
+import java.util.Optional;
 
 import io.proximax.sdk.gen.model.MosaicInfoDTO;
-import io.proximax.sdk.gen.model.MosaicPropertyDTO;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
-import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
  * The mosaic info structure contains its properties, the owner and the namespace to which it belongs to.
- *
- * @since 1.0
  */
 public class MosaicInfo {
     private final String metaId;
@@ -108,20 +104,11 @@ public class MosaicInfo {
     }
 
     /**
-     * Returns if the mosaic levy is mutable
-     *
-     * @return if the mosaic levy is mutable
-     */
-    public boolean isLevyMutable() {
-        return properties.isLevyMutable();
-    }
-
-    /**
      * Return the number of blocks from height it will be active
      *
-     * @return the number of blocks from height it will be active
+     * @return the optional number of blocks from height it will be active
      */
-    public BigInteger getDuration() {
+    public Optional<BigInteger> getDuration() {
         return properties.getDuration();
     }
 
@@ -154,24 +141,8 @@ public class MosaicInfo {
             toBigInt(dto.getMosaic().getSupply()),
             toBigInt(dto.getMosaic().getHeight()),
             new PublicAccount(dto.getMosaic().getOwner(), networkType),
-            extractMosaicProperties(dto.getMosaic().getProperties())
+            MosaicProperties.fromDto(dto.getMosaic().getProperties())
       );
 	}
-
-   /**
-    * Convert array of numbers into named properties
-    * 
-    * @param mosaicPropertiesDTO array of numeric values
-    * @return mosaic properties instance
-    */
-   private static MosaicProperties extractMosaicProperties(List<MosaicPropertyDTO> mosaicPropertiesDTO) {
-       String flags = "00" + Integer.toBinaryString(UInt64Utils.toBigInt(mosaicPropertiesDTO.get(0).getValue()).intValue());
-       String bitMapFlags = flags.substring(flags.length() - 3, flags.length());
-       return new MosaicProperties(bitMapFlags.charAt(2) == '1',
-               bitMapFlags.charAt(1) == '1',
-               bitMapFlags.charAt(0) == '1',
-               toBigInt(mosaicPropertiesDTO.get(1).getValue()).intValue(),
-               toBigInt(mosaicPropertiesDTO.get(2).getValue()));
-   }
 }
 

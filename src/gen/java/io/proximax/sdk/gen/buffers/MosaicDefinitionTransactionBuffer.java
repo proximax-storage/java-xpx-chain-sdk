@@ -25,10 +25,10 @@ public final class MosaicDefinitionTransactionBuffer extends Table {
   public ByteBuffer signerInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 8, 1); }
   public int version() { int o = __offset(10); return o != 0 ? bb.getShort(o + bb_pos) & 0xFFFF : 0; }
   public int type() { int o = __offset(12); return o != 0 ? bb.getShort(o + bb_pos) & 0xFFFF : 0; }
-  public long fee(int j) { int o = __offset(14); return o != 0 ? (long)bb.getInt(__vector(o) + j * 4) & 0xFFFFFFFFL : 0; }
-  public int feeLength() { int o = __offset(14); return o != 0 ? __vector_len(o) : 0; }
-  public ByteBuffer feeAsByteBuffer() { return __vector_as_bytebuffer(14, 4); }
-  public ByteBuffer feeInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 14, 4); }
+  public long maxFee(int j) { int o = __offset(14); return o != 0 ? (long)bb.getInt(__vector(o) + j * 4) & 0xFFFFFFFFL : 0; }
+  public int maxFeeLength() { int o = __offset(14); return o != 0 ? __vector_len(o) : 0; }
+  public ByteBuffer maxFeeAsByteBuffer() { return __vector_as_bytebuffer(14, 4); }
+  public ByteBuffer maxFeeInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 14, 4); }
   public long deadline(int j) { int o = __offset(16); return o != 0 ? (long)bb.getInt(__vector(o) + j * 4) & 0xFFFFFFFFL : 0; }
   public int deadlineLength() { int o = __offset(16); return o != 0 ? __vector_len(o) : 0; }
   public ByteBuffer deadlineAsByteBuffer() { return __vector_as_bytebuffer(16, 4); }
@@ -41,11 +41,9 @@ public final class MosaicDefinitionTransactionBuffer extends Table {
   public int numOptionalProperties() { int o = __offset(22); return o != 0 ? bb.get(o + bb_pos) & 0xFF : 0; }
   public int flags() { int o = __offset(24); return o != 0 ? bb.get(o + bb_pos) & 0xFF : 0; }
   public int divisibility() { int o = __offset(26); return o != 0 ? bb.get(o + bb_pos) & 0xFF : 0; }
-  public int indicateDuration() { int o = __offset(28); return o != 0 ? bb.get(o + bb_pos) & 0xFF : 0; }
-  public long duration(int j) { int o = __offset(30); return o != 0 ? (long)bb.getInt(__vector(o) + j * 4) & 0xFFFFFFFFL : 0; }
-  public int durationLength() { int o = __offset(30); return o != 0 ? __vector_len(o) : 0; }
-  public ByteBuffer durationAsByteBuffer() { return __vector_as_bytebuffer(30, 4); }
-  public ByteBuffer durationInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 30, 4); }
+  public MosaicProperty optionalProperties(int j) { return optionalProperties(new MosaicProperty(), j); }
+  public MosaicProperty optionalProperties(MosaicProperty obj, int j) { int o = __offset(28); return o != 0 ? obj.__assign(__indirect(__vector(o) + j * 4), bb) : null; }
+  public int optionalPropertiesLength() { int o = __offset(28); return o != 0 ? __vector_len(o) : 0; }
 
   public static int createMosaicDefinitionTransactionBuffer(FlatBufferBuilder builder,
       long size,
@@ -53,34 +51,32 @@ public final class MosaicDefinitionTransactionBuffer extends Table {
       int signerOffset,
       int version,
       int type,
-      int feeOffset,
+      int maxFeeOffset,
       int deadlineOffset,
       long mosaicNonce,
       int mosaicIdOffset,
       int numOptionalProperties,
       int flags,
       int divisibility,
-      int indicateDuration,
-      int durationOffset) {
-    builder.startObject(14);
-    MosaicDefinitionTransactionBuffer.addDuration(builder, durationOffset);
+      int optionalPropertiesOffset) {
+    builder.startObject(13);
+    MosaicDefinitionTransactionBuffer.addOptionalProperties(builder, optionalPropertiesOffset);
     MosaicDefinitionTransactionBuffer.addMosaicId(builder, mosaicIdOffset);
     MosaicDefinitionTransactionBuffer.addMosaicNonce(builder, mosaicNonce);
     MosaicDefinitionTransactionBuffer.addDeadline(builder, deadlineOffset);
-    MosaicDefinitionTransactionBuffer.addFee(builder, feeOffset);
+    MosaicDefinitionTransactionBuffer.addMaxFee(builder, maxFeeOffset);
     MosaicDefinitionTransactionBuffer.addSigner(builder, signerOffset);
     MosaicDefinitionTransactionBuffer.addSignature(builder, signatureOffset);
     MosaicDefinitionTransactionBuffer.addSize(builder, size);
     MosaicDefinitionTransactionBuffer.addType(builder, type);
     MosaicDefinitionTransactionBuffer.addVersion(builder, version);
-    MosaicDefinitionTransactionBuffer.addIndicateDuration(builder, indicateDuration);
     MosaicDefinitionTransactionBuffer.addDivisibility(builder, divisibility);
     MosaicDefinitionTransactionBuffer.addFlags(builder, flags);
     MosaicDefinitionTransactionBuffer.addNumOptionalProperties(builder, numOptionalProperties);
     return MosaicDefinitionTransactionBuffer.endMosaicDefinitionTransactionBuffer(builder);
   }
 
-  public static void startMosaicDefinitionTransactionBuffer(FlatBufferBuilder builder) { builder.startObject(14); }
+  public static void startMosaicDefinitionTransactionBuffer(FlatBufferBuilder builder) { builder.startObject(13); }
   public static void addSize(FlatBufferBuilder builder, long size) { builder.addInt(0, (int)size, (int)0L); }
   public static void addSignature(FlatBufferBuilder builder, int signatureOffset) { builder.addOffset(1, signatureOffset, 0); }
   public static int createSignatureVector(FlatBufferBuilder builder, byte[] data) { builder.startVector(1, data.length, 1); for (int i = data.length - 1; i >= 0; i--) builder.addByte(data[i]); return builder.endVector(); }
@@ -90,9 +86,9 @@ public final class MosaicDefinitionTransactionBuffer extends Table {
   public static void startSignerVector(FlatBufferBuilder builder, int numElems) { builder.startVector(1, numElems, 1); }
   public static void addVersion(FlatBufferBuilder builder, int version) { builder.addShort(3, (short)version, (short)0); }
   public static void addType(FlatBufferBuilder builder, int type) { builder.addShort(4, (short)type, (short)0); }
-  public static void addFee(FlatBufferBuilder builder, int feeOffset) { builder.addOffset(5, feeOffset, 0); }
-  public static int createFeeVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addInt(data[i]); return builder.endVector(); }
-  public static void startFeeVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
+  public static void addMaxFee(FlatBufferBuilder builder, int maxFeeOffset) { builder.addOffset(5, maxFeeOffset, 0); }
+  public static int createMaxFeeVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addInt(data[i]); return builder.endVector(); }
+  public static void startMaxFeeVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
   public static void addDeadline(FlatBufferBuilder builder, int deadlineOffset) { builder.addOffset(6, deadlineOffset, 0); }
   public static int createDeadlineVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addInt(data[i]); return builder.endVector(); }
   public static void startDeadlineVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
@@ -103,10 +99,9 @@ public final class MosaicDefinitionTransactionBuffer extends Table {
   public static void addNumOptionalProperties(FlatBufferBuilder builder, int numOptionalProperties) { builder.addByte(9, (byte)numOptionalProperties, (byte)0); }
   public static void addFlags(FlatBufferBuilder builder, int flags) { builder.addByte(10, (byte)flags, (byte)0); }
   public static void addDivisibility(FlatBufferBuilder builder, int divisibility) { builder.addByte(11, (byte)divisibility, (byte)0); }
-  public static void addIndicateDuration(FlatBufferBuilder builder, int indicateDuration) { builder.addByte(12, (byte)indicateDuration, (byte)0); }
-  public static void addDuration(FlatBufferBuilder builder, int durationOffset) { builder.addOffset(13, durationOffset, 0); }
-  public static int createDurationVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addInt(data[i]); return builder.endVector(); }
-  public static void startDurationVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
+  public static void addOptionalProperties(FlatBufferBuilder builder, int optionalPropertiesOffset) { builder.addOffset(12, optionalPropertiesOffset, 0); }
+  public static int createOptionalPropertiesVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addOffset(data[i]); return builder.endVector(); }
+  public static void startOptionalPropertiesVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
   public static int endMosaicDefinitionTransactionBuffer(FlatBufferBuilder builder) {
     int o = builder.endObject();
     return o;

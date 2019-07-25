@@ -186,7 +186,7 @@ public class ModifyMetadataTransaction extends Transaction {
       int signerOffset = ModifyMetadataTransactionBuffer.createSignerVector(builder, new byte[32]);
       int deadlineOffset = ModifyMetadataTransactionBuffer.createDeadlineVector(builder,
             UInt64Utils.fromBigInteger(deadlineBigInt));
-      int feeOffset = ModifyMetadataTransactionBuffer.createFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
+      int feeOffset = ModifyMetadataTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
       int metadataIdOffset = ModifyMetadataTransactionBuffer.createMetadataIdVector(builder, metadataIdBytes);
       int modificationsOffset = ModifyMetadataTransactionBuffer.createModificationsVector(builder, modificationOffsets);
 
@@ -195,7 +195,7 @@ public class ModifyMetadataTransaction extends Transaction {
 
       ModifyMetadataTransactionBuffer.startModifyMetadataTransactionBuffer(builder);
       ModifyMetadataTransactionBuffer.addDeadline(builder, deadlineOffset);
-      ModifyMetadataTransactionBuffer.addFee(builder, feeOffset);
+      ModifyMetadataTransactionBuffer.addMaxFee(builder, feeOffset);
       ModifyMetadataTransactionBuffer.addSigner(builder, signerOffset);
       ModifyMetadataTransactionBuffer.addSignature(builder, signatureOffset);
       ModifyMetadataTransactionBuffer.addSize(builder, totalSize);

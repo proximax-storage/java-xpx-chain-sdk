@@ -21,19 +21,19 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
-import io.proximax.sdk.model.namespace.NamespaceId;
 
 class MosaicInfoTest {
-
+   private static final Optional<BigInteger> TEN = Optional.of(BigInteger.TEN);
+   
     @Test
     void createAMosaicInfoViaConstructor() {
-        MosaicProperties mosaicProperties = new MosaicProperties(true, true,true, 3, BigInteger.valueOf(10));
-        NamespaceId namespaceId = new NamespaceId(new BigInteger("-8884663987180930485"));
+        MosaicProperties mosaicProperties = new MosaicProperties(true, true,3, TEN);
         MosaicId mosaicId = new MosaicId(new BigInteger("-3087871471161192663"));
         MosaicInfo mosaicInfo = new MosaicInfo(
                 "5A3CD9B09CD1E8000159249B",
@@ -50,14 +50,13 @@ class MosaicInfoTest {
         assertEquals(new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", NetworkType.MIJIN_TEST), mosaicInfo.getOwner());
         assertTrue(mosaicInfo.isSupplyMutable());
         assertTrue(mosaicInfo.isTransferable());
-        assertTrue(mosaicInfo.isLevyMutable());
         assertEquals(3, mosaicInfo.getDivisibility());
-        assertEquals(BigInteger.valueOf(10), mosaicInfo.getDuration());
+        assertEquals(TEN, mosaicInfo.getDuration());
     }
 
     @Test
     void shouldReturnIsSupplyMutableWhenIsMutable() {
-        MosaicProperties mosaicProperties = new MosaicProperties(true, true,true, 3, BigInteger.valueOf(10));
+        MosaicProperties mosaicProperties = new MosaicProperties(true, true, 3, TEN);
 
         MosaicInfo mosaicInfo = new MosaicInfo(
                 "5A3CD9B09CD1E8000159249B",
@@ -72,7 +71,7 @@ class MosaicInfoTest {
 
     @Test
     void shouldReturnIsSupplyMutableWhenIsImmutable() {
-        MosaicProperties mosaicProperties = new MosaicProperties(false, true,true, 3, BigInteger.valueOf(10));
+        MosaicProperties mosaicProperties = new MosaicProperties(false, true, 3, TEN);
 
         MosaicInfo mosaicInfo = new MosaicInfo(
                 "5A3CD9B09CD1E8000159249B",
@@ -87,7 +86,7 @@ class MosaicInfoTest {
 
     @Test
     void shouldReturnIsTransferableWhenItsTransferable() {
-        MosaicProperties mosaicProperties = new MosaicProperties(true, true,true, 3, BigInteger.valueOf(10));
+        MosaicProperties mosaicProperties = new MosaicProperties(true, true, 3, TEN);
 
         MosaicInfo mosaicInfo = new MosaicInfo(
                 "5A3CD9B09CD1E8000159249B",
@@ -102,7 +101,7 @@ class MosaicInfoTest {
 
     @Test
     void shouldReturnIsTransferableWhenItsNotTransferable() {
-        MosaicProperties mosaicProperties = new MosaicProperties(true, false,true, 3, BigInteger.valueOf(10));
+        MosaicProperties mosaicProperties = new MosaicProperties(true, false, 3, TEN);
 
         MosaicInfo mosaicInfo = new MosaicInfo(
                 "5A3CD9B09CD1E8000159249B",
@@ -113,35 +112,5 @@ class MosaicInfoTest {
                 mosaicProperties);
 
         assertFalse(mosaicInfo.isTransferable());
-    }
-
-    @Test
-    void shouldReturnIsTransferableWhenLevyIsMutable() {
-        MosaicProperties mosaicProperties = new MosaicProperties(true, true,true, 3, BigInteger.valueOf(10));
-
-        MosaicInfo mosaicInfo = new MosaicInfo(
-                "5A3CD9B09CD1E8000159249B",
-                new MosaicId(new BigInteger("-3087871471161192663")),
-                new BigInteger("100"),
-                new BigInteger("0"),
-                new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", NetworkType.MIJIN_TEST),
-                mosaicProperties);
-
-        assertTrue(mosaicInfo.isLevyMutable());
-    }
-
-    @Test
-    void shouldReturnIsTransferableWhenLevyIsImmutable() {
-        MosaicProperties mosaicProperties = new MosaicProperties(true, true,false, 3, BigInteger.valueOf(10));
-
-        MosaicInfo mosaicInfo = new MosaicInfo(
-                "5A3CD9B09CD1E8000159249B",
-                new MosaicId(new BigInteger("-3087871471161192663")),
-                new BigInteger("100"),
-                new BigInteger("0"),
-                new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", NetworkType.MIJIN_TEST),
-                mosaicProperties);
-
-        assertFalse(mosaicInfo.isLevyMutable());
     }
 }

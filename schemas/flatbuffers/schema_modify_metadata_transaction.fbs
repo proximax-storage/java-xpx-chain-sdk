@@ -15,9 +15,10 @@ table ModifyMetadataTransactionBuffer {
     signer: [ubyte];
     version: ushort;
     type: ushort;
-    fee: [uint];
+    maxFee: [uint];
     deadline:[uint];
     metadataType: ubyte;
+    /// In case of address it is 25 bytes array. In case of mosaic or namespace it is 8 byte array(or 2 uint32 array)
     metadataId: [ubyte];
     modifications: [MetadataModificationBuffer];
 }

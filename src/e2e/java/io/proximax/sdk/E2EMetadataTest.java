@@ -21,6 +21,7 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.MethodOrderer;
@@ -90,7 +91,7 @@ public class E2EMetadataTest extends E2EBaseTest {
       SignedTransaction mdt = MosaicDefinitionTransaction.create(nonce,
             id,
             getDeadline(),
-            new MosaicProperties(true, true, false, 6, BigInteger.valueOf(20)),
+            new MosaicProperties(true, true, 6, Optional.of(BigInteger.valueOf(20))),
             getNetworkType()).signWith(seedAccount, api.getNetworkGenerationHash());
       Observable<Transaction> confirmation = listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS);
       sleepForAWhile();

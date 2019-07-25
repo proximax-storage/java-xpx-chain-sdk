@@ -18,6 +18,7 @@ package io.proximax.sdk.infrastructure;
 
 import static io.proximax.sdk.utils.GsonUtils.getFieldOfObject;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -234,9 +235,9 @@ public class TransactionMappingTest extends ResourceBasedTest {
         JsonArray properties = getFieldOfObject(transactionDTO, "transaction", "properties").getAsJsonArray();
         assertEquals(transaction.getMosaicProperties().getDivisibility(), properties.get(1).getAsJsonObject().get("value").getAsJsonArray().get(0).getAsInt());
         if (properties.size() > 2) {
-        	assertEquals(extractBigInteger(properties.get(2).getAsJsonObject().get("value").getAsJsonArray()), transaction.getMosaicProperties().getDuration());
+        	assertEquals(extractBigInteger(properties.get(2).getAsJsonObject().get("value").getAsJsonArray()), transaction.getMosaicProperties().getDuration().orElse(BigInteger.valueOf(-98765)));
         } else {
-        	assertEquals(BigInteger.valueOf(0), transaction.getMosaicProperties().getDuration());
+        	assertFalse(transaction.getMosaicProperties().getDuration().isPresent());
         }
     }
 

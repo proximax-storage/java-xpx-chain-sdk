@@ -107,7 +107,7 @@ public class LockFundsTransaction extends Transaction {
         int signatureVector = LockFundsTransactionBuffer.createSignatureVector(builder, new byte[64]);
         int signerVector = LockFundsTransactionBuffer.createSignerVector(builder, new byte[32]);
         int deadlineVector = LockFundsTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
-        int feeVector = LockFundsTransactionBuffer.createFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
+        int feeVector = LockFundsTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
         int mosaicIdVector = LockFundsTransactionBuffer.createMosaicIdVector(builder, UInt64Utils.fromBigInteger(mosaic.getId().getId()));
         int mosaicAmountVector = LockFundsTransactionBuffer.createMosaicAmountVector(builder, UInt64Utils.fromBigInteger(mosaic.getAmount()));
         int durationVector = LockFundsTransactionBuffer.createDurationVector(builder, UInt64Utils.fromBigInteger(duration));
@@ -120,7 +120,7 @@ public class LockFundsTransaction extends Transaction {
         LockFundsTransactionBuffer.addSigner(builder, signerVector);
         LockFundsTransactionBuffer.addVersion(builder, version);
         LockFundsTransactionBuffer.addType(builder, getType().getValue());
-        LockFundsTransactionBuffer.addFee(builder, feeVector);
+        LockFundsTransactionBuffer.addMaxFee(builder, feeVector);
         LockFundsTransactionBuffer.addDeadline(builder, deadlineVector);
         LockFundsTransactionBuffer.addMosaicId(builder, mosaicIdVector);
         LockFundsTransactionBuffer.addMosaicAmount(builder, mosaicAmountVector);

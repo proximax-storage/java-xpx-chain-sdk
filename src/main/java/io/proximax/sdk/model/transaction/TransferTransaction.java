@@ -163,7 +163,7 @@ public class TransferTransaction extends Transaction {
         int signatureVector = TransferTransactionBuffer.createSignatureVector(builder, new byte[64]);
         int signerVector = TransferTransactionBuffer.createSignerVector(builder, new byte[32]);
         int deadlineVector = TransferTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
-        int feeVector = TransferTransactionBuffer.createFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
+        int feeVector = TransferTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
         int recipientVector = TransferTransactionBuffer.createRecipientVector(builder, recipientBytes);
         int mosaicsVector = TransferTransactionBuffer.createMosaicsVector(builder, mosaicBuffers);
 
@@ -190,7 +190,7 @@ public class TransferTransaction extends Transaction {
         TransferTransactionBuffer.addSigner(builder, signerVector);
         TransferTransactionBuffer.addVersion(builder, version);
         TransferTransactionBuffer.addType(builder, getType().getValue());
-        TransferTransactionBuffer.addFee(builder, feeVector);
+        TransferTransactionBuffer.addMaxFee(builder, feeVector);
         TransferTransactionBuffer.addDeadline(builder, deadlineVector);
         
         TransferTransactionBuffer.addRecipient(builder, recipientVector);

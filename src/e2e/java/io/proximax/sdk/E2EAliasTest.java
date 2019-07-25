@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.AfterAll;
@@ -120,7 +121,7 @@ public class E2EAliasTest extends E2EBaseTest {
       SignedTransaction mdt = MosaicDefinitionTransaction.create(mosaicNonce,
             mosaicId,
             getDeadline(),
-            new MosaicProperties(true, true, false, 6, BigInteger.valueOf(200)),
+            new MosaicProperties(true, true, 6, Optional.of(BigInteger.valueOf(200))),
             getNetworkType()).signWith(seedAccount, api.getNetworkGenerationHash());
       Observable<Transaction> confirmation = listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS);
       sleepForAWhile();

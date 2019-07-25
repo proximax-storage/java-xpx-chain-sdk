@@ -17,18 +17,23 @@
 package io.proximax.sdk.model.transaction;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 
 import io.proximax.sdk.gen.buffers.MosaicDefinitionTransactionBuffer;
+import io.proximax.sdk.gen.buffers.MosaicProperty;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicNonce;
 import io.proximax.sdk.model.mosaic.MosaicProperties;
+import io.proximax.sdk.model.mosaic.MosaicPropertyId;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
@@ -118,54 +123,68 @@ public class MosaicDefinitionTransaction extends Transaction {
       BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
       int version = (int) Long
             .parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
-
+      // get value for flags field
       int flags = 0;
-
       if (mosaicProperties.isSupplyMutable()) {
-         flags += 1;
+         flags |= MosaicProperties.FLAG_SUPPLY_MUTABLE;
       }
-
       if (mosaicProperties.isTransferable()) {
-         flags += 2;
+         flags |= MosaicProperties.FLAG_TRANSFERABLE;
       }
 
-      if (mosaicProperties.isLevyMutable()) {
-         flags += 4;
+      // get array of optional properties
+      ArrayList<Pair<MosaicPropertyId, BigInteger>> propertyList = new ArrayList<>();
+      Optional<BigInteger> duration = mosaicProperties.getDuration();
+      if (duration.isPresent()) {
+         propertyList.add(new ImmutablePair<>(MosaicPropertyId.DURATION, duration.get()));
       }
-
+      int[] optinalPropertiesVector = new int[propertyList.size()];
+      for (int i = 0; i < propertyList.size(); i++) {
+         Pair<MosaicPropertyId, BigInteger> property = propertyList.get(i);
+         // prepare offset for the value
+         int valueOffset = MosaicProperty.createValueVector(builder, UInt64Utils.fromBigInteger(property.getValue()));
+         // increase size - id + value
+         MosaicProperty.startMosaicProperty(builder);
+         MosaicProperty.addMosaicPropertyId(builder, property.getKey().getCode());
+         MosaicProperty.addValue(builder, valueOffset);
+         optinalPropertiesVector[i] = MosaicProperty.endMosaicProperty(builder);
+      }
       // Create Vectors
       int signatureVector = MosaicDefinitionTransactionBuffer.createSignatureVector(builder, new byte[64]);
       int signerVector = MosaicDefinitionTransactionBuffer.createSignerVector(builder, new byte[32]);
       int deadlineVector = MosaicDefinitionTransactionBuffer.createDeadlineVector(builder,
             UInt64Utils.fromBigInteger(deadlineBigInt));
-      int feeVector = MosaicDefinitionTransactionBuffer.createFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
+      int feeVector = MosaicDefinitionTransactionBuffer.createMaxFeeVector(builder,
+            UInt64Utils.fromBigInteger(getFee()));
       int mosaicIdVector = MosaicDefinitionTransactionBuffer.createMosaicIdVector(builder,
             UInt64Utils.fromBigInteger(mosaicId.getId()));
-      int durationVector = MosaicDefinitionTransactionBuffer.createDurationVector(builder,
-            UInt64Utils.fromBigInteger(mosaicProperties.getDuration()));
+      int optionalPropertiesVector = MosaicDefinitionTransactionBuffer.createOptionalPropertiesVector(builder,
+            optinalPropertiesVector);
 
-      // 4+2+64+32+8+8+4+8+1+1+1+1+8+2
-      int fixSize = 144; // replace by the all numbers sum or add a comment explaining this
+      // header + nonce + id + numOptProp + flags + divisibility + (id + value)*numOptProp
+      int size = 120 + 4 + 8 + 1 + 1 + 1 + (1 + 8) * optinalPropertiesVector.length;
 
       MosaicDefinitionTransactionBuffer.startMosaicDefinitionTransactionBuffer(builder);
-      MosaicDefinitionTransactionBuffer.addSize(builder, fixSize);
+      MosaicDefinitionTransactionBuffer.addSize(builder, size);
       MosaicDefinitionTransactionBuffer.addSignature(builder, signatureVector);
       MosaicDefinitionTransactionBuffer.addSigner(builder, signerVector);
       MosaicDefinitionTransactionBuffer.addVersion(builder, version);
       MosaicDefinitionTransactionBuffer.addType(builder, getType().getValue());
-      MosaicDefinitionTransactionBuffer.addFee(builder, feeVector);
+      MosaicDefinitionTransactionBuffer.addMaxFee(builder, feeVector);
       MosaicDefinitionTransactionBuffer.addDeadline(builder, deadlineVector);
+
       MosaicDefinitionTransactionBuffer.addMosaicNonce(builder, nonce.getNonceAsInt());
       MosaicDefinitionTransactionBuffer.addMosaicId(builder, mosaicIdVector);
-      MosaicDefinitionTransactionBuffer.addNumOptionalProperties(builder, 1);
+      MosaicDefinitionTransactionBuffer.addNumOptionalProperties(builder, optinalPropertiesVector.length);
       MosaicDefinitionTransactionBuffer.addFlags(builder, flags);
       MosaicDefinitionTransactionBuffer.addDivisibility(builder, mosaicProperties.getDivisibility());
-      MosaicDefinitionTransactionBuffer.addIndicateDuration(builder, 2);
-      MosaicDefinitionTransactionBuffer.addDuration(builder, durationVector);
+      MosaicDefinitionTransactionBuffer.addOptionalProperties(builder, optionalPropertiesVector);
 
       int codedTransaction = MosaicDefinitionTransactionBuffer.endMosaicDefinitionTransactionBuffer(builder);
       builder.finish(codedTransaction);
 
-      return schema.serialize(builder.sizedByteArray());
+      byte[] output = schema.serialize(builder.sizedByteArray());
+      Validate.isTrue(output.length == size, "Serialized form has incorrect length");
+      return output;
    }
 }

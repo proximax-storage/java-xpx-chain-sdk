@@ -111,7 +111,7 @@ public class MosaicSupplyChangeTransaction extends Transaction {
         int signatureVector = MosaicSupplyChangeTransactionBuffer.createSignatureVector(builder, new byte[64]);
         int signerVector = MosaicSupplyChangeTransactionBuffer.createSignerVector(builder, new byte[32]);
         int deadlineVector = MosaicSupplyChangeTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
-        int feeVector = MosaicSupplyChangeTransactionBuffer.createFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
+        int feeVector = MosaicSupplyChangeTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
         int mosaicIdVector = MosaicSupplyChangeTransactionBuffer.createMosaicIdVector(builder, UInt64Utils.fromBigInteger(mosaicId.getId()));
         int deltaVector = MosaicSupplyChangeTransactionBuffer.createDeltaVector(builder, UInt64Utils.fromBigInteger(delta));
 
@@ -123,7 +123,7 @@ public class MosaicSupplyChangeTransaction extends Transaction {
         MosaicSupplyChangeTransactionBuffer.addSigner(builder, signerVector);
         MosaicSupplyChangeTransactionBuffer.addVersion(builder, version);
         MosaicSupplyChangeTransactionBuffer.addType(builder, getType().getValue());
-        MosaicSupplyChangeTransactionBuffer.addFee(builder, feeVector);
+        MosaicSupplyChangeTransactionBuffer.addMaxFee(builder, feeVector);
         MosaicSupplyChangeTransactionBuffer.addDeadline(builder, deadlineVector);
         MosaicSupplyChangeTransactionBuffer.addMosaicId(builder, mosaicIdVector);
         MosaicSupplyChangeTransactionBuffer.addDirection(builder, mosaicSupplyType.getValue());

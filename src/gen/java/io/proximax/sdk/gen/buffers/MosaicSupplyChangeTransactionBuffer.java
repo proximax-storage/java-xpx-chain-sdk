@@ -25,10 +25,10 @@ public final class MosaicSupplyChangeTransactionBuffer extends Table {
   public ByteBuffer signerInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 8, 1); }
   public int version() { int o = __offset(10); return o != 0 ? bb.getShort(o + bb_pos) & 0xFFFF : 0; }
   public int type() { int o = __offset(12); return o != 0 ? bb.getShort(o + bb_pos) & 0xFFFF : 0; }
-  public long fee(int j) { int o = __offset(14); return o != 0 ? (long)bb.getInt(__vector(o) + j * 4) & 0xFFFFFFFFL : 0; }
-  public int feeLength() { int o = __offset(14); return o != 0 ? __vector_len(o) : 0; }
-  public ByteBuffer feeAsByteBuffer() { return __vector_as_bytebuffer(14, 4); }
-  public ByteBuffer feeInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 14, 4); }
+  public long maxFee(int j) { int o = __offset(14); return o != 0 ? (long)bb.getInt(__vector(o) + j * 4) & 0xFFFFFFFFL : 0; }
+  public int maxFeeLength() { int o = __offset(14); return o != 0 ? __vector_len(o) : 0; }
+  public ByteBuffer maxFeeAsByteBuffer() { return __vector_as_bytebuffer(14, 4); }
+  public ByteBuffer maxFeeInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 14, 4); }
   public long deadline(int j) { int o = __offset(16); return o != 0 ? (long)bb.getInt(__vector(o) + j * 4) & 0xFFFFFFFFL : 0; }
   public int deadlineLength() { int o = __offset(16); return o != 0 ? __vector_len(o) : 0; }
   public ByteBuffer deadlineAsByteBuffer() { return __vector_as_bytebuffer(16, 4); }
@@ -49,7 +49,7 @@ public final class MosaicSupplyChangeTransactionBuffer extends Table {
       int signerOffset,
       int version,
       int type,
-      int feeOffset,
+      int maxFeeOffset,
       int deadlineOffset,
       int mosaicIdOffset,
       int direction,
@@ -58,7 +58,7 @@ public final class MosaicSupplyChangeTransactionBuffer extends Table {
     MosaicSupplyChangeTransactionBuffer.addDelta(builder, deltaOffset);
     MosaicSupplyChangeTransactionBuffer.addMosaicId(builder, mosaicIdOffset);
     MosaicSupplyChangeTransactionBuffer.addDeadline(builder, deadlineOffset);
-    MosaicSupplyChangeTransactionBuffer.addFee(builder, feeOffset);
+    MosaicSupplyChangeTransactionBuffer.addMaxFee(builder, maxFeeOffset);
     MosaicSupplyChangeTransactionBuffer.addSigner(builder, signerOffset);
     MosaicSupplyChangeTransactionBuffer.addSignature(builder, signatureOffset);
     MosaicSupplyChangeTransactionBuffer.addSize(builder, size);
@@ -78,9 +78,9 @@ public final class MosaicSupplyChangeTransactionBuffer extends Table {
   public static void startSignerVector(FlatBufferBuilder builder, int numElems) { builder.startVector(1, numElems, 1); }
   public static void addVersion(FlatBufferBuilder builder, int version) { builder.addShort(3, (short)version, (short)0); }
   public static void addType(FlatBufferBuilder builder, int type) { builder.addShort(4, (short)type, (short)0); }
-  public static void addFee(FlatBufferBuilder builder, int feeOffset) { builder.addOffset(5, feeOffset, 0); }
-  public static int createFeeVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addInt(data[i]); return builder.endVector(); }
-  public static void startFeeVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
+  public static void addMaxFee(FlatBufferBuilder builder, int maxFeeOffset) { builder.addOffset(5, maxFeeOffset, 0); }
+  public static int createMaxFeeVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addInt(data[i]); return builder.endVector(); }
+  public static void startMaxFeeVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
   public static void addDeadline(FlatBufferBuilder builder, int deadlineOffset) { builder.addOffset(6, deadlineOffset, 0); }
   public static int createDeadlineVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addInt(data[i]); return builder.endVector(); }
   public static void startDeadlineVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }

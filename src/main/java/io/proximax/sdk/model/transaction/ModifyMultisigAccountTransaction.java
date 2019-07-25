@@ -124,7 +124,7 @@ public class ModifyMultisigAccountTransaction extends Transaction {
         int signatureVector = ModifyMultisigAccountTransactionBuffer.createSignatureVector(builder, new byte[64]);
         int signerVector = ModifyMultisigAccountTransactionBuffer.createSignerVector(builder, new byte[32]);
         int deadlineVector = ModifyMultisigAccountTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
-        int feeVector = ModifyMultisigAccountTransactionBuffer.createFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
+        int feeVector = ModifyMultisigAccountTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
         int modificationsVector = ModifyMultisigAccountTransactionBuffer.createModificationsVector(builder, modificationsBuffers);
 
         int fixSize = 123; // replace by the all numbers sum or add a comment explaining this
@@ -135,7 +135,7 @@ public class ModifyMultisigAccountTransaction extends Transaction {
         ModifyMultisigAccountTransactionBuffer.addSigner(builder, signerVector);
         ModifyMultisigAccountTransactionBuffer.addVersion(builder, version);
         ModifyMultisigAccountTransactionBuffer.addType(builder, getType().getValue());
-        ModifyMultisigAccountTransactionBuffer.addFee(builder, feeVector);
+        ModifyMultisigAccountTransactionBuffer.addMaxFee(builder, feeVector);
         ModifyMultisigAccountTransactionBuffer.addDeadline(builder, deadlineVector);
         ModifyMultisigAccountTransactionBuffer.addMinApprovalDelta(builder, (byte)minApprovalDelta);
         ModifyMultisigAccountTransactionBuffer.addMinRemovalDelta(builder, (byte)minRemovalDelta);
