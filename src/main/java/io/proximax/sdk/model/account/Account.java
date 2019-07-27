@@ -129,10 +129,11 @@ public class Account {
     * Sign a transaction.
     *
     * @param transaction The transaction to be signed.
+    * @param generationHash network generation hash retrieved from block 1
     * @return {@link SignedTransaction}
     */
-   public SignedTransaction sign(Transaction transaction) {
-      return transaction.signWith(this);
+   public SignedTransaction sign(Transaction transaction, String generationHash) {
+      return transaction.signWith(this, generationHash);
    }
 
    /**
@@ -149,12 +150,13 @@ public class Account {
     * Sign transaction with cosignatories creating a new SignedTransaction.
     *
     * @param transaction The aggregate transaction to be signed.
+    * @param generationHash network generation hash retrieved from block 1
     * @param cosignatories The list of accounts that will cosign the transaction
     * @return {@link SignedTransaction}
     */
-   public SignedTransaction signTransactionWithCosignatories(AggregateTransaction transaction,
+   public SignedTransaction signTransactionWithCosignatories(AggregateTransaction transaction, String generationHash,
          List<Account> cosignatories) {
-      return transaction.signTransactionWithCosigners(this, cosignatories);
+      return transaction.signTransactionWithCosigners(this, generationHash, cosignatories);
    }
 
    @Override

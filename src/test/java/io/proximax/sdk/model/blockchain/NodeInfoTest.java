@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.gen.model.NodeInfoDTO;
+import io.proximax.sdk.gen.model.RolesTypeEnum;
 
 /**
  * {@link NodeInfo} tests
@@ -18,7 +19,7 @@ class NodeInfoTest {
 
    @Test
    void testConstructor() {
-      NodeInfo ni = new NodeInfo("pubkey", 1, 2, 3, 4, "host", "friend");
+      NodeInfo ni = new NodeInfo("pubkey", 1, 2, 3, 1, "host", "friend");
       doAsserts(ni);
    }
 
@@ -29,7 +30,7 @@ class NodeInfoTest {
       dto.setPort(1);
       dto.setNetworkIdentifier(2);
       dto.setVersion(3);
-      dto.setRoles(4);
+      dto.setRoles(RolesTypeEnum.NUMBER_1);
       dto.setHost("host");
       dto.setFriendlyName("friend");
       doAsserts(NodeInfo.fromDto(dto));
@@ -40,7 +41,7 @@ class NodeInfoTest {
       assertEquals(1, ni.getPort());
       assertEquals(2, ni.getNetworkIdentifier());
       assertEquals(3, ni.getVersion());
-      assertEquals(4, ni.getRoles());
+      assertEquals(RolesTypeEnum.NUMBER_1.getValue(), ni.getRoles());
       assertEquals("host", ni.getHost());
       assertEquals("friend", ni.getFriendlyName());
    }

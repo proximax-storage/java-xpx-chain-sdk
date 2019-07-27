@@ -18,8 +18,7 @@ package io.proximax.sdk.infrastructure;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 
 import io.proximax.sdk.BlockchainApi;
 
@@ -29,7 +28,7 @@ import io.proximax.sdk.BlockchainApi;
 public class Http {
     protected final BlockchainApi api;
     protected final HttpClient client;
-    protected final ObjectMapper objectMapper;
+    protected Gson gson;
     
     /**
      * create and initialize new instance for specified API
@@ -39,10 +38,8 @@ public class Http {
     Http(BlockchainApi api) {
         this.api = api;
         this.client = new OkHttpHttpClient(api);
-        // init the object mapper
-        this.objectMapper = new ObjectMapper();
-        this.objectMapper.configure(DeserializationFeature.USE_LONG_FOR_INTS, true);
-        this.objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        // gson instance
+        this.gson = new Gson();
     }
 
     /**

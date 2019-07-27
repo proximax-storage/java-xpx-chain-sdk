@@ -6,7 +6,7 @@ table RegisterNamespaceTransactionBuffer {
     signer: [ubyte];
     version: ushort;
     type: ushort;
-    fee: [uint];
+    maxFee: [uint];
     deadline:[uint];
     namespaceType:ubyte;
     durationParentId:[uint];

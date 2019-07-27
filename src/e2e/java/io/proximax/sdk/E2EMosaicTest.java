@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.AfterAll;
@@ -78,8 +79,8 @@ public class E2EMosaicTest extends E2EBaseTest {
       SignedTransaction mdt = MosaicDefinitionTransaction.create(nonce,
             id,
             getDeadline(),
-            new MosaicProperties(true, true, false, 6, BigInteger.valueOf(20)),
-            getNetworkType()).signWith(seedAccount);
+            new MosaicProperties(true, true, 6, Optional.of(BigInteger.valueOf(20))),
+            getNetworkType()).signWith(seedAccount, api.getNetworkGenerationHash());
       Observable<Transaction> confirmation = listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS);
       transactionHttp.announce(mdt).blockingFirst();
       logger.info("Mosaic created. {}", confirmation.blockingFirst());
@@ -87,6 +88,11 @@ public class E2EMosaicTest extends E2EBaseTest {
       // verify that mosaic looks fine
       MosaicInfo info = mosaicHttp.getMosaic(id).blockingFirst();
       assertEquals(BigInteger.ZERO, info.getSupply());
+      // check properties
+      assertEquals(true, info.isSupplyMutable());
+      assertEquals(true, info.isTransferable());
+      assertEquals(6, info.getDivisibility());
+      assertEquals(Optional.of(BigInteger.valueOf(20)), info.getDuration());
    }
 
    @Test
@@ -94,7 +100,7 @@ public class E2EMosaicTest extends E2EBaseTest {
       logger.info("Changing supply");
       SignedTransaction supplychange = MosaicSupplyChangeTransaction
             .create(getDeadline(), id, MosaicSupplyType.INCREASE, BigInteger.TEN, getNetworkType())
-            .signWith(seedAccount);
+            .signWith(seedAccount, api.getNetworkGenerationHash());
       transactionHttp.announce(supplychange).blockingFirst();
       logger.info("Supply changed. {}",
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
@@ -109,7 +115,7 @@ public class E2EMosaicTest extends E2EBaseTest {
       logger.info("Changing supply");
       SignedTransaction supplychange = MosaicSupplyChangeTransaction
             .create(getDeadline(), id, MosaicSupplyType.DECREASE, BigInteger.ONE, getNetworkType())
-            .signWith(seedAccount);
+            .signWith(seedAccount, api.getNetworkGenerationHash());
       transactionHttp.announce(supplychange).blockingFirst();
       logger.info("Supply changed. {}",
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
@@ -128,7 +134,7 @@ public class E2EMosaicTest extends E2EBaseTest {
       MosaicDefinitionTransaction create = MosaicDefinitionTransaction.create(aNonce,
             aId,
             getDeadline(),
-            new MosaicProperties(true, true, false, 6, BigInteger.valueOf(20)),
+            new MosaicProperties(true, true, 6, Optional.of(BigInteger.valueOf(20))),
             getNetworkType());
       // add supply of 10
       MosaicSupplyChangeTransaction increaseSupply = MosaicSupplyChangeTransaction
@@ -145,7 +151,7 @@ public class E2EMosaicTest extends E2EBaseTest {
                   ),
             getNetworkType());
       // sign the transaction
-      SignedTransaction signedTransaction = seedAccount.sign(aggregateTransaction);
+      SignedTransaction signedTransaction = api.sign(aggregateTransaction, seedAccount);
       // announce the request
       transactionHttp.announce(signedTransaction).blockingFirst();
       // wait for acceptance
@@ -156,5 +162,30 @@ public class E2EMosaicTest extends E2EBaseTest {
       MosaicInfo info = mosaicHttp.getMosaic(aId).blockingFirst();
       assertEquals(BigInteger.valueOf(9), info.getSupply());
    }
+   
+   @Test
+   void test05CreateMosaicWithoutDuration() {
+      MosaicNonce aNonce = MosaicNonce.createRandom();
+      MosaicId aId = new MosaicId(aNonce, seedAccount.getPublicKey());
+      logger.info("Creating new mosaic {}", aId.getIdAsHex());
+      SignedTransaction mdt = MosaicDefinitionTransaction.create(aNonce,
+            aId,
+            getDeadline(),
+            new MosaicProperties(true, true, 6, Optional.empty()),
+            getNetworkType()).signWith(seedAccount, api.getNetworkGenerationHash());
+      Observable<Transaction> confirmation = listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS);
+      transactionHttp.announce(mdt).blockingFirst();
+      logger.info("Mosaic created. {}", confirmation.blockingFirst());
+      sleepForAWhile();
+      // verify that mosaic looks fine
+      MosaicInfo info = mosaicHttp.getMosaic(aId).blockingFirst();
+      assertEquals(BigInteger.ZERO, info.getSupply());
+      // check properties
+      assertEquals(true, info.isSupplyMutable());
+      assertEquals(true, info.isTransferable());
+      assertEquals(6, info.getDivisibility());
+      assertEquals(Optional.empty(), info.getDuration());
+   }
+
 
 }

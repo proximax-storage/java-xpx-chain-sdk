@@ -15,7 +15,9 @@
  */
 package io.proximax.sdk;
 
+import java.math.BigInteger;
 import java.net.URL;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.proximax.sdk.infrastructure.AccountHttp;
@@ -26,7 +28,11 @@ import io.proximax.sdk.infrastructure.MetadataHttp;
 import io.proximax.sdk.infrastructure.MosaicHttp;
 import io.proximax.sdk.infrastructure.NamespaceHttp;
 import io.proximax.sdk.infrastructure.TransactionHttp;
+import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.transaction.AggregateTransaction;
+import io.proximax.sdk.model.transaction.SignedTransaction;
+import io.proximax.sdk.model.transaction.Transaction;
 
 /**
  * Central API for blockchain interaction
@@ -36,7 +42,9 @@ public class BlockchainApi {
    private final URL url;
    /** network type of the node */
    private NetworkType networkType;
-   
+   /** network generation hash used for signing */
+   private String networkGenerationHash;
+
    /**
     * create new instance that connects to specified node
     * 
@@ -45,7 +53,7 @@ public class BlockchainApi {
    public BlockchainApi(URL url) {
       this.url = url;
    }
-   
+
    /**
     * create new instance that connects to specified node
     * 
@@ -56,19 +64,19 @@ public class BlockchainApi {
       this.url = url;
       this.networkType = networkType;
    }
-   
+
    /**
     * check that the network type matches what is reported by the node
     * 
-    * this is useful to make sure that network type is OK. This method also loads network type if not specified
-    * in constructor
+    * this is useful to make sure that network type is OK. This method also loads network type if not specified in
+    * constructor
     * 
     * @return true if reported network type matches expectation, false otherwise
     */
    public boolean isNetworkTypeValid() {
-      return queryForNetowrkType() == getNetworkType();
+      return queryForNetworkType() == getNetworkType();
    }
-   
+
    /**
     * create account repository
     * 
@@ -95,7 +103,7 @@ public class BlockchainApi {
    public ContractRepository createContractRepository() {
       return new ContractHttp(this);
    }
-   
+
    /**
     * create metadata repository
     * 
@@ -104,7 +112,7 @@ public class BlockchainApi {
    public MetadataRepository createMetadataRepository() {
       return new MetadataHttp(this);
    }
-   
+
    /**
     * create mosaic repository
     * 
@@ -113,7 +121,7 @@ public class BlockchainApi {
    public MosaicRepository createMosaicRepository() {
       return new MosaicHttp(this);
    }
-   
+
    /**
     * create namespace repository
     * 
@@ -140,7 +148,7 @@ public class BlockchainApi {
    public ListenerRepository createListener() {
       return new Listener(this);
    }
-   
+
    /**
     * get the configured network type
     * 
@@ -148,7 +156,7 @@ public class BlockchainApi {
     */
    public synchronized NetworkType getNetworkType() {
       if (networkType == null) {
-         
+         networkType = queryForNetworkType();
       }
       return networkType;
    }
@@ -161,13 +169,51 @@ public class BlockchainApi {
    public URL getUrl() {
       return url;
    }
+
+   /**
+    * convenience method for signing of transactions
+    * 
+    * @param transaction the transaction to be signed
+    * @param signer signing account
+    * 
+    * @return signed transaction instance
+    */
+   public SignedTransaction sign(Transaction transaction, Account signer) {
+      return transaction.signWith(signer, getNetworkGenerationHash());
+   }
    
+   /**
+    * convenience method for signing of transactions
+    * 
+    * @param transaction the transaction to be signed
+    * @param initiator signing account that initiated the transaction
+    * @param cosignatories cosigning accounts
+    * 
+    * @return signed transaction instance
+    */
+   public SignedTransaction signWithCosigners(AggregateTransaction transaction, Account initiator, List<Account> cosignatories) {
+      return transaction.signTransactionWithCosigners(initiator, getNetworkGenerationHash(), cosignatories);
+   }
+   
+   /**
+    * get network generation hash for purpose of transaction signing
+    * 
+    * @return the network generation hash represented as hexadecimal string
+    */
+   public synchronized String getNetworkGenerationHash() {
+      if (networkGenerationHash == null) {
+         networkGenerationHash = createBlockchainRepository().getBlockByHeight(BigInteger.ONE)
+               .timeout(30, TimeUnit.SECONDS).blockingFirst().getGenerationHash();
+      }
+      return networkGenerationHash;
+   }
+
    /**
     * query the network blockchain API to retrieve network type as reported by the node
     * 
     * @return network type of the node
     */
-   private NetworkType queryForNetowrkType() {
+   private NetworkType queryForNetworkType() {
       return createBlockchainRepository().getNetworkType().timeout(30, TimeUnit.SECONDS).blockingFirst();
    }
 }

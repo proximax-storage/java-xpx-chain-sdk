@@ -27,7 +27,6 @@ import com.google.flatbuffers.FlatBufferBuilder;
 import io.proximax.core.utils.HexEncoder;
 import io.proximax.sdk.gen.buffers.CosignatoryModificationBuffer;
 import io.proximax.sdk.gen.buffers.ModifyMultisigAccountTransactionBuffer;
-import io.proximax.sdk.gen.buffers.TransferTransactionBuffer;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.utils.dto.UInt64Utils;
@@ -125,8 +124,8 @@ public class ModifyMultisigAccountTransaction extends Transaction {
         int signatureVector = ModifyMultisigAccountTransactionBuffer.createSignatureVector(builder, new byte[64]);
         int signerVector = ModifyMultisigAccountTransactionBuffer.createSignerVector(builder, new byte[32]);
         int deadlineVector = ModifyMultisigAccountTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
-        int feeVector = ModifyMultisigAccountTransactionBuffer.createFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
-        int modificationsVector = TransferTransactionBuffer.createMosaicsVector(builder, modificationsBuffers);
+        int feeVector = ModifyMultisigAccountTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
+        int modificationsVector = ModifyMultisigAccountTransactionBuffer.createModificationsVector(builder, modificationsBuffers);
 
         int fixSize = 123; // replace by the all numbers sum or add a comment explaining this
 
@@ -136,7 +135,7 @@ public class ModifyMultisigAccountTransaction extends Transaction {
         ModifyMultisigAccountTransactionBuffer.addSigner(builder, signerVector);
         ModifyMultisigAccountTransactionBuffer.addVersion(builder, version);
         ModifyMultisigAccountTransactionBuffer.addType(builder, getType().getValue());
-        ModifyMultisigAccountTransactionBuffer.addFee(builder, feeVector);
+        ModifyMultisigAccountTransactionBuffer.addMaxFee(builder, feeVector);
         ModifyMultisigAccountTransactionBuffer.addDeadline(builder, deadlineVector);
         ModifyMultisigAccountTransactionBuffer.addMinApprovalDelta(builder, (byte)minApprovalDelta);
         ModifyMultisigAccountTransactionBuffer.addMinRemovalDelta(builder, (byte)minRemovalDelta);

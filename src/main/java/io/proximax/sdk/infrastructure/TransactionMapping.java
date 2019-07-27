@@ -45,6 +45,7 @@ import io.proximax.sdk.model.mosaic.Mosaic;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicNonce;
 import io.proximax.sdk.model.mosaic.MosaicProperties;
+import io.proximax.sdk.model.mosaic.MosaicPropertyId;
 import io.proximax.sdk.model.mosaic.MosaicSupplyType;
 import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.namespace.NamespaceType;
@@ -471,14 +472,6 @@ class MosaicCreationTransactionMapping extends TransactionMapping {
         // load data fields
         DeadlineBP deadline = new DeadlineBP(extractBigInteger(transaction.getAsJsonArray("deadline")));
         // construct properties
-        JsonArray mosaicProperties = transaction.getAsJsonArray("properties");
-        String flags = "00" + Integer.toBinaryString(extractBigInteger(mosaicProperties.get(0).getAsJsonObject().getAsJsonArray("value")).intValue());
-        String bitMapFlags = flags.substring(flags.length() - 3, flags.length());
-        MosaicProperties properties = new MosaicProperties(bitMapFlags.charAt(2) == '1',
-                bitMapFlags.charAt(1) == '1',
-                bitMapFlags.charAt(0) == '1',
-                extractBigInteger(mosaicProperties.get(1).getAsJsonObject().getAsJsonArray("value")).intValue(),
-                mosaicProperties.size() == 3 ? extractBigInteger(mosaicProperties.get(2).getAsJsonObject().getAsJsonArray("value")) : BigInteger.valueOf(0));
         JsonElement version = transaction.get("version");
         // return instance of mosaic definition transaction
         return new MosaicDefinitionTransaction(
@@ -488,11 +481,36 @@ class MosaicCreationTransactionMapping extends TransactionMapping {
                 extractFee(transaction),
                 extractNonce(transaction),
                 new MosaicId(extractBigInteger(transaction.getAsJsonArray("mosaicId"))),
-                properties,
+                extractProperties(transaction.getAsJsonArray("properties")),
                 transaction.get("signature").getAsString(),
                 new PublicAccount(transaction.get("signer").getAsString(), extractNetworkType(version)),
                 transactionInfo
         );
+    }
+    
+    private static MosaicProperties extractProperties(JsonArray props) {
+       // get property values
+       BigInteger flags = getProperty(props, MosaicPropertyId.FLAGS).orElseThrow(() -> new IllegalStateException("flags property is mandatory"));
+       BigInteger divisibility = getProperty(props, MosaicPropertyId.DIVISIBILITY).orElseThrow(() -> new IllegalStateException("divisibility property is mandatory"));
+       Optional<BigInteger> duration = getProperty(props, MosaicPropertyId.DURATION);
+       return MosaicProperties.create(flags.intValue(), divisibility.intValue(), duration);
+    }
+    
+    /**
+     * get first property with specified id. This implementation is order-agnostic and properties can be in any order
+     * 
+     * @param mosaicProperties the properties to search in
+     * @param id the id to search for
+     * @return the optional BigInteger with property value
+     */
+    private static Optional<BigInteger> getProperty(JsonArray mosaicProperties, MosaicPropertyId id) {
+       final byte index = id.getCode();
+       return GsonUtils.stream(mosaicProperties)
+          .map(JsonElement::getAsJsonObject)
+          .filter(obj -> (obj.has("key") ? obj.get("key") : obj.get("id")).getAsByte() == index)
+          .map(obj -> obj.getAsJsonArray("value"))
+          .map(TransactionMapping::extractBigInteger)
+          .findFirst();
     }
     
     /**
@@ -840,6 +858,7 @@ class SecretProofTransactionMapping extends TransactionMapping {
                 deadline,
                 extractFee(transaction),
                 HashType.rawValueOf(transaction.get("hashAlgorithm").getAsInt()),
+                Recipient.from(Address.createFromEncoded(transaction.get("recipient").getAsString())),
                 transaction.get("secret").getAsString(),
                 transaction.get("proof").getAsString(),
                 transaction.get("signature").getAsString(),

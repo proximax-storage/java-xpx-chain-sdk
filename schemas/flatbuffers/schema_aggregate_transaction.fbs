@@ -6,7 +6,7 @@ table AggregateTransactionBuffer {
     signer: [ubyte];
     version: ushort;
     type: ushort;
-    fee: [uint];
+    maxFee: [uint];
     deadline:[uint];
     transactionsSize: uint;
     transactions:[ubyte];

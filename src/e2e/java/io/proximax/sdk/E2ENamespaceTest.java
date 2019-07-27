@@ -73,7 +73,7 @@ public class E2ENamespaceTest extends E2EBaseTest {
       // create root namespace
       RegisterNamespaceTransaction registerNamespaceTransaction = RegisterNamespaceTransaction
             .createRootNamespace(getDeadline(), ROOT_NAME, BigInteger.valueOf(100), getNetworkType());
-      SignedTransaction signedTransaction = seedAccount.sign(registerNamespaceTransaction);
+      SignedTransaction signedTransaction = api.sign(registerNamespaceTransaction, seedAccount);
       transactionHttp.announce(signedTransaction).blockingFirst();
       logger.info("Registered namespace {}. {}",
             ROOT_NAME,
@@ -91,7 +91,7 @@ public class E2ENamespaceTest extends E2EBaseTest {
       // create root namespace
       RegisterNamespaceTransaction registerNamespaceTransaction = RegisterNamespaceTransaction
             .createSubNamespace(getDeadline(), CHILD1_NAME, rootId, getNetworkType());
-      SignedTransaction signedTransaction = seedAccount.sign(registerNamespaceTransaction);
+      SignedTransaction signedTransaction = api.sign(registerNamespaceTransaction, seedAccount);
       transactionHttp.announce(signedTransaction).blockingFirst();
       logger.info("Registered namespace {}. {}",
             CHILD1_NAME,
@@ -118,7 +118,7 @@ public class E2ENamespaceTest extends E2EBaseTest {
                   registerChildTransaction.toAggregate(seedAccount.getPublicAccount())),
             getNetworkType());
       // sign the aggregate transaction
-      SignedTransaction signedTransaction = seedAccount.sign(aggregateTransaction);
+      SignedTransaction signedTransaction = api.sign(aggregateTransaction, seedAccount);
       transactionHttp.announce(signedTransaction).blockingFirst();
       logger.info("Registered namespaces {}. {}",
             CHILD1_NAME,

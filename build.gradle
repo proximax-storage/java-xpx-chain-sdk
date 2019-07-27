@@ -28,6 +28,8 @@ plugins {
     id 'jacoco'
     // integrate coverage with github
     id 'com.github.kt3k.coveralls' version '2.8.4'
+    // generator for the DTOs
+    id "org.openapi.generator" version "4.0.2"
 }
 
 // define contents of the build
@@ -40,6 +42,8 @@ apply from: "$rootDir/gradle/coverage.gradle"
 apply from: "$rootDir/gradle/publishing.gradle"
 // load Travis CI specific support
 apply from: "$rootDir/gradle/travis.gradle"
+// load support for openapi code generator
+apply from: "$rootDir/gradle/openapi.gradle"
 
 // Java8
 sourceCompatibility = 1.8
@@ -99,8 +103,6 @@ dependencies {
     implementation 'io.swagger:swagger-annotations:1.5.22'
     implementation "com.squareup.okhttp3:okhttp:${okHttp3Version}"
 	implementation "com.squareup.okhttp3:logging-interceptor:${okHttp3Version}"
-	// object mapping from json to DTO
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
 	
 	// file utils
 	testImplementation 'commons-io:commons-io:2.4'

@@ -77,15 +77,23 @@ public abstract class Transaction {
     /**
      * Generates hash for a serialized transaction payload.
      *
-     * @param transactionPayload Transaction payload
+     * @param payloadBytes Transaction payload as byte array
+     * @param generationHashBytes the network generation hash
      * @return generated transaction hash.
      */
-    public static String createTransactionHash(String transactionPayload) {
-        byte[] bytes = Hex.decode(transactionPayload);
-        byte[] signingBytes = new byte[bytes.length - 36];
-        System.arraycopy(bytes, 4, signingBytes, 0, 32);
-        System.arraycopy(bytes, 68, signingBytes, 32, bytes.length - 68);
-
+    public static String createTransactionHash(byte[] payloadBytes, byte[] generationHashBytes) {
+        // expected size is payload - 4 bytes
+        byte[] signingBytes = new byte[payloadBytes.length - 4];
+        // 32 bytes = skip 4 bytes and take half of the signature
+        System.arraycopy(payloadBytes, 4, signingBytes, 0, 32);
+        // 32 bytes = skip second half of signature and take signer
+        System.arraycopy(payloadBytes, 68, signingBytes, 32, 32);
+        // 32 bytes = generation hash
+        System.arraycopy(generationHashBytes, 0, signingBytes, 64, 32);
+        // remainder
+        System.arraycopy(payloadBytes, 100, signingBytes, 96, payloadBytes.length - 100);
+        
+        // hash and encode as upper-case hexadecimal string
         byte[] result = Hashes.sha3_256(signingBytes);
         return Hex.toHexString(result).toUpperCase();
     }
@@ -163,23 +171,38 @@ public abstract class Transaction {
      * Serialize and sign transaction creating a new SignedTransaction.
      *
      * @param account The account to sign the transaction.
+     * @param generationHash network generation hash retrieved from block 1
      * @return {@link SignedTransaction}
      */
-    public SignedTransaction signWith(Account account) {
-
-        Signer signer = new Signer(account.getKeyPair());
+    public SignedTransaction signWith(Account account, String generationHash) {
+       // 32 bytes of the generation hash
+        byte[] generationHashBytes = Hex.decode(generationHash);
         byte[] bytes = this.generateBytes();
-        byte[] signingBytes = new byte[bytes.length - 100];
-        System.arraycopy(bytes, 100, signingBytes, 0, bytes.length - 100);
-        Signature signature = signer.sign(signingBytes);
+        // ignore first 4 + 64 + 32 bytes from the serialized form and concat with 32 bytes of generation hash
+        byte[] signingBytes = new byte[bytes.length - 100 + 32];
+        System.arraycopy(generationHashBytes, 0, signingBytes, 0, 32);
+        System.arraycopy(bytes, 100, signingBytes, 32, bytes.length - 100);
+        
+        // sign the byte array with generation hash and serialized transaction
+        Signature transSignature = new Signer(account.getKeyPair()).sign(signingBytes);
 
+        // create payload
         byte[] payload = new byte[bytes.length];
-        System.arraycopy(bytes, 0, payload, 0, 4); // Size
-        System.arraycopy(signature.getBytes(), 0, payload, 4, signature.getBytes().length); // Signature
-        System.arraycopy(account.getKeyPair().getPublicKey().getRaw(), 0, payload, 64 + 4, account.getKeyPair().getPublicKey().getRaw().length); // Signer
+        // 4 bytes = size
+        System.arraycopy(bytes, 0, payload, 0, 4);
+        // 64 bytes = signature
+        byte[] transSignatureBytes = transSignature.getBytes();
+        System.arraycopy(transSignatureBytes, 0, payload, 4, transSignatureBytes.length);
+        // 32 bytes = signer
+        byte[] rawSignerPublicKey = account.getKeyPair().getPublicKey().getRaw();
+        System.arraycopy(rawSignerPublicKey, 0, payload, 64 + 4, rawSignerPublicKey.length);
+        // append remainder of the transaction bytes
         System.arraycopy(bytes, 100, payload, 100, bytes.length - 100);
-
-        String hash = Transaction.createTransactionHash(Hex.toHexString(payload));
+        
+        // compute transaction hash
+        String hash = Transaction.createTransactionHash(payload, generationHashBytes);
+        
+        // return signed transaction
         return new SignedTransaction(Hex.toHexString(payload).toUpperCase(), hash, type);
     }
 
@@ -189,7 +212,7 @@ public abstract class Transaction {
      * @return transaction with signer serialized to be part of an aggregate transaction
      */
     byte[] toAggregateTransactionBytes() {
-        byte[] signerBytes = Hex.decode(this.signer.get().getPublicKey());
+        byte[] signerBytes = Hex.decode(this.signer.orElseThrow(() -> new IllegalStateException("missing signer")).getPublicKey());
         byte[] bytes = this.generateBytes();
         byte[] resultBytes = new byte[bytes.length - 64 - 16];
 
@@ -197,7 +220,7 @@ public abstract class Transaction {
         System.arraycopy(bytes, 100, resultBytes, 32 + 4, 4); // Copy type and version
         System.arraycopy(bytes, 100 + 2 + 2 + 16, resultBytes, 32 + 4 + 4, bytes.length - 120); // Copy following data
 
-        byte[] size = BigInteger.valueOf(bytes.length - 64 - 16).toByteArray();
+        byte[] size = BigInteger.valueOf(bytes.length - 64l - 16).toByteArray();
         ArrayUtils.reverse(size);
 
         System.arraycopy(size, 0, resultBytes, 0, size.length);

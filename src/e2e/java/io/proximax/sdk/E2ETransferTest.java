@@ -92,11 +92,14 @@ public class E2ETransferTest extends E2EBaseTest {
 
    @Test
    void insufficientFunds() {
-      transactionHttp.announce(simpleAccount.sign(TransferTransaction.create(getDeadline(),
+      TransferTransaction transaction = TransferTransaction.create(getDeadline(),
             seedAccount.getAddress(),
             Arrays.asList(NetworkCurrencyMosaic.createRelative(BigInteger.TEN)),
             PlainMessage.Empty,
-            getNetworkType()))).blockingFirst();
+            getNetworkType());
+      SignedTransaction signedTransaction = api.sign(transaction, simpleAccount);
+      transactionHttp.announce(signedTransaction).blockingFirst();
+      // await error
       listener.status(simpleAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
    }
    
@@ -112,7 +115,7 @@ public class E2ETransferTest extends E2EBaseTest {
    private SignedTransaction signTransfer(Account signerAccount, Address target, Mosaic amount, Message message) {
       TransferTransaction transaction = TransferTransaction
             .create(getDeadline(), target, Collections.singletonList(amount), message, getNetworkType());
-      return signerAccount.sign(transaction);
+      return signerAccount.sign(transaction, api.getNetworkGenerationHash());
    }
 
    /**
@@ -132,7 +135,7 @@ public class E2ETransferTest extends E2EBaseTest {
       AggregateTransaction aggregateTransaction = AggregateTransaction.createComplete(getDeadline(),
             Arrays.asList(transfer.toAggregate(signerAccount.getPublicAccount())),
             getNetworkType());
-      return signerAccount.sign(aggregateTransaction);
+      return signerAccount.sign(aggregateTransaction, api.getNetworkGenerationHash());
    }
 
    /**

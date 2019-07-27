@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import io.proximax.sdk.gen.model.MerkleProofInfoPayload;
+import io.proximax.sdk.gen.model.MerkleProofInfo;
 
 /**
  * merkle path is list of merkle path items
@@ -39,7 +39,7 @@ public class MerklePath {
     * @param dto DTO from the server
     * @return the path
     */
-   public static MerklePath fromDto(MerkleProofInfoPayload dto) {
+   public static MerklePath fromDto(MerkleProofInfo dto) {
       return new MerklePath(
             dto.getMerklePath().stream().map(MerklePathItem::fromDto).collect(Collectors.toList()));
    }

@@ -41,8 +41,8 @@ public final class AliasTransactionBuffer extends Table {
   public ByteBuffer namespaceIdInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 20, 4); }
   /**
    * In case of address it is 25 bytes array. In case of mosaic it is 8 byte array(or 2 uint32 array)
-   * @param j number
-   * @return number
+   * @param j j
+   * @return int
    */
   public int aliasId(int j) { int o = __offset(22); return o != 0 ? bb.get(__vector(o) + j * 1) & 0xFF : 0; }
   public int aliasIdLength() { int o = __offset(22); return o != 0 ? __vector_len(o) : 0; }

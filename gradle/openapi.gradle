@@ -1,0 +1,18 @@
+/*
+ * Copyright 2019 ProximaX Limited. All rights reserved.
+ * Use of this source code is governed by the Apache 2.0
+ * license that can be found in the LICENSE file.
+ */
+ 
+openApiGenerate {
+    generatorName = "java"
+    inputSpec = "$rootDir/schemas/swagger/swagger.yaml".toString()
+    outputDir = "$buildDir/generated".toString()
+    apiPackage = "io.proximax.sdk.gen.api"
+    invokerPackage = "io.proximax.sdk.gen.invoker"
+    modelPackage = "io.proximax.sdk.gen.model"
+    generateAliasAsModel = true
+    configOptions = [
+        dateLibrary: "java8"
+    ]
+}

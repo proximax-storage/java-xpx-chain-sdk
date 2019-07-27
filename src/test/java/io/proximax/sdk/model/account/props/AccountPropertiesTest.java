@@ -13,8 +13,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 
 import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.ResourceBasedTest;
@@ -47,13 +46,11 @@ class AccountPropertiesTest extends ResourceBasedTest {
    @Test
    void checkResourceBundleDeserialization() {
       // init the object mapper
-      final ObjectMapper objectMapper = new ObjectMapper();
-      objectMapper.configure(DeserializationFeature.USE_LONG_FOR_INTS, true);
-      objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+      final Gson gson = new Gson();
       // go through all the items and collect them to a list
       List<AccountProperties> props = Observable.fromIterable(getResources("account_properties", "dtos", "properties"))
-         .map(json -> json.toString())
-         .map(str -> objectMapper.readValue(str, AccountPropertiesInfoDTO.class))
+         .map(Object::toString)
+         .map(str -> gson.fromJson(str, AccountPropertiesInfoDTO.class))
          .map(AccountPropertiesInfoDTO::getAccountProperties)
          .map(AccountProperties::fromDto)
          .toList()

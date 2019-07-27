@@ -20,19 +20,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
 class MosaicPropertiesTest {
+   private static final Optional<BigInteger> TEN = Optional.of(BigInteger.TEN);
 
     @Test
     void shouldCreateMosaicPropertiesViaConstructor() {
-        MosaicProperties mosaicProperties = new MosaicProperties(true, true, true, 1, BigInteger.valueOf(1000));
+        MosaicProperties mosaicProperties = new MosaicProperties(true, true, 1, TEN);
         assertTrue(mosaicProperties.isSupplyMutable());
         assertTrue(mosaicProperties.isTransferable());
-        assertTrue(mosaicProperties.isLevyMutable());
         assertTrue(1 == mosaicProperties.getDivisibility());
-        assertEquals(BigInteger.valueOf(1000), mosaicProperties.getDuration());
+        assertEquals(TEN, mosaicProperties.getDuration());
     }
 
     @Test
@@ -40,14 +41,12 @@ class MosaicPropertiesTest {
         MosaicProperties mosaicProperties = new MosaicProperties.Builder()
                 .supplyMutable(true)
                 .transferable(true)
-                .levyMutable(true)
                 .divisibility(1)
-                .duration(BigInteger.valueOf(1000))
+                .duration(TEN.orElse(BigInteger.ZERO))
                 .build();
         assertTrue(mosaicProperties.isSupplyMutable());
         assertTrue(mosaicProperties.isTransferable());
-        assertTrue(mosaicProperties.isLevyMutable());
         assertTrue(1 == mosaicProperties.getDivisibility());
-        assertEquals(BigInteger.valueOf(1000), mosaicProperties.getDuration());
+        assertEquals(TEN, mosaicProperties.getDuration());
     }
 }

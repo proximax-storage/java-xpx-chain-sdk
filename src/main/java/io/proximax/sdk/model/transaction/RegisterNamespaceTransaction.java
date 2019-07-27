@@ -150,7 +150,7 @@ public class RegisterNamespaceTransaction extends Transaction {
         int signatureVector = RegisterNamespaceTransactionBuffer.createSignatureVector(builder, new byte[64]);
         int signerVector = RegisterNamespaceTransactionBuffer.createSignerVector(builder, new byte[32]);
         int deadlineVector = RegisterNamespaceTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
-        int feeVector = RegisterNamespaceTransactionBuffer.createFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
+        int feeVector = RegisterNamespaceTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
         int namespaceIdVector = RegisterNamespaceTransactionBuffer.createNamespaceIdVector(builder, UInt64Utils.fromBigInteger(namespaceId.getId()));
         int durationParentIdVector = RegisterNamespaceTransactionBuffer.createDurationParentIdVector(builder, getNamespaceType() == NamespaceType.RootNamespace ? UInt64Utils.fromBigInteger(duration.get()) : UInt64Utils.fromBigInteger(parentId.get().getId()));
 
@@ -164,7 +164,7 @@ public class RegisterNamespaceTransaction extends Transaction {
         RegisterNamespaceTransactionBuffer.addSigner(builder, signerVector);
         RegisterNamespaceTransactionBuffer.addVersion(builder, version);
         RegisterNamespaceTransactionBuffer.addType(builder, getType().getValue());
-        RegisterNamespaceTransactionBuffer.addFee(builder, feeVector);
+        RegisterNamespaceTransactionBuffer.addMaxFee(builder, feeVector);
         RegisterNamespaceTransactionBuffer.addDeadline(builder, deadlineVector);
         RegisterNamespaceTransactionBuffer.addNamespaceType(builder, getNamespaceType().getValue());
         RegisterNamespaceTransactionBuffer.addDurationParentId(builder, durationParentIdVector);

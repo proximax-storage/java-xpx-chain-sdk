@@ -6,7 +6,7 @@ table MosaicSupplyChangeTransactionBuffer {
     signer: [ubyte];
     version: ushort;
     type: ushort;
-    fee: [uint];
+    maxFee: [uint];
     deadline:[uint];
     mosaicId:[uint];
     direction:ubyte;

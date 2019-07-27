@@ -26,15 +26,17 @@ class MosaicDefinitionTransactionSchema extends Schema {
                 new ArrayAttribute ("signer", Constants.SIZEOF_BYTE),
                 new ScalarAttribute("version", Constants.SIZEOF_SHORT),
                 new ScalarAttribute("type", Constants.SIZEOF_SHORT),
-                new ArrayAttribute ("fee", Constants.SIZEOF_INT),
+                new ArrayAttribute ("maxFee", Constants.SIZEOF_INT),
                 new ArrayAttribute ("deadline", Constants.SIZEOF_INT),
                 new ScalarAttribute("mosaicNonce", Constants.SIZEOF_INT),
                 new ArrayAttribute ("mosaicId", Constants.SIZEOF_INT),
                 new ScalarAttribute("numOptionalProperties", Constants.SIZEOF_BYTE),
                 new ScalarAttribute("flags", Constants.SIZEOF_BYTE),
                 new ScalarAttribute("divisibility", Constants.SIZEOF_BYTE),
-                new ScalarAttribute("indicateDuration", Constants.SIZEOF_BYTE),
-                new ArrayAttribute ("duration", Constants.SIZEOF_INT)
+                new TableArrayAttribute("optionalProperties",
+                      Arrays.asList(
+                            new ScalarAttribute("mosaicPropertyId", Constants.SIZEOF_BYTE),
+                            new ArrayAttribute ("value", Constants.SIZEOF_INT)))
         ));
     }
 }

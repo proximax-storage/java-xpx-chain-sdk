@@ -26,7 +26,7 @@ class TransferTransactionSchema extends Schema {
                 new ArrayAttribute("signer", Constants.SIZEOF_BYTE),
                 new ScalarAttribute("version", Constants.SIZEOF_SHORT),
                 new ScalarAttribute("type", Constants.SIZEOF_SHORT),
-                new ArrayAttribute("fee", Constants.SIZEOF_INT),
+                new ArrayAttribute("maxFee", Constants.SIZEOF_INT),
                 new ArrayAttribute("deadline", Constants.SIZEOF_INT),
                 
                 new ArrayAttribute("recipient", Constants.SIZEOF_BYTE),

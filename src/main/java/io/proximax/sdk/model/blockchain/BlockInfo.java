@@ -44,9 +44,13 @@ public class BlockInfo {
     private final BigInteger difficulty;
     private final String previousBlockHash;
     private final String blockTransactionsHash;
+    private final Optional<String> blockReceiptsHash;
 
 
-    public BlockInfo(String hash, String generationHash, Optional<BigInteger> totalFee, Optional<Integer> numTransactions, String signature, PublicAccount signer, NetworkType networkType, Integer version, int type, BigInteger height, BigInteger timestamp, BigInteger difficulty, String previousBlockHash, String blockTransactionsHash) {
+   public BlockInfo(String hash, String generationHash, Optional<BigInteger> totalFee,
+         Optional<Integer> numTransactions, String signature, PublicAccount signer, NetworkType networkType,
+         Integer version, int type, BigInteger height, BigInteger timestamp, BigInteger difficulty,
+         String previousBlockHash, String blockTransactionsHash, Optional<String> blockReceiptsHash) {
         this.hash = hash;
         this.generationHash = generationHash;
         this.totalFee = totalFee;
@@ -61,9 +65,17 @@ public class BlockInfo {
         this.difficulty = difficulty;
         this.previousBlockHash = previousBlockHash;
         this.blockTransactionsHash = blockTransactionsHash;
+        this.blockReceiptsHash = blockReceiptsHash;
     }
 
     /**
+    * @return the blockReceiptsHash
+    */
+   public Optional<String> getBlockReceiptsHash() {
+      return blockReceiptsHash;
+   }
+
+   /**
      * Returns block hash.
      *
      * @return String
@@ -206,31 +218,22 @@ public class BlockInfo {
              new PublicAccount(dto.getBlock().getSigner(), networkType),
              networkType,
              (int) Long.parseLong(Integer.toHexString(dto.getBlock().getVersion().intValue()).substring(2, 4), 16),
-             dto.getBlock().getType().intValue(),
+             dto.getBlock().getType().getValue(),
              toBigInt(dto.getBlock().getHeight()),
              toBigInt(dto.getBlock().getTimestamp()),
              toBigInt(dto.getBlock().getDifficulty()),
              dto.getBlock().getPreviousBlockHash(),
-             dto.getBlock().getBlockTransactionsHash());
+             dto.getBlock().getBlockTransactionsHash(),
+             Optional.ofNullable(dto.getBlock().getBlockReceiptsHash()));
     }
+
+   @Override
+   public String toString() {
+      return "BlockInfo [hash=" + hash + ", generationHash=" + generationHash + ", totalFee=" + totalFee
+            + ", numTransactions=" + numTransactions + ", signature=" + signature + ", signer=" + signer
+            + ", networkType=" + networkType + ", version=" + version + ", type=" + type + ", height=" + height
+            + ", timestamp=" + timestamp + ", difficulty=" + difficulty + ", previousBlockHash=" + previousBlockHash
+            + ", blockTransactionsHash=" + blockTransactionsHash + ", blockReceiptsHash=" + blockReceiptsHash + "]";
+   }
     
-    @Override
-    public String toString() {
-        return "BlockInfo{" +
-                "hash='" + hash + '\'' +
-                ", generationHash='" + generationHash + '\'' +
-                ", totalFee=" + totalFee +
-                ", numTransactions=" + numTransactions +
-                ", signature='" + signature + '\'' +
-                ", signer=" + signer +
-                ", networkType=" + networkType +
-                ", version=" + version +
-                ", type=" + type +
-                ", height=" + height +
-                ", timestamp=" + timestamp +
-                ", difficulty=" + difficulty +
-                ", previousBlockHash='" + previousBlockHash + '\'' +
-                ", blockTransactionsHash='" + blockTransactionsHash + '\'' +
-                '}';
-    }
 }

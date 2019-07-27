@@ -25,10 +25,10 @@ public final class SecretProofTransactionBuffer extends Table {
   public ByteBuffer signerInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 8, 1); }
   public int version() { int o = __offset(10); return o != 0 ? bb.getShort(o + bb_pos) & 0xFFFF : 0; }
   public int type() { int o = __offset(12); return o != 0 ? bb.getShort(o + bb_pos) & 0xFFFF : 0; }
-  public long fee(int j) { int o = __offset(14); return o != 0 ? (long)bb.getInt(__vector(o) + j * 4) & 0xFFFFFFFFL : 0; }
-  public int feeLength() { int o = __offset(14); return o != 0 ? __vector_len(o) : 0; }
-  public ByteBuffer feeAsByteBuffer() { return __vector_as_bytebuffer(14, 4); }
-  public ByteBuffer feeInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 14, 4); }
+  public long maxFee(int j) { int o = __offset(14); return o != 0 ? (long)bb.getInt(__vector(o) + j * 4) & 0xFFFFFFFFL : 0; }
+  public int maxFeeLength() { int o = __offset(14); return o != 0 ? __vector_len(o) : 0; }
+  public ByteBuffer maxFeeAsByteBuffer() { return __vector_as_bytebuffer(14, 4); }
+  public ByteBuffer maxFeeInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 14, 4); }
   public long deadline(int j) { int o = __offset(16); return o != 0 ? (long)bb.getInt(__vector(o) + j * 4) & 0xFFFFFFFFL : 0; }
   public int deadlineLength() { int o = __offset(16); return o != 0 ? __vector_len(o) : 0; }
   public ByteBuffer deadlineAsByteBuffer() { return __vector_as_bytebuffer(16, 4); }
@@ -38,11 +38,15 @@ public final class SecretProofTransactionBuffer extends Table {
   public int secretLength() { int o = __offset(20); return o != 0 ? __vector_len(o) : 0; }
   public ByteBuffer secretAsByteBuffer() { return __vector_as_bytebuffer(20, 1); }
   public ByteBuffer secretInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 20, 1); }
-  public int proofSize() { int o = __offset(22); return o != 0 ? bb.getShort(o + bb_pos) & 0xFFFF : 0; }
-  public int proof(int j) { int o = __offset(24); return o != 0 ? bb.get(__vector(o) + j * 1) & 0xFF : 0; }
-  public int proofLength() { int o = __offset(24); return o != 0 ? __vector_len(o) : 0; }
-  public ByteBuffer proofAsByteBuffer() { return __vector_as_bytebuffer(24, 1); }
-  public ByteBuffer proofInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 24, 1); }
+  public int recipient(int j) { int o = __offset(22); return o != 0 ? bb.get(__vector(o) + j * 1) & 0xFF : 0; }
+  public int recipientLength() { int o = __offset(22); return o != 0 ? __vector_len(o) : 0; }
+  public ByteBuffer recipientAsByteBuffer() { return __vector_as_bytebuffer(22, 1); }
+  public ByteBuffer recipientInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 22, 1); }
+  public int proofSize() { int o = __offset(24); return o != 0 ? bb.getShort(o + bb_pos) & 0xFFFF : 0; }
+  public int proof(int j) { int o = __offset(26); return o != 0 ? bb.get(__vector(o) + j * 1) & 0xFF : 0; }
+  public int proofLength() { int o = __offset(26); return o != 0 ? __vector_len(o) : 0; }
+  public ByteBuffer proofAsByteBuffer() { return __vector_as_bytebuffer(26, 1); }
+  public ByteBuffer proofInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 26, 1); }
 
   public static int createSecretProofTransactionBuffer(FlatBufferBuilder builder,
       long size,
@@ -50,17 +54,19 @@ public final class SecretProofTransactionBuffer extends Table {
       int signerOffset,
       int version,
       int type,
-      int feeOffset,
+      int maxFeeOffset,
       int deadlineOffset,
       int hashAlgorithm,
       int secretOffset,
+      int recipientOffset,
       int proofSize,
       int proofOffset) {
-    builder.startObject(11);
+    builder.startObject(12);
     SecretProofTransactionBuffer.addProof(builder, proofOffset);
+    SecretProofTransactionBuffer.addRecipient(builder, recipientOffset);
     SecretProofTransactionBuffer.addSecret(builder, secretOffset);
     SecretProofTransactionBuffer.addDeadline(builder, deadlineOffset);
-    SecretProofTransactionBuffer.addFee(builder, feeOffset);
+    SecretProofTransactionBuffer.addMaxFee(builder, maxFeeOffset);
     SecretProofTransactionBuffer.addSigner(builder, signerOffset);
     SecretProofTransactionBuffer.addSignature(builder, signatureOffset);
     SecretProofTransactionBuffer.addSize(builder, size);
@@ -71,7 +77,7 @@ public final class SecretProofTransactionBuffer extends Table {
     return SecretProofTransactionBuffer.endSecretProofTransactionBuffer(builder);
   }
 
-  public static void startSecretProofTransactionBuffer(FlatBufferBuilder builder) { builder.startObject(11); }
+  public static void startSecretProofTransactionBuffer(FlatBufferBuilder builder) { builder.startObject(12); }
   public static void addSize(FlatBufferBuilder builder, long size) { builder.addInt(0, (int)size, (int)0L); }
   public static void addSignature(FlatBufferBuilder builder, int signatureOffset) { builder.addOffset(1, signatureOffset, 0); }
   public static int createSignatureVector(FlatBufferBuilder builder, byte[] data) { builder.startVector(1, data.length, 1); for (int i = data.length - 1; i >= 0; i--) builder.addByte(data[i]); return builder.endVector(); }
@@ -81,9 +87,9 @@ public final class SecretProofTransactionBuffer extends Table {
   public static void startSignerVector(FlatBufferBuilder builder, int numElems) { builder.startVector(1, numElems, 1); }
   public static void addVersion(FlatBufferBuilder builder, int version) { builder.addShort(3, (short)version, (short)0); }
   public static void addType(FlatBufferBuilder builder, int type) { builder.addShort(4, (short)type, (short)0); }
-  public static void addFee(FlatBufferBuilder builder, int feeOffset) { builder.addOffset(5, feeOffset, 0); }
-  public static int createFeeVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addInt(data[i]); return builder.endVector(); }
-  public static void startFeeVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
+  public static void addMaxFee(FlatBufferBuilder builder, int maxFeeOffset) { builder.addOffset(5, maxFeeOffset, 0); }
+  public static int createMaxFeeVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addInt(data[i]); return builder.endVector(); }
+  public static void startMaxFeeVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
   public static void addDeadline(FlatBufferBuilder builder, int deadlineOffset) { builder.addOffset(6, deadlineOffset, 0); }
   public static int createDeadlineVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addInt(data[i]); return builder.endVector(); }
   public static void startDeadlineVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
@@ -91,8 +97,11 @@ public final class SecretProofTransactionBuffer extends Table {
   public static void addSecret(FlatBufferBuilder builder, int secretOffset) { builder.addOffset(8, secretOffset, 0); }
   public static int createSecretVector(FlatBufferBuilder builder, byte[] data) { builder.startVector(1, data.length, 1); for (int i = data.length - 1; i >= 0; i--) builder.addByte(data[i]); return builder.endVector(); }
   public static void startSecretVector(FlatBufferBuilder builder, int numElems) { builder.startVector(1, numElems, 1); }
-  public static void addProofSize(FlatBufferBuilder builder, int proofSize) { builder.addShort(9, (short)proofSize, (short)0); }
-  public static void addProof(FlatBufferBuilder builder, int proofOffset) { builder.addOffset(10, proofOffset, 0); }
+  public static void addRecipient(FlatBufferBuilder builder, int recipientOffset) { builder.addOffset(9, recipientOffset, 0); }
+  public static int createRecipientVector(FlatBufferBuilder builder, byte[] data) { builder.startVector(1, data.length, 1); for (int i = data.length - 1; i >= 0; i--) builder.addByte(data[i]); return builder.endVector(); }
+  public static void startRecipientVector(FlatBufferBuilder builder, int numElems) { builder.startVector(1, numElems, 1); }
+  public static void addProofSize(FlatBufferBuilder builder, int proofSize) { builder.addShort(10, (short)proofSize, (short)0); }
+  public static void addProof(FlatBufferBuilder builder, int proofOffset) { builder.addOffset(11, proofOffset, 0); }
   public static int createProofVector(FlatBufferBuilder builder, byte[] data) { builder.startVector(1, data.length, 1); for (int i = data.length - 1; i >= 0; i--) builder.addByte(data[i]); return builder.endVector(); }
   public static void startProofVector(FlatBufferBuilder builder, int numElems) { builder.startVector(1, numElems, 1); }
   public static int endSecretProofTransactionBuffer(FlatBufferBuilder builder) {

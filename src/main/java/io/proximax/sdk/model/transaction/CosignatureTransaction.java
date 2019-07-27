@@ -16,6 +16,8 @@
 
 package io.proximax.sdk.model.transaction;
 
+import java.util.function.Supplier;
+
 import org.spongycastle.util.encoders.Hex;
 
 import io.proximax.core.crypto.Signer;
@@ -23,53 +25,69 @@ import io.proximax.sdk.model.account.Account;
 
 /**
  * The cosignature transaction is used to sign an aggregate transactions with missing cosignatures.
- *
- * @since 1.0
  */
 public class CosignatureTransaction {
-    private final AggregateTransaction transactionToCosign;
+   private static final Supplier<IllegalArgumentException> ANNOUNCE_BEFORE_COSIGN = () -> new IllegalArgumentException(
+         "Transaction to cosign should be announced before being able to cosign it");
+   private final AggregateTransaction transactionToCosign;
 
-    /**
-     * Constructor
-     *
-     * @param transactionToCosign Aggregate transaction that will be cosigned.
-     */
-    public CosignatureTransaction(AggregateTransaction transactionToCosign) {
-        if (!transactionToCosign.getTransactionInfo().isPresent() || !transactionToCosign.getTransactionInfo().get().getHash().isPresent()) {
-            throw new IllegalArgumentException("Transaction to cosign should be announced before being able to cosign it");
-        }
-        this.transactionToCosign = transactionToCosign;
-    }
+   /**
+    * Constructor
+    *
+    * @param transactionToCosign Aggregate transaction that will be cosigned.
+    */
+   public CosignatureTransaction(AggregateTransaction transactionToCosign) {
+      getHashOrFail(transactionToCosign);
+      this.transactionToCosign = transactionToCosign;
+   }
 
-    /**
-     * Create a cosignature transaction.
-     *
-     * @param transactionToCosign Aggregate transaction that will be cosigned.
-     * @return {@link CosignatureTransaction}
-     */
-    public static CosignatureTransaction create(AggregateTransaction transactionToCosign) {
-        return new CosignatureTransaction(transactionToCosign);
-    }
+   /**
+    * Create a cosignature transaction.
+    *
+    * @param transactionToCosign Aggregate transaction that will be cosigned.
+    * @return {@link CosignatureTransaction}
+    */
+   public static CosignatureTransaction create(AggregateTransaction transactionToCosign) {
+      return new CosignatureTransaction(transactionToCosign);
+   }
 
-    /**
-     * Returns transaction to cosign.
-     *
-     * @return {@link AggregateTransaction}
-     */
-    public AggregateTransaction getTransactionToCosign() {
-        return transactionToCosign;
-    }
+   /**
+    * Returns transaction to cosign.
+    *
+    * @return {@link AggregateTransaction}
+    */
+   public AggregateTransaction getTransactionToCosign() {
+      return transactionToCosign;
+   }
 
-    /**
-     * Serialize and sign transaction creating a new SignedTransaction.
-     *
-     * @param account Account
-     * @return {@link CosignatureSignedTransaction}
-     */
-    public CosignatureSignedTransaction signWith(Account account) {
-        Signer signer = new Signer(account.getKeyPair());
-        byte[] bytes = Hex.decode(this.transactionToCosign.getTransactionInfo().get().getHash().get());
-        byte[] signatureBytes = signer.sign(bytes).getBytes();
-        return new CosignatureSignedTransaction(this.transactionToCosign.getTransactionInfo().get().getHash().get(), Hex.toHexString(signatureBytes), account.getPublicKey());
-    }
+   private static String getHashOrFail(AggregateTransaction transactionToCosign) {
+      return transactionToCosign.getTransactionInfo().orElseThrow(ANNOUNCE_BEFORE_COSIGN).getHash()
+            .orElseThrow(ANNOUNCE_BEFORE_COSIGN);
+   }
+
+   /**
+    * Serialize and sign transaction creating a new SignedTransaction.
+    *
+    * @param account Account
+    * @return {@link CosignatureSignedTransaction}
+    */
+   public CosignatureSignedTransaction signWith(Account account) {
+      String hash = getHashOrFail(getTransactionToCosign());
+      return new CosignatureSignedTransaction(hash, cosignTransaction(hash, account), account.getPublicKey());
+   }
+   
+   /**
+    * get cosignature for given transaction hash as hexadecimal string
+    * 
+    * @param transactionHash hash of the transaction that is being cosigned
+    * @param cosignatory the account to cosign the transaction
+    * @return hexadecimal string with signature
+    */
+   public static String cosignTransaction(String transactionHash, Account cosignatory) {
+      Signer signer = new Signer(cosignatory.getKeyPair());
+      byte[] bytes = Hex.decode(transactionHash);
+      byte[] signatureBytes = signer.sign(bytes).getBytes();
+      return Hex.toHexString(signatureBytes);
+
+   }
 }
