@@ -5,9 +5,8 @@
 # we use java
 language: java
 
-# try build using both oracle and openjdk
+# use openjdk8 for the build
 jdk:
-  - oraclejdk8
   - openjdk8
 
 env:

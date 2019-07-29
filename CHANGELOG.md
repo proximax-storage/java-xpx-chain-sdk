@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.4.0 Dragon release support
+
+See [milestone](https://github.com/proximax-storage/java-xpx-chain-sdk/milestone/4?closed=1) for fixed issues
+* dragon support
+* delegated harvesting
+* bugfixes
+
 ## 0.3.1 Full Cow release support
 
 See [milestone](https://github.com/proximax-storage/java-xpx-chain-sdk/milestone/3?closed=1) for fixed issues
