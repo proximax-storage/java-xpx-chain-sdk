@@ -94,7 +94,7 @@ public class E2ETransferTest extends E2EBaseTest {
    void insufficientFunds() {
       TransferTransaction transaction = TransferTransaction.create(getDeadline(),
             seedAccount.getAddress(),
-            Arrays.asList(NetworkCurrencyMosaic.createRelative(BigInteger.TEN)),
+            Arrays.asList(NetworkCurrencyMosaic.TEN),
             PlainMessage.Empty,
             getNetworkType());
       SignedTransaction signedTransaction = api.sign(transaction, simpleAccount);

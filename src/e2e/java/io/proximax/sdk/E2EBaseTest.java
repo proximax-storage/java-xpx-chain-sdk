@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
 import java.time.temporal.ChronoUnit;
@@ -144,7 +145,7 @@ public class E2EBaseTest extends BaseTest {
     */
    protected void sendSomeCash(Account sender, Address recipient, long amount) {
       BigInteger bigAmount = BigInteger.valueOf(amount);
-      Mosaic mosaicToTransfer = NetworkCurrencyMosaic.createRelative(bigAmount);
+      Mosaic mosaicToTransfer = NetworkCurrencyMosaic.createRelative(BigDecimal.valueOf(amount));
       sendMosaic(sender, recipient, mosaicToTransfer);
       BigInteger endAmount = accountHttp.getAccountInfo(recipient).map(acct -> acct.getMosaics().get(0).getAmount())
             .blockingFirst();

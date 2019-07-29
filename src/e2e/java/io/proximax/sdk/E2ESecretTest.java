@@ -89,7 +89,7 @@ public class E2ESecretTest extends E2EBaseTest {
       String proof = Hex.toHexString(secretBytes);
       // make a secret lock moving mosaic to the target account
       SecretLockTransaction secretLocktx = SecretLockTransaction.create(getDeadline(),
-            NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(1)),
+            NetworkCurrencyMosaic.ONE,
             BigInteger.valueOf(10),
             hashType,
             secret,
@@ -139,7 +139,7 @@ public class E2ESecretTest extends E2EBaseTest {
       String proof = Hex.toHexString(secretBytes);
       // make a secret lock moving mosaic to the target account
       SecretLockTransaction secretLocktx = SecretLockTransaction.create(getDeadline(),
-            NetworkCurrencyMosaic.createRelative(BigInteger.valueOf(1)),
+            NetworkCurrencyMosaic.ONE,
             BigInteger.valueOf(10),
             hashType,
             secret,

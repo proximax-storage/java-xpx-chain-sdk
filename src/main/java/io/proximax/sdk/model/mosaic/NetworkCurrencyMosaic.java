@@ -50,6 +50,11 @@ public class NetworkCurrencyMosaic extends Mosaic {
     */
    public static final boolean LEVYMUTABLE = false;
 
+   /** one of network currency taking the divisibility into account */
+   public static final NetworkCurrencyMosaic ONE = NetworkCurrencyMosaic.createRelative(BigDecimal.ONE);
+   /** ten of network currency taking the divisibility into account */
+   public static final NetworkCurrencyMosaic TEN = NetworkCurrencyMosaic.createRelative(BigDecimal.TEN);
+   
    /**
     * create specified amount of micro XPX
     * 
@@ -65,8 +70,8 @@ public class NetworkCurrencyMosaic extends Mosaic {
     * @param amount amount to send
     * @return a XPX instance
     */
-   public static NetworkCurrencyMosaic createRelative(BigInteger amount) {
-      BigInteger relativeAmount = BigDecimal.valueOf(Math.pow(10, NetworkCurrencyMosaic.DIVISIBILITY)).toBigInteger().multiply(amount);
+   public static NetworkCurrencyMosaic createRelative(BigDecimal amount) {
+      BigInteger relativeAmount = BigDecimal.valueOf(Math.pow(10, NetworkCurrencyMosaic.DIVISIBILITY)).multiply(amount).toBigInteger();
       return new NetworkCurrencyMosaic(relativeAmount);
    }
 
