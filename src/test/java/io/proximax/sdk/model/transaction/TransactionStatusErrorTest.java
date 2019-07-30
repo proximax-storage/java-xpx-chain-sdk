@@ -17,6 +17,7 @@
 package io.proximax.sdk.model.transaction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
 
@@ -24,22 +25,30 @@ import org.junit.jupiter.api.Test;
 
 class TransactionStatusErrorTest {
 
-    @Test
-    void getHash() {
-        final TransactionStatusError transactionStatusError = new TransactionStatusError("hash", "error", new Deadline(BigInteger.valueOf(1)));
-        assertEquals("hash", transactionStatusError.getHash());
-    }
+   @Test
+   void getHash() {
+      final TransactionStatusError transactionStatusError = new TransactionStatusError("hash", "error",
+            new Deadline(BigInteger.valueOf(1)));
+      assertEquals("hash", transactionStatusError.getHash());
+   }
 
-    @Test
-    void getStatus() {
-        final TransactionStatusError transactionStatusError = new TransactionStatusError("hash", "error", new Deadline(BigInteger.valueOf(1)));
-        assertEquals("error", transactionStatusError.getStatus());
-    }
+   @Test
+   void getStatus() {
+      final TransactionStatusError transactionStatusError = new TransactionStatusError("hash", "error",
+            new Deadline(BigInteger.valueOf(1)));
+      assertEquals("error", transactionStatusError.getStatus());
+   }
 
-    @Test
-    void getDeadline() {
-        Deadline deadline = new Deadline(BigInteger.valueOf(1));
-        final TransactionStatusError transactionStatusError = new TransactionStatusError("hash", "error", deadline);
-        assertEquals(deadline, transactionStatusError.getDeadline());
-    }
+   @Test
+   void getDeadline() {
+      Deadline deadline = new Deadline(BigInteger.valueOf(1));
+      final TransactionStatusError transactionStatusError = new TransactionStatusError("hash", "error", deadline);
+      assertEquals(deadline, transactionStatusError.getDeadline());
+   }
+
+   @Test
+   void checkToString() {
+      assertTrue(new TransactionStatusError("hash", "error", new Deadline(BigInteger.valueOf(1))).toString()
+            .startsWith("TransactionStatusError "));
+   }
 }

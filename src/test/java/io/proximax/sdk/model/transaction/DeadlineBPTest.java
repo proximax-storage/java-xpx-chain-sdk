@@ -43,4 +43,9 @@ class DeadlineBPTest {
        assertTrue((nowSinceNemesis + 2 * HOUR_MILLIS - SECOND_MILLIS) < deadline.getInstant(), "now plus 2 hours is before deadline localtime");
        assertTrue((nowSinceNemesis + 2 * HOUR_MILLIS + 2 * SECOND_MILLIS) > deadline.getInstant(), "now plus 2 hours and 2 seconds is after deadline localtime");
     }
+    
+    @Test
+    void checkToString() {
+       assertTrue(new DeadlineBP(2, ChronoUnit.HOURS).toString().startsWith("DeadlineBP "));
+    }
 }

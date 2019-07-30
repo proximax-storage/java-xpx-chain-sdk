@@ -23,7 +23,7 @@ import io.proximax.sdk.model.mosaic.MosaicId;
  * Mosaic metadata defining numeric ID
  */
 public class MosaicMetadata extends Metadata {
-   private MosaicId id;
+   private final MosaicId id;
 
    /**
     * @param fields metadata fields associated with the mosaic
@@ -40,12 +40,4 @@ public class MosaicMetadata extends Metadata {
    public MosaicId getId() {
       return id;
    }
-
-   /**
-    * @param id the id to set
-    */
-   public void setId(MosaicId id) {
-      this.id = id;
-   }
-
 }

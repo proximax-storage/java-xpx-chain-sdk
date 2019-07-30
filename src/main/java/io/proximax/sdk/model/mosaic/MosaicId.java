@@ -26,13 +26,12 @@ import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
  * The mosaic id structure describes mosaic id
- *
- * @since 1.0
  */
 public class MosaicId implements UInt64Id {
+   private static final Optional<String> FULL_NAME = Optional.empty();
+
    private final BigInteger id;
    private final Optional<MosaicNonce> nonce;
-   private final Optional<String> fullName = Optional.empty();
 
    /**
     * Create mosaic from the random nonce and public key of the owner
@@ -45,9 +44,14 @@ public class MosaicId implements UInt64Id {
       this.nonce = Optional.of(nonce);
    }
 
+   /**
+    * Create mosaic ID from the hex-encoded value
+    * 
+    * @param hex hexadecimal string representing the ID
+    */
    public MosaicId(String hex) {
       if (!hex.matches("^[0-9A-Fa-f]{16}$")) {
-         throw new IllegalIdentifierException("invalid hex string");
+         throw new IllegalIdentifierException("invalid hex string " + hex);
       }
       this.id = new BigInteger(hex, 16);
       this.nonce = Optional.empty();
@@ -89,7 +93,7 @@ public class MosaicId implements UInt64Id {
    
    @Override
    public Optional<String> getFullName() {
-      return fullName;
+      return FULL_NAME;
    }
    
    @Override

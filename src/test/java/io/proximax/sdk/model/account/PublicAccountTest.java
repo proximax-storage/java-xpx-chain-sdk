@@ -54,4 +54,16 @@ class PublicAccountTest {
         PublicAccount publicAccount2 = new PublicAccount(publicKey, NetworkType.MAIN_NET);
         assertNotEquals(publicAccount, publicAccount2);
     }
+    
+    @Test
+    void equalityReturnsFalseForNull() {
+       PublicAccount publicAccount = new PublicAccount(publicKey, NetworkType.MIJIN_TEST);
+       assertNotEquals(publicAccount, null);
+    }
+    
+    @Test
+    void equalityReturnsFalseForDifferentClass() {
+       PublicAccount publicAccount = new PublicAccount(publicKey, NetworkType.MIJIN_TEST);
+       assertNotEquals(publicAccount, "hello");
+    }
 }
