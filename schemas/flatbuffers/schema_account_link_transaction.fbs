@@ -1,0 +1,15 @@
+namespace io.proximax.sdk.gen.buffers;
+
+table AccountLinkTransactionBuffer {
+    size: uint;
+    signature: [ubyte];
+    signer: [ubyte];
+    version: ushort;
+    type: ushort;
+    maxFee: [uint];
+    deadline:[uint];
+    remoteAccountKey: [ubyte];
+    linkAction: ubyte;
+}
+
+root_type AccountLinkTransactionBuffer;
