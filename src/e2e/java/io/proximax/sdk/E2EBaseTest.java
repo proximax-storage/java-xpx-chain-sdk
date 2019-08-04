@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
-import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -40,7 +39,7 @@ import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.mosaic.Mosaic;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
-import io.proximax.sdk.model.transaction.Deadline;
+import io.proximax.sdk.model.transaction.DeadlineRaw;
 import io.proximax.sdk.model.transaction.PlainMessage;
 import io.proximax.sdk.model.transaction.SignedTransaction;
 import io.proximax.sdk.model.transaction.TransactionDeadline;
@@ -117,7 +116,7 @@ public class E2EBaseTest extends BaseTest {
     * @return deadline
     */
    protected TransactionDeadline getDeadline() {
-      return new Deadline(5, ChronoUnit.MINUTES);
+      return DeadlineRaw.startNow(BigInteger.valueOf(5*60*1000l));
    }
    
 

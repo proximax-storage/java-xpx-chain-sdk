@@ -48,7 +48,7 @@ public class DeadlineBP implements TransactionDeadline {
    /**
     * Constructor
     *
-    * @param input Deadline in BigInteger format
+    * @param input milliseconds since epoch
     */
    public DeadlineBP(BigInteger input) {
       instant = Instant.ofEpochMilli(input.longValue() + NETWORK_EPOCH_START_MILLIS);
@@ -65,11 +65,7 @@ public class DeadlineBP implements TransactionDeadline {
       return new DeadlineBP(units, chronoUnit);
    }
 
-   /**
-    * Returns number of seconds elapsed since the creation of the nemesis block.
-    *
-    * @return long
-    */
+   @Override
    public long getInstant() {
       return instant.toEpochMilli() - DeadlineBP.NETWORK_EPOCH.toEpochMilli();
    }

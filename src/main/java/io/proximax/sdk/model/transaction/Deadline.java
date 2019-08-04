@@ -21,10 +21,8 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
 /**
- * The deadline of the transaction. The deadline is given as the number of seconds elapsed since the creation of the
+ * The deadline of the transaction. The deadline is given as the number of milliseconds elapsed since the creation of the
  * nemesis block. If a transaction does not get included in a block before the deadline is reached, it is deleted.
- *
- * @since 1.0
  */
 public class Deadline implements TransactionDeadline {
 
