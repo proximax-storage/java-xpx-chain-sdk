@@ -8,7 +8,7 @@ package io.proximax.sdk.infrastructure.listener;
 import com.google.gson.JsonObject;
 
 import io.proximax.sdk.model.account.Address;
-import io.proximax.sdk.model.transaction.DeadlineBP;
+import io.proximax.sdk.model.transaction.DeadlineRaw;
 import io.proximax.sdk.model.transaction.TransactionStatusError;
 import io.reactivex.Observable;
 import io.reactivex.subjects.Subject;
@@ -38,7 +38,7 @@ public class StatusChannelMessage extends ListenerMessage<TransactionStatusError
       return new TransactionStatusError(
             message.get("hash").getAsString(), 
             message.get("status").getAsString(),
-            new DeadlineBP(extractBigInteger(message.getAsJsonArray("deadline"))));
+            new DeadlineRaw(extractBigInteger(message.getAsJsonArray("deadline"))));
 
    }
 
