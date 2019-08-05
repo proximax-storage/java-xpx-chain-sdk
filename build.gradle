@@ -72,7 +72,6 @@ test {
 ext {
     okHttp3Version = '3.14.1'
     junitVersion = '5.4.2'
-    junitPlatformVersion = '1.4.2'
 }
 
 dependencies {
@@ -82,8 +81,6 @@ dependencies {
     // backport of java.time to support old android devices - removed from dependencies to avoid classpath polution
 	compileOnly 'org.threeten:threetenbp:1.4.0'
 
-    // Logging facade
-	implementation 'org.slf4j:slf4j-api:1.7.26'
 	// crypto utilities, Hex
     implementation('com.madgag.spongycastle:prov:1.58.0.0') {
     	// exclude junit as transitive dependency...
@@ -113,6 +110,8 @@ dependencies {
     testImplementation 'org.mockito:mockito-all:1.9.5'
     testImplementation 'com.googlecode.matrix-toolkits-java:mtj:1.0.1'
 	
+    // Logging facade
+	testImplementation 'org.slf4j:slf4j-api:1.7.26'
 	// log implementation
 	testRuntimeOnly 'ch.qos.logback:logback-classic:1.2.3'
 	
