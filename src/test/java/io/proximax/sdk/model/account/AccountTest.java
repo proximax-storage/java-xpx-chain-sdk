@@ -18,6 +18,7 @@ package io.proximax.sdk.model.account;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
 import java.util.Collections;
@@ -101,5 +102,11 @@ class AccountTest {
         Account account = new Account(random, NetworkType.MIJIN_TEST);
         assertEquals(random.getPrivateKey().toString().toUpperCase(), account.getPrivateKey());
         assertEquals(account.getAddress().getNetworkType(), NetworkType.MIJIN_TEST);
+    }
+    
+    @Test
+    void checkToString() {
+       Account account = new Account("787225aaff3d2c71f4ffa32d4f19ec4922f3cd869747f267378f81f8e3fcb12d", NetworkType.MIJIN_TEST);
+       assertTrue(account.toString().startsWith("Account"));
     }
 }

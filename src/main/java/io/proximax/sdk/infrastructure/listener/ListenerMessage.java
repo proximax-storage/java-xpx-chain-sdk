@@ -94,7 +94,8 @@ public class ListenerMessage<T> {
     * @return true or false indicating whether specified address matches
     */
    public boolean isForAddress(Address address) {
-      return this.address.orElseThrow(() -> new RuntimeException("Address is missing")).equals(address);
+      Validate.notNull(address, "address for comparison is mandatory");
+      return address.equals(getAddress().orElse(null));
    }
    
    /**

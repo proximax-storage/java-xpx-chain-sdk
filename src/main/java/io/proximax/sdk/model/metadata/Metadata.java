@@ -21,8 +21,8 @@ import java.util.List;
  * Generic metadata having type and key-value fields
  */
 public class Metadata {
-   private MetadataType type;
-   private List<Field> fields;
+   private final MetadataType type;
+   private final List<Field> fields;
    
    /**
     * @param type type of the metadata (account/mosaic/namespace)
@@ -40,21 +40,9 @@ public class Metadata {
       return type;
    }
    /**
-    * @param type the type to set
-    */
-   public void setType(MetadataType type) {
-      this.type = type;
-   }
-   /**
     * @return the fields
     */
    public List<Field> getFields() {
       return fields;
-   }
-   /**
-    * @param fields the fields to set
-    */
-   public void setFields(List<Field> fields) {
-      this.fields = fields;
    }
 }

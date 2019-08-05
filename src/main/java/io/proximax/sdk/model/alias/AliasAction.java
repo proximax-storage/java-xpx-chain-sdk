@@ -43,7 +43,7 @@ public enum AliasAction {
     * @param code of the alias action
     * @return alias action
     */
-   public static AliasAction getBycode(int code) {
+   public static AliasAction getByCode(int code) {
       for (AliasAction type : AliasAction.values()) {
          if (code == type.code) {
             return type;

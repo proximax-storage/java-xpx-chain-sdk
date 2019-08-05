@@ -153,4 +153,18 @@ public class UInt64Utils {
        }
        return bytes;
     }
+    
+    /**
+     * create DTO from BigInteger value
+     * 
+     * @param bigInt the big integer
+     * @return the DTO
+     */
+    public static UInt64DTO dtoFromBigInt(BigInteger bigInt) {
+       int[] uint64Parts = UInt64Utils.fromBigInteger(bigInt);
+       UInt64DTO dto = new UInt64DTO();
+       dto.add((long)uint64Parts[0]);
+       dto.add((long)uint64Parts[1]);
+       return dto;
+    }
 }

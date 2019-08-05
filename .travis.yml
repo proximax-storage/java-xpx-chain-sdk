@@ -37,13 +37,13 @@ install:
   # download dependencies (at least most of them)
   - ./gradlew downloadDependencies --console=plain
 
-script:
-  # build and test the app
-  - ./gradlew build jacocoTestReport coveralls --console=plain
-
 # add publishing stage that publishes data out
 jobs:
   include:
+    - stage: build and coverage
+      jdk: openjdk8
+      script:
+        - ./gradlew build jacocoTestReport coveralls --console=plain
     - stage: publish snapshot
       jdk: openjdk8
       if: type = push AND branch = master

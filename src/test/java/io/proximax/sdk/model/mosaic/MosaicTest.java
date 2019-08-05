@@ -16,19 +16,57 @@
 
 package io.proximax.sdk.model.mosaic;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * {@link Mosaic} tests
+ */
 class MosaicTest {
 
     @Test
     void createANewMosaicViaConstructor() {
         MosaicId mosaicId = new MosaicId(new BigInteger("-3087871471161192663"));
         Mosaic mosaic = new Mosaic(mosaicId, BigInteger.valueOf(24));
-        assertTrue(mosaic.getId().equals(mosaicId));
-        assertTrue(mosaic.getAmount().equals(BigInteger.valueOf(24)));
+        assertEquals(mosaicId, mosaic.getId());
+        assertEquals(BigInteger.valueOf(24), mosaic.getAmount());
+        assertEquals("d525ad41d95fcf29",  mosaic.getIdAsHex());
+    }
+    
+    @Test
+    void checkHashCode() {
+       MosaicId mosaicId = new MosaicId(new BigInteger("-3087871471161192663"));
+       Mosaic a1 = new Mosaic(mosaicId, BigInteger.valueOf(24));
+       Mosaic a2 = new Mosaic(mosaicId, BigInteger.valueOf(24));
+       Mosaic b = new Mosaic(mosaicId, BigInteger.valueOf(25));
+       assertEquals(a1.hashCode(), a1.hashCode());
+       assertEquals(a1.hashCode(), a2.hashCode());
+       assertNotEquals(a1.hashCode(), b.hashCode());
+    }
+    
+    @Test
+    void checkEquals() {
+       MosaicId mosaicId = new MosaicId(new BigInteger("-3087871471161192663"));
+       Mosaic a1 = new Mosaic(mosaicId, BigInteger.valueOf(24));
+       Mosaic a2 = new Mosaic(mosaicId, BigInteger.valueOf(24));
+       Mosaic b = new Mosaic(mosaicId, BigInteger.valueOf(25));
+       assertEquals(a1, a1);
+       assertEquals(a1, a2);
+       assertNotEquals(a1, b);
+       assertNotEquals(a1, null);
+       assertNotEquals(a1, "othertype");
+    }
+    
+    @Test
+    void checkToString() {
+       MosaicId mosaicId = new MosaicId(new BigInteger("-3087871471161192663"));
+       Mosaic a1 = new Mosaic(mosaicId, BigInteger.valueOf(24));
+
+       assertTrue(a1.toString().startsWith("Mosaic "));
     }
 }

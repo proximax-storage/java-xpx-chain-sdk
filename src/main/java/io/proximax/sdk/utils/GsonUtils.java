@@ -54,13 +54,13 @@ public class GsonUtils {
 
    public static JsonArray getJsonArray(List<String> elements) {
       JsonArray bodyArr = new JsonArray(elements.size());
-      elements.stream().forEachOrdered(str -> bodyArr.add(str));
+      elements.stream().forEachOrdered(bodyArr::add);
       return bodyArr;
    }
 
    public static <T> JsonArray getJsonArray(List<T> elements, Function<T, String> mapper) {
       JsonArray bodyArr = new JsonArray(elements.size());
-      elements.stream().map(mapper).forEachOrdered(str -> bodyArr.add(str));
+      elements.stream().map(mapper).forEachOrdered(bodyArr::add);
       return bodyArr;
    }
 

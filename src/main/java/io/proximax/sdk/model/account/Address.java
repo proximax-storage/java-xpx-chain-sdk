@@ -32,8 +32,8 @@ import io.proximax.sdk.model.blockchain.NetworkType;
  */
 public class Address {
     private static final int NUM_CHECKSUM_BYTES = 4;
-    final private String address;
-    final private NetworkType networkType;
+    private final String address;
+    private final NetworkType networkType;
 
     /**
      * Constructor

@@ -22,8 +22,6 @@ package io.proximax.sdk.model.mosaic;
  * @since 1.0
  */
 public class IllegalIdentifierException extends RuntimeException {
-    public IllegalIdentifierException() {
-    }
 
     public IllegalIdentifierException(String s) {
         super(s);
@@ -31,13 +29,5 @@ public class IllegalIdentifierException extends RuntimeException {
 
     public IllegalIdentifierException(String s, Throwable throwable) {
         super(s, throwable);
-    }
-
-    public IllegalIdentifierException(Throwable throwable) {
-        super(throwable);
-    }
-
-    public IllegalIdentifierException(String s, Throwable throwable, boolean b, boolean b1) {
-        super(s, throwable, b, b1);
     }
 }

@@ -72,6 +72,6 @@ public class DeadlineBP implements TransactionDeadline {
 
    @Override
    public String toString() {
-      return "Deadline [instant=" + instant + "]";
+      return "DeadlineBP [instant=" + instant + "]";
    }
 }

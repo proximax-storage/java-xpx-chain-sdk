@@ -47,7 +47,6 @@ public class MetadataId implements UInt64Id {
          throw new IllegalIdentifierException("invalid hex string");
       }
       this.id = new BigInteger(hex, 16);
-
    }
 
    @Override

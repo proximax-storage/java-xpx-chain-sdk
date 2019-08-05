@@ -18,6 +18,8 @@ package io.proximax.sdk.infrastructure;
 
 import java.io.IOException;
 
+import org.apache.commons.lang3.Validate;
+
 import com.google.gson.Gson;
 
 import io.proximax.sdk.BlockchainApi;
@@ -26,36 +28,58 @@ import io.proximax.sdk.BlockchainApi;
  * base HTTP repository implementation, keeping track of the API, HTTP client and mapper
  */
 public class Http {
-    protected final BlockchainApi api;
-    protected final HttpClient client;
-    protected Gson gson;
-    
-    /**
-     * create and initialize new instance for specified API
-     * 
-     * @param api the main API
-     */
-    Http(BlockchainApi api) {
-        this.api = api;
-        this.client = new OkHttpHttpClient(api);
-        // gson instance
-        this.gson = new Gson();
-    }
+   protected final BlockchainApi api;
+   protected final HttpClient client;
+   protected final Gson gson;
 
-    /**
-     * throw RuntimeException on error or return body of the response
-     * 
-     * @param response response to examine
-     * @return body of the response as string
-     */
-    static String mapStringOrError(final HttpResponse response) {
-       if (response.getCode() < 200 || response.getCode() > 299) {
-           throw new RuntimeException(response.getStatusMessage());
-       }
-       try {
-           return response.getBodyString();
-       } catch (IOException e) {
-           throw new RuntimeException(e.getMessage());
-       }
+   /**
+    * create and initialize new instance for specified API
+    * 
+    * @param api the main API
+    */
+   Http(BlockchainApi api) {
+      Validate.notNull(api, "api has to be provided");
+      this.api = api;
+      this.client = new OkHttpHttpClient(api);
+      // gson instance
+      this.gson = new Gson();
+   }
+
+   /**
+    * @return the api
+    */
+   public BlockchainApi getApi() {
+      return api;
+   }
+
+   /**
+    * @return the client
+    */
+   public HttpClient getClient() {
+      return client;
+   }
+
+   /**
+    * @return the gson
+    */
+   public Gson getGson() {
+      return gson;
+   }
+
+   /**
+    * throw RuntimeException on error or return body of the response
+    * 
+    * @param response response to examine
+    * @return body of the response as string
+    */
+   static String mapStringOrError(final HttpResponse response) {
+      if (response.getCode() < 200 || response.getCode() > 299) {
+         throw new RuntimeException(response.getStatusMessage());
+      }
+      try {
+         return response.getBodyString();
+      } catch (IOException e) {
+         throw new RuntimeException(e.getMessage());
+      }
    }
 }

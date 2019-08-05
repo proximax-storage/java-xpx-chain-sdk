@@ -135,7 +135,7 @@ public class MetadataMapper {
     */
    private static List<Field> loadFields(JsonArray jsonFields) {
       return stream(jsonFields)
-         .map( obj -> obj.getAsJsonObject())
+         .map(JsonElement::getAsJsonObject)
          .map(json -> new Field(json.get(META_KEY_FIELD_KEY).getAsString(), json.get(META_KEY_FIELD_VALUE).getAsString()))
          .collect(Collectors.toList());
    }
