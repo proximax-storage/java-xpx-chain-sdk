@@ -16,8 +16,6 @@
 package io.proximax.sdk;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -180,13 +178,5 @@ public class E2ENamespaceTest extends E2EBaseTest {
             .timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
       assertEquals(name, nsName.getName());
       assertEquals(nsId.getId(), nsName.getNamespaceId().getId());
-      if (!parentName.isPresent()) {
-         // we expect to be root
-         assertFalse(nsName.getParentId().isPresent());
-      } else {
-         NamespaceId parentId = new NamespaceId(parentName.get());
-         assertTrue(nsName.getParentId().isPresent());
-         assertEquals(parentId.getId(), nsName.getParentId().get().getId());
-      }
    }
 }

@@ -17,11 +17,13 @@
 package io.proximax.sdk.model.namespace;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
+
+import io.proximax.sdk.gen.model.NamespaceNameDTO;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 
 class NamespaceNameTest {
 
@@ -32,17 +34,21 @@ class NamespaceNameTest {
 
         assertEquals(namespaceId, namespaceName.getNamespaceId());
         assertEquals("nem", namespaceName.getName());
-        assertFalse(namespaceName.getParentId().isPresent());
     }
-
+    
     @Test
-    void createANamespaceNameWithParentId() {
-        NamespaceId namespaceId = new NamespaceId(new BigInteger("-8884663987180930485"));
-        NamespaceId parentId = new NamespaceId(new BigInteger("-3087871471161192663"));
-        NamespaceName namespaceName = new NamespaceName(namespaceId, "nem", parentId);
-
-        assertEquals(namespaceId, namespaceName.getNamespaceId());
-        assertEquals("nem", namespaceName.getName());
-        assertEquals(parentId, namespaceName.getParentId().get());
+    void checkFromDto() {
+       // values for the test
+       final String name = "prx.xpx";
+       final NamespaceId ns = new NamespaceId(name);
+       // prepare DTO
+       NamespaceNameDTO dto = new NamespaceNameDTO();
+       dto.setName(name);
+       dto.setNamespaceId(UInt64Utils.dtoFromBigInt(ns.getId()));
+       // convert
+       NamespaceName namespaceName = NamespaceName.fromDto(dto);
+       // check
+       assertEquals(ns, namespaceName.getNamespaceId());
+       assertEquals(name, namespaceName.getName());
     }
 }

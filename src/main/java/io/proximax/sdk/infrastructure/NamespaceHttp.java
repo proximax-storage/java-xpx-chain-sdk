@@ -149,19 +149,7 @@ public class NamespaceHttp extends Http implements NamespaceRepository {
                 .map(Http::mapStringOrError)
                 .map(this::toNamespaceNameList)
                 .flatMapIterable(item -> item)
-                .map(namespaceNameDTO -> {
-                    UInt64DTO parentId = namespaceNameDTO.getParentId();
-                    if (parentId != null && !parentId.isEmpty()) {
-                        return new NamespaceName(
-                                new NamespaceId(toBigInt(namespaceNameDTO.getNamespaceId())),
-                                namespaceNameDTO.getName(),
-                                new NamespaceId(toBigInt(parentId)));
-                    } else {
-                        return new NamespaceName(
-                                new NamespaceId(toBigInt(namespaceNameDTO.getNamespaceId())),
-                                namespaceNameDTO.getName());
-                    }
-                })
+                .map(NamespaceName::fromDto)
                 .toList()
                 .toObservable();
     }

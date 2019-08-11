@@ -20,59 +20,36 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import io.proximax.sdk.gen.model.BlockDTO;
-import io.proximax.sdk.gen.model.BlockMetaDTO;
+import io.proximax.sdk.gen.model.ConfigDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * BlockInfoDTO
+ * CatapultConfigDTO
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-08-11T15:04:35.591+02:00[Europe/Prague]")
-public class BlockInfoDTO {
-  public static final String SERIALIZED_NAME_META = "meta";
-  @SerializedName(SERIALIZED_NAME_META)
-  private BlockMetaDTO meta = null;
+public class CatapultConfigDTO {
+  public static final String SERIALIZED_NAME_CATAPULT_CONFIG = "catapultConfig";
+  @SerializedName(SERIALIZED_NAME_CATAPULT_CONFIG)
+  private ConfigDTO catapultConfig = null;
 
-  public static final String SERIALIZED_NAME_BLOCK = "block";
-  @SerializedName(SERIALIZED_NAME_BLOCK)
-  private BlockDTO block = null;
-
-  public BlockInfoDTO meta(BlockMetaDTO meta) {
-    this.meta = meta;
+  public CatapultConfigDTO catapultConfig(ConfigDTO catapultConfig) {
+    this.catapultConfig = catapultConfig;
     return this;
   }
 
    /**
-   * Get meta
-   * @return meta
+   * Get catapultConfig
+   * @return catapultConfig
   **/
   @ApiModelProperty(required = true, value = "")
-  public BlockMetaDTO getMeta() {
-    return meta;
+  public ConfigDTO getCatapultConfig() {
+    return catapultConfig;
   }
 
-  public void setMeta(BlockMetaDTO meta) {
-    this.meta = meta;
-  }
-
-  public BlockInfoDTO block(BlockDTO block) {
-    this.block = block;
-    return this;
-  }
-
-   /**
-   * Get block
-   * @return block
-  **/
-  @ApiModelProperty(required = true, value = "")
-  public BlockDTO getBlock() {
-    return block;
-  }
-
-  public void setBlock(BlockDTO block) {
-    this.block = block;
+  public void setCatapultConfig(ConfigDTO catapultConfig) {
+    this.catapultConfig = catapultConfig;
   }
 
 
@@ -84,23 +61,21 @@ public class BlockInfoDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    BlockInfoDTO blockInfoDTO = (BlockInfoDTO) o;
-    return Objects.equals(this.meta, blockInfoDTO.meta) &&
-        Objects.equals(this.block, blockInfoDTO.block);
+    CatapultConfigDTO catapultConfigDTO = (CatapultConfigDTO) o;
+    return Objects.equals(this.catapultConfig, catapultConfigDTO.catapultConfig);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(meta, block);
+    return Objects.hash(catapultConfig);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class BlockInfoDTO {\n");
-    sb.append("    meta: ").append(toIndentedString(meta)).append("\n");
-    sb.append("    block: ").append(toIndentedString(block)).append("\n");
+    sb.append("class CatapultConfigDTO {\n");
+    sb.append("    catapultConfig: ").append(toIndentedString(catapultConfig)).append("\n");
     sb.append("}");
     return sb.toString();
   }

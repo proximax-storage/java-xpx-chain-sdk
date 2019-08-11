@@ -16,30 +16,25 @@
 
 package io.proximax.sdk.model.namespace;
 
-import java.util.Optional;
+import io.proximax.sdk.gen.model.NamespaceNameDTO;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
  * The namespace name info structure describes basic information of a namespace and name.
- *
- * @since 1.0
  */
 public class NamespaceName {
     private final NamespaceId namespaceId;
     private final String name;
-    private final Optional<NamespaceId> parentId;
 
+    /**
+     * create new namespace name descriptor
+     * 
+     * @param namespaceId the ID of the namespace
+     * @param name the name of the namespace
+     */
     public NamespaceName(NamespaceId namespaceId, String name) {
-        this(namespaceId, name, Optional.empty());
-    }
-
-    public NamespaceName(NamespaceId namespaceId, String name, NamespaceId parentId) {
-        this(namespaceId, name, Optional.of(parentId));
-    }
-
-    private NamespaceName(NamespaceId namespaceId, String name, Optional<NamespaceId> parentId) {
         this.namespaceId = namespaceId;
         this.name = name;
-        this.parentId = parentId;
     }
 
     /**
@@ -61,11 +56,14 @@ public class NamespaceName {
     }
 
     /**
-     * Returns an optional that could contain the parent namespace id
-     *
-     * @return the parent id if available
+     * create new instance from the DTO
+     * 
+     * @param dto the dto of namespace name
+     * @return new instance
      */
-    public Optional<NamespaceId> getParentId() {
-        return parentId;
+    public static NamespaceName fromDto(NamespaceNameDTO dto) {
+       return new NamespaceName(
+             new NamespaceId(UInt64Utils.toBigInt(dto.getNamespaceId())),
+             dto.getName());
     }
 }

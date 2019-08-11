@@ -20,59 +20,58 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import io.proximax.sdk.gen.model.BlockDTO;
-import io.proximax.sdk.gen.model.BlockMetaDTO;
+import io.proximax.sdk.gen.model.UInt64DTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * BlockInfoDTO
+ * UpgradeDTO
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-08-11T15:04:35.591+02:00[Europe/Prague]")
-public class BlockInfoDTO {
-  public static final String SERIALIZED_NAME_META = "meta";
-  @SerializedName(SERIALIZED_NAME_META)
-  private BlockMetaDTO meta = null;
+public class UpgradeDTO {
+  public static final String SERIALIZED_NAME_HEIGHT = "height";
+  @SerializedName(SERIALIZED_NAME_HEIGHT)
+  private UInt64DTO height = new UInt64DTO();
 
-  public static final String SERIALIZED_NAME_BLOCK = "block";
-  @SerializedName(SERIALIZED_NAME_BLOCK)
-  private BlockDTO block = null;
+  public static final String SERIALIZED_NAME_CATAPULT_VERSION = "catapultVersion";
+  @SerializedName(SERIALIZED_NAME_CATAPULT_VERSION)
+  private UInt64DTO catapultVersion = new UInt64DTO();
 
-  public BlockInfoDTO meta(BlockMetaDTO meta) {
-    this.meta = meta;
+  public UpgradeDTO height(UInt64DTO height) {
+    this.height = height;
     return this;
   }
 
    /**
-   * Get meta
-   * @return meta
+   * Get height
+   * @return height
   **/
   @ApiModelProperty(required = true, value = "")
-  public BlockMetaDTO getMeta() {
-    return meta;
+  public UInt64DTO getHeight() {
+    return height;
   }
 
-  public void setMeta(BlockMetaDTO meta) {
-    this.meta = meta;
+  public void setHeight(UInt64DTO height) {
+    this.height = height;
   }
 
-  public BlockInfoDTO block(BlockDTO block) {
-    this.block = block;
+  public UpgradeDTO catapultVersion(UInt64DTO catapultVersion) {
+    this.catapultVersion = catapultVersion;
     return this;
   }
 
    /**
-   * Get block
-   * @return block
+   * Get catapultVersion
+   * @return catapultVersion
   **/
   @ApiModelProperty(required = true, value = "")
-  public BlockDTO getBlock() {
-    return block;
+  public UInt64DTO getCatapultVersion() {
+    return catapultVersion;
   }
 
-  public void setBlock(BlockDTO block) {
-    this.block = block;
+  public void setCatapultVersion(UInt64DTO catapultVersion) {
+    this.catapultVersion = catapultVersion;
   }
 
 
@@ -84,23 +83,23 @@ public class BlockInfoDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    BlockInfoDTO blockInfoDTO = (BlockInfoDTO) o;
-    return Objects.equals(this.meta, blockInfoDTO.meta) &&
-        Objects.equals(this.block, blockInfoDTO.block);
+    UpgradeDTO upgradeDTO = (UpgradeDTO) o;
+    return Objects.equals(this.height, upgradeDTO.height) &&
+        Objects.equals(this.catapultVersion, upgradeDTO.catapultVersion);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(meta, block);
+    return Objects.hash(height, catapultVersion);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class BlockInfoDTO {\n");
-    sb.append("    meta: ").append(toIndentedString(meta)).append("\n");
-    sb.append("    block: ").append(toIndentedString(block)).append("\n");
+    sb.append("class UpgradeDTO {\n");
+    sb.append("    height: ").append(toIndentedString(height)).append("\n");
+    sb.append("    catapultVersion: ").append(toIndentedString(catapultVersion)).append("\n");
     sb.append("}");
     return sb.toString();
   }
