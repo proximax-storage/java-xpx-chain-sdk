@@ -8,11 +8,11 @@ import java.util.*;
 import com.google.flatbuffers.*;
 
 @SuppressWarnings("unused")
-public final class AccountLinkTransactionBuffer extends Table {
-  public static AccountLinkTransactionBuffer getRootAsAccountLinkTransactionBuffer(ByteBuffer _bb) { return getRootAsAccountLinkTransactionBuffer(_bb, new AccountLinkTransactionBuffer()); }
-  public static AccountLinkTransactionBuffer getRootAsAccountLinkTransactionBuffer(ByteBuffer _bb, AccountLinkTransactionBuffer obj) { _bb.order(ByteOrder.LITTLE_ENDIAN); return (obj.__assign(_bb.getInt(_bb.position()) + _bb.position(), _bb)); }
+public final class CatapultUpgradeTransactionBuffer extends Table {
+  public static CatapultUpgradeTransactionBuffer getRootAsCatapultUpgradeTransactionBuffer(ByteBuffer _bb) { return getRootAsCatapultUpgradeTransactionBuffer(_bb, new CatapultUpgradeTransactionBuffer()); }
+  public static CatapultUpgradeTransactionBuffer getRootAsCatapultUpgradeTransactionBuffer(ByteBuffer _bb, CatapultUpgradeTransactionBuffer obj) { _bb.order(ByteOrder.LITTLE_ENDIAN); return (obj.__assign(_bb.getInt(_bb.position()) + _bb.position(), _bb)); }
   public void __init(int _i, ByteBuffer _bb) { bb_pos = _i; bb = _bb; vtable_start = bb_pos - bb.getInt(bb_pos); vtable_size = bb.getShort(vtable_start); }
-  public AccountLinkTransactionBuffer __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
+  public CatapultUpgradeTransactionBuffer __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
   public long size() { int o = __offset(4); return o != 0 ? (long)bb.getInt(o + bb_pos) & 0xFFFFFFFFL : 0L; }
   public int signature(int j) { int o = __offset(6); return o != 0 ? bb.get(__vector(o) + j * 1) & 0xFF : 0; }
@@ -33,13 +33,16 @@ public final class AccountLinkTransactionBuffer extends Table {
   public int deadlineLength() { int o = __offset(16); return o != 0 ? __vector_len(o) : 0; }
   public ByteBuffer deadlineAsByteBuffer() { return __vector_as_bytebuffer(16, 4); }
   public ByteBuffer deadlineInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 16, 4); }
-  public int remoteAccountKey(int j) { int o = __offset(18); return o != 0 ? bb.get(__vector(o) + j * 1) & 0xFF : 0; }
-  public int remoteAccountKeyLength() { int o = __offset(18); return o != 0 ? __vector_len(o) : 0; }
-  public ByteBuffer remoteAccountKeyAsByteBuffer() { return __vector_as_bytebuffer(18, 1); }
-  public ByteBuffer remoteAccountKeyInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 18, 1); }
-  public int linkAction() { int o = __offset(20); return o != 0 ? bb.get(o + bb_pos) & 0xFF : 0; }
+  public long upgradePeriod(int j) { int o = __offset(18); return o != 0 ? (long)bb.getInt(__vector(o) + j * 4) & 0xFFFFFFFFL : 0; }
+  public int upgradePeriodLength() { int o = __offset(18); return o != 0 ? __vector_len(o) : 0; }
+  public ByteBuffer upgradePeriodAsByteBuffer() { return __vector_as_bytebuffer(18, 4); }
+  public ByteBuffer upgradePeriodInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 18, 4); }
+  public long newCatapultVersion(int j) { int o = __offset(20); return o != 0 ? (long)bb.getInt(__vector(o) + j * 4) & 0xFFFFFFFFL : 0; }
+  public int newCatapultVersionLength() { int o = __offset(20); return o != 0 ? __vector_len(o) : 0; }
+  public ByteBuffer newCatapultVersionAsByteBuffer() { return __vector_as_bytebuffer(20, 4); }
+  public ByteBuffer newCatapultVersionInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 20, 4); }
 
-  public static int createAccountLinkTransactionBuffer(FlatBufferBuilder builder,
+  public static int createCatapultUpgradeTransactionBuffer(FlatBufferBuilder builder,
       long size,
       int signatureOffset,
       int signerOffset,
@@ -47,22 +50,22 @@ public final class AccountLinkTransactionBuffer extends Table {
       int type,
       int maxFeeOffset,
       int deadlineOffset,
-      int remoteAccountKeyOffset,
-      int linkAction) {
+      int upgradePeriodOffset,
+      int newCatapultVersionOffset) {
     builder.startObject(9);
-    AccountLinkTransactionBuffer.addRemoteAccountKey(builder, remoteAccountKeyOffset);
-    AccountLinkTransactionBuffer.addDeadline(builder, deadlineOffset);
-    AccountLinkTransactionBuffer.addMaxFee(builder, maxFeeOffset);
-    AccountLinkTransactionBuffer.addVersion(builder, version);
-    AccountLinkTransactionBuffer.addSigner(builder, signerOffset);
-    AccountLinkTransactionBuffer.addSignature(builder, signatureOffset);
-    AccountLinkTransactionBuffer.addSize(builder, size);
-    AccountLinkTransactionBuffer.addType(builder, type);
-    AccountLinkTransactionBuffer.addLinkAction(builder, linkAction);
-    return AccountLinkTransactionBuffer.endAccountLinkTransactionBuffer(builder);
+    CatapultUpgradeTransactionBuffer.addNewCatapultVersion(builder, newCatapultVersionOffset);
+    CatapultUpgradeTransactionBuffer.addUpgradePeriod(builder, upgradePeriodOffset);
+    CatapultUpgradeTransactionBuffer.addDeadline(builder, deadlineOffset);
+    CatapultUpgradeTransactionBuffer.addMaxFee(builder, maxFeeOffset);
+    CatapultUpgradeTransactionBuffer.addVersion(builder, version);
+    CatapultUpgradeTransactionBuffer.addSigner(builder, signerOffset);
+    CatapultUpgradeTransactionBuffer.addSignature(builder, signatureOffset);
+    CatapultUpgradeTransactionBuffer.addSize(builder, size);
+    CatapultUpgradeTransactionBuffer.addType(builder, type);
+    return CatapultUpgradeTransactionBuffer.endCatapultUpgradeTransactionBuffer(builder);
   }
 
-  public static void startAccountLinkTransactionBuffer(FlatBufferBuilder builder) { builder.startObject(9); }
+  public static void startCatapultUpgradeTransactionBuffer(FlatBufferBuilder builder) { builder.startObject(9); }
   public static void addSize(FlatBufferBuilder builder, long size) { builder.addInt(0, (int)size, (int)0L); }
   public static void addSignature(FlatBufferBuilder builder, int signatureOffset) { builder.addOffset(1, signatureOffset, 0); }
   public static int createSignatureVector(FlatBufferBuilder builder, byte[] data) { builder.startVector(1, data.length, 1); for (int i = data.length - 1; i >= 0; i--) builder.addByte(data[i]); return builder.endVector(); }
@@ -78,15 +81,17 @@ public final class AccountLinkTransactionBuffer extends Table {
   public static void addDeadline(FlatBufferBuilder builder, int deadlineOffset) { builder.addOffset(6, deadlineOffset, 0); }
   public static int createDeadlineVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addInt(data[i]); return builder.endVector(); }
   public static void startDeadlineVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
-  public static void addRemoteAccountKey(FlatBufferBuilder builder, int remoteAccountKeyOffset) { builder.addOffset(7, remoteAccountKeyOffset, 0); }
-  public static int createRemoteAccountKeyVector(FlatBufferBuilder builder, byte[] data) { builder.startVector(1, data.length, 1); for (int i = data.length - 1; i >= 0; i--) builder.addByte(data[i]); return builder.endVector(); }
-  public static void startRemoteAccountKeyVector(FlatBufferBuilder builder, int numElems) { builder.startVector(1, numElems, 1); }
-  public static void addLinkAction(FlatBufferBuilder builder, int linkAction) { builder.addByte(8, (byte)linkAction, (byte)0); }
-  public static int endAccountLinkTransactionBuffer(FlatBufferBuilder builder) {
+  public static void addUpgradePeriod(FlatBufferBuilder builder, int upgradePeriodOffset) { builder.addOffset(7, upgradePeriodOffset, 0); }
+  public static int createUpgradePeriodVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addInt(data[i]); return builder.endVector(); }
+  public static void startUpgradePeriodVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
+  public static void addNewCatapultVersion(FlatBufferBuilder builder, int newCatapultVersionOffset) { builder.addOffset(8, newCatapultVersionOffset, 0); }
+  public static int createNewCatapultVersionVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addInt(data[i]); return builder.endVector(); }
+  public static void startNewCatapultVersionVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
+  public static int endCatapultUpgradeTransactionBuffer(FlatBufferBuilder builder) {
     int o = builder.endObject();
     return o;
   }
-  public static void finishAccountLinkTransactionBufferBuffer(FlatBufferBuilder builder, int offset) { builder.finish(offset); }
-  public static void finishSizePrefixedAccountLinkTransactionBufferBuffer(FlatBufferBuilder builder, int offset) { builder.finishSizePrefixed(offset); }
+  public static void finishCatapultUpgradeTransactionBufferBuffer(FlatBufferBuilder builder, int offset) { builder.finish(offset); }
+  public static void finishSizePrefixedCatapultUpgradeTransactionBufferBuffer(FlatBufferBuilder builder, int offset) { builder.finishSizePrefixed(offset); }
 }
 

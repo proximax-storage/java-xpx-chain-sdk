@@ -1,6 +1,6 @@
 namespace io.proximax.sdk.gen.buffers;
 
-table AggregateTransactionBuffer {
+table CatapultUpgradeTransactionBuffer {
     size: uint;
     signature: [ubyte];
     signer: [ubyte];
@@ -8,8 +8,8 @@ table AggregateTransactionBuffer {
     type: ushort;
     maxFee: [uint];
     deadline:[uint];
-    transactionsSize: uint;
-    transactions:[ubyte];
+    upgradePeriod: [uint];
+    newCatapultVersion: [uint];
 }
 
-root_type AggregateTransactionBuffer;
+root_type CatapultUpgradeTransactionBuffer;
