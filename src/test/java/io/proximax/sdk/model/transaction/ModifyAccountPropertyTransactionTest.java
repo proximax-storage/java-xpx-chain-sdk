@@ -55,7 +55,7 @@ class ModifyAccountPropertyTransactionTest extends ResourceBasedTest {
    @Test
    void serializationMosaic() throws IOException {
       Deadline deadline = new FakeDeadline();
-      ModifyAccountPropertyTransaction<MosaicId> trans = ModifyAccountPropertyTransaction.createForMosaic(
+      ModifyAccountPropertyTransaction<UInt64Id> trans = ModifyAccountPropertyTransaction.createForMosaic(
             deadline,
             BigInteger.ZERO,
             AccountPropertyType.ALLOW_MOSAIC,

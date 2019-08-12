@@ -24,7 +24,6 @@ import io.proximax.sdk.model.account.props.AccountPropertyModification;
 import io.proximax.sdk.model.account.props.AccountPropertyModificationType;
 import io.proximax.sdk.model.account.props.AccountPropertyType;
 import io.proximax.sdk.model.blockchain.NetworkType;
-import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
@@ -86,9 +85,9 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
     * @param propertyModifications property modifications
     * @return the transaction instance
     */
-   public static ModifyAccountPropertyTransaction<MosaicId> createForMosaic(TransactionDeadline deadline, BigInteger maxFee,
+   public static ModifyAccountPropertyTransaction<UInt64Id> createForMosaic(TransactionDeadline deadline, BigInteger maxFee,
          AccountPropertyType propertyType,
-         List<AccountPropertyModification<MosaicId>> propertyModifications, NetworkType networkType) {
+         List<AccountPropertyModification<UInt64Id>> propertyModifications, NetworkType networkType) {
       return new MosaicModification(networkType, TransactionVersion.ACCOUNT_PROPERTIES_MOSAIC.getValue(), deadline, maxFee, propertyType, propertyModifications, Optional.empty(), Optional.empty(), Optional.empty());
    }
    
@@ -247,7 +246,7 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
    /**
     * Mosaic account property modification transaction implementation
     */
-   public static class MosaicModification extends ModifyAccountPropertyTransaction<MosaicId> {
+   public static class MosaicModification extends ModifyAccountPropertyTransaction<UInt64Id> {
       private static final int VALUE_BYTES_LENGTH = 8;
       /**
        * <p>Account property modification for mosaic</p>
@@ -261,21 +260,21 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
        * @param deadline deadline
        * @param maxFee max fee
        * @param propertyType property type
-       * @param propertyModifications list of property modifications
+       * @param list list of property modifications
        * @param signature optional signature
        * @param signer optional signer
        * @param transactionInfo optional transaction info
        */
       public MosaicModification(NetworkType networkType, Integer version, TransactionDeadline deadline,
             BigInteger maxFee, AccountPropertyType propertyType,
-            List<AccountPropertyModification<MosaicId>> propertyModifications, Optional<String> signature,
+            List<AccountPropertyModification<UInt64Id>> list, Optional<String> signature,
             Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
          super(TransactionType.ACCOUNT_PROPERTIES_MOSAIC, networkType, version, deadline, maxFee, propertyType,
-               propertyModifications, signature, signer, transactionInfo);
+               list, signature, signer, transactionInfo);
       }
 
       @Override
-      protected byte[] getValueBytesFromModification(AccountPropertyModification<MosaicId> mod) {
+      protected byte[] getValueBytesFromModification(AccountPropertyModification<UInt64Id> mod) {
          // get the bytes from string
          byte[] valueBytes = UInt64Utils.getBytes(mod.getValue().getId());
          // check that length is as expected

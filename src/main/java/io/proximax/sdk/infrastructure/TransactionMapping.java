@@ -373,13 +373,13 @@ class ModifyAccountPropertiesTransactionMapping extends TransactionMapping {
     * @param transaction the transaction object to get data from
     * @return the list of mosaic account property modifications
     */
-   static List<AccountPropertyModification<MosaicId>> getMosaicMods(JsonObject transaction) {
-      return stream(transaction.getAsJsonArray("modifications")).map(obj -> (JsonObject) obj).map(json -> {
-         AccountPropertyModificationType modType = AccountPropertyModificationType
-               .getByCode(json.get("modificationType").getAsInt());
-         return new AccountPropertyModification<>(modType,
-               new MosaicId(extractBigInteger(json.get("value").getAsJsonArray())));
-      }).collect(Collectors.toList());
+   static List<AccountPropertyModification<UInt64Id>> getMosaicMods(JsonObject transaction) {
+      return stream(transaction.getAsJsonArray("modifications"))
+            .map(obj -> (JsonObject) obj)
+            .map(json -> {
+               AccountPropertyModificationType modType = AccountPropertyModificationType.getByCode(json.get("modificationType").getAsInt());
+               return new AccountPropertyModification<>(modType, (UInt64Id)new MosaicId(extractBigInteger(json.get("value").getAsJsonArray())));
+            }).collect(Collectors.toList());
    }
 
    /**

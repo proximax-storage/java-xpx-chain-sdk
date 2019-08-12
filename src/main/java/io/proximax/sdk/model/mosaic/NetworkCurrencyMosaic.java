@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import io.proximax.sdk.model.namespace.NamespaceId;
+import io.proximax.sdk.model.transaction.UInt64Id;
 
 /**
  * XPX Mosaic
@@ -28,7 +29,7 @@ public class NetworkCurrencyMosaic extends Mosaic {
    /**
     * ID of network currency
     */
-   public static final NamespaceId ID = new NamespaceId("prx.xpx");
+   public static final UInt64Id ID = new NamespaceId("prx.xpx");
    /**
     * Divisibility
     */

@@ -47,6 +47,7 @@ import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.transaction.ModifyAccountPropertyTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
 import io.proximax.sdk.model.transaction.TransactionType;
+import io.proximax.sdk.model.transaction.UInt64Id;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -98,9 +99,9 @@ class E2EAccountTest extends E2EBaseTest {
    void addAllowMosaicProperty() {
       Account acct = new Account(new KeyPair(), getNetworkType());
       signup(acct.getAddress());
-      MosaicId allowedMosaic = NetworkCurrencyMosaic.ID;
+      UInt64Id allowedMosaic = NetworkCurrencyMosaic.ID;
       logger.info("going to allow {} by {}", allowedMosaic, acct.getPublicAccount());
-      ModifyAccountPropertyTransaction<MosaicId> trans = ModifyAccountPropertyTransaction.createForMosaic(getDeadline(),
+      ModifyAccountPropertyTransaction<UInt64Id> trans = ModifyAccountPropertyTransaction.createForMosaic(getDeadline(),
             BigInteger.ZERO,
             AccountPropertyType.ALLOW_MOSAIC,
             Arrays.asList(AccountPropertyModification.add(allowedMosaic)),
@@ -176,7 +177,7 @@ class E2EAccountTest extends E2EBaseTest {
     * @param aps account properties
     * @param blockedAddress address that is blocked
     */
-   private void testAccountPropertiesOnSimpleAccount(AccountProperties aps, MosaicId allowedMosaic) {
+   private void testAccountPropertiesOnSimpleAccount(AccountProperties aps, UInt64Id allowedMosaic) {
       boolean gotMatch = false;
       for (AccountProperty ap: aps.getProperties()) {
          if (ap.getPropertyType().equals(AccountPropertyType.ALLOW_MOSAIC)) {
