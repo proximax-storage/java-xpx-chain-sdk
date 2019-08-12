@@ -221,21 +221,21 @@ public abstract class Transaction {
         byte[] signerBytes = Hex.decode(this.signer.orElseThrow(() -> new IllegalStateException("missing signer")).getPublicKey());
         // serialize the transaction
         byte[] bytes = this.generateBytes();
-        // we will be removing header (122) and adding size (4), signer (32), type/version (4)
-        byte[] resultBytes = new byte[bytes.length - 122 + 4 + 32 + 4];
+        // we will be removing header (122) and adding size (4), signer (32), version (4), trans type(2)
+        byte[] resultBytes = new byte[bytes.length - 122 + 4 + 32 + 4 + 2];
 
         // prepare size of this as embedded transaction
-        byte[] size = BigInteger.valueOf(resultBytes.length).toByteArray();
-        ArrayUtils.reverse(size);
+        byte[] sizeBytes = BigInteger.valueOf(resultBytes.length).toByteArray();
+        ArrayUtils.reverse(sizeBytes);
         
         // write size of the aggregate transaction bytes - can be less than 4 bytes
-        System.arraycopy(size, 0, resultBytes, 0, size.length);
+        System.arraycopy(sizeBytes, 0, resultBytes, 0, sizeBytes.length);
         // at position 4 start writing 32 bytes of signer
         System.arraycopy(signerBytes, 0, resultBytes, 4, 32);
-        // version is expected to start at position 100 and be 4 bytes, write that after the signer
-        System.arraycopy(bytes, 100, resultBytes, 4 + 32, 4);
+        // version is expected to start at position 100 and be 4 bytes, then take next 2 bytes
+        System.arraycopy(bytes, 100, resultBytes, 4 + 32, 6);
         // copy remaining data after header
-        System.arraycopy(bytes, 122, resultBytes, 4 + 32 + 4, bytes.length - 122);
+        System.arraycopy(bytes, 122, resultBytes, 4 + 32 + 6, bytes.length - 122);
 
         return resultBytes;
     }
