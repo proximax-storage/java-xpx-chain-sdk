@@ -168,8 +168,6 @@ public class AggregateTransaction extends Transaction {
    byte[] generateBytes() {
       FlatBufferBuilder builder = new FlatBufferBuilder();
       BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
-      int version = (int) Long
-            .parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
 
       byte[] transactionsBytes = new byte[0];
       for (Transaction innerTransaction : innerTransactions) {
@@ -178,7 +176,7 @@ public class AggregateTransaction extends Transaction {
       }
 
       // expected size = header + transactions bytes count + transactions bytes
-      int size = 120 + 4 + transactionsBytes.length;
+      int size = 122 + 4 + transactionsBytes.length;
       
       // Create Vectors
       int signatureVector = AggregateTransactionBuffer.createSignatureVector(builder, new byte[64]);
@@ -192,7 +190,7 @@ public class AggregateTransaction extends Transaction {
       AggregateTransactionBuffer.addSize(builder, size);
       AggregateTransactionBuffer.addSignature(builder, signatureVector);
       AggregateTransactionBuffer.addSigner(builder, signerVector);
-      AggregateTransactionBuffer.addVersion(builder, version);
+      AggregateTransactionBuffer.addVersion(builder, getTxVersionforSerialization());
       AggregateTransactionBuffer.addType(builder, getType().getValue());
       AggregateTransactionBuffer.addMaxFee(builder, feeVector);
       AggregateTransactionBuffer.addDeadline(builder, deadlineVector);

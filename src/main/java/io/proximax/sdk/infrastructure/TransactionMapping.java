@@ -116,10 +116,10 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
     * @param version version field of transaction
     * @return transaction version
     */
-   Integer extractTransactionVersion(JsonElement elem) {
+   static Integer extractTransactionVersion(JsonElement elem) {
       int version = elem.getAsInt();
-      // take second most significant byte of a version and return it as a number
-      return (int) Long.parseLong(Integer.toHexString(version).substring(2, 4), 16);
+      // take last 3 bytes and return them as a version
+      return version & 0xFFFFFF;
    }
 
    /**
@@ -128,11 +128,10 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
     * @param version version field of transaction
     * @return transaction network type
     */
-   NetworkType extractNetworkType(JsonElement elem) {
+   static NetworkType extractNetworkType(JsonElement elem) {
       int version = elem.getAsInt();
       // take most significant byte of a version and return it as a number
-      int networkType = (int) Long.parseLong(Integer.toHexString(version).substring(0, 2), 16);
-      return NetworkType.rawValueOf(networkType);
+      return NetworkType.rawValueOf(version >>> 24);
    }
 
    /**

@@ -135,7 +135,7 @@ public class TransferTransaction extends Transaction {
     byte[] generateBytes() {
         FlatBufferBuilder builder = new FlatBufferBuilder();
         BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
-        int version = (int) Long.parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
+        int version = getTxVersionforSerialization();
 
         // Create Message
         byte[] bytePayload = message.getEncodedPayload();
@@ -170,7 +170,7 @@ public class TransferTransaction extends Transaction {
         // total size of transaction
         int size = 
               // header
-              120 + 
+              122 + 
               // recipient is always 25 bytes
               25 + 
               // message size is short
