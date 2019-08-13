@@ -78,7 +78,6 @@ public class Http {
       }
       try {
          String body = response.getBodyString();
-         System.out.println("haa: " + body);
          return body;
       } catch (IOException e) {
          throw new RuntimeException(e.getMessage());
