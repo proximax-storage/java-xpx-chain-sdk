@@ -72,6 +72,7 @@ class LockFundsTransactionTest extends ResourceBasedTest {
             signedTransaction,
             NetworkType.MIJIN_TEST);
       byte[] actual = lockFundstx.generateBytes();
+//      saveBytes("lock_funds", actual);
       assertArrayEquals(loadBytes("lock_funds"), actual);
    }
 

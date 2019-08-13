@@ -161,12 +161,14 @@ public class E2ENamespaceTest extends E2EBaseTest {
     * @param duration number of blocks that this namespace will exist
     */
    private void checkNamespace(String name, Optional<String> parentName, long duration) {
-      NamespaceId nsId;
+      String fullName;
       if (parentName.isPresent()) {
-         nsId = new NamespaceId(parentName.get() + "." + name);
+         fullName = parentName.get() + "." + name;
       } else {
-         nsId = new NamespaceId(name);
+         fullName = name;
       }
+      NamespaceId nsId = new NamespaceId(fullName);
+
       logger.info("Checking namespace {}", nsId);
       // retrieve the namespace and check it is OK
       NamespaceInfo namespace = namespaceHttp.getNamespace(nsId).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
@@ -176,7 +178,7 @@ public class E2ENamespaceTest extends E2EBaseTest {
       // try to check name
       NamespaceName nsName = namespaceHttp.getNamespaceNames(Arrays.asList(nsId)).flatMapIterable(list -> list)
             .timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
-      assertEquals(name, nsName.getName());
+      assertEquals(fullName, nsName.getName());
       assertEquals(nsId.getId(), nsName.getNamespaceId().getId());
    }
 }

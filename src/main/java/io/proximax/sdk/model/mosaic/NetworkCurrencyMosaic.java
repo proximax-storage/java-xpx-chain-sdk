@@ -27,9 +27,14 @@ import io.proximax.sdk.model.transaction.UInt64Id;
  */
 public class NetworkCurrencyMosaic extends Mosaic {
    /**
+    * Namespace with alias to the network currency mosaic
+    */
+   public static final String MOSAIC_NAMESPACE = "prx.xpx";
+   
+   /**
     * ID of network currency
     */
-   public static final UInt64Id ID = new NamespaceId("prx.xpx");
+   public static final UInt64Id ID = new NamespaceId(MOSAIC_NAMESPACE);
    /**
     * Divisibility
     */

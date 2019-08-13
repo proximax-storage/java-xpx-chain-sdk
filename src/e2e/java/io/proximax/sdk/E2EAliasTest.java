@@ -40,6 +40,7 @@ import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicNames;
 import io.proximax.sdk.model.mosaic.MosaicNonce;
 import io.proximax.sdk.model.mosaic.MosaicProperties;
+import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.transaction.AliasTransaction;
 import io.proximax.sdk.model.transaction.MosaicDefinitionTransaction;
@@ -163,7 +164,7 @@ public class E2EAliasTest extends E2EBaseTest {
    void test05TransferUsingAliases() {
       transactionHttp.announce(TransferTransaction.create(getDeadline(),
             accNamespaceId,
-            Arrays.asList(new Mosaic(new NamespaceId("cat.currency"), BigInteger.valueOf(1_000_000))),
+            Arrays.asList(new Mosaic(new NamespaceId(NetworkCurrencyMosaic.MOSAIC_NAMESPACE), BigInteger.valueOf(1_000_000))),
             PlainMessage.Empty,
             getNetworkType()).signWith(seedAccount, api.getNetworkGenerationHash())).blockingFirst();
       logger.info("made transfer. {}",

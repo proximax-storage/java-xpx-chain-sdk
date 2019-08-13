@@ -18,6 +18,7 @@ package io.proximax.sdk;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -44,6 +45,8 @@ import io.proximax.sdk.model.account.props.AccountPropertyModificationType;
 import io.proximax.sdk.model.account.props.AccountPropertyType;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
+import io.proximax.sdk.model.namespace.NamespaceId;
+import io.proximax.sdk.model.namespace.NamespaceInfo;
 import io.proximax.sdk.model.transaction.ModifyAccountPropertyTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
 import io.proximax.sdk.model.transaction.TransactionType;
@@ -172,17 +175,27 @@ class E2EAccountTest extends E2EBaseTest {
    }
    
    /**
-    * check that simple account has block as expected
+    * check that simple account has allowed mosaic as expected
     * 
     * @param aps account properties
-    * @param blockedAddress address that is blocked
+    * @param allowedAsset the asset we are looking for
     */
-   private void testAccountPropertiesOnSimpleAccount(AccountProperties aps, UInt64Id allowedMosaic) {
+   private void testAccountPropertiesOnSimpleAccount(AccountProperties aps, UInt64Id allowedAsset) {
+      MosaicId allowedMosaic = null;
+      if (allowedAsset instanceof MosaicId) {
+         allowedMosaic = (MosaicId)allowedAsset;
+      } else if (allowedAsset instanceof NamespaceId) {
+         logger.info("Converting namespace to aliased mosaic");
+         NamespaceInfo ns = namespaceHttp.getNamespace((NamespaceId)allowedAsset).blockingFirst();
+         allowedMosaic = ns.getMosaicAlias().orElseThrow(() -> new RuntimeException("Missing mosaic alias"));
+      } else {
+         fail("Unexpected asset " + allowedAsset);
+      }
       boolean gotMatch = false;
       for (AccountProperty ap: aps.getProperties()) {
          if (ap.getPropertyType().equals(AccountPropertyType.ALLOW_MOSAIC)) {
             for (Object value: ap.getValues()) {
-               logger.info("{}", value);
+               logger.info("allowed mosaic: {}", value);
                // value should be string and should represent encoded address of the blocked account
                if (value instanceof List) {
                      UInt64DTO dto = new UInt64DTO();

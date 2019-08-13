@@ -106,7 +106,6 @@ public class SecretProofTransaction extends Transaction {
     byte[] generateBytes() {
         FlatBufferBuilder builder = new FlatBufferBuilder();
         BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
-        int version = (int) Long.parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
 
         byte[] recipientBytes = recipient.getBytes();
         byte[] proofBytes = Hex.decode(proof);
@@ -119,9 +118,7 @@ public class SecretProofTransaction extends Transaction {
         int recipientVector = SecretProofTransactionBuffer.createRecipientVector(builder, recipientBytes);
         int proofVector = SecretProofTransactionBuffer.createProofVector(builder, proofBytes);
 
-        int size =
-              // header
-              120 + 
+        int size = HEADER_SIZE + 
               35 + 
               // recipient
               recipientBytes.length + 
@@ -131,7 +128,7 @@ public class SecretProofTransaction extends Transaction {
         SecretProofTransactionBuffer.addSize(builder, size);
         SecretProofTransactionBuffer.addSignature(builder, signatureVector);
         SecretProofTransactionBuffer.addSigner(builder, signerVector);
-        SecretProofTransactionBuffer.addVersion(builder, version);
+        SecretProofTransactionBuffer.addVersion(builder, getTxVersionforSerialization());
         SecretProofTransactionBuffer.addType(builder, getType().getValue());
         SecretProofTransactionBuffer.addMaxFee(builder, feeVector);
         SecretProofTransactionBuffer.addDeadline(builder, deadlineVector);
@@ -144,8 +141,9 @@ public class SecretProofTransaction extends Transaction {
         int codedSecretProof = SecretProofTransactionBuffer.endSecretProofTransactionBuffer(builder);
         builder.finish(codedSecretProof);
 
+        // validate size
         byte[] output = schema.serialize(builder.sizedByteArray());
-        Validate.isTrue(output.length == size, "Serialized secret proof has incorrect length");
+        Validate.isTrue(output.length == size, "Serialized transaction has incorrect length: " + this.getClass());
         return output;
     }
 }

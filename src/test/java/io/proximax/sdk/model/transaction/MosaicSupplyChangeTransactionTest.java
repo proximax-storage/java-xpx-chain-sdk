@@ -20,17 +20,19 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.time.temporal.ChronoUnit;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import io.proximax.sdk.ResourceBasedTest;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicSupplyType;
 
-class MosaicSupplyChangeTransactionTest {
+class MosaicSupplyChangeTransactionTest extends ResourceBasedTest {
 
     @Test
     void createAMosaicSupplyChangeTransactionViaConstructor() {
@@ -55,11 +57,7 @@ class MosaicSupplyChangeTransactionTest {
 
     @Test
     @DisplayName("Serialization")
-    void serialization() {
-        // Generated at nem2-library-js/test/transactions/MosaicSupplyChangeTransaction.spec.js
-        byte[] expected = new byte[]{(byte)137,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                2,(byte)144,77,66,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,(byte)136,105,116,110,(byte)155,26,112,87,1,10,0,0,0,0,0,0,0};
-
+    void serialization() throws IOException {
         MosaicSupplyChangeTransaction mosaicSupplyChangeTransaction = MosaicSupplyChangeTransaction.create(
                 new FakeDeadline(),
                 new MosaicId(new BigInteger("6300565133566699912")),
@@ -69,6 +67,7 @@ class MosaicSupplyChangeTransactionTest {
         );
 
         byte[] actual = mosaicSupplyChangeTransaction.generateBytes();
-        assertArrayEquals(expected, actual);
+//        saveBytes("mosaic_supply_change", actual);
+        assertArrayEquals(loadBytes("mosaic_supply_change"), actual);
     }
 }

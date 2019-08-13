@@ -21,17 +21,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Collections;
 
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
 
+import io.proximax.sdk.ResourceBasedTest;
 import io.proximax.sdk.infrastructure.TransactionMapping;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
@@ -41,7 +42,7 @@ import io.proximax.sdk.model.mosaic.Mosaic;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.utils.GsonUtils;
 
-public class AggregateTransactionTest {
+public class AggregateTransactionTest extends ResourceBasedTest {
 
     @Test
     void createAAggregateTransactionViaStaticConstructor() {
@@ -68,17 +69,7 @@ public class AggregateTransactionTest {
     }
 
     @Test
-    @DisplayName("Serialization")
-    @Disabled
-    void serialization() {
-        // Generated at nem2-library-js/test/transactions/RegisterNamespaceTransaction.spec.js
-        byte[] expected = new byte[]{(byte)209,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                2,(byte)144,65,65,0,0,0,0, 0,0,0,0,1,0,0,0,0,0,0,0,85,0,0,0,85,0,0,0,(byte)132,107,68,57,21,69,121,(byte)165,(byte)144,59,20,89,
-                (byte)201,(byte)207,105,(byte)203,(byte)129,83,(byte)246,(byte)208,17,10,122,14,(byte)214,29,(byte)226,(byte)154,
-                (byte)228,(byte)129,11,(byte)242,3,(byte)144,84,65,(byte)144,80,(byte)185,(byte)131,126,(byte)250,(byte)180,
-                (byte)187,(byte)232,(byte)164,(byte)185,(byte)187,50,(byte)216,18,(byte)249,(byte)136,92,0,(byte)216,(byte)252,
-                22,80,(byte)225,66,1,0,1,0,41,(byte)207,95,(byte)217,65,(byte)173,37,(byte)213,(byte)128,(byte)150,(byte)152,0,0,0,0,0};
+    void serialization() throws IOException {
 
         TransferTransaction transferTx = TransferTransaction.create(
                 new FakeDeadline(),
@@ -97,7 +88,8 @@ public class AggregateTransactionTest {
         );
 
         byte[] actual = aggregateTx.generateBytes();
-        assertArrayEquals(expected, actual);
+//        saveBytes("aggregate_trans", actual);
+        assertArrayEquals(loadBytes("aggregate_trans"), actual);
     }
 
     @Test
@@ -122,13 +114,14 @@ public class AggregateTransactionTest {
 
         SignedTransaction signedTransaction = cosignatoryAccount.signTransactionWithCosignatories(aggregateTx, "7B631D803F912B00DC0CBED3014BBD17A302BA50B99D233B9C2D9533B842ABDF", Arrays.asList(cosignatoryAccount2));
 
-        assertEquals("2d010000", signedTransaction.getPayload().substring(0, 8));
-        assertEquals("5100000051000000", signedTransaction.getPayload().substring(240, 256));
+        assertEquals("31010000", signedTransaction.getPayload().substring(0, 8));
+        assertEquals("0000530000005300", signedTransaction.getPayload().substring(240, 256));
         //assertEquals("039054419050B9837EFAB4BBE8A4B9BB32D812F9885C00D8FC1650E1420D000000746573742D6D65737361676568B3FBB18729C1FDE225C57F8CE080FA828F0067E451A3FD81FA628842B0B763", signedTransaction.getPayload().substring(320, 474));
 
     }
 
     @Test
+    @Disabled
     void shouldFindAccountInAsASignerOfTheTransaction() {
         JsonObject aggregateTransferTransactionDTO = GsonUtils.mapToJsonObject("{\"meta\":{\"hash\":\"671653C94E2254F2A23EFEDB15D67C38332AED1FBD24B063C0A8E675582B6A96\",\"height\":[18160,0],\"id\":\"5A0069D83F17CF0001777E55\",\"index\":0,\"merkleComponentHash\":\"81E5E7AE49998802DABC816EC10158D3A7879702FF29084C2C992CD1289877A7\"},\"transaction\":{\"cosignatures\":[{\"signature\":\"5780C8DF9D46BA2BCF029DCC5D3BF55FE1CB5BE7ABCF30387C4637DDEDFC2152703CA0AD95F21BB9B942F3CC52FCFC2064C7B84CF60D1A9E69195F1943156C07\",\"signer\":\"A5F82EC8EBB341427B6785C8111906CD0DF18838FB11B51CE0E18B5E79DFF630\"}],\"deadline\":[3266625578,11],\"fee\":[0,0],\"signature\":\"939673209A13FF82397578D22CC96EB8516A6760C894D9B7535E3A1E068007B9255CFA9A914C97142A7AE18533E381C846B69D2AE0D60D1DC8A55AD120E2B606\",\"signer\":\"7681ED5023141D9CDCF184E5A7B60B7D466739918ED5DA30F7E71EA7B86EFF2D\",\"transactions\":[{\"meta\":{\"aggregateHash\":\"3D28C804EDD07D5A728E5C5FFEC01AB07AFA5766AE6997B38526D36015A4D006\",\"aggregateId\":\"5A0069D83F17CF0001777E55\",\"height\":[18160,0],\"id\":\"5A0069D83F17CF0001777E56\",\"index\":0},\"transaction\":{\"message\":{\"payload\":\"746573742D6D657373616765\",\"type\":0},\"mosaics\":[{\"amount\":[3863990592,95248],\"id\":[3646934825,3576016193]}],\"recipient\":\"9050B9837EFAB4BBE8A4B9BB32D812F9885C00D8FC1650E142\",\"signer\":\"B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF\",\"type\":16724,\"version\":36867}}],\"type\":16705,\"version\":36867}}");
 

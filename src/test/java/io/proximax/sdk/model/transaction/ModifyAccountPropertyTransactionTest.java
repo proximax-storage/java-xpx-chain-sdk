@@ -49,6 +49,7 @@ class ModifyAccountPropertyTransactionTest extends ResourceBasedTest {
       assertEquals(address, trans.getPropertyModifications().get(0).getValue());
       // check that serialization does not fail
       byte[] actual = trans.generateBytes();
+//      saveBytes("account_property_address", actual);
       assertArrayEquals(loadBytes("account_property_address"), actual);
    }
 
@@ -72,6 +73,7 @@ class ModifyAccountPropertyTransactionTest extends ResourceBasedTest {
       assertEquals(new MosaicId(BigInteger.ONE), trans.getPropertyModifications().get(0).getValue());
       // check that serialization does not fail
       byte[] actual = trans.generateBytes();
+//      saveBytes("account_property_mosaic", actual);
       assertArrayEquals(loadBytes("account_property_mosaic"), actual);
    }
 
@@ -95,6 +97,7 @@ class ModifyAccountPropertyTransactionTest extends ResourceBasedTest {
       assertEquals(TransactionType.LOCK, trans.getPropertyModifications().get(0).getValue());
       // check that serialization does not fail
       byte[] actual = trans.generateBytes();
+//      saveBytes("account_property_entity", actual);
       assertArrayEquals(loadBytes("account_property_entity"), actual);
    }
 

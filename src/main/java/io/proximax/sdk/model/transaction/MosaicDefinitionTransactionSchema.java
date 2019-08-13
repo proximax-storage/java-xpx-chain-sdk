@@ -24,7 +24,7 @@ class MosaicDefinitionTransactionSchema extends Schema {
                 new ScalarAttribute("size", Constants.SIZEOF_INT),
                 new ArrayAttribute ("signature", Constants.SIZEOF_BYTE),
                 new ArrayAttribute ("signer", Constants.SIZEOF_BYTE),
-                new ScalarAttribute("version", Constants.SIZEOF_SHORT),
+                new ScalarAttribute("version", Constants.SIZEOF_INT),
                 new ScalarAttribute("type", Constants.SIZEOF_SHORT),
                 new ArrayAttribute ("maxFee", Constants.SIZEOF_INT),
                 new ArrayAttribute ("deadline", Constants.SIZEOF_INT),

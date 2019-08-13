@@ -121,8 +121,6 @@ public class MosaicDefinitionTransaction extends Transaction {
    byte[] generateBytes() {
       FlatBufferBuilder builder = new FlatBufferBuilder();
       BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
-      int version = (int) Long
-            .parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
       // get value for flags field
       int flags = 0;
       if (mosaicProperties.isSupplyMutable()) {
@@ -162,13 +160,13 @@ public class MosaicDefinitionTransaction extends Transaction {
             optinalPropertiesVector);
 
       // header + nonce + id + numOptProp + flags + divisibility + (id + value)*numOptProp
-      int size = 120 + 4 + 8 + 1 + 1 + 1 + (1 + 8) * optinalPropertiesVector.length;
+      int size = HEADER_SIZE + 4 + 8 + 1 + 1 + 1 + (1 + 8) * optinalPropertiesVector.length;
 
       MosaicDefinitionTransactionBuffer.startMosaicDefinitionTransactionBuffer(builder);
       MosaicDefinitionTransactionBuffer.addSize(builder, size);
       MosaicDefinitionTransactionBuffer.addSignature(builder, signatureVector);
       MosaicDefinitionTransactionBuffer.addSigner(builder, signerVector);
-      MosaicDefinitionTransactionBuffer.addVersion(builder, version);
+      MosaicDefinitionTransactionBuffer.addVersion(builder, getTxVersionforSerialization());
       MosaicDefinitionTransactionBuffer.addType(builder, getType().getValue());
       MosaicDefinitionTransactionBuffer.addMaxFee(builder, feeVector);
       MosaicDefinitionTransactionBuffer.addDeadline(builder, deadlineVector);
@@ -183,8 +181,9 @@ public class MosaicDefinitionTransaction extends Transaction {
       int codedTransaction = MosaicDefinitionTransactionBuffer.endMosaicDefinitionTransactionBuffer(builder);
       builder.finish(codedTransaction);
 
+      // validate size
       byte[] output = schema.serialize(builder.sizedByteArray());
-      Validate.isTrue(output.length == size, "Serialized form has incorrect length");
+      Validate.isTrue(output.length == size, "Serialized transaction has incorrect length: " + this.getClass());
       return output;
    }
 }

@@ -53,7 +53,9 @@ class ModifyContractTransactionTest extends ResourceBasedTest {
             Arrays.asList(),
             NetworkType.MIJIN);
       // used saveBytes to store the file data
-      assertArrayEquals(loadBytes("modify_contract"), trans.generateBytes());
+      byte[] actual = trans.generateBytes();
+//      saveBytes("modify_contract", actual);
+      assertArrayEquals(loadBytes("modify_contract"), actual);
    }
 
 }

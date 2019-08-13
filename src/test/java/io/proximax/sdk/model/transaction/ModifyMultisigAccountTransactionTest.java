@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
@@ -28,10 +29,11 @@ import java.util.Collections;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import io.proximax.sdk.ResourceBasedTest;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 
-class ModifyMultisigAccountTransactionTest {
+class ModifyMultisigAccountTransactionTest extends ResourceBasedTest {
 
     @Test
     void createAMultisigModificationTransactionViaConstructor() {
@@ -59,12 +61,7 @@ class ModifyMultisigAccountTransactionTest {
 
     @Test
     @DisplayName("Serialization")
-    void serialization() {
-        // Generated at nem2-library-js/test/transactions/ModifyMultisigAccountTransaction.spec.js
-        byte[] expected = new byte[]{(byte) 189, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                3, (byte) 144, 85, 65, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 0, 104, (byte) 179, (byte) 251, (byte) 177, (byte) 135, 41, (byte) 193, (byte) 253, (byte) 226, 37, (byte) 197, 127, (byte) 140, (byte) 224, (byte) 128, (byte) 250, (byte) 130, (byte) 143, 0, 103, (byte) 228, 81, (byte) 163, (byte) 253, (byte) 129, (byte) 250, 98, (byte) 136, 66, (byte) 176, (byte) 183, 99, 0, (byte) 207, (byte) 137, 63, (byte) 252, (byte) 196, 124, 51, (byte) 231, (byte) 246, (byte) 138, (byte) 177, (byte) 219, 86, 54, 92, 21, 107, 7, 54, (byte) 130, 74, 12, 30, 39, 63, (byte) 158, 0, (byte) 184, (byte) 223, (byte) 143, 1, (byte) 235};
-
+    void serialization() throws IOException {
         ModifyMultisigAccountTransaction modifyMultisigAccountTransaction = ModifyMultisigAccountTransaction.create(
                 new FakeDeadline(),
                 2,
@@ -78,6 +75,7 @@ class ModifyMultisigAccountTransactionTest {
         );
 
         byte[] actual = modifyMultisigAccountTransaction.generateBytes();
-        assertArrayEquals(expected, actual);
+//        saveBytes("modify_multisig_trans", actual);
+        assertArrayEquals(loadBytes("modify_multisig_trans"), actual);
     }
 }

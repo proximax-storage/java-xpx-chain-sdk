@@ -29,6 +29,7 @@ import io.proximax.core.crypto.Signer;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.utils.dto.TransactionMappingUtils;
 
 /**
  * An abstract transaction class that serves as the base class of all NEM transactions.
@@ -36,6 +37,9 @@ import io.proximax.sdk.model.blockchain.NetworkType;
  * @since 1.0
  */
 public abstract class Transaction {
+    /** standard transaction header size */
+    public static final int HEADER_SIZE = 122;
+   
     private final TransactionType type;
     private final NetworkType networkType;
     private final Integer version;
@@ -293,7 +297,7 @@ public abstract class Transaction {
      * @return 4 bytes
      */
     protected int getTxVersionforSerialization() {
-       return (getNetworkType().getValue() << 24) + getVersion().intValue();
+       return TransactionMappingUtils.serializeVersion(getVersion(), getNetworkType().getValue());
     }
     
    @Override

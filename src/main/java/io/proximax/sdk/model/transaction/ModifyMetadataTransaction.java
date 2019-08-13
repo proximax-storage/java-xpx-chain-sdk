@@ -133,8 +133,6 @@ public class ModifyMetadataTransaction extends Transaction {
 
       // prepare data for serialization
       BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
-      int version = (int) Long
-            .parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
       byte[] metadataIdBytes;
       if (address.isPresent()) {
          metadataIdBytes = Base32Encoder.getBytes(address.get().plain());
@@ -191,7 +189,7 @@ public class ModifyMetadataTransaction extends Transaction {
       int modificationsOffset = ModifyMetadataTransactionBuffer.createModificationsVector(builder, modificationOffsets);
 
       // add size of stuff with constant size and size of metadata id
-      totalSize += 120 + metadataIdBytes.length + 1;
+      totalSize += HEADER_SIZE + metadataIdBytes.length + 1;
 
       ModifyMetadataTransactionBuffer.startModifyMetadataTransactionBuffer(builder);
       ModifyMetadataTransactionBuffer.addDeadline(builder, deadlineOffset);
@@ -200,7 +198,7 @@ public class ModifyMetadataTransaction extends Transaction {
       ModifyMetadataTransactionBuffer.addSignature(builder, signatureOffset);
       ModifyMetadataTransactionBuffer.addSize(builder, totalSize);
       ModifyMetadataTransactionBuffer.addType(builder, getType().getValue());
-      ModifyMetadataTransactionBuffer.addVersion(builder, version);
+      ModifyMetadataTransactionBuffer.addVersion(builder, getTxVersionforSerialization());
 
       ModifyMetadataTransactionBuffer.addMetadataId(builder, metadataIdOffset);
       ModifyMetadataTransactionBuffer.addMetadataType(builder, metadataType.getCode());
@@ -209,8 +207,9 @@ public class ModifyMetadataTransaction extends Transaction {
       int codedTransaction = ModifyMetadataTransactionBuffer.endModifyMetadataTransactionBuffer(builder);
       builder.finish(codedTransaction);
 
+      // validate size
       byte[] output = schema.serialize(builder.sizedByteArray());
-      Validate.isTrue(output.length == totalSize, "Serialized form has incorrect length");
+      Validate.isTrue(output.length == totalSize, "Serialized transaction has incorrect length: " + this.getClass());
       return output;
    }
 }

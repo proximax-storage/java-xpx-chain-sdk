@@ -118,8 +118,6 @@ public class AccountLinkTransaction extends Transaction {
       FlatBufferBuilder builder = new FlatBufferBuilder();
       // prepare data
       BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
-      int version = (int) Long
-            .parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
       byte[] remoteAccountPublicKey = HexEncoder.getBytes(getRemoteAccount().getPublicKey());
 
       // Create Vectors
@@ -132,9 +130,7 @@ public class AccountLinkTransaction extends Transaction {
             remoteAccountPublicKey);
 
       // total size of transaction
-      int size =
-            // header
-            120 +
+      int size = HEADER_SIZE +
             // remote account public key
             32 +
             // link action
@@ -145,7 +141,7 @@ public class AccountLinkTransaction extends Transaction {
       AccountLinkTransactionBuffer.addSize(builder, size);
       AccountLinkTransactionBuffer.addSignature(builder, signatureVector);
       AccountLinkTransactionBuffer.addSigner(builder, signerVector);
-      AccountLinkTransactionBuffer.addVersion(builder, version);
+      AccountLinkTransactionBuffer.addVersion(builder, getTxVersionforSerialization());
       AccountLinkTransactionBuffer.addType(builder, getType().getValue());
       AccountLinkTransactionBuffer.addMaxFee(builder, feeVector);
       AccountLinkTransactionBuffer.addDeadline(builder, deadlineVector);
@@ -157,7 +153,7 @@ public class AccountLinkTransaction extends Transaction {
 
       // validate size
       byte[] output = schema.serialize(builder.sizedByteArray());
-      Validate.isTrue(output.length == size, "Serialized form has incorrect length");
+      Validate.isTrue(output.length == size, "Serialized transaction has incorrect length: " + this.getClass());
       return output;
    }
 

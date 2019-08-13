@@ -62,6 +62,7 @@ public class SecretLockTransactionTest extends ResourceBasedTest {
             Address.createFromRawAddress("SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM"),
             NetworkType.MIJIN_TEST);
       byte[] actual = secretLocktx.generateBytes();
+//      saveBytes("secret_lock", actual);
       assertArrayEquals(loadBytes("secret_lock"), actual);
    }
 

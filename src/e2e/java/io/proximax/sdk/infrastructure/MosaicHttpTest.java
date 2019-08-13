@@ -27,7 +27,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
@@ -37,7 +36,6 @@ import io.proximax.sdk.MosaicRepository;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicInfo;
 import io.proximax.sdk.model.mosaic.MosaicNames;
-import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.reactivex.schedulers.Schedulers;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -63,16 +61,15 @@ class MosaicHttpTest extends BaseTest {
    void getMosaics() throws ExecutionException, InterruptedException {
       List<MosaicInfo> mosaicsInfo = mosaicHttp.getMosaics(Collections.singletonList(ID)).toFuture().get();
 
-      assertEquals(NetworkCurrencyMosaic.ID, mosaicsInfo.get(0).getMosaicId());
+      assertEquals(ID, mosaicsInfo.get(0).getMosaicId());
    }
 
    @Test
-   @Disabled("not implemented yet")
    void getMosaicNames() throws ExecutionException, InterruptedException {
       List<MosaicNames> mosaicNames = mosaicHttp.getMosaicNames(Collections.singletonList(ID)).toFuture().get();
 
       assertEquals("xpx", mosaicNames.get(0).getNames().get(0));
-      assertEquals(NetworkCurrencyMosaic.ID, mosaicNames.get(0).getMosaicId());
+      assertEquals(ID, mosaicNames.get(0).getMosaicId());
    }
 
    @Test

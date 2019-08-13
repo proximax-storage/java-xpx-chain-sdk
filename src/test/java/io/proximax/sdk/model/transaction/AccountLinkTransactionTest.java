@@ -91,6 +91,7 @@ class AccountLinkTransactionTest extends ResourceBasedTest {
             .create(deadline, BigInteger.ONE, REMOTE_ACCOUNT, AccountLinkAction.LINK, NETWORK_TYPE);
       // serialize
       byte[] actual = trans.generateBytes();
+//      saveBytes("account_link", actual);
       assertArrayEquals(loadBytes("account_link"), actual);
    }
 }

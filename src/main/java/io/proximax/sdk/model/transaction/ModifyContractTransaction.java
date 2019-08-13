@@ -91,7 +91,6 @@ public class ModifyContractTransaction extends Transaction {
    byte[] generateBytes() {
       FlatBufferBuilder builder = new FlatBufferBuilder();
       BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
-      int version = (int) Long.parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
 
       // Create Modifications
       int[] customersBuffer = createCosigModificationVector(builder, customersModifications);
@@ -112,15 +111,15 @@ public class ModifyContractTransaction extends Transaction {
       int executorsOffset = ModifyContractTransactionBuffer.createExecutorsVector(builder, executorsBuffer);
       int verifiersOffset = ModifyContractTransactionBuffer.createVerifiersVector(builder, verifiersBuffer);
 
-      // standard fields + duration delta + hash length + 3 modification lengths + 33 bytes per every modification (1 byte mod type + 32 bytes public key)
-      int totalSize = 120 + 8 + contentHashBytes.length + 3 + 33 * (customersBuffer.length + executorsBuffer.length + verifiersBuffer.length);
+      // header + duration delta + hash length + 3 modification lengths + 33 bytes per every modification (1 byte mod type + 32 bytes public key)
+      int totalSize = HEADER_SIZE + 8 + contentHashBytes.length + 3 + 33 * (customersBuffer.length + executorsBuffer.length + verifiersBuffer.length);
 
       // standard transaction information
       ModifyContractTransactionBuffer.startModifyContractTransactionBuffer(builder);
       ModifyContractTransactionBuffer.addSize(builder, totalSize);
       ModifyContractTransactionBuffer.addSignature(builder, signatureOffset);
       ModifyContractTransactionBuffer.addSigner(builder, signerOffset);
-      ModifyContractTransactionBuffer.addVersion(builder, version);
+      ModifyContractTransactionBuffer.addVersion(builder, getTxVersionforSerialization());
       ModifyContractTransactionBuffer.addType(builder, getType().getValue());
       ModifyContractTransactionBuffer.addMaxFee(builder, feeOffset);
       ModifyContractTransactionBuffer.addDeadline(builder, deadlineOffset);
@@ -138,9 +137,9 @@ public class ModifyContractTransaction extends Transaction {
       int codedTransaction = ModifyContractTransactionBuffer.endModifyContractTransactionBuffer(builder);
       builder.finish(codedTransaction);
 
-      // serialize the transaction
+      // validate size
       byte[] output = schema.serialize(builder.sizedByteArray());
-      Validate.isTrue(output.length == totalSize, "Serialized form has incorrect length. Was %d indicated %d", output.length, totalSize);
+      Validate.isTrue(output.length == totalSize, "Serialized transaction has incorrect length: " + this.getClass());
       return output;
    }
    

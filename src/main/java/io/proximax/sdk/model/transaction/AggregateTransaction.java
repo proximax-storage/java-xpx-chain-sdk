@@ -176,7 +176,7 @@ public class AggregateTransaction extends Transaction {
       }
 
       // expected size = header + transactions bytes count + transactions bytes
-      int size = 122 + 4 + transactionsBytes.length;
+      int size = HEADER_SIZE + 4 + transactionsBytes.length;
 
       // Create Vectors
       int signatureVector = AggregateTransactionBuffer.createSignatureVector(builder, new byte[64]);
@@ -201,8 +201,9 @@ public class AggregateTransaction extends Transaction {
       int codedTransaction = AggregateTransactionBuffer.endAggregateTransactionBuffer(builder);
       builder.finish(codedTransaction);
 
+      // validate size
       byte[] output = schema.serialize(builder.sizedByteArray());
-      Validate.isTrue(output.length == size, "Serialized aggregate transaction has incorrect length");
+      Validate.isTrue(output.length == size, "Serialized transaction has incorrect length: " + this.getClass());
       return output;
    }
 }

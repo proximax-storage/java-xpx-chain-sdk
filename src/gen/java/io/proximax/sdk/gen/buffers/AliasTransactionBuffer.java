@@ -2,10 +2,11 @@
 
 package io.proximax.sdk.gen.buffers;
 
-import java.nio.*;
-import java.lang.*;
-import java.util.*;
-import com.google.flatbuffers.*;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
+import com.google.flatbuffers.FlatBufferBuilder;
+import com.google.flatbuffers.Table;
 
 @SuppressWarnings("unused")
 public final class AliasTransactionBuffer extends Table {
@@ -38,7 +39,7 @@ public final class AliasTransactionBuffer extends Table {
   public int namespaceIdLength() { int o = __offset(20); return o != 0 ? __vector_len(o) : 0; }
   public ByteBuffer namespaceIdAsByteBuffer() { return __vector_as_bytebuffer(20, 4); }
   public ByteBuffer namespaceIdInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 20, 4); }
-  /**
+  /*
    * In case of address it is 25 bytes array. In case of mosaic it is 8 byte array(or 2 uint32 array)
    */
   public int aliasId(int j) { int o = __offset(22); return o != 0 ? bb.get(__vector(o) + j * 1) & 0xFF : 0; }

@@ -137,8 +137,6 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
 
       // prepare data for serialization
       BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
-      int version = (int) Long
-            .parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
 
       // track the size of the whole transaction
       int totalSize = 0;
@@ -172,8 +170,8 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
       int feeOffset = AccountPropertiesTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
       int modificationsOffset = AccountPropertiesTransactionBuffer.createModificationsVector(builder, modificationOffsets);
 
-      // add size of the header (120) + size of prop type (1) + size of mod count (1)
-      totalSize += 120 + 1 + 1;
+      // add size of the header + size of prop type (1) + size of mod count (1)
+      totalSize += HEADER_SIZE + 1 + 1;
 
       AccountPropertiesTransactionBuffer.startAccountPropertiesTransactionBuffer(builder);
       AccountPropertiesTransactionBuffer.addDeadline(builder, deadlineOffset);
@@ -182,7 +180,7 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
       AccountPropertiesTransactionBuffer.addSignature(builder, signatureOffset);
       AccountPropertiesTransactionBuffer.addSize(builder, totalSize);
       AccountPropertiesTransactionBuffer.addType(builder, getType().getValue());
-      AccountPropertiesTransactionBuffer.addVersion(builder, version);
+      AccountPropertiesTransactionBuffer.addVersion(builder, getTxVersionforSerialization());
 
       AccountPropertiesTransactionBuffer.addPropertyType(builder, getPropertyType().getCode());
       AccountPropertiesTransactionBuffer.addModificationCount(builder, getPropertyModifications().size());
@@ -191,10 +189,10 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
       int codedTransaction = AccountPropertiesTransactionBuffer.endAccountPropertiesTransactionBuffer(builder);
       builder.finish(codedTransaction);
 
+      // validate size
       byte[] output = schema.serialize(builder.sizedByteArray());
-      Validate.isTrue(output.length == totalSize, "Serialized form has incorrect length");
+      Validate.isTrue(output.length == totalSize, "Serialized transaction has incorrect length: " + this.getClass());
       return output;
-   
    }
    
    /**

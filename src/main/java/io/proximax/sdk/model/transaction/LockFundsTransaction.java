@@ -101,7 +101,6 @@ public class LockFundsTransaction extends Transaction {
     byte[] generateBytes() {
         FlatBufferBuilder builder = new FlatBufferBuilder();
         BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
-        int version = (int) Long.parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
 
         // Create Vectors
         int signatureVector = LockFundsTransactionBuffer.createSignatureVector(builder, new byte[64]);
@@ -114,14 +113,18 @@ public class LockFundsTransaction extends Transaction {
 
         int hashVector = LockFundsTransactionBuffer.createHashVector(builder, Hex.decode(signedTransaction.getHash()));
 
+        // header, mosaic id, amount, duration, hash
+        int size = HEADER_SIZE + 8 + 8 + 8 + 32;
+
         LockFundsTransactionBuffer.startLockFundsTransactionBuffer(builder);
-        LockFundsTransactionBuffer.addSize(builder, 176);
+        LockFundsTransactionBuffer.addSize(builder, size);
         LockFundsTransactionBuffer.addSignature(builder, signatureVector);
         LockFundsTransactionBuffer.addSigner(builder, signerVector);
-        LockFundsTransactionBuffer.addVersion(builder, version);
+        LockFundsTransactionBuffer.addVersion(builder, getTxVersionforSerialization());
         LockFundsTransactionBuffer.addType(builder, getType().getValue());
         LockFundsTransactionBuffer.addMaxFee(builder, feeVector);
         LockFundsTransactionBuffer.addDeadline(builder, deadlineVector);
+        
         LockFundsTransactionBuffer.addMosaicId(builder, mosaicIdVector);
         LockFundsTransactionBuffer.addMosaicAmount(builder, mosaicAmountVector);
         LockFundsTransactionBuffer.addDuration(builder, durationVector);
@@ -130,8 +133,10 @@ public class LockFundsTransaction extends Transaction {
         int codedLockFunds = LockFundsTransactionBuffer.endLockFundsTransactionBuffer(builder);
         builder.finish(codedLockFunds);
 
-        return schema.serialize(builder.sizedByteArray());
-    }
+        // validate size
+        byte[] output = schema.serialize(builder.sizedByteArray());
+        Validate.isTrue(output.length == size, "Serialized transaction has incorrect length: " + this.getClass());
+        return output;    }
 
    @Override
    public String toString() {
