@@ -19,11 +19,13 @@ import okhttp3.WebSocket;
  */
 public class DebuggingListener extends Listener {
 
-   private static final FileWriter writer;
+   private static final FileWriter listenerResponseWriter;
+   private static final FileWriter dtoTransactionWriter;
    
    static {
       try {
-         writer = new FileWriter(new File("./src/test/resources/dtos/listener.json"), true);
+         listenerResponseWriter = new FileWriter(new File("./src/test/resources/dtos/listener.json"), true);
+         dtoTransactionWriter = new FileWriter(new File("./src/test/resources/transactions/all.json"), true);
       } catch (FileNotFoundException e) {
          throw new RuntimeException("failed to init listener", e);
       } catch (IOException e) {
@@ -45,10 +47,25 @@ public class DebuggingListener extends Listener {
       
       if (text.contains("\"uid\"")) return;
       try {
-         writer.append(text).append(",\n");
-         writer.flush();
+         listenerResponseWriter.append(text).append(",\n");
+         listenerResponseWriter.flush();
       } catch (IOException e) {
          e.printStackTrace();
       }
    }
+   
+   public String writeTransaction(String text) {
+      try {
+         String str = text.substring(1, text.length()-1);
+         if (str.isEmpty()) {
+            return text;
+         }
+         dtoTransactionWriter.append(str).append(",\n");
+         dtoTransactionWriter.flush();
+      } catch (IOException e) {
+         e.printStackTrace();
+      }
+      return text;
+   }
+   
 }

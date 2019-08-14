@@ -50,7 +50,7 @@ public class TransactionMappingTest extends ResourceBasedTest {
 
     @Test
     void validateStandaloneTransactions() {
-    	streamTransactions("TRANSFER", "TRANSFER.messages", "REGISTER_NAMESPACE", "MOSAIC_DEFINITION", "LOCK", "METADATA_MODIFICATION", "ALIAS", "ACCOUNT_PROPERTY")
+    	streamTransactions("all")
     		.forEachOrdered(transactionDTO -> {
     			Transaction transaction = new TransactionMapping().apply(transactionDTO);
     			validateStandaloneTransaction(transaction, transactionDTO);
@@ -78,9 +78,9 @@ public class TransactionMappingTest extends ResourceBasedTest {
     				case SECURE:
     					SecureMessage secMsg = (SecureMessage)msg;
     					// private key of recipient is needed to decrypt the message
-    					KeyPair recipientKeyPair = new KeyPair(PrivateKey.fromHexString("6556da78c063e0547b7fd2e8a8b66ba09b8f28043235fea441414f0fc591f507"));
+    					KeyPair recipientKeyPair = new KeyPair(PrivateKey.fromHexString("530f670b492c2949ebe9bd70443e6b9c3bd8a036ceffe717b69d197643da954a"));
     					// public key of sender is needed to decrypt the message
-    					KeyPair senderKeyPair = new KeyPair(PublicKey.fromHexString("A36DF1F0B64C7FF71499784317C8D63FB1DB8E1909519AB72051D2BE77A1EF45"));
+    					KeyPair senderKeyPair = new KeyPair(PublicKey.fromHexString("0eb448d07c7ccb312989ac27aa052738ff589e2f83973f909b506b450dc5c4e2"));
     					// check that all went well
     					assertEquals("java SDK secure message", secMsg.decrypt(recipientKeyPair, senderKeyPair));
     					break;

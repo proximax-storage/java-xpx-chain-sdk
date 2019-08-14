@@ -68,7 +68,7 @@ class MosaicHttpTest extends BaseTest {
    void getMosaicNames() throws ExecutionException, InterruptedException {
       List<MosaicNames> mosaicNames = mosaicHttp.getMosaicNames(Collections.singletonList(ID)).toFuture().get();
 
-      assertEquals("prk.xpx", mosaicNames.get(0).getNames().get(0));
+      assertEquals("prx.xpx", mosaicNames.get(0).getNames().get(0));
       assertEquals(ID, mosaicNames.get(0).getMosaicId());
    }
 

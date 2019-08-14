@@ -310,7 +310,7 @@ class ModifyAccountPropertiesTransactionMapping extends TransactionMapping {
    static List<AccountPropertyModification<Address>> getAddressMods(JsonObject transaction) {
       return stream(transaction.getAsJsonArray("modifications")).map(obj -> (JsonObject) obj).map(json -> {
          AccountPropertyModificationType modType = AccountPropertyModificationType
-               .getByCode(json.get("modificationType").getAsInt());
+               .getByCode(getModType(json).getAsInt());
          return new AccountPropertyModification<>(modType, Address.createFromEncoded(json.get("value").getAsString()));
       }).collect(Collectors.toList());
    }
@@ -325,7 +325,7 @@ class ModifyAccountPropertiesTransactionMapping extends TransactionMapping {
       return stream(transaction.getAsJsonArray("modifications"))
             .map(obj -> (JsonObject) obj)
             .map(json -> {
-               AccountPropertyModificationType modType = AccountPropertyModificationType.getByCode(json.get("modificationType").getAsInt());
+               AccountPropertyModificationType modType = AccountPropertyModificationType.getByCode(getModType(json).getAsInt());
                return new AccountPropertyModification<>(modType, (UInt64Id)new MosaicId(GsonUtils.getBigInteger(json.get("value").getAsJsonArray())));
             }).collect(Collectors.toList());
    }
@@ -339,9 +339,23 @@ class ModifyAccountPropertiesTransactionMapping extends TransactionMapping {
    static List<AccountPropertyModification<TransactionType>> getEntityTypeMods(JsonObject transaction) {
       return stream(transaction.getAsJsonArray("modifications")).map(obj -> (JsonObject) obj).map(json -> {
          AccountPropertyModificationType modType = AccountPropertyModificationType
-               .getByCode(json.get("modificationType").getAsInt());
+               .getByCode(getModType(json).getAsInt());
          return new AccountPropertyModification<>(modType, TransactionType.rawValueOf(json.get("value").getAsInt()));
       }).collect(Collectors.toList());
+   }
+   
+   /**
+    * helper method to support different names of modification type field
+    * 
+    * @param json modification object
+    * @return element representing the modification type
+    */
+   static JsonElement getModType(JsonObject json) {
+      if (json.has("type")) {
+         return json.get("type");
+      } else {
+         return json.get("modificationType");
+      }
    }
 }
 
@@ -733,9 +747,23 @@ class AccountLinkTransactionMapping extends TransactionMapping {
 
       return new AccountLinkTransaction(
             new PublicAccount(transaction.get("remoteAccountKey").getAsString(), networkType),
-            AccountLinkAction.getByCode(transaction.get("linkAction").getAsByte()), networkType,
+            AccountLinkAction.getByCode(getAction(transaction).getAsByte()), networkType,
             extractTransactionVersion(transaction.get("version")), deadline, extractFee(transaction),
             transaction.get("signature").getAsString(),
             new PublicAccount(transaction.get("signer").getAsString(), networkType), transactionInfo);
+   }
+   
+   /**
+    * helper method to retrieve account link action as it uses different field names in listener and transaction
+    * 
+    * @param json transaction object
+    * @return JSON element representing the action
+    */
+   static JsonElement getAction(JsonObject json) {
+      if (json.has("action")) {
+         return json.get("action");
+      } else {
+         return json.get("linkAction");
+      }
    }
 }

@@ -77,8 +77,7 @@ public class Http {
          throw new RuntimeException(response.getStatusMessage());
       }
       try {
-         String body = response.getBodyString();
-         return body;
+         return response.getBodyString();
       } catch (IOException e) {
          throw new RuntimeException(e.getMessage());
       }

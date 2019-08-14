@@ -7,6 +7,7 @@ package io.proximax.test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
@@ -14,16 +15,18 @@ import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.BaseTest;
 import io.proximax.sdk.BlockchainApi;
+import io.proximax.sdk.BlockchainRepository;
 import io.proximax.sdk.NamespaceRepository;
 import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.namespace.NamespaceName;
 
 /**
- * TODO add proper description
+ * ad-hoc tests used for debugging or test instrumentation
  */
 class AdHocTests extends BaseTest {
    private static final String NAMESPACE_PRX_XPX = "prx.xpx";
@@ -47,4 +50,20 @@ class AdHocTests extends BaseTest {
       assertFalse(names.isEmpty());
    }
 
+   @Test
+   @Disabled
+   void getTransactions() {
+      /*
+       * create debugging listener for the instance and add following line to
+       * BlockchainHttp.getBlockTransactions(BigInteger height, Optional<QueryParams> queryParams)
+       * 
+       *                 .map(listener::writeTransaction)
+       */
+      long startBlock = 4134;
+      long endBlock = 4271;
+      BlockchainRepository repo = api.createBlockchainRepository();
+      for (long block = startBlock; block < endBlock; block++) {
+         repo.getBlockTransactions(BigInteger.valueOf(block)).blockingFirst();
+      }
+   }
 }
