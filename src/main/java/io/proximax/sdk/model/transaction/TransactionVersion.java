@@ -117,7 +117,7 @@ public enum TransactionVersion {
     */
    MODIFY_CONTRACT(3);
 
-   private Integer code;
+   private int code;
 
    TransactionVersion(int code) {
       this.code = code;
@@ -128,7 +128,7 @@ public enum TransactionVersion {
     *
     * @return enum value
     */
-   public Integer getValue() {
+   public int getValue() {
       return this.code;
    }
 }

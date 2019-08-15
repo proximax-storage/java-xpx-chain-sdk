@@ -106,7 +106,6 @@ public class ModifyMultisigAccountTransaction extends Transaction {
     byte[] generateBytes() {
         FlatBufferBuilder builder = new FlatBufferBuilder();
         BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
-        int version = (int) Long.parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
 
         // Create Modifications
         int[] modificationsBuffers = new int[modifications.size()];
@@ -127,16 +126,18 @@ public class ModifyMultisigAccountTransaction extends Transaction {
         int feeVector = ModifyMultisigAccountTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
         int modificationsVector = ModifyMultisigAccountTransactionBuffer.createModificationsVector(builder, modificationsBuffers);
 
-        int fixSize = 123; // replace by the all numbers sum or add a comment explaining this
+        // header, min approval, min removal, mod count, mod (type, pub key) * count
+        int size = HEADER_SIZE + 1 + 1 + 1 + (1 + 32) * modifications.size();
 
         ModifyMultisigAccountTransactionBuffer.startModifyMultisigAccountTransactionBuffer(builder);
-        ModifyMultisigAccountTransactionBuffer.addSize(builder, fixSize + (33 * modifications.size()));
+        ModifyMultisigAccountTransactionBuffer.addSize(builder, size);
         ModifyMultisigAccountTransactionBuffer.addSignature(builder, signatureVector);
         ModifyMultisigAccountTransactionBuffer.addSigner(builder, signerVector);
-        ModifyMultisigAccountTransactionBuffer.addVersion(builder, version);
+        ModifyMultisigAccountTransactionBuffer.addVersion(builder, getTxVersionforSerialization());
         ModifyMultisigAccountTransactionBuffer.addType(builder, getType().getValue());
         ModifyMultisigAccountTransactionBuffer.addMaxFee(builder, feeVector);
         ModifyMultisigAccountTransactionBuffer.addDeadline(builder, deadlineVector);
+        
         ModifyMultisigAccountTransactionBuffer.addMinApprovalDelta(builder, (byte)minApprovalDelta);
         ModifyMultisigAccountTransactionBuffer.addMinRemovalDelta(builder, (byte)minRemovalDelta);
         ModifyMultisigAccountTransactionBuffer.addNumModifications(builder, modifications.size());
@@ -145,6 +146,9 @@ public class ModifyMultisigAccountTransaction extends Transaction {
         int codedTransaction = ModifyMultisigAccountTransactionBuffer.endModifyMultisigAccountTransactionBuffer(builder);
         builder.finish(codedTransaction);
 
-        return schema.serialize(builder.sizedByteArray());
+        // validate size
+        byte[] output = schema.serialize(builder.sizedByteArray());
+        Validate.isTrue(output.length == size, "Serialized transaction has incorrect length: " + this.getClass());
+        return output;
     }
 }

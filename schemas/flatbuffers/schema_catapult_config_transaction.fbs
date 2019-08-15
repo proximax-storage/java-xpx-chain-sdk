@@ -1,0 +1,18 @@
+namespace io.proximax.sdk.gen.buffers;
+
+table CatapultConfigTransactionBuffer {
+    size: uint;
+    signature: [ubyte];
+    signer: [ubyte];
+    version: uint;
+    type: ushort;
+    maxFee: [uint];
+    deadline:[uint];
+    applyHeightDelta: [uint];
+    blockChainConfigSize: ushort;
+    supportedEntityVersionsSize: ushort;
+    blockChainConfig: [ubyte];
+    supportedEntityVersions: [ubyte];
+}
+
+root_type CatapultConfigTransactionBuffer;

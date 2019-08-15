@@ -105,7 +105,6 @@ public class MosaicSupplyChangeTransaction extends Transaction {
     byte[] generateBytes() {
         FlatBufferBuilder builder = new FlatBufferBuilder();
         BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
-        int version = (int) Long.parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
 
         // Create Vectors
         int signatureVector = MosaicSupplyChangeTransactionBuffer.createSignatureVector(builder, new byte[64]);
@@ -115,16 +114,18 @@ public class MosaicSupplyChangeTransaction extends Transaction {
         int mosaicIdVector = MosaicSupplyChangeTransactionBuffer.createMosaicIdVector(builder, UInt64Utils.fromBigInteger(mosaicId.getId()));
         int deltaVector = MosaicSupplyChangeTransactionBuffer.createDeltaVector(builder, UInt64Utils.fromBigInteger(delta));
 
-        int fixSize = 137; // replace by the all numbers sum or add a comment explaining this
+        // header, mosaic id, supply type, delta
+        int size = HEADER_SIZE + 8 + 1 + 8;
 
         MosaicSupplyChangeTransactionBuffer.startMosaicSupplyChangeTransactionBuffer(builder);
-        MosaicSupplyChangeTransactionBuffer.addSize(builder, fixSize);
+        MosaicSupplyChangeTransactionBuffer.addSize(builder, size);
         MosaicSupplyChangeTransactionBuffer.addSignature(builder, signatureVector);
         MosaicSupplyChangeTransactionBuffer.addSigner(builder, signerVector);
-        MosaicSupplyChangeTransactionBuffer.addVersion(builder, version);
+        MosaicSupplyChangeTransactionBuffer.addVersion(builder, getTxVersionforSerialization());
         MosaicSupplyChangeTransactionBuffer.addType(builder, getType().getValue());
         MosaicSupplyChangeTransactionBuffer.addMaxFee(builder, feeVector);
         MosaicSupplyChangeTransactionBuffer.addDeadline(builder, deadlineVector);
+        
         MosaicSupplyChangeTransactionBuffer.addMosaicId(builder, mosaicIdVector);
         MosaicSupplyChangeTransactionBuffer.addDirection(builder, mosaicSupplyType.getValue());
         MosaicSupplyChangeTransactionBuffer.addDelta(builder, deltaVector);
@@ -132,6 +133,9 @@ public class MosaicSupplyChangeTransaction extends Transaction {
         int codedTransaction = MosaicSupplyChangeTransactionBuffer.endMosaicSupplyChangeTransactionBuffer(builder);
         builder.finish(codedTransaction);
 
-        return schema.serialize(builder.sizedByteArray());
+        // validate size
+        byte[] output = schema.serialize(builder.sizedByteArray());
+        Validate.isTrue(output.length == size, "Serialized transaction has incorrect length: " + this.getClass());
+        return output;
     }
 }

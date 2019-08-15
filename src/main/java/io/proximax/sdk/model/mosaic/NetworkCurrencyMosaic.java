@@ -19,16 +19,22 @@ package io.proximax.sdk.model.mosaic;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import io.proximax.sdk.model.namespace.NamespaceId;
+import io.proximax.sdk.model.transaction.UInt64Id;
+
 /**
  * XPX Mosaic
  */
 public class NetworkCurrencyMosaic extends Mosaic {
    /**
+    * Namespace with alias to the network currency mosaic
+    */
+   public static final String MOSAIC_NAMESPACE = "prx.xpx";
+   
+   /**
     * ID of network currency
     */
-   // TODO had to replace this by hard-coded mosaic ID because alias to currency namespace is not in the dev image
-//   public static final NamespaceId ID = new NamespaceId("prx.xpx");
-   public static final MosaicId ID = new MosaicId(new BigInteger("0DC67FBE1CAD29E3", 16));
+   public static final UInt64Id ID = new NamespaceId(MOSAIC_NAMESPACE);
    /**
     * Divisibility
     */

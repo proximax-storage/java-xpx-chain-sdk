@@ -129,8 +129,6 @@ public class AliasTransaction extends Transaction {
       
       // prepare data for serialization
       BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
-      int version = (int) Long
-            .parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
 
       byte[] aliasIdBytes;
       if (address.isPresent()) {
@@ -152,7 +150,7 @@ public class AliasTransaction extends Transaction {
       int aliasIdOffset = AliasTransactionBuffer.createAliasIdVector(builder, aliasIdBytes);
       
       // header, 2 uint64 and int
-      int totalSize = 120 + aliasIdBytes.length + 8 + 1;
+      int totalSize = HEADER_SIZE + aliasIdBytes.length + 8 + 1;
 
       AliasTransactionBuffer.startAliasTransactionBuffer(builder);
       AliasTransactionBuffer.addDeadline(builder, deadlineOffset);
@@ -161,7 +159,7 @@ public class AliasTransaction extends Transaction {
       AliasTransactionBuffer.addSignature(builder, signatureOffset);
       AliasTransactionBuffer.addSize(builder, totalSize);
       AliasTransactionBuffer.addType(builder, getType().getValue());
-      AliasTransactionBuffer.addVersion(builder, version);
+      AliasTransactionBuffer.addVersion(builder, getTxVersionforSerialization());
 
       AliasTransactionBuffer.addAliasId(builder, aliasIdOffset);
       AliasTransactionBuffer.addNamespaceId(builder, namespaceIdVector);
@@ -170,8 +168,9 @@ public class AliasTransaction extends Transaction {
       int codedTransaction = AliasTransactionBuffer.endAliasTransactionBuffer(builder);
       builder.finish(codedTransaction);
 
+      // validate size
       byte[] output = schema.serialize(builder.sizedByteArray());
-      Validate.isTrue(output.length == totalSize, "Serialized form has incorrect length ", output.length);
+      Validate.isTrue(output.length == totalSize, "Serialized transaction has incorrect length: " + this.getClass());
       return output;
    }
 }

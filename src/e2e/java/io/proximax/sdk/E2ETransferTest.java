@@ -57,8 +57,7 @@ public class E2ETransferTest extends E2EBaseTest {
    @BeforeAll
    void addListener() {
       logger.info("Sending transactions to {}", simpleAccount);
-      disposables.add(listener.status(simpleAccount.getAddress())
-            .subscribe(err -> logger.error("Operation failed: {}", err), t -> logger.error("exception thrown", t)));
+      signup(simpleAccount.getAddress());
    }
 
    @AfterAll

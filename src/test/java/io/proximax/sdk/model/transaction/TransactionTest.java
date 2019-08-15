@@ -106,4 +106,14 @@ public class TransactionTest {
    void testSign() {
       System.out.println(Hex.decode("7B631D803F912B00DC0CBED3014BBD17A302BA50B99D233B9C2D9533B842ABDF").length);
    }
+   
+   @Test
+   void testSerializationVersion() {
+      FakeTransferTransaction trans = new FakeTransferTransaction(NetworkType.MIJIN_TEST, 1,
+            new FakeDeadline(), BigInteger.valueOf(0), "signature", signer,
+            TransactionInfo.create(BigInteger.valueOf(0), 1, "id_hash", "hash", "hash_2"));
+      // now mijin test is 0x90 and trans version is set to 1
+      // (144 << 24) + 1
+      assertEquals((144 << 24) + 1, trans.getTxVersionforSerialization());
+   }
 }

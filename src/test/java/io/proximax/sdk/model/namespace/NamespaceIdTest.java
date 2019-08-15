@@ -38,6 +38,8 @@ class NamespaceIdTest {
         NamespaceId namespaceId = new NamespaceId("nem.xem");
         assertEquals(namespaceId.getId(), new BigInteger("-3087871471161192663"));
         assertEquals(namespaceId.getFullName().get(), "nem.xem");
+        assertEquals(-3087871471161192663l, namespaceId.getIdAsLong());
+        assertEquals("d525ad41d95fcf29", namespaceId.getIdAsHex());
     }
 
     @Test
@@ -53,5 +55,7 @@ class NamespaceIdTest {
         NamespaceId namespaceId = new NamespaceId(new BigInteger("-8884663987180930485"));
         NamespaceId namespaceId2 = new NamespaceId(new BigInteger("-8884663987180930485"));
         assertTrue(namespaceId.equals(namespaceId2));
+        assertFalse(namespaceId.equals(null));
+        assertFalse(namespaceId.equals("otherclass"));
     }
 }

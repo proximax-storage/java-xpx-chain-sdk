@@ -56,6 +56,7 @@ public class SecretProofTransactionTest extends ResourceBasedTest {
       SecretProofTransaction secretProoftx = SecretProofTransaction
             .create(new FakeDeadline(), HashType.SHA3_256, recipient, secret, secretSeed, NetworkType.MIJIN_TEST);
       byte[] actual = secretProoftx.generateBytes();
+//      saveBytes("secret_proof", actual);
       assertArrayEquals(loadBytes("secret_proof"), actual);
    }
 

@@ -1,0 +1,15 @@
+namespace io.proximax.sdk.gen.buffers;
+
+table CatapultUpgradeTransactionBuffer {
+    size: uint;
+    signature: [ubyte];
+    signer: [ubyte];
+    version: uint;
+    type: ushort;
+    maxFee: [uint];
+    deadline:[uint];
+    upgradePeriod: [uint];
+    newCatapultVersion: [uint];
+}
+
+root_type CatapultUpgradeTransactionBuffer;

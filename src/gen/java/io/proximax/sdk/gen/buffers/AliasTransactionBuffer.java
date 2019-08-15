@@ -24,7 +24,7 @@ public final class AliasTransactionBuffer extends Table {
   public int signerLength() { int o = __offset(8); return o != 0 ? __vector_len(o) : 0; }
   public ByteBuffer signerAsByteBuffer() { return __vector_as_bytebuffer(8, 1); }
   public ByteBuffer signerInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 8, 1); }
-  public int version() { int o = __offset(10); return o != 0 ? bb.getShort(o + bb_pos) & 0xFFFF : 0; }
+  public long version() { int o = __offset(10); return o != 0 ? (long)bb.getInt(o + bb_pos) & 0xFFFFFFFFL : 0L; }
   public int type() { int o = __offset(12); return o != 0 ? bb.getShort(o + bb_pos) & 0xFFFF : 0; }
   public long maxFee(int j) { int o = __offset(14); return o != 0 ? (long)bb.getInt(__vector(o) + j * 4) & 0xFFFFFFFFL : 0; }
   public int maxFeeLength() { int o = __offset(14); return o != 0 ? __vector_len(o) : 0; }
@@ -39,10 +39,8 @@ public final class AliasTransactionBuffer extends Table {
   public int namespaceIdLength() { int o = __offset(20); return o != 0 ? __vector_len(o) : 0; }
   public ByteBuffer namespaceIdAsByteBuffer() { return __vector_as_bytebuffer(20, 4); }
   public ByteBuffer namespaceIdInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 20, 4); }
-  /**
+  /*
    * In case of address it is 25 bytes array. In case of mosaic it is 8 byte array(or 2 uint32 array)
-   * @param j j
-   * @return int
    */
   public int aliasId(int j) { int o = __offset(22); return o != 0 ? bb.get(__vector(o) + j * 1) & 0xFF : 0; }
   public int aliasIdLength() { int o = __offset(22); return o != 0 ? __vector_len(o) : 0; }
@@ -53,7 +51,7 @@ public final class AliasTransactionBuffer extends Table {
       long size,
       int signatureOffset,
       int signerOffset,
-      int version,
+      long version,
       int type,
       int maxFeeOffset,
       int deadlineOffset,
@@ -65,11 +63,11 @@ public final class AliasTransactionBuffer extends Table {
     AliasTransactionBuffer.addNamespaceId(builder, namespaceIdOffset);
     AliasTransactionBuffer.addDeadline(builder, deadlineOffset);
     AliasTransactionBuffer.addMaxFee(builder, maxFeeOffset);
+    AliasTransactionBuffer.addVersion(builder, version);
     AliasTransactionBuffer.addSigner(builder, signerOffset);
     AliasTransactionBuffer.addSignature(builder, signatureOffset);
     AliasTransactionBuffer.addSize(builder, size);
     AliasTransactionBuffer.addType(builder, type);
-    AliasTransactionBuffer.addVersion(builder, version);
     AliasTransactionBuffer.addActionType(builder, actionType);
     return AliasTransactionBuffer.endAliasTransactionBuffer(builder);
   }
@@ -82,7 +80,7 @@ public final class AliasTransactionBuffer extends Table {
   public static void addSigner(FlatBufferBuilder builder, int signerOffset) { builder.addOffset(2, signerOffset, 0); }
   public static int createSignerVector(FlatBufferBuilder builder, byte[] data) { builder.startVector(1, data.length, 1); for (int i = data.length - 1; i >= 0; i--) builder.addByte(data[i]); return builder.endVector(); }
   public static void startSignerVector(FlatBufferBuilder builder, int numElems) { builder.startVector(1, numElems, 1); }
-  public static void addVersion(FlatBufferBuilder builder, int version) { builder.addShort(3, (short)version, (short)0); }
+  public static void addVersion(FlatBufferBuilder builder, long version) { builder.addInt(3, (int)version, (int)0L); }
   public static void addType(FlatBufferBuilder builder, int type) { builder.addShort(4, (short)type, (short)0); }
   public static void addMaxFee(FlatBufferBuilder builder, int maxFeeOffset) { builder.addOffset(5, maxFeeOffset, 0); }
   public static int createMaxFeeVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addInt(data[i]); return builder.endVector(); }

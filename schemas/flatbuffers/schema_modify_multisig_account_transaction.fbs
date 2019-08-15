@@ -9,7 +9,7 @@ table ModifyMultisigAccountTransactionBuffer {
     size: uint;
     signature: [ubyte];
     signer: [ubyte];
-    version: ushort;
+    version: uint;
     type: ushort;
     maxFee: [uint];
     deadline:[uint];

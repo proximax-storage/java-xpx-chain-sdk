@@ -12,6 +12,7 @@ import com.google.gson.JsonObject;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.BlockInfo;
 import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.utils.dto.TransactionMappingUtils;
 import io.reactivex.Observable;
 import io.reactivex.subjects.Subject;
 
@@ -39,9 +40,9 @@ public class BlockChannelMessage extends ListenerMessage<BlockInfo> {
    private static BlockInfo getMessageObject(JsonObject message) {
       final JsonObject meta = message.getAsJsonObject("meta");
       final JsonObject block = message.getAsJsonObject("block");
-      final int rawNetworkType = (int) Long.parseLong(Integer.toHexString(block.get("version").getAsInt()).substring(0, 2), 16);
+      final int rawNetworkType = TransactionMappingUtils.extractNetworkType(block.get("version")).getValue();
       final NetworkType networkType = NetworkType.rawValueOf(rawNetworkType);
-      final int version = (int) Long.parseLong(Integer.toHexString(block.get("version").getAsInt()).substring(2, 4), 16);
+      final int version = TransactionMappingUtils.extractTransactionVersion(block.get("version"));
       return new BlockInfo(
                       meta.get("hash").getAsString(),
                       meta.get("generationHash").getAsString(),

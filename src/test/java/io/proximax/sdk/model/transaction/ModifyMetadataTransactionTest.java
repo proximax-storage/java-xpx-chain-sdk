@@ -75,8 +75,10 @@ class ModifyMetadataTransactionTest extends ResourceBasedTest {
             new Address("SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM", NetworkType.MIJIN_TEST),
             Arrays.asList(MetadataModification.remove("keytoremove"), MetadataModification.add("addedkey", "value")),
             NetworkType.MIJIN_TEST);
+      byte[] actual = trans.generateBytes();
       // used saveBytes to store the file data
-      assertArrayEquals(loadBytes("modify_metadata_address"), trans.generateBytes());
+//      saveBytes("modify_metadata_address", actual);
+      assertArrayEquals(loadBytes("modify_metadata_address"), actual);
    }
 
    @Test
@@ -85,8 +87,10 @@ class ModifyMetadataTransactionTest extends ResourceBasedTest {
             new MosaicId(BigInteger.ONE),
             Arrays.asList(MetadataModification.remove("keytoremove"), MetadataModification.add("addedkey", "value")),
             NetworkType.MIJIN_TEST);
+      byte[] actual = trans.generateBytes();
       // used saveBytes to store the file data
-      assertArrayEquals(loadBytes("modify_metadata_mosaic"), trans.generateBytes());
+//      saveBytes("modify_metadata_mosaic", actual);
+      assertArrayEquals(loadBytes("modify_metadata_mosaic"), actual);
    }
 
    @Test
@@ -96,7 +100,9 @@ class ModifyMetadataTransactionTest extends ResourceBasedTest {
             Arrays.asList(MetadataModification.remove("keytoremove"), MetadataModification.add("addedkey", "value")),
             NetworkType.MIJIN_TEST);
       // used saveBytes to store the file data
-      assertArrayEquals(loadBytes("modify_metadata_namespace"), trans.generateBytes());
+      byte[] actual = trans.generateBytes();
+//      saveBytes("modify_metadata_namespace", actual);
+      assertArrayEquals(loadBytes("modify_metadata_namespace"), actual);
    }
 
 }

@@ -29,6 +29,7 @@ import io.proximax.core.crypto.Signer;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.utils.dto.TransactionMappingUtils;
 
 /**
  * An abstract transaction class that serves as the base class of all NEM transactions.
@@ -36,6 +37,9 @@ import io.proximax.sdk.model.blockchain.NetworkType;
  * @since 1.0
  */
 public abstract class Transaction {
+    /** standard transaction header size */
+    public static final int HEADER_SIZE = 122;
+   
     private final TransactionType type;
     private final NetworkType networkType;
     private final Integer version;
@@ -165,6 +169,11 @@ public abstract class Transaction {
      */
     public Optional<TransactionInfo> getTransactionInfo() { return transactionInfo; }
 
+    /**
+     * generate byte array with serialized form of transaction
+     * 
+     * @return byte array
+     */
     abstract byte[] generateBytes();
 
     /**
@@ -212,18 +221,25 @@ public abstract class Transaction {
      * @return transaction with signer serialized to be part of an aggregate transaction
      */
     byte[] toAggregateTransactionBytes() {
+        // decode signer from hex to byte array
         byte[] signerBytes = Hex.decode(this.signer.orElseThrow(() -> new IllegalStateException("missing signer")).getPublicKey());
+        // serialize the transaction
         byte[] bytes = this.generateBytes();
-        byte[] resultBytes = new byte[bytes.length - 64 - 16];
+        // we will be removing header (122) and adding size (4), signer (32), version (4), trans type(2)
+        byte[] resultBytes = new byte[bytes.length - 122 + 4 + 32 + 4 + 2];
 
-        System.arraycopy(signerBytes, 0, resultBytes, 4, 32); // Copy signer
-        System.arraycopy(bytes, 100, resultBytes, 32 + 4, 4); // Copy type and version
-        System.arraycopy(bytes, 100 + 2 + 2 + 16, resultBytes, 32 + 4 + 4, bytes.length - 120); // Copy following data
-
-        byte[] size = BigInteger.valueOf(bytes.length - 64l - 16).toByteArray();
-        ArrayUtils.reverse(size);
-
-        System.arraycopy(size, 0, resultBytes, 0, size.length);
+        // prepare size of this as embedded transaction
+        byte[] sizeBytes = BigInteger.valueOf(resultBytes.length).toByteArray();
+        ArrayUtils.reverse(sizeBytes);
+        
+        // write size of the aggregate transaction bytes - can be less than 4 bytes
+        System.arraycopy(sizeBytes, 0, resultBytes, 0, sizeBytes.length);
+        // at position 4 start writing 32 bytes of signer
+        System.arraycopy(signerBytes, 0, resultBytes, 4, 32);
+        // version is expected to start at position 100 and be 4 bytes, then take next 2 bytes
+        System.arraycopy(bytes, 100, resultBytes, 4 + 32, 6);
+        // copy remaining data after header
+        System.arraycopy(bytes, 122, resultBytes, 4 + 32 + 6, bytes.length - 122);
 
         return resultBytes;
     }
@@ -275,6 +291,15 @@ public abstract class Transaction {
         return !this.transactionInfo.isPresent();
     }
 
+    /**
+     * get value of the version field for serialization
+     * 
+     * @return 4 bytes
+     */
+    protected int getTxVersionforSerialization() {
+       return TransactionMappingUtils.serializeVersion(getVersion(), getNetworkType().getValue());
+    }
+    
    @Override
    public String toString() {
       return "Transaction [type=" + type + ", networkType=" + networkType + ", version=" + version + ", deadline="

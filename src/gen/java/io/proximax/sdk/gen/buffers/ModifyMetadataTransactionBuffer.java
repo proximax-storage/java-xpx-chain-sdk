@@ -24,7 +24,7 @@ public final class ModifyMetadataTransactionBuffer extends Table {
   public int signerLength() { int o = __offset(8); return o != 0 ? __vector_len(o) : 0; }
   public ByteBuffer signerAsByteBuffer() { return __vector_as_bytebuffer(8, 1); }
   public ByteBuffer signerInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 8, 1); }
-  public int version() { int o = __offset(10); return o != 0 ? bb.getShort(o + bb_pos) & 0xFFFF : 0; }
+  public long version() { int o = __offset(10); return o != 0 ? (long)bb.getInt(o + bb_pos) & 0xFFFFFFFFL : 0L; }
   public int type() { int o = __offset(12); return o != 0 ? bb.getShort(o + bb_pos) & 0xFFFF : 0; }
   public long maxFee(int j) { int o = __offset(14); return o != 0 ? (long)bb.getInt(__vector(o) + j * 4) & 0xFFFFFFFFL : 0; }
   public int maxFeeLength() { int o = __offset(14); return o != 0 ? __vector_len(o) : 0; }
@@ -35,11 +35,8 @@ public final class ModifyMetadataTransactionBuffer extends Table {
   public ByteBuffer deadlineAsByteBuffer() { return __vector_as_bytebuffer(16, 4); }
   public ByteBuffer deadlineInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 16, 4); }
   public int metadataType() { int o = __offset(18); return o != 0 ? bb.get(o + bb_pos) & 0xFF : 0; }
-  /**
+  /*
    * In case of address it is 25 bytes array. In case of mosaic or namespace it is 8 byte array(or 2 uint32 array)
-   * 
-   * @param j j
-   * @return int
    */
   public int metadataId(int j) { int o = __offset(20); return o != 0 ? bb.get(__vector(o) + j * 1) & 0xFF : 0; }
   public int metadataIdLength() { int o = __offset(20); return o != 0 ? __vector_len(o) : 0; }
@@ -53,7 +50,7 @@ public final class ModifyMetadataTransactionBuffer extends Table {
       long size,
       int signatureOffset,
       int signerOffset,
-      int version,
+      long version,
       int type,
       int maxFeeOffset,
       int deadlineOffset,
@@ -65,11 +62,11 @@ public final class ModifyMetadataTransactionBuffer extends Table {
     ModifyMetadataTransactionBuffer.addMetadataId(builder, metadataIdOffset);
     ModifyMetadataTransactionBuffer.addDeadline(builder, deadlineOffset);
     ModifyMetadataTransactionBuffer.addMaxFee(builder, maxFeeOffset);
+    ModifyMetadataTransactionBuffer.addVersion(builder, version);
     ModifyMetadataTransactionBuffer.addSigner(builder, signerOffset);
     ModifyMetadataTransactionBuffer.addSignature(builder, signatureOffset);
     ModifyMetadataTransactionBuffer.addSize(builder, size);
     ModifyMetadataTransactionBuffer.addType(builder, type);
-    ModifyMetadataTransactionBuffer.addVersion(builder, version);
     ModifyMetadataTransactionBuffer.addMetadataType(builder, metadataType);
     return ModifyMetadataTransactionBuffer.endModifyMetadataTransactionBuffer(builder);
   }
@@ -82,7 +79,7 @@ public final class ModifyMetadataTransactionBuffer extends Table {
   public static void addSigner(FlatBufferBuilder builder, int signerOffset) { builder.addOffset(2, signerOffset, 0); }
   public static int createSignerVector(FlatBufferBuilder builder, byte[] data) { builder.startVector(1, data.length, 1); for (int i = data.length - 1; i >= 0; i--) builder.addByte(data[i]); return builder.endVector(); }
   public static void startSignerVector(FlatBufferBuilder builder, int numElems) { builder.startVector(1, numElems, 1); }
-  public static void addVersion(FlatBufferBuilder builder, int version) { builder.addShort(3, (short)version, (short)0); }
+  public static void addVersion(FlatBufferBuilder builder, long version) { builder.addInt(3, (int)version, (int)0L); }
   public static void addType(FlatBufferBuilder builder, int type) { builder.addShort(4, (short)type, (short)0); }
   public static void addMaxFee(FlatBufferBuilder builder, int maxFeeOffset) { builder.addOffset(5, maxFeeOffset, 0); }
   public static int createMaxFeeVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addInt(data[i]); return builder.endVector(); }

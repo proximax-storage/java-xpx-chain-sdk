@@ -93,6 +93,7 @@ class RegisterNamespaceTransactionTest extends ResourceBasedTest {
             .createRootNamespace(new FakeDeadline(), "newnamespace", BigInteger.valueOf(10000), NetworkType.MIJIN_TEST);
 
       byte[] actual = registerNamespaceTransaction.generateBytes();
+//      saveBytes("register_namespace_root", actual);
       assertArrayEquals(loadBytes("register_namespace_root"), actual);
    }
 
@@ -105,6 +106,7 @@ class RegisterNamespaceTransactionTest extends ResourceBasedTest {
             NetworkType.MIJIN_TEST);
 
       byte[] actual = registerNamespaceTransaction.generateBytes();
+//      saveBytes("register_namespace_child", actual);
       assertArrayEquals(loadBytes("register_namespace_child"), actual);
    }
 }

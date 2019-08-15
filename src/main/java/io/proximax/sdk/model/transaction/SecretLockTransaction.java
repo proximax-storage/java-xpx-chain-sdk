@@ -120,7 +120,6 @@ public class SecretLockTransaction extends Transaction {
     byte[] generateBytes() {
         FlatBufferBuilder builder = new FlatBufferBuilder();
         BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
-        int version = (int) Long.parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
 
         // Create Vectors
         int signatureVector = SecretLockTransactionBuffer.createSignatureVector(builder, new byte[64]);
@@ -135,14 +134,18 @@ public class SecretLockTransaction extends Transaction {
         byte[] address = Base32Encoder.getBytes(getRecipient().plain());
         int recipientVector = SecretLockTransactionBuffer.createRecipientVector(builder, address);
 
+        // header + mosaicID, amount, duration, hash algo, secret, recipient
+        int size = HEADER_SIZE + 8 + 8 + 8 + 1 + 32 + 25;
+
         SecretLockTransactionBuffer.startSecretLockTransactionBuffer(builder);
-        SecretLockTransactionBuffer.addSize(builder, 202);
+        SecretLockTransactionBuffer.addSize(builder, size);
         SecretLockTransactionBuffer.addSignature(builder, signatureVector);
         SecretLockTransactionBuffer.addSigner(builder, signerVector);
-        SecretLockTransactionBuffer.addVersion(builder, version);
+        SecretLockTransactionBuffer.addVersion(builder, getTxVersionforSerialization());
         SecretLockTransactionBuffer.addType(builder, getType().getValue());
         SecretLockTransactionBuffer.addMaxFee(builder, feeVector);
         SecretLockTransactionBuffer.addDeadline(builder, deadlineVector);
+        
         SecretLockTransactionBuffer.addMosaicId(builder, mosaicIdVector);
         SecretLockTransactionBuffer.addMosaicAmount(builder, mosaicAmountVector);
         SecretLockTransactionBuffer.addDuration(builder, durationVector);
@@ -153,6 +156,9 @@ public class SecretLockTransaction extends Transaction {
         int codedSecretLock = SecretLockTransactionBuffer.endSecretLockTransactionBuffer(builder);
         builder.finish(codedSecretLock);
 
-        return schema.serialize(builder.sizedByteArray());
+        // validate size
+        byte[] output = schema.serialize(builder.sizedByteArray());
+        Validate.isTrue(output.length == size, "Serialized transaction has incorrect length: " + this.getClass());
+        return output;
     }
 }

@@ -144,7 +144,6 @@ public class RegisterNamespaceTransaction extends Transaction {
     byte[] generateBytes() {
         FlatBufferBuilder builder = new FlatBufferBuilder();
         BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
-        int version = (int) Long.parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
 
         // Create Vectors
         int signatureVector = RegisterNamespaceTransactionBuffer.createSignatureVector(builder, new byte[64]);
@@ -153,19 +152,21 @@ public class RegisterNamespaceTransaction extends Transaction {
         int feeVector = RegisterNamespaceTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
         int namespaceIdVector = RegisterNamespaceTransactionBuffer.createNamespaceIdVector(builder, UInt64Utils.fromBigInteger(namespaceId.getId()));
         int durationParentIdVector = RegisterNamespaceTransactionBuffer.createDurationParentIdVector(builder, getNamespaceType() == NamespaceType.RootNamespace ? UInt64Utils.fromBigInteger(duration.get()) : UInt64Utils.fromBigInteger(parentId.get().getId()));
-
-        int fixSize = 138; // replace by the all numbers sum or add a comment explaining this
-
         int name = builder.createString(namespaceName);
 
+        // header, ns type, duration, ns id, name size, name
+        int size = HEADER_SIZE + 1 + 8 + 8 + 1 + namespaceName.length();
+
+
         RegisterNamespaceTransactionBuffer.startRegisterNamespaceTransactionBuffer(builder);
-        RegisterNamespaceTransactionBuffer.addSize(builder, fixSize + namespaceName.length());
+        RegisterNamespaceTransactionBuffer.addSize(builder, size);
         RegisterNamespaceTransactionBuffer.addSignature(builder, signatureVector);
         RegisterNamespaceTransactionBuffer.addSigner(builder, signerVector);
-        RegisterNamespaceTransactionBuffer.addVersion(builder, version);
+        RegisterNamespaceTransactionBuffer.addVersion(builder, getTxVersionforSerialization());
         RegisterNamespaceTransactionBuffer.addType(builder, getType().getValue());
         RegisterNamespaceTransactionBuffer.addMaxFee(builder, feeVector);
         RegisterNamespaceTransactionBuffer.addDeadline(builder, deadlineVector);
+        
         RegisterNamespaceTransactionBuffer.addNamespaceType(builder, getNamespaceType().getValue());
         RegisterNamespaceTransactionBuffer.addDurationParentId(builder, durationParentIdVector);
         RegisterNamespaceTransactionBuffer.addNamespaceId(builder, namespaceIdVector);
@@ -175,6 +176,9 @@ public class RegisterNamespaceTransaction extends Transaction {
         int codedTransaction = RegisterNamespaceTransactionBuffer.endRegisterNamespaceTransactionBuffer(builder);
         builder.finish(codedTransaction);
 
-        return schema.serialize(builder.sizedByteArray());
+        // validate size
+        byte[] output = schema.serialize(builder.sizedByteArray());
+        Validate.isTrue(output.length == size, "Serialized transaction has incorrect length: " + this.getClass());
+        return output;
     }
 }

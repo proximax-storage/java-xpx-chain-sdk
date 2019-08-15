@@ -1,46 +1,52 @@
 openapi: 3.0.0
 info:
   version: 0.7.15
-  title: ProximaX Chain REST API Reference
+  title: Catapult REST API Reference
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  description: ProximaX Chain REST API Reference
+  description: ""
 tags:
 - name: Account routes
   description: |
-    [Account](https://bcdocs.xpxsirius.io/concepts/account.html) related endpoints.
-- name: Blockchain routes
+    Account related
+    endpoints.
+- name: Block routes
   description: |
-    [Block](https://bcdocs.xpxsirius.io/concepts/block.html) related endpoints.
+    Block related endpoints.
+- name: Config routes
+  description: |
+    Config related endpoints.
 - name: Contract routes
   description: |
-    [Contract TODO](https://bcdocs.xpxsirius.io/concepts/mosaic.html) related endpoints.
+    Contract related endpoints.
 - name: Chain routes
   description: |
-    [Chain](https://bcdocs.xpxsirius.io/concepts/block.html) related endpoints.
+    Chain related endpoints.
 - name: Diagnostic routes
   description: |
-    [Diagnostic](https://bcdocs.xpxsirius.io/concepts/node.html) related
-    endpoints.
+    Diagnostic related endpoints.
 - name: Metadata routes
   description: |
-    [Metadata TODO](https://bcdocs.xpxsirius.io/concepts/mosaic.html) related endpoints.
+    Metadata related endpoints.
 - name: Mosaic routes
   description: |
-    [Mosaic](https://bcdocs.xpxsirius.io/concepts/mosaic.html) related endpoints.
+    Mosaic related endpoints.
 - name: Namespace routes
   description: |
-    [Namespace](https://bcdocs.xpxsirius.io/concepts/mosaic.html) related endpoints.
+    Namespace related endpoints.
 - name: Transaction routes
   description: |
-    [Transaction](https://bcdocs.xpxsirius.io/concepts/transaction.html) related endpoints.
+    Transaction related endpoints.
 - name: Network routes
   description: |
     Network related endpoints.
 - name: Node routes
   description: |
-    [Node](https://bcdocs.xpxsirius.io/concepts/node.html) related endpoints.
+    Node related endpoints.
+- name: Upgrade routes
+  description: |
+    Upgrade related endpoints.
 paths:
   "/account/{accountId}":
     get:
@@ -761,6 +767,33 @@ paths:
           description: resource not found
         '409':
           description: invalid argument
+  '/config/{height}':
+    get:
+      tags:
+      - Config routes
+      summary: Get config of network
+      description: Gets config of network at height.
+      operationId: getConfig
+      parameters:
+      - name: height
+        in: path
+        description: The height of the blockchain to get config.
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatapultConfigDTO'
+        '404':
+          description: resource not found
+        '409':
+          description: invalid argument
   '/contract/{contractId}':
     get:
       tags:
@@ -1383,6 +1416,33 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/NodeTimeDTO"
+  '/upgrade/{height}':
+    get:
+      tags:
+      - Upgrade routes
+      summary: Get software info of network
+      description:  Get software info of network at height.
+      operationId: getUpgrade
+      parameters:
+      - name: height
+        in: path
+        description: The height of the blockchain to get software info.
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatapultUpgradeDTO'
+        '404':
+          description: resource not found
+        '409':
+          description: invalid argument
 externalDocs:
   description: ProximaX Developer Center
   url: 'https://proximax.io/'
@@ -1749,8 +1809,8 @@ components:
       properties:
         address:
           type: string
-          description: The address of the account in base 32.
-          example: SAAM2O7SSJ2A7AU3DZJMSTTRFZT5TFDPQ3ZIIJX7
+          description: The address of the account in hexadecimal.
+          example: 9081FCCB41F8C8409A9B99E485E0E28D23BD6304EF7215E01A
         names:
           type: array
           description: The mosaic linked namespace names.
@@ -1812,6 +1872,45 @@ components:
             - type: string
             - $ref: "#/components/schemas/UInt64DTO"
             - type: integer
+    CatapultConfigDTO:
+      type: object
+      required:
+      - catapultConfig
+      properties:
+        catapultConfig:
+          $ref: '#/components/schemas/ConfigDTO'
+    ConfigDTO:
+      type: object
+      required:
+      - height
+      - blockChainConfig
+      - supportedEntityVersions
+      properties:
+        height:
+          $ref: '#/components/schemas/UInt64DTO'
+        blockChainConfig:
+          type: string
+          example: "[network]\n\nidentifier = mijin-test\npublicKey = B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF\ngenerationHash = 7B631D803F912B00DC0CBED3014BBD17A302BA50B99D233B9C2D9533B842ABDF\n\n"
+        supportedEntityVersions:
+          type: string
+          example: "{\n\t\"entities\": [\n\t\t{\n\t\t\t\"name\": \"Block\",\n\t\t\t\"type\": \"33091\",\n\t\t\t\"supportedVersions\": [3]\n\t\t}]}"
+    CatapultUpgradeDTO:
+      type: object
+      required:
+      - catapultUpgrade
+      properties:
+        catapultConfig:
+          $ref: '#/components/schemas/UpgradeDTO'
+    UpgradeDTO:
+      type: object
+      required:
+      - height
+      - catapultVersion
+      properties:
+        height:
+          $ref: '#/components/schemas/UInt64DTO'
+        catapultVersion:
+          $ref: '#/components/schemas/UInt64DTO'
     ContractInfoDTO:
       type: object
       required:
@@ -2548,14 +2647,12 @@ components:
       - namespaceId
       - name
       properties:
-        parentId:
-          $ref: "#/components/schemas/UInt64DTO"
         namespaceId:
           $ref: "#/components/schemas/UInt64DTO"
         name:
           type: string
-          description: The name of the namespace.
-          example: cat
+          description: The full name of the namespace.
+          example: cat.currency
     AliasDTO:
       type: object
       required:

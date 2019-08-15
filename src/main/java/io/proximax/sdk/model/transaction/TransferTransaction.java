@@ -135,7 +135,6 @@ public class TransferTransaction extends Transaction {
     byte[] generateBytes() {
         FlatBufferBuilder builder = new FlatBufferBuilder();
         BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
-        int version = (int) Long.parseLong(Integer.toHexString(getNetworkType().getValue()) + "0" + Integer.toHexString(getVersion()), 16);
 
         // Create Message
         byte[] bytePayload = message.getEncodedPayload();
@@ -168,9 +167,7 @@ public class TransferTransaction extends Transaction {
         int mosaicsVector = TransferTransactionBuffer.createMosaicsVector(builder, mosaicBuffers);
 
         // total size of transaction
-        int size = 
-              // header
-              120 + 
+        int size = HEADER_SIZE + 
               // recipient is always 25 bytes
               25 + 
               // message size is short
@@ -188,7 +185,7 @@ public class TransferTransaction extends Transaction {
         TransferTransactionBuffer.addSize(builder, size);
         TransferTransactionBuffer.addSignature(builder, signatureVector);
         TransferTransactionBuffer.addSigner(builder, signerVector);
-        TransferTransactionBuffer.addVersion(builder, version);
+        TransferTransactionBuffer.addVersion(builder, getTxVersionforSerialization());
         TransferTransactionBuffer.addType(builder, getType().getValue());
         TransferTransactionBuffer.addMaxFee(builder, feeVector);
         TransferTransactionBuffer.addDeadline(builder, deadlineVector);
@@ -202,8 +199,9 @@ public class TransferTransaction extends Transaction {
         int codedTransfer = TransferTransactionBuffer.endTransferTransactionBuffer(builder);
         builder.finish(codedTransfer);
 
+        // validate size
         byte[] output = schema.serialize(builder.sizedByteArray());
-        Validate.isTrue(output.length == size, "Serialized form has incorrect length");
+        Validate.isTrue(output.length == size, "Serialized transaction has incorrect length: " + this.getClass());
         return output;
     }
 }

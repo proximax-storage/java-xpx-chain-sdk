@@ -16,12 +16,9 @@ public final class PropertyModificationBuffer extends Table {
   public PropertyModificationBuffer __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
   public int modificationType() { int o = __offset(4); return o != 0 ? bb.get(o + bb_pos) & 0xFF : 0; }
-  /**
+  /*
    * In case of address it is 25 bytes array. In case of mosaic it is 8 byte array(or 2 uint32 array).
    * In case of transaction it is 2 byte array(ushort)
-   * 
-   * @param j j
-   * @return int
    */
   public int value(int j) { int o = __offset(6); return o != 0 ? bb.get(__vector(o) + j * 1) & 0xFF : 0; }
   public int valueLength() { int o = __offset(6); return o != 0 ? __vector_len(o) : 0; }

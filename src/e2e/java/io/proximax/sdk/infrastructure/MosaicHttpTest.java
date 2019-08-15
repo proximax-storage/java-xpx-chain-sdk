@@ -27,7 +27,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
@@ -37,59 +36,46 @@ import io.proximax.sdk.MosaicRepository;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicInfo;
 import io.proximax.sdk.model.mosaic.MosaicNames;
-import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.reactivex.schedulers.Schedulers;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MosaicHttpTest extends BaseTest {
-    private MosaicRepository mosaicHttp;
+   private static final MosaicId ID = new MosaicId(new BigInteger("0DC67FBE1CAD29E3", 16));
 
-    @BeforeAll
-    void setup() throws IOException {
-        mosaicHttp = new BlockchainApi(new URL(getNodeUrl()), getNetworkType()).createMosaicRepository();
-    }
+   private MosaicRepository mosaicHttp;
 
-    @Test
-    void getMosaic() throws ExecutionException, InterruptedException {
-        MosaicInfo mosaicInfo = mosaicHttp
-                .getMosaic(NetworkCurrencyMosaic.ID)
-                .toFuture()
-                .get();
+   @BeforeAll
+   void setup() throws IOException {
+      mosaicHttp = new BlockchainApi(new URL(getNodeUrl()), getNetworkType()).createMosaicRepository();
+   }
 
-        assertEquals(new BigInteger("1"), mosaicInfo.getHeight());
-        assertEquals(NetworkCurrencyMosaic.ID, mosaicInfo.getMosaicId());
-    }
+   @Test
+   void getMosaic() throws ExecutionException, InterruptedException {
+      MosaicInfo mosaicInfo = mosaicHttp.getMosaic(ID).toFuture().get();
 
-    @Test
-    void getMosaics() throws ExecutionException, InterruptedException {
-        List<MosaicInfo> mosaicsInfo = mosaicHttp
-                .getMosaics(Collections.singletonList(NetworkCurrencyMosaic.ID))
-                .toFuture()
-                .get();
+      assertEquals(new BigInteger("1"), mosaicInfo.getHeight());
+      assertEquals(ID, mosaicInfo.getMosaicId());
+   }
 
-        assertEquals(NetworkCurrencyMosaic.ID, mosaicsInfo.get(0).getMosaicId());
-    }
+   @Test
+   void getMosaics() throws ExecutionException, InterruptedException {
+      List<MosaicInfo> mosaicsInfo = mosaicHttp.getMosaics(Collections.singletonList(ID)).toFuture().get();
 
-    @Test
-    @Disabled("not implemented yet")
-    void getMosaicNames() throws ExecutionException, InterruptedException {
-        List<MosaicNames> mosaicNames = mosaicHttp
-                .getMosaicNames(Collections.singletonList(NetworkCurrencyMosaic.ID))
-                .toFuture()
-                .get();
+      assertEquals(ID, mosaicsInfo.get(0).getMosaicId());
+   }
 
-        assertEquals("xpx", mosaicNames.get(0).getNames().get(0));
-        assertEquals(NetworkCurrencyMosaic.ID, mosaicNames.get(0).getMosaicId());
-    }
+   @Test
+   void getMosaicNames() throws ExecutionException, InterruptedException {
+      List<MosaicNames> mosaicNames = mosaicHttp.getMosaicNames(Collections.singletonList(ID)).toFuture().get();
 
-    @Test
-    void throwExceptionWhenMosaicDoesNotExists() {
-        mosaicHttp
-                .getMosaic(new MosaicId(BigInteger.valueOf(123456789l)))
-                .subscribeOn(Schedulers.single())
-                .test()
-                .awaitDone(2, TimeUnit.SECONDS)
-                .assertFailure(RuntimeException.class);
-    }
+      assertEquals("prx.xpx", mosaicNames.get(0).getNames().get(0));
+      assertEquals(ID, mosaicNames.get(0).getMosaicId());
+   }
+
+   @Test
+   void throwExceptionWhenMosaicDoesNotExists() {
+      mosaicHttp.getMosaic(new MosaicId(BigInteger.valueOf(123456789l))).subscribeOn(Schedulers.single()).test()
+            .awaitDone(2, TimeUnit.SECONDS).assertFailure(RuntimeException.class);
+   }
 
 }

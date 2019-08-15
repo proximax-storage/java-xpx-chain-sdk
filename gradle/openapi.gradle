@@ -3,7 +3,20 @@
  * Use of this source code is governed by the Apache 2.0
  * license that can be found in the LICENSE file.
  */
- 
+
+/*
+to generate DTOs run
+  ./gradlew openApiGenerate
+then copy model from build/generated/.. to src/gen
+
+then resolve compilation issues by replacing
+  (private UInt64DTO \w+ = new )(ArrayList<>)\(\);
+by
+  \1UInt64DTO\(\);
+
+also weird types need to be manually replaced by Object class
+*/
+
 openApiGenerate {
     generatorName = "java"
     inputSpec = "$rootDir/schemas/swagger/swagger.yaml".toString()
