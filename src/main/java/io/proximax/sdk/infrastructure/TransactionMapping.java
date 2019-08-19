@@ -41,6 +41,7 @@ import io.proximax.sdk.model.account.props.AccountPropertyModification;
 import io.proximax.sdk.model.account.props.AccountPropertyModificationType;
 import io.proximax.sdk.model.account.props.AccountPropertyType;
 import io.proximax.sdk.model.alias.AliasAction;
+import io.proximax.sdk.model.blockchain.BlockchainVersion;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.metadata.MetadataModification;
 import io.proximax.sdk.model.metadata.MetadataModificationType;
@@ -99,6 +100,8 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
          return new ModifyAccountPropertiesTransactionMapping().apply(input);
       case ACCOUNT_LINK:
          return new AccountLinkTransactionMapping().apply(input);
+      case BLOCKCHAIN_UPGRADE:
+         return new BlockchainUpgradeTransactionMapping().apply(input);
       default:
          throw new UnsupportedOperationException("Unimplemented transaction type " + type);
       }
@@ -765,5 +768,29 @@ class AccountLinkTransactionMapping extends TransactionMapping {
       } else {
          return json.get("linkAction");
       }
+   }
+}
+/**
+ * Mapping from server response to an blockchain upgrade transaction
+ */
+class BlockchainUpgradeTransactionMapping extends TransactionMapping {
+
+   @Override
+   public BlockchainUpgradeTransaction apply(JsonObject input) {
+      TransactionInfo transactionInfo = this.createTransactionInfo(input.getAsJsonObject("meta"));
+
+      JsonObject transaction = input.getAsJsonObject("transaction");
+      DeadlineBP deadline = new DeadlineBP(GsonUtils.getBigInteger(transaction.getAsJsonArray("deadline")));
+      NetworkType networkType = extractNetworkType(transaction.get("version"));
+      return new BlockchainUpgradeTransaction(
+            networkType, 
+            extractTransactionVersion(transaction.get("version")), 
+            deadline, 
+            extractFee(transaction), 
+            Optional.of(transaction.get("signature").getAsString()), 
+            Optional.of(new PublicAccount(transaction.get("signer").getAsString(), networkType)), 
+            Optional.of(transactionInfo), 
+            GsonUtils.getBigInteger(transaction.getAsJsonArray("upgradePeriod")), 
+            BlockchainVersion.fromVersionValue(GsonUtils.getBigInteger(transaction.getAsJsonArray("newCatapultVersion"))));
    }
 }

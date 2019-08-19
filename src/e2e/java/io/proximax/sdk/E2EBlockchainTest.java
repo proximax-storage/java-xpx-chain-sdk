@@ -37,12 +37,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import io.proximax.sdk.infrastructure.QueryParams;
+import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.blockchain.BlockInfo;
 import io.proximax.sdk.model.blockchain.BlockchainConfig;
 import io.proximax.sdk.model.blockchain.BlockchainUpgrade;
+import io.proximax.sdk.model.blockchain.BlockchainVersion;
 import io.proximax.sdk.model.blockchain.BlocksLimit;
 import io.proximax.sdk.model.blockchain.MerklePath;
 import io.proximax.sdk.model.blockchain.Receipts;
+import io.proximax.sdk.model.transaction.BlockchainUpgradeTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
 
 /**
@@ -174,5 +177,17 @@ public class E2EBlockchainTest extends E2EBaseTest {
       BlockchainUpgrade upgrade = blockchainHttp.getBlockchainUpgrade(BigInteger.ONE).blockingFirst();
       assertEquals(BigInteger.ONE, upgrade.getHeight());
       assertNotNull(upgrade.getVersion());
+   }
+   
+   @Test
+   void upgradeBlockchainVersion() {
+      BlockchainVersion version = new BlockchainVersion(1, 2, 3, 4);
+      Account nemesis = Account.createFromPrivateKey("C06B2CC5D7B66900B2493CF68BE10B7AA8690D973B7F0B65D0DAE4F7AA464716", getNetworkType());
+      BigInteger height = blockchainHttp.getBlockchainHeight().blockingFirst().add(BigInteger.TEN);
+      BlockchainUpgradeTransaction trans = BlockchainUpgradeTransaction.create(height, version, getDeadline(), getNetworkType());
+      transactionHttp.announce(api.sign(trans, nemesis)).blockingFirst();
+      BlockchainUpgradeTransaction conFirmedTrans = (BlockchainUpgradeTransaction)listener.confirmed(nemesis.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      assertEquals(version, conFirmedTrans.getNewVersion());
+      assertEquals(height, conFirmedTrans.getUpgradePeriod());
    }
 }
