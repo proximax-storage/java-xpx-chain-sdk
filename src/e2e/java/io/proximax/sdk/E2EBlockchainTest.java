@@ -58,8 +58,7 @@ public class E2EBlockchainTest extends E2EBaseTest {
    /** logger */
    private static final Logger logger = LoggerFactory.getLogger(E2EBlockchainTest.class);
 
-//   private static final String NEMESIS_PRIVATE_KEY = "put nemesis private key here";
-   private static final String NEMESIS_PRIVATE_KEY = "C06B2CC5D7B66900B2493CF68BE10B7AA8690D973B7F0B65D0DAE4F7AA464716";
+   private static final String NEMESIS_PRIVATE_KEY = "put nemesis private key here";
 
    @Test
    void blockByHeight() {
