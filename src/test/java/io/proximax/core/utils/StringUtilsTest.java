@@ -24,77 +24,97 @@ import org.junit.jupiter.api.Test;
 
 public class StringUtilsTest {
 
-    @Test
-    public void isNullOrEmptyReturnsCorrectResult() {
-        // Assert:
-        MatcherAssert.assertThat(StringUtils.isNullOrEmpty(null), IsEqual.equalTo(true));
-        MatcherAssert.assertThat(StringUtils.isNullOrEmpty(""), IsEqual.equalTo(true));
-        MatcherAssert.assertThat(StringUtils.isNullOrEmpty("   "), IsEqual.equalTo(false));
-        MatcherAssert.assertThat(StringUtils.isNullOrEmpty(" \t  \t"), IsEqual.equalTo(false));
-        MatcherAssert.assertThat(StringUtils.isNullOrEmpty("foo"), IsEqual.equalTo(false));
-        MatcherAssert.assertThat(StringUtils.isNullOrEmpty(" foo "), IsEqual.equalTo(false));
-    }
+   private static final byte[] ENCODED_SIGMA_BYTES = new byte[] { 0x53, 0x69, 0x67, 0x6D, 0x61 };
 
-    @Test
-    public void isNullOrWhitespaceReturnsCorrectResult() {
-        // Assert:
-        MatcherAssert.assertThat(StringUtils.isNullOrWhitespace(null), IsEqual.equalTo(true));
-        MatcherAssert.assertThat(StringUtils.isNullOrWhitespace(""), IsEqual.equalTo(true));
-        MatcherAssert.assertThat(StringUtils.isNullOrWhitespace("   "), IsEqual.equalTo(true));
-        MatcherAssert.assertThat(StringUtils.isNullOrWhitespace(" \t  \t"), IsEqual.equalTo(true));
-        MatcherAssert.assertThat(StringUtils.isNullOrWhitespace("foo"), IsEqual.equalTo(false));
-        MatcherAssert.assertThat(StringUtils.isNullOrWhitespace(" foo "), IsEqual.equalTo(false));
-    }
+   @Test
+   public void isNullOrEmptyReturnsCorrectResult() {
+      // Assert:
+      MatcherAssert.assertThat(StringUtils.isNullOrEmpty(null), IsEqual.equalTo(true));
+      MatcherAssert.assertThat(StringUtils.isNullOrEmpty(""), IsEqual.equalTo(true));
+      MatcherAssert.assertThat(StringUtils.isNullOrEmpty("   "), IsEqual.equalTo(false));
+      MatcherAssert.assertThat(StringUtils.isNullOrEmpty(" \t  \t"), IsEqual.equalTo(false));
+      MatcherAssert.assertThat(StringUtils.isNullOrEmpty("foo"), IsEqual.equalTo(false));
+      MatcherAssert.assertThat(StringUtils.isNullOrEmpty(" foo "), IsEqual.equalTo(false));
+   }
 
-    @Test
-    public void replaceVariableOnStringWithoutVariablesReturnsStringItself() {
-        // Assert:
-        MatcherAssert.assertThat(StringUtils.replaceVariable("quick brown fox", "variable", "-"), IsEqual.equalTo("quick brown fox"));
-        MatcherAssert.assertThat(StringUtils.replaceVariable("", "variable", "-"), IsEqual.equalTo(""));
-        MatcherAssert.assertThat(StringUtils.replaceVariable("variable", "variable", "-"), IsEqual.equalTo("variable"));
-    }
+   @Test
+   public void isNullOrWhitespaceReturnsCorrectResult() {
+      // Assert:
+      MatcherAssert.assertThat(StringUtils.isNullOrWhitespace(null), IsEqual.equalTo(true));
+      MatcherAssert.assertThat(StringUtils.isNullOrWhitespace(""), IsEqual.equalTo(true));
+      MatcherAssert.assertThat(StringUtils.isNullOrWhitespace("   "), IsEqual.equalTo(true));
+      MatcherAssert.assertThat(StringUtils.isNullOrWhitespace(" \t  \t"), IsEqual.equalTo(true));
+      MatcherAssert.assertThat(StringUtils.isNullOrWhitespace("foo"), IsEqual.equalTo(false));
+      MatcherAssert.assertThat(StringUtils.isNullOrWhitespace(" foo "), IsEqual.equalTo(false));
+   }
 
-    @Test
-    public void replaceVariableReplaceOnlyExactVariables() {
-        MatcherAssert.assertThat(StringUtils.replaceVariable("${   }", " ", "-"), IsEqual.equalTo("${   }"));
-        MatcherAssert.assertThat(StringUtils.replaceVariable("${ foo}", "foo", "-"), IsEqual.equalTo("${ foo}"));
-    }
+   @Test
+   public void replaceVariableOnStringWithoutVariablesReturnsStringItself() {
+      // Assert:
+      MatcherAssert.assertThat(StringUtils.replaceVariable("quick brown fox", "variable", "-"),
+            IsEqual.equalTo("quick brown fox"));
+      MatcherAssert.assertThat(StringUtils.replaceVariable("", "variable", "-"), IsEqual.equalTo(""));
+      MatcherAssert.assertThat(StringUtils.replaceVariable("variable", "variable", "-"), IsEqual.equalTo("variable"));
+   }
 
-    @Test
-    public void replaceVariableOnStringWithVariablesReturnsCorrectResults() {
-        MatcherAssert.assertThat(StringUtils.replaceVariable("${variable}", "variable", "-"), IsEqual.equalTo("-"));
-        MatcherAssert.assertThat(StringUtils.replaceVariable("${ }", " ", "-"), IsEqual.equalTo("-"));
-        MatcherAssert.assertThat(StringUtils.replaceVariable("${    }", "    ", "-"), IsEqual.equalTo("-"));
-    }
+   @Test
+   public void replaceVariableReplaceOnlyExactVariables() {
+      MatcherAssert.assertThat(StringUtils.replaceVariable("${   }", " ", "-"), IsEqual.equalTo("${   }"));
+      MatcherAssert.assertThat(StringUtils.replaceVariable("${ foo}", "foo", "-"), IsEqual.equalTo("${ foo}"));
+   }
 
-    @Test
-    public void replaceVariableMustMatchVariableCaseSensitively() {
-        // Assert:
-        MatcherAssert.assertThat(StringUtils.replaceVariable("${Variable}", "variable", "-"), IsEqual.equalTo("${Variable}"));
-        MatcherAssert.assertThat(StringUtils.replaceVariable("${Variable}", "xx", "-"), IsEqual.equalTo("${Variable}"));
-        MatcherAssert.assertThat(StringUtils.replaceVariable("${Variable}", "", "-"), IsEqual.equalTo("${Variable}"));
-    }
+   @Test
+   public void replaceVariableOnStringWithVariablesReturnsCorrectResults() {
+      MatcherAssert.assertThat(StringUtils.replaceVariable("${variable}", "variable", "-"), IsEqual.equalTo("-"));
+      MatcherAssert.assertThat(StringUtils.replaceVariable("${ }", " ", "-"), IsEqual.equalTo("-"));
+      MatcherAssert.assertThat(StringUtils.replaceVariable("${    }", "    ", "-"), IsEqual.equalTo("-"));
+   }
 
-    @Test
-    public void replaceVariableCanReplaceVariableOccurrencesBetweenText() {
-        MatcherAssert.assertThat(StringUtils.replaceVariable("quick ${color} fox", "color", "brown"), IsEqual.equalTo("quick brown fox"));
-        MatcherAssert.assertThat(StringUtils.replaceVariable("jumps over the ${adj} dog", "adj", "lazy"), IsEqual.equalTo("jumps over the lazy dog"));
-    }
+   @Test
+   public void replaceVariableMustMatchVariableCaseSensitively() {
+      // Assert:
+      MatcherAssert.assertThat(StringUtils.replaceVariable("${Variable}", "variable", "-"),
+            IsEqual.equalTo("${Variable}"));
+      MatcherAssert.assertThat(StringUtils.replaceVariable("${Variable}", "xx", "-"), IsEqual.equalTo("${Variable}"));
+      MatcherAssert.assertThat(StringUtils.replaceVariable("${Variable}", "", "-"), IsEqual.equalTo("${Variable}"));
+   }
 
-    @Test
-    public void replaceVariableCanReplaceMultipleOccurrencesOfVariable() {
-        MatcherAssert.assertThat(StringUtils.replaceVariable("quick ${color} ${color} fox", "color", "brown"), IsEqual.equalTo("quick brown brown fox"));
-        MatcherAssert.assertThat(StringUtils.replaceVariable("Buffalo ${} Buffalo ${} ${} ${} Buffalo ${}", "", "buffalo"),
-                IsEqual.equalTo("Buffalo buffalo Buffalo buffalo buffalo buffalo Buffalo buffalo"));
-    }
-    
-    @Test
-    void repeat() {
-       assertEquals("", StringUtils.repeat("hello", 0));
-       assertEquals("", StringUtils.repeat("hello", -2));
-       assertEquals("", StringUtils.repeat("", 7));
-       assertEquals("aaa", StringUtils.repeat("a", 3));
-       assertEquals("abab", StringUtils.repeat("ab", 2));
-       assertEquals(null, StringUtils.repeat(null, 2));
-    }
+   @Test
+   public void replaceVariableCanReplaceVariableOccurrencesBetweenText() {
+      MatcherAssert.assertThat(StringUtils.replaceVariable("quick ${color} fox", "color", "brown"),
+            IsEqual.equalTo("quick brown fox"));
+      MatcherAssert.assertThat(StringUtils.replaceVariable("jumps over the ${adj} dog", "adj", "lazy"),
+            IsEqual.equalTo("jumps over the lazy dog"));
+   }
+
+   @Test
+   public void replaceVariableCanReplaceMultipleOccurrencesOfVariable() {
+      MatcherAssert.assertThat(StringUtils.replaceVariable("quick ${color} ${color} fox", "color", "brown"),
+            IsEqual.equalTo("quick brown brown fox"));
+      MatcherAssert.assertThat(
+            StringUtils.replaceVariable("Buffalo ${} Buffalo ${} ${} ${} Buffalo ${}", "", "buffalo"),
+            IsEqual.equalTo("Buffalo buffalo Buffalo buffalo buffalo buffalo Buffalo buffalo"));
+   }
+
+   @Test
+   void repeat() {
+      assertEquals("", StringUtils.repeat("hello", 0));
+      assertEquals("", StringUtils.repeat("hello", -2));
+      assertEquals("", StringUtils.repeat("", 7));
+      assertEquals("aaa", StringUtils.repeat("a", 3));
+      assertEquals("abab", StringUtils.repeat("ab", 2));
+      assertEquals(null, StringUtils.repeat(null, 2));
+   }
+
+   @Test
+   public void stringCanBeConvertedToByteArray() {
+      // Assert:
+      MatcherAssert.assertThat(StringUtils.getBytes("Sigma"), IsEqual.equalTo(ENCODED_SIGMA_BYTES));
+   }
+
+   @Test
+   public void byteArrayCanBeConvertedToString() {
+      // Assert:
+      MatcherAssert.assertThat(StringUtils.getString(ENCODED_SIGMA_BYTES), IsEqual.equalTo("Sigma"));
+   }
 }
