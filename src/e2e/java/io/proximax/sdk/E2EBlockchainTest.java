@@ -179,15 +179,22 @@ public class E2EBlockchainTest extends E2EBaseTest {
       assertNotNull(upgrade.getVersion());
    }
    
+   /**
+    * this test requires upgrade of nodes to version 1.2.3.4 after 1_000_000_000 blocks get generated => will break
+    * the blockchain!!!!
+    * 
+    * To run it you need first to enter private key for nemesis account
+    */
    @Test
+   @Disabled("This test breaks blockchain after 1_000_000_000 blocks")
    void upgradeBlockchainVersion() {
       BlockchainVersion version = new BlockchainVersion(1, 2, 3, 4);
-      Account nemesis = Account.createFromPrivateKey("C06B2CC5D7B66900B2493CF68BE10B7AA8690D973B7F0B65D0DAE4F7AA464716", getNetworkType());
-      BigInteger height = blockchainHttp.getBlockchainHeight().blockingFirst().add(BigInteger.TEN);
-      BlockchainUpgradeTransaction trans = BlockchainUpgradeTransaction.create(height, version, getDeadline(), getNetworkType());
+      Account nemesis = Account.createFromPrivateKey("put nemesis private key here", getNetworkType());
+      BigInteger upgradePeriod = BigInteger.valueOf(1_000_000_000l);
+      BlockchainUpgradeTransaction trans = BlockchainUpgradeTransaction.create(upgradePeriod, version, getDeadline(), getNetworkType());
       transactionHttp.announce(api.sign(trans, nemesis)).blockingFirst();
       BlockchainUpgradeTransaction conFirmedTrans = (BlockchainUpgradeTransaction)listener.confirmed(nemesis.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
       assertEquals(version, conFirmedTrans.getNewVersion());
-      assertEquals(height, conFirmedTrans.getUpgradePeriod());
+      assertEquals(upgradePeriod, conFirmedTrans.getUpgradePeriod());
    }
 }

@@ -30,13 +30,19 @@ import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
- * Transaction requesting upgrade of blockchain version
+ * Transaction requesting upgrade of blockchain version. Transaction defines version of nodes which will be able to
+ * participate on generation of next block. Transaction becomes valid after upgradePeriod blocks get generated.
+ * 
+ * e.g. if upgrade transaction to version 1.2.3.4 with upgrade period 1000 blocks is accepted in block 50, then starting
+ * block 1050 all nodes that want to participate on generation of new block need to have version 1.2.3.4
+ * 
+ * By default the upgrade period is required to be at least 360
  */
 public class BlockchainUpgradeTransaction extends Transaction {
 
    private final BigInteger upgradePeriod;
    private final BlockchainVersion newVersion;
-   
+
    private final Schema schema = new BlockchainUpgradeTransactionSchema();
 
    /**
@@ -46,14 +52,15 @@ public class BlockchainUpgradeTransaction extends Transaction {
     * @param fee
     * @param signature
     * @param signer
-    * @param transactionInfo
-    * @param upgradePeriod
-    * @param newVersion
+    * @param transactionInfo 
+    * @param upgradePeriod period after version is enforced. Default minimum is 360
+    * @param newVersion new node version which will be enforced after upgrade period elapses
     */
-   public BlockchainUpgradeTransaction(NetworkType networkType, Integer version,
-         TransactionDeadline deadline, BigInteger fee, Optional<String> signature, Optional<PublicAccount> signer,
+   public BlockchainUpgradeTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline,
+         BigInteger fee, Optional<String> signature, Optional<PublicAccount> signer,
          Optional<TransactionInfo> transactionInfo, BigInteger upgradePeriod, BlockchainVersion newVersion) {
-      super(TransactionType.BLOCKCHAIN_UPGRADE, networkType, version, deadline, fee, signature, signer, transactionInfo);
+      super(TransactionType.BLOCKCHAIN_UPGRADE, networkType, version, deadline, fee, signature, signer,
+            transactionInfo);
       // basic validations
       Validate.notNull(upgradePeriod);
       Validate.notNull(newVersion);
@@ -62,19 +69,21 @@ public class BlockchainUpgradeTransaction extends Transaction {
       this.newVersion = newVersion;
    }
 
-   public static BlockchainUpgradeTransaction create(BigInteger upgradePeriod, BlockchainVersion newVersion, TransactionDeadline deadline, NetworkType networkType) {
-      return new BlockchainUpgradeTransaction(networkType, TransactionVersion.BLOCKCHAIN_UPGRADE.getValue(), deadline, BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), upgradePeriod, newVersion);
+   public static BlockchainUpgradeTransaction create(BigInteger upgradePeriod, BlockchainVersion newVersion,
+         TransactionDeadline deadline, NetworkType networkType) {
+      return new BlockchainUpgradeTransaction(networkType, TransactionVersion.BLOCKCHAIN_UPGRADE.getValue(), deadline,
+            BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), upgradePeriod, newVersion);
    }
-   
+
    /**
-    * @return the upgradePeriod
+    * @return the upgradePeriod after which the version becomes required for block generation
     */
    public BigInteger getUpgradePeriod() {
       return upgradePeriod;
    }
 
    /**
-    * @return the newVersion
+    * @return the newVersion new version to which the upgrade is requested
     */
    public BlockchainVersion getNewVersion() {
       return newVersion;
@@ -83,7 +92,7 @@ public class BlockchainUpgradeTransaction extends Transaction {
    @Override
    byte[] generateBytes() {
       FlatBufferBuilder builder = new FlatBufferBuilder();
-      
+
       // prepare data for serialization
       BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
 
@@ -92,10 +101,13 @@ public class BlockchainUpgradeTransaction extends Transaction {
       int signerOffset = CatapultUpgradeTransactionBuffer.createSignerVector(builder, new byte[32]);
       int deadlineOffset = CatapultUpgradeTransactionBuffer.createDeadlineVector(builder,
             UInt64Utils.fromBigInteger(deadlineBigInt));
-      int feeOffset = CatapultUpgradeTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
-      int upgradePeriodOffset = CatapultUpgradeTransactionBuffer.createUpgradePeriodVector(builder, UInt64Utils.fromBigInteger(getUpgradePeriod()));
-      int newCatapultVersionOffset = CatapultUpgradeTransactionBuffer.createNewCatapultVersionVector(builder, UInt64Utils.fromBigInteger(getNewVersion().getVersionValue()));
-      
+      int feeOffset = CatapultUpgradeTransactionBuffer.createMaxFeeVector(builder,
+            UInt64Utils.fromBigInteger(getFee()));
+      int upgradePeriodOffset = CatapultUpgradeTransactionBuffer.createUpgradePeriodVector(builder,
+            UInt64Utils.fromBigInteger(getUpgradePeriod()));
+      int newCatapultVersionOffset = CatapultUpgradeTransactionBuffer.createNewCatapultVersionVector(builder,
+            UInt64Utils.fromBigInteger(getNewVersion().getVersionValue()));
+
       // header, 2 uint64
       int size = HEADER_SIZE + 8 + 8;
 
@@ -110,7 +122,7 @@ public class BlockchainUpgradeTransaction extends Transaction {
 
       CatapultUpgradeTransactionBuffer.addUpgradePeriod(builder, upgradePeriodOffset);
       CatapultUpgradeTransactionBuffer.addNewCatapultVersion(builder, newCatapultVersionOffset);
-      
+
       int codedTransaction = CatapultUpgradeTransactionBuffer.endCatapultUpgradeTransactionBuffer(builder);
       builder.finish(codedTransaction);
 
