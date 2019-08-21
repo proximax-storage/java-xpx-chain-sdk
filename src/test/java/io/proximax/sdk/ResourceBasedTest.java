@@ -15,6 +15,7 @@
  */
 package io.proximax.sdk;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -32,6 +33,7 @@ import org.apache.commons.io.IOUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import io.proximax.core.utils.StringUtils;
 import io.proximax.sdk.utils.GsonUtils;
 
 /**
@@ -109,6 +111,25 @@ public class ResourceBasedTest {
       try (InputStream is = ResourceBasedTest.class.getClassLoader()
             .getResource("serialization/" + name + ".bytes").openStream()) {
          return IOUtils.toByteArray(is);
+      }
+   }
+   
+   /**
+    * read resource on a classpath to a String
+    * 
+    * @param name the name f the resource
+    * @return the String with contents
+    * @throws IOException on error
+    */
+   public static String getResourceAsString(String name) throws IOException {
+      try (InputStream is = ResourceBasedTest.class.getClassLoader().getResourceAsStream(name)) {
+         ByteArrayOutputStream bos = new ByteArrayOutputStream();
+         byte[] buffer = new byte[1024];
+         int size;
+         while ((size = is.read(buffer)) >= 0) {
+            bos.write(buffer, 0, size);
+         }
+         return StringUtils.getString(bos.toByteArray());
       }
    }
 }

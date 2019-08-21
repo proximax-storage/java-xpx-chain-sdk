@@ -102,6 +102,8 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
          return new AccountLinkTransactionMapping().apply(input);
       case BLOCKCHAIN_UPGRADE:
          return new BlockchainUpgradeTransactionMapping().apply(input);
+      case BLOCKCHAIN_CONFIG:
+         return new BlockchainConfigTransactionMapping().apply(input);
       default:
          throw new UnsupportedOperationException("Unimplemented transaction type " + type);
       }
@@ -770,6 +772,7 @@ class AccountLinkTransactionMapping extends TransactionMapping {
       }
    }
 }
+
 /**
  * Mapping from server response to an blockchain upgrade transaction
  */
@@ -792,5 +795,31 @@ class BlockchainUpgradeTransactionMapping extends TransactionMapping {
             Optional.of(transactionInfo), 
             GsonUtils.getBigInteger(transaction.getAsJsonArray("upgradePeriod")), 
             BlockchainVersion.fromVersionValue(GsonUtils.getBigInteger(transaction.getAsJsonArray("newCatapultVersion"))));
+   }
+}
+
+/**
+ * Mapping from server response to an blockchain upgrade transaction
+ */
+class BlockchainConfigTransactionMapping extends TransactionMapping {
+
+   @Override
+   public BlockchainConfigTransaction apply(JsonObject input) {
+      TransactionInfo transactionInfo = this.createTransactionInfo(input.getAsJsonObject("meta"));
+
+      JsonObject transaction = input.getAsJsonObject("transaction");
+      DeadlineBP deadline = new DeadlineBP(GsonUtils.getBigInteger(transaction.getAsJsonArray("deadline")));
+      NetworkType networkType = extractNetworkType(transaction.get("version"));
+      return new BlockchainConfigTransaction(
+            networkType, 
+            extractTransactionVersion(transaction.get("version")), 
+            deadline, 
+            extractFee(transaction), 
+            Optional.of(transaction.get("signature").getAsString()), 
+            Optional.of(new PublicAccount(transaction.get("signer").getAsString(), networkType)), 
+            Optional.of(transactionInfo), 
+            GsonUtils.getBigInteger(transaction.getAsJsonArray("applyHeightDelta")), 
+            transaction.get("blockChainConfig").getAsString(),
+            transaction.get("supportedEntityVersions").getAsString());
    }
 }

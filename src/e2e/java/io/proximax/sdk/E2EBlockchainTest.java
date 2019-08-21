@@ -45,6 +45,7 @@ import io.proximax.sdk.model.blockchain.BlockchainVersion;
 import io.proximax.sdk.model.blockchain.BlocksLimit;
 import io.proximax.sdk.model.blockchain.MerklePath;
 import io.proximax.sdk.model.blockchain.Receipts;
+import io.proximax.sdk.model.transaction.BlockchainConfigTransaction;
 import io.proximax.sdk.model.transaction.BlockchainUpgradeTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
 
@@ -57,12 +58,15 @@ public class E2EBlockchainTest extends E2EBaseTest {
    /** logger */
    private static final Logger logger = LoggerFactory.getLogger(E2EBlockchainTest.class);
 
+//   private static final String NEMESIS_PRIVATE_KEY = "put nemesis private key here";
+   private static final String NEMESIS_PRIVATE_KEY = "C06B2CC5D7B66900B2493CF68BE10B7AA8690D973B7F0B65D0DAE4F7AA464716";
+
    @Test
    void blockByHeight() {
       BlockInfo blockInfo = blockchainHttp.getBlockByHeight(BigInteger.ONE).blockingFirst();
       assertEquals(BigInteger.ONE, blockInfo.getHeight());
    }
-   
+
    @Test
    void listTransactions() {
       QueryParams queryParams = new QueryParams(15);
@@ -70,7 +74,7 @@ public class E2EBlockchainTest extends E2EBaseTest {
       assertTrue(!transactions.isEmpty());
       assertTrue(transactions.size() <= 15);
    }
-   
+
    @Test
    void blocksShouldBeAdded() {
       BigInteger height1 = blockchainHttp.getBlockchainHeight().blockingFirst();
@@ -98,19 +102,19 @@ public class E2EBlockchainTest extends E2EBaseTest {
 
    @Test
    void retrieveNodeInfo() {
-      assertTrue(blockchainHttp.getNodeInfo().blockingFirst().getPublicKey()!=null);
+      assertTrue(blockchainHttp.getNodeInfo().blockingFirst().getPublicKey() != null);
    }
-   
+
    @Test
    void retrieveNodeTime() {
-      assertTrue(blockchainHttp.getNodeTime().blockingFirst().getReceiveTimestamp()!=null);
+      assertTrue(blockchainHttp.getNodeTime().blockingFirst().getReceiveTimestamp() != null);
    }
-   
+
    @Test
    void networkTypeIsAsDeclared() {
       assertEquals(getNetworkType(), blockchainHttp.getNetworkType().blockingFirst());
    }
-   
+
    @Test
    void block1Receipts() {
       Receipts r = blockchainHttp.getBlockReceipts(BigInteger.ONE).blockingFirst();
@@ -119,7 +123,7 @@ public class E2EBlockchainTest extends E2EBaseTest {
       assertEquals(0, r.getAddressResolutionStatements().size());
       assertEquals(0, r.getMosaicResolutionStatements().size());
    }
-   
+
    @Test
    void block2Receipts() {
       Receipts r = blockchainHttp.getBlockReceipts(BigInteger.valueOf(2l)).blockingFirst();
@@ -128,28 +132,31 @@ public class E2EBlockchainTest extends E2EBaseTest {
       assertEquals(0, r.getAddressResolutionStatements().size());
       assertEquals(0, r.getMosaicResolutionStatements().size());
    }
-   
+
    @Test
    void block2MerklePath() {
       // block 2 has receipts but no merkle path items
       checkBlockReceiptMerklePath(2l, 0);
    }
-   
+
    private void checkBlockReceiptMerklePath(long blockHeight, int expectedItems) {
       BigInteger height = BigInteger.valueOf(blockHeight);
       BlockInfo block = blockchainHttp.getBlockByHeight(height).blockingFirst();
-      MerklePath p = blockchainHttp.getReceiptMerklePath(height, block.getBlockReceiptsHash().orElseThrow(()-> new RuntimeException("expected recepts hash"))).blockingFirst();
+      MerklePath p = blockchainHttp
+            .getReceiptMerklePath(height,
+                  block.getBlockReceiptsHash().orElseThrow(() -> new RuntimeException("expected recepts hash")))
+            .blockingFirst();
       // check number of items
       assertEquals(expectedItems, p.getItems().size());
    }
-   
+
    @Test
    void blocksWithLimit() {
       BlocksLimit limit = BlocksLimit.LIMIT_25;
       List<BlockInfo> blocks = blockchainHttp.getBlocksByHeightWithLimit(BigInteger.ONE, limit).blockingFirst();
       assertTrue(blocks.size() <= limit.getLimit());
    }
-   
+
    @Test
    @Disabled("something weird happening there")
    void recentBlocksWithLimit() {
@@ -159,7 +166,7 @@ public class E2EBlockchainTest extends E2EBaseTest {
       // there can not be 25 blocks if we started from last one
       assertTrue(blocks.size() < limit.getLimit(), blocks.size() + " is expected to be less than " + limit.getLimit());
    }
-   
+
    @Test
    void checkBlockchainConfiguration() throws IOException {
       BlockchainConfig config = blockchainHttp.getBlockchainConfiguration(BigInteger.ONE).blockingFirst();
@@ -171,30 +178,46 @@ public class E2EBlockchainTest extends E2EBaseTest {
       assertNotNull(props.getProperty("namespaceRentalFeeSinkPublicKey"));
       assertNotNull(entities.getAsJsonArray("entities").get(0).getAsJsonObject().get("name"));
    }
-   
+
    @Test
    void checkBlockchainUpgrade() {
       BlockchainUpgrade upgrade = blockchainHttp.getBlockchainUpgrade(BigInteger.ONE).blockingFirst();
       assertEquals(BigInteger.ONE, upgrade.getHeight());
       assertNotNull(upgrade.getVersion());
    }
-   
+
    /**
-    * this test requires upgrade of nodes to version 1.2.3.4 after 1_000_000_000 blocks get generated => will break
-    * the blockchain!!!!
+    * this test requires upgrade of nodes to version 1.2.3.4 after 1_000_000_000 blocks get generated => will break the
+    * blockchain!!!!
     * 
-    * To run it you need first to enter private key for nemesis account
+    * To run it you need first to enter private key for nemesis account to constant NEMESIS_PRIVATE_KEY
     */
    @Test
    @Disabled("This test breaks blockchain after 1_000_000_000 blocks")
    void upgradeBlockchainVersion() {
       BlockchainVersion version = new BlockchainVersion(1, 2, 3, 4);
-      Account nemesis = Account.createFromPrivateKey("put nemesis private key here", getNetworkType());
+      Account nemesis = Account.createFromPrivateKey(NEMESIS_PRIVATE_KEY, getNetworkType());
       BigInteger upgradePeriod = BigInteger.valueOf(1_000_000_000l);
-      BlockchainUpgradeTransaction trans = BlockchainUpgradeTransaction.create(upgradePeriod, version, getDeadline(), getNetworkType());
+      BlockchainUpgradeTransaction trans = BlockchainUpgradeTransaction
+            .create(upgradePeriod, version, getDeadline(), getNetworkType());
       transactionHttp.announce(api.sign(trans, nemesis)).blockingFirst();
-      BlockchainUpgradeTransaction conFirmedTrans = (BlockchainUpgradeTransaction)listener.confirmed(nemesis.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      BlockchainUpgradeTransaction conFirmedTrans = (BlockchainUpgradeTransaction) listener
+            .confirmed(nemesis.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
       assertEquals(version, conFirmedTrans.getNewVersion());
       assertEquals(upgradePeriod, conFirmedTrans.getUpgradePeriod());
+   }
+
+   @Test
+   void configTransaction() {
+      Account nemesis = Account.createFromPrivateKey(NEMESIS_PRIVATE_KEY, getNetworkType());
+      BigInteger height = blockchainHttp.getBlockchainHeight().blockingFirst();
+      BlockchainConfig configuration = blockchainHttp.getBlockchainConfiguration(height).blockingFirst();
+      String conf = configuration.getConfig();
+      String entities = configuration.getSupportedEntityVersions();
+      // prepare transaction
+      BlockchainConfigTransaction trans = BlockchainConfigTransaction
+            .create(BigInteger.valueOf(3), conf, entities, getNetworkType(), getDeadline());
+      transactionHttp.announce(api.sign(trans, nemesis)).blockingFirst();
+      listener.confirmed(nemesis.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
    }
 }
