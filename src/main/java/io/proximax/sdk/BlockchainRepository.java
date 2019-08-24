@@ -20,14 +20,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 import io.proximax.sdk.infrastructure.QueryParams;
-import io.proximax.sdk.model.blockchain.BlockInfo;
-import io.proximax.sdk.model.blockchain.BlockchainStorageInfo;
-import io.proximax.sdk.model.blockchain.BlocksLimit;
-import io.proximax.sdk.model.blockchain.MerklePath;
-import io.proximax.sdk.model.blockchain.NetworkType;
-import io.proximax.sdk.model.blockchain.NodeInfo;
-import io.proximax.sdk.model.blockchain.NodeTime;
-import io.proximax.sdk.model.blockchain.Receipts;
+import io.proximax.sdk.model.blockchain.*;
 import io.proximax.sdk.model.transaction.Transaction;
 import io.reactivex.Observable;
 
@@ -140,4 +133,21 @@ public interface BlockchainRepository {
      * @return list of block info instances
      */
     Observable<List<BlockInfo>> getBlocksByHeightWithLimit(BigInteger height, BlocksLimit limit);
+    
+    /**
+     * retrieve network configuration
+     * 
+     * @param height the block height at which retrieved configuration was/is valid
+     * @return network configuration at give height
+     */
+    Observable<BlockchainConfig> getBlockchainConfiguration(BigInteger height);
+    
+    /**
+     * get information about blockchain upgrade at given height
+     * 
+     * @param height the height at which the information is requested
+     * @return the blockchain upgrade information
+     */
+    Observable<BlockchainUpgrade> getBlockchainUpgrade(BigInteger height);
+
 }

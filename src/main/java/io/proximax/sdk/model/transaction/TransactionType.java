@@ -128,7 +128,17 @@ public enum TransactionType {
    /**
     * transaction to modify account contract
     */
-   MODIFY_CONTRACT(0x4157);
+   MODIFY_CONTRACT(0x4157), 
+   
+   /**
+    * Blockchain configuration change transaction
+    */
+   BLOCKCHAIN_CONFIG(0x4159),
+   
+   /**
+    * blockchain version update transaction
+    */
+   BLOCKCHAIN_UPGRADE(0x4158);
 
    private int value;
 

@@ -16,11 +16,17 @@
 
 package io.proximax.core.utils;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
 /**
  * Static class that contains string utility functions.
  */
 public class StringUtils {
    
+   /** standard charset used on the project */
+   private static final Charset ENCODING_CHARSET = StandardCharsets.UTF_8;
+
    private StringUtils() {
       // hiding implicit constructor for utility class
    }
@@ -87,5 +93,25 @@ public class StringUtils {
      */
     public static String replaceVariable(final String string, final String name, final String value) {
         return string.replace(String.format("${%s}", name), value);
+    }
+    
+    /**
+     * Converts a string to a UTF-8 byte array.
+     *
+     * @param s The input string.
+     * @return The output byte array.
+     */
+    public static byte[] getBytes(final String s) {
+        return s.getBytes(ENCODING_CHARSET);
+    }
+
+    /**
+     * Converts a UTF-8 byte array to a string.
+     *
+     * @param bytes The input byte array.
+     * @return The output string.
+     */
+    public static String getString(final byte[] bytes) {
+        return new String(bytes, ENCODING_CHARSET);
     }
 }

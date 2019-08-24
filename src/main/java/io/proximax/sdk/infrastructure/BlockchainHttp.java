@@ -30,22 +30,8 @@ import com.google.gson.reflect.TypeToken;
 
 import io.proximax.sdk.BlockchainApi;
 import io.proximax.sdk.BlockchainRepository;
-import io.proximax.sdk.gen.model.BlockInfoDTO;
-import io.proximax.sdk.gen.model.BlockchainScoreDTO;
-import io.proximax.sdk.gen.model.HeightInfoDTO;
-import io.proximax.sdk.gen.model.MerkleProofInfo;
-import io.proximax.sdk.gen.model.MerkleProofInfoDTO;
-import io.proximax.sdk.gen.model.NodeInfoDTO;
-import io.proximax.sdk.gen.model.NodeTimeDTO;
-import io.proximax.sdk.gen.model.StorageInfoDTO;
-import io.proximax.sdk.model.blockchain.BlockInfo;
-import io.proximax.sdk.model.blockchain.BlockchainStorageInfo;
-import io.proximax.sdk.model.blockchain.BlocksLimit;
-import io.proximax.sdk.model.blockchain.MerklePath;
-import io.proximax.sdk.model.blockchain.NetworkType;
-import io.proximax.sdk.model.blockchain.NodeInfo;
-import io.proximax.sdk.model.blockchain.NodeTime;
-import io.proximax.sdk.model.blockchain.Receipts;
+import io.proximax.sdk.gen.model.*;
+import io.proximax.sdk.model.blockchain.*;
 import io.proximax.sdk.model.transaction.Transaction;
 import io.proximax.sdk.utils.GsonUtils;
 import io.proximax.sdk.utils.dto.BlockchainScoreDTOUtils;
@@ -61,6 +47,8 @@ public class BlockchainHttp extends Http implements BlockchainRepository {
    private static final String BLOCK = "/block/";
    private static final String CHAIN_HEIGHT = "/chain/height";
    private static final String CHAIN_SCORE = "/chain/score";
+   private static final String CONFIG = "/config/";
+   private static final String UPGRADE = "/upgrade/";
    
    private static final Type BLOCK_INFO_LIST_TYPE = new TypeToken<List<BlockInfoDTO>>(){}.getType();
    
@@ -179,7 +167,6 @@ public class BlockchainHttp extends Http implements BlockchainRepository {
 
    @Override
    public Observable<MerklePath> getReceiptMerklePath(BigInteger height, String receiptHash) {
-      System.out.println("merkle path for "+height+ " "+receiptHash);
       return this.client.get(BLOCK + height.toString() + "/receipt/" + receiptHash + "/merkle")
             .map(Http::mapStringOrError)
             .map(str -> gson.fromJson(str, MerkleProofInfo.class))
@@ -203,6 +190,24 @@ public class BlockchainHttp extends Http implements BlockchainRepository {
             .flatMapIterable(item -> item)
             .map(blockInfoDTO -> BlockInfo.fromDto(blockInfoDTO, api.getNetworkType()))
             .toList().toObservable();
+   }
+
+   @Override
+   public Observable<BlockchainConfig> getBlockchainConfiguration(BigInteger height) {
+      return this.client.get(CONFIG + height.toString())
+            .map(Http::mapStringOrError)
+            .map(str -> gson.fromJson(str, CatapultConfigDTO.class))
+            .map(CatapultConfigDTO::getCatapultConfig)
+            .map(BlockchainConfig::fromDto);
+   }
+
+   @Override
+   public Observable<BlockchainUpgrade> getBlockchainUpgrade(BigInteger height) {
+      return this.client.get(UPGRADE + height.toString())
+            .map(Http::mapStringOrError)
+            .map(str -> gson.fromJson(str, CatapultUpgradeDTO.class))
+            .map(CatapultUpgradeDTO::getCatapultConfig)
+            .map(BlockchainUpgrade::fromDto);
    }
    
    /**

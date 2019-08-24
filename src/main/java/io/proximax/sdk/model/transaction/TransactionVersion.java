@@ -115,7 +115,17 @@ public enum TransactionVersion {
    /**
     * contract modification transaction version
     */
-   MODIFY_CONTRACT(3);
+   MODIFY_CONTRACT(3),
+   
+   /**
+    * Blockchain configuration change transaction
+    */
+   BLOCKCHAIN_CONFIG(1),
+   
+   /**
+    * blockchain version update transaction
+    */
+   BLOCKCHAIN_UPGRADE(1);
 
    private int code;
 
