@@ -151,7 +151,7 @@ public abstract class Transaction {
     public BigInteger getMaxFee() {
        // return fee if available, otherwise try to use fee calculation strategy to calculate fee
        return maxFee.orElseGet(() -> feeCalculationStrategy
-                .orElseThrow(() -> new IllegalStateException("Fee and fee calculation strategy missing"))
+                .orElse(FeeCalculationStrategy.ZERO)
                 .calculateFee(getSerializedSize()));
     }
 

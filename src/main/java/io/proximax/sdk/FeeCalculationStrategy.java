@@ -11,6 +11,7 @@ import java.math.BigInteger;
  * Fee calculation strategies for transactions
  */
 public enum FeeCalculationStrategy {
+   ZERO(0),
    LOW(25),
    MEDIUM(250),
    HIGH(2500);
