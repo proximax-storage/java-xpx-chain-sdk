@@ -19,21 +19,42 @@ package io.proximax.sdk.model.transaction;
 import java.math.BigInteger;
 import java.util.Optional;
 
+import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 
 public class FakeTransferTransaction extends Transaction {
 
-    public FakeTransferTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
-        super(TransactionType.TRANSFER, networkType, version, deadline, fee, Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo));
-    }
+   public FakeTransferTransaction(TransactionType type, NetworkType networkType, Integer version,
+         TransactionDeadline deadline, Optional<BigInteger> fee, Optional<String> signature,
+         Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo,
+         Optional<FeeCalculationStrategy> feeCalculationStrategy) {
+      super(type, networkType, version, deadline, fee, signature, signer, transactionInfo, feeCalculationStrategy);
+   }
 
-    public FakeTransferTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee) {
-        super(TransactionType.TRANSFER, networkType, version, deadline, fee, Optional.empty(), Optional.empty(), Optional.empty());
-    }
+   public FakeTransferTransaction(NetworkType networkType, int version, Deadline deadline, BigInteger fee) {
+      this(TransactionType.TRANSFER, networkType, version, deadline, Optional.of(fee), Optional.empty(),
+            Optional.empty(), Optional.empty(), Optional.empty());
+   }
 
-    @Override
-    byte[] generateBytes() {
-        throw new Error("Method no implemented");
-    }
+   public FakeTransferTransaction(NetworkType networkType, int version, Deadline deadline, BigInteger fee,
+         String signature, PublicAccount signer, TransactionInfo transInfo) {
+      this(TransactionType.TRANSFER, networkType, version, deadline, Optional.of(fee), Optional.of(signature),
+            Optional.of(signer), Optional.of(transInfo), Optional.empty());
+   }
+
+   @Override
+   protected byte[] generateBytes() {
+      throw new UnsupportedOperationException("Method no implemented");
+   }
+
+   @Override
+   protected int getPayloadSerializedSize() {
+      throw new UnsupportedOperationException("Method no implemented");
+   }
+
+   @Override
+   protected Transaction copyForSigner(PublicAccount signer) {
+      throw new UnsupportedOperationException("Method no implemented");
+   }
 }

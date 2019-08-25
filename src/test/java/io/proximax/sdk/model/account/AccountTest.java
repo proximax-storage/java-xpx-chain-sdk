@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
 import java.util.Collections;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
@@ -88,7 +89,9 @@ class AccountTest {
                         new Mosaic(new MosaicId(new BigInteger("95442763262823")), BigInteger.valueOf(100))
                 ),
                 PlainMessage.Empty,
-                NetworkType.MIJIN_TEST
+                Optional.of(BigInteger.ZERO),
+                NetworkType.MIJIN_TEST,
+                Optional.empty()
         );
 
         SignedTransaction signedTransaction = account.sign(transferTransaction, "7B631D803F912B00DC0CBED3014BBD17A302BA50B99D233B9C2D9533B842ABDF");

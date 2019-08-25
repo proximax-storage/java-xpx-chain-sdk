@@ -33,11 +33,15 @@ import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.SignedTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
+import io.proximax.sdk.model.transaction.builder.TransactionFactory;
 
 /**
  * Central API for blockchain interaction
  */
 public class BlockchainApi {
+   /** default fee calculation strategy */
+   public static final FeeCalculationStrategy DEFAULT_FEE_CALCULATION_STRATEGY = FeeCalculationStrategy.MEDIUM;
+   
    /** URL of the node */
    private final URL url;
    /** network type of the node */
@@ -215,5 +219,14 @@ public class BlockchainApi {
     */
    private NetworkType queryForNetworkType() {
       return createBlockchainRepository().getNetworkType().timeout(30, TimeUnit.SECONDS).blockingFirst();
+   }
+   
+   /**
+    * @return the factory to get transaction builders
+    */
+   public TransactionFactory transact() {
+      TransactionFactory fac = new TransactionFactory();
+      fac.setNetworkType(getNetworkType());
+      return fac;
    }
 }

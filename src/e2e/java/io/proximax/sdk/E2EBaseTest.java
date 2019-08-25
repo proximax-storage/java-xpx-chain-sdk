@@ -23,7 +23,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -40,7 +39,6 @@ import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.mosaic.Mosaic;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.transaction.DeadlineRaw;
-import io.proximax.sdk.model.transaction.PlainMessage;
 import io.proximax.sdk.model.transaction.SignedTransaction;
 import io.proximax.sdk.model.transaction.TransactionDeadline;
 import io.proximax.sdk.model.transaction.TransferTransaction;
@@ -56,6 +54,8 @@ import io.reactivex.functions.Consumer;
 public class E2EBaseTest extends BaseTest {
    /** logger */
    private static final Logger logger = LoggerFactory.getLogger(E2EBaseTest.class);
+
+   protected static final BigInteger DEFAULT_DEADLINE_DURATION = BigInteger.valueOf(5*60*1000l);
 
    protected BlockchainApi api;
    protected BlockchainRepository blockchainHttp;
@@ -116,7 +116,7 @@ public class E2EBaseTest extends BaseTest {
     * @return deadline
     */
    protected TransactionDeadline getDeadline() {
-      return DeadlineRaw.startNow(BigInteger.valueOf(5*60*1000l));
+      return DeadlineRaw.startNow(DEFAULT_DEADLINE_DURATION);
    }
    
 
@@ -159,11 +159,12 @@ public class E2EBaseTest extends BaseTest {
     * @param amount amount of XPX taking the divisibility into account
     */
    protected void sendMosaic(Account sender, Address recipient, Mosaic mosaicToTransfer) {
-      TransferTransaction transfer = TransferTransaction
-            .create(getDeadline(), recipient, Collections.singletonList(mosaicToTransfer), PlainMessage.Empty, getNetworkType());
+      TransferTransaction transfer = api.transact().transfer().mosaic(mosaicToTransfer).to(recipient)
+            .maxFee(BigInteger.ZERO).deadline(getDeadline()).build();
       SignedTransaction signedTransfer = sender.sign(transfer, api.getNetworkGenerationHash());
       logger.info("Sent XPX to {}: {}", recipient.pretty(), transactionHttp.announce(signedTransfer).blockingFirst());
-      logger.info("request confirmed: {}", listener.confirmed(sender.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      logger.info("request confirmed: {}",
+            listener.confirmed(sender.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
    }
    
    /**

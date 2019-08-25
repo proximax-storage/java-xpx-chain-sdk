@@ -62,7 +62,7 @@ public class AggregateTransaction extends Transaction {
          TransactionDeadline deadline, BigInteger fee, List<Transaction> innerTransactions,
          List<AggregateTransactionCosignature> cosignatures, Optional<String> signature, Optional<PublicAccount> signer,
          Optional<TransactionInfo> transactionInfo) {
-      super(transactionType, networkType, version, deadline, fee, signature, signer, transactionInfo);
+      super(transactionType, networkType, version, deadline, Optional.of(fee), signature, signer, transactionInfo, Optional.empty());
       Validate.notNull(innerTransactions, "InnerTransactions must not be null");
       Validate.notNull(cosignatures, "Cosignatures must not be null");
       this.innerTransactions = innerTransactions;
@@ -165,7 +165,7 @@ public class AggregateTransaction extends Transaction {
    }
 
    @Override
-   byte[] generateBytes() {
+   protected byte[] generateBytes() {
       FlatBufferBuilder builder = new FlatBufferBuilder();
       BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
 
@@ -183,7 +183,7 @@ public class AggregateTransaction extends Transaction {
       int signerVector = AggregateTransactionBuffer.createSignerVector(builder, new byte[32]);
       int deadlineVector = AggregateTransactionBuffer.createDeadlineVector(builder,
             UInt64Utils.fromBigInteger(deadlineBigInt));
-      int feeVector = AggregateTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
+      int feeVector = AggregateTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getMaxFee()));
       int transactionsVector = AggregateTransactionBuffer.createTransactionsVector(builder, transactionsBytes);
 
       AggregateTransactionBuffer.startAggregateTransactionBuffer(builder);
@@ -205,5 +205,16 @@ public class AggregateTransaction extends Transaction {
       byte[] output = schema.serialize(builder.sizedByteArray());
       Validate.isTrue(output.length == size, "Serialized transaction has incorrect length: " + this.getClass());
       return output;
+   }
+
+   @Override
+   protected int getPayloadSerializedSize() {
+      int innerSize = innerTransactions.stream().mapToInt(Transaction::getSerializedSize).sum();
+      return 4 + innerSize;
+   }
+
+   @Override
+   protected Transaction copyForSigner(PublicAccount signer) {
+      throw new UnsupportedOperationException("Can not embed aggregate transaction into aggregate transaction");
    }
 }

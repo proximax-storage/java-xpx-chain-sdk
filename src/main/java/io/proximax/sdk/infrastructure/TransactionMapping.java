@@ -186,11 +186,18 @@ class TransferTransactionMapping extends TransactionMapping {
       // version
       JsonElement version = transaction.get("version");
       // create transfer transaction instance
-      return new TransferTransaction(extractNetworkType(version), extractTransactionVersion(version), deadline,
-            extractFee(transaction),
-            Recipient.from(Address.createFromEncoded(transaction.get("recipient").getAsString())), mosaics, message,
-            transaction.get("signature").getAsString(),
-            new PublicAccount(transaction.get("signer").getAsString(), extractNetworkType(version)), transactionInfo);
+      return new TransferTransaction(
+            extractNetworkType(version), 
+            extractTransactionVersion(version), 
+            deadline,
+            Optional.of(extractFee(transaction)),
+            Recipient.from(Address.createFromEncoded(transaction.get("recipient").getAsString())), 
+            mosaics, 
+            message,
+            Optional.of(transaction.get("signature").getAsString()),
+            Optional.of(new PublicAccount(transaction.get("signer").getAsString(), extractNetworkType(version))), 
+            Optional.of(transactionInfo),
+            Optional.empty());
    }
 }
 

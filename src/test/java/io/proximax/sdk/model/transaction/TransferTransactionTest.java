@@ -25,11 +25,13 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.ResourceBasedTest;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
@@ -54,14 +56,16 @@ class TransferTransactionTest extends ResourceBasedTest {
                 new Address("SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.MIJIN_TEST),
                 Arrays.asList(),
                 PlainMessage.Empty,
-                NetworkType.MIJIN_TEST
+                Optional.empty(),
+                NetworkType.MIJIN_TEST,
+                Optional.of(FeeCalculationStrategy.MEDIUM)
         );
 
         assertEquals(NetworkType.MIJIN_TEST, transferTx.getNetworkType());
         assertTrue(3 == transferTx.getVersion());
         long nowSinceNemesis = new Deadline(0, ChronoUnit.SECONDS).getInstant();
         assertTrue(nowSinceNemesis < transferTx.getDeadline().getInstant());
-        assertEquals(BigInteger.valueOf(0), transferTx.getFee());
+        assertEquals(BigInteger.valueOf(37750), transferTx.getMaxFee());
         assertTrue(new Address("SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.MIJIN_TEST)
                 .equals(transferTx.getRecipient().getAddress().orElseThrow(RuntimeException::new)));
         assertEquals(0, transferTx.getMosaics().size());
@@ -78,7 +82,9 @@ class TransferTransactionTest extends ResourceBasedTest {
                         new Mosaic(new MosaicId(new BigInteger("95442763262823")), BigInteger.valueOf(100))
                 ),
                 PlainMessage.Empty,
-                NetworkType.MIJIN_TEST
+                Optional.of(BigInteger.ZERO),
+                NetworkType.MIJIN_TEST,
+                Optional.empty()
         );
         byte[] actual = transferTransaction.generateBytes();
 //        saveBytes("transfer_trans", actual);
@@ -95,7 +101,9 @@ class TransferTransactionTest extends ResourceBasedTest {
                         new Mosaic(new MosaicId(new BigInteger("95442763262823")), BigInteger.valueOf(100))
                 ),
                 PlainMessage.Empty,
-                NetworkType.MIJIN_TEST
+                Optional.of(BigInteger.ZERO),
+                NetworkType.MIJIN_TEST,
+                Optional.empty()
         );
         byte[] actual = transferTransaction.toAggregate(new PublicAccount("9A49366406ACA952B88BADF5F1E9BE6CE4968141035A60BE503273EA65456B24", NetworkType.MIJIN_TEST)).toAggregateTransactionBytes();
 //        saveBytes("transfer_trans_toagg", actual);
@@ -111,7 +119,9 @@ class TransferTransactionTest extends ResourceBasedTest {
                         new Mosaic(new MosaicId(new BigInteger("95442763262823")), BigInteger.valueOf(100))
                 ),
                 PlainMessage.Empty,
-                NetworkType.MIJIN_TEST
+                Optional.of(BigInteger.ZERO),
+                NetworkType.MIJIN_TEST,
+                Optional.empty()
         );
 
         SignedTransaction signedTransaction = transferTransaction.signWith(account, "7B631D803F912B00DC0CBED3014BBD17A302BA50B99D233B9C2D9533B842ABDF");

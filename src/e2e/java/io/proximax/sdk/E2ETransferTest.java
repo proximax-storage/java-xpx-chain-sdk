@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -41,6 +40,7 @@ import io.proximax.sdk.model.transaction.PlainMessage;
 import io.proximax.sdk.model.transaction.SecureMessage;
 import io.proximax.sdk.model.transaction.SignedTransaction;
 import io.proximax.sdk.model.transaction.TransferTransaction;
+import io.proximax.sdk.model.transaction.builder.TransactionFactory;
 
 /**
  * E2E tests that demonstrate transfers
@@ -54,10 +54,16 @@ public class E2ETransferTest extends E2EBaseTest {
 
    private final Account simpleAccount = new Account(new KeyPair(), getNetworkType());
 
+   private TransactionFactory transact;
+
    @BeforeAll
    void addListener() {
       logger.info("Sending transactions to {}", simpleAccount);
       signup(simpleAccount.getAddress());
+      // create and initialize transaction factory
+      transact = api.transact();
+      transact.setDeadlineMillis(DEFAULT_DEADLINE_DURATION);
+      transact.setFeeCalculationStrategy(FeeCalculationStrategy.MEDIUM);
    }
 
    @AfterAll
@@ -86,22 +92,22 @@ public class E2ETransferTest extends E2EBaseTest {
       SecureMessage secureMessage = SecureMessage.create(seedAccount.getKeyPair().getPrivateKey(),
             simpleAccount.getKeyPair().getPublicKey(),
             "java SDK secure message");
-      transfer(seedAccount, simpleAccount.getAddress(), NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1)), secureMessage);
+      transfer(seedAccount,
+            simpleAccount.getAddress(),
+            NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1)),
+            secureMessage);
    }
 
    @Test
    void insufficientFunds() {
-      TransferTransaction transaction = TransferTransaction.create(getDeadline(),
-            seedAccount.getAddress(),
-            Arrays.asList(NetworkCurrencyMosaic.TEN),
-            PlainMessage.Empty,
-            getNetworkType());
+      TransferTransaction transaction = transact.transfer().to(seedAccount.getAddress())
+            .addMosaic(NetworkCurrencyMosaic.TEN).build();
       SignedTransaction signedTransaction = api.sign(transaction, simpleAccount);
       transactionHttp.announce(signedTransaction).blockingFirst();
       // await error
       listener.status(simpleAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
    }
-   
+
    /**
     * return transactions as specified by arguments signed by the signer account
     * 
@@ -112,8 +118,7 @@ public class E2ETransferTest extends E2EBaseTest {
     * @return instance of signed transaction which can be then announced to the network
     */
    private SignedTransaction signTransfer(Account signerAccount, Address target, Mosaic amount, Message message) {
-      TransferTransaction transaction = TransferTransaction
-            .create(getDeadline(), target, Collections.singletonList(amount), message, getNetworkType());
+      TransferTransaction transaction = transact.transfer().mosaic(amount).to(target).message(message).build();
       return signerAccount.sign(transaction, api.getNetworkGenerationHash());
    }
 
@@ -128,8 +133,7 @@ public class E2ETransferTest extends E2EBaseTest {
     */
    private SignedTransaction signAggregateTransfer(Account signerAccount, Address target, Mosaic amount,
          Message message) {
-      TransferTransaction transfer = TransferTransaction
-            .create(getDeadline(), target, Collections.singletonList(amount), message, getNetworkType());
+      TransferTransaction transfer = transact.transfer().mosaic(amount).to(target).message(message).build();
       // add the modification to the aggregate transaction. has to be bonded because we are going to test the lock
       AggregateTransaction aggregateTransaction = AggregateTransaction.createComplete(getDeadline(),
             Arrays.asList(transfer.toAggregate(signerAccount.getPublicAccount())),

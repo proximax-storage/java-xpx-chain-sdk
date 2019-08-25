@@ -26,6 +26,7 @@ import org.spongycastle.util.encoders.Hex;
 import io.proximax.core.crypto.Hashes;
 import io.proximax.core.crypto.Signature;
 import io.proximax.core.crypto.Signer;
+import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
@@ -44,10 +45,11 @@ public abstract class Transaction {
     private final NetworkType networkType;
     private final Integer version;
     private final TransactionDeadline deadline;
-    private final BigInteger fee;
+    private final Optional<BigInteger> maxFee;
     private final Optional<String> signature;
-    private Optional<PublicAccount> signer;
+    private final Optional<PublicAccount> signer;
     private final Optional<TransactionInfo> transactionInfo;
+    private final Optional<FeeCalculationStrategy> feeCalculationStrategy;
 
     /**
      * Constructor
@@ -56,26 +58,28 @@ public abstract class Transaction {
      * @param networkType     Network type.
      * @param version         Transaction version.
      * @param deadline        Transaction deadline.
-     * @param fee             Transaction fee.
+     * @param maxFee             Transaction fee.
      * @param signature       Transaction signature.
      * @param signer          Transaction signer.
      * @param transactionInfo Transaction meta data info.
      */
-    public Transaction(TransactionType type, NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
+    public Transaction(TransactionType type, NetworkType networkType, Integer version, TransactionDeadline deadline, Optional<BigInteger> maxFee, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo, Optional<FeeCalculationStrategy> feeCalculationStrategy) {
         Validate.notNull(type, "Type must not be null");
         Validate.notNull(networkType, "NetworkType must not be null");
         Validate.notNull(version, "Version must not be null");
         Validate.notNull(deadline, "Deadline must not be null");
-        Validate.notNull(fee, "Fee must not be null");
+        Validate.notNull(maxFee, "MaxFee must not be null");
+        Validate.notNull(feeCalculationStrategy, "feeCalculationStrategy must not be null");
+        Validate.isTrue(maxFee.isPresent() || feeCalculationStrategy.isPresent(), "fee or calculaion strategy need to be provided");
         this.type = type;
         this.networkType = networkType;
         this.version = version;
         this.deadline = deadline;
-        this.fee = fee;
-
+        this.maxFee = maxFee;
         this.signature = signature;
         this.signer = signer;
         this.transactionInfo = transactionInfo;
+        this.feeCalculationStrategy = feeCalculationStrategy;
     }
 
     /**
@@ -144,8 +148,11 @@ public abstract class Transaction {
      *
      * @return fee amount
      */
-    public BigInteger getFee() {
-        return fee;
+    public BigInteger getMaxFee() {
+       // return fee if available, otherwise try to use fee calculation strategy to calculate fee
+       return maxFee.orElseGet(() -> feeCalculationStrategy
+                .orElseThrow(() -> new IllegalStateException("Fee and fee calculation strategy missing"))
+                .calculateFee(getSerializedSize()));
     }
 
     /**
@@ -170,12 +177,44 @@ public abstract class Transaction {
     public Optional<TransactionInfo> getTransactionInfo() { return transactionInfo; }
 
     /**
+     * get number of bytes the transaction will get serialized to
+     * 
+     * @return the number of bytes after serialization
+     */
+    protected int getSerializedSize() {
+       return HEADER_SIZE + getPayloadSerializedSize();
+    }
+    
+    /**
+    * @return the feeCalculationStrategy
+    */
+    public Optional<FeeCalculationStrategy> getFeeCalculationStrategy() {
+       return feeCalculationStrategy;
+    }
+
+    /**
+     * payload size is number of bytes to which the actual transaction data will be serialized to. This
+     * does not include transaction header.
+     * 
+     * @return size of serialized payload
+     */
+    protected abstract int getPayloadSerializedSize();
+    
+    /**
      * generate byte array with serialized form of transaction
      * 
      * @return byte array
      */
-    abstract byte[] generateBytes();
+    protected abstract byte[] generateBytes();
 
+    /**
+     * create copy of he transaction but swap original signer for the one provided
+     * 
+     * @param signer signer to use for the copy of transaction
+     * @return the transaction instance
+     */
+    protected abstract Transaction copyForSigner(PublicAccount signer);
+    
     /**
      * Serialize and sign transaction creating a new SignedTransaction.
      *
@@ -222,7 +261,7 @@ public abstract class Transaction {
      */
     byte[] toAggregateTransactionBytes() {
         // decode signer from hex to byte array
-        byte[] signerBytes = Hex.decode(this.signer.orElseThrow(() -> new IllegalStateException("missing signer")).getPublicKey());
+        byte[] signerBytes = Hex.decode(this.getSigner().orElseThrow(() -> new IllegalStateException("Missing signer! Call toAggregate")).getPublicKey());
         // serialize the transaction
         byte[] bytes = this.generateBytes();
         // we will be removing header (122) and adding size (4), signer (32), version (4), trans type(2)
@@ -251,8 +290,7 @@ public abstract class Transaction {
      * @return instance of Transaction with signer
      */
     public Transaction toAggregate(PublicAccount signer) {
-        this.signer = Optional.of(signer);
-        return this;
+        return copyForSigner(signer);
     }
 
     /**
@@ -303,7 +341,7 @@ public abstract class Transaction {
    @Override
    public String toString() {
       return "Transaction [type=" + type + ", networkType=" + networkType + ", version=" + version + ", deadline="
-            + deadline + ", fee=" + fee + ", signature=" + signature + ", signer=" + signer + ", transactionInfo="
+            + deadline + ", maxFee=" + maxFee + ", signature=" + signature + ", signer=" + signer + ", transactionInfo="
             + transactionInfo + "]";
    }
     

@@ -26,6 +26,7 @@ import java.math.BigInteger;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -52,7 +53,9 @@ public class AggregateTransactionTest extends ResourceBasedTest {
                 new Address("SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.MIJIN_TEST),
                 Collections.emptyList(),
                 PlainMessage.Empty,
-                NetworkType.MIJIN_TEST
+                Optional.of(BigInteger.ZERO),
+                NetworkType.MIJIN_TEST,
+                Optional.empty()
         );
 
         AggregateTransaction aggregateTx = AggregateTransaction.createComplete(
@@ -64,7 +67,7 @@ public class AggregateTransactionTest extends ResourceBasedTest {
         assertTrue(2 == aggregateTx.getVersion());
         long nowSinceNemesis = new Deadline(0, ChronoUnit.SECONDS).getInstant();
         assertTrue(nowSinceNemesis < aggregateTx.getDeadline().getInstant());
-        assertEquals(BigInteger.valueOf(0), aggregateTx.getFee());
+        assertEquals(BigInteger.valueOf(0), aggregateTx.getMaxFee());
         assertEquals(1, aggregateTx.getInnerTransactions().size());
     }
 
@@ -78,7 +81,9 @@ public class AggregateTransactionTest extends ResourceBasedTest {
                         new Mosaic(NetworkCurrencyMosaic.ID, BigInteger.valueOf(10000000))
                 ),
                 PlainMessage.Empty,
-                NetworkType.MIJIN_TEST
+                Optional.of(BigInteger.ZERO),
+                NetworkType.MIJIN_TEST,
+                Optional.empty()
         );
 
         AggregateTransaction aggregateTx = AggregateTransaction.createComplete(
@@ -100,7 +105,9 @@ public class AggregateTransactionTest extends ResourceBasedTest {
                 new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST),
                 Arrays.asList(),
                 new PlainMessage("test-message"),
-                NetworkType.MIJIN_TEST
+                Optional.of(BigInteger.ZERO),
+                NetworkType.MIJIN_TEST,
+                Optional.empty()
         );
 
         AggregateTransaction aggregateTx = AggregateTransaction.createComplete(
