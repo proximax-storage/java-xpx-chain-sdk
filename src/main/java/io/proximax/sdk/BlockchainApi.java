@@ -33,7 +33,7 @@ import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.SignedTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
-import io.proximax.sdk.model.transaction.builder.TransactionFactory;
+import io.proximax.sdk.model.transaction.builder.TransactionBuilderFactory;
 
 /**
  * Central API for blockchain interaction
@@ -224,8 +224,8 @@ public class BlockchainApi {
    /**
     * @return the factory to get transaction builders
     */
-   public TransactionFactory transact() {
-      TransactionFactory fac = new TransactionFactory();
+   public TransactionBuilderFactory transact() {
+      TransactionBuilderFactory fac = new TransactionBuilderFactory();
       fac.setNetworkType(getNetworkType());
       return fac;
    }

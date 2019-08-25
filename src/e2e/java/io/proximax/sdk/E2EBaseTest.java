@@ -42,6 +42,7 @@ import io.proximax.sdk.model.transaction.DeadlineRaw;
 import io.proximax.sdk.model.transaction.SignedTransaction;
 import io.proximax.sdk.model.transaction.TransactionDeadline;
 import io.proximax.sdk.model.transaction.TransferTransaction;
+import io.proximax.sdk.model.transaction.builder.TransactionBuilderFactory;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
@@ -66,6 +67,8 @@ public class E2EBaseTest extends BaseTest {
    protected MetadataRepository metadataHttp;
    protected ContractRepository contractHttp;
    
+   protected TransactionBuilderFactory transact;
+
    protected ListenerRepository listener;
 
    protected Account seedAccount;
@@ -89,6 +92,10 @@ public class E2EBaseTest extends BaseTest {
       metadataHttp = api.createMetadataRepository();
       contractHttp = api.createContractRepository();
       logger.info("Created HTTP interfaces");
+      // create and initialize transaction factory
+      transact = api.transact();
+      transact.setDeadlineMillis(DEFAULT_DEADLINE_DURATION);
+      transact.setFeeCalculationStrategy(FeeCalculationStrategy.ZERO);
       // prepare listener
       listener = api.createListener();
       listener.open().get();

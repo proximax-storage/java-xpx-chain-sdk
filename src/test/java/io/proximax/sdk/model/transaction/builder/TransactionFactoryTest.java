@@ -13,17 +13,17 @@ import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.model.blockchain.NetworkType;
-import io.proximax.sdk.model.transaction.builder.TransactionFactory;
+import io.proximax.sdk.model.transaction.builder.TransactionBuilderFactory;
 
 /**
- * {@link TransactionFactory} tests
+ * {@link TransactionBuilderFactory} tests
  */
 class TransactionFactoryTest {
    private static final NetworkType NETWORK_TYPE = NetworkType.MIJIN_TEST;
    
    @Test
    void prepareFactory() {
-      TransactionFactory fac = new TransactionFactory();
+      TransactionBuilderFactory fac = new TransactionBuilderFactory();
       fac.setNetworkType(NETWORK_TYPE);
       fac.setDeadlineMillis(BigInteger.valueOf(60_000));
       fac.setFeeCalculationStrategy(FeeCalculationStrategy.MEDIUM);

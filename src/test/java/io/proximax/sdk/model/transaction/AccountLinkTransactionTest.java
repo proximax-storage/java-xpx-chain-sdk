@@ -7,10 +7,10 @@ package io.proximax.sdk.model.transaction;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
@@ -35,60 +35,24 @@ class AccountLinkTransactionTest extends ResourceBasedTest {
       TransactionInfo transactionInfo = TransactionInfo.create(BigInteger.TEN, "hash", "merkle");
       String signature = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
       AccountLinkTransaction trans = new AccountLinkTransaction(remoteAccount, AccountLinkAction.LINK, NETWORK_TYPE, 7,
-            deadline, BigInteger.ONE, signature, signer, transactionInfo);
+            deadline, Optional.of(BigInteger.ONE), Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo), Optional.empty());
       // assert object attributes
       assertEquals(remoteAccount, trans.getRemoteAccount());
       assertEquals(AccountLinkAction.LINK, trans.getAction());
       assertEquals(NETWORK_TYPE, trans.getNetworkType());
       assertEquals(7, trans.getVersion());
       assertEquals(deadline, trans.getDeadline());
-      assertEquals(BigInteger.ONE, trans.getFee());
+      assertEquals(BigInteger.ONE, trans.getMaxFee());
       assertEquals(signature, trans.getSignature().orElse("missing"));
       assertEquals(signer, trans.getSigner().orElse(null));
       assertEquals(transactionInfo, trans.getTransactionInfo().orElse(null));
    }
 
    @Test
-   void testShortConstructor() {
-      TransactionDeadline deadline = new FakeDeadline();
-      PublicAccount remoteAccount = new Account(new KeyPair(), NETWORK_TYPE).getPublicAccount();
-      AccountLinkTransaction trans = new AccountLinkTransaction(remoteAccount, AccountLinkAction.LINK, NETWORK_TYPE,
-            deadline, BigInteger.ONE);
-      // assert object attributes
-      assertEquals(remoteAccount, trans.getRemoteAccount());
-      assertEquals(AccountLinkAction.LINK, trans.getAction());
-      assertEquals(NETWORK_TYPE, trans.getNetworkType());
-      assertEquals(TransactionVersion.ACCOUNT_LINK.getValue(), trans.getVersion());
-      assertEquals(deadline, trans.getDeadline());
-      assertEquals(BigInteger.ONE, trans.getFee());
-      assertFalse(trans.getSignature().isPresent());
-      assertFalse(trans.getSigner().isPresent());
-      assertFalse(trans.getTransactionInfo().isPresent());
-   }
-
-   @Test
-   void testStaticConstructor() {
-      TransactionDeadline deadline = new FakeDeadline();
-      PublicAccount remoteAccount = new Account(new KeyPair(), NETWORK_TYPE).getPublicAccount();
-      AccountLinkTransaction trans = AccountLinkTransaction
-            .create(deadline, BigInteger.ONE, remoteAccount, AccountLinkAction.LINK, NETWORK_TYPE);
-      // assert object attributes
-      assertEquals(remoteAccount, trans.getRemoteAccount());
-      assertEquals(AccountLinkAction.LINK, trans.getAction());
-      assertEquals(NETWORK_TYPE, trans.getNetworkType());
-      assertEquals(TransactionVersion.ACCOUNT_LINK.getValue(), trans.getVersion());
-      assertEquals(deadline, trans.getDeadline());
-      assertEquals(BigInteger.ONE, trans.getFee());
-      assertFalse(trans.getSignature().isPresent());
-      assertFalse(trans.getSigner().isPresent());
-      assertFalse(trans.getTransactionInfo().isPresent());
-   }
-
-   @Test
    void serialization() throws IOException {
       TransactionDeadline deadline = new FakeDeadline();
-      AccountLinkTransaction trans = AccountLinkTransaction
-            .create(deadline, BigInteger.ONE, REMOTE_ACCOUNT, AccountLinkAction.LINK, NETWORK_TYPE);
+      AccountLinkTransaction trans = new AccountLinkTransaction(REMOTE_ACCOUNT, AccountLinkAction.LINK, NETWORK_TYPE, 7,
+            deadline, Optional.of(BigInteger.ONE), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
       // serialize
       byte[] actual = trans.generateBytes();
 //      saveBytes("account_link", actual);

@@ -22,7 +22,7 @@ import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.transaction.PlainMessage;
 import io.proximax.sdk.model.transaction.Recipient;
 import io.proximax.sdk.model.transaction.TransferTransaction;
-import io.proximax.sdk.model.transaction.builder.TransactionFactory;
+import io.proximax.sdk.model.transaction.builder.TransactionBuilderFactory;
 import io.proximax.sdk.model.transaction.builder.TransferTransactionBuilder;
 
 /**
@@ -35,7 +35,7 @@ class TransferTransactionBuilderTest {
    @Test
    void testEmptyTransfer() {
       // prepare factory
-      TransactionFactory fac = new TransactionFactory();
+      TransactionBuilderFactory fac = new TransactionBuilderFactory();
       fac.setNetworkType(NETWORK_TYPE);
       fac.setDeadlineMillis(BigInteger.valueOf(60_000));
       fac.setFeeCalculationStrategy(FeeCalculationStrategy.MEDIUM);
@@ -54,7 +54,7 @@ class TransferTransactionBuilderTest {
    @Test
    void testMosaicTransferWithMessage() {
       // prepare factory
-      TransactionFactory fac = new TransactionFactory();
+      TransactionBuilderFactory fac = new TransactionBuilderFactory();
       fac.setNetworkType(NETWORK_TYPE);
       fac.setDeadlineMillis(BigInteger.valueOf(60_000));
       fac.setFeeCalculationStrategy(FeeCalculationStrategy.MEDIUM);

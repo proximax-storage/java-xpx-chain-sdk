@@ -176,7 +176,7 @@ public class AggregateTransaction extends Transaction {
       }
 
       // expected size = header + transactions bytes count + transactions bytes
-      int size = HEADER_SIZE + 4 + transactionsBytes.length;
+      int size = getSerializedSize();
 
       // Create Vectors
       int signatureVector = AggregateTransactionBuffer.createSignatureVector(builder, new byte[64]);

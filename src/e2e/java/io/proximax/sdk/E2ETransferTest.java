@@ -40,7 +40,6 @@ import io.proximax.sdk.model.transaction.PlainMessage;
 import io.proximax.sdk.model.transaction.SecureMessage;
 import io.proximax.sdk.model.transaction.SignedTransaction;
 import io.proximax.sdk.model.transaction.TransferTransaction;
-import io.proximax.sdk.model.transaction.builder.TransactionFactory;
 
 /**
  * E2E tests that demonstrate transfers
@@ -54,16 +53,10 @@ public class E2ETransferTest extends E2EBaseTest {
 
    private final Account simpleAccount = new Account(new KeyPair(), getNetworkType());
 
-   private TransactionFactory transact;
-
    @BeforeAll
    void addListener() {
       logger.info("Sending transactions to {}", simpleAccount);
       signup(simpleAccount.getAddress());
-      // create and initialize transaction factory
-      transact = api.transact();
-      transact.setDeadlineMillis(DEFAULT_DEADLINE_DURATION);
-      transact.setFeeCalculationStrategy(FeeCalculationStrategy.MEDIUM);
    }
 
    @AfterAll

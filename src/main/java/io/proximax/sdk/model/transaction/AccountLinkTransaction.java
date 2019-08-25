@@ -13,6 +13,7 @@ import org.apache.commons.lang3.Validate;
 import com.google.flatbuffers.FlatBufferBuilder;
 
 import io.proximax.core.utils.HexEncoder;
+import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.gen.buffers.AccountLinkTransactionBuffer;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
@@ -23,6 +24,7 @@ import io.proximax.sdk.utils.dto.UInt64Utils;
  */
 public class AccountLinkTransaction extends Transaction {
    private final AccountLinkTransactionSchema schema = new AccountLinkTransactionSchema();
+
    private final PublicAccount remoteAccount;
    private final AccountLinkAction action;
 
@@ -34,69 +36,21 @@ public class AccountLinkTransaction extends Transaction {
     * @param networkType network type
     * @param version transaction version
     * @param deadline transaction deadline
-    * @param fee transaction fee
+    * @param maxFee transaction fee
     * @param signature signature
     * @param signer signer
     * @param transactionInfo transaction information
     */
-   private AccountLinkTransaction(PublicAccount remoteAccount, AccountLinkAction action, NetworkType networkType,
-         Integer version, TransactionDeadline deadline, BigInteger fee, Optional<String> signature,
-         Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
-      super(TransactionType.ACCOUNT_LINK, networkType, version, deadline, fee, signature, signer, transactionInfo);
+   public AccountLinkTransaction(PublicAccount remoteAccount, AccountLinkAction action, NetworkType networkType,
+         Integer version, TransactionDeadline deadline, Optional<BigInteger> maxFee, Optional<String> signature,
+         Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo,
+         Optional<FeeCalculationStrategy> feeCalculationStrategy) {
+      super(TransactionType.ACCOUNT_LINK, networkType, version, deadline, maxFee, signature, signer, transactionInfo,
+            feeCalculationStrategy);
       Validate.notNull(remoteAccount, "remoteAccount has to be specified");
       Validate.notNull(action, "action has to be specified");
       this.remoteAccount = remoteAccount;
       this.action = action;
-   }
-
-   /**
-    * Create new instance of account link transaction
-    * 
-    * @param remoteAccount account to manage link for
-    * @param action link action to perform
-    * @param networkType network type
-    * @param version transaction version
-    * @param deadline transaction deadline
-    * @param fee transaction fee
-    * @param signature signature
-    * @param signer signer
-    * @param transactionInfo transaction information
-    */
-   public AccountLinkTransaction(PublicAccount remoteAccount, AccountLinkAction action, NetworkType networkType,
-         Integer version, TransactionDeadline deadline, BigInteger fee, String signature, PublicAccount signer,
-         TransactionInfo transactionInfo) {
-      this(remoteAccount, action, networkType, version, deadline, fee, Optional.of(signature), Optional.of(signer),
-            Optional.of(transactionInfo));
-   }
-
-   /**
-    * Create new instance of account link transaction
-    * 
-    * @param remoteAccount account to manage link for
-    * @param action link action to perform
-    * @param networkType network type
-    * @param deadline transaction deadline
-    * @param fee transaction fee
-    */
-   public AccountLinkTransaction(PublicAccount remoteAccount, AccountLinkAction action, NetworkType networkType,
-         TransactionDeadline deadline, BigInteger fee) {
-      this(remoteAccount, action, networkType, TransactionVersion.ACCOUNT_LINK.getValue(), deadline, fee,
-            Optional.empty(), Optional.empty(), Optional.empty());
-   }
-
-   /**
-    * Create new instance of account link transaction
-    * 
-    * @param deadline transaction deadline
-    * @param fee transaction fee
-    * @param remoteAccount account to manage link for
-    * @param action link action to perform
-    * @param networkType network type
-    * @return account link transaction instance
-    */
-   public static AccountLinkTransaction create(TransactionDeadline deadline, BigInteger fee,
-         PublicAccount remoteAccount, AccountLinkAction action, NetworkType networkType) {
-      return new AccountLinkTransaction(remoteAccount, action, networkType, deadline, fee);
    }
 
    /**
@@ -114,7 +68,7 @@ public class AccountLinkTransaction extends Transaction {
    }
 
    @Override
-   byte[] generateBytes() {
+   protected byte[] generateBytes() {
       FlatBufferBuilder builder = new FlatBufferBuilder();
       // prepare data
       BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
@@ -125,16 +79,12 @@ public class AccountLinkTransaction extends Transaction {
       int signerVector = AccountLinkTransactionBuffer.createSignerVector(builder, new byte[32]);
       int deadlineVector = AccountLinkTransactionBuffer.createDeadlineVector(builder,
             UInt64Utils.fromBigInteger(deadlineBigInt));
-      int feeVector = AccountLinkTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
+      int feeVector = AccountLinkTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getMaxFee()));
       int remoteAccountVector = AccountLinkTransactionBuffer.createRemoteAccountKeyVector(builder,
             remoteAccountPublicKey);
 
       // total size of transaction
-      int size = HEADER_SIZE +
-            // remote account public key
-            32 +
-            // link action
-            1;
+      int size = getSerializedSize();
 
       // flatbuffer serialization
       AccountLinkTransactionBuffer.startAccountLinkTransactionBuffer(builder);
@@ -155,6 +105,22 @@ public class AccountLinkTransaction extends Transaction {
       byte[] output = schema.serialize(builder.sizedByteArray());
       Validate.isTrue(output.length == size, "Serialized transaction has incorrect length: " + this.getClass());
       return output;
+   }
+
+   @Override
+   protected int getPayloadSerializedSize() {
+      return
+      // remote account public key
+      32 +
+      // link action
+            1;
+   }
+
+   @Override
+   protected Transaction copyForSigner(PublicAccount signer) {
+      return new AccountLinkTransaction(getRemoteAccount(), getAction(), getNetworkType(), getVersion(), getDeadline(),
+            Optional.of(getMaxFee()), getSignature(), Optional.of(signer), getTransactionInfo(),
+            getFeeCalculationStrategy());
    }
 
 }

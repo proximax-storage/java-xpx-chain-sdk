@@ -9,12 +9,11 @@ import java.math.BigInteger;
 
 import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.model.blockchain.NetworkType;
-import io.proximax.sdk.model.transaction.PlainMessage;
 
 /**
  * Central factory to instantiate transaction builders for all transaction types
  */
-public class TransactionFactory {
+public class TransactionBuilderFactory {
    private NetworkType networkType;
    private BigInteger deadlineMillis;
    private FeeCalculationStrategy feeCalculationStrategy;
@@ -88,7 +87,17 @@ public class TransactionFactory {
    public TransferTransactionBuilder transfer() {
       TransferTransactionBuilder builder = new TransferTransactionBuilder();
       initDefaults(builder);
-      builder.message(PlainMessage.Empty);
+      return builder;
+   }
+   
+   /**
+    * get builder for account link transaction
+    * 
+    * @return the account link transaction builder
+    */
+   public AccountLinkTransactionBuilder accountLink() {
+      AccountLinkTransactionBuilder builder = new AccountLinkTransactionBuilder();
+      initDefaults(builder);
       return builder;
    }
 }

@@ -23,7 +23,7 @@ import java.net.URL;
 import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.model.blockchain.NetworkType;
-import io.proximax.sdk.model.transaction.builder.TransactionFactory;
+import io.proximax.sdk.model.transaction.builder.TransactionBuilderFactory;
 
 /**
  * test main API
@@ -42,7 +42,7 @@ class BlockchainApiTest {
    void testRetrieveTransactionFactory() throws MalformedURLException {
       BlockchainApi api = new BlockchainApi(new URL("http://localhost:3000"), NETWORK);
 
-      TransactionFactory fac = api.transact();
+      TransactionBuilderFactory fac = api.transact();
       assertEquals(NETWORK, fac.getNetworkType());
    }
 }

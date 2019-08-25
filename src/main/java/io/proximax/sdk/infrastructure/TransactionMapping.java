@@ -759,10 +759,15 @@ class AccountLinkTransactionMapping extends TransactionMapping {
 
       return new AccountLinkTransaction(
             new PublicAccount(transaction.get("remoteAccountKey").getAsString(), networkType),
-            AccountLinkAction.getByCode(getAction(transaction).getAsByte()), networkType,
-            extractTransactionVersion(transaction.get("version")), deadline, extractFee(transaction),
-            transaction.get("signature").getAsString(),
-            new PublicAccount(transaction.get("signer").getAsString(), networkType), transactionInfo);
+            AccountLinkAction.getByCode(getAction(transaction).getAsByte()), 
+            networkType,
+            extractTransactionVersion(transaction.get("version")), 
+            deadline, 
+            Optional.of(extractFee(transaction)),
+            Optional.of(transaction.get("signature").getAsString()),
+            Optional.of(new PublicAccount(transaction.get("signer").getAsString(), networkType)), 
+            Optional.of(transactionInfo),
+            Optional.empty());
    }
    
    /**
