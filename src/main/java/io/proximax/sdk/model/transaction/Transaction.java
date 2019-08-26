@@ -70,7 +70,6 @@ public abstract class Transaction {
         Validate.notNull(deadline, "Deadline must not be null");
         Validate.notNull(maxFee, "MaxFee must not be null");
         Validate.notNull(feeCalculationStrategy, "feeCalculationStrategy must not be null");
-        Validate.isTrue(maxFee.isPresent() || feeCalculationStrategy.isPresent(), "fee or calculaion strategy need to be provided");
         this.type = type;
         this.networkType = networkType;
         this.version = version;

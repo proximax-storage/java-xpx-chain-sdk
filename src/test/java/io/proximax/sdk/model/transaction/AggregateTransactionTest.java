@@ -41,6 +41,7 @@ import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.Mosaic;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
+import io.proximax.sdk.model.transaction.builder.TransactionBuilderFactory;
 import io.proximax.sdk.utils.GsonUtils;
 
 public class AggregateTransactionTest extends ResourceBasedTest {
@@ -58,11 +59,14 @@ public class AggregateTransactionTest extends ResourceBasedTest {
                 Optional.empty()
         );
 
-        AggregateTransaction aggregateTx = AggregateTransaction.createComplete(
-                new Deadline(2, ChronoUnit.HOURS),
-                Arrays.asList(transferTx.toAggregate(new PublicAccount("9A49366406ACA952B88BADF5F1E9BE6CE4968141035A60BE503273EA65456B24", NetworkType.MIJIN_TEST))),
-                NetworkType.MIJIN_TEST);
-
+        PublicAccount innerSigner = new PublicAccount("9A49366406ACA952B88BADF5F1E9BE6CE4968141035A60BE503273EA65456B24", NetworkType.MIJIN_TEST);
+        
+        AggregateTransaction aggregateTx = new TransactionBuilderFactory().aggregateComplete()
+           .innerTransactions(transferTx.toAggregate(innerSigner))
+           .deadline(new Deadline(2, ChronoUnit.HOURS))
+           .networkType(NetworkType.MIJIN_TEST)
+           .build();
+        
         assertEquals(NetworkType.MIJIN_TEST, aggregateTx.getNetworkType());
         assertTrue(2 == aggregateTx.getVersion());
         long nowSinceNemesis = new Deadline(0, ChronoUnit.SECONDS).getInstant();
@@ -85,12 +89,12 @@ public class AggregateTransactionTest extends ResourceBasedTest {
                 NetworkType.MIJIN_TEST,
                 Optional.empty()
         );
-
-        AggregateTransaction aggregateTx = AggregateTransaction.createComplete(
-                new FakeDeadline(),
-                Collections.singletonList(transferTx.toAggregate(new PublicAccount("846B4439154579A5903B1459C9CF69CB8153F6D0110A7A0ED61DE29AE4810BF2", NetworkType.MIJIN_TEST))),
-                NetworkType.MIJIN_TEST
-        );
+        PublicAccount innerSigner = new PublicAccount("846B4439154579A5903B1459C9CF69CB8153F6D0110A7A0ED61DE29AE4810BF2", NetworkType.MIJIN_TEST);
+        AggregateTransaction aggregateTx = new TransactionBuilderFactory().aggregateComplete()
+              .innerTransactions(transferTx.toAggregate(innerSigner))
+              .deadline(new FakeDeadline())
+              .networkType(NetworkType.MIJIN_TEST)
+              .build();
 
         byte[] actual = aggregateTx.generateBytes();
 //        saveBytes("aggregate_trans", actual);
@@ -110,14 +114,15 @@ public class AggregateTransactionTest extends ResourceBasedTest {
                 Optional.empty()
         );
 
-        AggregateTransaction aggregateTx = AggregateTransaction.createComplete(
-                new FakeDeadline(),
-                Collections.singletonList(transferTx.toAggregate(new PublicAccount("B694186EE4AB0558CA4AFCFDD43B42114AE71094F5A1FC4A913FE9971CACD21D", NetworkType.MIJIN_TEST))),
-                NetworkType.MIJIN_TEST
-        );
+        PublicAccount innerSigner = new PublicAccount("B694186EE4AB0558CA4AFCFDD43B42114AE71094F5A1FC4A913FE9971CACD21D", NetworkType.MIJIN_TEST);
+        AggregateTransaction aggregateTx = new TransactionBuilderFactory().aggregateComplete()
+              .innerTransactions(transferTx.toAggregate(innerSigner))
+              .deadline(new FakeDeadline())
+              .networkType(NetworkType.MIJIN_TEST)
+              .build();
 
         Account cosignatoryAccount = new Account("2a2b1f5d366a5dd5dc56c3c757cf4fe6c66e2787087692cf329d7a49a594658b", NetworkType.MIJIN_TEST);
-        Account cosignatoryAccount2 = new Account("b8afae6f4ad13a1b8aad047b488e0738a437c7389d4ff30c359ac068910c1d59", NetworkType.MIJIN_TEST); // TODO bug with private key
+        Account cosignatoryAccount2 = new Account("b8afae6f4ad13a1b8aad047b488e0738a437c7389d4ff30c359ac068910c1d59", NetworkType.MIJIN_TEST);
 
         SignedTransaction signedTransaction = cosignatoryAccount.signTransactionWithCosignatories(aggregateTx, "7B631D803F912B00DC0CBED3014BBD17A302BA50B99D233B9C2D9533B842ABDF", Arrays.asList(cosignatoryAccount2));
 

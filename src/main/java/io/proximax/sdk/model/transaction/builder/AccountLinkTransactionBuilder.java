@@ -31,8 +31,8 @@ public class AccountLinkTransactionBuilder
 
    @Override
    public AccountLinkTransaction build() {
-      return new AccountLinkTransaction(remoteAccount, action, getNetworkType(), getVersion(), getDeadline(),
-            getMaxFee(), getSignature(), getSigner(), getTransactionInfo(), getFeeCalculationStrategy());
+      return new AccountLinkTransaction(getNetworkType(), getVersion(), getDeadline(), getMaxFee(), getSignature(),
+            getSigner(), getTransactionInfo(), getFeeCalculationStrategy(), remoteAccount, action);
    }
 
    // ------------------------------------- setters ---------------------------------------------//

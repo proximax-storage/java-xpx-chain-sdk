@@ -25,8 +25,9 @@ import io.proximax.sdk.model.blockchain.NetworkType;
  */
 class AccountLinkTransactionTest extends ResourceBasedTest {
    private static final NetworkType NETWORK_TYPE = NetworkType.MAIN_NET;
-   private static final PublicAccount REMOTE_ACCOUNT = new PublicAccount("3fc8ba10229ab5778d05d9c4b7f56676a88bf9295c185acfc0f961db5408cafe", NETWORK_TYPE);
-   
+   private static final PublicAccount REMOTE_ACCOUNT = new PublicAccount(
+         "3fc8ba10229ab5778d05d9c4b7f56676a88bf9295c185acfc0f961db5408cafe", NETWORK_TYPE);
+
    @Test
    void testFullConstructor() {
       TransactionDeadline deadline = new FakeDeadline();
@@ -34,8 +35,9 @@ class AccountLinkTransactionTest extends ResourceBasedTest {
       PublicAccount signer = new Account(new KeyPair(), NETWORK_TYPE).getPublicAccount();
       TransactionInfo transactionInfo = TransactionInfo.create(BigInteger.TEN, "hash", "merkle");
       String signature = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-      AccountLinkTransaction trans = new AccountLinkTransaction(remoteAccount, AccountLinkAction.LINK, NETWORK_TYPE, 7,
-            deadline, Optional.of(BigInteger.ONE), Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo), Optional.empty());
+      AccountLinkTransaction trans = new AccountLinkTransaction(NETWORK_TYPE, 7, deadline, Optional.of(BigInteger.ONE),
+            Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo), Optional.empty(), remoteAccount,
+            AccountLinkAction.LINK);
       // assert object attributes
       assertEquals(remoteAccount, trans.getRemoteAccount());
       assertEquals(AccountLinkAction.LINK, trans.getAction());
@@ -51,8 +53,9 @@ class AccountLinkTransactionTest extends ResourceBasedTest {
    @Test
    void serialization() throws IOException {
       TransactionDeadline deadline = new FakeDeadline();
-      AccountLinkTransaction trans = new AccountLinkTransaction(REMOTE_ACCOUNT, AccountLinkAction.LINK, NETWORK_TYPE, 7,
-            deadline, Optional.of(BigInteger.ONE), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
+      AccountLinkTransaction trans = new AccountLinkTransaction(NETWORK_TYPE, 7, deadline, Optional.of(BigInteger.ONE),
+            Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), REMOTE_ACCOUNT,
+            AccountLinkAction.LINK);
       // serialize
       byte[] actual = trans.generateBytes();
 //      saveBytes("account_link", actual);

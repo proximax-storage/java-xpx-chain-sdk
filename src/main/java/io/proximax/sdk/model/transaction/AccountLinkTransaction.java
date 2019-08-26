@@ -29,22 +29,21 @@ public class AccountLinkTransaction extends Transaction {
    private final AccountLinkAction action;
 
    /**
-    * Create new instance of account link transaction
-    * 
-    * @param remoteAccount account to manage link for
-    * @param action link action to perform
     * @param networkType network type
-    * @param version transaction version
+    * @param version transaction version. Use {@link TransactionVersion#ACCOUNT_LINK} for current version
     * @param deadline transaction deadline
     * @param maxFee transaction fee
-    * @param signature signature
-    * @param signer signer
-    * @param transactionInfo transaction information
+    * @param signature optional signature
+    * @param signer optional signer
+    * @param transactionInfo optional transaction info
+    * @param feeCalculationStrategy optional fee calculation strategy
+    * @param remoteAccount remote account
+    * @param action link/unlink action
     */
-   public AccountLinkTransaction(PublicAccount remoteAccount, AccountLinkAction action, NetworkType networkType,
-         Integer version, TransactionDeadline deadline, Optional<BigInteger> maxFee, Optional<String> signature,
-         Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo,
-         Optional<FeeCalculationStrategy> feeCalculationStrategy) {
+   public AccountLinkTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline,
+         Optional<BigInteger> maxFee, Optional<String> signature, Optional<PublicAccount> signer,
+         Optional<TransactionInfo> transactionInfo, Optional<FeeCalculationStrategy> feeCalculationStrategy,
+         PublicAccount remoteAccount, AccountLinkAction action) {
       super(TransactionType.ACCOUNT_LINK, networkType, version, deadline, maxFee, signature, signer, transactionInfo,
             feeCalculationStrategy);
       Validate.notNull(remoteAccount, "remoteAccount has to be specified");
@@ -109,18 +108,15 @@ public class AccountLinkTransaction extends Transaction {
 
    @Override
    protected int getPayloadSerializedSize() {
-      return
-      // remote account public key
-      32 +
-      // link action
-            1;
+      // remote account public key + link action
+      return 32 + 1;
    }
 
    @Override
    protected Transaction copyForSigner(PublicAccount signer) {
-      return new AccountLinkTransaction(getRemoteAccount(), getAction(), getNetworkType(), getVersion(), getDeadline(),
-            Optional.of(getMaxFee()), getSignature(), Optional.of(signer), getTransactionInfo(),
-            getFeeCalculationStrategy());
+      return new AccountLinkTransaction(getNetworkType(), getVersion(), getDeadline(), Optional.of(getMaxFee()),
+            getSignature(), Optional.of(signer), getTransactionInfo(), getFeeCalculationStrategy(), getRemoteAccount(),
+            getAction());
    }
 
 }

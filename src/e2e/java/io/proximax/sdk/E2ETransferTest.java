@@ -18,7 +18,6 @@ package io.proximax.sdk;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -128,10 +127,10 @@ public class E2ETransferTest extends E2EBaseTest {
          Message message) {
       TransferTransaction transfer = transact.transfer().mosaic(amount).to(target).message(message).build();
       // add the modification to the aggregate transaction. has to be bonded because we are going to test the lock
-      AggregateTransaction aggregateTransaction = AggregateTransaction.createComplete(getDeadline(),
-            Arrays.asList(transfer.toAggregate(signerAccount.getPublicAccount())),
-            getNetworkType());
-      return signerAccount.sign(aggregateTransaction, api.getNetworkGenerationHash());
+      AggregateTransaction aggregateTransaction = transact.aggregateComplete()
+            .innerTransactions(transfer.toAggregate(signerAccount.getPublicAccount())).build();
+      // return signed transaction
+      return api.sign(aggregateTransaction, signerAccount);
    }
 
    /**

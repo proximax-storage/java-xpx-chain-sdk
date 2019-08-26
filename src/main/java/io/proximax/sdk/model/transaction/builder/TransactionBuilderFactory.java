@@ -80,9 +80,9 @@ public class TransactionBuilderFactory {
 
    // ------------------------------ retrieve specific transaction builders ------------------------------- //
    /**
-    * get builder for transfer transaction
+    * create builder for transfer transaction
     * 
-    * @return the transfer transaction builder
+    * @return the builder
     */
    public TransferTransactionBuilder transfer() {
       TransferTransactionBuilder builder = new TransferTransactionBuilder();
@@ -91,13 +91,59 @@ public class TransactionBuilderFactory {
    }
    
    /**
-    * get builder for account link transaction
+    * create builder for account link transaction
     * 
-    * @return the account link transaction builder
+    * @return the builder
     */
    public AccountLinkTransactionBuilder accountLink() {
       AccountLinkTransactionBuilder builder = new AccountLinkTransactionBuilder();
       initDefaults(builder);
       return builder;
+   }
+   
+   /**
+    * create builder for aggregate bonded transaction
+    * 
+    * @return the builder
+    */
+   public AggregateTransactionBuilder aggregateBonded() {
+      AggregateTransactionBuilder builder = AggregateTransactionBuilder.createBonded();
+      initDefaults(builder);
+      return builder;      
+   }
+   
+   /**
+    * create builder for aggregate complete transaction
+    * 
+    * @return the builder
+    */
+   public AggregateTransactionBuilder aggregateComplete() {
+      AggregateTransactionBuilder builder = AggregateTransactionBuilder.createComplete();
+      initDefaults(builder);
+      return builder;      
+   }
+   
+   /**
+    * create builder for mosaic alias transaction
+    * 
+    * @return the builder
+    */
+   public AliasTransactionBuilder aliasMosaic() {
+      AliasTransactionBuilder builder = AliasTransactionBuilder.createForMosaic();
+      initDefaults(builder);
+      return builder;      
+
+   }
+   
+   /**
+    * create builder for address alias transaction
+    * 
+    * @return the builder
+    */
+   public AliasTransactionBuilder aliasAddress() {
+      AliasTransactionBuilder builder = AliasTransactionBuilder.createForAddress();
+      initDefaults(builder);
+      return builder;      
+
    }
 }
