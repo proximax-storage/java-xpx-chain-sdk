@@ -24,7 +24,6 @@ import org.apache.commons.lang3.Validate;
 import com.google.flatbuffers.FlatBufferBuilder;
 
 import io.proximax.core.utils.Base32Encoder;
-import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.gen.buffers.AliasTransactionBuffer;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
@@ -56,23 +55,21 @@ public class AliasTransaction extends Transaction {
     * @param signature optional signature
     * @param signer optional signer
     * @param transactionInfo optional transaction info
-    * @param feeCalculationStrategy optional fee calculation strategy
     * @param mosaicId optional Mosaic ID specified when mosaic alias is being created
     * @param address optional address specified when address alias is being created
     * @param namespaceId namespace Id to get an alias
     * @param aliasAction link/unlink action
     */
    public AliasTransaction(TransactionType type, NetworkType networkType, Integer version, TransactionDeadline deadline,
-         Optional<BigInteger> maxFee, Optional<String> signature, Optional<PublicAccount> signer,
-         Optional<TransactionInfo> transactionInfo, Optional<FeeCalculationStrategy> feeCalculationStrategy,
-         Optional<MosaicId> mosaicId, Optional<Address> address, NamespaceId namespaceId, AliasAction aliasAction) {
-      super(type, networkType, version, deadline, maxFee, signature, signer, transactionInfo, feeCalculationStrategy);
+         BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
+         Optional<TransactionInfo> transactionInfo, Optional<MosaicId> mosaicId, Optional<Address> address,
+         NamespaceId namespaceId, AliasAction aliasAction) {
+      super(type, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
       // validate input
       Validate.notNull(mosaicId, "MosaicId must not be null");
       Validate.notNull(namespaceId, "namespaceId must not be null");
       Validate.notNull(aliasAction, "action must not be null");
-      Validate.isTrue(mosaicId.isPresent() != address.isPresent(),
-            "Address or mosaic has to be specified exclusively");
+      Validate.isTrue(mosaicId.isPresent() != address.isPresent(), "Address or mosaic has to be specified exclusively");
       Validate.isTrue(mosaicId.isPresent() == (type == TransactionType.MOSAIC_ALIAS),
             "Mosaic ID needs to be used with mosaic alias transaction type");
       Validate.isTrue(address.isPresent() == (type == TransactionType.ADDRESS_ALIAS),
@@ -162,18 +159,27 @@ public class AliasTransaction extends Transaction {
       return output;
    }
 
-   @Override
-   protected int getPayloadSerializedSize() {
+   /**
+    * calculate payload size excluding header
+    * 
+    * @param isForAddress try if address alias is created, false otherwise
+    * @return the size
+    */
+   public static int calculatePayloadSize(boolean isForAddress) {
       // alias is either 25 bytes of address or 8 bytes of mosaic ID
-      int aliasIdSize = address.isPresent() ? 25 : 8;
+      int aliasIdSize = isForAddress ? 25 : 8;
       // alias ID + namespace ID + action
       return aliasIdSize + 8 + 1;
+   }
+   
+   @Override
+   protected int getPayloadSerializedSize() {
+      return calculatePayloadSize(address.isPresent());
    }
 
    @Override
    protected Transaction copyForSigner(PublicAccount signer) {
-      return new AliasTransaction(getType(), getNetworkType(), getVersion(), getDeadline(), Optional.of(getMaxFee()),
-            getSignature(), Optional.of(signer), getTransactionInfo(), getFeeCalculationStrategy(), getMosaicId(),
-            getAddress(), getNamespaceId(), getAliasAction());
+      return new AliasTransaction(getType(), getNetworkType(), getVersion(), getDeadline(), getMaxFee(), getSignature(),
+            Optional.of(signer), getTransactionInfo(), getMosaicId(), getAddress(), getNamespaceId(), getAliasAction());
    }
 }

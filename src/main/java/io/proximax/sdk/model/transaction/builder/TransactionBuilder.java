@@ -26,15 +26,15 @@ public abstract class TransactionBuilder<B extends TransactionBuilder<B, T>, T e
    private TransactionType type;
    private Integer version;
    private NetworkType networkType;
-   private Optional<BigInteger> maxFee = Optional.empty();
-   private Optional<String> signature = Optional.empty();
-   private Optional<PublicAccount> signer = Optional.empty();
-   private Optional<TransactionInfo> transactionInfo = Optional.empty();
-   private Optional<FeeCalculationStrategy> feeCalculationStrategy = Optional.empty();
+   private Optional<BigInteger> maxFee;
+   private Optional<String> signature;
+   private Optional<PublicAccount> signer;
+   private Optional<TransactionInfo> transactionInfo;
+   private Optional<FeeCalculationStrategy> feeCalculationStrategy;
    // fixed deadline
-   private Optional<TransactionDeadline> deadline = Optional.empty();
+   private Optional<TransactionDeadline> deadline;
    // duration to generate deadline from the time of call to build
-   private Optional<BigInteger> deadlineMillis = Optional.empty();
+   private Optional<BigInteger> deadlineMillis;
 
    /**
     * @param type
@@ -43,6 +43,13 @@ public abstract class TransactionBuilder<B extends TransactionBuilder<B, T>, T e
    public TransactionBuilder(TransactionType type, Integer version) {
       this.type = type;
       this.version = version;
+      // initialize defaults
+      maxFee = Optional.empty();
+      signature = Optional.empty();
+      signer = Optional.empty();
+      transactionInfo = Optional.empty();
+      deadline = Optional.empty();
+      deadlineMillis = Optional.empty();
    }
 
    /**
@@ -59,8 +66,18 @@ public abstract class TransactionBuilder<B extends TransactionBuilder<B, T>, T e
     */
    public abstract T build();
 
+   /**
+    * calculate maxFee using fee calculation strategy or return 0 maxFee if no strategy was provided
+    * 
+    * @param transactionSize size of transaction in bytes
+    * @return the maxFee
+    */
+   protected BigInteger getMaxFeeCalculation(int transactionSize) {
+      return feeCalculationStrategy.orElse(FeeCalculationStrategy.ZERO).calculateFee(transactionSize);
+   }
+
    // ----------------------------------------- setters --------------------------------------//
-   
+
    /**
     * @param version the version to set
     */
@@ -134,8 +151,8 @@ public abstract class TransactionBuilder<B extends TransactionBuilder<B, T>, T e
       return self();
    }
 
-   //-------------------------------------- getters ---------------------------------------//
-   
+   // -------------------------------------- getters ---------------------------------------//
+
    /**
     * @return the type
     */

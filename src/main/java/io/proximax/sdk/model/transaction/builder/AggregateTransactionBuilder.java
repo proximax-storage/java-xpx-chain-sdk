@@ -5,6 +5,7 @@
  */
 package io.proximax.sdk.model.transaction.builder;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,9 +48,13 @@ public class AggregateTransactionBuilder extends TransactionBuilder<AggregateTra
 
    @Override
    public AggregateTransaction build() {
-      return new AggregateTransaction(getType(), getNetworkType(), getVersion(), getDeadline(), getMaxFee(),
-            getSignature(), getSigner(), getTransactionInfo(), getFeeCalculationStrategy(), innerTransactions,
-            cosignatures);
+      // use or calculate maxFee
+      BigInteger maxFee = getMaxFee().orElseGet(
+            () -> getMaxFeeCalculation(AggregateTransaction.calculatePayloadSize(getInnerTransactions())));
+      // create transaction instance
+      return new AggregateTransaction(getType(), getNetworkType(), getVersion(), getDeadline(), maxFee,
+            getSignature(), getSigner(), getTransactionInfo(), getInnerTransactions(),
+            getCosignatures());
    }
 
    // ------------------------------------- setters ---------------------------------------------//

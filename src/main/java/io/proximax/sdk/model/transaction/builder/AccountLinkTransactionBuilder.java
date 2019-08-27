@@ -5,6 +5,8 @@
  */
 package io.proximax.sdk.model.transaction.builder;
 
+import java.math.BigInteger;
+
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.transaction.AccountLinkAction;
 import io.proximax.sdk.model.transaction.AccountLinkTransaction;
@@ -31,8 +33,12 @@ public class AccountLinkTransactionBuilder
 
    @Override
    public AccountLinkTransaction build() {
-      return new AccountLinkTransaction(getNetworkType(), getVersion(), getDeadline(), getMaxFee(), getSignature(),
-            getSigner(), getTransactionInfo(), getFeeCalculationStrategy(), remoteAccount, action);
+      // use or calculate maxFee
+      BigInteger maxFee = getMaxFee().orElseGet(
+            () -> getMaxFeeCalculation(AccountLinkTransaction.calculatePayloadSize()));
+      // create transaction instance
+      return new AccountLinkTransaction(getNetworkType(), getVersion(), getDeadline(), maxFee, getSignature(),
+            getSigner(), getTransactionInfo(), getRemoteAccount(), getAction());
    }
 
    // ------------------------------------- setters ---------------------------------------------//

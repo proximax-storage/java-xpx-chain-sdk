@@ -13,7 +13,6 @@ import org.apache.commons.lang3.Validate;
 import com.google.flatbuffers.FlatBufferBuilder;
 
 import io.proximax.core.utils.HexEncoder;
-import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.gen.buffers.AccountLinkTransactionBuffer;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
@@ -36,16 +35,13 @@ public class AccountLinkTransaction extends Transaction {
     * @param signature optional signature
     * @param signer optional signer
     * @param transactionInfo optional transaction info
-    * @param feeCalculationStrategy optional fee calculation strategy
     * @param remoteAccount remote account
     * @param action link/unlink action
     */
    public AccountLinkTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline,
-         Optional<BigInteger> maxFee, Optional<String> signature, Optional<PublicAccount> signer,
-         Optional<TransactionInfo> transactionInfo, Optional<FeeCalculationStrategy> feeCalculationStrategy,
-         PublicAccount remoteAccount, AccountLinkAction action) {
-      super(TransactionType.ACCOUNT_LINK, networkType, version, deadline, maxFee, signature, signer, transactionInfo,
-            feeCalculationStrategy);
+         BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
+         Optional<TransactionInfo> transactionInfo, PublicAccount remoteAccount, AccountLinkAction action) {
+      super(TransactionType.ACCOUNT_LINK, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
       Validate.notNull(remoteAccount, "remoteAccount has to be specified");
       Validate.notNull(action, "action has to be specified");
       this.remoteAccount = remoteAccount;
@@ -106,17 +102,20 @@ public class AccountLinkTransaction extends Transaction {
       return output;
    }
 
-   @Override
-   protected int getPayloadSerializedSize() {
+   public static int calculatePayloadSize() {
       // remote account public key + link action
       return 32 + 1;
    }
 
    @Override
+   protected int getPayloadSerializedSize() {
+      return calculatePayloadSize();
+   }
+
+   @Override
    protected Transaction copyForSigner(PublicAccount signer) {
-      return new AccountLinkTransaction(getNetworkType(), getVersion(), getDeadline(), Optional.of(getMaxFee()),
-            getSignature(), Optional.of(signer), getTransactionInfo(), getFeeCalculationStrategy(), getRemoteAccount(),
-            getAction());
+      return new AccountLinkTransaction(getNetworkType(), getVersion(), getDeadline(), getMaxFee(), getSignature(),
+            Optional.of(signer), getTransactionInfo(), getRemoteAccount(), getAction());
    }
 
 }

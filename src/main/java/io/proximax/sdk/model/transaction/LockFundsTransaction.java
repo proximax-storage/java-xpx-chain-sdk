@@ -24,7 +24,6 @@ import org.spongycastle.util.encoders.Hex;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 
-import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.gen.buffers.LockFundsTransactionBuffer;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
@@ -52,17 +51,15 @@ public class LockFundsTransaction extends Transaction {
     * @param signature
     * @param signer
     * @param transactionInfo
-    * @param feeCalculationStrategy
     * @param mosaic
     * @param duration
     * @param signedTransaction
     */
    public LockFundsTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline,
-         Optional<BigInteger> maxFee, Optional<String> signature, Optional<PublicAccount> signer,
-         Optional<TransactionInfo> transactionInfo, Optional<FeeCalculationStrategy> feeCalculationStrategy,
-         Mosaic mosaic, BigInteger duration, SignedTransaction signedTransaction) {
-      super(TransactionType.LOCK, networkType, version, deadline, maxFee, signature, signer, transactionInfo,
-            feeCalculationStrategy);
+         BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
+         Optional<TransactionInfo> transactionInfo, Mosaic mosaic, BigInteger duration,
+         SignedTransaction signedTransaction) {
+      super(TransactionType.LOCK, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
       Validate.notNull(mosaic, "Mosaic must not be null");
       Validate.notNull(duration, "Duration must not be null");
       Validate.notNull(signedTransaction, "Signed transaction must not be null");
@@ -151,16 +148,20 @@ public class LockFundsTransaction extends Transaction {
             + signedTransaction + ", schema=" + schema + "]";
    }
 
-   @Override
-   protected int getPayloadSerializedSize() {
+   public static int calculatePayloadSize() {
       // mosaic id, amount, duration, hash
       return 8 + 8 + 8 + 32;
+   }
+   
+   @Override
+   protected int getPayloadSerializedSize() {
+      return calculatePayloadSize();
    }
 
    @Override
    protected Transaction copyForSigner(PublicAccount signer) {
-      return new LockFundsTransaction(getNetworkType(), getVersion(), getDeadline(), Optional.of(getMaxFee()),
-            getSignature(), Optional.of(signer), getTransactionInfo(), getFeeCalculationStrategy(), getMosaic(),
+      return new LockFundsTransaction(getNetworkType(), getVersion(), getDeadline(), getMaxFee(),
+            getSignature(), Optional.of(signer), getTransactionInfo(), getMosaic(),
             getDuration(), getSignedTransaction());
    }
 }

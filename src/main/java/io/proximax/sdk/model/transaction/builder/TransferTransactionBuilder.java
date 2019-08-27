@@ -5,6 +5,7 @@
  */
 package io.proximax.sdk.model.transaction.builder;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class TransferTransactionBuilder extends TransactionBuilder<TransferTrans
    private Recipient recipient;
    private List<Mosaic> mosaics;
    private Message message;
-   
+
    public TransferTransactionBuilder() {
       super(TransactionType.TRANSFER, TransactionVersion.TRANSFER.getValue());
       // make default message empty
@@ -34,7 +35,6 @@ public class TransferTransactionBuilder extends TransactionBuilder<TransferTrans
       mosaics = new ArrayList<>();
    }
 
-   
    @Override
    protected TransferTransactionBuilder self() {
       return this;
@@ -42,12 +42,16 @@ public class TransferTransactionBuilder extends TransactionBuilder<TransferTrans
 
    @Override
    public TransferTransaction build() {
-      return new TransferTransaction(getNetworkType(), getVersion(), getDeadline(), getMaxFee(), getRecipient(),
-            getMosaics(), getMessage(), getSignature(), getSigner(), getTransactionInfo(), getFeeCalculationStrategy());
+      // use or calculate maxFee
+      BigInteger maxFee = getMaxFee().orElseGet(
+            () -> getMaxFeeCalculation(TransferTransaction.calculatePayloadSize(getMessage(), getMosaics().size())));
+      // create transaction instance
+      return new TransferTransaction(getNetworkType(), getVersion(), getDeadline(), maxFee, getSignature(), getSigner(),
+            getTransactionInfo(), getRecipient(), getMosaics(), getMessage());
    }
 
    // ------------------------------------ setters ------------------------------------//
-   
+
    /**
     * @param recipient the recipient to set
     */
@@ -93,9 +97,9 @@ public class TransferTransactionBuilder extends TransactionBuilder<TransferTrans
    public Message getMessage() {
       return message;
    }
-   
+
    // ----------------------------------------- convenience methods -------------------------------------//
-   
+
    /**
     * convenience call to {@link TransferTransactionBuilder#recipient(Recipient)}
     * 
@@ -122,7 +126,6 @@ public class TransferTransactionBuilder extends TransactionBuilder<TransferTrans
    public TransferTransactionBuilder to(NamespaceId namespaceId) {
       return recipient(Recipient.from(namespaceId));
    }
-
 
    /**
     * @param mosaic add mosaic to the list of transferred mosaics

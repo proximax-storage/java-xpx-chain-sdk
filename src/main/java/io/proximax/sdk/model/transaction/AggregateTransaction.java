@@ -27,7 +27,6 @@ import org.spongycastle.util.encoders.Hex;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 
-import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.gen.buffers.AggregateTransactionBuffer;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.PublicAccount;
@@ -56,16 +55,15 @@ public class AggregateTransaction extends Transaction {
     * @param signature optional signature
     * @param signer optional signer
     * @param transactionInfo optional transaction info
-    * @param feeCalculationStrategy optional fee calculation strategy
     * @param innerTransactions inner transactions of this aggregate transaction
     * @param cosignatures available cosignatures if any
     */
    public AggregateTransaction(TransactionType type, NetworkType networkType, Integer version,
-         TransactionDeadline deadline, Optional<BigInteger> maxFee, Optional<String> signature,
+         TransactionDeadline deadline, BigInteger maxFee, Optional<String> signature,
          Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo,
-         Optional<FeeCalculationStrategy> feeCalculationStrategy, List<Transaction> innerTransactions,
+         List<Transaction> innerTransactions,
          List<AggregateTransactionCosignature> cosignatures) {
-      super(type, networkType, version, deadline, maxFee, signature, signer, transactionInfo, feeCalculationStrategy);
+      super(type, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
       Validate.notNull(innerTransactions, "InnerTransactions must not be null");
       Validate.notNull(cosignatures, "Cosignatures must not be null");
       Validate.validState(type == TransactionType.AGGREGATE_BONDED || type == TransactionType.AGGREGATE_COMPLETE,
@@ -185,12 +183,22 @@ public class AggregateTransaction extends Transaction {
       return output;
    }
 
-   @Override
-   protected int getPayloadSerializedSize() {
+   /**
+    * calculate payload size excluding header
+    * 
+    * @param innerTransactions list of transactions inside of this aggregate transacion
+    * @return the size
+    */
+   public static int calculatePayloadSize(List<Transaction> innerTransactions) {
       // sum sizes of inner transactions, subtract 80 as toAggregateTransactionBytes leaves out 80 bytes of header
       int innerSize = innerTransactions.stream().mapToInt(Transaction::getSerializedSize).map(size -> size - 80).sum();
       // transactions size + transactions
       return 4 + innerSize;
+   }
+   
+   @Override
+   protected int getPayloadSerializedSize() {
+      return calculatePayloadSize(getInnerTransactions());
    }
 
    @Override

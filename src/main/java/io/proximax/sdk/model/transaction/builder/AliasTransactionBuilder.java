@@ -5,6 +5,7 @@
  */
 package io.proximax.sdk.model.transaction.builder;
 
+import java.math.BigInteger;
 import java.util.Optional;
 
 import org.apache.commons.lang3.Validate;
@@ -20,8 +21,7 @@ import io.proximax.sdk.model.transaction.TransactionVersion;
 /**
  * builder for {@link AliasTransaction}
  */
-public class AliasTransactionBuilder
-      extends TransactionBuilder<AliasTransactionBuilder, AliasTransaction> {
+public class AliasTransactionBuilder extends TransactionBuilder<AliasTransactionBuilder, AliasTransaction> {
 
    private Optional<MosaicId> mosaicId;
    private Optional<Address> address;
@@ -35,11 +35,11 @@ public class AliasTransactionBuilder
    public static AliasTransactionBuilder createForAddress() {
       return new AliasTransactionBuilder(TransactionType.ADDRESS_ALIAS, TransactionVersion.ADDRESS_ALIAS.getValue());
    }
-   
+
    public static AliasTransactionBuilder createForMosaic() {
       return new AliasTransactionBuilder(TransactionType.MOSAIC_ALIAS, TransactionVersion.MOSAIC_ALIAS.getValue());
    }
-   
+
    @Override
    protected AliasTransactionBuilder self() {
       return this;
@@ -47,20 +47,26 @@ public class AliasTransactionBuilder
 
    @Override
    public AliasTransaction build() {
-      return null;
+      // use or calculate maxFee
+      BigInteger maxFee = getMaxFee()
+            .orElseGet(() -> getMaxFeeCalculation(AliasTransaction.calculatePayloadSize(getAddress().isPresent())));
+      // create transaction instance
+      return new AliasTransaction(getType(), getNetworkType(), getVersion(), getDeadline(), maxFee, getSignature(),
+            getSigner(), getTransactionInfo(), getMosaicId(), getAddress(), getNamespaceId(), getAliasAction());
    }
 
    // ------------------------------------- setters ---------------------------------------------//
 
-
    public AliasTransactionBuilder mosaicId(MosaicId mosaicId) {
-      Validate.isTrue(getType() == TransactionType.MOSAIC_ALIAS, "Mosaic ID alias can be created only by mosaic alias builder");
+      Validate.isTrue(getType() == TransactionType.MOSAIC_ALIAS,
+            "Mosaic ID alias can be created only by mosaic alias builder");
       this.mosaicId = Optional.of(mosaicId);
       return self();
    }
 
    public AliasTransactionBuilder address(Address address) {
-      Validate.isTrue(getType() == TransactionType.ADDRESS_ALIAS, "Address alias can be created only by address alias builder");
+      Validate.isTrue(getType() == TransactionType.ADDRESS_ALIAS,
+            "Address alias can be created only by address alias builder");
       this.address = Optional.of(address);
       return self();
    }
@@ -104,23 +110,23 @@ public class AliasTransactionBuilder
    public AliasAction getAliasAction() {
       return aliasAction;
    }
-   
+
    // -------------------------------------- convenience --------------------------------------------//
-   
+
    public AliasTransactionBuilder link(MosaicId mosaicId) {
       return aliasAction(AliasAction.LINK).mosaicId(mosaicId);
    }
-   
+
    public AliasTransactionBuilder link(Address address) {
       return aliasAction(AliasAction.LINK).address(address);
    }
-   
+
    public AliasTransactionBuilder unlink(MosaicId mosaicId) {
       return aliasAction(AliasAction.UNLINK).mosaicId(mosaicId);
    }
-   
+
    public AliasTransactionBuilder unlink(Address address) {
       return aliasAction(AliasAction.UNLINK).address(address);
    }
-   
+
 }

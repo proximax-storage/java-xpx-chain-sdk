@@ -132,7 +132,6 @@ public class TransactionBuilderFactory {
       AliasTransactionBuilder builder = AliasTransactionBuilder.createForMosaic();
       initDefaults(builder);
       return builder;      
-
    }
    
    /**
@@ -144,6 +143,16 @@ public class TransactionBuilderFactory {
       AliasTransactionBuilder builder = AliasTransactionBuilder.createForAddress();
       initDefaults(builder);
       return builder;      
-
+   }
+   
+   /**
+    * create builder for lock funds transaction
+    * 
+    * @return the builder
+    */
+   public LockFundsTransactionBuilder lockFunds() {
+      LockFundsTransactionBuilder builder = new LockFundsTransactionBuilder();
+      initDefaults(builder);
+      return builder; 
    }
 }

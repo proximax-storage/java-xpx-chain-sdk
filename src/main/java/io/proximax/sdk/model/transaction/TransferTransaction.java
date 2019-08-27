@@ -17,7 +17,6 @@
 package io.proximax.sdk.model.transaction;
 
 import java.math.BigInteger;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,15 +24,12 @@ import org.apache.commons.lang3.Validate;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 
-import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.gen.buffers.MessageBuffer;
 import io.proximax.sdk.gen.buffers.MosaicBuffer;
 import io.proximax.sdk.gen.buffers.TransferTransactionBuffer;
-import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.Mosaic;
-import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
@@ -42,103 +38,36 @@ import io.proximax.sdk.utils.dto.UInt64Utils;
  * @since 1.0
  */
 public class TransferTransaction extends Transaction {
+   private final Schema schema = new TransferTransactionSchema();
+
    private final Recipient recipient;
    private final List<Mosaic> mosaics;
    private final Message message;
-   private final Schema schema = new TransferTransactionSchema();
 
    /**
-    * private raw all-argument constructor
-    * 
-    * @param networkType type of the network
-    * @param version transaction version
+    * @param networkType network type
+    * @param version transaction version. Use {@link TransactionVersion#TRANSFER} for current version
     * @param deadline transaction deadline
-    * @param maxFee optional maxFee declaring maximum allowed fee for transaction
+    * @param maxFee transaction fee
+    * @param signature optional signature
+    * @param signer optional signer
+    * @param transactionInfo optional transaction info
     * @param recipient transfer recipient
     * @param mosaics list of mosaic values that is to be transferred
     * @param message message
-    * @param signature transaction signature
-    * @param signer transaction signer
-    * @param transactionInfo transaction info
-    * @param feeCalculationStrategy fee calculation strategy used when fee is not specified
     */
-   public TransferTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline,
-         Optional<BigInteger> maxFee, Recipient recipient, List<Mosaic> mosaics, Message message,
+   public TransferTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger maxFee,
          Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo,
-         Optional<FeeCalculationStrategy> feeCalculationStrategy) {
-      super(TransactionType.TRANSFER, networkType, version, deadline, maxFee, signature, signer, transactionInfo,
-            feeCalculationStrategy);
+         Recipient recipient, List<Mosaic> mosaics, Message message) {
+      super(TransactionType.TRANSFER, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
       Validate.notNull(recipient, "Recipient must not be null");
       Validate.notNull(mosaics, "Mosaics must not be null");
       Validate.notNull(message, "Message must not be null");
       this.recipient = recipient;
-      this.mosaics = Collections.unmodifiableList(mosaics);
+      this.mosaics = mosaics;
       this.message = message;
    }
 
-   /**
-    * Create generic transfer transaction with unspecified recipient
-    * 
-    * @param deadline transaction deadline
-    * @param recipient transfer recipient
-    * @param mosaics list of mosaic values that is to be transferred
-    * @param message message
-    * @param maxFee optional maxFee declaring maximum allowed fee for transaction
-    * @param networkType type of the network
-    * @param feeCalculationStrategy fee calculation strategy used when fee is not specified
-    * @return the transaction instance
-    */
-   public static TransferTransaction create(TransactionDeadline deadline, Recipient recipient, List<Mosaic> mosaics,
-         Message message, Optional<BigInteger> maxFee, NetworkType networkType,
-         Optional<FeeCalculationStrategy> feeCalculationStrategy) {
-      return new TransferTransaction(networkType, TransactionVersion.TRANSFER.getValue(), deadline, maxFee, recipient,
-            mosaics, message, Optional.empty(), Optional.empty(), Optional.empty(), feeCalculationStrategy);
-   }
-
-   /**
-    * Create transfer transaction with recipient specified as address
-    * 
-    * @param deadline transaction deadline
-    * @param address transfer recipient
-    * @param mosaics list of mosaic values that is to be transferred
-    * @param message message
-    * @param maxFee optional maxFee declaring maximum allowed fee for transaction
-    * @param networkType type of the network
-    * @param feeCalculationStrategy fee calculation strategy used when fee is not specified
-    * @return the transaction instance
-    */
-   public static TransferTransaction create(TransactionDeadline deadline, Address address, List<Mosaic> mosaics,
-         Message message, Optional<BigInteger> maxFee, NetworkType networkType,
-         Optional<FeeCalculationStrategy> feeCalculationStrategy) {
-      return new TransferTransaction(networkType, TransactionVersion.TRANSFER.getValue(), deadline, maxFee, Recipient.from(address),
-            mosaics, message, Optional.empty(), Optional.empty(), Optional.empty(), feeCalculationStrategy);
-   }
-
-   /**
-    * Create transfer transaction with recipient specified as namespace ID
-    * 
-    * @param deadline transaction deadline
-    * @param namespaceId transfer recipient
-    * @param mosaics list of mosaic values that is to be transferred
-    * @param message message
-    * @param maxFee optional maxFee declaring maximum allowed fee for transaction
-    * @param networkType type of the network
-    * @param feeCalculationStrategy fee calculation strategy used when fee is not specified
-    * @return the transaction instance
-    */
-   public static TransferTransaction create(TransactionDeadline deadline, NamespaceId namespaceId, List<Mosaic> mosaics,
-         Message message, Optional<BigInteger> maxFee, NetworkType networkType,
-         Optional<FeeCalculationStrategy> feeCalculationStrategy) {
-      return new TransferTransaction(networkType, TransactionVersion.TRANSFER.getValue(), deadline, maxFee, Recipient.from(namespaceId),
-            mosaics, message, Optional.empty(), Optional.empty(), Optional.empty(), feeCalculationStrategy);
-   }
-
-   @Override
-   protected Transaction copyForSigner(PublicAccount signer) {
-      return new TransferTransaction(getNetworkType(), getVersion(), getDeadline(), Optional.of(getMaxFee()), getRecipient(),
-            getMosaics(), getMessage(), getSignature(), Optional.of(signer), getTransactionInfo(), getFeeCalculationStrategy());
-   }
-   
    /**
     * Returns the recipient.
     *
@@ -166,40 +95,13 @@ public class TransferTransaction extends Transaction {
       return message;
    }
 
-   /**
-    * get message payload serialized to byte array
-    * 
-    * @return payload byte array
-    */
-   private byte[] getPayloadBytes() {
-      return getMessage().getEncodedPayload();
-   }
-
-   @Override
-   protected int getPayloadSerializedSize() {
-      byte[] payloadBytes = getPayloadBytes();
-      return
-            // recipient is always 25 bytes
-            25 +
-            // message size is short
-            2 +
-            // message type byte
-            1 +
-            // number of mosaics
-            1 +
-            // each mosaic has id and amount, both 8byte uint64
-            ((8 + 8) * mosaics.size()) +
-            // number of message bytes
-            payloadBytes.length;
-   }
-
    @Override
    protected byte[] generateBytes() {
       FlatBufferBuilder builder = new FlatBufferBuilder();
       BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
 
       // Create Message
-      byte[] payloadBytes = getPayloadBytes();
+      byte[] payloadBytes = serializeMessage(getMessage());
       int payload = MessageBuffer.createPayloadVector(builder, payloadBytes);
       MessageBuffer.startMessageBuffer(builder);
       MessageBuffer.addType(builder, message.getTypeCode());
@@ -255,5 +157,48 @@ public class TransferTransaction extends Transaction {
       Validate.isTrue(output.length == size, "Serialized transaction has incorrect length: " + this.getClass());
       return output;
    }
+
+   @Override
+   protected Transaction copyForSigner(PublicAccount signer) {
+      return new TransferTransaction(getNetworkType(), getVersion(), getDeadline(), getMaxFee(), getSignature(),
+            Optional.of(signer), getTransactionInfo(), getRecipient(), getMosaics(), getMessage());
+   }
+
+   /**
+    * calculate payload size by specifying items with variable size
+    * 
+    * @param message transaction message
+    * @param mosaicCount number of mosaics that will be transferred
+    * @return size of the payload excluding message header
+    */
+   public static int calculatePayloadSize(Message message, int mosaicCount) {
+      return
+      // recipient is always 25 bytes
+      25 +
+      // message size is short
+            2 +
+            // message type byte
+            1 +
+            // number of mosaics
+            1 +
+            // each mosaic has id and amount, both 8byte uint64
+            ((8 + 8) * mosaicCount) +
+            // number of message bytes
+            serializeMessage(message).length;
+   }
    
+   /**
+    * serialize the message into byte array
+    * 
+    * @param message the message
+    * @return byte array representing the message
+    */
+   protected static byte[] serializeMessage(Message message) {
+      return message.getEncodedPayload();
+   }
+   
+   @Override
+   protected int getPayloadSerializedSize() {
+      return calculatePayloadSize(getMessage(), getMosaics().size());
+   }
 }
