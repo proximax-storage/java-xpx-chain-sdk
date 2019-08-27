@@ -18,18 +18,14 @@ package io.proximax.sdk.model.transaction;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
-import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.ResourceBasedTest;
-import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicNonce;
@@ -40,33 +36,11 @@ class MosaicDefinitionTransactionTest extends ResourceBasedTest {
    @Test
    void constructor() {
       MosaicNonce nonce = new MosaicNonce(new byte[4]);
-      MosaicDefinitionTransaction mosaicCreationTx = new MosaicDefinitionTransaction(NetworkType.TEST_NET, 23, new FakeDeadline(), BigInteger.ONE, nonce,
+      MosaicDefinitionTransaction mosaicCreationTx = new MosaicDefinitionTransaction(NetworkType.MIJIN_TEST, 23,
+            new FakeDeadline(), BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), nonce,
             new MosaicId(nonce, "B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF"),
-            new MosaicProperties(true, true, 3, Optional.of(BigInteger.valueOf(10))),"signaturestring",
-            new PublicAccount(new KeyPair().getPublicKey().getHexString(), NetworkType.MIJIN),
-            TransactionInfo.create(BigInteger.ONE, "infohash", "merklehash"));
-      assertEquals(BigInteger.valueOf(992621222383397347l), mosaicCreationTx.getMosaicId().getId());
-      assertEquals(true, mosaicCreationTx.getMosaicProperties().isSupplyMutable());
-      assertEquals(true, mosaicCreationTx.getMosaicProperties().isTransferable());
-      assertEquals(3, mosaicCreationTx.getMosaicProperties().getDivisibility());
-      assertEquals(Optional.of(BigInteger.valueOf(10)), mosaicCreationTx.getMosaicProperties().getDuration());
-      assertEquals(nonce, mosaicCreationTx.getNonce());
-   }
+            new MosaicProperties(true, true, 3, Optional.of(BigInteger.valueOf(10))));
 
-   @Test
-   void createAMosaicCreationTransactionViaStaticConstructor() {
-      MosaicNonce nonce = new MosaicNonce(new byte[4]);
-      MosaicDefinitionTransaction mosaicCreationTx = MosaicDefinitionTransaction.create(nonce,
-            new MosaicId(nonce, "B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF"),
-            new Deadline(2, ChronoUnit.HOURS),
-            new MosaicProperties(true, true, 3, Optional.of(BigInteger.valueOf(10))),
-            NetworkType.TEST_NET);
-
-      assertEquals(NetworkType.TEST_NET, mosaicCreationTx.getNetworkType());
-      assertEquals(TransactionVersion.MOSAIC_DEFINITION.getValue(), mosaicCreationTx.getVersion());
-      long nowSinceNemesis = new Deadline(0, ChronoUnit.SECONDS).getInstant();
-      assertTrue(nowSinceNemesis < mosaicCreationTx.getDeadline().getInstant());
-      assertEquals(BigInteger.valueOf(0), mosaicCreationTx.getFee());
       assertEquals(BigInteger.valueOf(992621222383397347l), mosaicCreationTx.getMosaicId().getId());
       assertEquals(true, mosaicCreationTx.getMosaicProperties().isSupplyMutable());
       assertEquals(true, mosaicCreationTx.getMosaicProperties().isTransferable());
@@ -78,12 +52,12 @@ class MosaicDefinitionTransactionTest extends ResourceBasedTest {
    @Test
    void serialization() throws IOException {
       MosaicNonce nonce = MosaicNonce.createFromBigInteger(BigInteger.valueOf(7));
-      MosaicDefinitionTransaction mosaicDefinitionTransaction = MosaicDefinitionTransaction.create(nonce,
+      MosaicDefinitionTransaction mosaicCreationTx = new MosaicDefinitionTransaction(NetworkType.MIJIN_TEST, 3,
+            new FakeDeadline(), BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), nonce,
             new MosaicId(nonce, "B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF"),
-            new FakeDeadline(),
-            new MosaicProperties(true, true, 4, Optional.of(BigInteger.valueOf(10000))),
-            NetworkType.MIJIN_TEST);
-      byte[] actual = mosaicDefinitionTransaction.generateBytes();
+            new MosaicProperties(true, true, 4, Optional.of(BigInteger.valueOf(1000))));
+
+      byte[] actual = mosaicCreationTx.generateBytes();
 //      saveBytes("mosaic_definition", actual);
       assertArrayEquals(loadBytes("mosaic_definition"), actual);
    }

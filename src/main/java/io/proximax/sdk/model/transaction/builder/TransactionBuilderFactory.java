@@ -27,9 +27,11 @@ public class TransactionBuilderFactory {
 
    /**
     * @param networkType the networkType to set
+    * @return this factory
     */
-   public void setNetworkType(NetworkType networkType) {
+   public TransactionBuilderFactory setNetworkType(NetworkType networkType) {
       this.networkType = networkType;
+      return this;
    }
 
    /**
@@ -44,9 +46,11 @@ public class TransactionBuilderFactory {
     * {@link TransactionBuilder#build()} is invoked
     * 
     * @param deadlineMillis the deadlineMillis to set
+    * @return this factory
     */
-   public void setDeadlineMillis(BigInteger deadlineMillis) {
+   public TransactionBuilderFactory setDeadlineMillis(BigInteger deadlineMillis) {
       this.deadlineMillis = deadlineMillis;
+      return this;
    }
 
    /**
@@ -58,9 +62,11 @@ public class TransactionBuilderFactory {
 
    /**
     * @param feeCalculationStrategy the feeCalculationStrategy to set
+    * @return this factory
     */
-   public void setFeeCalculationStrategy(FeeCalculationStrategy feeCalculationStrategy) {
+   public TransactionBuilderFactory setFeeCalculationStrategy(FeeCalculationStrategy feeCalculationStrategy) {
       this.feeCalculationStrategy = feeCalculationStrategy;
+      return this;
    }
 
    /**
