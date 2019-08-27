@@ -22,6 +22,7 @@ import io.proximax.sdk.model.transaction.TransactionType;
  * specialized transaction builders for all types of transactions
  */
 public abstract class TransactionBuilder<B extends TransactionBuilder<B, T>, T extends Transaction> {
+   private static final BigInteger TRANSACTION_HEADER_SIZE = BigInteger.valueOf(Transaction.HEADER_SIZE);
 
    private TransactionType type;
    private Integer version;
@@ -48,6 +49,7 @@ public abstract class TransactionBuilder<B extends TransactionBuilder<B, T>, T e
       signature = Optional.empty();
       signer = Optional.empty();
       transactionInfo = Optional.empty();
+      feeCalculationStrategy = Optional.empty();
       deadline = Optional.empty();
       deadlineMillis = Optional.empty();
    }
@@ -73,7 +75,8 @@ public abstract class TransactionBuilder<B extends TransactionBuilder<B, T>, T e
     * @return the maxFee
     */
    protected BigInteger getMaxFeeCalculation(int transactionSize) {
-      return feeCalculationStrategy.orElse(FeeCalculationStrategy.ZERO).calculateFee(transactionSize);
+      return feeCalculationStrategy.orElse(FeeCalculationStrategy.ZERO).calculateFee(transactionSize)
+            .add(TRANSACTION_HEADER_SIZE);
    }
 
    // ----------------------------------------- setters --------------------------------------//

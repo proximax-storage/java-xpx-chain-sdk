@@ -111,7 +111,7 @@ public class E2ETransferTest extends E2EBaseTest {
     */
    private SignedTransaction signTransfer(Account signerAccount, Address target, Mosaic amount, Message message) {
       TransferTransaction transaction = transact.transfer().mosaic(amount).to(target).message(message).build();
-      return signerAccount.sign(transaction, api.getNetworkGenerationHash());
+      return api.sign(transaction, signerAccount);
    }
 
    /**

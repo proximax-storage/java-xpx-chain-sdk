@@ -20,7 +20,7 @@ import io.proximax.sdk.model.transaction.TransactionVersion;
 import io.proximax.sdk.model.transaction.TransferTransaction;
 
 /**
- * builder for transfer transactions
+ * builder for {@link TransferTransaction}
  */
 public class TransferTransactionBuilder extends TransactionBuilder<TransferTransactionBuilder, TransferTransaction> {
    private Recipient recipient;
@@ -53,7 +53,10 @@ public class TransferTransactionBuilder extends TransactionBuilder<TransferTrans
    // ------------------------------------ setters ------------------------------------//
 
    /**
-    * @param recipient the recipient to set
+    * transfer recipient
+    * 
+    * @param recipient the recipient
+    * @return self
     */
    public TransferTransactionBuilder recipient(Recipient recipient) {
       this.recipient = recipient;
@@ -61,7 +64,10 @@ public class TransferTransactionBuilder extends TransactionBuilder<TransferTrans
    }
 
    /**
-    * @param mosaics the mosaics to set
+    * mosaics to be transferred to recipient
+    * 
+    * @param mosaics list of mosaics for transfer
+    * @return self
     */
    public TransferTransactionBuilder mosaics(List<Mosaic> mosaics) {
       this.mosaics = mosaics;
@@ -69,7 +75,10 @@ public class TransferTransactionBuilder extends TransactionBuilder<TransferTrans
    }
 
    /**
-    * @param message the message to set
+    * transfer message for the recipient
+    * 
+    * @param message the message
+    * @return self
     */
    public TransferTransactionBuilder message(Message message) {
       this.message = message;
@@ -104,6 +113,7 @@ public class TransferTransactionBuilder extends TransactionBuilder<TransferTrans
     * convenience call to {@link TransferTransactionBuilder#recipient(Recipient)}
     * 
     * @param recipient the recipient to set
+    * @return self
     */
    public TransferTransactionBuilder to(Recipient recipient) {
       return recipient(recipient);
@@ -113,6 +123,7 @@ public class TransferTransactionBuilder extends TransactionBuilder<TransferTrans
     * convenience call to {@link TransferTransactionBuilder#recipient(Recipient)}
     * 
     * @param address the recipient to set
+    * @return self
     */
    public TransferTransactionBuilder to(Address address) {
       return recipient(Recipient.from(address));
@@ -122,6 +133,7 @@ public class TransferTransactionBuilder extends TransactionBuilder<TransferTrans
     * convenience call to {@link TransferTransactionBuilder#recipient(Recipient)}
     * 
     * @param namespaceId the recipient to set
+    * @return self
     */
    public TransferTransactionBuilder to(NamespaceId namespaceId) {
       return recipient(Recipient.from(namespaceId));
@@ -129,6 +141,7 @@ public class TransferTransactionBuilder extends TransactionBuilder<TransferTrans
 
    /**
     * @param mosaic add mosaic to the list of transferred mosaics
+    * @return self
     */
    public TransferTransactionBuilder addMosaic(Mosaic mosaic) {
       mosaics.add(mosaic);
@@ -137,6 +150,7 @@ public class TransferTransactionBuilder extends TransactionBuilder<TransferTrans
 
    /**
     * @param mosaic the mosaics to set
+    * @return self
     */
    public TransferTransactionBuilder mosaic(Mosaic mosaic) {
       this.mosaics = new ArrayList<>();

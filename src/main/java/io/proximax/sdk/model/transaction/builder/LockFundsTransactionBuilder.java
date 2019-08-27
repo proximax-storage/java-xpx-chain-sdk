@@ -15,7 +15,7 @@ import io.proximax.sdk.model.transaction.TransactionType;
 import io.proximax.sdk.model.transaction.TransactionVersion;
 
 /**
- * builder for {@link AccountLinkTransaction}
+ * builder for {@link LockFundsTransaction}
  */
 public class LockFundsTransactionBuilder
       extends TransactionBuilder<LockFundsTransactionBuilder, LockFundsTransaction> {

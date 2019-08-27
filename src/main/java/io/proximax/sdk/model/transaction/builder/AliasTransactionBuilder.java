@@ -30,6 +30,9 @@ public class AliasTransactionBuilder extends TransactionBuilder<AliasTransaction
 
    private AliasTransactionBuilder(TransactionType type, Integer version) {
       super(type, version);
+      // defaults
+      mosaicId = Optional.empty();
+      address = Optional.empty();
    }
 
    public static AliasTransactionBuilder createForAddress() {
@@ -57,6 +60,12 @@ public class AliasTransactionBuilder extends TransactionBuilder<AliasTransaction
 
    // ------------------------------------- setters ---------------------------------------------//
 
+   /**
+    * define mosaic ID for which alias is to be created
+    * 
+    * @param mosaicId id of the mosaic
+    * @return self
+    */
    public AliasTransactionBuilder mosaicId(MosaicId mosaicId) {
       Validate.isTrue(getType() == TransactionType.MOSAIC_ALIAS,
             "Mosaic ID alias can be created only by mosaic alias builder");
@@ -64,6 +73,12 @@ public class AliasTransactionBuilder extends TransactionBuilder<AliasTransaction
       return self();
    }
 
+   /**
+    * specify address for which the alias is to be created
+    * 
+    * @param address the address
+    * @return self
+    */
    public AliasTransactionBuilder address(Address address) {
       Validate.isTrue(getType() == TransactionType.ADDRESS_ALIAS,
             "Address alias can be created only by address alias builder");
@@ -71,11 +86,23 @@ public class AliasTransactionBuilder extends TransactionBuilder<AliasTransaction
       return self();
    }
 
+   /**
+    * specify namespace ID which will be having alias to either address or mosaic
+    * 
+    * @param namespaceId target namespace ID
+    * @return self
+    */
    public AliasTransactionBuilder namespaceId(NamespaceId namespaceId) {
       this.namespaceId = namespaceId;
       return self();
    }
 
+   /**
+    * action to perform with the alias
+    * 
+    * @param aliasAction link or unlink
+    * @return self
+    */
    public AliasTransactionBuilder aliasAction(AliasAction aliasAction) {
       this.aliasAction = aliasAction;
       return self();
@@ -113,18 +140,42 @@ public class AliasTransactionBuilder extends TransactionBuilder<AliasTransaction
 
    // -------------------------------------- convenience --------------------------------------------//
 
+   /**
+    * create alias for mosaic ID
+    * 
+    * @param mosaicId the mosaic ID
+    * @return self
+    */
    public AliasTransactionBuilder link(MosaicId mosaicId) {
       return aliasAction(AliasAction.LINK).mosaicId(mosaicId);
    }
 
+   /**
+    * create alias for the address
+    * 
+    * @param address the address
+    * @return self
+    */
    public AliasTransactionBuilder link(Address address) {
       return aliasAction(AliasAction.LINK).address(address);
    }
 
+   /**
+    * remove alias from mosaic ID
+    * 
+    * @param mosaicId the mosaic ID
+    * @return self
+    */
    public AliasTransactionBuilder unlink(MosaicId mosaicId) {
       return aliasAction(AliasAction.UNLINK).mosaicId(mosaicId);
    }
 
+   /**
+    * remove link from the address
+    * 
+    * @param address the address
+    * @return self
+    */
    public AliasTransactionBuilder unlink(Address address) {
       return aliasAction(AliasAction.UNLINK).address(address);
    }

@@ -31,111 +31,125 @@ import io.proximax.sdk.model.mosaic.MosaicSupplyType;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
- * In case a mosaic has the flag 'supplyMutable' set to true, the creator of the mosaic can change the supply,
- * i.e. increase or decrease the supply.
- *
- * @since 1.0
+ * In case a mosaic has the flag 'supplyMutable' set to true, the creator of the mosaic can change the supply, i.e.
+ * increase or decrease the supply.
  */
 public class MosaicSupplyChangeTransaction extends Transaction {
-    private final MosaicId mosaicId;
-    private final MosaicSupplyType mosaicSupplyType;
-    private final BigInteger delta;
-    private final Schema schema = new MosaicSupplyChangeTransactionSchema();
+   private final Schema schema = new MosaicSupplyChangeTransactionSchema();
 
+   private final MosaicId mosaicId;
+   private final MosaicSupplyType mosaicSupplyType;
+   private final BigInteger delta;
 
-    public MosaicSupplyChangeTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, MosaicId mosaicId, MosaicSupplyType mosaicSupplyType, BigInteger delta, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
-        this(networkType, version, deadline, fee, mosaicId, mosaicSupplyType, delta, Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo));
-    }
+   /**
+    * @param networkType
+    * @param version
+    * @param deadline
+    * @param maxFee
+    * @param signature
+    * @param signer
+    * @param transactionInfo
+    * @param mosaicId
+    * @param mosaicSupplyType
+    * @param delta
+    */
+   public MosaicSupplyChangeTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline,
+         BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
+         Optional<TransactionInfo> transactionInfo, MosaicId mosaicId, MosaicSupplyType mosaicSupplyType,
+         BigInteger delta) {
+      super(TransactionType.MOSAIC_SUPPLY_CHANGE, networkType, version, deadline, maxFee, signature, signer,
+            transactionInfo);
+      // validations
+      Validate.notNull(mosaicId, "MosaicId must not be null");
+      Validate.notNull(mosaicSupplyType, "MosaicSupplyType must not be null");
+      Validate.notNull(delta, "Delta must not be null");
+      // assignments
+      this.mosaicId = mosaicId;
+      this.mosaicSupplyType = mosaicSupplyType;
+      this.delta = delta;
+   }
 
-    public MosaicSupplyChangeTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, MosaicId mosaicId, MosaicSupplyType mosaicSupplyType, BigInteger delta) {
-        this(networkType, version, deadline, fee, mosaicId, mosaicSupplyType, delta, Optional.empty(), Optional.empty(), Optional.empty());
-    }
+   /**
+    * Returns mosaic id.
+    *
+    * @return BigInteger
+    */
+   public MosaicId getMosaicId() {
+      return mosaicId;
+   }
 
-    private MosaicSupplyChangeTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, MosaicId mosaicId, MosaicSupplyType mosaicSupplyType, BigInteger delta, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
-        super(TransactionType.MOSAIC_SUPPLY_CHANGE, networkType, version, deadline, fee, signature, signer, transactionInfo);
-        Validate.notNull(mosaicId, "MosaicId must not be null");
-        Validate.notNull(mosaicSupplyType, "MosaicSupplyType must not be null");
-        Validate.notNull(delta, "Delta must not be null");
-        this.mosaicId = mosaicId;
-        this.mosaicSupplyType = mosaicSupplyType;
-        this.delta = delta;
-    }
+   /**
+    * Returns mosaic supply type.
+    *
+    * @return {@link MosaicSupplyType}
+    */
+   public MosaicSupplyType getMosaicSupplyType() {
+      return mosaicSupplyType;
+   }
 
-    /**
-     * Create a mosaic supply change transaction object.
-     *
-     * @param deadline         The deadline to include the transaction.
-     * @param mosaicId         The mosaic id.
-     * @param mosaicSupplyType The supply type.
-     * @param delta            The supply change in units for the mosaic.
-     * @param networkType      The network type.
-     * @return {@link MosaicSupplyChangeTransaction}
-     */
-    public static MosaicSupplyChangeTransaction create(TransactionDeadline deadline, MosaicId mosaicId, MosaicSupplyType mosaicSupplyType, BigInteger delta, NetworkType networkType) {
-        return new MosaicSupplyChangeTransaction(networkType, 2, deadline, BigInteger.valueOf(0), mosaicId, mosaicSupplyType, delta);
-    }
+   /**
+    * Returns amount of mosaics added or removed.
+    *
+    * @return BigInteger
+    */
+   public BigInteger getDelta() {
+      return delta;
+   }
 
-    /**
-     * Returns mosaic id.
-     *
-     * @return BigInteger
-     */
-    public MosaicId getMosaicId() {
-        return mosaicId;
-    }
+   protected byte[] generateBytes() {
+      FlatBufferBuilder builder = new FlatBufferBuilder();
+      BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
 
-    /**
-     * Returns mosaic supply type.
-     *
-     * @return {@link MosaicSupplyType}
-     */
-    public MosaicSupplyType getMosaicSupplyType() {
-        return mosaicSupplyType;
-    }
+      // Create Vectors
+      int signatureVector = MosaicSupplyChangeTransactionBuffer.createSignatureVector(builder, new byte[64]);
+      int signerVector = MosaicSupplyChangeTransactionBuffer.createSignerVector(builder, new byte[32]);
+      int deadlineVector = MosaicSupplyChangeTransactionBuffer.createDeadlineVector(builder,
+            UInt64Utils.fromBigInteger(deadlineBigInt));
+      int feeVector = MosaicSupplyChangeTransactionBuffer.createMaxFeeVector(builder,
+            UInt64Utils.fromBigInteger(getMaxFee()));
+      int mosaicIdVector = MosaicSupplyChangeTransactionBuffer.createMosaicIdVector(builder,
+            UInt64Utils.fromBigInteger(mosaicId.getId()));
+      int deltaVector = MosaicSupplyChangeTransactionBuffer.createDeltaVector(builder,
+            UInt64Utils.fromBigInteger(delta));
 
-    /**
-     * Returns amount of mosaics added or removed.
-     *
-     * @return BigInteger
-     */
-    public BigInteger getDelta() {
-        return delta;
-    }
+      int size = getSerializedSize();
 
-    byte[] generateBytes() {
-        FlatBufferBuilder builder = new FlatBufferBuilder();
-        BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
+      MosaicSupplyChangeTransactionBuffer.startMosaicSupplyChangeTransactionBuffer(builder);
+      MosaicSupplyChangeTransactionBuffer.addSize(builder, size);
+      MosaicSupplyChangeTransactionBuffer.addSignature(builder, signatureVector);
+      MosaicSupplyChangeTransactionBuffer.addSigner(builder, signerVector);
+      MosaicSupplyChangeTransactionBuffer.addVersion(builder, getTxVersionforSerialization());
+      MosaicSupplyChangeTransactionBuffer.addType(builder, getType().getValue());
+      MosaicSupplyChangeTransactionBuffer.addMaxFee(builder, feeVector);
+      MosaicSupplyChangeTransactionBuffer.addDeadline(builder, deadlineVector);
 
-        // Create Vectors
-        int signatureVector = MosaicSupplyChangeTransactionBuffer.createSignatureVector(builder, new byte[64]);
-        int signerVector = MosaicSupplyChangeTransactionBuffer.createSignerVector(builder, new byte[32]);
-        int deadlineVector = MosaicSupplyChangeTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
-        int feeVector = MosaicSupplyChangeTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
-        int mosaicIdVector = MosaicSupplyChangeTransactionBuffer.createMosaicIdVector(builder, UInt64Utils.fromBigInteger(mosaicId.getId()));
-        int deltaVector = MosaicSupplyChangeTransactionBuffer.createDeltaVector(builder, UInt64Utils.fromBigInteger(delta));
+      MosaicSupplyChangeTransactionBuffer.addMosaicId(builder, mosaicIdVector);
+      MosaicSupplyChangeTransactionBuffer.addDirection(builder, mosaicSupplyType.getValue());
+      MosaicSupplyChangeTransactionBuffer.addDelta(builder, deltaVector);
 
-        // header, mosaic id, supply type, delta
-        int size = HEADER_SIZE + 8 + 1 + 8;
+      int codedTransaction = MosaicSupplyChangeTransactionBuffer.endMosaicSupplyChangeTransactionBuffer(builder);
+      builder.finish(codedTransaction);
 
-        MosaicSupplyChangeTransactionBuffer.startMosaicSupplyChangeTransactionBuffer(builder);
-        MosaicSupplyChangeTransactionBuffer.addSize(builder, size);
-        MosaicSupplyChangeTransactionBuffer.addSignature(builder, signatureVector);
-        MosaicSupplyChangeTransactionBuffer.addSigner(builder, signerVector);
-        MosaicSupplyChangeTransactionBuffer.addVersion(builder, getTxVersionforSerialization());
-        MosaicSupplyChangeTransactionBuffer.addType(builder, getType().getValue());
-        MosaicSupplyChangeTransactionBuffer.addMaxFee(builder, feeVector);
-        MosaicSupplyChangeTransactionBuffer.addDeadline(builder, deadlineVector);
-        
-        MosaicSupplyChangeTransactionBuffer.addMosaicId(builder, mosaicIdVector);
-        MosaicSupplyChangeTransactionBuffer.addDirection(builder, mosaicSupplyType.getValue());
-        MosaicSupplyChangeTransactionBuffer.addDelta(builder, deltaVector);
+      // validate size
+      byte[] output = schema.serialize(builder.sizedByteArray());
+      Validate.isTrue(output.length == size, "Serialized transaction has incorrect length: " + this.getClass());
+      return output;
+   }
 
-        int codedTransaction = MosaicSupplyChangeTransactionBuffer.endMosaicSupplyChangeTransactionBuffer(builder);
-        builder.finish(codedTransaction);
+   public static int calculatePayloadSize() {
+      // mosaic id, supply type, delta
+      return 8 + 1 + 8;
+   }
 
-        // validate size
-        byte[] output = schema.serialize(builder.sizedByteArray());
-        Validate.isTrue(output.length == size, "Serialized transaction has incorrect length: " + this.getClass());
-        return output;
-    }
+   @Override
+   protected int getPayloadSerializedSize() {
+      return calculatePayloadSize();
+   }
+
+   @Override
+   protected Transaction copyForSigner(PublicAccount signer) {
+      return new MosaicSupplyChangeTransaction(getNetworkType(), getVersion(), getDeadline(), getMaxFee(),
+            getSignature(), Optional.of(signer), getTransactionInfo(), getMosaicId(), getMosaicSupplyType(),
+            getDelta());
+   }
 }

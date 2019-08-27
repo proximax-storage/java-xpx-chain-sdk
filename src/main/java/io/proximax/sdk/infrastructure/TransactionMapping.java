@@ -190,14 +190,13 @@ class TransferTransactionMapping extends TransactionMapping {
             extractNetworkType(version), 
             extractTransactionVersion(version), 
             deadline,
-            Optional.of(extractFee(transaction)),
-            Recipient.from(Address.createFromEncoded(transaction.get("recipient").getAsString())), 
-            mosaics, 
-            message,
+            extractFee(transaction),
             Optional.of(transaction.get("signature").getAsString()),
             Optional.of(new PublicAccount(transaction.get("signer").getAsString(), extractNetworkType(version))), 
             Optional.of(transactionInfo),
-            Optional.empty());
+            Recipient.from(Address.createFromEncoded(transaction.get("recipient").getAsString())), 
+            mosaics, 
+            message);
    }
 }
 
@@ -394,9 +393,10 @@ class NamespaceCreationTransactionMapping extends TransactionMapping {
       JsonElement version = transaction.get("version");
       // return the register namespace transaction
       return new RegisterNamespaceTransaction(extractNetworkType(version), extractTransactionVersion(version), deadline,
-            extractFee(transaction), transaction.get("name").getAsString(), namespaceId, namespaceType,
-            namespaceDuration, namespaceParentId, transaction.get("signature").getAsString(),
-            new PublicAccount(transaction.get("signer").getAsString(), extractNetworkType(version)), transactionInfo);
+            extractFee(transaction), Optional.of(transaction.get("signature").getAsString()),
+            Optional.of(new PublicAccount(transaction.get("signer").getAsString(), extractNetworkType(version))),
+            Optional.of(transactionInfo), transaction.get("name").getAsString(), namespaceId, namespaceDuration,
+            namespaceParentId, namespaceType);
    }
 }
 
@@ -416,10 +416,11 @@ class MosaicCreationTransactionMapping extends TransactionMapping {
       JsonElement version = transaction.get("version");
       // return instance of mosaic definition transaction
       return new MosaicDefinitionTransaction(extractNetworkType(version), extractTransactionVersion(version), deadline,
-            extractFee(transaction), extractNonce(transaction),
+            extractFee(transaction), Optional.of(transaction.get("signature").getAsString()),
+            Optional.of(new PublicAccount(transaction.get("signer").getAsString(), extractNetworkType(version))),
+            Optional.of(transactionInfo), extractNonce(transaction),
             new MosaicId(GsonUtils.getBigInteger(transaction.getAsJsonArray("mosaicId"))),
-            extractProperties(transaction.getAsJsonArray("properties")), transaction.get("signature").getAsString(),
-            new PublicAccount(transaction.get("signer").getAsString(), extractNetworkType(version)), transactionInfo);
+            extractProperties(transaction.getAsJsonArray("properties")));
    }
 
    private static MosaicProperties extractProperties(JsonArray props) {
@@ -479,10 +480,10 @@ class MosaicAliasTransactionMapping extends TransactionMapping {
       JsonElement version = transaction.get("version");
       // return instance of mosaic alias definition transaction
       return new AliasTransaction(TransactionType.MOSAIC_ALIAS, extractNetworkType(version),
-            extractTransactionVersion(version), deadline, Optional.of(extractFee(transaction)),
+            extractTransactionVersion(version), deadline, extractFee(transaction),
             Optional.of(transaction.get("signature").getAsString()),
             Optional.of(new PublicAccount(transaction.get("signer").getAsString(), extractNetworkType(version))),
-            Optional.of(transactionInfo), Optional.empty(),
+            Optional.of(transactionInfo), 
             Optional.of(new MosaicId(GsonUtils.getBigInteger(transaction.getAsJsonArray("mosaicId")))),
             Optional.empty(), new NamespaceId(GsonUtils.getBigInteger(transaction.getAsJsonArray("namespaceId"))),
             AliasAction.getByCode(transaction.get("aliasAction").getAsInt()));
@@ -504,10 +505,10 @@ class AddressAliasTransactionMapping extends TransactionMapping {
       JsonElement version = transaction.get("version");
       // return instance of mosaic alias definition transaction
       return new AliasTransaction(TransactionType.ADDRESS_ALIAS, extractNetworkType(version),
-            extractTransactionVersion(version), deadline, Optional.of(extractFee(transaction)),
+            extractTransactionVersion(version), deadline, extractFee(transaction),
             Optional.of(transaction.get("signature").getAsString()),
             Optional.of(new PublicAccount(transaction.get("signer").getAsString(), extractNetworkType(version))),
-            Optional.of(transactionInfo), Optional.empty(), Optional.empty(),
+            Optional.of(transactionInfo), Optional.empty(),
             Optional.of(Address.createFromEncoded(transaction.get("address").getAsString())),
             new NamespaceId(GsonUtils.getBigInteger(transaction.getAsJsonArray("namespaceId"))),
             AliasAction.getByCode(transaction.get("aliasAction").getAsInt()));
@@ -525,11 +526,12 @@ class MosaicSupplyChangeTransactionMapping extends TransactionMapping {
 
       return new MosaicSupplyChangeTransaction(extractNetworkType(transaction.get("version")),
             extractTransactionVersion(transaction.get("version")), deadline, extractFee(transaction),
-            new MosaicId(GsonUtils.getBigInteger(transaction.getAsJsonArray("mosaicId"))),
+            Optional.of(transaction.get("signature").getAsString()),
+            Optional.of(new PublicAccount(transaction.get("signer").getAsString(),
+                  extractNetworkType(transaction.get("version")))),
+            Optional.of(transactionInfo), new MosaicId(GsonUtils.getBigInteger(transaction.getAsJsonArray("mosaicId"))),
             MosaicSupplyType.rawValueOf(transaction.get("direction").getAsInt()),
-            GsonUtils.getBigInteger(transaction.getAsJsonArray("delta")), transaction.get("signature").getAsString(),
-            new PublicAccount(transaction.get("signer").getAsString(), extractNetworkType(transaction.get("version"))),
-            transactionInfo);
+            GsonUtils.getBigInteger(transaction.getAsJsonArray("delta")));
    }
 }
 
@@ -643,11 +645,10 @@ class AggregateTransactionMapping extends TransactionMapping {
             networkType, 
             extractTransactionVersion(transaction.get("version")), 
             deadline, 
-            Optional.of(extractFee(transaction)), 
+            extractFee(transaction), 
             Optional.of(transaction.get("signature").getAsString()),
             Optional.of(new PublicAccount(transaction.get("signer").getAsString(), networkType)), 
             Optional.of(transactionInfo), 
-            Optional.empty(),
             transactions,
             cosignatures);
    }
@@ -687,11 +688,16 @@ class LockFundsTransactionMapping extends TransactionMapping {
                new MosaicId(GsonUtils.getBigInteger(transaction.getAsJsonObject("mosaic").getAsJsonArray("id"))),
                GsonUtils.getBigInteger(transaction.getAsJsonObject("mosaic").getAsJsonArray("amount")));
       }
-      return new LockFundsTransaction(networkType, extractTransactionVersion(transaction.get("version")), deadline,
-            extractFee(transaction), mosaic, GsonUtils.getBigInteger(transaction.getAsJsonArray("duration")),
-            new SignedTransaction("", transaction.get("hash").getAsString(), TransactionType.AGGREGATE_BONDED),
-            transaction.get("signature").getAsString(),
-            new PublicAccount(transaction.get("signer").getAsString(), networkType), transactionInfo);
+      return new LockFundsTransaction(networkType, 
+            extractTransactionVersion(transaction.get("version")), 
+            deadline,
+            extractFee(transaction),
+            Optional.of(transaction.get("signature").getAsString()),
+            Optional.of(new PublicAccount(transaction.get("signer").getAsString(), networkType)),
+            Optional.of(transactionInfo),
+            mosaic,
+            GsonUtils.getBigInteger(transaction.getAsJsonArray("duration")),
+            new SignedTransaction("", transaction.get("hash").getAsString(), TransactionType.AGGREGATE_BONDED));
    }
 }
 
@@ -758,11 +764,10 @@ class AccountLinkTransactionMapping extends TransactionMapping {
             networkType, 
             extractTransactionVersion(transaction.get("version")), 
             deadline,
-            Optional.of(extractFee(transaction)), 
+            extractFee(transaction), 
             Optional.of(transaction.get("signature").getAsString()),
             Optional.of(new PublicAccount(transaction.get("signer").getAsString(), networkType)),
             Optional.of(transactionInfo), 
-            Optional.empty(),
             new PublicAccount(transaction.get("remoteAccountKey").getAsString(), networkType),
             AccountLinkAction.getByCode(getAction(transaction).getAsByte()));
    }

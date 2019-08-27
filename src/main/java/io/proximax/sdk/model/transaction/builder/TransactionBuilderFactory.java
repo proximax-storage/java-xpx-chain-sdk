@@ -155,4 +155,37 @@ public class TransactionBuilderFactory {
       initDefaults(builder);
       return builder; 
    }
+
+   /**
+    * create builder for register namespace transaction
+    * 
+    * @return the builder
+    */
+   public RegisterNamespaceTransactionBuilder registerNamespace() {
+      RegisterNamespaceTransactionBuilder builder = new RegisterNamespaceTransactionBuilder();
+      initDefaults(builder);
+      return builder; 
+   }
+
+   /**
+    * create builder for mosaic definition transaction
+    * 
+    * @return the builder
+    */
+   public MosaicDefinitionTransactionBuilder mosaicDefinition() {
+      MosaicDefinitionTransactionBuilder builder = new MosaicDefinitionTransactionBuilder();
+      initDefaults(builder);
+      return builder; 
+   }
+
+   /**
+    * create builder for mosaic supply change transaction
+    * 
+    * @return the builder
+    */
+   public MosaicSupplyChangeTransactionBuilder mosaicSupplyChange() {
+      MosaicSupplyChangeTransactionBuilder builder = new MosaicSupplyChangeTransactionBuilder();
+      initDefaults(builder);
+      return builder; 
+   }
 }

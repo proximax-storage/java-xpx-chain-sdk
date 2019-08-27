@@ -20,8 +20,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigInteger;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
@@ -64,7 +66,8 @@ public class CosignatureTransactionTest {
     @Test
     void shouldThrowExceptionWhenTransactionToCosignHasNotBeenAnnunced() throws Exception {
 
-        AggregateTransaction aggregateTransaction = AggregateTransaction.createComplete(Deadline.create(2, ChronoUnit.HOURS), Collections.emptyList(), NetworkType.MIJIN_TEST);
+       AggregateTransaction aggregateTransaction = new AggregateTransaction(TransactionType.AGGREGATE_COMPLETE, NetworkType.MIJIN_TEST, 1, Deadline.create(2, ChronoUnit.HOURS), BigInteger.ZERO, 
+             Optional.empty(), Optional.empty(), Optional.empty(), Collections.emptyList(), Collections.emptyList());
 
         assertThrows(IllegalArgumentException.class, ()->{CosignatureTransaction.create(aggregateTransaction);}, "Transaction to cosign should be announced before being able to cosign it");
 

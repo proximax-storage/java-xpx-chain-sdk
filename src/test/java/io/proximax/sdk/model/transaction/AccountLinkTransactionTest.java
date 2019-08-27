@@ -35,8 +35,8 @@ class AccountLinkTransactionTest extends ResourceBasedTest {
       PublicAccount signer = new Account(new KeyPair(), NETWORK_TYPE).getPublicAccount();
       TransactionInfo transactionInfo = TransactionInfo.create(BigInteger.TEN, "hash", "merkle");
       String signature = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-      AccountLinkTransaction trans = new AccountLinkTransaction(NETWORK_TYPE, 7, deadline, Optional.of(BigInteger.ONE),
-            Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo), Optional.empty(), remoteAccount,
+      AccountLinkTransaction trans = new AccountLinkTransaction(NETWORK_TYPE, 7, deadline, BigInteger.ONE,
+            Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo), remoteAccount,
             AccountLinkAction.LINK);
       // assert object attributes
       assertEquals(remoteAccount, trans.getRemoteAccount());
@@ -53,8 +53,8 @@ class AccountLinkTransactionTest extends ResourceBasedTest {
    @Test
    void serialization() throws IOException {
       TransactionDeadline deadline = new FakeDeadline();
-      AccountLinkTransaction trans = new AccountLinkTransaction(NETWORK_TYPE, 7, deadline, Optional.of(BigInteger.ONE),
-            Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), REMOTE_ACCOUNT,
+      AccountLinkTransaction trans = new AccountLinkTransaction(NETWORK_TYPE, 7, deadline, BigInteger.ONE,
+            Optional.empty(), Optional.empty(), Optional.empty(), REMOTE_ACCOUNT,
             AccountLinkAction.LINK);
       // serialize
       byte[] actual = trans.generateBytes();

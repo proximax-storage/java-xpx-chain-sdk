@@ -43,7 +43,10 @@ public class AccountLinkTransactionBuilder
 
    // ------------------------------------- setters ---------------------------------------------//
    /**
-    * @param remoteAccount the remoteAccount to set
+    * define the remote account to link/unlink to/from
+    * 
+    * @param remoteAccount linked account
+    * @return self
     */
    public AccountLinkTransactionBuilder remoteAccount(PublicAccount remoteAccount) {
       this.remoteAccount = remoteAccount;
@@ -51,7 +54,10 @@ public class AccountLinkTransactionBuilder
    }
 
    /**
-    * @param action the action to set
+    * the link/unlink action to perform
+    * 
+    * @param action the action
+    * @return self
     */
    public AccountLinkTransactionBuilder action(AccountLinkAction action) {
       this.action = action;

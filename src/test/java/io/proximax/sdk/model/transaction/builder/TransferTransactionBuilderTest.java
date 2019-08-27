@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
@@ -22,8 +21,6 @@ import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.transaction.PlainMessage;
 import io.proximax.sdk.model.transaction.Recipient;
 import io.proximax.sdk.model.transaction.TransferTransaction;
-import io.proximax.sdk.model.transaction.builder.TransactionBuilderFactory;
-import io.proximax.sdk.model.transaction.builder.TransferTransactionBuilder;
 
 /**
  * {@link TransferTransactionBuilder} tests
@@ -45,7 +42,6 @@ class TransferTransactionBuilderTest {
       TransferTransaction trans = fac.transfer().to(recipient).build();
       // check transaction
       assertEquals(NetworkType.MIJIN_TEST, trans.getNetworkType());
-      assertEquals(Optional.of(FeeCalculationStrategy.MEDIUM), trans.getFeeCalculationStrategy());
       assertTrue(trans.getMosaics().isEmpty());
       assertEquals(PlainMessage.Empty, trans.getMessage());
       assertEquals(recipient, trans.getRecipient());
@@ -64,7 +60,6 @@ class TransferTransactionBuilderTest {
       TransferTransaction trans = fac.transfer().addMosaic(NetworkCurrencyMosaic.TEN).to(recipient).message(PlainMessage.create("hello world")).build();
       // check transaction
       assertEquals(NetworkType.MIJIN_TEST, trans.getNetworkType());
-      assertEquals(Optional.of(FeeCalculationStrategy.MEDIUM), trans.getFeeCalculationStrategy());
       assertEquals(Arrays.asList(NetworkCurrencyMosaic.TEN), trans.getMosaics());
       assertEquals("hello world", trans.getMessage().getPayload());
       assertEquals(recipient, trans.getRecipient());
