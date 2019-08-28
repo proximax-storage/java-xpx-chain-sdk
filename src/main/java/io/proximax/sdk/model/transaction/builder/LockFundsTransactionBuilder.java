@@ -8,7 +8,6 @@ package io.proximax.sdk.model.transaction.builder;
 import java.math.BigInteger;
 
 import io.proximax.sdk.model.mosaic.Mosaic;
-import io.proximax.sdk.model.transaction.AccountLinkTransaction;
 import io.proximax.sdk.model.transaction.LockFundsTransaction;
 import io.proximax.sdk.model.transaction.SignedTransaction;
 import io.proximax.sdk.model.transaction.TransactionType;
@@ -37,7 +36,7 @@ public class LockFundsTransactionBuilder
    public LockFundsTransaction build() {
       // use or calculate maxFee
       BigInteger maxFee = getMaxFee().orElseGet(
-            () -> getMaxFeeCalculation(AccountLinkTransaction.calculatePayloadSize()));
+            () -> getMaxFeeCalculation(LockFundsTransaction.calculatePayloadSize()));
       // create transaction instance
       return new LockFundsTransaction(getNetworkType(), getVersion(), getDeadline(), maxFee, getSignature(), getSigner(), getTransactionInfo(), getMosaic(), getDuration(), getSignedTransaction());
    }
