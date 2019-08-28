@@ -33,132 +33,157 @@ import io.proximax.sdk.model.mosaic.Mosaic;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 public class SecretLockTransaction extends Transaction {
-    private final Mosaic mosaic;
-    private final BigInteger duration;
-    private final HashType hashType;
-    private final String secret;
-    private final Address recipient;
-    private final Schema schema = new SecretLockTransactionSchema();
+   private final Schema schema = new SecretLockTransactionSchema();
 
-    public SecretLockTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, Mosaic mosaic, BigInteger duration, HashType hashType, String secret, Address recipient, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
-        this(networkType, version, deadline, fee, mosaic, duration, hashType, secret, recipient, Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo));
-    }
+   private final Mosaic mosaic;
+   private final BigInteger duration;
+   private final HashType hashType;
+   private final String secret;
+   private final Address recipient;
 
-    public SecretLockTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, Mosaic mosaic, BigInteger duration, HashType hashType, String secret, Address recipient) {
-        this(networkType, version, deadline, fee, mosaic, duration, hashType, secret, recipient, Optional.empty(), Optional.empty(), Optional.empty());
-    }
+   /**
+    * @param networkType network type
+    * @param version transaction version. Use {@link TransactionVersion#MODIFY_MULTISIG_ACCOUNT} for current version
+    * @param deadline transaction deadline
+    * @param maxFee transaction fee
+    * @param signature optional signature
+    * @param signer optional signer
+    * @param transactionInfo optional transaction info
+    * @param mosaic mosaic amount to lock
+    * @param duration duration of the lock in block count
+    * @param hashType type of the hashing function
+    * @param secret secret
+    * @param recipient recipient of the locked funds
+    */
+   public SecretLockTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline,
+         BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
+         Optional<TransactionInfo> transactionInfo, Mosaic mosaic, BigInteger duration, HashType hashType,
+         String secret, Address recipient) {
+      super(TransactionType.SECRET_LOCK, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
+      // validations
+      Validate.notNull(mosaic, "Mosaic must not be null");
+      Validate.notNull(duration, "Duration must not be null");
+      Validate.notNull(secret, "Secret must not be null");
+      Validate.notNull(recipient, "Recipient must not be null");
+      if (!hashType.validate(secret)) {
+         throw new IllegalArgumentException("HashType and Secret have incompatible length or not hexadecimal string");
+      }
+      // assignments
+      this.mosaic = mosaic;
+      this.duration = duration;
+      this.hashType = hashType;
+      this.secret = secret;
+      this.recipient = recipient;
+   }
 
-    public SecretLockTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, Mosaic mosaic, BigInteger duration, HashType hashType, String secret, Address recipient, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
-        super(TransactionType.SECRET_LOCK, networkType, version, deadline, fee, signature, signer, transactionInfo);
-        Validate.notNull(mosaic, "Mosaic must not be null");
-        Validate.notNull(duration, "Duration must not be null");
-        Validate.notNull(secret, "Secret must not be null");
-        Validate.notNull(recipient, "Recipient must not be null");
-        if (!hashType.validate(secret)) {
-            throw new IllegalArgumentException("HashType and Secret have incompatible length or not hexadecimal string");
-        }
-        this.mosaic = mosaic;
-        this.duration = duration;
-        this.hashType = hashType;
-        this.secret = secret;
-        this.recipient = recipient;
-    }
+   /**
+    * Returns locked mosaic.
+    *
+    * @return locked mosaic.
+    */
+   public Mosaic getMosaic() {
+      return mosaic;
+   }
 
-    /**
-     * Create a secret lock transaction object.
-     *
-     * @param deadline          The deadline to include the transaction.
-     * @param mosaic            The locked mosaic.
-     * @param duration          The duration for the funds to be released or returned.
-     * @param hashType          The hash algorithm secret is generated with.
-     * @param secret            The proof hashed.
-     * @param recipient         The recipient of the funds.
-     * @param networkType       The network type.
-     *
-     * @return a SecretLockTransaction instance
-     */
-    public static SecretLockTransaction create(TransactionDeadline deadline, Mosaic mosaic, BigInteger duration, HashType hashType, String secret, Address recipient, NetworkType networkType) {
-        return new SecretLockTransaction(networkType, 1, deadline, BigInteger.valueOf(0), mosaic, duration, hashType, secret, recipient);
-    }
+   /**
+    * Returns duration for the funds to be released or returned.
+    *
+    * @return duration for the funds to be released or returned.
+    */
+   public BigInteger getDuration() {
+      return duration;
+   }
 
-    /**
-     * Returns locked mosaic.
-     *
-     * @return locked mosaic.
-     */
-    public Mosaic getMosaic() { return mosaic; }
+   /**
+    * Returns the hash algorithm, secret is generated with.
+    *
+    * @return the hash algorithm, secret is generated with.
+    */
+   public HashType getHashType() {
+      return hashType;
+   }
 
-    /**
-     * Returns duration for the funds to be released or returned.
-     *
-     * @return duration for the funds to be released or returned.
-     */
-    public BigInteger getDuration() { return duration; }
+   /**
+    * Returns the proof hashed.
+    *
+    * @return the proof hashed.
+    */
+   public String getSecret() {
+      return secret;
+   }
 
-    /**
-     * Returns the hash algorithm, secret is generated with.
-     *
-     * @return the hash algorithm, secret is generated with.
-     */
-    public HashType getHashType() { return hashType; }
+   /**
+    * Returns the recipient of the funds.
+    *
+    * @return the recipient of the funds.
+    */
+   public Address getRecipient() {
+      return recipient;
+   }
 
-    /**
-     * Returns the proof hashed.
-     *
-     * @return the proof hashed.
-     */
-    public String getSecret() { return secret; }
+   @Override
+   protected byte[] generateBytes() {
+      FlatBufferBuilder builder = new FlatBufferBuilder();
+      BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
 
-    /**
-     * Returns the recipient of the funds.
-     *
-     * @return the recipient of the funds.
-     */
-    public Address getRecipient() { return recipient; }
+      // Create Vectors
+      int signatureVector = SecretLockTransactionBuffer.createSignatureVector(builder, new byte[64]);
+      int signerVector = SecretLockTransactionBuffer.createSignerVector(builder, new byte[32]);
+      int deadlineVector = SecretLockTransactionBuffer.createDeadlineVector(builder,
+            UInt64Utils.fromBigInteger(deadlineBigInt));
+      int feeVector = SecretLockTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getMaxFee()));
+      int mosaicIdVector = SecretLockTransactionBuffer.createMosaicIdVector(builder,
+            UInt64Utils.fromBigInteger(mosaic.getId().getId()));
+      int mosaicAmountVector = SecretLockTransactionBuffer.createMosaicAmountVector(builder,
+            UInt64Utils.fromBigInteger(mosaic.getAmount()));
+      int durationVector = SecretLockTransactionBuffer.createDurationVector(builder,
+            UInt64Utils.fromBigInteger(duration));
+      int secretVector = SecretLockTransactionBuffer.createSecretVector(builder, Hex.decode(secret));
 
-    @Override
-    byte[] generateBytes() {
-        FlatBufferBuilder builder = new FlatBufferBuilder();
-        BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
+      byte[] address = Base32Encoder.getBytes(getRecipient().plain());
+      int recipientVector = SecretLockTransactionBuffer.createRecipientVector(builder, address);
 
-        // Create Vectors
-        int signatureVector = SecretLockTransactionBuffer.createSignatureVector(builder, new byte[64]);
-        int signerVector = SecretLockTransactionBuffer.createSignerVector(builder, new byte[32]);
-        int deadlineVector = SecretLockTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
-        int feeVector = SecretLockTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
-        int mosaicIdVector = SecretLockTransactionBuffer.createMosaicIdVector(builder, UInt64Utils.fromBigInteger(mosaic.getId().getId()));
-        int mosaicAmountVector = SecretLockTransactionBuffer.createMosaicAmountVector(builder, UInt64Utils.fromBigInteger(mosaic.getAmount()));
-        int durationVector = SecretLockTransactionBuffer.createDurationVector(builder, UInt64Utils.fromBigInteger(duration));
-        int secretVector = SecretLockTransactionBuffer.createSecretVector(builder, Hex.decode(secret));
+      int size = getSerializedSize();
 
-        byte[] address = Base32Encoder.getBytes(getRecipient().plain());
-        int recipientVector = SecretLockTransactionBuffer.createRecipientVector(builder, address);
+      SecretLockTransactionBuffer.startSecretLockTransactionBuffer(builder);
+      SecretLockTransactionBuffer.addSize(builder, size);
+      SecretLockTransactionBuffer.addSignature(builder, signatureVector);
+      SecretLockTransactionBuffer.addSigner(builder, signerVector);
+      SecretLockTransactionBuffer.addVersion(builder, getTxVersionforSerialization());
+      SecretLockTransactionBuffer.addType(builder, getType().getValue());
+      SecretLockTransactionBuffer.addMaxFee(builder, feeVector);
+      SecretLockTransactionBuffer.addDeadline(builder, deadlineVector);
 
-        // header + mosaicID, amount, duration, hash algo, secret, recipient
-        int size = HEADER_SIZE + 8 + 8 + 8 + 1 + 32 + 25;
+      SecretLockTransactionBuffer.addMosaicId(builder, mosaicIdVector);
+      SecretLockTransactionBuffer.addMosaicAmount(builder, mosaicAmountVector);
+      SecretLockTransactionBuffer.addDuration(builder, durationVector);
+      SecretLockTransactionBuffer.addHashAlgorithm(builder, hashType.getValue());
+      SecretLockTransactionBuffer.addSecret(builder, secretVector);
+      SecretLockTransactionBuffer.addRecipient(builder, recipientVector);
 
-        SecretLockTransactionBuffer.startSecretLockTransactionBuffer(builder);
-        SecretLockTransactionBuffer.addSize(builder, size);
-        SecretLockTransactionBuffer.addSignature(builder, signatureVector);
-        SecretLockTransactionBuffer.addSigner(builder, signerVector);
-        SecretLockTransactionBuffer.addVersion(builder, getTxVersionforSerialization());
-        SecretLockTransactionBuffer.addType(builder, getType().getValue());
-        SecretLockTransactionBuffer.addMaxFee(builder, feeVector);
-        SecretLockTransactionBuffer.addDeadline(builder, deadlineVector);
-        
-        SecretLockTransactionBuffer.addMosaicId(builder, mosaicIdVector);
-        SecretLockTransactionBuffer.addMosaicAmount(builder, mosaicAmountVector);
-        SecretLockTransactionBuffer.addDuration(builder, durationVector);
-        SecretLockTransactionBuffer.addHashAlgorithm(builder, hashType.getValue());
-        SecretLockTransactionBuffer.addSecret(builder, secretVector);
-        SecretLockTransactionBuffer.addRecipient(builder, recipientVector);
+      int codedSecretLock = SecretLockTransactionBuffer.endSecretLockTransactionBuffer(builder);
+      builder.finish(codedSecretLock);
 
-        int codedSecretLock = SecretLockTransactionBuffer.endSecretLockTransactionBuffer(builder);
-        builder.finish(codedSecretLock);
+      // validate size
+      byte[] output = schema.serialize(builder.sizedByteArray());
+      Validate.isTrue(output.length == size, "Serialized transaction has incorrect length: " + this.getClass());
+      return output;
+   }
 
-        // validate size
-        byte[] output = schema.serialize(builder.sizedByteArray());
-        Validate.isTrue(output.length == size, "Serialized transaction has incorrect length: " + this.getClass());
-        return output;
-    }
+   public static int calculatePayloadSize() {
+      // mosaicID, amount, duration, hash algo, secret, recipient
+      return 8 + 8 + 8 + 1 + 32 + 25;
+   }
+
+   @Override
+   protected int getPayloadSerializedSize() {
+      return calculatePayloadSize();
+   }
+
+   @Override
+   protected Transaction copyForSigner(PublicAccount signer) {
+      return new SecretLockTransaction(getNetworkType(), getVersion(), getDeadline(), getMaxFee(), getSignature(),
+            Optional.of(signer), getTransactionInfo(), getMosaic(), getDuration(), getHashType(), getSecret(),
+            getRecipient());
+   }
 }

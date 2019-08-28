@@ -25,6 +25,7 @@ import java.math.BigInteger;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,47 +36,46 @@ import io.proximax.sdk.model.blockchain.NetworkType;
 
 class ModifyMultisigAccountTransactionTest extends ResourceBasedTest {
 
-    @Test
-    void createAMultisigModificationTransactionViaConstructor() {
-        ModifyMultisigAccountTransaction modifyMultisigAccountTransaction = ModifyMultisigAccountTransaction.create(
-                new Deadline(2, ChronoUnit.HOURS),
-                2,
-                1,
-                Collections.singletonList(
-                        new MultisigCosignatoryModification(MultisigCosignatoryModificationType.ADD,
-                                PublicAccount.createFromPublicKey("68b3fbb18729c1fde225c57f8ce080fa828f0067e451a3fd81fa628842b0b763", NetworkType.MIJIN_TEST))
-                ),
-                NetworkType.MIJIN_TEST
-        );
+   @Test
+   void createAMultisigModificationTransactionViaConstructor() {
+      ModifyMultisigAccountTransaction modifyMultisigAccountTransaction = new ModifyMultisigAccountTransaction(
+            NetworkType.MIJIN_TEST, 3, new Deadline(2, ChronoUnit.HOURS), BigInteger.ZERO, Optional.empty(),
+            Optional.empty(), Optional.empty(), 2, 1,
+            Collections.singletonList(new MultisigCosignatoryModification(MultisigCosignatoryModificationType.ADD,
+                  PublicAccount.createFromPublicKey("68b3fbb18729c1fde225c57f8ce080fa828f0067e451a3fd81fa628842b0b763",
+                        NetworkType.MIJIN_TEST))));
 
-        assertEquals(NetworkType.MIJIN_TEST, modifyMultisigAccountTransaction.getNetworkType());
-        assertTrue(3 == modifyMultisigAccountTransaction.getVersion());
-        long nowSinceNemesis = new Deadline(0, ChronoUnit.SECONDS).getInstant();
-        assertTrue(nowSinceNemesis < modifyMultisigAccountTransaction.getDeadline().getInstant());
-        assertEquals(BigInteger.valueOf(0), modifyMultisigAccountTransaction.getFee());
-        assertEquals(2, modifyMultisigAccountTransaction.getMinApprovalDelta());
-        assertEquals(1, modifyMultisigAccountTransaction.getMinRemovalDelta());
-        assertEquals("68b3fbb18729c1fde225c57f8ce080fa828f0067e451a3fd81fa628842b0b763", modifyMultisigAccountTransaction.getModifications().get(0).getCosignatoryPublicAccount().getPublicKey());
-        assertEquals(MultisigCosignatoryModificationType.ADD, modifyMultisigAccountTransaction.getModifications().get(0).getType());
-    }
+      assertEquals(NetworkType.MIJIN_TEST, modifyMultisigAccountTransaction.getNetworkType());
+      assertTrue(3 == modifyMultisigAccountTransaction.getVersion());
+      long nowSinceNemesis = new Deadline(0, ChronoUnit.SECONDS).getInstant();
+      assertTrue(nowSinceNemesis < modifyMultisigAccountTransaction.getDeadline().getInstant());
+      assertEquals(BigInteger.valueOf(0), modifyMultisigAccountTransaction.getMaxFee());
+      assertEquals(2, modifyMultisigAccountTransaction.getMinApprovalDelta());
+      assertEquals(1, modifyMultisigAccountTransaction.getMinRemovalDelta());
+      assertEquals("68b3fbb18729c1fde225c57f8ce080fa828f0067e451a3fd81fa628842b0b763",
+            modifyMultisigAccountTransaction.getModifications().get(0).getCosignatoryPublicAccount().getPublicKey());
+      assertEquals(MultisigCosignatoryModificationType.ADD,
+            modifyMultisigAccountTransaction.getModifications().get(0).getType());
+   }
 
-    @Test
-    @DisplayName("Serialization")
-    void serialization() throws IOException {
-        ModifyMultisigAccountTransaction modifyMultisigAccountTransaction = ModifyMultisigAccountTransaction.create(
-                new FakeDeadline(),
-                2,
-                1,
-                Arrays.asList(
-                        new MultisigCosignatoryModification(MultisigCosignatoryModificationType.ADD, PublicAccount.createFromPublicKey("68b3fbb18729c1fde225c57f8ce080fa828f0067e451a3fd81fa628842b0b763", NetworkType.MIJIN_TEST)),
-                        new MultisigCosignatoryModification(MultisigCosignatoryModificationType.ADD, PublicAccount.createFromPublicKey("cf893ffcc47c33e7f68ab1db56365c156b0736824a0c1e273f9e00b8df8f01eb", NetworkType.MIJIN_TEST))
+   @Test
+   @DisplayName("Serialization")
+   void serialization() throws IOException {
+      ModifyMultisigAccountTransaction modifyMultisigAccountTransaction = new ModifyMultisigAccountTransaction(
+            NetworkType.MIJIN_TEST, 3, new FakeDeadline(), BigInteger.ZERO, Optional.empty(), Optional.empty(),
+            Optional.empty(), 2, 1,
+            Arrays.asList(new MultisigCosignatoryModification(MultisigCosignatoryModificationType.ADD,
+                  PublicAccount.createFromPublicKey("68b3fbb18729c1fde225c57f8ce080fa828f0067e451a3fd81fa628842b0b763",
+                        NetworkType.MIJIN_TEST)),
+                  new MultisigCosignatoryModification(MultisigCosignatoryModificationType.ADD,
+                        PublicAccount.createFromPublicKey(
+                              "cf893ffcc47c33e7f68ab1db56365c156b0736824a0c1e273f9e00b8df8f01eb",
+                              NetworkType.MIJIN_TEST))
 
-                ),
-                NetworkType.MIJIN_TEST
-        );
+            ));
 
-        byte[] actual = modifyMultisigAccountTransaction.generateBytes();
+      byte[] actual = modifyMultisigAccountTransaction.generateBytes();
 //        saveBytes("modify_multisig_trans", actual);
-        assertArrayEquals(loadBytes("modify_multisig_trans"), actual);
-    }
+      assertArrayEquals(loadBytes("modify_multisig_trans"), actual);
+   }
 }

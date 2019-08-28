@@ -227,4 +227,26 @@ public class TransactionBuilderFactory {
       initDefaults(builder);
       return builder; 
    }
+   
+   /**
+    * create builder for multisig account modification transaction
+    * 
+    * @return the builder
+    */
+   public ModifyMultisigAccountTransactionBuilder multisigModification() {
+      ModifyMultisigAccountTransactionBuilder builder = new ModifyMultisigAccountTransactionBuilder();
+      initDefaults(builder);
+      return builder; 
+   }
+   
+   /**
+    * create builder for secret lock transaction
+    * 
+    * @return the builder
+    */
+   public SecretLockTransactionBuilder secretLock() {
+      SecretLockTransactionBuilder builder = new SecretLockTransactionBuilder();
+      initDefaults(builder);
+      return builder; 
+   }
 }

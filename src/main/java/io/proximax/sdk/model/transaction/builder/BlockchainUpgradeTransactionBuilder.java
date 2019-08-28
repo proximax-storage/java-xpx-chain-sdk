@@ -49,7 +49,7 @@ public class BlockchainUpgradeTransactionBuilder
     * @param upgradePeriod number of blocks
     * @return self
     */
-   public BlockchainUpgradeTransactionBuilder setUpgradePeriod(BigInteger upgradePeriod) {
+   public BlockchainUpgradeTransactionBuilder upgradePeriod(BigInteger upgradePeriod) {
       this.upgradePeriod = upgradePeriod;
       return self();
    }
@@ -60,7 +60,7 @@ public class BlockchainUpgradeTransactionBuilder
     * @param newVersion new blockchain version
     * @return self
     */
-   public BlockchainUpgradeTransactionBuilder setNewVersion(BlockchainVersion newVersion) {
+   public BlockchainUpgradeTransactionBuilder newVersion(BlockchainVersion newVersion) {
       this.newVersion = newVersion;
       return self();
    }

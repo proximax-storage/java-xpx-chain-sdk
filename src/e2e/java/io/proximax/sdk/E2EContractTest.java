@@ -81,23 +81,21 @@ public class E2EContractTest extends E2EBaseTest {
    void test02CreateContract() {
       logger.info("Creating contract");
       // prepare transaction
-      ModifyContractTransaction trans = ModifyContractTransaction.create(getDeadline(),
-            BigInteger.ZERO,
-            BigInteger.valueOf(100l),
-            contentHash,
-            Arrays.asList(MultisigCosignatoryModification.add(customer.getPublicAccount())),
-            Arrays.asList(
-                  MultisigCosignatoryModification.add(executor1.getPublicAccount()),
-                  MultisigCosignatoryModification.add(executor2.getPublicAccount())),
-            Arrays.asList(
-                  MultisigCosignatoryModification.add(validator1.getPublicAccount()),
-                  MultisigCosignatoryModification.add(validator2.getPublicAccount())),
-            getNetworkType());
+      ModifyContractTransaction trans = transact.modifyContract().durationDelta(BigInteger.valueOf(100l))
+            .contentHash(contentHash)
+            .customersModifications(MultisigCosignatoryModification.add(customer.getPublicAccount()))
+            .executorsModifications(MultisigCosignatoryModification.add(executor1.getPublicAccount()),
+                  MultisigCosignatoryModification.add(executor2.getPublicAccount()))
+            .verifiersModifications(MultisigCosignatoryModification.add(validator1.getPublicAccount()),
+                  MultisigCosignatoryModification.add(validator2.getPublicAccount()))
+            .build();
+
       // sign the transaction
       SignedTransaction signedTrans = api.sign(trans, accContract);
       // announce the transaction
       transactionHttp.announce(signedTrans).blockingFirst();
-      ModifyContractTransaction contractConfirmation = (ModifyContractTransaction)listener.confirmed(accContract.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      ModifyContractTransaction contractConfirmation = (ModifyContractTransaction) listener
+            .confirmed(accContract.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
       sleepForAWhile();
       logger.info("Got contract confirmed: {}", contractConfirmation);
       // do couple sanity checks
@@ -121,22 +119,15 @@ public class E2EContractTest extends E2EBaseTest {
    void test03ChangeExistingContract() {
       logger.info("Changing contract");
       // prepare transaction - add one block to duration, move executor2 to verifiers
-      ModifyContractTransaction trans = ModifyContractTransaction.create(getDeadline(),
-            BigInteger.ZERO,
-            BigInteger.ONE,
-            contentHash,
-            Arrays.asList(),
-            Arrays.asList(
-                  MultisigCosignatoryModification.remove(executor2.getPublicAccount())),
-            Arrays.asList(
-                  MultisigCosignatoryModification.add(executor2.getPublicAccount())),
-            getNetworkType());
+      ModifyContractTransaction trans = transact.modifyContract().durationDelta(BigInteger.ONE).contentHash(contentHash)
+            .executorsModifications(MultisigCosignatoryModification.remove(executor2.getPublicAccount()))
+            .verifiersModifications(MultisigCosignatoryModification.add(executor2.getPublicAccount())).build();
       // create aggregate transaction for the multisig
-      AggregateTransaction aggregateTrans = AggregateTransaction.createComplete(getDeadline(),
-            Arrays.asList(trans.toAggregate(accContract.getPublicAccount())),
-            getNetworkType());
+      AggregateTransaction aggregateTrans = transact.aggregateComplete()
+            .innerTransactions(trans.toAggregate(accContract.getPublicAccount())).build();
       // sign the transaction
-      SignedTransaction signedTrans = validator1.signTransactionWithCosignatories(aggregateTrans, api.getNetworkGenerationHash(),
+      SignedTransaction signedTrans = validator1.signTransactionWithCosignatories(aggregateTrans,
+            api.getNetworkGenerationHash(),
             Arrays.asList(validator2));
       // announce the transaction
       transactionHttp.announce(signedTrans).blockingFirst();
@@ -151,7 +142,7 @@ public class E2EContractTest extends E2EBaseTest {
       assertEquals(contentHash.toLowerCase(), contract.getContentHash().toLowerCase());
       assertEquals(BigInteger.valueOf(101l), contract.getDuration());
    }
-   
+
    @Test
    void test04CompareContractEndpoints() {
       // prepare public key
@@ -168,6 +159,6 @@ public class E2EContractTest extends E2EBaseTest {
       assertEquals(contractByAddress, contractByPubKey);
       assertEquals(contractByAddress, contractsByAddresses.get(0));
       assertEquals(contractByAddress, contractsByPubKeys.get(0));
-      
+
    }
 }

@@ -51,7 +51,7 @@ public class BlockchainConfigTransactionBuilder
     * @param applyHeightDelta number of blocks
     * @return self
     */
-   public BlockchainConfigTransactionBuilder setApplyHeightDelta(BigInteger applyHeightDelta) {
+   public BlockchainConfigTransactionBuilder applyHeightDelta(BigInteger applyHeightDelta) {
       this.applyHeightDelta = applyHeightDelta;
       return self();
    }
@@ -62,7 +62,7 @@ public class BlockchainConfigTransactionBuilder
     * @param blockchainConfig the configuration
     * @return self
     */
-   public BlockchainConfigTransactionBuilder setBlockchainConfig(String blockchainConfig) {
+   public BlockchainConfigTransactionBuilder blockchainConfig(String blockchainConfig) {
       this.blockchainConfig = blockchainConfig;
       return self();
    }
@@ -73,7 +73,7 @@ public class BlockchainConfigTransactionBuilder
     * @param supportedEntityVersions JSON string
     * @return self
     */
-   public BlockchainConfigTransactionBuilder setSupportedEntityVersions(String supportedEntityVersions) {
+   public BlockchainConfigTransactionBuilder supportedEntityVersions(String supportedEntityVersions) {
       this.supportedEntityVersions = supportedEntityVersions;
       return self();
    }

@@ -17,6 +17,7 @@
 package io.proximax.sdk.model.transaction;
 
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,123 +33,145 @@ import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
- * Modify multisig account transactions are part of the NEM's multisig account system.
- * A modify multisig account transaction holds an array of multisig cosignatory modifications, min number of signatures to approve a transaction and a min number of signatures to remove a cosignatory.
- *
- * @since 1.0
+ * Modify multisig account transactions are part of the NEM's multisig account system. A modify multisig account
+ * transaction holds an array of multisig cosignatory modifications, min number of signatures to approve a transaction
+ * and a min number of signatures to remove a cosignatory.
  */
 public class ModifyMultisigAccountTransaction extends Transaction {
-    private final int minApprovalDelta;
-    private final int minRemovalDelta;
-    private final List<MultisigCosignatoryModification> modifications;
-    private final Schema schema = new ModifyMultisigAccountTransactionSchema();
+   private final Schema schema = new ModifyMultisigAccountTransactionSchema();
 
-    public ModifyMultisigAccountTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, int minApprovalDelta, int minRemovalDelta, List<MultisigCosignatoryModification> modifications, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
-        this(networkType, version, deadline, fee, minApprovalDelta, minRemovalDelta, modifications, Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo));
-    }
+   private final int minApprovalDelta;
+   private final int minRemovalDelta;
+   private final List<MultisigCosignatoryModification> modifications;
 
-    public ModifyMultisigAccountTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, int minApprovalDelta, int minRemovalDelta, List<MultisigCosignatoryModification> modifications) {
-        this(networkType, version, deadline, fee, minApprovalDelta, minRemovalDelta, modifications, Optional.empty(), Optional.empty(), Optional.empty());
-    }
+   /**
+    * @param networkType network type
+    * @param version transaction version. Use {@link TransactionVersion#MODIFY_MULTISIG_ACCOUNT} for current version
+    * @param deadline transaction deadline
+    * @param maxFee transaction fee
+    * @param signature optional signature
+    * @param signer optional signer
+    * @param transactionInfo optional transaction info
+    * @param minApprovalDelta minimum number of cosignatures for transaction approval
+    * @param minRemovalDelta minimum number of cosignatures for cosignatory removal
+    * @param modifications
+    */
+   public ModifyMultisigAccountTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline,
+         BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
+         Optional<TransactionInfo> transactionInfo, int minApprovalDelta, int minRemovalDelta,
+         List<MultisigCosignatoryModification> modifications) {
+      super(TransactionType.MODIFY_MULTISIG_ACCOUNT, networkType, version, deadline, maxFee, signature, signer,
+            transactionInfo);
+      // validations
+      Validate.notNull(modifications, "Modifications must not be null");
+      // assignments
+      this.minApprovalDelta = minApprovalDelta;
+      this.minRemovalDelta = minRemovalDelta;
+      this.modifications = Collections.unmodifiableList(modifications);
+   }
 
-    private ModifyMultisigAccountTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, int minApprovalDelta, int minRemovalDelta, List<MultisigCosignatoryModification> modifications, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
-        super(TransactionType.MODIFY_MULTISIG_ACCOUNT, networkType, version, deadline, fee, signature, signer, transactionInfo);
-        Validate.notNull(modifications, "Modifications must not be null");
-        this.minApprovalDelta = minApprovalDelta;
-        this.minRemovalDelta = minRemovalDelta;
-        this.modifications = modifications;
-    }
+   /**
+    * Return number of signatures needed to approve a transaction. If we are modifying and existing multi-signature
+    * account this indicates the relative change of the minimum cosignatories.
+    *
+    * @return int
+    */
+   public int getMinApprovalDelta() {
+      return minApprovalDelta;
+   }
 
-    /**
-     * Create a modify multisig account transaction object.
-     *
-     * @param deadline         The deadline to include the transaction.
-     * @param minApprovalDelta The min approval relative change.
-     * @param minRemovalDelta  The min removal relative change.
-     * @param modifications    The list of modifications.
-     * @param networkType      The network type.
-     * @return {@link ModifyMultisigAccountTransaction}
-     */
+   /**
+    * Return number of signatures needed to remove a cosignatory. If we are modifying and existing multi-signature
+    * account this indicates the relative change of the minimum cosignatories.
+    *
+    * @return int
+    */
+   public int getMinRemovalDelta() {
+      return minRemovalDelta;
+   }
 
-    public static ModifyMultisigAccountTransaction create(TransactionDeadline deadline, int minApprovalDelta, int minRemovalDelta, List<MultisigCosignatoryModification> modifications, NetworkType networkType) {
-        return new ModifyMultisigAccountTransaction(networkType, 3, deadline, BigInteger.valueOf(0), minApprovalDelta, minRemovalDelta, modifications);
-    }
+   /**
+    * The List of cosigner accounts added or removed from the multi-signature account.
+    *
+    * @return modifications in this transaction
+    */
+   public List<MultisigCosignatoryModification> getModifications() {
+      return modifications;
+   }
 
-    /**
-     * Return number of signatures needed to approve a transaction.
-     * If we are modifying and existing multi-signature account this indicates the relative change of the minimum cosignatories.
-     *
-     * @return int
-     */
-    public int getMinApprovalDelta() {
-        return minApprovalDelta;
-    }
+   protected byte[] generateBytes() {
+      FlatBufferBuilder builder = new FlatBufferBuilder();
+      BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
 
-    /**
-     * Return number of signatures needed to remove a cosignatory.
-     * If we are modifying and existing multi-signature account this indicates the relative change of the minimum cosignatories.
-     *
-     * @return int
-     */
-    public int getMinRemovalDelta() {
-        return minRemovalDelta;
-    }
+      // Create Modifications
+      int[] modificationsBuffers = new int[getModifications().size()];
+      for (int i = 0; i < getModifications().size(); ++i) {
+         MultisigCosignatoryModification multisigCosignatoryModification = getModifications().get(i);
+         byte[] byteCosignatoryPublicKey = HexEncoder
+               .getBytes(multisigCosignatoryModification.getCosignatoryPublicAccount().getPublicKey());
+         int cosignatoryPublicKey = CosignatoryModificationBuffer.createCosignatoryPublicKeyVector(builder,
+               byteCosignatoryPublicKey);
+         CosignatoryModificationBuffer.startCosignatoryModificationBuffer(builder);
+         CosignatoryModificationBuffer.addType(builder, multisigCosignatoryModification.getType().getValue());
+         CosignatoryModificationBuffer.addCosignatoryPublicKey(builder, cosignatoryPublicKey);
+         modificationsBuffers[i] = CosignatoryModificationBuffer.endCosignatoryModificationBuffer(builder);
+      }
 
-    /**
-     * The List of cosigner accounts added or removed from the multi-signature account.
-     *
-     * @return modifications in this transaction
-     */
-    public List<MultisigCosignatoryModification> getModifications() {
-        return modifications;
-    }
+      // Create Vectors
+      int signatureVector = ModifyMultisigAccountTransactionBuffer.createSignatureVector(builder, new byte[64]);
+      int signerVector = ModifyMultisigAccountTransactionBuffer.createSignerVector(builder, new byte[32]);
+      int deadlineVector = ModifyMultisigAccountTransactionBuffer.createDeadlineVector(builder,
+            UInt64Utils.fromBigInteger(deadlineBigInt));
+      int feeVector = ModifyMultisigAccountTransactionBuffer.createMaxFeeVector(builder,
+            UInt64Utils.fromBigInteger(getMaxFee()));
+      int modificationsVector = ModifyMultisigAccountTransactionBuffer.createModificationsVector(builder,
+            modificationsBuffers);
 
-    byte[] generateBytes() {
-        FlatBufferBuilder builder = new FlatBufferBuilder();
-        BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
+      int size = getSerializedSize();
 
-        // Create Modifications
-        int[] modificationsBuffers = new int[modifications.size()];
-        for (int i = 0; i < modifications.size(); ++i) {
-            MultisigCosignatoryModification multisigCosignatoryModification = modifications.get(i);
-            byte[] byteCosignatoryPublicKey = HexEncoder.getBytes(multisigCosignatoryModification.getCosignatoryPublicAccount().getPublicKey());
-            int cosignatoryPublicKey = CosignatoryModificationBuffer.createCosignatoryPublicKeyVector(builder, byteCosignatoryPublicKey);
-            CosignatoryModificationBuffer.startCosignatoryModificationBuffer(builder);
-            CosignatoryModificationBuffer.addType(builder, multisigCosignatoryModification.getType().getValue());
-            CosignatoryModificationBuffer.addCosignatoryPublicKey(builder, cosignatoryPublicKey);
-            modificationsBuffers[i] = CosignatoryModificationBuffer.endCosignatoryModificationBuffer(builder);
-        }
+      ModifyMultisigAccountTransactionBuffer.startModifyMultisigAccountTransactionBuffer(builder);
+      ModifyMultisigAccountTransactionBuffer.addSize(builder, size);
+      ModifyMultisigAccountTransactionBuffer.addSignature(builder, signatureVector);
+      ModifyMultisigAccountTransactionBuffer.addSigner(builder, signerVector);
+      ModifyMultisigAccountTransactionBuffer.addVersion(builder, getTxVersionforSerialization());
+      ModifyMultisigAccountTransactionBuffer.addType(builder, getType().getValue());
+      ModifyMultisigAccountTransactionBuffer.addMaxFee(builder, feeVector);
+      ModifyMultisigAccountTransactionBuffer.addDeadline(builder, deadlineVector);
 
-        // Create Vectors
-        int signatureVector = ModifyMultisigAccountTransactionBuffer.createSignatureVector(builder, new byte[64]);
-        int signerVector = ModifyMultisigAccountTransactionBuffer.createSignerVector(builder, new byte[32]);
-        int deadlineVector = ModifyMultisigAccountTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
-        int feeVector = ModifyMultisigAccountTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
-        int modificationsVector = ModifyMultisigAccountTransactionBuffer.createModificationsVector(builder, modificationsBuffers);
+      ModifyMultisigAccountTransactionBuffer.addMinApprovalDelta(builder, (byte) getMinApprovalDelta());
+      ModifyMultisigAccountTransactionBuffer.addMinRemovalDelta(builder, (byte) getMinRemovalDelta());
+      ModifyMultisigAccountTransactionBuffer.addNumModifications(builder, getModifications().size());
+      ModifyMultisigAccountTransactionBuffer.addModifications(builder, modificationsVector);
 
-        // header, min approval, min removal, mod count, mod (type, pub key) * count
-        int size = HEADER_SIZE + 1 + 1 + 1 + (1 + 32) * modifications.size();
+      int codedTransaction = ModifyMultisigAccountTransactionBuffer.endModifyMultisigAccountTransactionBuffer(builder);
+      builder.finish(codedTransaction);
 
-        ModifyMultisigAccountTransactionBuffer.startModifyMultisigAccountTransactionBuffer(builder);
-        ModifyMultisigAccountTransactionBuffer.addSize(builder, size);
-        ModifyMultisigAccountTransactionBuffer.addSignature(builder, signatureVector);
-        ModifyMultisigAccountTransactionBuffer.addSigner(builder, signerVector);
-        ModifyMultisigAccountTransactionBuffer.addVersion(builder, getTxVersionforSerialization());
-        ModifyMultisigAccountTransactionBuffer.addType(builder, getType().getValue());
-        ModifyMultisigAccountTransactionBuffer.addMaxFee(builder, feeVector);
-        ModifyMultisigAccountTransactionBuffer.addDeadline(builder, deadlineVector);
-        
-        ModifyMultisigAccountTransactionBuffer.addMinApprovalDelta(builder, (byte)minApprovalDelta);
-        ModifyMultisigAccountTransactionBuffer.addMinRemovalDelta(builder, (byte)minRemovalDelta);
-        ModifyMultisigAccountTransactionBuffer.addNumModifications(builder, modifications.size());
-        ModifyMultisigAccountTransactionBuffer.addModifications(builder, modificationsVector);
+      // validate size
+      byte[] output = schema.serialize(builder.sizedByteArray());
+      Validate.isTrue(output.length == size, "Serialized transaction has incorrect length: " + this.getClass());
+      return output;
+   }
 
-        int codedTransaction = ModifyMultisigAccountTransactionBuffer.endModifyMultisigAccountTransactionBuffer(builder);
-        builder.finish(codedTransaction);
+   /**
+    * calculate size of payload without header
+    * 
+    * @param modificationCount number of multisig modifications
+    * @return size
+    */
+   public static int calculatePayloadSize(int modificationCount) {
+      // min approval, min removal, mod count, mod (type, pub key) * count
+      return 1 + 1 + 1 + (1 + 32) * modificationCount;
+   }
 
-        // validate size
-        byte[] output = schema.serialize(builder.sizedByteArray());
-        Validate.isTrue(output.length == size, "Serialized transaction has incorrect length: " + this.getClass());
-        return output;
-    }
+   @Override
+   protected int getPayloadSerializedSize() {
+      return calculatePayloadSize(getModifications().size());
+   }
+
+   @Override
+   protected Transaction copyForSigner(PublicAccount signer) {
+      return new ModifyMultisigAccountTransaction(getNetworkType(), getVersion(), getDeadline(), getMaxFee(),
+            getSignature(), Optional.of(signer), getTransactionInfo(), getMinApprovalDelta(), getMinRemovalDelta(),
+            getModifications());
+   }
 }

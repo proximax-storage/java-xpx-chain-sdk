@@ -22,7 +22,6 @@ import io.proximax.sdk.model.transaction.TransactionType;
  * specialized transaction builders for all types of transactions
  */
 public abstract class TransactionBuilder<B extends TransactionBuilder<B, T>, T extends Transaction> {
-   private static final BigInteger TRANSACTION_HEADER_SIZE = BigInteger.valueOf(Transaction.HEADER_SIZE);
 
    private TransactionType type;
    private Integer version;
@@ -71,12 +70,11 @@ public abstract class TransactionBuilder<B extends TransactionBuilder<B, T>, T e
    /**
     * calculate maxFee using fee calculation strategy or return 0 maxFee if no strategy was provided
     * 
-    * @param transactionSize size of transaction in bytes
+    * @param transactionPayloadSize size of transaction in bytes excluding header
     * @return the maxFee
     */
-   protected BigInteger getMaxFeeCalculation(int transactionSize) {
-      return feeCalculationStrategy.orElse(FeeCalculationStrategy.ZERO).calculateFee(transactionSize)
-            .add(TRANSACTION_HEADER_SIZE);
+   protected BigInteger getMaxFeeCalculation(int transactionPayloadSize) {
+      return feeCalculationStrategy.orElse(FeeCalculationStrategy.ZERO).calculateFee(Transaction.HEADER_SIZE + transactionPayloadSize);
    }
 
    // ----------------------------------------- setters --------------------------------------//
