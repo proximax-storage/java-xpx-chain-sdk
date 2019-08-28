@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
@@ -24,8 +25,9 @@ class BlockchainUpgradeTransactionTest extends ResourceBasedTest {
 
    @Test
    void testConstructor() {
-      BlockchainUpgradeTransaction trans = BlockchainUpgradeTransaction
-            .create(BigInteger.ONE, new BlockchainVersion(1, 2, 3, 4), new FakeDeadline(), NetworkType.MIJIN);
+      BlockchainUpgradeTransaction trans = new BlockchainUpgradeTransaction(NetworkType.MIJIN, 1, new FakeDeadline(),
+            BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), BigInteger.ONE,
+            new BlockchainVersion(1, 2, 3, 4));
 
       assertEquals(BigInteger.ONE, trans.getUpgradePeriod());
       assertEquals(new BlockchainVersion(1, 2, 3, 4), trans.getNewVersion());
@@ -33,8 +35,9 @@ class BlockchainUpgradeTransactionTest extends ResourceBasedTest {
 
    @Test
    void serialization() throws IOException {
-      BlockchainUpgradeTransaction trans = BlockchainUpgradeTransaction
-            .create(BigInteger.ONE, new BlockchainVersion(1, 2, 3, 4), new FakeDeadline(), NetworkType.MIJIN);
+      BlockchainUpgradeTransaction trans = new BlockchainUpgradeTransaction(NetworkType.MIJIN, 1, new FakeDeadline(),
+            BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), BigInteger.ONE,
+            new BlockchainVersion(1, 2, 3, 4));
 
       byte[] actual = trans.generateBytes();
 //      saveBytes("blockchain_upgrade", actual);
