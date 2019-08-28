@@ -194,4 +194,37 @@ public class TransactionBuilderFactory {
       initDefaults(builder);
       return builder; 
    }
+
+   /**
+    * create builder for blockchain config transaction
+    * 
+    * @return the builder
+    */
+   public BlockchainConfigTransactionBuilder blockchainConfig() {
+      BlockchainConfigTransactionBuilder builder = new BlockchainConfigTransactionBuilder();
+      initDefaults(builder);
+      return builder; 
+   }
+
+   /**
+    * create builder for blockchain upgrade transaction
+    * 
+    * @return the builder
+    */
+   public BlockchainUpgradeTransactionBuilder blockchainUpgrade() {
+      BlockchainUpgradeTransactionBuilder builder = new BlockchainUpgradeTransactionBuilder();
+      initDefaults(builder);
+      return builder; 
+   }
+   
+   /**
+    * create builder for blockchain upgrade transaction
+    * 
+    * @return the builder
+    */
+   public ModifyContractTransactionBuilder modifyContract() {
+      ModifyContractTransactionBuilder builder = new ModifyContractTransactionBuilder();
+      initDefaults(builder);
+      return builder; 
+   }
 }

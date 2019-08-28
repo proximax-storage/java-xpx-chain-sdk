@@ -39,40 +39,33 @@ import io.proximax.sdk.utils.dto.UInt64Utils;
  * By default the upgrade period is required to be at least 360
  */
 public class BlockchainUpgradeTransaction extends Transaction {
+   private final Schema schema = new BlockchainUpgradeTransactionSchema();
 
    private final BigInteger upgradePeriod;
    private final BlockchainVersion newVersion;
 
-   private final Schema schema = new BlockchainUpgradeTransactionSchema();
-
    /**
-    * @param networkType
-    * @param version
-    * @param deadline
-    * @param fee
-    * @param signature
-    * @param signer
-    * @param transactionInfo 
+    * @param networkType network type
+    * @param version transaction version. Use {@link TransactionVersion#BLOCKCHAIN_UPGRADE} for current version
+    * @param deadline transaction deadline
+    * @param maxFee transaction fee
+    * @param signature optional signature
+    * @param signer optional signer
+    * @param transactionInfo optional transaction info
     * @param upgradePeriod period after version is enforced. Default minimum is 360
     * @param newVersion new node version which will be enforced after upgrade period elapses
     */
    public BlockchainUpgradeTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline,
-         BigInteger fee, Optional<String> signature, Optional<PublicAccount> signer,
+         BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
          Optional<TransactionInfo> transactionInfo, BigInteger upgradePeriod, BlockchainVersion newVersion) {
-      super(TransactionType.BLOCKCHAIN_UPGRADE, networkType, version, deadline, fee, signature, signer,
+      super(TransactionType.BLOCKCHAIN_UPGRADE, networkType, version, deadline, maxFee, signature, signer,
             transactionInfo);
-      // basic validations
-      Validate.notNull(upgradePeriod);
-      Validate.notNull(newVersion);
-      // make assignments
+      // validations
+      Validate.notNull(upgradePeriod, "upgrade period is mandatory");
+      Validate.notNull(newVersion, "new version is required");
+      // assignments
       this.upgradePeriod = upgradePeriod;
       this.newVersion = newVersion;
-   }
-
-   public static BlockchainUpgradeTransaction create(BigInteger upgradePeriod, BlockchainVersion newVersion,
-         TransactionDeadline deadline, NetworkType networkType) {
-      return new BlockchainUpgradeTransaction(networkType, TransactionVersion.BLOCKCHAIN_UPGRADE.getValue(), deadline,
-            BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), upgradePeriod, newVersion);
    }
 
    /**
@@ -90,7 +83,7 @@ public class BlockchainUpgradeTransaction extends Transaction {
    }
 
    @Override
-   byte[] generateBytes() {
+   protected byte[] generateBytes() {
       FlatBufferBuilder builder = new FlatBufferBuilder();
 
       // prepare data for serialization
@@ -102,14 +95,13 @@ public class BlockchainUpgradeTransaction extends Transaction {
       int deadlineOffset = CatapultUpgradeTransactionBuffer.createDeadlineVector(builder,
             UInt64Utils.fromBigInteger(deadlineBigInt));
       int feeOffset = CatapultUpgradeTransactionBuffer.createMaxFeeVector(builder,
-            UInt64Utils.fromBigInteger(getFee()));
+            UInt64Utils.fromBigInteger(getMaxFee()));
       int upgradePeriodOffset = CatapultUpgradeTransactionBuffer.createUpgradePeriodVector(builder,
             UInt64Utils.fromBigInteger(getUpgradePeriod()));
       int newCatapultVersionOffset = CatapultUpgradeTransactionBuffer.createNewCatapultVersionVector(builder,
             UInt64Utils.fromBigInteger(getNewVersion().getVersionValue()));
 
-      // header, 2 uint64
-      int size = HEADER_SIZE + 8 + 8;
+      int size = getSerializedSize();
 
       CatapultUpgradeTransactionBuffer.startCatapultUpgradeTransactionBuffer(builder);
       CatapultUpgradeTransactionBuffer.addDeadline(builder, deadlineOffset);
@@ -130,5 +122,26 @@ public class BlockchainUpgradeTransaction extends Transaction {
       byte[] output = schema.serialize(builder.sizedByteArray());
       Validate.isTrue(output.length == size, "Serialized transaction has incorrect length: " + this.getClass());
       return output;
+   }
+
+   /**
+    * calculate payload size excluding header
+    * 
+    * @return size
+    */
+   public static int calculatePayloadSize() {
+      // period offset + version
+      return 8 + 8;
+   }
+
+   @Override
+   protected int getPayloadSerializedSize() {
+      return calculatePayloadSize();
+   }
+
+   @Override
+   protected Transaction copyForSigner(PublicAccount signer) {
+      return new BlockchainUpgradeTransaction(getNetworkType(), getVersion(), getDeadline(), getMaxFee(),
+            getSignature(), Optional.of(signer), getTransactionInfo(), getUpgradePeriod(), getNewVersion());
    }
 }

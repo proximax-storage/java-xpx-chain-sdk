@@ -41,22 +41,22 @@ public class BlockchainConfigTransaction extends Transaction {
    private final String supportedEntityVersions;
 
    /**
-    * @param networkType
-    * @param version
-    * @param deadline
-    * @param fee
-    * @param signature
-    * @param signer
-    * @param transactionInfo
-    * @param applyHeightDelta
-    * @param blockchainConfig
-    * @param supportedEntityVersions
+    * @param networkType network type
+    * @param version transaction version. Use {@link TransactionVersion#BLOCKCHAIN_CONFIG} for current version
+    * @param deadline transaction deadline
+    * @param maxFee transaction fee
+    * @param signature optional signature
+    * @param signer optional signer
+    * @param transactionInfo optional transaction info
+    * @param applyHeightDelta number of blocks after which the configuration becomes valid
+    * @param blockchainConfig string matching the content of the configuration file
+    * @param supportedEntityVersions JSON string with supported entity versions
     */
    public BlockchainConfigTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline,
-         BigInteger fee, Optional<String> signature, Optional<PublicAccount> signer,
+         BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
          Optional<TransactionInfo> transactionInfo, BigInteger applyHeightDelta, String blockchainConfig,
          String supportedEntityVersions) {
-      super(TransactionType.BLOCKCHAIN_CONFIG, networkType, version, deadline, fee, signature, signer, transactionInfo);
+      super(TransactionType.BLOCKCHAIN_CONFIG, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
       // basic input validations
       Validate.notNull(applyHeightDelta);
       Validate.notNull(blockchainConfig);
@@ -65,21 +65,6 @@ public class BlockchainConfigTransaction extends Transaction {
       this.applyHeightDelta = applyHeightDelta;
       this.blockchainConfig = blockchainConfig;
       this.supportedEntityVersions = supportedEntityVersions;
-   }
-
-   /**
-    * @param applyHeightDelta number of blocks after which the configuration becomes valid
-    * @param blockchainConfig string matching the content of the configuration file
-    * @param supportedEntityVersions JSON string with supported entity versions
-    * @param networkType type of the network
-    * @param deadline transaction deadline
-    * @return the transaction instance
-    */
-   public static BlockchainConfigTransaction create(BigInteger applyHeightDelta, String blockchainConfig,
-         String supportedEntityVersions, NetworkType networkType, TransactionDeadline deadline) {
-      return new BlockchainConfigTransaction(networkType, TransactionVersion.BLOCKCHAIN_CONFIG.getValue(), deadline,
-            BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), applyHeightDelta, blockchainConfig,
-            supportedEntityVersions);
    }
 
    /**
@@ -103,7 +88,7 @@ public class BlockchainConfigTransaction extends Transaction {
       return supportedEntityVersions;
    }
 
-   byte[] generateBytes() {
+   protected byte[] generateBytes() {
       FlatBufferBuilder builder = new FlatBufferBuilder();
 
       // prepare data for serialization
@@ -116,15 +101,15 @@ public class BlockchainConfigTransaction extends Transaction {
       int signerOffset = CatapultConfigTransactionBuffer.createSignerVector(builder, new byte[32]);
       int deadlineOffset = CatapultConfigTransactionBuffer.createDeadlineVector(builder,
             UInt64Utils.fromBigInteger(deadlineBigInt));
-      int feeOffset = CatapultConfigTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
+      int feeOffset = CatapultConfigTransactionBuffer.createMaxFeeVector(builder,
+            UInt64Utils.fromBigInteger(getMaxFee()));
       // specific fields
       int applyHeightOffset = CatapultConfigTransactionBuffer.createApplyHeightDeltaVector(builder,
             UInt64Utils.fromBigInteger(getApplyHeightDelta()));
       int confgOffset = CatapultConfigTransactionBuffer.createBlockChainConfigVector(builder, configBytes);
       int entityOffset = CatapultConfigTransactionBuffer.createSupportedEntityVersionsVector(builder, entityBytes);
 
-      // header, 2 uint64 and int
-      int size = HEADER_SIZE + 8 + 2 + 2 + configBytes.length + entityBytes.length;
+      int size = getSerializedSize();
 
       CatapultConfigTransactionBuffer.startCatapultConfigTransactionBuffer(builder);
       CatapultConfigTransactionBuffer.addDeadline(builder, deadlineOffset);
@@ -148,5 +133,30 @@ public class BlockchainConfigTransaction extends Transaction {
       byte[] output = schema.serialize(builder.sizedByteArray());
       Validate.isTrue(output.length == size, "Serialized transaction has incorrect length: " + this.getClass());
       return output;
+   }
+
+   /**
+    * calculate the payload size excluding the header
+    * 
+    * @param configBytesLength number of bytes of configuration
+    * @param entityBytesLength number of bytes of supported entities
+    * @return the size
+    */
+   public static int calculatePayloadSize(int configBytesLength, int entityBytesLength) {
+      // height offset + size of config + config + size of entities + entities
+      return 8 + 2 + configBytesLength + 2 + entityBytesLength;
+   }
+
+   @Override
+   protected int getPayloadSerializedSize() {
+      return calculatePayloadSize(StringUtils.getBytes(getBlockchainConfig()).length,
+            StringUtils.getBytes(getSupportedEntityVersions()).length);
+   }
+
+   @Override
+   protected Transaction copyForSigner(PublicAccount signer) {
+      return new BlockchainConfigTransaction(getNetworkType(), getVersion(), getDeadline(), getMaxFee(), getSignature(),
+            Optional.of(signer), getTransactionInfo(), getApplyHeightDelta(), getBlockchainConfig(),
+            getSupportedEntityVersions());
    }
 }
