@@ -8,6 +8,7 @@ package io.proximax.sdk.model.transaction;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,7 +54,7 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
          List<AccountPropertyModification<T>> modifications) {
       super(type, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
       this.propertyType = propertyType;
-      this.modifications = modifications;
+      this.modifications = Collections.unmodifiableList(modifications);
    }
 
    /**
@@ -150,7 +151,6 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
       private static final int VALUE_BYTES_LENGTH = 25;
 
       /**
-       * @param type
        * @param networkType
        * @param version
        * @param deadline
@@ -184,7 +184,7 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
       }
 
       /**
-       * calcucate the payload size
+       * calculate the payload size
        * 
        * @param modCount number of address modifications
        * @return the size
@@ -248,7 +248,7 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
       }
 
       /**
-       * calcucate the payload size
+       * calculate the payload size
        * 
        * @param modCount number of address modifications
        * @return the size
@@ -306,7 +306,7 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
       }
 
       /**
-       * calcucate the payload size
+       * calculate the payload size
        * 
        * @param modCount number of address modifications
        * @return the size

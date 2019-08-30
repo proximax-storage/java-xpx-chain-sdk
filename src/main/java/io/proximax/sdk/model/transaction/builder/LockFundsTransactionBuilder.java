@@ -8,6 +8,7 @@ package io.proximax.sdk.model.transaction.builder;
 import java.math.BigInteger;
 
 import io.proximax.sdk.model.mosaic.Mosaic;
+import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.transaction.LockFundsTransaction;
 import io.proximax.sdk.model.transaction.SignedTransaction;
 import io.proximax.sdk.model.transaction.TransactionType;
@@ -102,4 +103,13 @@ public class LockFundsTransactionBuilder
    
    // -------------------------------------- convenience --------------------------------------------//
 
+   /**
+    * lock 10 network currency for specified duration. this is convenience for aggregate transaction locks
+    * 
+    * @param duration the duration in number of blocks
+    * @return self
+    */
+   public LockFundsTransactionBuilder aggregate(BigInteger duration) {
+      return mosaic(NetworkCurrencyMosaic.TEN).duration(duration);
+   }
 }

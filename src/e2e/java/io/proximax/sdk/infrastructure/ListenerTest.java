@@ -16,16 +16,14 @@
 
 package io.proximax.sdk.infrastructure;
 
-import static java.time.temporal.ChronoUnit.HOURS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -38,6 +36,7 @@ import org.junit.jupiter.api.TestInstance;
 import io.proximax.sdk.AccountRepository;
 import io.proximax.sdk.BaseTest;
 import io.proximax.sdk.BlockchainApi;
+import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.ListenerRepository;
 import io.proximax.sdk.TransactionRepository;
 import io.proximax.sdk.model.account.Account;
@@ -48,17 +47,18 @@ import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.CosignatureSignedTransaction;
 import io.proximax.sdk.model.transaction.CosignatureTransaction;
-import io.proximax.sdk.model.transaction.Deadline;
 import io.proximax.sdk.model.transaction.PlainMessage;
 import io.proximax.sdk.model.transaction.SignedTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
 import io.proximax.sdk.model.transaction.TransactionStatusError;
 import io.proximax.sdk.model.transaction.TransferTransaction;
+import io.proximax.sdk.model.transaction.builder.TransactionBuilderFactory;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Disabled("listeners are used by other tests")
 class ListenerTest extends BaseTest {
    private BlockchainApi api;
+   private TransactionBuilderFactory transact;
    private TransactionRepository transactionHttp;
    private AccountRepository accountHttp;
    private Account account;
@@ -69,6 +69,8 @@ class ListenerTest extends BaseTest {
    @BeforeAll
    void setup() throws IOException {
       api = new BlockchainApi(new URL(getNodeUrl()), getNetworkType());
+      transact = api.transact().setDeadlineMillis(BigInteger.valueOf(3_600_000))
+            .setFeeCalculationStrategy(FeeCalculationStrategy.ZERO);
       transactionHttp = api.createTransactionRepository();
       accountHttp = api.createAccountRepository();
       account = new Account("787225aaff3d2c71f4ffa32d4f19ec4922f3cd869747f267378f81f8e3fcb12d", NetworkType.MIJIN_TEST);
@@ -218,12 +220,8 @@ class ListenerTest extends BaseTest {
    }
 
    private SignedTransaction announceStandaloneTransferTransaction() throws ExecutionException, InterruptedException {
-      TransferTransaction transferTransaction = TransferTransaction.create(new Deadline(2, HOURS),
-            new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST),
-            Arrays.asList(),
-            PlainMessage.create("test-message"),
-            NetworkType.MIJIN_TEST);
-
+      TransferTransaction transferTransaction = transact.transfer().message(PlainMessage.create("test-message"))
+            .to(new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST)).build();
       SignedTransaction signedTransaction = this.account.sign(transferTransaction, api.getNetworkGenerationHash());
       transactionHttp.announce(signedTransaction).toFuture().get();
       return signedTransaction;
@@ -231,11 +229,10 @@ class ListenerTest extends BaseTest {
 
    private SignedTransaction announceStandaloneTransferTransactionWithInsufficientBalance()
          throws ExecutionException, InterruptedException {
-      TransferTransaction transferTransaction = TransferTransaction.create(new Deadline(2, HOURS),
-            new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST),
-            Arrays.asList(NetworkCurrencyMosaic.createRelative(new BigDecimal("100000000000"))),
-            PlainMessage.create("test-message"),
-            NetworkType.MIJIN_TEST);
+      TransferTransaction transferTransaction = transact.transfer()
+            .mosaic(NetworkCurrencyMosaic.createRelative(new BigDecimal("100000000000")))
+            .message(PlainMessage.create("test-message"))
+            .to(new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST)).build();
 
       SignedTransaction signedTransaction = this.account.sign(transferTransaction, api.getNetworkGenerationHash());
       transactionHttp.announce(signedTransaction).toFuture().get();
@@ -243,17 +240,14 @@ class ListenerTest extends BaseTest {
    }
 
    private SignedTransaction announceAggregateBondedTransaction() throws ExecutionException, InterruptedException {
-      TransferTransaction transferTransaction = TransferTransaction.create(new Deadline(2, HOURS),
-            new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST),
-            Arrays.asList(),
-            PlainMessage.create("test-message"),
-            NetworkType.MIJIN_TEST);
+      TransferTransaction transferTransaction = transact.transfer().message(PlainMessage.create("test-message"))
+            .to(new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST)).build();
 
-      AggregateTransaction aggregateTransaction = AggregateTransaction.createComplete(new Deadline(2, HOURS),
-            Collections.singletonList(transferTransaction.toAggregate(this.multisigAccount.getPublicAccount())),
-            NetworkType.MIJIN_TEST);
+      AggregateTransaction aggregateTransaction = transact.aggregateBonded()
+            .addInnerTransactions(transferTransaction.toAggregate(this.multisigAccount.getPublicAccount())).build();
 
-      SignedTransaction signedTransaction = this.cosignatoryAccount.sign(aggregateTransaction, api.getNetworkGenerationHash());
+      SignedTransaction signedTransaction = this.cosignatoryAccount.sign(aggregateTransaction,
+            api.getNetworkGenerationHash());
 
       transactionHttp.announceAggregateBonded(signedTransaction).toFuture().get();
 

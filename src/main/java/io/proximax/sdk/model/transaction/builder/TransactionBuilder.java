@@ -80,6 +80,14 @@ public abstract class TransactionBuilder<B extends TransactionBuilder<B, T>, T e
    // ----------------------------------------- setters --------------------------------------//
 
    /**
+    * @param type the type to set
+    */
+   public B type(TransactionType type) {
+      this.type = type;
+      return self();
+   }
+
+   /**
     * @param version the version to set
     */
    public B version(Integer version) {

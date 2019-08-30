@@ -20,6 +20,7 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +29,7 @@ import org.apache.commons.lang3.Validate;
 import com.google.flatbuffers.FlatBufferBuilder;
 
 import io.proximax.core.utils.Base32Encoder;
+import io.proximax.core.utils.StringUtils;
 import io.proximax.sdk.gen.buffers.MetadataModificationBuffer;
 import io.proximax.sdk.gen.buffers.ModifyMetadataTransactionBuffer;
 import io.proximax.sdk.model.account.Address;
@@ -37,67 +39,47 @@ import io.proximax.sdk.model.metadata.Field;
 import io.proximax.sdk.model.metadata.MetadataModification;
 import io.proximax.sdk.model.metadata.MetadataModificationType;
 import io.proximax.sdk.model.metadata.MetadataType;
-import io.proximax.sdk.model.mosaic.MosaicId;
-import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
  * Transaction requesting modification of metadata
  */
 public class ModifyMetadataTransaction extends Transaction {
+   private final Schema schema = new ModifyMetadataTransactionSchema();
+
    private final MetadataType metadataType;
    private final Optional<UInt64Id> metadataId;
    private final Optional<Address> address;
    private final List<MetadataModification> modifications;
-   private final Schema schema = new ModifyMetadataTransactionSchema();
 
-   public ModifyMetadataTransaction(TransactionType transactionType, NetworkType networkType,
-         Integer transactionVersion, TransactionDeadline deadline, BigInteger fee, Optional<UInt64Id> metadataId,
-         Optional<Address> address, MetadataType metadataType, List<MetadataModification> modifications, String signature,
-         PublicAccount signer, TransactionInfo transactionInfo) {
-      this(transactionType, networkType, transactionVersion, deadline, fee, metadataId, address,
-            metadataType, modifications, Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo));
-   }
-   
-   private ModifyMetadataTransaction(TransactionType transactionType, NetworkType networkType, TransactionDeadline deadline,
-         Optional<UInt64Id> metadataId, Optional<Address> address, MetadataType metadataType,
-         List<MetadataModification> modifications) {
-      this(transactionType, networkType, TransactionVersion.METADATA_MODIFICATION.getValue(), deadline, BigInteger.ZERO,
-            metadataId, address, metadataType, modifications, Optional.empty(), Optional.empty(), Optional.empty());
-   }
-
-   private ModifyMetadataTransaction(TransactionType transactionType, NetworkType networkType, Integer version,
-         TransactionDeadline deadline, BigInteger fee, Optional<UInt64Id> metadataId, Optional<Address> address,
-         MetadataType metadataType, List<MetadataModification> modifications, Optional<String> signature,
-         Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
-      super(transactionType, networkType, version, deadline, fee, signature, signer, transactionInfo);
-      Validate.notNull(metadataType, "metadataType must not be null");
-      Validate.notNull(metadataId, "metadataId must not be null");
-      Validate.notNull(address, "address must not be null");
-      Validate.notNull(modifications, "modifications must not be null");
-      Validate.isTrue(metadataId.isPresent() != address.isPresent(), "specify metadata id or address exclusively");
+   /**
+    * @param type
+    * @param networkType
+    * @param version
+    * @param deadline
+    * @param maxFee
+    * @param signature
+    * @param signer
+    * @param transactionInfo
+    * @param metadataType
+    * @param metadataId
+    * @param address
+    * @param modifications
+    */
+   public ModifyMetadataTransaction(TransactionType type, NetworkType networkType, Integer version,
+         TransactionDeadline deadline, BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
+         Optional<TransactionInfo> transactionInfo, MetadataType metadataType, Optional<UInt64Id> metadataId,
+         Optional<Address> address, List<MetadataModification> modifications) {
+      super(type, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
+      // validations
+      Validate.notNull(metadataType, "metadataType can not be null");
+      Validate.isTrue(address.isPresent() != metadataId.isPresent(), "Has to be either address or metadata");
+      Validate.notNull(modifications, "modifications can not be null");
+      // assignments
+      this.metadataType = metadataType;
       this.metadataId = metadataId;
       this.address = address;
-      this.metadataType = metadataType;
-      this.modifications = modifications;
-   }
-
-   public static ModifyMetadataTransaction createForMosaic(TransactionDeadline deadline, MosaicId mosaicId,
-         List<MetadataModification> modifications, NetworkType networkType) {
-      return new ModifyMetadataTransaction(TransactionType.MODIFY_MOSAIC_METADATA, networkType, deadline,
-            Optional.of(mosaicId), Optional.empty(), MetadataType.MOSAIC, modifications);
-   }
-
-   public static ModifyMetadataTransaction createForNamespace(TransactionDeadline deadline, NamespaceId namespaceId,
-         List<MetadataModification> modifications, NetworkType networkType) {
-      return new ModifyMetadataTransaction(TransactionType.MODIFY_NAMESPACE_METADATA, networkType, deadline,
-            Optional.of(namespaceId), Optional.empty(), MetadataType.NAMESPACE, modifications);
-   }
-
-   public static ModifyMetadataTransaction createForAddress(TransactionDeadline deadline, Address address,
-         List<MetadataModification> modifications, NetworkType networkType) {
-      return new ModifyMetadataTransaction(TransactionType.MODIFY_ADDRESS_METADATA, networkType, deadline,
-            Optional.empty(), Optional.of(address), MetadataType.ADDRESS, modifications);
+      this.modifications = Collections.unmodifiableList(modifications);
    }
 
    /**
@@ -128,7 +110,7 @@ public class ModifyMetadataTransaction extends Transaction {
       return modifications;
    }
 
-   byte[] generateBytes() {
+   protected byte[] generateBytes() {
       FlatBufferBuilder builder = new FlatBufferBuilder();
 
       // prepare data for serialization
@@ -142,8 +124,6 @@ public class ModifyMetadataTransaction extends Transaction {
          throw new IllegalStateException("Always has to be address or id");
       }
 
-      // track the size of the whole metadata modification
-      int totalSize = 0;
       // load modifications
       int[] modificationOffsets = new int[modifications.size()];
       for (int i = 0; i < modificationOffsets.length; i++) {
@@ -165,8 +145,6 @@ public class ModifyMetadataTransaction extends Transaction {
 
          // compute number of bytes: size + modType + keySize + valueSize + key + value
          int modSize = 4 + 1 + 1 + 2 + keyBytes.length + valueBytes.length;
-         // increase total size
-         totalSize += modSize;
 
          // populate flat-buffer
          MetadataModificationBuffer.startMetadataModificationBuffer(builder);
@@ -184,12 +162,13 @@ public class ModifyMetadataTransaction extends Transaction {
       int signerOffset = ModifyMetadataTransactionBuffer.createSignerVector(builder, new byte[32]);
       int deadlineOffset = ModifyMetadataTransactionBuffer.createDeadlineVector(builder,
             UInt64Utils.fromBigInteger(deadlineBigInt));
-      int feeOffset = ModifyMetadataTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
+      int feeOffset = ModifyMetadataTransactionBuffer.createMaxFeeVector(builder,
+            UInt64Utils.fromBigInteger(getMaxFee()));
       int metadataIdOffset = ModifyMetadataTransactionBuffer.createMetadataIdVector(builder, metadataIdBytes);
       int modificationsOffset = ModifyMetadataTransactionBuffer.createModificationsVector(builder, modificationOffsets);
 
       // add size of stuff with constant size and size of metadata id
-      totalSize += HEADER_SIZE + metadataIdBytes.length + 1;
+      int totalSize = getSerializedSize();
 
       ModifyMetadataTransactionBuffer.startModifyMetadataTransactionBuffer(builder);
       ModifyMetadataTransactionBuffer.addDeadline(builder, deadlineOffset);
@@ -211,5 +190,48 @@ public class ModifyMetadataTransaction extends Transaction {
       byte[] output = schema.serialize(builder.sizedByteArray());
       Validate.isTrue(output.length == totalSize, "Serialized transaction has incorrect length: " + this.getClass());
       return output;
+   }
+
+   /**
+    * calculate size of modification
+    * 
+    * @param mod the modification
+    * @return the size
+    */
+   private static int calculateModSize(MetadataModification mod) {
+      int keySize = StringUtils.getBytes(mod.getField().getKey()).length;
+      // remove does not have value
+      int valueSize = mod.getType() == MetadataModificationType.REMOVE ? 0
+            : StringUtils.getBytes(mod.getField().getValue()).length;
+      // compute number of bytes: size + modType + keySize + valueSize + key + value
+      return 4 + 1 + 1 + 2 + keySize + valueSize;
+   }
+
+   /**
+    * calculate payload size
+    * 
+    * @param isAddressMetadata true if address, false otherwise
+    * @param mods modifications
+    * 
+    * @return size
+    */
+   public static int calculatePayloadSize(boolean isAddressMetadata, List<MetadataModification> mods) {
+      // 25 bytes for address 8 bytes for uint64
+      int metaIdSize = isAddressMetadata ? 25 : 8;
+      int modsSize = mods.stream().mapToInt(ModifyMetadataTransaction::calculateModSize).sum();
+      // id + mod size + mods
+      return metaIdSize + 1 + modsSize;
+   }
+
+   @Override
+   protected int getPayloadSerializedSize() {
+      return calculatePayloadSize(getAddress().isPresent(), getModifications());
+   }
+
+   @Override
+   protected Transaction copyForSigner(PublicAccount signer) {
+      return new ModifyMetadataTransaction(getType(), getNetworkType(), getVersion(), getDeadline(), getMaxFee(),
+            getSignature(), Optional.of(signer), getTransactionInfo(), getMetadataType(), getMetadataId(), getAddress(),
+            getModifications());
    }
 }

@@ -293,4 +293,15 @@ public class TransactionBuilderFactory {
       initDefaults(builder);
       return builder; 
    }
+
+   /**
+    * create builder for metadata modification transaction
+    * 
+    * @return the builder
+    */
+   public ModifyMetadataTransactionBuilder modifyMetadata() {
+      ModifyMetadataTransactionBuilder builder = new ModifyMetadataTransactionBuilder();
+      initDefaults(builder);
+      return builder; 
+   }
 }

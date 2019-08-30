@@ -231,19 +231,21 @@ class ModifyMetadataTransactionMapping extends TransactionMapping {
       switch (type) {
       case MODIFY_ADDRESS_METADATA:
          return new ModifyMetadataTransaction(type, extractNetworkType(version), extractTransactionVersion(version),
-               deadline, extractFee(transaction), Optional.empty(),
-               Optional.of(Address.createFromEncoded(transaction.get("metadataId").getAsString())), metadataType,
-               modifications, signature, signer, transactionInfo);
+               deadline, extractFee(transaction), Optional.of(signature), Optional.of(signer),
+               Optional.of(transactionInfo), metadataType, Optional.empty(),
+               Optional.of(Address.createFromEncoded(transaction.get("metadataId").getAsString())), modifications);
       case MODIFY_MOSAIC_METADATA:
          return new ModifyMetadataTransaction(type, extractNetworkType(version), extractTransactionVersion(version),
-               deadline, extractFee(transaction),
-               Optional.of(new MosaicId(GsonUtils.getBigInteger(transaction.getAsJsonArray("metadataId")))), Optional.empty(),
-               metadataType, modifications, signature, signer, transactionInfo);
+               deadline, extractFee(transaction), Optional.of(signature), Optional.of(signer),
+               Optional.of(transactionInfo), metadataType,
+               Optional.of(new MosaicId(GsonUtils.getBigInteger(transaction.getAsJsonArray("metadataId")))),
+               Optional.empty(), modifications);
       case MODIFY_NAMESPACE_METADATA:
          return new ModifyMetadataTransaction(type, extractNetworkType(version), extractTransactionVersion(version),
-               deadline, extractFee(transaction),
+               deadline, extractFee(transaction), Optional.of(signature), Optional.of(signer),
+               Optional.of(transactionInfo), metadataType,
                Optional.of(new NamespaceId(GsonUtils.getBigInteger(transaction.getAsJsonArray("metadataId")))),
-               Optional.empty(), metadataType, modifications, signature, signer, transactionInfo);
+               Optional.empty(), modifications);
       default:
          throw new IllegalArgumentException("unsupported transaction type " + type);
       }

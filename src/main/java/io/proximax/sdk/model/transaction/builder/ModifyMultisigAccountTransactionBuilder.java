@@ -28,6 +28,8 @@ public class ModifyMultisigAccountTransactionBuilder
    public ModifyMultisigAccountTransactionBuilder() {
       super(TransactionType.MODIFY_MULTISIG_ACCOUNT, TransactionVersion.MODIFY_MULTISIG_ACCOUNT.getValue());
       // defaults
+      minApprovalDelta = 0;
+      minRemovalDelta = 0;
       modifications = new ArrayList<>();
    }
 
