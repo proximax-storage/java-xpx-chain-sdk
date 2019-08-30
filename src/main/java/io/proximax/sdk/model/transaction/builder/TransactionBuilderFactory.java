@@ -249,4 +249,48 @@ public class TransactionBuilderFactory {
       initDefaults(builder);
       return builder; 
    }
+   
+   /**
+    * create builder for secret proof transaction
+    * 
+    * @return the builder
+    */
+   public SecretProofTransactionBuilder secretProof() {
+      SecretProofTransactionBuilder builder = new SecretProofTransactionBuilder();
+      initDefaults(builder);
+      return builder; 
+   }
+
+   /**
+    * create builder for address account property modification transaction
+    * 
+    * @return the builder
+    */
+   public ModifyAccountPropertyAddressTransactionBuilder accountPropAddress() {
+      ModifyAccountPropertyAddressTransactionBuilder builder = new ModifyAccountPropertyAddressTransactionBuilder();
+      initDefaults(builder);
+      return builder; 
+   }
+
+   /**
+    * create builder for entity type account property modification transaction
+    * 
+    * @return the builder
+    */
+   public ModifyAccountPropertyEntityTransactionBuilder accountPropEntityType() {
+      ModifyAccountPropertyEntityTransactionBuilder builder = new ModifyAccountPropertyEntityTransactionBuilder();
+      initDefaults(builder);
+      return builder; 
+   }
+
+   /**
+    * create builder for mosaic account property modification transaction
+    * 
+    * @return the builder
+    */
+   public ModifyAccountPropertyMosaicTransactionBuilder accountPropMosaic() {
+      ModifyAccountPropertyMosaicTransactionBuilder builder = new ModifyAccountPropertyMosaicTransactionBuilder();
+      initDefaults(builder);
+      return builder; 
+   }
 }

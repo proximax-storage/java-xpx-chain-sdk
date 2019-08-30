@@ -53,7 +53,7 @@ public class SecretLockTransactionBuilder
     * @param mosaic locked mosaic
     * @return self
     */
-   public SecretLockTransactionBuilder setMosaic(Mosaic mosaic) {
+   public SecretLockTransactionBuilder mosaic(Mosaic mosaic) {
       this.mosaic = mosaic;
       return self();
    }
@@ -64,7 +64,7 @@ public class SecretLockTransactionBuilder
     * @param duration number of blocks
     * @return self
     */
-   public SecretLockTransactionBuilder setDuration(BigInteger duration) {
+   public SecretLockTransactionBuilder duration(BigInteger duration) {
       this.duration = duration;
       return self();
    }
@@ -75,7 +75,7 @@ public class SecretLockTransactionBuilder
     * @param hashType hash function
     * @return self
     */
-   public SecretLockTransactionBuilder setHashType(HashType hashType) {
+   public SecretLockTransactionBuilder hashType(HashType hashType) {
       this.hashType = hashType;
       return self();
    }
@@ -86,7 +86,7 @@ public class SecretLockTransactionBuilder
     * @param secret the secret
     * @return self
     */
-   public SecretLockTransactionBuilder setSecret(String secret) {
+   public SecretLockTransactionBuilder secret(String secret) {
       this.secret = secret;
       return self();
    }
@@ -97,7 +97,7 @@ public class SecretLockTransactionBuilder
     * @param recipient the recipient
     * @return self
     */
-   public SecretLockTransactionBuilder setRecipient(Address recipient) {
+   public SecretLockTransactionBuilder recipient(Address recipient) {
       this.recipient = recipient;
       return self();
    }

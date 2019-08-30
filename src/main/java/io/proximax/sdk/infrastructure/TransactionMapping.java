@@ -295,18 +295,17 @@ class ModifyAccountPropertiesTransactionMapping extends TransactionMapping {
       // create instance of transaction
       switch (type) {
       case ACCOUNT_PROPERTIES_ADDRESS:
-         return new ModifyAccountPropertyTransaction.AddressModification(extractNetworkType(version),
-               extractTransactionVersion(version), deadline, extractFee(transaction), propertyType,
-               getAddressMods(transaction), Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo));
+         return new ModifyAccountPropertyTransaction.AddressModification(extractNetworkType(version), extractTransactionVersion(version), deadline, extractFee(transaction), 
+               Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo), 
+               propertyType, getAddressMods(transaction));
       case ACCOUNT_PROPERTIES_MOSAIC:
-         return new ModifyAccountPropertyTransaction.MosaicModification(extractNetworkType(version),
-               extractTransactionVersion(version), deadline, extractFee(transaction), propertyType,
-               getMosaicMods(transaction), Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo));
+         return new ModifyAccountPropertyTransaction.MosaicModification(extractNetworkType(version), extractTransactionVersion(version), deadline, extractFee(transaction), 
+               Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo), 
+               propertyType, getMosaicMods(transaction));
       case ACCOUNT_PROPERTIES_ENTITY_TYPE:
-         return new ModifyAccountPropertyTransaction.EntityTypeModification(extractNetworkType(version),
-               extractTransactionVersion(version), deadline, extractFee(transaction), propertyType,
-               getEntityTypeMods(transaction), Optional.of(signature), Optional.of(signer),
-               Optional.of(transactionInfo));
+         return new ModifyAccountPropertyTransaction.EntityTypeModification(extractNetworkType(version), extractTransactionVersion(version), deadline, extractFee(transaction), 
+               Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo), 
+               propertyType, getEntityTypeMods(transaction));
       default:
          throw new IllegalArgumentException("unsupported transaction type " + type);
       }
@@ -556,9 +555,11 @@ class MultisigModificationTransactionMapping extends TransactionMapping {
             : Collections.emptyList();
 
       return new ModifyMultisigAccountTransaction(networkType, extractTransactionVersion(transaction.get("version")),
-            deadline, extractFee(transaction), transaction.get("minApprovalDelta").getAsInt(),
-            transaction.get("minRemovalDelta").getAsInt(), modifications, transaction.get("signature").getAsString(),
-            new PublicAccount(transaction.get("signer").getAsString(), networkType), transactionInfo);
+            deadline, extractFee(transaction), Optional.of(transaction.get("signature").getAsString()),
+            Optional.of(new PublicAccount(transaction.get("signer").getAsString(), networkType)),
+            Optional.of(transactionInfo), transaction.get("minApprovalDelta").getAsInt(),
+            transaction.get("minRemovalDelta").getAsInt(), modifications);
+
    }
 }
 
@@ -720,11 +721,11 @@ class SecretLockTransactionMapping extends TransactionMapping {
                GsonUtils.getBigInteger(transaction.getAsJsonObject("mosaic").getAsJsonArray("amount")));
       }
       return new SecretLockTransaction(networkType, extractTransactionVersion(transaction.get("version")), deadline,
-            extractFee(transaction), mosaic, GsonUtils.getBigInteger(transaction.getAsJsonArray("duration")),
+            extractFee(transaction), Optional.of(transaction.get("signature").getAsString()),
+            Optional.of(new PublicAccount(transaction.get("signer").getAsString(), networkType)),
+            Optional.of(transactionInfo), mosaic, GsonUtils.getBigInteger(transaction.getAsJsonArray("duration")),
             HashType.rawValueOf(transaction.get("hashAlgorithm").getAsInt()), transaction.get("secret").getAsString(),
-            Address.createFromEncoded(transaction.get("recipient").getAsString()),
-            transaction.get("signature").getAsString(),
-            new PublicAccount(transaction.get("signer").getAsString(), networkType), transactionInfo);
+            Address.createFromEncoded(transaction.get("recipient").getAsString()));
    }
 }
 
@@ -739,11 +740,11 @@ class SecretProofTransactionMapping extends TransactionMapping {
       NetworkType networkType = extractNetworkType(transaction.get("version"));
 
       return new SecretProofTransaction(networkType, extractTransactionVersion(transaction.get("version")), deadline,
-            extractFee(transaction), HashType.rawValueOf(transaction.get("hashAlgorithm").getAsInt()),
-            Recipient.from(Address.createFromEncoded(transaction.get("recipient").getAsString())),
+            extractFee(transaction), Optional.of(transaction.get("signature").getAsString()),
+            Optional.of(new PublicAccount(transaction.get("signer").getAsString(), networkType)),
+            Optional.of(transactionInfo), HashType.rawValueOf(transaction.get("hashAlgorithm").getAsInt()),
             transaction.get("secret").getAsString(), transaction.get("proof").getAsString(),
-            transaction.get("signature").getAsString(),
-            new PublicAccount(transaction.get("signer").getAsString(), networkType), transactionInfo);
+            Recipient.from(Address.createFromEncoded(transaction.get("recipient").getAsString())));
    }
 
 }
