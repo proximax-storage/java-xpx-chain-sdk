@@ -25,12 +25,16 @@ import io.proximax.sdk.model.blockchain.NetworkType;
 
 public class AggregateTransactionCosignatureTest {
 
+   @Test
+   void createAnAggregateCosignatureViaConstructor() {
+      AggregateTransactionCosignature aggregateTransactionCosignature = new AggregateTransactionCosignature("signature",
+            new PublicAccount("9A49366406ACA952B88BADF5F1E9BE6CE4968141035A60BE503273EA65456B24",
+                  NetworkType.MIJIN_TEST));
 
-    @Test
-    void createAnAggregateCosignatureViaConstructor() {
-        AggregateTransactionCosignature aggregateTransactionCosignature = new AggregateTransactionCosignature("signature", new PublicAccount("9A49366406ACA952B88BADF5F1E9BE6CE4968141035A60BE503273EA65456B24", NetworkType.MIJIN_TEST));
-
-        assertEquals("signature", aggregateTransactionCosignature.getSignature());
-        assertEquals(new PublicAccount("9A49366406ACA952B88BADF5F1E9BE6CE4968141035A60BE503273EA65456B24", NetworkType.MIJIN_TEST), aggregateTransactionCosignature.getSigner());
-    }
+      assertEquals("signature", aggregateTransactionCosignature.getSignature());
+      assertEquals(
+            new PublicAccount("9A49366406ACA952B88BADF5F1E9BE6CE4968141035A60BE503273EA65456B24",
+                  NetworkType.MIJIN_TEST),
+            aggregateTransactionCosignature.getSigner());
+   }
 }

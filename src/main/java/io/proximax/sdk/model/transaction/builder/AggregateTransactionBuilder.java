@@ -106,8 +106,16 @@ public class AggregateTransactionBuilder extends TransactionBuilder<AggregateTra
     * @return the builder
     */
    public AggregateTransactionBuilder innerTransactions(Transaction ... innerTransactions) {
-      this.innerTransactions = new ArrayList<>();
-      this.innerTransactions.addAll(Arrays.asList(innerTransactions));
-      return self();
+      return innerTransactions(Arrays.asList(innerTransactions));
+   }
+   
+   /**
+    * set list of cosignatures
+    * 
+    * @param cosignatures cosignatures
+    * @return the builder
+    */
+   public AggregateTransactionBuilder cosignatures(AggregateTransactionCosignature ... cosignatures) {
+      return cosignatures(Arrays.asList(cosignatures));
    }
 }
