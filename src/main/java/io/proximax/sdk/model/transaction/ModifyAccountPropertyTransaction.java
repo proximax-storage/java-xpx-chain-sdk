@@ -225,12 +225,12 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
        * @param propertyType
        * @param modifications
        */
-      public MosaicModification(NetworkType networkType, Integer version,
-            TransactionDeadline deadline, BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
+      public MosaicModification(NetworkType networkType, Integer version, TransactionDeadline deadline,
+            BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
             Optional<TransactionInfo> transactionInfo, AccountPropertyType propertyType,
             List<AccountPropertyModification<UInt64Id>> modifications) {
-         super(TransactionType.ACCOUNT_PROPERTIES_MOSAIC, networkType, version, deadline, maxFee, signature, signer, transactionInfo, propertyType,
-               modifications);
+         super(TransactionType.ACCOUNT_PROPERTIES_MOSAIC, networkType, version, deadline, maxFee, signature, signer,
+               transactionInfo, propertyType, modifications);
       }
 
       @Override
@@ -265,8 +265,8 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
 
       @Override
       protected Transaction copyForSigner(PublicAccount signer) {
-         return new MosaicModification(getNetworkType(), getVersion(), getDeadline(), getMaxFee(),
-               getSignature(), Optional.of(signer), getTransactionInfo(), getPropertyType(),
+         return new MosaicModification(getNetworkType(), getVersion(), getDeadline(), getMaxFee(), getSignature(),
+               Optional.of(signer), getTransactionInfo(), getPropertyType(),
                (List<AccountPropertyModification<UInt64Id>>) getPropertyModifications());
       }
    }
@@ -288,12 +288,12 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
        * @param propertyType
        * @param modifications
        */
-      public EntityTypeModification(NetworkType networkType, Integer version,
-            TransactionDeadline deadline, BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
+      public EntityTypeModification(NetworkType networkType, Integer version, TransactionDeadline deadline,
+            BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
             Optional<TransactionInfo> transactionInfo, AccountPropertyType propertyType,
             List<AccountPropertyModification<TransactionType>> modifications) {
-         super(TransactionType.ACCOUNT_PROPERTIES_ENTITY_TYPE, networkType, version, deadline, maxFee, signature, signer, transactionInfo, propertyType,
-               modifications);
+         super(TransactionType.ACCOUNT_PROPERTIES_ENTITY_TYPE, networkType, version, deadline, maxFee, signature,
+               signer, transactionInfo, propertyType, modifications);
       }
 
       @Override
@@ -323,8 +323,8 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
 
       @Override
       protected Transaction copyForSigner(PublicAccount signer) {
-         return new EntityTypeModification(getNetworkType(), getVersion(), getDeadline(), getMaxFee(),
-               getSignature(), Optional.of(signer), getTransactionInfo(), getPropertyType(),
+         return new EntityTypeModification(getNetworkType(), getVersion(), getDeadline(), getMaxFee(), getSignature(),
+               Optional.of(signer), getTransactionInfo(), getPropertyType(),
                (List<AccountPropertyModification<TransactionType>>) getPropertyModifications());
       }
    }

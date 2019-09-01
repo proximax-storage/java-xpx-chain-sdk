@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
@@ -38,10 +39,12 @@ public class SecretProofTransactionTest extends ResourceBasedTest {
       String secret = "3fc8ba10229ab5778d05d9c4b7f56676a88bf9295c185acfc0f961db5408cafe";
       String secretSeed = "9a493664";
       Recipient recipient = Recipient.from(new Address("XY", NetworkType.MAIN_NET));
-      SecretProofTransaction tx = new SecretProofTransaction(NetworkType.MIJIN, 23, new FakeDeadline(), BigInteger.ONE,
-            HashType.SHA3_256, recipient, secret, secretSeed, "signaturestring",
-            new PublicAccount(new KeyPair().getPublicKey().getHexString(), NetworkType.MIJIN),
-            TransactionInfo.create(BigInteger.ONE, "infohash", "merklehash"));
+      SecretProofTransaction tx = new SecretProofTransaction(NetworkType.MAIN_NET, 23, new FakeDeadline(), BigInteger.ONE,
+            Optional.of("signaturestring"),
+            Optional.of(new PublicAccount(new KeyPair().getPublicKey().getHexString(), NetworkType.MAIN_NET)),
+            Optional.of(TransactionInfo.create(BigInteger.ONE, "infohash", "merklehash")), HashType.SHA3_256, secret,
+            secretSeed, recipient);
+
       assertEquals(secret, tx.getSecret());
       assertEquals(secretSeed, tx.getProof());
       assertEquals(HashType.SHA3_256, tx.getHashType());
@@ -53,8 +56,11 @@ public class SecretProofTransactionTest extends ResourceBasedTest {
       String secret = "3fc8ba10229ab5778d05d9c4b7f56676a88bf9295c185acfc0f961db5408cafe";
       String secretSeed = "9a493664";
       Recipient recipient = Recipient.from(new Address("XY", NetworkType.MAIN_NET));
-      SecretProofTransaction secretProoftx = SecretProofTransaction
-            .create(new FakeDeadline(), HashType.SHA3_256, recipient, secret, secretSeed, NetworkType.MIJIN_TEST);
+
+      SecretProofTransaction secretProoftx = new SecretProofTransaction(NetworkType.MAIN_NET, 1, new FakeDeadline(),
+            BigInteger.ONE, Optional.empty(), Optional.empty(), Optional.empty(), HashType.SHA3_256, secret, secretSeed,
+            recipient);
+
       byte[] actual = secretProoftx.generateBytes();
 //      saveBytes("secret_proof", actual);
       assertArrayEquals(loadBytes("secret_proof"), actual);
@@ -65,9 +71,8 @@ public class SecretProofTransactionTest extends ResourceBasedTest {
       String proof = "B778A39A3663719DFC5E48C9D78431B1E45C2AF9DF538782BF199C189DABEAC7680ADA57DCEC8EEE91"
             + "C4E3BF3BFA9AF6FFDE90CD1D249D1C6121D7B759A001B1";
       Recipient recipient = Recipient.from(new Address("XY", NetworkType.MAIN_NET));
-      assertThrows(IllegalArgumentException.class, () -> {
-         SecretProofTransaction secretProoftx = SecretProofTransaction
-               .create(new FakeDeadline(), HashType.SHA3_256, recipient, "non valid hash", proof, NetworkType.MIJIN_TEST);
-      }, "not a valid secret");
+      assertThrows(IllegalArgumentException.class, () -> new SecretProofTransaction(NetworkType.MAIN_NET, 1, new FakeDeadline(),
+            BigInteger.ONE, Optional.empty(), Optional.empty(), Optional.empty(), HashType.SHA3_256, "non valid hash", proof,
+            recipient), "not a valid secret");
    }
 }

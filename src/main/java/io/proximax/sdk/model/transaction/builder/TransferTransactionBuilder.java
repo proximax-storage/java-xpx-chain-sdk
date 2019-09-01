@@ -7,6 +7,7 @@ package io.proximax.sdk.model.transaction.builder;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import io.proximax.sdk.model.account.Address;
@@ -140,22 +141,11 @@ public class TransferTransactionBuilder extends TransactionBuilder<TransferTrans
    }
 
    /**
-    * @param mosaic add mosaic to the list of transferred mosaics
+    * @param mosaics the mosaics to set
     * @return self
     */
-   public TransferTransactionBuilder addMosaic(Mosaic mosaic) {
-      mosaics.add(mosaic);
-      return this;
-   }
-
-   /**
-    * @param mosaic the mosaics to set
-    * @return self
-    */
-   public TransferTransactionBuilder mosaic(Mosaic mosaic) {
-      this.mosaics = new ArrayList<>();
-      this.mosaics.add(mosaic);
-      return this;
+   public TransferTransactionBuilder mosaics(Mosaic ... mosaics) {
+      return mosaics(Arrays.asList(mosaics));
    }
 
 }

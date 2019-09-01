@@ -166,7 +166,7 @@ public class E2EBaseTest extends BaseTest {
     * @param amount amount of XPX taking the divisibility into account
     */
    protected void sendMosaic(Account sender, Address recipient, Mosaic mosaicToTransfer) {
-      TransferTransaction transfer = api.transact().transfer().mosaic(mosaicToTransfer).to(recipient)
+      TransferTransaction transfer = api.transact().transfer().mosaics(mosaicToTransfer).to(recipient)
             .maxFee(BigInteger.ZERO).deadline(getDeadline()).build();
       SignedTransaction signedTransfer = sender.sign(transfer, api.getNetworkGenerationHash());
       logger.info("Sent XPX to {}: {}", recipient.pretty(), transactionHttp.announce(signedTransfer).blockingFirst());

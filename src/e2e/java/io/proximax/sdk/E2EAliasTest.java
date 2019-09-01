@@ -163,7 +163,7 @@ public class E2EAliasTest extends E2EBaseTest {
    @Test
    void test05TransferUsingAliases() {
       transactionHttp.announce(transact.transfer()
-            .mosaic(new Mosaic(new NamespaceId(NetworkCurrencyMosaic.MOSAIC_NAMESPACE), BigInteger.valueOf(1_000_000)))
+            .mosaics(new Mosaic(new NamespaceId(NetworkCurrencyMosaic.MOSAIC_NAMESPACE), BigInteger.valueOf(1_000_000)))
             .to(accNamespaceId).build().signWith(seedAccount, api.getNetworkGenerationHash())).blockingFirst();
       logger.info("made transfer. {}",
             listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS)

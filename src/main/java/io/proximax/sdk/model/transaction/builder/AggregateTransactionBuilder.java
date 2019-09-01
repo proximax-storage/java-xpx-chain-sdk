@@ -110,17 +110,4 @@ public class AggregateTransactionBuilder extends TransactionBuilder<AggregateTra
       this.innerTransactions.addAll(Arrays.asList(innerTransactions));
       return self();
    }
-
-   /**
-    * add specified transactions as new inner transactions
-    * 
-    * @param innerTransactions inner transactions to add
-    * @return the builder
-    */
-   public AggregateTransactionBuilder addInnerTransactions(Transaction ... innerTransactions) {
-      this.innerTransactions.addAll(Arrays.asList(innerTransactions));
-      return self();
-   }
-
-   
 }

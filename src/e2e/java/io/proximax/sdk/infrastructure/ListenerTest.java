@@ -230,7 +230,7 @@ class ListenerTest extends BaseTest {
    private SignedTransaction announceStandaloneTransferTransactionWithInsufficientBalance()
          throws ExecutionException, InterruptedException {
       TransferTransaction transferTransaction = transact.transfer()
-            .mosaic(NetworkCurrencyMosaic.createRelative(new BigDecimal("100000000000")))
+            .mosaics(NetworkCurrencyMosaic.createRelative(new BigDecimal("100000000000")))
             .message(PlainMessage.create("test-message"))
             .to(new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST)).build();
 
@@ -244,7 +244,7 @@ class ListenerTest extends BaseTest {
             .to(new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST)).build();
 
       AggregateTransaction aggregateTransaction = transact.aggregateBonded()
-            .addInnerTransactions(transferTransaction.toAggregate(this.multisigAccount.getPublicAccount())).build();
+            .innerTransactions(transferTransaction.toAggregate(this.multisigAccount.getPublicAccount())).build();
 
       SignedTransaction signedTransaction = this.cosignatoryAccount.sign(aggregateTransaction,
             api.getNetworkGenerationHash());

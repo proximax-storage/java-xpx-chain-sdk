@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.model.blockchain.NetworkType;
-import io.proximax.sdk.model.transaction.builder.TransactionBuilderFactory;
 
 /**
  * {@link TransactionBuilderFactory} tests
@@ -30,7 +29,7 @@ class TransactionFactoryTest {
 
       assertEquals(NETWORK_TYPE, fac.getNetworkType());
       assertEquals(BigInteger.valueOf(60_000), fac.getDeadlineMillis());
-      assertEquals(FeeCalculationStrategy.MEDIUM, fac.getDeadlineMillis());
+      assertEquals(FeeCalculationStrategy.MEDIUM, fac.getFeeCalculationStrategy());
    }
    
 }

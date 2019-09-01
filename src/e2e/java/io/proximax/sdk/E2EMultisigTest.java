@@ -109,7 +109,7 @@ public class E2EMultisigTest extends E2EBaseTest {
    @Test
    void test01TransferFromMultisig1Of2Aggregate() {
       // prepare transfer to the seed account
-      TransferTransaction transfer = transact.transfer().mosaic(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))).to(seedAccount.getAddress()).build();
+      TransferTransaction transfer = transact.transfer().mosaics(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))).to(seedAccount.getAddress()).build();
       // add the modification to the aggregate transaction
       AggregateTransaction aggregateTransaction = transact.aggregateComplete().innerTransactions(transfer.toAggregate(multisigAccount.getPublicAccount())).build();
       // sign the aggregate transaction
@@ -124,7 +124,7 @@ public class E2EMultisigTest extends E2EBaseTest {
    @Test
    void test01TransferFromMultisig1Of2AggregateBonded() {
       // prepare transfer to the seed account
-      TransferTransaction transfer = transact.transfer().mosaic(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))).to(seedAccount.getAddress()).build();
+      TransferTransaction transfer = transact.transfer().mosaics(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))).to(seedAccount.getAddress()).build();
       // add the modification to the aggregate transaction. has to be bonded because we are going to test the lock
       AggregateTransaction aggregateTransaction = transact.aggregateBonded().innerTransactions(transfer.toAggregate(multisigAccount.getPublicAccount())).build();
       // sign the aggregate bonded transaction
@@ -165,9 +165,9 @@ public class E2EMultisigTest extends E2EBaseTest {
    @Test
    void test02TransferFromMultisig2Of2Aggregate() {
       // prepare transfer to the seed account
-      TransferTransaction transfer = transact.transfer().mosaic(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))).to(seedAccount.getAddress()).build();
+      TransferTransaction transfer = transact.transfer().mosaics(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))).to(seedAccount.getAddress()).build();
       // add the modification to the aggregate transaction
-      AggregateTransaction aggregateTransaction = transact.aggregateComplete().addInnerTransactions(transfer.toAggregate(multisigAccount.getPublicAccount())).build();
+      AggregateTransaction aggregateTransaction = transact.aggregateComplete().innerTransactions(transfer.toAggregate(multisigAccount.getPublicAccount())).build();
       // sign the aggregate transaction
       SignedTransaction signedTransaction = cosig1.signTransactionWithCosignatories(aggregateTransaction, api.getNetworkGenerationHash(),
             Arrays.asList(cosig2));
@@ -181,9 +181,9 @@ public class E2EMultisigTest extends E2EBaseTest {
    @Test
    void test02TransferFromMultisig2Of2AggregateBonded() {
       // prepare transfer to the seed account
-      TransferTransaction transfer = transact.transfer().mosaic(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))).to(seedAccount.getAddress()).build();
+      TransferTransaction transfer = transact.transfer().mosaics(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))).to(seedAccount.getAddress()).build();
       // add the modification to the aggregate transaction. has to be bonded because we are going to test the lock
-      AggregateTransaction aggregateTransaction = transact.aggregateBonded().addInnerTransactions(transfer.toAggregate(multisigAccount.getPublicAccount())).build();
+      AggregateTransaction aggregateTransaction = transact.aggregateBonded().innerTransactions(transfer.toAggregate(multisigAccount.getPublicAccount())).build();
       // sign the aggregate bonded transaction
       SignedTransaction signedTransaction = cosig1.signTransactionWithCosignatories(aggregateTransaction, api.getNetworkGenerationHash(),
             Arrays.asList(cosig2));
@@ -207,9 +207,9 @@ public class E2EMultisigTest extends E2EBaseTest {
    @Test
    void test02TransferFromMultisig2Of2AggregateBondedSeparateConfirmation() {
       // prepare transfer to the seed account
-      TransferTransaction transfer = transact.transfer().mosaic(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))).to(seedAccount.getAddress()).build();
+      TransferTransaction transfer = transact.transfer().mosaics(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))).to(seedAccount.getAddress()).build();
       // add the modification to the aggregate transaction. has to be bonded because we are going to test the lock
-      AggregateTransaction aggregateTransaction = transact.aggregateBonded().addInnerTransactions(transfer.toAggregate(multisigAccount.getPublicAccount())).build();
+      AggregateTransaction aggregateTransaction = transact.aggregateBonded().innerTransactions(transfer.toAggregate(multisigAccount.getPublicAccount())).build();
       // sign the aggregate bonded transaction
       SignedTransaction signedTransaction = api.sign(aggregateTransaction, cosig1);
       // lock 10 of XPX (required to prevent spamming)
@@ -238,7 +238,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       ModifyMultisigAccountTransaction addCosig3 = transact.multisigModification().modifications(new MultisigCosignatoryModification(MultisigCosignatoryModificationType.ADD,
             cosig3.getPublicAccount())).build();
       // add the modification to the aggregate bonded transaction
-      AggregateTransaction aggregateTransaction = transact.aggregateBonded().addInnerTransactions(addCosig3.toAggregate(multisigAccount.getPublicAccount())).build();
+      AggregateTransaction aggregateTransaction = transact.aggregateBonded().innerTransactions(addCosig3.toAggregate(multisigAccount.getPublicAccount())).build();
       // sign the aggregate bonded transaction
       SignedTransaction signedTransaction = api.signWithCosigners(aggregateTransaction, cosig1, Arrays.asList(cosig3));
       // lock 10 of XPX (required to prevent spamming)

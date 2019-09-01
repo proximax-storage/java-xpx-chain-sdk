@@ -93,7 +93,7 @@ public class E2ETransferTest extends E2EBaseTest {
    @Test
    void insufficientFunds() {
       TransferTransaction transaction = transact.transfer().to(seedAccount.getAddress())
-            .addMosaic(NetworkCurrencyMosaic.TEN).build();
+            .mosaics(NetworkCurrencyMosaic.TEN).build();
       SignedTransaction signedTransaction = api.sign(transaction, simpleAccount);
       transactionHttp.announce(signedTransaction).blockingFirst();
       // await error
@@ -110,7 +110,7 @@ public class E2ETransferTest extends E2EBaseTest {
     * @return instance of signed transaction which can be then announced to the network
     */
    private SignedTransaction signTransfer(Account signerAccount, Address target, Mosaic amount, Message message) {
-      TransferTransaction transaction = transact.transfer().mosaic(amount).to(target).message(message).build();
+      TransferTransaction transaction = transact.transfer().mosaics(amount).to(target).message(message).build();
       return api.sign(transaction, signerAccount);
    }
 
@@ -125,7 +125,7 @@ public class E2ETransferTest extends E2EBaseTest {
     */
    private SignedTransaction signAggregateTransfer(Account signerAccount, Address target, Mosaic amount,
          Message message) {
-      TransferTransaction transfer = transact.transfer().mosaic(amount).to(target).message(message).build();
+      TransferTransaction transfer = transact.transfer().mosaics(amount).to(target).message(message).build();
       // add the modification to the aggregate transaction. has to be bonded because we are going to test the lock
       AggregateTransaction aggregateTransaction = transact.aggregateComplete()
             .innerTransactions(transfer.toAggregate(signerAccount.getPublicAccount())).build();

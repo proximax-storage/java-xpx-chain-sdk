@@ -6,7 +6,6 @@
 package io.proximax.sdk.model.transaction.builder;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import io.proximax.sdk.model.account.props.AccountPropertyModification;
@@ -71,11 +70,4 @@ public abstract class ModifyAccountPropertyTransactionBuilder<T> extends Transac
 
    // -------------------------------------- convenience --------------------------------------------//
 
-   /**
-    * @param modifications the modifications to set
-    * @return self
-    */
-   public ModifyAccountPropertyTransactionBuilder<T> modifications(AccountPropertyModification<T> ... modifications) {
-      return modifications(Arrays.asList(modifications));
-   }
 }

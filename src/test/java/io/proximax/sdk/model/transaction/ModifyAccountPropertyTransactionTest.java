@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
@@ -32,16 +33,15 @@ class ModifyAccountPropertyTransactionTest extends ResourceBasedTest {
       Address address = Address.createFromRawAddress("SBMJIUDBTCFVS24UHGND2ZJ3OX5EFKIPESXCTWLO");
       System.out.println(address);
       Deadline deadline = new FakeDeadline();
-      ModifyAccountPropertyTransaction<Address> trans = ModifyAccountPropertyTransaction.createForAddress(
-            deadline,
-            BigInteger.ZERO,
+
+      ModifyAccountPropertyTransaction<Address> trans = new ModifyAccountPropertyTransaction.AddressModification(
+            NetworkType.MIJIN_TEST, 1, deadline, BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
             AccountPropertyType.ALLOW_ADDRESS,
-            Arrays.asList(new AccountPropertyModification<>(AccountPropertyModificationType.ADD, address)),
-            NetworkType.MIJIN_TEST);
+            Arrays.asList(new AccountPropertyModification<>(AccountPropertyModificationType.ADD, address)));
       // check that values are as expected
-      assertEquals(BigInteger.ZERO, trans.getFee());
+      assertEquals(BigInteger.ZERO, trans.getMaxFee());
       assertEquals(TransactionType.ACCOUNT_PROPERTIES_ADDRESS, trans.getType());
-      assertEquals(TransactionVersion.ACCOUNT_PROPERTIES_ADDRESS.getValue(), trans.getVersion());
+      assertEquals(1, trans.getVersion());
       assertEquals(deadline.getInstant(), trans.getDeadline().getInstant());
       assertEquals(AccountPropertyType.ALLOW_ADDRESS, trans.getPropertyType());
       assertEquals(NetworkType.MIJIN_TEST, trans.getNetworkType());
@@ -56,16 +56,15 @@ class ModifyAccountPropertyTransactionTest extends ResourceBasedTest {
    @Test
    void serializationMosaic() throws IOException {
       Deadline deadline = new FakeDeadline();
-      ModifyAccountPropertyTransaction<UInt64Id> trans = ModifyAccountPropertyTransaction.createForMosaic(
-            deadline,
-            BigInteger.ZERO,
+      ModifyAccountPropertyTransaction<UInt64Id> trans = new ModifyAccountPropertyTransaction.MosaicModification(
+            NetworkType.MIJIN_TEST, 1, deadline, BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
             AccountPropertyType.ALLOW_MOSAIC,
-            Arrays.asList(new AccountPropertyModification<>(AccountPropertyModificationType.ADD, new MosaicId(BigInteger.ONE))),
-            NetworkType.MIJIN_TEST);
+            Arrays.asList(new AccountPropertyModification<>(AccountPropertyModificationType.ADD,
+                  new MosaicId(BigInteger.ONE))));
       // check that values are as expected
-      assertEquals(BigInteger.ZERO, trans.getFee());
+      assertEquals(BigInteger.ZERO, trans.getMaxFee());
       assertEquals(TransactionType.ACCOUNT_PROPERTIES_MOSAIC, trans.getType());
-      assertEquals(TransactionVersion.ACCOUNT_PROPERTIES_MOSAIC.getValue(), trans.getVersion());
+      assertEquals(1, trans.getVersion());
       assertEquals(deadline.getInstant(), trans.getDeadline().getInstant());
       assertEquals(AccountPropertyType.ALLOW_MOSAIC, trans.getPropertyType());
       assertEquals(NetworkType.MIJIN_TEST, trans.getNetworkType());
@@ -80,14 +79,12 @@ class ModifyAccountPropertyTransactionTest extends ResourceBasedTest {
    @Test
    void serializationEntity() throws IOException {
       Deadline deadline = new FakeDeadline();
-      ModifyAccountPropertyTransaction<TransactionType> trans = ModifyAccountPropertyTransaction.createForEntityType(
-            deadline,
-            BigInteger.ZERO,
-            AccountPropertyType.BLOCK_TRANSACTION,
-            Arrays.asList(new AccountPropertyModification<>(AccountPropertyModificationType.ADD, TransactionType.LOCK)),
-            NetworkType.MIJIN_TEST);
+      ModifyAccountPropertyTransaction<TransactionType> trans = new ModifyAccountPropertyTransaction.EntityTypeModification(
+            NetworkType.MIJIN_TEST, 1, deadline, BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
+            AccountPropertyType.BLOCK_TRANSACTION, Arrays.asList(
+                  new AccountPropertyModification<>(AccountPropertyModificationType.ADD, TransactionType.LOCK)));
       // check that values are as expected
-      assertEquals(BigInteger.ZERO, trans.getFee());
+      assertEquals(BigInteger.ZERO, trans.getMaxFee());
       assertEquals(TransactionType.ACCOUNT_PROPERTIES_ENTITY_TYPE, trans.getType());
       assertEquals(TransactionVersion.ACCOUNT_PROPERTIES_ENTITY_TYPE.getValue(), trans.getVersion());
       assertEquals(deadline.getInstant(), trans.getDeadline().getInstant());

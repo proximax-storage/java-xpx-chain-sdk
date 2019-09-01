@@ -57,7 +57,7 @@ class TransferTransactionBuilderTest {
       // prepare data
       Recipient recipient = Recipient.from(new Account(new KeyPair(), NETWORK_TYPE).getAddress());
       // create transaction
-      TransferTransaction trans = fac.transfer().addMosaic(NetworkCurrencyMosaic.TEN).to(recipient).message(PlainMessage.create("hello world")).build();
+      TransferTransaction trans = fac.transfer().mosaics(NetworkCurrencyMosaic.TEN).to(recipient).message(PlainMessage.create("hello world")).build();
       // check transaction
       assertEquals(NetworkType.MIJIN_TEST, trans.getNetworkType());
       assertEquals(Arrays.asList(NetworkCurrencyMosaic.TEN), trans.getMosaics());

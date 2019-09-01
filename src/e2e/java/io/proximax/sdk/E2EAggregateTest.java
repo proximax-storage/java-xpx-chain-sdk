@@ -99,10 +99,10 @@ public class E2EAggregateTest extends E2EBaseTest {
       sendMosaic(seedAccount, bob.getAddress(), new Mosaic(mosaicY, BigInteger.TEN));
       logger.info("Escrow between {} and {}", alice, bob);
       // send mosaic X from alice to bob
-      TransferTransaction aliceToBob = transact.transfer().mosaic(NetworkCurrencyMosaic.ONE).to(bob.getAddress())
+      TransferTransaction aliceToBob = transact.transfer().mosaics(NetworkCurrencyMosaic.ONE).to(bob.getAddress())
             .build();
       // send mosaic Y from bob to alice
-      TransferTransaction bobToAlice = transact.transfer().mosaic(new Mosaic(mosaicY, BigInteger.TEN))
+      TransferTransaction bobToAlice = transact.transfer().mosaics(new Mosaic(mosaicY, BigInteger.TEN))
             .to(alice.getAddress()).build();
       // aggregate bonded with the 2 transactions - escrow
       AggregateTransaction escrow = transact.aggregateBonded()
@@ -171,10 +171,10 @@ public class E2EAggregateTest extends E2EBaseTest {
       sendMosaic(seedAccount, bob.getAddress(), new Mosaic(mosaicY, BigInteger.TEN));
       logger.info("Escrow between {} and {}", alice, bob);
       // send mosaic X from alice to bob
-      TransferTransaction aliceToBob = transact.transfer().mosaic(NetworkCurrencyMosaic.ONE).to(bob.getAddress())
+      TransferTransaction aliceToBob = transact.transfer().mosaics(NetworkCurrencyMosaic.ONE).to(bob.getAddress())
             .build();
       // send mosaic Y from bob to alice
-      TransferTransaction bobToAlice = transact.transfer().mosaic(new Mosaic(mosaicY, BigInteger.TEN))
+      TransferTransaction bobToAlice = transact.transfer().mosaics(new Mosaic(mosaicY, BigInteger.TEN))
             .to(alice.getAddress()).build();
       // aggregate bonded with the 2 transactions - escrow
       AggregateTransaction escrow = transact.aggregateComplete()
@@ -225,13 +225,13 @@ public class E2EAggregateTest extends E2EBaseTest {
       sleepForAWhile();
       logger.info("Escrow between {}, {} and {}", alice, bob, mike);
       // send mosaic X from alice to bob
-      TransferTransaction aliceToBob = transact.transfer().mosaic(NetworkCurrencyMosaic.ONE).to(bob.getAddress())
+      TransferTransaction aliceToBob = transact.transfer().mosaics(NetworkCurrencyMosaic.ONE).to(bob.getAddress())
             .build();
       // send mosaic Y from bob to alice
-      TransferTransaction bobToAlice = transact.transfer().mosaic(new Mosaic(mosaicY, BigInteger.TEN))
+      TransferTransaction bobToAlice = transact.transfer().mosaics(new Mosaic(mosaicY, BigInteger.TEN))
             .to(alice.getAddress()).build();
       // send mosaic Y from bob to alice
-      TransferTransaction mikeToAlice = transact.transfer().mosaic(NetworkCurrencyMosaic.ONE).to(alice.getAddress())
+      TransferTransaction mikeToAlice = transact.transfer().mosaics(NetworkCurrencyMosaic.ONE).to(alice.getAddress())
             .build();
       // aggregate bonded with the 3 transactions - escrow
       AggregateTransaction escrow = transact.aggregateBonded()
@@ -319,7 +319,7 @@ public class E2EAggregateTest extends E2EBaseTest {
       TransferTransaction aliceToBob = transact.transfer().to(bob.getAddress())
             .message(PlainMessage.create("send me 10 Y")).build();
       // send mosaic Y from bob to alice
-      TransferTransaction bobToAlice = transact.transfer().mosaic(new Mosaic(mosaicY, BigInteger.TEN))
+      TransferTransaction bobToAlice = transact.transfer().mosaics(new Mosaic(mosaicY, BigInteger.TEN))
             .to(alice.getAddress()).build();
       // aggregate bonded with the 2 transactions - escrow
       AggregateTransaction escrow = transact.aggregateBonded()
