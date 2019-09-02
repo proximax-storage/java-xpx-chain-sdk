@@ -131,24 +131,24 @@ public abstract class TransactionBuilder<B extends TransactionBuilder<B, T>, T e
    /**
     * @param signature the signature to set
     */
-   public B signature(Optional<String> signature) {
-      this.signature = signature;
+   public B signature(String signature) {
+      this.signature = Optional.of(signature);
       return self();
    }
 
    /**
     * @param signer the signer to set
     */
-   public B signer(Optional<PublicAccount> signer) {
-      this.signer = signer;
+   public B signer(PublicAccount signer) {
+      this.signer = Optional.of(signer);
       return self();
    }
 
    /**
     * @param transactionInfo the transactionInfo to set
     */
-   public B transactionInfo(Optional<TransactionInfo> transactionInfo) {
-      this.transactionInfo = transactionInfo;
+   public B transactionInfo(TransactionInfo transactionInfo) {
+      this.transactionInfo = Optional.of(transactionInfo);
       return self();
    }
 

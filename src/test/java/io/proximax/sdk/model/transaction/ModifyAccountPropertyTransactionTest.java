@@ -15,8 +15,11 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
+import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.ResourceBasedTest;
+import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
+import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.account.props.AccountPropertyModification;
 import io.proximax.sdk.model.account.props.AccountPropertyModificationType;
 import io.proximax.sdk.model.account.props.AccountPropertyType;
@@ -31,7 +34,6 @@ class ModifyAccountPropertyTransactionTest extends ResourceBasedTest {
    @Test
    void serializationAddress() throws IOException {
       Address address = Address.createFromRawAddress("SBMJIUDBTCFVS24UHGND2ZJ3OX5EFKIPESXCTWLO");
-      System.out.println(address);
       Deadline deadline = new FakeDeadline();
 
       ModifyAccountPropertyTransaction<Address> trans = new ModifyAccountPropertyTransaction.AddressModification(
@@ -98,4 +100,49 @@ class ModifyAccountPropertyTransactionTest extends ResourceBasedTest {
       assertArrayEquals(loadBytes("account_property_entity"), actual);
    }
 
+   
+   @Test
+   void checkCopyToSignerAddress() throws IOException {
+      PublicAccount remoteAccount = new Account(new KeyPair(), NetworkType.MIJIN).getPublicAccount();
+      
+      Address address = Address.createFromRawAddress("SBMJIUDBTCFVS24UHGND2ZJ3OX5EFKIPESXCTWLO");
+      Deadline deadline = new FakeDeadline();
+
+      ModifyAccountPropertyTransaction<Address> trans = new ModifyAccountPropertyTransaction.AddressModification(
+            NetworkType.MIJIN_TEST, 1, deadline, BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
+            AccountPropertyType.ALLOW_ADDRESS,
+            Arrays.asList(new AccountPropertyModification<>(AccountPropertyModificationType.ADD, address)));
+
+      Transaction t = trans.copyForSigner(remoteAccount);
+      assertEquals(Optional.of(remoteAccount), t.getSigner());
+   }
+   
+   @Test
+   void checkCopyToSignerMosaic() throws IOException {
+      PublicAccount remoteAccount = new Account(new KeyPair(), NetworkType.MIJIN).getPublicAccount();
+      
+      Deadline deadline = new FakeDeadline();
+      ModifyAccountPropertyTransaction<UInt64Id> trans = new ModifyAccountPropertyTransaction.MosaicModification(
+            NetworkType.MIJIN_TEST, 1, deadline, BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
+            AccountPropertyType.ALLOW_MOSAIC,
+            Arrays.asList(new AccountPropertyModification<>(AccountPropertyModificationType.ADD,
+                  new MosaicId(BigInteger.ONE))));
+
+      Transaction t = trans.copyForSigner(remoteAccount);
+      assertEquals(Optional.of(remoteAccount), t.getSigner());
+   }
+   
+   @Test
+   void checkCopyToSignerentity() throws IOException {
+      PublicAccount remoteAccount = new Account(new KeyPair(), NetworkType.MIJIN).getPublicAccount();
+      
+      Deadline deadline = new FakeDeadline();
+      ModifyAccountPropertyTransaction<TransactionType> trans = new ModifyAccountPropertyTransaction.EntityTypeModification(
+            NetworkType.MIJIN_TEST, 1, deadline, BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
+            AccountPropertyType.BLOCK_TRANSACTION, Arrays.asList(
+                  new AccountPropertyModification<>(AccountPropertyModificationType.ADD, TransactionType.LOCK)));
+
+      Transaction t = trans.copyForSigner(remoteAccount);
+      assertEquals(Optional.of(remoteAccount), t.getSigner());
+   }
 }

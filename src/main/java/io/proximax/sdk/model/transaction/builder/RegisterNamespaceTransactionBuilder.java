@@ -155,7 +155,7 @@ public class RegisterNamespaceTransactionBuilder
    public RegisterNamespaceTransactionBuilder rootNamespace(String name) {
       namespaceType(NamespaceType.RootNamespace);
       namespaceName(name);
-      namespaceId(new NamespaceId(IdGenerator.generateNamespaceId(name)));
+      namespaceId(new NamespaceId(name));
       return self();
    }
    

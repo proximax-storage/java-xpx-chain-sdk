@@ -16,8 +16,11 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
+import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.ResourceBasedTest;
+import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
+import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.alias.AliasAction;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.MosaicId;
@@ -82,4 +85,17 @@ class AliasTransactionTest extends ResourceBasedTest {
       assertArrayEquals(loadBytes("link_mosaic"), actual);
    }
 
+   @Test
+   void checkCopyToSigner() {
+      PublicAccount remoteAccount = new Account(new KeyPair(), NetworkType.MIJIN).getPublicAccount();
+      
+      AliasTransaction trans = new AliasTransaction(TransactionType.MOSAIC_ALIAS, NetworkType.MIJIN,
+            TransactionVersion.ADDRESS_ALIAS.getValue(), new FakeDeadline(), BigInteger.ZERO,
+            Optional.empty(), Optional.empty(), Optional.empty(), Optional.of(new MosaicId(
+                  BigInteger.ONE)),
+            Optional.empty(), new NamespaceId("testest"), AliasAction.LINK);
+
+      Transaction t = trans.copyForSigner(remoteAccount);
+      assertEquals(Optional.of(remoteAccount), t.getSigner());
+   }
 }

@@ -30,6 +30,7 @@ import org.junit.jupiter.api.Test;
 
 import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.ResourceBasedTest;
+import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
@@ -83,5 +84,19 @@ class LockFundsTransactionTest extends ResourceBasedTest {
             BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), NetworkCurrencyMosaic.TEN,
             BigInteger.valueOf(100), signedTransaction);
       assertTrue(tx.toString().startsWith("LockFundsTransaction "));
+   }
+   
+   @Test
+   void checkCopyToSigner() throws IOException {
+      PublicAccount remoteAccount = new Account(new KeyPair(), NetworkType.MIJIN).getPublicAccount();
+      
+      SignedTransaction signedTransaction = new SignedTransaction("payload",
+            "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", TransactionType.AGGREGATE_BONDED);
+      LockFundsTransaction trans = new LockFundsTransaction(NetworkType.MIJIN_TEST, 1, new FakeDeadline(),
+            BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), NetworkCurrencyMosaic.TEN,
+            BigInteger.valueOf(100), signedTransaction);
+
+      Transaction t = trans.copyForSigner(remoteAccount);
+      assertEquals(Optional.of(remoteAccount), t.getSigner());
    }
 }

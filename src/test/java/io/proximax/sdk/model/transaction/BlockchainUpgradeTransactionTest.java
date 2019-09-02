@@ -14,7 +14,10 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
+import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.ResourceBasedTest;
+import io.proximax.sdk.model.account.Account;
+import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.BlockchainVersion;
 import io.proximax.sdk.model.blockchain.NetworkType;
 
@@ -44,4 +47,15 @@ class BlockchainUpgradeTransactionTest extends ResourceBasedTest {
       assertArrayEquals(actual, loadBytes("blockchain_upgrade"));
    }
 
+   @Test
+   void checkCopyToSigner() throws IOException {
+      PublicAccount remoteAccount = new Account(new KeyPair(), NetworkType.MIJIN).getPublicAccount();
+      
+      BlockchainUpgradeTransaction trans = new BlockchainUpgradeTransaction(NetworkType.MIJIN, 1, new FakeDeadline(),
+            BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), BigInteger.ONE,
+            new BlockchainVersion(1, 2, 3, 4));
+
+      Transaction t = trans.copyForSigner(remoteAccount);
+      assertEquals(Optional.of(remoteAccount), t.getSigner());
+   }
 }

@@ -141,4 +141,14 @@ public class SecretLockTransactionBuilder
 
    // -------------------------------------- convenience --------------------------------------------//
 
+   /**
+    * specify lock secret along with the corresponding hash type
+    * 
+    * @param hashType hashing function used to hash proof to create secret
+    * @param secret the secret
+    * @return self
+    */
+   public SecretLockTransactionBuilder secret(HashType hashType, String secret) {
+      return hashType(hashType).secret(secret);
+   }
 }

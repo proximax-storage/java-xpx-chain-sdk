@@ -16,7 +16,9 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
+import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.ResourceBasedTest;
+import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 
@@ -55,4 +57,18 @@ class ModifyContractTransactionTest extends ResourceBasedTest {
       assertArrayEquals(loadBytes("modify_contract"), actual);
    }
 
+   @Test
+   void checkCopyToSigner() throws IOException {
+      PublicAccount remoteAccount = new Account(new KeyPair(), NetworkType.MIJIN).getPublicAccount();
+      
+      ModifyContractTransaction trans = new ModifyContractTransaction(NetworkType.MIJIN, 3, new FakeDeadline(),
+            BigInteger.valueOf(324), Optional.empty(), Optional.empty(), Optional.empty(), BigInteger.valueOf(5),
+            "CAFE",
+            Arrays.asList(MultisigCosignatoryModification.add(new PublicAccount(PUBKEYHASH, NetworkType.MIJIN))),
+            Arrays.asList(MultisigCosignatoryModification.remove(new PublicAccount(PUBKEYHASH, NetworkType.MIJIN))),
+            Arrays.asList());
+
+      Transaction t = trans.copyForSigner(remoteAccount);
+      assertEquals(Optional.of(remoteAccount), t.getSigner());
+   }
 }

@@ -19,6 +19,7 @@ package io.proximax.sdk.model.transaction;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -114,6 +115,22 @@ public class AggregateTransactionTest extends ResourceBasedTest {
       // assertEquals("039054419050B9837EFAB4BBE8A4B9BB32D812F9885C00D8FC1650E1420D000000746573742D6D65737361676568B3FBB18729C1FDE225C57F8CE080FA828F0067E451A3FD81FA628842B0B763",
       // signedTransaction.getPayload().substring(320, 474));
 
+   }
+   
+   @Test
+   void checkCopyToSigner() {
+      TransferTransaction transferTx = new TransferTransaction(NetworkType.MIJIN_TEST, 3,
+            new FakeDeadline(), BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
+            Recipient.from(new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST)),
+            Arrays.asList(), new PlainMessage("test-message"));
+
+      PublicAccount innerSigner = new PublicAccount("B694186EE4AB0558CA4AFCFDD43B42114AE71094F5A1FC4A913FE9971CACD21D",
+            NetworkType.MIJIN_TEST);
+      AggregateTransaction aggregateTx = new TransactionBuilderFactory().aggregateComplete()
+            .innerTransactions(transferTx.toAggregate(innerSigner)).deadline(new FakeDeadline())
+            .networkType(NetworkType.MIJIN_TEST).build();
+
+      assertThrows(UnsupportedOperationException.class, () -> aggregateTx.copyForSigner(innerSigner));
    }
 
    @Test

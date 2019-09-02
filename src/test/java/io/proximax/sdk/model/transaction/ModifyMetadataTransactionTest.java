@@ -18,7 +18,9 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
 
+import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.ResourceBasedTest;
+import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
@@ -118,4 +120,17 @@ class ModifyMetadataTransactionTest extends ResourceBasedTest {
       assertArrayEquals(loadBytes("modify_metadata_namespace"), actual);
    }
 
+   @Test
+   void checkCopyToSigner() throws IOException {
+      PublicAccount remoteAccount = new Account(new KeyPair(), NetworkType.MIJIN).getPublicAccount();
+      
+      ModifyMetadataTransaction trans = new ModifyMetadataTransaction(TransactionType.MODIFY_NAMESPACE_METADATA,
+            NetworkType.MIJIN_TEST, 1, new FakeDeadline(), BigInteger.ZERO, Optional.empty(), Optional.empty(),
+            Optional.empty(), MetadataType.NAMESPACE, Optional.of(new NamespaceId("testns")),
+            Optional.empty(),
+            Arrays.asList(MetadataModification.remove("keytoremove"), MetadataModification.add("addedkey", "value")));
+
+      Transaction t = trans.copyForSigner(remoteAccount);
+      assertEquals(Optional.of(remoteAccount), t.getSigner());
+   }
 }

@@ -61,4 +61,19 @@ class AccountLinkTransactionTest extends ResourceBasedTest {
 //      saveBytes("account_link", actual);
       assertArrayEquals(loadBytes("account_link"), actual);
    }
+   
+   @Test
+   void checkCopyToSigner() {
+      TransactionDeadline deadline = new FakeDeadline();
+      PublicAccount remoteAccount = new Account(new KeyPair(), NETWORK_TYPE).getPublicAccount();
+      PublicAccount signer = new Account(new KeyPair(), NETWORK_TYPE).getPublicAccount();
+      TransactionInfo transactionInfo = TransactionInfo.create(BigInteger.TEN, "hash", "merkle");
+      String signature = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+      AccountLinkTransaction trans = new AccountLinkTransaction(NETWORK_TYPE, 7, deadline, BigInteger.ONE,
+            Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo), remoteAccount,
+            AccountLinkAction.LINK);
+
+      Transaction t = trans.copyForSigner(remoteAccount);
+      assertEquals(Optional.of(remoteAccount), t.getSigner());
+   }
 }
