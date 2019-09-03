@@ -67,7 +67,7 @@ public class RegisterNamespaceTransaction extends Transaction {
       Validate.notNull(namespaceName, "NamespaceName must not be null");
       Validate.notNull(namespaceType, "NamespaceType must not be null");
       Validate.notNull(namespaceId, "NamespaceId must not be null");
-      if (namespaceType == NamespaceType.RootNamespace) {
+      if (namespaceType == NamespaceType.ROOT_NAMESPACE) {
          Validate.notNull(duration, "Duration must not be null");
       } else {
          Validate.notNull(parentId, "ParentId must not be null");
@@ -129,6 +129,11 @@ public class RegisterNamespaceTransaction extends Transaction {
    protected byte[] generateBytes() {
       FlatBufferBuilder builder = new FlatBufferBuilder();
       BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
+      // duration and parent ID are sent in shared field based on Root/Sub namespace status
+      BigInteger durationParentId = getNamespaceType() == NamespaceType.ROOT_NAMESPACE
+            ? duration.orElseThrow(() -> new IllegalStateException("Root namespace has to have duration specified"))
+            : parentId.orElseThrow(() -> new IllegalStateException("Sub namespace has to have parentId specified"))
+                  .getId();
 
       // Create Vectors
       int signatureVector = RegisterNamespaceTransactionBuffer.createSignatureVector(builder, new byte[64]);
@@ -140,8 +145,7 @@ public class RegisterNamespaceTransaction extends Transaction {
       int namespaceIdVector = RegisterNamespaceTransactionBuffer.createNamespaceIdVector(builder,
             UInt64Utils.fromBigInteger(namespaceId.getId()));
       int durationParentIdVector = RegisterNamespaceTransactionBuffer.createDurationParentIdVector(builder,
-            getNamespaceType() == NamespaceType.RootNamespace ? UInt64Utils.fromBigInteger(duration.get())
-                  : UInt64Utils.fromBigInteger(parentId.get().getId()));
+            UInt64Utils.fromBigInteger(durationParentId));
       int name = builder.createString(namespaceName);
 
       int size = getSerializedSize();

@@ -4,11 +4,11 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * The factory to create Message instance.
- *
- * @since 1.0
  */
 public class MessageFactory {
 
+   /* hiding constructor for utility class */
+   private MessageFactory() { /* nothing o do here */ }
     /**
      * Create Message instance based on type and encodedPayload
      * @param type the message type
@@ -21,6 +21,6 @@ public class MessageFactory {
         } else if (type == MessageType.SECURE.getCode()){
             return SecureMessage.createFromEncodedPayload(encodedPayload);
         }
-        return PlainMessage.Empty;
+        return PlainMessage.EMPTY;
     }
 }

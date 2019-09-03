@@ -176,7 +176,7 @@ public class NamespaceInfo {
     * @return true if namespace is Root
     */
    public boolean isRoot() {
-      return this.type == NamespaceType.RootNamespace;
+      return this.type == NamespaceType.ROOT_NAMESPACE;
    }
 
    /**
@@ -185,7 +185,7 @@ public class NamespaceInfo {
     * @return true if namespace is Subnamespace
     */
    public boolean isSubnamespace() {
-      return this.type == NamespaceType.SubNamespace;
+      return this.type == NamespaceType.SUB_NAMESPACE;
    }
 
    /**

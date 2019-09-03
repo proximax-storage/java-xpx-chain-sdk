@@ -58,7 +58,7 @@ class AggregateTransactionBuilderTest {
             new Deadline(2, ChronoUnit.HOURS), BigInteger.valueOf(37750), Optional.empty(), Optional.empty(),
             Optional.empty(),
             Recipient.from(new Address("SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.MIJIN_TEST)),
-            Arrays.asList(), PlainMessage.Empty);
+            Arrays.asList(), PlainMessage.EMPTY);
 
       AggregateTransaction agg = completeBuilder.innerTransactions(transferTx).build();
       
@@ -74,7 +74,7 @@ class AggregateTransactionBuilderTest {
             new Deadline(2, ChronoUnit.HOURS), BigInteger.valueOf(37750), Optional.empty(), Optional.empty(),
             Optional.empty(),
             Recipient.from(new Address("SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.MIJIN_TEST)),
-            Arrays.asList(), PlainMessage.Empty);
+            Arrays.asList(), PlainMessage.EMPTY);
 
       AggregateTransaction agg = bondedBuilder.innerTransactions(transferTx).build();
       
@@ -91,7 +91,7 @@ class AggregateTransactionBuilderTest {
             new Deadline(2, ChronoUnit.HOURS), BigInteger.valueOf(37750), Optional.empty(), Optional.empty(),
             Optional.empty(),
             Recipient.from(new Address("SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.MIJIN_TEST)),
-            Arrays.asList(), PlainMessage.Empty);
+            Arrays.asList(), PlainMessage.EMPTY);
       
       PublicAccount puba = new PublicAccount("9A49366406ACA952B88BADF5F1E9BE6CE4968141035A60BE503273EA65456B24",
             NetworkType.MIJIN_TEST);

@@ -233,7 +233,7 @@ public class TransactionMappingTest extends ResourceBasedTest {
         assertEquals(extractBigInteger(getFieldOfObject(transactionDTO, "transaction", "namespaceId").getAsJsonArray()),
                 transaction.getNamespaceId().getId());
 
-        if (transaction.getNamespaceType() == NamespaceType.RootNamespace) {
+        if (transaction.getNamespaceType() == NamespaceType.ROOT_NAMESPACE) {
             assertEquals(extractBigInteger(getFieldOfObject(transactionDTO, "transaction", "duration").getAsJsonArray()),
                     transaction.getDuration().get());
         } else {

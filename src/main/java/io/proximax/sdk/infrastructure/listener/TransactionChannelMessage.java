@@ -15,6 +15,7 @@ import io.proximax.sdk.infrastructure.TransactionMapping;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
+import io.proximax.sdk.model.transaction.Recipient;
 import io.proximax.sdk.model.transaction.Transaction;
 import io.proximax.sdk.model.transaction.TransferTransaction;
 import io.reactivex.Observable;
@@ -72,7 +73,7 @@ public class TransactionChannelMessage extends ListenerMessage<Transaction> {
       // if not signer or recipient and this is aggregate transaction then run some extra checks
       if (!result.get() && transaction instanceof AggregateTransaction) {
          final AggregateTransaction aggregateTransaction = (AggregateTransaction) transaction;
-         // check whether ddress is cosignatory
+         // check whether address is cosignatory
          aggregateTransaction.getCosignatures().forEach(cosignature -> {
             if (cosignature.getSigner().getAddress().equals(address)) {
                result.set(true);
@@ -106,7 +107,7 @@ public class TransactionChannelMessage extends ListenerMessage<Transaction> {
       }
       // address was not signer so check whether it is recipient
       if (transaction instanceof TransferTransaction) {
-         boolean isRecipient = ((TransferTransaction) transaction).getRecipient().equals(address);
+         boolean isRecipient = ((TransferTransaction) transaction).getRecipient().equals(Recipient.from(address));
          if (isRecipient) {
             return true;
          }

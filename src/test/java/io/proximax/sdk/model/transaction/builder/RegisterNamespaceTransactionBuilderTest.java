@@ -41,7 +41,7 @@ class RegisterNamespaceTransactionBuilderTest {
       final String ID = "test.ns";
       RegisterNamespaceTransaction trans = builder.rootNamespace(ID).build();
       
-      assertEquals(NamespaceType.RootNamespace, trans.getNamespaceType());
+      assertEquals(NamespaceType.ROOT_NAMESPACE, trans.getNamespaceType());
       assertEquals(new NamespaceId(ID), trans.getNamespaceId());
       assertEquals(ID, trans.getNamespaceName());
       assertEquals(Optional.empty(), trans.getDuration());
@@ -53,7 +53,7 @@ class RegisterNamespaceTransactionBuilderTest {
       final String ID = "test.ns";
       RegisterNamespaceTransaction trans = builder.subNamespace(new NamespaceId(ID), "hello").duration(BigInteger.TEN).build();
       
-      assertEquals(NamespaceType.SubNamespace, trans.getNamespaceType());
+      assertEquals(NamespaceType.SUB_NAMESPACE, trans.getNamespaceType());
       assertEquals(new NamespaceId(ID + ".hello"), trans.getNamespaceId());
       assertEquals("hello", trans.getNamespaceName());
       assertEquals(Optional.of(BigInteger.TEN), trans.getDuration());

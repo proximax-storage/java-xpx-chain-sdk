@@ -39,7 +39,7 @@ class NamespaceInfoTest {
         NamespaceInfo namespaceInfo = new NamespaceInfo(true,
                 0,
                 "5A3CD9B09CD1E8000159249B",
-                NamespaceType.RootNamespace,
+                NamespaceType.ROOT_NAMESPACE,
                 1,
                 Arrays.asList(namespaceId),
                 new NamespaceId(new BigInteger("0")),
@@ -52,7 +52,7 @@ class NamespaceInfoTest {
         assertEquals(true, namespaceInfo.isActive());
         assertTrue(namespaceInfo.getIndex() == 0);
         assertEquals("5A3CD9B09CD1E8000159249B", namespaceInfo.getMetaId());
-        assertTrue(namespaceInfo.getType() == NamespaceType.RootNamespace);
+        assertTrue(namespaceInfo.getType() == NamespaceType.ROOT_NAMESPACE);
         assertTrue(namespaceInfo.getDepth() == 1);
         assertEquals(namespaceId, namespaceInfo.getLevels().get(0));
         Assertions.assertEquals(new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", NetworkType.MIJIN_TEST), namespaceInfo.getOwner());
@@ -113,7 +113,7 @@ class NamespaceInfoTest {
         return new NamespaceInfo(true,
                 0,
                 "5A3CD9B09CD1E8000159249B",
-                NamespaceType.RootNamespace,
+                NamespaceType.ROOT_NAMESPACE,
                 1,
                 Arrays.asList(new NamespaceId(new BigInteger("-8884663987180930485"))),
                 new NamespaceId(new BigInteger("0")),
@@ -128,7 +128,7 @@ class NamespaceInfoTest {
         return new NamespaceInfo(true,
                 0,
                 "5A3CD9B09CD1E8000159249B",
-                NamespaceType.SubNamespace,
+                NamespaceType.SUB_NAMESPACE,
                 1,
                 Arrays.asList(new NamespaceId(new BigInteger("-3087871471161192663")), new NamespaceId(new BigInteger("-1087871471161192663"))),
                 new NamespaceId(new BigInteger("-3087871471161192663")),

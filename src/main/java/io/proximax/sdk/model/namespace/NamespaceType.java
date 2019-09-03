@@ -18,18 +18,16 @@ package io.proximax.sdk.model.namespace;
 
 /**
  * Enum containing namespace supply type.
- *
- * @since 1.0
  */
 public enum NamespaceType {
     /**
      * Root namespace
      */
-    RootNamespace(0),
+    ROOT_NAMESPACE(0),
     /**
      * Sub namespace
      */
-    SubNamespace(1);
+    SUB_NAMESPACE(1);
 
     private int value;
 
@@ -37,17 +35,28 @@ public enum NamespaceType {
         this.value = value;
     }
 
+    /**
+     * retrieve namespace type based on the code
+     * 
+     * @param value the value representing the namespace type
+     * @return the enum element
+     */
     public static NamespaceType rawValueOf(int value) {
         switch (value) {
             case 0:
-                return NamespaceType.RootNamespace;
+                return NamespaceType.ROOT_NAMESPACE;
             case 1:
-                return NamespaceType.SubNamespace;
+                return NamespaceType.SUB_NAMESPACE;
             default:
                 throw new IllegalArgumentException(value + " is not a valid value");
         }
     }
 
+    /**
+     * get the numeric representation of the namespace type
+     * 
+     * @return the numeric representation
+     */
     public int getValue() {
         return value;
     }

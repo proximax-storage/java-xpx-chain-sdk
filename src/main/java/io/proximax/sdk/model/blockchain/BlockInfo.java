@@ -213,7 +213,7 @@ public class BlockInfo {
        return new BlockInfo(dto.getMeta().getHash(),
              dto.getMeta().getGenerationHash(),
              Optional.of(toBigInt(dto.getMeta().getTotalFee())),
-             Optional.of(dto.getMeta().getNumTransactions().intValue()),
+             Optional.of(dto.getMeta().getNumTransactions()),
              dto.getBlock().getSignature(),
              new PublicAccount(dto.getBlock().getSigner(), networkType),
              networkType,

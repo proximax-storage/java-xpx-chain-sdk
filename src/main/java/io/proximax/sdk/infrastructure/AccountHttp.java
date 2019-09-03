@@ -85,7 +85,7 @@ public class AccountHttp extends Http implements AccountRepository {
    public Observable<List<AccountInfo>> getAccountsInfo(List<Address> addresses) {
       // prepare JSON array with addresses
       JsonArray arr = new JsonArray(addresses.size());
-      addresses.stream().map(Address::plain).forEachOrdered(addr -> arr.add(addr));
+      addresses.stream().map(Address::plain).forEachOrdered(arr::add);
 
       JsonObject requestBody = new JsonObject();
       requestBody.add("addresses", arr);
@@ -123,7 +123,7 @@ public class AccountHttp extends Http implements AccountRepository {
    public Observable<List<AccountProperties>> getAccountProperties(List<Address> addresses) {
       // prepare JSON array with addresses
       JsonArray arr = new JsonArray(addresses.size());
-      addresses.stream().map(Address::plain).forEachOrdered(addr -> arr.add(addr));
+      addresses.stream().map(Address::plain).forEachOrdered(arr::add);
 
       JsonObject requestBody = new JsonObject();
       requestBody.add("addresses", arr);

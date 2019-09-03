@@ -31,7 +31,7 @@ public class TransferTransactionBuilder extends TransactionBuilder<TransferTrans
    public TransferTransactionBuilder() {
       super(EntityType.TRANSFER, EntityVersion.TRANSFER.getValue());
       // make default message empty
-      message = PlainMessage.Empty;
+      message = PlainMessage.EMPTY;
       // make the list of mosaics to transfer empty
       mosaics = new ArrayList<>();
    }

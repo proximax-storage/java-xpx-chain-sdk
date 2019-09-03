@@ -180,7 +180,7 @@ class TransferTransactionMapping extends TransactionMapping {
          String messagePayload = messageObj.get("payload").getAsString();
          message = MessageFactory.createMessage(messageType, Hex.decode(messagePayload));
       } else {
-         message = PlainMessage.Empty;
+         message = PlainMessage.EMPTY;
       }
 
       // version
@@ -385,10 +385,10 @@ class NamespaceCreationTransactionMapping extends TransactionMapping {
       DeadlineBP deadline = new DeadlineBP(GsonUtils.getBigInteger(transaction.getAsJsonArray("deadline")));
       NamespaceType namespaceType = NamespaceType.rawValueOf(transaction.get("namespaceType").getAsInt());
       NamespaceId namespaceId = new NamespaceId(GsonUtils.getBigInteger(transaction.getAsJsonArray("namespaceId")));
-      Optional<BigInteger> namespaceDuration = namespaceType == NamespaceType.RootNamespace
+      Optional<BigInteger> namespaceDuration = namespaceType == NamespaceType.ROOT_NAMESPACE
             ? Optional.of(GsonUtils.getBigInteger(transaction.getAsJsonArray("duration")))
             : Optional.empty();
-      Optional<NamespaceId> namespaceParentId = namespaceType == NamespaceType.SubNamespace
+      Optional<NamespaceId> namespaceParentId = namespaceType == NamespaceType.SUB_NAMESPACE
             ? Optional.of(new NamespaceId(GsonUtils.getBigInteger(transaction.getAsJsonArray("parentId"))))
             : Optional.empty();
       JsonElement version = transaction.get("version");

@@ -17,7 +17,7 @@
 package io.proximax.sdk.model.transaction;
 
 class ScalarAttribute extends SchemaAttribute {
-    final private Constants size;
+    private final Constants size;
 
     ScalarAttribute(String name, Constants typeSize) {
         super(name);

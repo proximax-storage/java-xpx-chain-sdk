@@ -153,7 +153,7 @@ public class RegisterNamespaceTransactionBuilder
     * @return self
     */
    public RegisterNamespaceTransactionBuilder rootNamespace(String name) {
-      namespaceType(NamespaceType.RootNamespace);
+      namespaceType(NamespaceType.ROOT_NAMESPACE);
       namespaceName(name);
       namespaceId(new NamespaceId(name));
       return self();
@@ -167,7 +167,7 @@ public class RegisterNamespaceTransactionBuilder
     * @return self
     */
    public RegisterNamespaceTransactionBuilder subNamespace(NamespaceId parentId, String name) {
-      namespaceType(NamespaceType.SubNamespace);
+      namespaceType(NamespaceType.SUB_NAMESPACE);
       parentId(parentId);
       namespaceName(name);
       namespaceId(new NamespaceId(IdGenerator.generateSubNamespaceIdFromParentId(parentId.getId(), name)));

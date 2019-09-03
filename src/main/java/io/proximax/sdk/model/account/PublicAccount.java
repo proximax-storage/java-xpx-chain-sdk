@@ -44,21 +44,6 @@ public class PublicAccount {
     public static PublicAccount createFromPublicKey(String publicKey, NetworkType networkType) {
         return new PublicAccount(publicKey, networkType);
     }
-//
-//    /**
-//     * Compares public accounts for equality.
-//     *
-//     * @param o PublicAccount
-//     * @return boolean
-//     */
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (!(o instanceof PublicAccount)) return false;
-//        PublicAccount that = (PublicAccount) o;
-//        return Objects.equals(address, that.address) &&
-//                Objects.equals(publicKey, that.publicKey);
-//    }
 
     /**
      * Returns account address.
