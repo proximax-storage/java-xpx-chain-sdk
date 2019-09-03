@@ -18,7 +18,6 @@ package io.proximax.sdk;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +44,6 @@ import io.proximax.sdk.model.mosaic.MosaicNonce;
 import io.proximax.sdk.model.mosaic.MosaicProperties;
 import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.transaction.ModifyMetadataTransaction;
-import io.proximax.sdk.model.transaction.MosaicDefinitionTransaction;
 import io.proximax.sdk.model.transaction.RegisterNamespaceTransaction;
 import io.proximax.sdk.model.transaction.SignedTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
@@ -61,14 +59,13 @@ public class E2EMetadataTest extends E2EBaseTest {
    private static final Logger logger = LoggerFactory.getLogger(E2EMetadataTest.class);
 
    private List<String> metaIds = new LinkedList<>();
-   
+
    @Test
    void add01MetadataToAccount() {
       Account target = Account.generateNewAccount(getNetworkType());
       logger.info("Adding metadata to account {}", target);
-      List<MetadataModification> mods = Arrays.asList(MetadataModification.add("tono", "a"));
-      ModifyMetadataTransaction addMeta = ModifyMetadataTransaction
-            .createForAddress(getDeadline(), target.getAddress(), mods, getNetworkType());
+      ModifyMetadataTransaction addMeta = transact.modifyMetadata().forAddress(target.getAddress())
+            .modifications(MetadataModification.add("tono", "a")).build();
       SignedTransaction signedAddMeta = api.sign(addMeta, target);
       transactionHttp.announce(signedAddMeta).blockingFirst();
       logger.info("Transfer done. {}",
@@ -78,7 +75,7 @@ public class E2EMetadataTest extends E2EBaseTest {
       Metadata meta = metadataHttp.getMetadata(target.getAddress()).blockingFirst();
       checkMeta(meta, MetadataType.ADDRESS, new Field("tono", "a"));
       // add to the list of existing metadata items
-      metaIds.add(((AddressMetadata)meta).getId());
+      metaIds.add(((AddressMetadata) meta).getId());
    }
 
    @Test
@@ -88,28 +85,28 @@ public class E2EMetadataTest extends E2EBaseTest {
       logger.info("Creating new mosaic {}", id);
       signup(seedAccount.getAddress());
       // create mosaic
-      SignedTransaction mdt = MosaicDefinitionTransaction.create(nonce,
-            id,
-            getDeadline(),
-            new MosaicProperties(true, true, 6, Optional.of(BigInteger.valueOf(20))),
-            getNetworkType()).signWith(seedAccount, api.getNetworkGenerationHash());
-      Observable<Transaction> confirmation = listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS);
+      SignedTransaction mdt = transact.mosaicDefinition().nonce(nonce).mosaicId(id)
+            .mosaicProperties(new MosaicProperties(true, true, 6, Optional.of(BigInteger.valueOf(20)))).build()
+            .signWith(seedAccount, api.getNetworkGenerationHash());
+      Observable<Transaction> confirmation = listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(),
+            TimeUnit.SECONDS);
       sleepForAWhile();
       transactionHttp.announce(mdt).blockingFirst();
       logger.info("Mosaic created. {}", confirmation.blockingFirst());
       // now add metadata to the mosaic
-      List<MetadataModification> mods = Arrays.asList(MetadataModification.add("tono", "mosaic"));
-      SignedTransaction signedAddMeta = ModifyMetadataTransaction.createForMosaic(getDeadline(), id, mods, getNetworkType())
+      SignedTransaction signedAddMeta = transact.modifyMetadata().forMosaic(id)
+            .modifications(MetadataModification.add("tono", "mosaic")).build()
             .signWith(seedAccount, api.getNetworkGenerationHash());
       transactionHttp.announce(signedAddMeta).blockingFirst();
       logger.info("Meta added to mosaic. {}",
-            listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS)
+                  .blockingFirst());
       // check the meta
       sleepForAWhile();
       Metadata meta = metadataHttp.getMetadata(id).blockingFirst();
       checkMeta(meta, MetadataType.MOSAIC, new Field("tono", "mosaic"));
       // add to the list of existing metadata items
-      metaIds.add(((MosaicMetadata)meta).getId().getIdAsHex());
+      metaIds.add(((MosaicMetadata) meta).getId().getIdAsHex());
    }
 
    @Test
@@ -118,28 +115,30 @@ public class E2EMetadataTest extends E2EBaseTest {
       NamespaceId rootId = new NamespaceId(name);
       logger.info("Going to create namespace {}", rootId);
       // create root namespace
-      RegisterNamespaceTransaction registerNamespaceTransaction = RegisterNamespaceTransaction
-            .createRootNamespace(getDeadline(), name, BigInteger.valueOf(100), getNetworkType());
+      RegisterNamespaceTransaction registerNamespaceTransaction = transact.registerNamespace().rootNamespace(name)
+            .duration(BigInteger.valueOf(100)).build();
       SignedTransaction signedTransaction = api.sign(registerNamespaceTransaction, seedAccount);
       transactionHttp.announce(signedTransaction).blockingFirst();
       logger.info("Registered namespace {}. {}",
             name,
-            listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS)
+                  .blockingFirst());
       sleepForAWhile();
       // now add metadata to the namespace
-      List<MetadataModification> mods = Arrays.asList(MetadataModification.add("tono", "namespace"));
-      SignedTransaction signedAddMeta = ModifyMetadataTransaction
-            .createForNamespace(getDeadline(), rootId, mods, getNetworkType()).signWith(seedAccount, api.getNetworkGenerationHash());
+      SignedTransaction signedAddMeta = transact.modifyMetadata().forNamespace(rootId)
+            .modifications(MetadataModification.add("tono", "namespace")).build()
+            .signWith(seedAccount, api.getNetworkGenerationHash());
       transactionHttp.announce(signedAddMeta).blockingFirst();
       logger.info("Meta added to namespace. {}",
-            listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS)
+                  .blockingFirst());
       sleepForAWhile();
       // check the meta
       sleepForAWhile();
       Metadata meta = metadataHttp.getMetadata(rootId).blockingFirst();
       checkMeta(meta, MetadataType.NAMESPACE, new Field("tono", "namespace"));
       // add to the list of existing metadata items
-      metaIds.add(((NamespaceMetadata)meta).getId().getIdAsHex());
+      metaIds.add(((NamespaceMetadata) meta).getId().getIdAsHex());
    }
 
    @Test
@@ -147,7 +146,7 @@ public class E2EMetadataTest extends E2EBaseTest {
       sleepForAWhile();
       assertEquals(3, metadataHttp.getMetadata(metaIds).count().blockingGet());
    }
-   
+
    /**
     * check the metadata values
     * 

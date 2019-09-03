@@ -30,72 +30,73 @@ import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 public class SecretProofTransaction extends Transaction {
-    private final HashType hashType;
-    private final String secret;
-    private final String proof;
-    private final Recipient recipient;
-    private final Schema schema = new SecretProofTransactionSchema();
+   private final Schema schema = new SecretProofTransactionSchema();
 
-    public SecretProofTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, HashType hashType, Recipient recipient, String secret, String proof, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
-        this(networkType, version, deadline, fee, hashType, recipient, secret, proof, Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo));
-    }
+   private final HashType hashType;
+   private final String secret;
+   private final String proof;
+   private final Recipient recipient;
 
-    public SecretProofTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, HashType hashType, Recipient recipient, String secret, String proof) {
-        this(networkType, version, deadline, fee, hashType, recipient, secret, proof, Optional.empty(), Optional.empty(), Optional.empty());
-    }
+   /**
+    * @param networkType network type
+    * @param version transaction version. Use {@link TransactionVersion#SECRET_PROOF} for current version
+    * @param deadline transaction deadline
+    * @param maxFee transaction fee
+    * @param signature optional signature
+    * @param signer optional signer
+    * @param transactionInfo optional transaction info
+    * @param hashType hashing function used
+    * @param secret hash of the secret value
+    * @param proof the secret value
+    * @param recipient recipient of the transfer
+    */
+   public SecretProofTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline,
+         BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
+         Optional<TransactionInfo> transactionInfo, HashType hashType, String secret, String proof,
+         Recipient recipient) {
+      super(TransactionType.SECRET_PROOF, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
+      // validations
+      Validate.notNull(secret, "Secret must not be null");
+      Validate.notNull(proof, "Proof must not be null");
+      Validate.notNull(recipient, "Recipient must not be null");
+      if (!hashType.validate(secret)) {
+         throw new IllegalArgumentException("HashType and Secret have incompatible length or not hexadecimal string");
+      }
+      // assignments
+      this.hashType = hashType;
+      this.secret = secret;
+      this.proof = proof;
+      this.recipient = recipient;
+   }
 
-    public SecretProofTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger fee, HashType hashType, Recipient recipient, String secret, String proof, Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo) {
-        super(TransactionType.SECRET_PROOF, networkType, version, deadline, fee, signature, signer, transactionInfo);
-        Validate.notNull(secret, "Secret must not be null");
-        Validate.notNull(proof, "Proof must not be null");
-        Validate.notNull(recipient, "Recipient must not be null");
-        if (!hashType.validate(secret)) {
-            throw new IllegalArgumentException("HashType and Secret have incompatible length or not hexadecimal string");
-        }
-        this.hashType = hashType;
-        this.secret = secret;
-        this.recipient = recipient;
-        this.proof = proof;
-    }
+   /**
+    * Returns the hash algorithm secret is generated with.
+    *
+    * @return the hash algorithm secret is generated with.
+    */
+   public HashType getHashType() {
+      return hashType;
+   }
 
-    /**
-     * Create a secret proof transaction object.
-     *
-     * @param deadline          The deadline to include the transaction.
-     * @param hashType          The hash algorithm secret is generated with.
-     * @param recipient         The recipient of the locked mosaic
-     * @param secret            The seed proof hashed.
-     * @param proof             The seed proof.
-     * @param networkType       The network type.
-     *
-     * @return a SecretLockTransaction instance
-     */
-    public static SecretProofTransaction create(TransactionDeadline deadline, HashType hashType, Recipient recipient, String secret, String proof, NetworkType networkType) {
-        return new SecretProofTransaction(networkType, 1, deadline, BigInteger.valueOf(0), hashType, recipient, secret, proof);
-    }
+   /**
+    * Returns the proof hashed.
+    *
+    * @return the proof hashed.
+    */
+   public String getSecret() {
+      return secret;
+   }
 
-    /**
-     * Returns the hash algorithm secret is generated with.
-     *
-     * @return the hash algorithm secret is generated with.
-     */
-    public HashType getHashType() { return hashType; }
+   /**
+    * Returns proof.
+    *
+    * @return proof.
+    */
+   public String getProof() {
+      return proof;
+   }
 
-    /**
-     * Returns the proof hashed.
-     *
-     * @return the proof hashed.
-     */
-    public String getSecret() { return secret; }
-
-    /**
-     * Returns proof.
-     *
-     * @return proof.
-     */
-    public String getProof() { return proof; }
-
-    /**
+   /**
     * @return the recipient
     */
    public Recipient getRecipient() {
@@ -103,47 +104,68 @@ public class SecretProofTransaction extends Transaction {
    }
 
    @Override
-    byte[] generateBytes() {
-        FlatBufferBuilder builder = new FlatBufferBuilder();
-        BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
+   protected byte[] generateBytes() {
+      FlatBufferBuilder builder = new FlatBufferBuilder();
+      BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
 
-        byte[] recipientBytes = recipient.getBytes();
-        byte[] proofBytes = Hex.decode(proof);
-        // Create Vectors
-        int signatureVector = SecretProofTransactionBuffer.createSignatureVector(builder, new byte[64]);
-        int signerVector = SecretProofTransactionBuffer.createSignerVector(builder, new byte[32]);
-        int deadlineVector = SecretProofTransactionBuffer.createDeadlineVector(builder, UInt64Utils.fromBigInteger(deadlineBigInt));
-        int feeVector = SecretProofTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
-        int secretVector = SecretProofTransactionBuffer.createSecretVector(builder, Hex.decode(secret));
-        int recipientVector = SecretProofTransactionBuffer.createRecipientVector(builder, recipientBytes);
-        int proofVector = SecretProofTransactionBuffer.createProofVector(builder, proofBytes);
+      byte[] recipientBytes = recipient.getBytes();
+      byte[] proofBytes = Hex.decode(proof);
+      // Create Vectors
+      int signatureVector = SecretProofTransactionBuffer.createSignatureVector(builder, new byte[64]);
+      int signerVector = SecretProofTransactionBuffer.createSignerVector(builder, new byte[32]);
+      int deadlineVector = SecretProofTransactionBuffer.createDeadlineVector(builder,
+            UInt64Utils.fromBigInteger(deadlineBigInt));
+      int feeVector = SecretProofTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getMaxFee()));
+      int secretVector = SecretProofTransactionBuffer.createSecretVector(builder, Hex.decode(secret));
+      int recipientVector = SecretProofTransactionBuffer.createRecipientVector(builder, recipientBytes);
+      int proofVector = SecretProofTransactionBuffer.createProofVector(builder, proofBytes);
 
-        int size = HEADER_SIZE + 
-              35 + 
-              // recipient
-              recipientBytes.length + 
-              // proof length
-              proofBytes.length;
-        SecretProofTransactionBuffer.startSecretProofTransactionBuffer(builder);
-        SecretProofTransactionBuffer.addSize(builder, size);
-        SecretProofTransactionBuffer.addSignature(builder, signatureVector);
-        SecretProofTransactionBuffer.addSigner(builder, signerVector);
-        SecretProofTransactionBuffer.addVersion(builder, getTxVersionforSerialization());
-        SecretProofTransactionBuffer.addType(builder, getType().getValue());
-        SecretProofTransactionBuffer.addMaxFee(builder, feeVector);
-        SecretProofTransactionBuffer.addDeadline(builder, deadlineVector);
-        SecretProofTransactionBuffer.addHashAlgorithm(builder, hashType.getValue());
-        SecretProofTransactionBuffer.addSecret(builder, secretVector);
-        SecretProofTransactionBuffer.addRecipient(builder, recipientVector);
-        SecretProofTransactionBuffer.addProofSize(builder, proofBytes.length);
-        SecretProofTransactionBuffer.addProof(builder, proofVector);
+      int size = getSerializedSize();
 
-        int codedSecretProof = SecretProofTransactionBuffer.endSecretProofTransactionBuffer(builder);
-        builder.finish(codedSecretProof);
+      SecretProofTransactionBuffer.startSecretProofTransactionBuffer(builder);
+      SecretProofTransactionBuffer.addSize(builder, size);
+      SecretProofTransactionBuffer.addSignature(builder, signatureVector);
+      SecretProofTransactionBuffer.addSigner(builder, signerVector);
+      SecretProofTransactionBuffer.addVersion(builder, getTxVersionforSerialization());
+      SecretProofTransactionBuffer.addType(builder, getType().getValue());
+      SecretProofTransactionBuffer.addMaxFee(builder, feeVector);
+      SecretProofTransactionBuffer.addDeadline(builder, deadlineVector);
 
-        // validate size
-        byte[] output = schema.serialize(builder.sizedByteArray());
-        Validate.isTrue(output.length == size, "Serialized transaction has incorrect length: " + this.getClass());
-        return output;
-    }
+      SecretProofTransactionBuffer.addHashAlgorithm(builder, hashType.getValue());
+      SecretProofTransactionBuffer.addSecret(builder, secretVector);
+      SecretProofTransactionBuffer.addRecipient(builder, recipientVector);
+      SecretProofTransactionBuffer.addProofSize(builder, proofBytes.length);
+      SecretProofTransactionBuffer.addProof(builder, proofVector);
+
+      int codedSecretProof = SecretProofTransactionBuffer.endSecretProofTransactionBuffer(builder);
+      builder.finish(codedSecretProof);
+
+      // validate size
+      byte[] output = schema.serialize(builder.sizedByteArray());
+      Validate.isTrue(output.length == size, "Serialized transaction has incorrect length: " + this.getClass());
+      return output;
+   }
+
+   /**
+    * calculate payload size excluding the header
+    * 
+    * @param recipient lock recipient
+    * @param proof proof
+    * @return the size
+    */
+   public static int calculatePayloadSize(Recipient recipient, String proof) {
+      // 1 hash type + 32 secret + 2 proof size + recipient + proof
+      return 35 + recipient.getBytes().length + Hex.decode(proof).length;
+   }
+
+   @Override
+   protected int getPayloadSerializedSize() {
+      return calculatePayloadSize(getRecipient(), getProof());
+   }
+
+   @Override
+   protected Transaction copyForSigner(PublicAccount signer) {
+      return new SecretProofTransaction(getNetworkType(), getVersion(), getDeadline(), getMaxFee(), getSignature(),
+            Optional.of(signer), getTransactionInfo(), getHashType(), getSecret(), getProof(), getRecipient());
+   }
 }

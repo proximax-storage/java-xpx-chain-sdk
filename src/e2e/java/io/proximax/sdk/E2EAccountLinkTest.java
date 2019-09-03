@@ -18,7 +18,6 @@ package io.proximax.sdk;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.math.BigInteger;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -32,7 +31,6 @@ import org.slf4j.LoggerFactory;
 import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.AccountInfo;
-import io.proximax.sdk.model.transaction.AccountLinkAction;
 import io.proximax.sdk.model.transaction.AccountLinkTransaction;
 import io.proximax.sdk.model.transaction.TransactionStatusError;
 
@@ -59,8 +57,7 @@ class E2EAccountLinkTest extends E2EBaseTest {
 
    @Test
    void test02unlinkAccounts() {
-      AccountLinkTransaction link = new AccountLinkTransaction(remoteAccount.getPublicAccount(),
-            AccountLinkAction.UNLINK, getNetworkType(), getDeadline(), BigInteger.ZERO);
+      AccountLinkTransaction link = transact.accountLink().unlink(remoteAccount.getPublicAccount()).build();
       transactionHttp.announce(api.sign(link, localAccount)).blockingFirst();
       listener.confirmed(localAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
 
@@ -82,16 +79,14 @@ class E2EAccountLinkTest extends E2EBaseTest {
    @Test
    void test04overLinkAccounts() {
       Account remoteAccount2 = new Account(new KeyPair(), getNetworkType());
-      AccountLinkTransaction link = new AccountLinkTransaction(remoteAccount2.getPublicAccount(),
-            AccountLinkAction.LINK, getNetworkType(), getDeadline(), BigInteger.ZERO);
+      AccountLinkTransaction link = transact.accountLink().link(remoteAccount2.getPublicAccount()).build();
       transactionHttp.announce(api.sign(link, localAccount)).blockingFirst();
       TransactionStatusError error = listener.status(localAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
       assertEquals("Failure_AccountLink_Link_Already_Exists", error.getStatus());
    }
 
    private void linkAndTestAccounts(Account localAccount, Account remoteAccount) {
-      AccountLinkTransaction link = new AccountLinkTransaction(remoteAccount.getPublicAccount(), AccountLinkAction.LINK,
-            getNetworkType(), getDeadline(), BigInteger.ZERO);
+      AccountLinkTransaction link = transact.accountLink().link(remoteAccount.getPublicAccount()).build();
       transactionHttp.announce(api.sign(link, localAccount)).blockingFirst();
       listener.confirmed(localAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
 

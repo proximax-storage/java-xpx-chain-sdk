@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -57,7 +56,7 @@ import io.proximax.sdk.utils.dto.UInt64Utils;
 class E2EAccountTest extends E2EBaseTest {
    /** logger */
    private static final Logger logger = LoggerFactory.getLogger(E2ETransferTest.class);
-   
+
    private final Account simpleAccount = new Account(new KeyPair(), getNetworkType());
 
    @BeforeAll
@@ -69,7 +68,6 @@ class E2EAccountTest extends E2EBaseTest {
       sendSomeCash(simpleAccount, seedAccount.getAddress(), 1);
    }
 
-   
    @Test
    void addBlockAccountProperty() {
       Account acct = new Account(new KeyPair(), getNetworkType());
@@ -77,11 +75,12 @@ class E2EAccountTest extends E2EBaseTest {
       signup(acct.getAddress());
       signup(blocked.getAddress());
       logger.info("going to block {} by {}", blocked.getPublicAccount(), acct.getPublicAccount());
-      ModifyAccountPropertyTransaction<Address> trans = ModifyAccountPropertyTransaction.createForAddress(getDeadline(),
-            BigInteger.ZERO,
-            AccountPropertyType.BLOCK_ADDRESS,
-            Arrays.asList(new AccountPropertyModification<>(AccountPropertyModificationType.ADD, blocked.getAddress())),
-            getNetworkType());
+
+      ModifyAccountPropertyTransaction<Address> trans = transact.accountPropAddress()
+            .propertyType(AccountPropertyType.BLOCK_ADDRESS)
+            .modifications(Arrays
+                  .asList(new AccountPropertyModification<>(AccountPropertyModificationType.ADD, blocked.getAddress())))
+            .build();
       // announce the transaction
       transactionHttp.announce(trans.signWith(acct, api.getNetworkGenerationHash())).blockingFirst();
       logger.info("Waiting for  confirmation");
@@ -97,18 +96,16 @@ class E2EAccountTest extends E2EBaseTest {
       assertEquals(1, apsList.size());
       testAccountProperties(apsList.get(0), blocked.getAddress());
    }
-   
+
    @Test
    void addAllowMosaicProperty() {
       Account acct = new Account(new KeyPair(), getNetworkType());
       signup(acct.getAddress());
       UInt64Id allowedMosaic = NetworkCurrencyMosaic.ID;
       logger.info("going to allow {} by {}", allowedMosaic, acct.getPublicAccount());
-      ModifyAccountPropertyTransaction<UInt64Id> trans = ModifyAccountPropertyTransaction.createForMosaic(getDeadline(),
-            BigInteger.ZERO,
-            AccountPropertyType.ALLOW_MOSAIC,
-            Arrays.asList(AccountPropertyModification.add(allowedMosaic)),
-            getNetworkType());
+      ModifyAccountPropertyTransaction<UInt64Id> trans = transact.accountPropMosaic()
+            .propertyType(AccountPropertyType.ALLOW_MOSAIC)
+            .modifications(Arrays.asList(AccountPropertyModification.add(allowedMosaic))).build();
       // announce the transaction
       transactionHttp.announce(trans.signWith(acct, api.getNetworkGenerationHash())).blockingFirst();
       logger.info("Waiting for  confirmation");
@@ -124,18 +121,16 @@ class E2EAccountTest extends E2EBaseTest {
       assertEquals(1, apsList.size());
       testAccountPropertiesOnSimpleAccount(apsList.get(0), allowedMosaic);
    }
-   
+
    @Test
    void addAllowEntityTypeProperty() {
       Account acct = new Account(new KeyPair(), getNetworkType());
       signup(acct.getAddress());
       TransactionType allowedTransType = TransactionType.ACCOUNT_PROPERTIES_ENTITY_TYPE;
       logger.info("going to allow {} by {}", allowedTransType, acct.getPublicAccount());
-      ModifyAccountPropertyTransaction<TransactionType> trans = ModifyAccountPropertyTransaction.createForEntityType(getDeadline(),
-            BigInteger.ZERO,
-            AccountPropertyType.ALLOW_TRANSACTION,
-            Arrays.asList(AccountPropertyModification.add(allowedTransType)),
-            getNetworkType());
+      ModifyAccountPropertyTransaction<TransactionType> trans = transact.accountPropEntityType()
+            .propertyType(AccountPropertyType.ALLOW_TRANSACTION)
+            .modifications(Arrays.asList(AccountPropertyModification.add(allowedTransType))).build();
       // announce the transaction
       transactionHttp.announce(trans.signWith(acct, api.getNetworkGenerationHash())).blockingFirst();
       logger.info("Waiting for  confirmation");
@@ -151,7 +146,7 @@ class E2EAccountTest extends E2EBaseTest {
       assertEquals(1, apsList.size());
       testAccountPropertiesOnSimpleAccount(apsList.get(0), allowedTransType);
    }
-   
+
    /**
     * check that address block is as expected
     * 
@@ -160,20 +155,20 @@ class E2EAccountTest extends E2EBaseTest {
     */
    private void testAccountProperties(AccountProperties aps, Address blockedAddress) {
       boolean gotMatch = false;
-      for (AccountProperty ap: aps.getProperties()) {
+      for (AccountProperty ap : aps.getProperties()) {
          if (ap.getPropertyType().equals(AccountPropertyType.BLOCK_ADDRESS)) {
-            for (Object value: ap.getValues()) {
+            for (Object value : ap.getValues()) {
                // value should be string and should represent encoded address of the blocked account
-               if (value instanceof String && blockedAddress.equals(Address.createFromEncoded((String)value))) {
-                     gotMatch = true;
+               if (value instanceof String && blockedAddress.equals(Address.createFromEncoded((String) value))) {
+                  gotMatch = true;
                }
             }
-            
+
          }
       }
       assertTrue(gotMatch);
    }
-   
+
    /**
     * check that simple account has allowed mosaic as expected
     * 
@@ -183,30 +178,30 @@ class E2EAccountTest extends E2EBaseTest {
    private void testAccountPropertiesOnSimpleAccount(AccountProperties aps, UInt64Id allowedAsset) {
       MosaicId allowedMosaic = null;
       if (allowedAsset instanceof MosaicId) {
-         allowedMosaic = (MosaicId)allowedAsset;
+         allowedMosaic = (MosaicId) allowedAsset;
       } else if (allowedAsset instanceof NamespaceId) {
          logger.info("Converting namespace to aliased mosaic");
-         NamespaceInfo ns = namespaceHttp.getNamespace((NamespaceId)allowedAsset).blockingFirst();
+         NamespaceInfo ns = namespaceHttp.getNamespace((NamespaceId) allowedAsset).blockingFirst();
          allowedMosaic = ns.getMosaicAlias().orElseThrow(() -> new RuntimeException("Missing mosaic alias"));
       } else {
          fail("Unexpected asset " + allowedAsset);
       }
       boolean gotMatch = false;
-      for (AccountProperty ap: aps.getProperties()) {
+      for (AccountProperty ap : aps.getProperties()) {
          if (ap.getPropertyType().equals(AccountPropertyType.ALLOW_MOSAIC)) {
-            for (Object value: ap.getValues()) {
+            for (Object value : ap.getValues()) {
                logger.info("allowed mosaic: {}", value);
                // value should be string and should represent encoded address of the blocked account
                if (value instanceof List) {
-                     UInt64DTO dto = new UInt64DTO();
-                     dto.addAll((List<Long>)value);
-                     MosaicId retrievedMosaic = new MosaicId(UInt64Utils.toBigInt(dto));
-                     if (retrievedMosaic.equals(allowedMosaic)) {
-                        gotMatch = true;
-                     }
+                  UInt64DTO dto = new UInt64DTO();
+                  dto.addAll((List<Long>) value);
+                  MosaicId retrievedMosaic = new MosaicId(UInt64Utils.toBigInt(dto));
+                  if (retrievedMosaic.equals(allowedMosaic)) {
+                     gotMatch = true;
+                  }
                }
             }
-            
+
          }
       }
       assertTrue(gotMatch);
@@ -220,24 +215,25 @@ class E2EAccountTest extends E2EBaseTest {
     */
    private void testAccountPropertiesOnSimpleAccount(AccountProperties aps, TransactionType allowedTransactionType) {
       boolean gotMatch = false;
-      for (AccountProperty ap: aps.getProperties()) {
+      for (AccountProperty ap : aps.getProperties()) {
          if (ap.getPropertyType().equals(AccountPropertyType.ALLOW_TRANSACTION)) {
             for (Object value : ap.getValues()) {
                try {
                   if (value instanceof Long && isValidTransactionTypeCode(((Long) value).intValue())) {
-                     assertEquals(TransactionType.ACCOUNT_PROPERTIES_ENTITY_TYPE, TransactionType.rawValueOf(((Long) value).intValue()));
+                     assertEquals(TransactionType.ACCOUNT_PROPERTIES_ENTITY_TYPE,
+                           TransactionType.rawValueOf(((Long) value).intValue()));
                      gotMatch = true;
                   }
                } catch (RuntimeException e) {
                   // do nothing just ignore
                }
             }
-            
+
          }
       }
       assertTrue(gotMatch);
    }
-   
+
    private static boolean isValidTransactionTypeCode(int code) {
       try {
          TransactionType.rawValueOf(code);
@@ -246,105 +242,82 @@ class E2EAccountTest extends E2EBaseTest {
          return false;
       }
    }
-   
-    @Test
-    void getAccountInfo() throws ExecutionException, InterruptedException {
-        AccountInfo accountInfo = accountHttp
-                .getAccountInfo(simpleAccount.getAddress())
-                .toFuture()
-                .get();
 
-        assertEquals(simpleAccount.getPublicKey(), accountInfo.getPublicKey());
-    }
+   @Test
+   void getAccountInfo() throws ExecutionException, InterruptedException {
+      AccountInfo accountInfo = accountHttp.getAccountInfo(simpleAccount.getAddress()).toFuture().get();
 
-    @Test
-    void getAccountsInfo() {
-        List<String> accountKeys = accountHttp
-                .getAccountsInfo(Arrays.asList(simpleAccount.getAddress(), seedAccount.getAddress()))
-                .flatMapIterable(list -> list)
-                .map(AccountInfo::getPublicKey)
-                .toList()
-                .blockingGet();
+      assertEquals(simpleAccount.getPublicKey(), accountInfo.getPublicKey());
+   }
 
-        assertEquals(2, accountKeys.size());
-        assertTrue(accountKeys.contains(simpleAccount.getPublicKey()));
-        assertTrue(accountKeys.contains(seedAccount.getPublicKey()));
-    }
+   @Test
+   void getAccountsInfo() {
+      List<String> accountKeys = accountHttp
+            .getAccountsInfo(Arrays.asList(simpleAccount.getAddress(), seedAccount.getAddress()))
+            .flatMapIterable(list -> list).map(AccountInfo::getPublicKey).toList().blockingGet();
 
-    @Test
-    void transactions() throws ExecutionException, InterruptedException {
-        List<Transaction> transactions = accountHttp
-                .transactions(simpleAccount.getPublicAccount())
-                .toFuture()
-                .get();
+      assertEquals(2, accountKeys.size());
+      assertTrue(accountKeys.contains(simpleAccount.getPublicKey()));
+      assertTrue(accountKeys.contains(seedAccount.getPublicKey()));
+   }
 
-        assertEquals(2, transactions.size());
-    }
+   @Test
+   void transactions() throws ExecutionException, InterruptedException {
+      List<Transaction> transactions = accountHttp.transactions(simpleAccount.getPublicAccount()).toFuture().get();
 
-    @Test
-    void transactionsWithPagination() throws ExecutionException, InterruptedException {
-       // get list of transactions
-        List<Transaction> transactions = accountHttp
-                .transactions(simpleAccount.getPublicAccount())
-                .toFuture()
-                .get();
-        // there should be 2 as we did transfer to and from the account previously
-        assertEquals(2, transactions.size());
-        // now make another request for page size 1 and start after first transaction ID in the list
-        List<Transaction> nextTransactions = accountHttp
-                .transactions(simpleAccount.getPublicAccount(), new QueryParams(10, transactions.get(0).getTransactionInfo().get().getId().get()))
-                .toFuture()
-                .get();
-        // the result should be page with one item which is the second transaction
-        assertEquals(1, nextTransactions.size());
-        assertEquals(transactions.get(1).getTransactionInfo().get().getHash(), nextTransactions.get(0).getTransactionInfo().get().getHash());
-        // now try another request and start after second item which is last
-        List<Transaction> noTransactions = accountHttp
-              .transactions(simpleAccount.getPublicAccount(), new QueryParams(10, transactions.get(1).getTransactionInfo().get().getId().get()))
-              .toFuture()
-              .get();
+      assertEquals(2, transactions.size());
+   }
+
+   @Test
+   void transactionsWithPagination() throws ExecutionException, InterruptedException {
+      // get list of transactions
+      List<Transaction> transactions = accountHttp.transactions(simpleAccount.getPublicAccount()).toFuture().get();
+      // there should be 2 as we did transfer to and from the account previously
+      assertEquals(2, transactions.size());
+      // now make another request for page size 1 and start after first transaction ID in the list
+      List<Transaction> nextTransactions = accountHttp.transactions(simpleAccount.getPublicAccount(),
+            new QueryParams(10, transactions.get(0).getTransactionInfo().get().getId().get())).toFuture().get();
+      // the result should be page with one item which is the second transaction
+      assertEquals(1, nextTransactions.size());
+      assertEquals(transactions.get(1).getTransactionInfo().get().getHash(),
+            nextTransactions.get(0).getTransactionInfo().get().getHash());
+      // now try another request and start after second item which is last
+      List<Transaction> noTransactions = accountHttp.transactions(simpleAccount.getPublicAccount(),
+            new QueryParams(10, transactions.get(1).getTransactionInfo().get().getId().get())).toFuture().get();
       // the result should be page with no items because we skipped both transactions
       assertEquals(0, noTransactions.size());
 
-    }
+   }
 
-    @Test
-    void incomingTransactions() throws ExecutionException, InterruptedException {
-        List<Transaction> transactions = accountHttp
-                .incomingTransactions(simpleAccount.getPublicAccount())
-                .toFuture()
-                .get();
+   @Test
+   void incomingTransactions() throws ExecutionException, InterruptedException {
+      List<Transaction> transactions = accountHttp.incomingTransactions(simpleAccount.getPublicAccount()).toFuture()
+            .get();
 
-        assertEquals(1, transactions.size());
-    }
+      assertEquals(1, transactions.size());
+   }
 
-    @Test
-    void outgoingTransactions() throws ExecutionException, InterruptedException {
-        List<Transaction> transactions = accountHttp
-                .outgoingTransactions(simpleAccount.getPublicAccount())
-                .toFuture()
-                .get();
+   @Test
+   void outgoingTransactions() throws ExecutionException, InterruptedException {
+      List<Transaction> transactions = accountHttp.outgoingTransactions(simpleAccount.getPublicAccount()).toFuture()
+            .get();
 
-        assertEquals(1, transactions.size());
-    }
+      assertEquals(1, transactions.size());
+   }
 
-    @Test
-    void unconfirmedTransactions() throws ExecutionException, InterruptedException {
-       sleepForAWhile();
-        List<Transaction> transactions = accountHttp
-                .unconfirmedTransactions(simpleAccount.getPublicAccount())
-                .toFuture()
-                .get();
+   @Test
+   void unconfirmedTransactions() throws ExecutionException, InterruptedException {
+      sleepForAWhile();
+      List<Transaction> transactions = accountHttp.unconfirmedTransactions(simpleAccount.getPublicAccount()).toFuture()
+            .get();
 
-        assertEquals(0, transactions.size());
-    }
+      assertEquals(0, transactions.size());
+   }
 
-    @Test
-    void throwExceptionWhenBlockDoesNotExists() {
-        accountHttp.getAccountInfo(Address.createFromRawAddress("SARDGFTDLLCB67D4HPGIMIHPNSRYRJRT7DOBGWZY"))
+   @Test
+   void throwExceptionWhenBlockDoesNotExists() {
+      accountHttp.getAccountInfo(Address.createFromRawAddress("SARDGFTDLLCB67D4HPGIMIHPNSRYRJRT7DOBGWZY"))
 //                .subscribeOn(Schedulers.single())
-                .test()
-                .awaitDone(2, TimeUnit.SECONDS)
-                .assertFailure(RuntimeException.class);
-    }
+            .test().awaitDone(2, TimeUnit.SECONDS).assertFailure(RuntimeException.class);
+   }
 }

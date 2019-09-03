@@ -57,18 +57,20 @@ public class E2EAggregateTest extends E2EBaseTest {
    private final Account bob = new Account(new KeyPair(), getNetworkType());
    private final Account mike = new Account(new KeyPair(), getNetworkType());
 
-   private final MosaicId mosaicX = new MosaicId(UInt64Utils.fromLongArray(new long[] {481110499,231112638}));
-   private final MosaicId mosaicY = new MosaicId(UInt64Utils.fromLongArray(new long[] {519256100,642862634}));
-   
-   
+   private final MosaicId mosaicX = new MosaicId(UInt64Utils.fromLongArray(new long[] { 481110499, 231112638 }));
+   private final MosaicId mosaicY = new MosaicId(UInt64Utils.fromLongArray(new long[] { 519256100, 642862634 }));
+
    @BeforeAll
    void addListener() {
-      disposables.add(listener.status(alice.getAddress())
-            .subscribe(err -> logger.error("Operation failed for alice: {}", err), t -> logger.error("exception thrown", t)));
-      disposables.add(listener.status(bob.getAddress())
-            .subscribe(err -> logger.error("Operation failed for bob: {}", err), t -> logger.error("exception thrown", t)));
-      disposables.add(listener.status(mike.getAddress())
-            .subscribe(err -> logger.error("Operation failed for mike: {}", err), t -> logger.error("exception thrown", t)));
+      disposables.add(
+            listener.status(alice.getAddress()).subscribe(err -> logger.error("Operation failed for alice: {}", err),
+                  t -> logger.error("exception thrown", t)));
+      disposables
+            .add(listener.status(bob.getAddress()).subscribe(err -> logger.error("Operation failed for bob: {}", err),
+                  t -> logger.error("exception thrown", t)));
+      disposables
+            .add(listener.status(mike.getAddress()).subscribe(err -> logger.error("Operation failed for mike: {}", err),
+                  t -> logger.error("exception thrown", t)));
       // send funds to alice and bob
       logger.info("Mosaic X: {}", mosaicX.getIdAsHex());
       logger.info("Mosaic Y: {}", mosaicY.getIdAsHex());
@@ -97,36 +99,28 @@ public class E2EAggregateTest extends E2EBaseTest {
       sendMosaic(seedAccount, bob.getAddress(), new Mosaic(mosaicY, BigInteger.TEN));
       logger.info("Escrow between {} and {}", alice, bob);
       // send mosaic X from alice to bob
-      TransferTransaction aliceToBob = TransferTransaction.create(getDeadline(),
-            bob.getAddress(),
-            Arrays.asList(NetworkCurrencyMosaic.ONE),
-            PlainMessage.Empty,
-            getNetworkType());
+      TransferTransaction aliceToBob = transact.transfer().mosaics(NetworkCurrencyMosaic.ONE).to(bob.getAddress())
+            .build();
       // send mosaic Y from bob to alice
-      TransferTransaction bobToAlice = TransferTransaction.create(getDeadline(),
-            alice.getAddress(),
-            Arrays.asList(new Mosaic(mosaicY, BigInteger.TEN)),
-            PlainMessage.Empty,
-            getNetworkType());
+      TransferTransaction bobToAlice = transact.transfer().mosaics(new Mosaic(mosaicY, BigInteger.TEN))
+            .to(alice.getAddress()).build();
       // aggregate bonded with the 2 transactions - escrow
-      AggregateTransaction escrow = AggregateTransaction.createBonded(getDeadline(),
-            Arrays.asList(aliceToBob.toAggregate(alice.getPublicAccount()),
-                  bobToAlice.toAggregate(bob.getPublicAccount())),
-            getNetworkType());
+      AggregateTransaction escrow = transact.aggregateBonded()
+            .innerTransactions(aliceToBob.toAggregate(alice.getPublicAccount()),
+                  bobToAlice.toAggregate(bob.getPublicAccount()))
+            .build();
       // alice sign the escrow trans
       SignedTransaction signedEscrow = api.sign(escrow, alice);
       // lock funds for escrow
-      LockFundsTransaction lock = LockFundsTransaction.create(getDeadline(),
-            NetworkCurrencyMosaic.TEN,
-            BigInteger.valueOf(480),
-            signedEscrow,
-            getNetworkType());
+      LockFundsTransaction lock = transact.lockFunds().mosaic(NetworkCurrencyMosaic.TEN)
+            .duration(BigInteger.valueOf(480)).signedTransaction(signedEscrow).build();
       // alice sign and announce the lock
       logger.info("announcing {}", lock);
       SignedTransaction signedLock = api.sign(lock, alice);
       transactionHttp.announce(signedLock).blockingFirst();
       // wait for lock confirmation
-      logger.info("got confirmation: {}", listener.confirmed(alice.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      logger.info("got confirmation: {}",
+            listener.confirmed(alice.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
       sleepForAWhile();
       // announce escrow
       logger.info("announcing {}", escrow);
@@ -135,7 +129,8 @@ public class E2EAggregateTest extends E2EBaseTest {
       listener.aggregateBondedAdded(alice.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
 
       // bob sign the escrow
-      AggregateTransaction pendingEscrow = accountHttp.aggregateBondedTransactions(bob.getPublicAccount()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst().get(0);
+      AggregateTransaction pendingEscrow = accountHttp.aggregateBondedTransactions(bob.getPublicAccount())
+            .timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst().get(0);
       CosignatureSignedTransaction signedCosig = CosignatureTransaction.create(pendingEscrow).signWith(bob);
       // bob announce the cosignature
       logger.info("announcing escrow");
@@ -166,7 +161,7 @@ public class E2EAggregateTest extends E2EBaseTest {
          }
       });
    }
-   
+
    @Test
    void escrowBetweenTwoPartiesComplete() {
       returnAllToSeed(alice);
@@ -176,22 +171,16 @@ public class E2EAggregateTest extends E2EBaseTest {
       sendMosaic(seedAccount, bob.getAddress(), new Mosaic(mosaicY, BigInteger.TEN));
       logger.info("Escrow between {} and {}", alice, bob);
       // send mosaic X from alice to bob
-      TransferTransaction aliceToBob = TransferTransaction.create(getDeadline(),
-            bob.getAddress(),
-            Arrays.asList(NetworkCurrencyMosaic.ONE),
-            PlainMessage.Empty,
-            getNetworkType());
+      TransferTransaction aliceToBob = transact.transfer().mosaics(NetworkCurrencyMosaic.ONE).to(bob.getAddress())
+            .build();
       // send mosaic Y from bob to alice
-      TransferTransaction bobToAlice = TransferTransaction.create(getDeadline(),
-            alice.getAddress(),
-            Arrays.asList(new Mosaic(mosaicY, BigInteger.TEN)),
-            PlainMessage.Empty,
-            getNetworkType());
+      TransferTransaction bobToAlice = transact.transfer().mosaics(new Mosaic(mosaicY, BigInteger.TEN))
+            .to(alice.getAddress()).build();
       // aggregate bonded with the 2 transactions - escrow
-      AggregateTransaction escrow = AggregateTransaction.createComplete(getDeadline(),
-            Arrays.asList(aliceToBob.toAggregate(alice.getPublicAccount()),
-                  bobToAlice.toAggregate(bob.getPublicAccount())),
-            getNetworkType());
+      AggregateTransaction escrow = transact.aggregateComplete()
+            .innerTransactions(aliceToBob.toAggregate(alice.getPublicAccount()),
+                  bobToAlice.toAggregate(bob.getPublicAccount()))
+            .build();
       // alice sign the escrow trans
       SignedTransaction signedEscrow = api.signWithCosigners(escrow, alice, Arrays.asList(bob));
       // announce escrow
@@ -223,7 +212,7 @@ public class E2EAggregateTest extends E2EBaseTest {
          }
       });
    }
-   
+
    @Test
    void escrowBetweenThreeParties() {
       returnAllToSeed(alice);
@@ -236,38 +225,25 @@ public class E2EAggregateTest extends E2EBaseTest {
       sleepForAWhile();
       logger.info("Escrow between {}, {} and {}", alice, bob, mike);
       // send mosaic X from alice to bob
-      TransferTransaction aliceToBob = TransferTransaction.create(getDeadline(),
-            bob.getAddress(),
-            Arrays.asList(NetworkCurrencyMosaic.ONE),
-            PlainMessage.Empty,
-            getNetworkType());
+      TransferTransaction aliceToBob = transact.transfer().mosaics(NetworkCurrencyMosaic.ONE).to(bob.getAddress())
+            .build();
       // send mosaic Y from bob to alice
-      TransferTransaction bobToAlice = TransferTransaction.create(getDeadline(),
-            alice.getAddress(),
-            Arrays.asList(new Mosaic(mosaicY, BigInteger.TEN)),
-            PlainMessage.Empty,
-            getNetworkType());
+      TransferTransaction bobToAlice = transact.transfer().mosaics(new Mosaic(mosaicY, BigInteger.TEN))
+            .to(alice.getAddress()).build();
       // send mosaic Y from bob to alice
-      TransferTransaction mikeToAlice = TransferTransaction.create(getDeadline(),
-            alice.getAddress(),
-            Arrays.asList(NetworkCurrencyMosaic.ONE),
-            PlainMessage.Empty,
-            getNetworkType());
+      TransferTransaction mikeToAlice = transact.transfer().mosaics(NetworkCurrencyMosaic.ONE).to(alice.getAddress())
+            .build();
       // aggregate bonded with the 3 transactions - escrow
-      AggregateTransaction escrow = AggregateTransaction.createBonded(getDeadline(),
-            Arrays.asList(
-                  aliceToBob.toAggregate(alice.getPublicAccount()),
+      AggregateTransaction escrow = transact.aggregateBonded()
+            .innerTransactions(aliceToBob.toAggregate(alice.getPublicAccount()),
                   bobToAlice.toAggregate(bob.getPublicAccount()),
-                  mikeToAlice.toAggregate(mike.getPublicAccount())),
-            getNetworkType());
+                  mikeToAlice.toAggregate(mike.getPublicAccount()))
+            .build();
       // alice sign the escrow trans
       SignedTransaction signedEscrow = api.sign(escrow, alice);
       // lock funds for escrow
-      LockFundsTransaction lock = LockFundsTransaction.create(getDeadline(),
-            NetworkCurrencyMosaic.TEN,
-            BigInteger.valueOf(480),
-            signedEscrow,
-            getNetworkType());
+      LockFundsTransaction lock = transact.lockFunds().mosaic(NetworkCurrencyMosaic.TEN)
+            .duration(BigInteger.valueOf(480)).signedTransaction(signedEscrow).build();
       // alice sign and announce the lock
       logger.info("announcing {}", lock);
       SignedTransaction signedLock = api.sign(lock, alice);
@@ -280,18 +256,20 @@ public class E2EAggregateTest extends E2EBaseTest {
       transactionHttp.announceAggregateBonded(signedEscrow).blockingFirst();
       // wait for escrow confirmation
       listener.aggregateBondedAdded(alice.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
-      
+
       // bob sign the escrow
-      AggregateTransaction pendingEscrowBob = accountHttp.aggregateBondedTransactions(bob.getPublicAccount()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst().get(0);
+      AggregateTransaction pendingEscrowBob = accountHttp.aggregateBondedTransactions(bob.getPublicAccount())
+            .timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst().get(0);
       CosignatureSignedTransaction signedCosigBob = CosignatureTransaction.create(pendingEscrowBob).signWith(bob);
       // bob announce the cosignature
       logger.info("announcing cosig bob");
       transactionHttp.announceAggregateBondedCosignature(signedCosigBob).blockingFirst();
       // wait for cosig event
       listener.cosignatureAdded(bob.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
-      
+
       // mike sign the escrow
-      AggregateTransaction pendingEscrowMike = accountHttp.aggregateBondedTransactions(mike.getPublicAccount()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst().get(0);
+      AggregateTransaction pendingEscrowMike = accountHttp.aggregateBondedTransactions(mike.getPublicAccount())
+            .timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst().get(0);
       CosignatureSignedTransaction signedCosigMike = CosignatureTransaction.create(pendingEscrowMike).signWith(mike);
       // mike announce the cosignature
       logger.info("announcing cosig mike");
@@ -329,7 +307,7 @@ public class E2EAggregateTest extends E2EBaseTest {
       List<Mosaic> mikeMosaics = accountHttp.getAccountInfo(mike.getAddress()).blockingFirst().getMosaics();
       assertTrue(mikeMosaics.isEmpty());
    }
-   
+
    @Test
    void askforMoney() {
       returnAllToSeed(alice);
@@ -338,30 +316,21 @@ public class E2EAggregateTest extends E2EBaseTest {
       sendMosaic(seedAccount, bob.getAddress(), new Mosaic(mosaicY, BigInteger.TEN));
       logger.info("Alice asks for money");
       // send mosaic X from alice to bob
-      TransferTransaction aliceToBob = TransferTransaction.create(getDeadline(),
-            bob.getAddress(),
-            Arrays.asList(),
-            PlainMessage.create("send me 10 Y"),
-            getNetworkType());
+      TransferTransaction aliceToBob = transact.transfer().to(bob.getAddress())
+            .message(PlainMessage.create("send me 10 Y")).build();
       // send mosaic Y from bob to alice
-      TransferTransaction bobToAlice = TransferTransaction.create(getDeadline(),
-            alice.getAddress(),
-            Arrays.asList(new Mosaic(mosaicY, BigInteger.TEN)),
-            PlainMessage.Empty,
-            getNetworkType());
+      TransferTransaction bobToAlice = transact.transfer().mosaics(new Mosaic(mosaicY, BigInteger.TEN))
+            .to(alice.getAddress()).build();
       // aggregate bonded with the 2 transactions - escrow
-      AggregateTransaction escrow = AggregateTransaction.createBonded(getDeadline(),
-            Arrays.asList(aliceToBob.toAggregate(alice.getPublicAccount()),
-                  bobToAlice.toAggregate(bob.getPublicAccount())),
-            getNetworkType());
+      AggregateTransaction escrow = transact.aggregateBonded()
+            .innerTransactions(aliceToBob.toAggregate(alice.getPublicAccount()),
+                  bobToAlice.toAggregate(bob.getPublicAccount()))
+            .build();
       // alice sign the escrow trans
       SignedTransaction signedEscrow = api.sign(escrow, alice);
       // lock funds for escrow
-      LockFundsTransaction lock = LockFundsTransaction.create(getDeadline(),
-            NetworkCurrencyMosaic.TEN,
-            BigInteger.valueOf(480),
-            signedEscrow,
-            getNetworkType());
+      LockFundsTransaction lock = transact.lockFunds().mosaic(NetworkCurrencyMosaic.TEN)
+            .duration(BigInteger.valueOf(480)).signedTransaction(signedEscrow).build();
       // alice sign and announce the lock
       logger.info("announcing {}", lock);
       SignedTransaction signedLock = api.sign(lock, alice);
@@ -375,7 +344,8 @@ public class E2EAggregateTest extends E2EBaseTest {
       // wait for escrow confirmation
       listener.aggregateBondedAdded(alice.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
       // bob sign the escrow
-      AggregateTransaction pendingEscrow = accountHttp.aggregateBondedTransactions(bob.getPublicAccount()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst().get(0);
+      AggregateTransaction pendingEscrow = accountHttp.aggregateBondedTransactions(bob.getPublicAccount())
+            .timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst().get(0);
       CosignatureSignedTransaction signedCosig = CosignatureTransaction.create(pendingEscrow).signWith(bob);
       // bob announce the cosignature
       logger.info("announcing escrow");

@@ -69,13 +69,14 @@ public class E2ENamespaceTest extends E2EBaseTest {
       NamespaceId rootId = new NamespaceId(ROOT_NAME);
       logger.info("Going to create namespace {}", rootId);
       // create root namespace
-      RegisterNamespaceTransaction registerNamespaceTransaction = RegisterNamespaceTransaction
-            .createRootNamespace(getDeadline(), ROOT_NAME, BigInteger.valueOf(100), getNetworkType());
+      RegisterNamespaceTransaction registerNamespaceTransaction = transact.registerNamespace().rootNamespace(ROOT_NAME)
+            .duration(BigInteger.valueOf(100)).build();
       SignedTransaction signedTransaction = api.sign(registerNamespaceTransaction, seedAccount);
       transactionHttp.announce(signedTransaction).blockingFirst();
       logger.info("Registered namespace {}. {}",
             ROOT_NAME,
-            listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS)
+                  .blockingFirst());
       sleepForAWhile();
       // check the namespace
       checkNamespace(ROOT_NAME, Optional.empty(), 100);
@@ -87,13 +88,14 @@ public class E2ENamespaceTest extends E2EBaseTest {
       NamespaceId childId = new NamespaceId(ROOT_NAME + "." + CHILD1_NAME);
       logger.info("Going to create child namespace {}", childId);
       // create root namespace
-      RegisterNamespaceTransaction registerNamespaceTransaction = RegisterNamespaceTransaction
-            .createSubNamespace(getDeadline(), CHILD1_NAME, rootId, getNetworkType());
+      RegisterNamespaceTransaction registerNamespaceTransaction = transact.registerNamespace()
+            .subNamespace(rootId, CHILD1_NAME).build();
       SignedTransaction signedTransaction = api.sign(registerNamespaceTransaction, seedAccount);
       transactionHttp.announce(signedTransaction).blockingFirst();
       logger.info("Registered namespace {}. {}",
             CHILD1_NAME,
-            listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS)
+                  .blockingFirst());
       sleepForAWhile();
       // check the namespace
       checkNamespace(CHILD1_NAME, Optional.of(ROOT_NAME), 100);
@@ -106,21 +108,22 @@ public class E2ENamespaceTest extends E2EBaseTest {
       NamespaceId childId = new NamespaceId(aggRootName + "." + CHILD1_NAME);
       logger.info("Going to create aggregate root and child namespace {}", childId);
       // create root namespace
-      RegisterNamespaceTransaction registerRootTransaction = RegisterNamespaceTransaction
-            .createRootNamespace(getDeadline(), aggRootName, BigInteger.valueOf(100), getNetworkType());
-      RegisterNamespaceTransaction registerChildTransaction = RegisterNamespaceTransaction
-            .createSubNamespace(getDeadline(), CHILD1_NAME, rootId, getNetworkType());
+      RegisterNamespaceTransaction registerRootTransaction = transact.registerNamespace().rootNamespace(aggRootName)
+            .duration(BigInteger.valueOf(100)).build();
+      RegisterNamespaceTransaction registerChildTransaction = transact.registerNamespace()
+            .subNamespace(rootId, CHILD1_NAME).build();
       // prepare aggregate transaction for both namespaces
-      AggregateTransaction aggregateTransaction = AggregateTransaction.createComplete(getDeadline(),
-            Arrays.asList(registerRootTransaction.toAggregate(seedAccount.getPublicAccount()),
-                  registerChildTransaction.toAggregate(seedAccount.getPublicAccount())),
-            getNetworkType());
+      AggregateTransaction aggregateTransaction = transact.aggregateComplete()
+            .innerTransactions(registerRootTransaction.toAggregate(seedAccount.getPublicAccount()),
+                  registerChildTransaction.toAggregate(seedAccount.getPublicAccount()))
+            .build();
       // sign the aggregate transaction
       SignedTransaction signedTransaction = api.sign(aggregateTransaction, seedAccount);
       transactionHttp.announce(signedTransaction).blockingFirst();
       logger.info("Registered namespaces {}. {}",
             CHILD1_NAME,
-            listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+            listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS)
+                  .blockingFirst());
       sleepForAWhile();
       // check the namespaces
       checkNamespace(aggRootName, Optional.empty(), 100);
@@ -132,27 +135,28 @@ public class E2ENamespaceTest extends E2EBaseTest {
       NamespaceId nsId = new NamespaceId(ROOT_NAME);
       // check that the seed account has the namespace as expected
       long nsCount = namespaceHttp.getNamespacesFromAccount(seedAccount.getAddress()).flatMapIterable(list -> list)
-            .filter(info -> nsId.getId().equals(info.getId().getId()))
-            .count().blockingGet();
+            .filter(info -> nsId.getId().equals(info.getId().getId())).count().blockingGet();
       assertEquals(1, nsCount);
    }
-   
+
    @Test
    void test05RetrieveFromAccounts() {
       NamespaceId nsId = new NamespaceId(ROOT_NAME);
       // check that the seed account has the namespace as expected
-      long nsCount = namespaceHttp.getNamespacesFromAccounts(Arrays.asList(seedAccount.getAddress(), Account.generateNewAccount(getNetworkType()).getAddress())).flatMapIterable(list -> list)
-            .filter(info -> nsId.getId().equals(info.getId().getId()))
-            .count().blockingGet();
+      long nsCount = namespaceHttp
+            .getNamespacesFromAccounts(
+                  Arrays.asList(seedAccount.getAddress(), Account.generateNewAccount(getNetworkType()).getAddress()))
+            .flatMapIterable(list -> list).filter(info -> nsId.getId().equals(info.getId().getId())).count()
+            .blockingGet();
       assertEquals(1, nsCount);
    }
-   
+
    @Test
    void throwExceptionWhenNamespaceDoesNotExists() {
       namespaceHttp.getNamespace(new NamespaceId("nonregisterednamespace")).subscribeOn(Schedulers.single()).test()
             .awaitDone(2, TimeUnit.SECONDS).assertFailure(RuntimeException.class);
    }
-   
+
    /**
     * service method that checks for existence of a namespace
     * 
@@ -171,7 +175,8 @@ public class E2ENamespaceTest extends E2EBaseTest {
 
       logger.info("Checking namespace {}", nsId);
       // retrieve the namespace and check it is OK
-      NamespaceInfo namespace = namespaceHttp.getNamespace(nsId).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
+      NamespaceInfo namespace = namespaceHttp.getNamespace(nsId).timeout(getTimeoutSeconds(), TimeUnit.SECONDS)
+            .blockingFirst();
       // check for namespace properties
       assertEquals(BigInteger.valueOf(duration), namespace.getEndHeight().subtract(namespace.getStartHeight()));
       assertEquals(nsId.getId(), namespace.getId().getId());

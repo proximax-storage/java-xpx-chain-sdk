@@ -10,10 +10,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
+import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.ResourceBasedTest;
+import io.proximax.sdk.model.account.Account;
+import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 
 /**
@@ -25,12 +29,9 @@ class BlockchainConfigTransactionTest extends ResourceBasedTest {
    void testConstructor() throws IOException {
       String conf = getResourceAsString("config/blockchain.properties");
       String entities = getResourceAsString("config/entities.json");
-      BlockchainConfigTransaction trans = BlockchainConfigTransaction.create(
-            BigInteger.valueOf(3),
-            conf,
-            entities,
-            NetworkType.MIJIN,
-            new FakeDeadline());
+      BlockchainConfigTransaction trans = new BlockchainConfigTransaction(NetworkType.MIJIN, 1, new FakeDeadline(),
+            BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), BigInteger.valueOf(3), conf,
+            entities);
 
       assertEquals(BigInteger.valueOf(3), trans.getApplyHeightDelta());
       assertEquals(conf, trans.getBlockchainConfig());
@@ -41,15 +42,26 @@ class BlockchainConfigTransactionTest extends ResourceBasedTest {
    void serialization() throws IOException {
       String conf = getResourceAsString("config/blockchain.properties");
       String entities = getResourceAsString("config/entities.json");
-      BlockchainConfigTransaction trans = BlockchainConfigTransaction.create(
-            BigInteger.valueOf(3),
-            conf,
-            entities,
-            NetworkType.MIJIN,
-            new FakeDeadline());
-      
+      BlockchainConfigTransaction trans = new BlockchainConfigTransaction(NetworkType.MIJIN, 1, new FakeDeadline(),
+            BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), BigInteger.valueOf(3), conf,
+            entities);
+
       byte[] actual = trans.generateBytes();
 //      saveBytes("config_transaction", actual);
       assertArrayEquals(loadBytes("config_transaction"), actual);
+   }
+   
+   @Test
+   void checkCopyToSigner() throws IOException {
+      PublicAccount remoteAccount = new Account(new KeyPair(), NetworkType.MIJIN).getPublicAccount();
+      
+      String conf = getResourceAsString("config/blockchain.properties");
+      String entities = getResourceAsString("config/entities.json");
+      BlockchainConfigTransaction trans = new BlockchainConfigTransaction(NetworkType.MIJIN, 1, new FakeDeadline(),
+            BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), BigInteger.valueOf(3), conf,
+            entities);
+
+      Transaction t = trans.copyForSigner(remoteAccount);
+      assertEquals(Optional.of(remoteAccount), t.getSigner());
    }
 }

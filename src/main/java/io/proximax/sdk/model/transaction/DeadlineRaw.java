@@ -26,7 +26,7 @@ public class DeadlineRaw implements TransactionDeadline {
    /**
     * create new deadline instance specifying duration since current time
     * 
-    * @param duration duration after current time
+    * @param duration millisecond duration after current time
     * @return deadline representing specified time
     */
    public static TransactionDeadline startNow(BigInteger duration) {

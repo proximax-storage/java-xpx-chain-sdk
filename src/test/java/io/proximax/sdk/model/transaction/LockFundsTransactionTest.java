@@ -24,11 +24,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
 import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.ResourceBasedTest;
+import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
@@ -40,24 +42,12 @@ class LockFundsTransactionTest extends ResourceBasedTest {
       SignedTransaction signedTransaction = new SignedTransaction("payload",
             "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", TransactionType.AGGREGATE_BONDED);
       LockFundsTransaction tx = new LockFundsTransaction(NetworkType.MIJIN, 23, new FakeDeadline(), BigInteger.ONE,
-            NetworkCurrencyMosaic.TEN, BigInteger.valueOf(100), signedTransaction,
-            "signaturestring", new PublicAccount(new KeyPair().getPublicKey().getHexString(), NetworkType.MIJIN),
-            TransactionInfo.create(BigInteger.ONE, "infohash", "merklehash"));
-      assertEquals(NetworkCurrencyMosaic.createRelative(BigDecimal.valueOf(10)), tx.getMosaic());
-      assertEquals(BigInteger.valueOf(100), tx.getDuration());
-      assertEquals(signedTransaction, tx.getSignedTransaction());
-   }
+            Optional.of("signaturestring"),
+            Optional.of(new PublicAccount(new KeyPair().getPublicKey().getHexString(), NetworkType.MIJIN)),
+            Optional.of(TransactionInfo.create(BigInteger.ONE, "infohash", "merklehash")), NetworkCurrencyMosaic.TEN,
+            BigInteger.valueOf(100), signedTransaction);
 
-   @Test
-   void staticConstructor() {
-      SignedTransaction signedTransaction = new SignedTransaction("payload",
-            "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", TransactionType.AGGREGATE_BONDED);
-      LockFundsTransaction tx = LockFundsTransaction.create(new FakeDeadline(),
-            NetworkCurrencyMosaic.TEN,
-            BigInteger.valueOf(100),
-            signedTransaction,
-            NetworkType.MIJIN_TEST);
-      assertEquals(NetworkCurrencyMosaic.TEN, tx.getMosaic());
+      assertEquals(NetworkCurrencyMosaic.createRelative(BigDecimal.valueOf(10)), tx.getMosaic());
       assertEquals(BigInteger.valueOf(100), tx.getDuration());
       assertEquals(signedTransaction, tx.getSignedTransaction());
    }
@@ -66,11 +56,9 @@ class LockFundsTransactionTest extends ResourceBasedTest {
    void serialization() throws IOException {
       SignedTransaction signedTransaction = new SignedTransaction("payload",
             "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", TransactionType.AGGREGATE_BONDED);
-      LockFundsTransaction lockFundstx = LockFundsTransaction.create(new FakeDeadline(),
-            NetworkCurrencyMosaic.TEN,
-            BigInteger.valueOf(100),
-            signedTransaction,
-            NetworkType.MIJIN_TEST);
+      LockFundsTransaction lockFundstx = new LockFundsTransaction(NetworkType.MIJIN_TEST, 1, new FakeDeadline(),
+            BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), NetworkCurrencyMosaic.TEN,
+            BigInteger.valueOf(100), signedTransaction);
       byte[] actual = lockFundstx.generateBytes();
 //      saveBytes("lock_funds", actual);
       assertArrayEquals(loadBytes("lock_funds"), actual);
@@ -82,11 +70,9 @@ class LockFundsTransactionTest extends ResourceBasedTest {
       SignedTransaction signedTransaction = new SignedTransaction("payload",
             "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", TransactionType.TRANSFER);
       assertThrows(IllegalArgumentException.class,
-            () -> LockFundsTransaction.create(new FakeDeadline(),
-                  NetworkCurrencyMosaic.TEN,
-                  BigInteger.valueOf(100),
-                  signedTransaction,
-                  NetworkType.MIJIN_TEST),
+            () -> new LockFundsTransaction(NetworkType.MIJIN_TEST, 1, new FakeDeadline(),
+                  BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), NetworkCurrencyMosaic.TEN,
+                  BigInteger.valueOf(100), signedTransaction),
             "Signed transaction must be Aggregate Bonded Transaction");
    }
 
@@ -94,11 +80,23 @@ class LockFundsTransactionTest extends ResourceBasedTest {
    void checkToStringIsImplemented() {
       SignedTransaction signedTransaction = new SignedTransaction("payload",
             "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", TransactionType.AGGREGATE_BONDED);
-      LockFundsTransaction tx = LockFundsTransaction.create(new FakeDeadline(),
-            NetworkCurrencyMosaic.TEN,
-            BigInteger.valueOf(100),
-            signedTransaction,
-            NetworkType.MIJIN_TEST);
+      LockFundsTransaction tx = new LockFundsTransaction(NetworkType.MIJIN_TEST, 1, new FakeDeadline(),
+            BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), NetworkCurrencyMosaic.TEN,
+            BigInteger.valueOf(100), signedTransaction);
       assertTrue(tx.toString().startsWith("LockFundsTransaction "));
+   }
+   
+   @Test
+   void checkCopyToSigner() throws IOException {
+      PublicAccount remoteAccount = new Account(new KeyPair(), NetworkType.MIJIN).getPublicAccount();
+      
+      SignedTransaction signedTransaction = new SignedTransaction("payload",
+            "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", TransactionType.AGGREGATE_BONDED);
+      LockFundsTransaction trans = new LockFundsTransaction(NetworkType.MIJIN_TEST, 1, new FakeDeadline(),
+            BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), NetworkCurrencyMosaic.TEN,
+            BigInteger.valueOf(100), signedTransaction);
+
+      Transaction t = trans.copyForSigner(remoteAccount);
+      assertEquals(Optional.of(remoteAccount), t.getSigner());
    }
 }

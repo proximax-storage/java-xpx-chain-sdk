@@ -17,7 +17,6 @@
 package io.proximax.sdk;
 
 import java.math.BigInteger;
-import java.util.Collections;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -88,21 +87,15 @@ public class E2ESecretTest extends E2EBaseTest {
       String secret = Hex.toHexString(result);
       String proof = Hex.toHexString(secretBytes);
       // make a secret lock moving mosaic to the target account
-      SecretLockTransaction secretLocktx = SecretLockTransaction.create(getDeadline(),
-            NetworkCurrencyMosaic.ONE,
-            BigInteger.valueOf(10),
-            hashType,
-            secret,
-            to,
-            getNetworkType());
+      SecretLockTransaction secretLocktx = transact.secretLock().mosaic(NetworkCurrencyMosaic.ONE)
+            .duration(BigInteger.valueOf(10)).hashType(hashType).secret(secret).recipient(to).build();
       SignedTransaction secretLockTransactionSigned = api.sign(secretLocktx, from);
       transactionHttp.announce(secretLockTransactionSigned).blockingFirst();
       logger.info("Lock confirmed: {}",
             listener.confirmed(from.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
       sleepForAWhile();
-
-      SecretProofTransaction secretProoftx = SecretProofTransaction
-            .create(getDeadline(), hashType, Recipient.from(to), secret, proof, getNetworkType());
+      SecretProofTransaction secretProoftx = transact.secretProof().hashType(hashType).secret(secret).proof(proof)
+            .recipient(Recipient.from(to)).build();
       SignedTransaction secretProoftxSigned = api.sign(secretProoftx, from);
       transactionHttp.announce(secretProoftxSigned).blockingFirst();
       logger.info("Proof confirmed: {}",
@@ -114,22 +107,22 @@ public class E2ESecretTest extends E2EBaseTest {
    void aggregateSecretLockAndProofTransaction_SHA3_256() {
       aggregateSecretLockAndProofTransaction(seedAccount, simpleAccount.getAddress(), HashType.SHA3_256);
    }
-   
+
    @Test
    void aggregateSecretLockandProofTransaction_KECCAK_256() {
       aggregateSecretLockAndProofTransaction(seedAccount, simpleAccount.getAddress(), HashType.KECCAK_256);
    }
-   
+
    @Test
    void aggregateSecretLockAndProofTransaction_HASH_160() {
       aggregateSecretLockAndProofTransaction(seedAccount, simpleAccount.getAddress(), HashType.HASH_160);
    }
-   
+
    @Test
    void aggregateSecretLockAndProofTransaction_HASH_256() {
       aggregateSecretLockAndProofTransaction(seedAccount, simpleAccount.getAddress(), HashType.HASH_256);
    }
-   
+
    void aggregateSecretLockAndProofTransaction(Account from, Address to, HashType hashType) {
       logger.info("Creating aggregate lock and proof for {}", hashType);
       byte[] secretBytes = new byte[20];
@@ -138,13 +131,8 @@ public class E2ESecretTest extends E2EBaseTest {
       String secret = Hex.toHexString(result);
       String proof = Hex.toHexString(secretBytes);
       // make a secret lock moving mosaic to the target account
-      SecretLockTransaction secretLocktx = SecretLockTransaction.create(getDeadline(),
-            NetworkCurrencyMosaic.ONE,
-            BigInteger.valueOf(10),
-            hashType,
-            secret,
-            to,
-            getNetworkType());
+      SecretLockTransaction secretLocktx = transact.secretLock().mosaic(NetworkCurrencyMosaic.ONE)
+            .duration(BigInteger.valueOf(10)).hashType(hashType).secret(secret).recipient(to).build();
       SignedTransaction lockFundsTransactionSigned = api.sign(secretLocktx, from);
       transactionHttp.announce(lockFundsTransactionSigned).blockingFirst();
       logger.info("Lock confirmed: {}",
@@ -152,11 +140,10 @@ public class E2ESecretTest extends E2EBaseTest {
       sleepForAWhile();
 
       // create aggregate proof
-      SecretProofTransaction secretProoftx = SecretProofTransaction
-            .create(getDeadline(), hashType, Recipient.from(to), secret, proof, getNetworkType());
-      AggregateTransaction secretProofAggregatetx = AggregateTransaction.createComplete(getDeadline(),
-            Collections.singletonList(secretProoftx.toAggregate(from.getPublicAccount())),
-            getNetworkType());
+      SecretProofTransaction secretProoftx = transact.secretProof().hashType(hashType).secret(secret).proof(proof)
+            .recipient(Recipient.from(to)).build();
+      AggregateTransaction secretProofAggregatetx = transact.aggregateComplete()
+            .innerTransactions(secretProoftx.toAggregate(from.getPublicAccount())).build();
       SignedTransaction secretProofTransactionSigned = api.sign(secretProofAggregatetx, from);
       transactionHttp.announce(secretProofTransactionSigned).blockingFirst();
 

@@ -197,8 +197,8 @@ public class E2EBlockchainTest extends E2EBaseTest {
       BlockchainVersion version = new BlockchainVersion(1, 2, 3, 4);
       Account nemesis = Account.createFromPrivateKey(NEMESIS_PRIVATE_KEY, getNetworkType());
       BigInteger upgradePeriod = BigInteger.valueOf(1_000_000_000l);
-      BlockchainUpgradeTransaction trans = BlockchainUpgradeTransaction
-            .create(upgradePeriod, version, getDeadline(), getNetworkType());
+      BlockchainUpgradeTransaction trans = transact.blockchainUpgrade().upgradePeriod(upgradePeriod).newVersion(version)
+            .build();
       transactionHttp.announce(api.sign(trans, nemesis)).blockingFirst();
       BlockchainUpgradeTransaction conFirmedTrans = (BlockchainUpgradeTransaction) listener
             .confirmed(nemesis.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
@@ -214,8 +214,8 @@ public class E2EBlockchainTest extends E2EBaseTest {
       String conf = configuration.getConfig();
       String entities = configuration.getSupportedEntityVersions();
       // prepare transaction
-      BlockchainConfigTransaction trans = BlockchainConfigTransaction
-            .create(BigInteger.valueOf(3), conf, entities, getNetworkType(), getDeadline());
+      BlockchainConfigTransaction trans = transact.blockchainConfig().applyHeightDelta(BigInteger.valueOf(3))
+            .blockchainConfig(conf).supportedEntityVersions(entities).build();
       transactionHttp.announce(api.sign(trans, nemesis)).blockingFirst();
       listener.confirmed(nemesis.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
    }

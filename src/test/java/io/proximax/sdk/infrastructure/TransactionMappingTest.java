@@ -134,7 +134,7 @@ public class TransactionMappingTest extends ResourceBasedTest {
         assertTrue(transaction.getVersion() == version);
         int networkType = TransactionMappingUtils.extractNetworkType(getFieldOfObject(transactionDTO, "transaction", "version")).getValue();
         assertTrue(transaction.getNetworkType().getValue() == networkType);
-        assertEquals(TransactionMappingUtils.extractFee(transactionDTO.get("transaction").getAsJsonObject()), transaction.getFee());
+        assertEquals(TransactionMappingUtils.extractFee(transactionDTO.get("transaction").getAsJsonObject()), transaction.getMaxFee());
         assertNotNull(transaction.getDeadline());
 
         if (transaction.getType() == TransactionType.TRANSFER) {
@@ -185,7 +185,7 @@ public class TransactionMappingTest extends ResourceBasedTest {
         assertTrue(aggregateTransaction.getNetworkType().getValue() == networkType);
         assertTrue(aggregateTransaction.getType().getValue() == getFieldOfObject(aggregateTransactionDTO, "transaction", "type").getAsInt());
         assertEquals(extractBigInteger(getFieldOfObject(aggregateTransactionDTO, "transaction", "fee").getAsJsonArray()),
-                aggregateTransaction.getFee());
+                aggregateTransaction.getMaxFee());
         assertNotNull(aggregateTransaction.getDeadline());
 
 

@@ -24,16 +24,33 @@ import io.proximax.sdk.model.blockchain.NetworkType;
 
 public class FakeTransferTransaction extends Transaction {
 
-    public FakeTransferTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee, String signature, PublicAccount signer, TransactionInfo transactionInfo) {
-        super(TransactionType.TRANSFER, networkType, version, deadline, fee, Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo));
-    }
+   public FakeTransferTransaction(NetworkType networkType, Integer version,
+         TransactionDeadline deadline, BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
+         Optional<TransactionInfo> transactionInfo) {
+      super(TransactionType.TRANSFER, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
+   }
 
-    public FakeTransferTransaction(NetworkType networkType, Integer version, Deadline deadline, BigInteger fee) {
-        super(TransactionType.TRANSFER, networkType, version, deadline, fee, Optional.empty(), Optional.empty(), Optional.empty());
-    }
+   public FakeTransferTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger maxFee) {
+      this(networkType, version, deadline, maxFee, Optional.empty(), Optional.empty(), Optional.empty());
+   }
 
-    @Override
-    byte[] generateBytes() {
-        throw new Error("Method no implemented");
-    }
+   public FakeTransferTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger maxFee,
+         String signature, PublicAccount signer, TransactionInfo info) {
+      this(networkType, version, deadline, maxFee, Optional.of(signature), Optional.of(signer), Optional.of(info));
+   }
+
+   @Override
+   protected byte[] generateBytes() {
+      throw new UnsupportedOperationException("Method no implemented");
+   }
+
+   @Override
+   protected int getPayloadSerializedSize() {
+      throw new UnsupportedOperationException("Method no implemented");
+   }
+
+   @Override
+   protected Transaction copyForSigner(PublicAccount signer) {
+      throw new UnsupportedOperationException("Method no implemented");
+   }
 }

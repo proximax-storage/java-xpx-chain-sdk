@@ -17,7 +17,7 @@
 package io.proximax.sdk.model.transaction;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,62 +39,38 @@ import io.proximax.sdk.utils.dto.UInt64Utils;
  * @since 1.0
  */
 public class AggregateTransaction extends Transaction {
-   private final List<Transaction> innerTransactions;
-   private final List<AggregateTransactionCosignature> cosignatures;
    private final Schema schema = new AggregateTransactionSchema();
 
-   public AggregateTransaction(NetworkType networkType, TransactionType transactionType, Integer version,
-         TransactionDeadline deadline, BigInteger fee, List<Transaction> innerTransactions,
-         List<AggregateTransactionCosignature> cosignatures, String signature, PublicAccount signer,
-         TransactionInfo transactionInfo) {
-      this(networkType, transactionType, version, deadline, fee, innerTransactions, cosignatures,
-            Optional.of(signature), Optional.of(signer), Optional.of(transactionInfo));
-   }
+   private final List<Transaction> innerTransactions;
+   private final List<AggregateTransactionCosignature> cosignatures;
 
-   public AggregateTransaction(NetworkType networkType, TransactionType transactionType, Integer version,
-         TransactionDeadline deadline, BigInteger fee, List<Transaction> innerTransactions,
+   /**
+    * @param type transaction type which has to be one of {@link TransactionType#AGGREGATE_COMPLETE} or
+    * {@link TransactionType#AGGREGATE_BONDED}
+    * @param networkType network type
+    * @param version transaction version. For latest {@link TransactionVersion#AGGREGATE_COMPLETE} or
+    * {@link TransactionVersion#AGGREGATE_BONDED}
+    * @param deadline transaction deadline
+    * @param maxFee transaction fee
+    * @param signature optional signature
+    * @param signer optional signer
+    * @param transactionInfo optional transaction info
+    * @param innerTransactions inner transactions of this aggregate transaction
+    * @param cosignatures available cosignatures if any
+    */
+   public AggregateTransaction(TransactionType type, NetworkType networkType, Integer version,
+         TransactionDeadline deadline, BigInteger maxFee, Optional<String> signature,
+         Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo,
+         List<Transaction> innerTransactions,
          List<AggregateTransactionCosignature> cosignatures) {
-      this(networkType, transactionType, version, deadline, fee, innerTransactions, cosignatures, Optional.empty(),
-            Optional.empty(), Optional.empty());
-   }
-
-   private AggregateTransaction(NetworkType networkType, TransactionType transactionType, Integer version,
-         TransactionDeadline deadline, BigInteger fee, List<Transaction> innerTransactions,
-         List<AggregateTransactionCosignature> cosignatures, Optional<String> signature, Optional<PublicAccount> signer,
-         Optional<TransactionInfo> transactionInfo) {
-      super(transactionType, networkType, version, deadline, fee, signature, signer, transactionInfo);
+      super(type, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
       Validate.notNull(innerTransactions, "InnerTransactions must not be null");
       Validate.notNull(cosignatures, "Cosignatures must not be null");
-      this.innerTransactions = innerTransactions;
-      this.cosignatures = cosignatures;
-   }
-
-   /**
-    * Create an aggregate complete transaction object
-    *
-    * @param deadline The deadline to include the transaction.
-    * @param innerTransactions The list of inner innerTransactions.
-    * @param networkType The network type.
-    * @return {@link AggregateTransaction}
-    */
-   public static AggregateTransaction createComplete(TransactionDeadline deadline, List<Transaction> innerTransactions,
-         NetworkType networkType) {
-      return new AggregateTransaction(networkType, TransactionType.AGGREGATE_COMPLETE, 2, deadline,
-            BigInteger.valueOf(0), innerTransactions, new ArrayList<>());
-   }
-
-   /**
-    * Create an aggregate bonded transaction object
-    *
-    * @param deadline The deadline to include the transaction.
-    * @param innerTransactions The list of inner innerTransactions.
-    * @param networkType The network type.
-    * @return {@link AggregateTransaction}
-    */
-   public static AggregateTransaction createBonded(TransactionDeadline deadline, List<Transaction> innerTransactions,
-         NetworkType networkType) {
-      return new AggregateTransaction(networkType, TransactionType.AGGREGATE_BONDED, 2, deadline, BigInteger.valueOf(0),
-            innerTransactions, new ArrayList<>());
+      Validate.validState(type == TransactionType.AGGREGATE_BONDED || type == TransactionType.AGGREGATE_COMPLETE,
+            "Transaction type has to be aggregate bonded or complete but was %s",
+            type);
+      this.innerTransactions = Collections.unmodifiableList(innerTransactions);
+      this.cosignatures = Collections.unmodifiableList(cosignatures);
    }
 
    /**
@@ -104,6 +80,15 @@ public class AggregateTransaction extends Transaction {
     */
    public List<Transaction> getInnerTransactions() {
       return innerTransactions;
+   }
+
+   /**
+    * Returns list of transaction cosigners signatures.
+    *
+    * @return List of transaction cosigners signatures.
+    */
+   public List<AggregateTransactionCosignature> getCosignatures() {
+      return cosignatures;
    }
 
    /**
@@ -120,15 +105,6 @@ public class AggregateTransaction extends Transaction {
       } else {
          return false;
       }
-   }
-
-   /**
-    * Returns list of transaction cosigners signatures.
-    *
-    * @return List of transaction cosigners signatures.
-    */
-   public List<AggregateTransactionCosignature> getCosignatures() {
-      return cosignatures;
    }
 
    /**
@@ -165,7 +141,7 @@ public class AggregateTransaction extends Transaction {
    }
 
    @Override
-   byte[] generateBytes() {
+   protected byte[] generateBytes() {
       FlatBufferBuilder builder = new FlatBufferBuilder();
       BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
 
@@ -176,14 +152,14 @@ public class AggregateTransaction extends Transaction {
       }
 
       // expected size = header + transactions bytes count + transactions bytes
-      int size = HEADER_SIZE + 4 + transactionsBytes.length;
+      int size = getSerializedSize();
 
       // Create Vectors
       int signatureVector = AggregateTransactionBuffer.createSignatureVector(builder, new byte[64]);
       int signerVector = AggregateTransactionBuffer.createSignerVector(builder, new byte[32]);
       int deadlineVector = AggregateTransactionBuffer.createDeadlineVector(builder,
             UInt64Utils.fromBigInteger(deadlineBigInt));
-      int feeVector = AggregateTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getFee()));
+      int feeVector = AggregateTransactionBuffer.createMaxFeeVector(builder, UInt64Utils.fromBigInteger(getMaxFee()));
       int transactionsVector = AggregateTransactionBuffer.createTransactionsVector(builder, transactionsBytes);
 
       AggregateTransactionBuffer.startAggregateTransactionBuffer(builder);
@@ -194,7 +170,7 @@ public class AggregateTransaction extends Transaction {
       AggregateTransactionBuffer.addType(builder, getType().getValue());
       AggregateTransactionBuffer.addMaxFee(builder, feeVector);
       AggregateTransactionBuffer.addDeadline(builder, deadlineVector);
-      
+
       AggregateTransactionBuffer.addTransactionsSize(builder, transactionsBytes.length);
       AggregateTransactionBuffer.addTransactions(builder, transactionsVector);
 
@@ -205,5 +181,28 @@ public class AggregateTransaction extends Transaction {
       byte[] output = schema.serialize(builder.sizedByteArray());
       Validate.isTrue(output.length == size, "Serialized transaction has incorrect length: " + this.getClass());
       return output;
+   }
+
+   /**
+    * calculate payload size excluding header
+    * 
+    * @param innerTransactions list of transactions inside of this aggregate transacion
+    * @return the size
+    */
+   public static int calculatePayloadSize(List<Transaction> innerTransactions) {
+      // sum sizes of inner transactions, subtract 80 as toAggregateTransactionBytes leaves out 80 bytes of header
+      int innerSize = innerTransactions.stream().mapToInt(Transaction::getSerializedSize).map(size -> size - 80).sum();
+      // transactions size + transactions
+      return 4 + innerSize;
+   }
+   
+   @Override
+   protected int getPayloadSerializedSize() {
+      return calculatePayloadSize(getInnerTransactions());
+   }
+
+   @Override
+   protected Transaction copyForSigner(PublicAccount signer) {
+      throw new UnsupportedOperationException("Can not embed aggregate transaction into aggregate transaction");
    }
 }
