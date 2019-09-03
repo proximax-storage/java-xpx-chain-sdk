@@ -36,7 +36,7 @@ import io.proximax.sdk.BlockchainApi;
 import io.proximax.sdk.TransactionRepository;
 import io.proximax.sdk.model.transaction.Transaction;
 import io.proximax.sdk.model.transaction.TransactionStatus;
-import io.proximax.sdk.model.transaction.TransactionType;
+import io.proximax.sdk.model.transaction.EntityType;
 import io.reactivex.observers.TestObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -59,7 +59,7 @@ public class TransactionHttpTest extends BaseTest {
                 .toFuture()
                 .get();
 
-        assertEquals(TransactionType.TRANSFER.getValue(), transaction.getType().getValue());
+        assertEquals(EntityType.TRANSFER.getValue(), transaction.getType().getValue());
         assertEquals(TRANSACTION_HASH, transaction.getTransactionInfo().get().getHash().get());
     }
 
@@ -70,7 +70,7 @@ public class TransactionHttpTest extends BaseTest {
                 .toFuture()
                 .get();
 
-        assertEquals(TransactionType.TRANSFER.getValue(), transaction.get(0).getType().getValue());
+        assertEquals(EntityType.TRANSFER.getValue(), transaction.get(0).getType().getValue());
         assertEquals(TRANSACTION_HASH, transaction.get(0).getTransactionInfo().get().getHash().get());
     }
 

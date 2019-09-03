@@ -43,7 +43,7 @@ public class SecretLockTransaction extends Transaction {
 
    /**
     * @param networkType network type
-    * @param version transaction version. Use {@link TransactionVersion#MODIFY_MULTISIG_ACCOUNT} for current version
+    * @param version transaction version. Use {@link EntityVersion#MODIFY_MULTISIG_ACCOUNT} for current version
     * @param deadline transaction deadline
     * @param maxFee transaction fee
     * @param signature optional signature
@@ -59,7 +59,7 @@ public class SecretLockTransaction extends Transaction {
          BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
          Optional<TransactionInfo> transactionInfo, Mosaic mosaic, BigInteger duration, HashType hashType,
          String secret, Address recipient) {
-      super(TransactionType.SECRET_LOCK, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
+      super(EntityType.SECRET_LOCK, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
       // validations
       Validate.notNull(mosaic, "Mosaic must not be null");
       Validate.notNull(duration, "Duration must not be null");

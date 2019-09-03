@@ -42,7 +42,7 @@ public class BlockchainConfigTransaction extends Transaction {
 
    /**
     * @param networkType network type
-    * @param version transaction version. Use {@link TransactionVersion#BLOCKCHAIN_CONFIG} for current version
+    * @param version transaction version. Use {@link EntityVersion#BLOCKCHAIN_CONFIG} for current version
     * @param deadline transaction deadline
     * @param maxFee transaction fee
     * @param signature optional signature
@@ -56,7 +56,7 @@ public class BlockchainConfigTransaction extends Transaction {
          BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
          Optional<TransactionInfo> transactionInfo, BigInteger applyHeightDelta, String blockchainConfig,
          String supportedEntityVersions) {
-      super(TransactionType.BLOCKCHAIN_CONFIG, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
+      super(EntityType.BLOCKCHAIN_CONFIG, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
       // basic input validations
       Validate.notNull(applyHeightDelta);
       Validate.notNull(blockchainConfig);

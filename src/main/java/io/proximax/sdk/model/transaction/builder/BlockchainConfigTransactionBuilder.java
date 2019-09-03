@@ -9,8 +9,8 @@ import java.math.BigInteger;
 
 import io.proximax.core.utils.StringUtils;
 import io.proximax.sdk.model.transaction.BlockchainConfigTransaction;
-import io.proximax.sdk.model.transaction.TransactionType;
-import io.proximax.sdk.model.transaction.TransactionVersion;
+import io.proximax.sdk.model.transaction.EntityType;
+import io.proximax.sdk.model.transaction.EntityVersion;
 
 /**
  * builder for {@link BlockchainConfigTransactionBuilder}
@@ -23,7 +23,7 @@ public class BlockchainConfigTransactionBuilder
    private String supportedEntityVersions;
 
    public BlockchainConfigTransactionBuilder() {
-      super(TransactionType.BLOCKCHAIN_CONFIG, TransactionVersion.BLOCKCHAIN_CONFIG.getValue());
+      super(EntityType.BLOCKCHAIN_CONFIG, EntityVersion.BLOCKCHAIN_CONFIG.getValue());
    }
 
    @Override

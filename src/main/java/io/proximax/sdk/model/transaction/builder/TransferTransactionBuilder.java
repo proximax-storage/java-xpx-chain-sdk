@@ -16,8 +16,8 @@ import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.transaction.Message;
 import io.proximax.sdk.model.transaction.PlainMessage;
 import io.proximax.sdk.model.transaction.Recipient;
-import io.proximax.sdk.model.transaction.TransactionType;
-import io.proximax.sdk.model.transaction.TransactionVersion;
+import io.proximax.sdk.model.transaction.EntityType;
+import io.proximax.sdk.model.transaction.EntityVersion;
 import io.proximax.sdk.model.transaction.TransferTransaction;
 
 /**
@@ -29,7 +29,7 @@ public class TransferTransactionBuilder extends TransactionBuilder<TransferTrans
    private Message message;
 
    public TransferTransactionBuilder() {
-      super(TransactionType.TRANSFER, TransactionVersion.TRANSFER.getValue());
+      super(EntityType.TRANSFER, EntityVersion.TRANSFER.getValue());
       // make default message empty
       message = PlainMessage.Empty;
       // make the list of mosaics to transfer empty

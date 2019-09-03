@@ -15,7 +15,7 @@ import io.proximax.sdk.model.transaction.DeadlineRaw;
 import io.proximax.sdk.model.transaction.Transaction;
 import io.proximax.sdk.model.transaction.TransactionDeadline;
 import io.proximax.sdk.model.transaction.TransactionInfo;
-import io.proximax.sdk.model.transaction.TransactionType;
+import io.proximax.sdk.model.transaction.EntityType;
 
 /**
  * Transaction builder is base class implementing builder pattern to construct instance of transaction. It is bases of
@@ -23,7 +23,7 @@ import io.proximax.sdk.model.transaction.TransactionType;
  */
 public abstract class TransactionBuilder<B extends TransactionBuilder<B, T>, T extends Transaction> {
 
-   private TransactionType type;
+   private EntityType type;
    private Integer version;
    private NetworkType networkType;
    private Optional<BigInteger> maxFee;
@@ -40,7 +40,7 @@ public abstract class TransactionBuilder<B extends TransactionBuilder<B, T>, T e
     * @param type
     * @param version
     */
-   public TransactionBuilder(TransactionType type, Integer version) {
+   public TransactionBuilder(EntityType type, Integer version) {
       this.type = type;
       this.version = version;
       // initialize defaults
@@ -82,7 +82,7 @@ public abstract class TransactionBuilder<B extends TransactionBuilder<B, T>, T e
    /**
     * @param type the type to set
     */
-   public B type(TransactionType type) {
+   public B type(EntityType type) {
       this.type = type;
       return self();
    }
@@ -165,7 +165,7 @@ public abstract class TransactionBuilder<B extends TransactionBuilder<B, T>, T e
    /**
     * @return the type
     */
-   public TransactionType getType() {
+   public EntityType getType() {
       return type;
    }
 

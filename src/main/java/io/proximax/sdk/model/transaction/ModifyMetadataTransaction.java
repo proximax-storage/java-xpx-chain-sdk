@@ -66,7 +66,7 @@ public class ModifyMetadataTransaction extends Transaction {
     * @param address
     * @param modifications
     */
-   public ModifyMetadataTransaction(TransactionType type, NetworkType networkType, Integer version,
+   public ModifyMetadataTransaction(EntityType type, NetworkType networkType, Integer version,
          TransactionDeadline deadline, BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
          Optional<TransactionInfo> transactionInfo, MetadataType metadataType, Optional<UInt64Id> metadataId,
          Optional<Address> address, List<MetadataModification> modifications) {

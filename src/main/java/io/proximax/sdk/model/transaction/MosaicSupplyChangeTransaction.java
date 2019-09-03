@@ -57,7 +57,7 @@ public class MosaicSupplyChangeTransaction extends Transaction {
          BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
          Optional<TransactionInfo> transactionInfo, MosaicId mosaicId, MosaicSupplyType mosaicSupplyType,
          BigInteger delta) {
-      super(TransactionType.MOSAIC_SUPPLY_CHANGE, networkType, version, deadline, maxFee, signature, signer,
+      super(EntityType.MOSAIC_SUPPLY_CHANGE, networkType, version, deadline, maxFee, signature, signer,
             transactionInfo);
       // validations
       Validate.notNull(mosaicId, "MosaicId must not be null");

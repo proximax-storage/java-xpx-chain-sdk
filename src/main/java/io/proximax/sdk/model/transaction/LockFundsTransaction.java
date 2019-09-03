@@ -59,11 +59,11 @@ public class LockFundsTransaction extends Transaction {
          BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
          Optional<TransactionInfo> transactionInfo, Mosaic mosaic, BigInteger duration,
          SignedTransaction signedTransaction) {
-      super(TransactionType.LOCK, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
+      super(EntityType.LOCK, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
       Validate.notNull(mosaic, "Mosaic must not be null");
       Validate.notNull(duration, "Duration must not be null");
       Validate.notNull(signedTransaction, "Signed transaction must not be null");
-      Validate.isTrue(signedTransaction.getType() == TransactionType.AGGREGATE_BONDED,
+      Validate.isTrue(signedTransaction.getType() == EntityType.AGGREGATE_BONDED,
             "Signed transaction must be Aggregate Bonded Transaction");
       this.mosaic = mosaic;
       this.duration = duration;

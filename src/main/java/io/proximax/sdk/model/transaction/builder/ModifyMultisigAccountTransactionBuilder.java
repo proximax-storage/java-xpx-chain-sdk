@@ -12,8 +12,8 @@ import java.util.List;
 
 import io.proximax.sdk.model.transaction.ModifyMultisigAccountTransaction;
 import io.proximax.sdk.model.transaction.MultisigCosignatoryModification;
-import io.proximax.sdk.model.transaction.TransactionType;
-import io.proximax.sdk.model.transaction.TransactionVersion;
+import io.proximax.sdk.model.transaction.EntityType;
+import io.proximax.sdk.model.transaction.EntityVersion;
 
 /**
  * builder for {@link ModifyMultisigAccountTransaction}
@@ -26,7 +26,7 @@ public class ModifyMultisigAccountTransactionBuilder
    private List<MultisigCosignatoryModification> modifications;
 
    public ModifyMultisigAccountTransactionBuilder() {
-      super(TransactionType.MODIFY_MULTISIG_ACCOUNT, TransactionVersion.MODIFY_MULTISIG_ACCOUNT.getValue());
+      super(EntityType.MODIFY_MULTISIG_ACCOUNT, EntityVersion.MODIFY_MULTISIG_ACCOUNT.getValue());
       // defaults
       minApprovalDelta = 0;
       minRemovalDelta = 0;

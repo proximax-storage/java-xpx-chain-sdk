@@ -10,8 +10,8 @@ import java.math.BigInteger;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicSupplyType;
 import io.proximax.sdk.model.transaction.MosaicSupplyChangeTransaction;
-import io.proximax.sdk.model.transaction.TransactionType;
-import io.proximax.sdk.model.transaction.TransactionVersion;
+import io.proximax.sdk.model.transaction.EntityType;
+import io.proximax.sdk.model.transaction.EntityVersion;
 
 /**
  * builder for {@link MosaicSupplyChangeTransaction}
@@ -24,7 +24,7 @@ public class MosaicSupplyChangeTransactionBuilder
    private BigInteger delta;
 
    public MosaicSupplyChangeTransactionBuilder() {
-      super(TransactionType.MOSAIC_SUPPLY_CHANGE, TransactionVersion.MOSAIC_SUPPLY_CHANGE.getValue());
+      super(EntityType.MOSAIC_SUPPLY_CHANGE, EntityVersion.MOSAIC_SUPPLY_CHANGE.getValue());
    }
 
    @Override

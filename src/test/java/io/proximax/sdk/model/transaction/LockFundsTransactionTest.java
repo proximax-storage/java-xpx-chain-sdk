@@ -40,7 +40,7 @@ class LockFundsTransactionTest extends ResourceBasedTest {
    @Test
    void constructor() {
       SignedTransaction signedTransaction = new SignedTransaction("payload",
-            "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", TransactionType.AGGREGATE_BONDED);
+            "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", EntityType.AGGREGATE_BONDED);
       LockFundsTransaction tx = new LockFundsTransaction(NetworkType.MIJIN, 23, new FakeDeadline(), BigInteger.ONE,
             Optional.of("signaturestring"),
             Optional.of(new PublicAccount(new KeyPair().getPublicKey().getHexString(), NetworkType.MIJIN)),
@@ -55,7 +55,7 @@ class LockFundsTransactionTest extends ResourceBasedTest {
    @Test
    void serialization() throws IOException {
       SignedTransaction signedTransaction = new SignedTransaction("payload",
-            "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", TransactionType.AGGREGATE_BONDED);
+            "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", EntityType.AGGREGATE_BONDED);
       LockFundsTransaction lockFundstx = new LockFundsTransaction(NetworkType.MIJIN_TEST, 1, new FakeDeadline(),
             BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), NetworkCurrencyMosaic.TEN,
             BigInteger.valueOf(100), signedTransaction);
@@ -68,7 +68,7 @@ class LockFundsTransactionTest extends ResourceBasedTest {
    void shouldThrowExceptionWhenSignedTransactionIsNotTypeAggregateBonded() {
 
       SignedTransaction signedTransaction = new SignedTransaction("payload",
-            "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", TransactionType.TRANSFER);
+            "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", EntityType.TRANSFER);
       assertThrows(IllegalArgumentException.class,
             () -> new LockFundsTransaction(NetworkType.MIJIN_TEST, 1, new FakeDeadline(),
                   BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), NetworkCurrencyMosaic.TEN,
@@ -79,7 +79,7 @@ class LockFundsTransactionTest extends ResourceBasedTest {
    @Test
    void checkToStringIsImplemented() {
       SignedTransaction signedTransaction = new SignedTransaction("payload",
-            "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", TransactionType.AGGREGATE_BONDED);
+            "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", EntityType.AGGREGATE_BONDED);
       LockFundsTransaction tx = new LockFundsTransaction(NetworkType.MIJIN_TEST, 1, new FakeDeadline(),
             BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), NetworkCurrencyMosaic.TEN,
             BigInteger.valueOf(100), signedTransaction);
@@ -91,7 +91,7 @@ class LockFundsTransactionTest extends ResourceBasedTest {
       PublicAccount remoteAccount = new Account(new KeyPair(), NetworkType.MIJIN).getPublicAccount();
       
       SignedTransaction signedTransaction = new SignedTransaction("payload",
-            "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", TransactionType.AGGREGATE_BONDED);
+            "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", EntityType.AGGREGATE_BONDED);
       LockFundsTransaction trans = new LockFundsTransaction(NetworkType.MIJIN_TEST, 1, new FakeDeadline(),
             BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), NetworkCurrencyMosaic.TEN,
             BigInteger.valueOf(100), signedTransaction);

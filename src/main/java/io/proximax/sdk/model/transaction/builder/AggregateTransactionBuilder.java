@@ -13,8 +13,8 @@ import java.util.List;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.AggregateTransactionCosignature;
 import io.proximax.sdk.model.transaction.Transaction;
-import io.proximax.sdk.model.transaction.TransactionType;
-import io.proximax.sdk.model.transaction.TransactionVersion;
+import io.proximax.sdk.model.transaction.EntityType;
+import io.proximax.sdk.model.transaction.EntityVersion;
 
 /**
  * builder for {@link AggregateTransaction}
@@ -24,7 +24,7 @@ public class AggregateTransactionBuilder extends TransactionBuilder<AggregateTra
    private List<Transaction> innerTransactions;
    private List<AggregateTransactionCosignature> cosignatures;
 
-   private AggregateTransactionBuilder(TransactionType type, Integer version) {
+   private AggregateTransactionBuilder(EntityType type, Integer version) {
       super(type, version);
       // provide empty lists as defaults
       this.innerTransactions = new ArrayList<>();
@@ -32,13 +32,13 @@ public class AggregateTransactionBuilder extends TransactionBuilder<AggregateTra
    }
 
    public static AggregateTransactionBuilder createBonded() {
-      return new AggregateTransactionBuilder(TransactionType.AGGREGATE_BONDED,
-            TransactionVersion.AGGREGATE_BONDED.getValue());
+      return new AggregateTransactionBuilder(EntityType.AGGREGATE_BONDED,
+            EntityVersion.AGGREGATE_BONDED.getValue());
    }
 
    public static AggregateTransactionBuilder createComplete() {
-      return new AggregateTransactionBuilder(TransactionType.AGGREGATE_COMPLETE,
-            TransactionVersion.AGGREGATE_COMPLETE.getValue());
+      return new AggregateTransactionBuilder(EntityType.AGGREGATE_COMPLETE,
+            EntityVersion.AGGREGATE_COMPLETE.getValue());
    }
 
    @Override

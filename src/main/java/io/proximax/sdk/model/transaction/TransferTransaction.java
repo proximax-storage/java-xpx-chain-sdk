@@ -46,7 +46,7 @@ public class TransferTransaction extends Transaction {
 
    /**
     * @param networkType network type
-    * @param version transaction version. Use {@link TransactionVersion#TRANSFER} for current version
+    * @param version transaction version. Use {@link EntityVersion#TRANSFER} for current version
     * @param deadline transaction deadline
     * @param maxFee transaction fee
     * @param signature optional signature
@@ -59,7 +59,7 @@ public class TransferTransaction extends Transaction {
    public TransferTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger maxFee,
          Optional<String> signature, Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo,
          Recipient recipient, List<Mosaic> mosaics, Message message) {
-      super(TransactionType.TRANSFER, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
+      super(EntityType.TRANSFER, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
       Validate.notNull(recipient, "Recipient must not be null");
       Validate.notNull(mosaics, "Mosaics must not be null");
       Validate.notNull(message, "Message must not be null");

@@ -24,8 +24,8 @@ import io.proximax.sdk.model.transaction.AggregateTransactionCosignature;
 import io.proximax.sdk.model.transaction.Deadline;
 import io.proximax.sdk.model.transaction.PlainMessage;
 import io.proximax.sdk.model.transaction.Recipient;
-import io.proximax.sdk.model.transaction.TransactionType;
-import io.proximax.sdk.model.transaction.TransactionVersion;
+import io.proximax.sdk.model.transaction.EntityType;
+import io.proximax.sdk.model.transaction.EntityVersion;
 import io.proximax.sdk.model.transaction.TransferTransaction;
 
 /**
@@ -64,8 +64,8 @@ class AggregateTransactionBuilderTest {
       
       assertEquals(1, agg.getInnerTransactions().size());
       assertEquals(transferTx, agg.getInnerTransactions().get(0));
-      assertEquals(TransactionType.AGGREGATE_COMPLETE, agg.getType());
-      assertEquals(TransactionVersion.AGGREGATE_COMPLETE.getValue(), agg.getVersion());
+      assertEquals(EntityType.AGGREGATE_COMPLETE, agg.getType());
+      assertEquals(EntityVersion.AGGREGATE_COMPLETE.getValue(), agg.getVersion());
    }
 
    @Test
@@ -80,8 +80,8 @@ class AggregateTransactionBuilderTest {
       
       assertEquals(1, agg.getInnerTransactions().size());
       assertEquals(transferTx, agg.getInnerTransactions().get(0));
-      assertEquals(TransactionType.AGGREGATE_BONDED, agg.getType());
-      assertEquals(TransactionVersion.AGGREGATE_BONDED.getValue(), agg.getVersion());
+      assertEquals(EntityType.AGGREGATE_BONDED, agg.getType());
+      assertEquals(EntityVersion.AGGREGATE_BONDED.getValue(), agg.getVersion());
 
    }
 

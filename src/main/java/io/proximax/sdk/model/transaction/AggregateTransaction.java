@@ -45,11 +45,11 @@ public class AggregateTransaction extends Transaction {
    private final List<AggregateTransactionCosignature> cosignatures;
 
    /**
-    * @param type transaction type which has to be one of {@link TransactionType#AGGREGATE_COMPLETE} or
-    * {@link TransactionType#AGGREGATE_BONDED}
+    * @param type transaction type which has to be one of {@link EntityType#AGGREGATE_COMPLETE} or
+    * {@link EntityType#AGGREGATE_BONDED}
     * @param networkType network type
-    * @param version transaction version. For latest {@link TransactionVersion#AGGREGATE_COMPLETE} or
-    * {@link TransactionVersion#AGGREGATE_BONDED}
+    * @param version transaction version. For latest {@link EntityVersion#AGGREGATE_COMPLETE} or
+    * {@link EntityVersion#AGGREGATE_BONDED}
     * @param deadline transaction deadline
     * @param maxFee transaction fee
     * @param signature optional signature
@@ -58,7 +58,7 @@ public class AggregateTransaction extends Transaction {
     * @param innerTransactions inner transactions of this aggregate transaction
     * @param cosignatures available cosignatures if any
     */
-   public AggregateTransaction(TransactionType type, NetworkType networkType, Integer version,
+   public AggregateTransaction(EntityType type, NetworkType networkType, Integer version,
          TransactionDeadline deadline, BigInteger maxFee, Optional<String> signature,
          Optional<PublicAccount> signer, Optional<TransactionInfo> transactionInfo,
          List<Transaction> innerTransactions,
@@ -66,7 +66,7 @@ public class AggregateTransaction extends Transaction {
       super(type, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
       Validate.notNull(innerTransactions, "InnerTransactions must not be null");
       Validate.notNull(cosignatures, "Cosignatures must not be null");
-      Validate.validState(type == TransactionType.AGGREGATE_BONDED || type == TransactionType.AGGREGATE_COMPLETE,
+      Validate.validState(type == EntityType.AGGREGATE_BONDED || type == EntityType.AGGREGATE_COMPLETE,
             "Transaction type has to be aggregate bonded or complete but was %s",
             type);
       this.innerTransactions = Collections.unmodifiableList(innerTransactions);

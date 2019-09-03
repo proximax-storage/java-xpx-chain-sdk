@@ -18,7 +18,7 @@ import io.proximax.sdk.model.account.props.AccountPropertyModification;
 import io.proximax.sdk.model.account.props.AccountPropertyType;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.transaction.ModifyAccountPropertyTransaction;
-import io.proximax.sdk.model.transaction.TransactionType;
+import io.proximax.sdk.model.transaction.EntityType;
 
 /**
  * {@link ModifyAccountPropertyEntityTransactionBuilder} tests
@@ -39,8 +39,8 @@ class ModifyAccountPropertyEntityTransactionBuilderTest {
    
    @Test
    void test() {
-      AccountPropertyModification<TransactionType> mod = AccountPropertyModification.add(TransactionType.MODIFY_CONTRACT);
-      ModifyAccountPropertyTransaction<TransactionType> trans = builder.propertyType(AccountPropertyType.ALLOW_TRANSACTION).modifications(Arrays.asList(mod)).build();
+      AccountPropertyModification<EntityType> mod = AccountPropertyModification.add(EntityType.MODIFY_CONTRACT);
+      ModifyAccountPropertyTransaction<EntityType> trans = builder.propertyType(AccountPropertyType.ALLOW_TRANSACTION).modifications(Arrays.asList(mod)).build();
       
       assertEquals(AccountPropertyType.ALLOW_TRANSACTION, trans.getPropertyType());
       assertEquals(1, trans.getPropertyModifications().size());

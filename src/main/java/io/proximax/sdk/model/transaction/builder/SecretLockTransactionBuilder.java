@@ -11,8 +11,8 @@ import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.mosaic.Mosaic;
 import io.proximax.sdk.model.transaction.HashType;
 import io.proximax.sdk.model.transaction.SecretLockTransaction;
-import io.proximax.sdk.model.transaction.TransactionType;
-import io.proximax.sdk.model.transaction.TransactionVersion;
+import io.proximax.sdk.model.transaction.EntityType;
+import io.proximax.sdk.model.transaction.EntityVersion;
 
 /**
  * builder for {@link SecretLockTransaction}
@@ -27,7 +27,7 @@ public class SecretLockTransactionBuilder
    private Address recipient;
 
    public SecretLockTransactionBuilder() {
-      super(TransactionType.SECRET_LOCK, TransactionVersion.SECRET_LOCK.getValue());
+      super(EntityType.SECRET_LOCK, EntityVersion.SECRET_LOCK.getValue());
    }
 
    @Override

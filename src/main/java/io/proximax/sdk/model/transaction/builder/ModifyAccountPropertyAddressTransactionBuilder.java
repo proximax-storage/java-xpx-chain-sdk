@@ -9,8 +9,8 @@ import java.math.BigInteger;
 
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.transaction.ModifyAccountPropertyTransaction;
-import io.proximax.sdk.model.transaction.TransactionType;
-import io.proximax.sdk.model.transaction.TransactionVersion;
+import io.proximax.sdk.model.transaction.EntityType;
+import io.proximax.sdk.model.transaction.EntityVersion;
 
 /**
  * Builder for account address property modification
@@ -18,7 +18,7 @@ import io.proximax.sdk.model.transaction.TransactionVersion;
 public class ModifyAccountPropertyAddressTransactionBuilder extends ModifyAccountPropertyTransactionBuilder<Address> {
 
    public ModifyAccountPropertyAddressTransactionBuilder() {
-      super(TransactionType.ACCOUNT_PROPERTIES_ADDRESS, TransactionVersion.ACCOUNT_PROPERTIES_ADDRESS.getValue());
+      super(EntityType.ACCOUNT_PROPERTIES_ADDRESS, EntityVersion.ACCOUNT_PROPERTIES_ADDRESS.getValue());
    }
 
    @Override

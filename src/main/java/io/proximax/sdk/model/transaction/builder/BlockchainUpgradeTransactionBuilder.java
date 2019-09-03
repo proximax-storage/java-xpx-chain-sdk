@@ -9,8 +9,8 @@ import java.math.BigInteger;
 
 import io.proximax.sdk.model.blockchain.BlockchainVersion;
 import io.proximax.sdk.model.transaction.BlockchainUpgradeTransaction;
-import io.proximax.sdk.model.transaction.TransactionType;
-import io.proximax.sdk.model.transaction.TransactionVersion;
+import io.proximax.sdk.model.transaction.EntityType;
+import io.proximax.sdk.model.transaction.EntityVersion;
 
 /**
  * builder for {@link BlockchainUpgradeTransaction}
@@ -22,7 +22,7 @@ public class BlockchainUpgradeTransactionBuilder
    private BlockchainVersion newVersion;
 
    public BlockchainUpgradeTransactionBuilder() {
-      super(TransactionType.BLOCKCHAIN_UPGRADE, TransactionVersion.BLOCKCHAIN_UPGRADE.getValue());
+      super(EntityType.BLOCKCHAIN_UPGRADE, EntityVersion.BLOCKCHAIN_UPGRADE.getValue());
       // defaults
    }
 

@@ -17,8 +17,8 @@ import io.proximax.sdk.model.metadata.MetadataType;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.transaction.ModifyMetadataTransaction;
-import io.proximax.sdk.model.transaction.TransactionType;
-import io.proximax.sdk.model.transaction.TransactionVersion;
+import io.proximax.sdk.model.transaction.EntityType;
+import io.proximax.sdk.model.transaction.EntityVersion;
 import io.proximax.sdk.model.transaction.UInt64Id;
 
 /**
@@ -33,7 +33,7 @@ public class ModifyMetadataTransactionBuilder
    private List<MetadataModification> modifications;
 
    public ModifyMetadataTransactionBuilder() {
-      super(null, TransactionVersion.METADATA_MODIFICATION.getValue());
+      super(null, EntityVersion.METADATA_MODIFICATION.getValue());
       // defaults
       metadataId = Optional.empty();
       address = Optional.empty();
@@ -135,15 +135,15 @@ public class ModifyMetadataTransactionBuilder
    // -------------------------------------- convenience --------------------------------------------//
 
    public ModifyMetadataTransactionBuilder forAddress(Address address) {
-      return type(TransactionType.MODIFY_ADDRESS_METADATA).metadataType(MetadataType.ADDRESS).metadataId(address);
+      return type(EntityType.MODIFY_ADDRESS_METADATA).metadataType(MetadataType.ADDRESS).metadataId(address);
    }
 
    public ModifyMetadataTransactionBuilder forMosaic(MosaicId mosaicId) {
-      return type(TransactionType.MODIFY_MOSAIC_METADATA).metadataType(MetadataType.MOSAIC).metadataId(mosaicId);
+      return type(EntityType.MODIFY_MOSAIC_METADATA).metadataType(MetadataType.MOSAIC).metadataId(mosaicId);
    }
 
    public ModifyMetadataTransactionBuilder forNamespace(NamespaceId namespaceId) {
-      return type(TransactionType.MODIFY_NAMESPACE_METADATA).metadataType(MetadataType.NAMESPACE)
+      return type(EntityType.MODIFY_NAMESPACE_METADATA).metadataType(MetadataType.NAMESPACE)
             .metadataId(namespaceId);
    }
 

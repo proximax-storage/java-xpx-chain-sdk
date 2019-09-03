@@ -45,11 +45,11 @@ public class AliasTransaction extends Transaction {
    private final AliasAction aliasAction;
 
    /**
-    * @param type transaction type which has to be one of {@link TransactionType#MOSAIC_ALIAS} or
-    * {@link TransactionType#ADDRESS_ALIAS}
+    * @param type transaction type which has to be one of {@link EntityType#MOSAIC_ALIAS} or
+    * {@link EntityType#ADDRESS_ALIAS}
     * @param networkType network type
-    * @param version transaction version. For latest {@link TransactionVersion#MOSAIC_ALIAS} or
-    * {@link TransactionVersion#ADDRESS_ALIAS}
+    * @param version transaction version. For latest {@link EntityVersion#MOSAIC_ALIAS} or
+    * {@link EntityVersion#ADDRESS_ALIAS}
     * @param deadline transaction deadline
     * @param maxFee transaction fee
     * @param signature optional signature
@@ -60,7 +60,7 @@ public class AliasTransaction extends Transaction {
     * @param namespaceId namespace Id to get an alias
     * @param aliasAction link/unlink action
     */
-   public AliasTransaction(TransactionType type, NetworkType networkType, Integer version, TransactionDeadline deadline,
+   public AliasTransaction(EntityType type, NetworkType networkType, Integer version, TransactionDeadline deadline,
          BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
          Optional<TransactionInfo> transactionInfo, Optional<MosaicId> mosaicId, Optional<Address> address,
          NamespaceId namespaceId, AliasAction aliasAction) {
@@ -70,9 +70,9 @@ public class AliasTransaction extends Transaction {
       Validate.notNull(namespaceId, "namespaceId must not be null");
       Validate.notNull(aliasAction, "action must not be null");
       Validate.isTrue(mosaicId.isPresent() != address.isPresent(), "Address or mosaic has to be specified exclusively");
-      Validate.isTrue(mosaicId.isPresent() == (type == TransactionType.MOSAIC_ALIAS),
+      Validate.isTrue(mosaicId.isPresent() == (type == EntityType.MOSAIC_ALIAS),
             "Mosaic ID needs to be used with mosaic alias transaction type");
-      Validate.isTrue(address.isPresent() == (type == TransactionType.ADDRESS_ALIAS),
+      Validate.isTrue(address.isPresent() == (type == EntityType.ADDRESS_ALIAS),
             "Address needs to be used with address alias transaction type");
       // make assignments
       this.mosaicId = mosaicId;

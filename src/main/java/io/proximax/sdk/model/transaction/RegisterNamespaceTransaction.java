@@ -62,7 +62,7 @@ public class RegisterNamespaceTransaction extends Transaction {
          TransactionDeadline deadline, BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
          Optional<TransactionInfo> transactionInfo, String namespaceName, NamespaceId namespaceId,
          Optional<BigInteger> duration, Optional<NamespaceId> parentId, NamespaceType namespaceType) {
-      super(TransactionType.REGISTER_NAMESPACE, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
+      super(EntityType.REGISTER_NAMESPACE, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
       // validations
       Validate.notNull(namespaceName, "NamespaceName must not be null");
       Validate.notNull(namespaceType, "NamespaceType must not be null");

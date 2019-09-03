@@ -42,7 +42,7 @@ class ModifyAccountPropertyTransactionTest extends ResourceBasedTest {
             Arrays.asList(new AccountPropertyModification<>(AccountPropertyModificationType.ADD, address)));
       // check that values are as expected
       assertEquals(BigInteger.ZERO, trans.getMaxFee());
-      assertEquals(TransactionType.ACCOUNT_PROPERTIES_ADDRESS, trans.getType());
+      assertEquals(EntityType.ACCOUNT_PROPERTIES_ADDRESS, trans.getType());
       assertEquals(1, trans.getVersion());
       assertEquals(deadline.getInstant(), trans.getDeadline().getInstant());
       assertEquals(AccountPropertyType.ALLOW_ADDRESS, trans.getPropertyType());
@@ -65,7 +65,7 @@ class ModifyAccountPropertyTransactionTest extends ResourceBasedTest {
                   new MosaicId(BigInteger.ONE))));
       // check that values are as expected
       assertEquals(BigInteger.ZERO, trans.getMaxFee());
-      assertEquals(TransactionType.ACCOUNT_PROPERTIES_MOSAIC, trans.getType());
+      assertEquals(EntityType.ACCOUNT_PROPERTIES_MOSAIC, trans.getType());
       assertEquals(1, trans.getVersion());
       assertEquals(deadline.getInstant(), trans.getDeadline().getInstant());
       assertEquals(AccountPropertyType.ALLOW_MOSAIC, trans.getPropertyType());
@@ -81,19 +81,19 @@ class ModifyAccountPropertyTransactionTest extends ResourceBasedTest {
    @Test
    void serializationEntity() throws IOException {
       Deadline deadline = new FakeDeadline();
-      ModifyAccountPropertyTransaction<TransactionType> trans = new ModifyAccountPropertyTransaction.EntityTypeModification(
+      ModifyAccountPropertyTransaction<EntityType> trans = new ModifyAccountPropertyTransaction.EntityTypeModification(
             NetworkType.MIJIN_TEST, 1, deadline, BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
             AccountPropertyType.BLOCK_TRANSACTION, Arrays.asList(
-                  new AccountPropertyModification<>(AccountPropertyModificationType.ADD, TransactionType.LOCK)));
+                  new AccountPropertyModification<>(AccountPropertyModificationType.ADD, EntityType.LOCK)));
       // check that values are as expected
       assertEquals(BigInteger.ZERO, trans.getMaxFee());
-      assertEquals(TransactionType.ACCOUNT_PROPERTIES_ENTITY_TYPE, trans.getType());
-      assertEquals(TransactionVersion.ACCOUNT_PROPERTIES_ENTITY_TYPE.getValue(), trans.getVersion());
+      assertEquals(EntityType.ACCOUNT_PROPERTIES_ENTITY_TYPE, trans.getType());
+      assertEquals(EntityVersion.ACCOUNT_PROPERTIES_ENTITY_TYPE.getValue(), trans.getVersion());
       assertEquals(deadline.getInstant(), trans.getDeadline().getInstant());
       assertEquals(AccountPropertyType.BLOCK_TRANSACTION, trans.getPropertyType());
       assertEquals(NetworkType.MIJIN_TEST, trans.getNetworkType());
       assertEquals(1, trans.getPropertyModifications().size());
-      assertEquals(TransactionType.LOCK, trans.getPropertyModifications().get(0).getValue());
+      assertEquals(EntityType.LOCK, trans.getPropertyModifications().get(0).getValue());
       // check that serialization does not fail
       byte[] actual = trans.generateBytes();
 //      saveBytes("account_property_entity", actual);
@@ -137,10 +137,10 @@ class ModifyAccountPropertyTransactionTest extends ResourceBasedTest {
       PublicAccount remoteAccount = new Account(new KeyPair(), NetworkType.MIJIN).getPublicAccount();
       
       Deadline deadline = new FakeDeadline();
-      ModifyAccountPropertyTransaction<TransactionType> trans = new ModifyAccountPropertyTransaction.EntityTypeModification(
+      ModifyAccountPropertyTransaction<EntityType> trans = new ModifyAccountPropertyTransaction.EntityTypeModification(
             NetworkType.MIJIN_TEST, 1, deadline, BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
             AccountPropertyType.BLOCK_TRANSACTION, Arrays.asList(
-                  new AccountPropertyModification<>(AccountPropertyModificationType.ADD, TransactionType.LOCK)));
+                  new AccountPropertyModification<>(AccountPropertyModificationType.ADD, EntityType.LOCK)));
 
       Transaction t = trans.copyForSigner(remoteAccount);
       assertEquals(Optional.of(remoteAccount), t.getSigner());

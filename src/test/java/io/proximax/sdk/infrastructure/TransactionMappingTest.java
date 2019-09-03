@@ -66,7 +66,7 @@ public class TransactionMappingTest extends ResourceBasedTest {
     			Transaction transaction = new TransactionMapping().apply(transactionDTO);
     			validateStandaloneTransaction(transaction, transactionDTO);
     			// assert transfer
-    			assertEquals(TransactionType.TRANSFER, transaction.getType());
+    			assertEquals(EntityType.TRANSFER, transaction.getType());
     			// retrieve the message
     			Message msg = ((TransferTransaction)transaction).getMessage();
     			MessageType msgType = MessageType.getByCode(msg.getTypeCode());
@@ -137,21 +137,21 @@ public class TransactionMappingTest extends ResourceBasedTest {
         assertEquals(TransactionMappingUtils.extractFee(transactionDTO.get("transaction").getAsJsonObject()), transaction.getMaxFee());
         assertNotNull(transaction.getDeadline());
 
-        if (transaction.getType() == TransactionType.TRANSFER) {
+        if (transaction.getType() == EntityType.TRANSFER) {
             validateTransferTx((TransferTransaction) transaction, transactionDTO);
-        } else if (transaction.getType() == TransactionType.REGISTER_NAMESPACE) {
+        } else if (transaction.getType() == EntityType.REGISTER_NAMESPACE) {
             validateNamespaceCreationTx((RegisterNamespaceTransaction) transaction, transactionDTO);
-        } else if (transaction.getType() == TransactionType.MOSAIC_DEFINITION) {
+        } else if (transaction.getType() == EntityType.MOSAIC_DEFINITION) {
             validateMosaicCreationTx((MosaicDefinitionTransaction) transaction, transactionDTO);
-        } else if (transaction.getType() == TransactionType.MOSAIC_SUPPLY_CHANGE) {
+        } else if (transaction.getType() == EntityType.MOSAIC_SUPPLY_CHANGE) {
             validateMosaicSupplyChangeTx((MosaicSupplyChangeTransaction) transaction, transactionDTO);
-        } else if (transaction.getType() == TransactionType.MODIFY_MULTISIG_ACCOUNT) {
+        } else if (transaction.getType() == EntityType.MODIFY_MULTISIG_ACCOUNT) {
             validateMultisigModificationTx((ModifyMultisigAccountTransaction) transaction, transactionDTO);
-        } else if (transaction.getType() == TransactionType.LOCK) {
+        } else if (transaction.getType() == EntityType.LOCK) {
             validateLockFundsTx((LockFundsTransaction) transaction, transactionDTO);
-        } else if (transaction.getType() == TransactionType.SECRET_LOCK) {
+        } else if (transaction.getType() == EntityType.SECRET_LOCK) {
             validateSecretLockTx((SecretLockTransaction) transaction, transactionDTO);
-        } else if (transaction.getType() == TransactionType.SECRET_PROOF) {
+        } else if (transaction.getType() == EntityType.SECRET_PROOF) {
             validateSecretProofTx((SecretProofTransaction) transaction, transactionDTO);
         }
 

@@ -23,129 +23,129 @@ import org.junit.jupiter.api.Test;
 class TransactionTypeTest {
     @Test
     void aggregateCompleteType() {
-        TransactionType transactionType = TransactionType.AGGREGATE_COMPLETE;
+        EntityType transactionType = EntityType.AGGREGATE_COMPLETE;
         assertEquals(0x4141, transactionType.getValue());
         assertEquals(16705, transactionType.getValue());
-        assertEquals(TransactionType.AGGREGATE_COMPLETE, TransactionType.rawValueOf(16705));
+        assertEquals(EntityType.AGGREGATE_COMPLETE, EntityType.rawValueOf(16705));
     }
 
     @Test
     void aggregateBondedType() {
-        TransactionType transactionType = TransactionType.AGGREGATE_BONDED;
+        EntityType transactionType = EntityType.AGGREGATE_BONDED;
         assertEquals(0x4241, transactionType.getValue());
         assertEquals(16961, transactionType.getValue());
-        assertEquals(TransactionType.AGGREGATE_BONDED, TransactionType.rawValueOf(16961));
+        assertEquals(EntityType.AGGREGATE_BONDED, EntityType.rawValueOf(16961));
     }
 
     @Test
     void mosaicCreationType() {
-        TransactionType transactionType = TransactionType.MOSAIC_DEFINITION;
+        EntityType transactionType = EntityType.MOSAIC_DEFINITION;
         assertEquals(0x414d, transactionType.getValue());
         assertEquals(16717, transactionType.getValue());
-        assertEquals(TransactionType.MOSAIC_DEFINITION, TransactionType.rawValueOf(16717));
+        assertEquals(EntityType.MOSAIC_DEFINITION, EntityType.rawValueOf(16717));
     }
 
     @Test
     void mosaicSupplyChangeType() {
-        TransactionType transactionType = TransactionType.MOSAIC_SUPPLY_CHANGE;
+        EntityType transactionType = EntityType.MOSAIC_SUPPLY_CHANGE;
         assertEquals(0x424d, transactionType.getValue());
         assertEquals(16973, transactionType.getValue());
-        assertEquals(TransactionType.MOSAIC_SUPPLY_CHANGE, TransactionType.rawValueOf(16973));
+        assertEquals(EntityType.MOSAIC_SUPPLY_CHANGE, EntityType.rawValueOf(16973));
     }
 
     @Test
     void multisigModificationType() {
-        TransactionType transactionType = TransactionType.MODIFY_MULTISIG_ACCOUNT;
+        EntityType transactionType = EntityType.MODIFY_MULTISIG_ACCOUNT;
         assertEquals(0x4155, transactionType.getValue());
         assertEquals(16725, transactionType.getValue());
-        assertEquals(TransactionType.MODIFY_MULTISIG_ACCOUNT, TransactionType.rawValueOf(16725));
+        assertEquals(EntityType.MODIFY_MULTISIG_ACCOUNT, EntityType.rawValueOf(16725));
     }
 
     @Test
     void namespaceCreationType() {
-        TransactionType transactionType = TransactionType.REGISTER_NAMESPACE;
+        EntityType transactionType = EntityType.REGISTER_NAMESPACE;
         assertEquals(0x414e, transactionType.getValue());
         assertEquals(16718, transactionType.getValue());
-        assertEquals(TransactionType.REGISTER_NAMESPACE, TransactionType.rawValueOf(16718));
+        assertEquals(EntityType.REGISTER_NAMESPACE, EntityType.rawValueOf(16718));
     }
 
     @Test
     void transferType() {
-        TransactionType transactionType = TransactionType.TRANSFER;
+        EntityType transactionType = EntityType.TRANSFER;
         assertEquals(0x4154, transactionType.getValue());
         assertEquals(16724, transactionType.getValue());
-        assertEquals(TransactionType.TRANSFER, TransactionType.rawValueOf(16724));
+        assertEquals(EntityType.TRANSFER, EntityType.rawValueOf(16724));
     }
 
     @Test
     void lockFundsType() {
-        TransactionType transactionType = TransactionType.LOCK;
+        EntityType transactionType = EntityType.LOCK;
         assertEquals(0x4148, transactionType.getValue());
         assertEquals(16712, transactionType.getValue());
-        assertEquals(TransactionType.LOCK, TransactionType.rawValueOf(16712));
+        assertEquals(EntityType.LOCK, EntityType.rawValueOf(16712));
     }
 
     @Test
     void secretLockType() {
-        TransactionType transactionType = TransactionType.SECRET_LOCK;
+        EntityType transactionType = EntityType.SECRET_LOCK;
         assertEquals(0x4152, transactionType.getValue());
         assertEquals(16722, transactionType.getValue());
-        assertEquals(TransactionType.SECRET_LOCK, TransactionType.rawValueOf(16722));
+        assertEquals(EntityType.SECRET_LOCK, EntityType.rawValueOf(16722));
     }
 
     @Test
     void secretProofType() {
-        TransactionType transactionType = TransactionType.SECRET_PROOF;
+        EntityType transactionType = EntityType.SECRET_PROOF;
         assertEquals(0x4252, transactionType.getValue());
         assertEquals(16978, transactionType.getValue());
-        assertEquals(TransactionType.SECRET_PROOF, TransactionType.rawValueOf(16978));
+        assertEquals(EntityType.SECRET_PROOF, EntityType.rawValueOf(16978));
     }
 
     @Test
     void addressAliasType() {
-        TransactionType transactionType = TransactionType.ADDRESS_ALIAS;
+        EntityType transactionType = EntityType.ADDRESS_ALIAS;
         assertEquals(0x424E, transactionType.getValue());
         assertEquals(16974, transactionType.getValue());
-        assertEquals(TransactionType.ADDRESS_ALIAS, TransactionType.rawValueOf(16974));
+        assertEquals(EntityType.ADDRESS_ALIAS, EntityType.rawValueOf(16974));
     }
 
     @Test
     void mosaicAliasType() {
-        TransactionType transactionType = TransactionType.MOSAIC_ALIAS;
+        EntityType transactionType = EntityType.MOSAIC_ALIAS;
         assertEquals(0x434E, transactionType.getValue());
         assertEquals(17230, transactionType.getValue());
-        assertEquals(TransactionType.MOSAIC_ALIAS, TransactionType.rawValueOf(17230));
+        assertEquals(EntityType.MOSAIC_ALIAS, EntityType.rawValueOf(17230));
     }
 
     @Test
     void accountPropertiesAddressType() {
-        TransactionType transactionType = TransactionType.ACCOUNT_PROPERTIES_ADDRESS;
+        EntityType transactionType = EntityType.ACCOUNT_PROPERTIES_ADDRESS;
         assertEquals(0x4150, transactionType.getValue());
         assertEquals(16720, transactionType.getValue());
-        assertEquals(TransactionType.ACCOUNT_PROPERTIES_ADDRESS, TransactionType.rawValueOf(16720));
+        assertEquals(EntityType.ACCOUNT_PROPERTIES_ADDRESS, EntityType.rawValueOf(16720));
     }
 
     @Test
     void accountPropertiesMosaic() {
-        TransactionType transactionType = TransactionType.ACCOUNT_PROPERTIES_MOSAIC;
+        EntityType transactionType = EntityType.ACCOUNT_PROPERTIES_MOSAIC;
         assertEquals(0x4250, transactionType.getValue());
         assertEquals(16976, transactionType.getValue());
-        assertEquals(TransactionType.ACCOUNT_PROPERTIES_MOSAIC, TransactionType.rawValueOf(16976));
+        assertEquals(EntityType.ACCOUNT_PROPERTIES_MOSAIC, EntityType.rawValueOf(16976));
     }
 
     @Test
     void accountPropertiesEntityType() {
-        TransactionType transactionType = TransactionType.ACCOUNT_PROPERTIES_ENTITY_TYPE;
+        EntityType transactionType = EntityType.ACCOUNT_PROPERTIES_ENTITY_TYPE;
         assertEquals(0x4350, transactionType.getValue());
         assertEquals(17232, transactionType.getValue());
-        assertEquals(TransactionType.ACCOUNT_PROPERTIES_ENTITY_TYPE, TransactionType.rawValueOf(17232));
+        assertEquals(EntityType.ACCOUNT_PROPERTIES_ENTITY_TYPE, EntityType.rawValueOf(17232));
     }
 
     @Test
     void accountLinkType() {
-        TransactionType transactionType = TransactionType.ACCOUNT_LINK;
+        EntityType transactionType = EntityType.ACCOUNT_LINK;
         assertEquals(0x414C, transactionType.getValue());
         assertEquals(16716, transactionType.getValue());
-        assertEquals(TransactionType.ACCOUNT_LINK, TransactionType.rawValueOf(16716));
+        assertEquals(EntityType.ACCOUNT_LINK, EntityType.rawValueOf(16716));
     }
 }

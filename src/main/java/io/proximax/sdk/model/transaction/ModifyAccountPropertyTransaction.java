@@ -48,7 +48,7 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
     * @param propertyType
     * @param modifications
     */
-   public ModifyAccountPropertyTransaction(TransactionType type, NetworkType networkType, Integer version,
+   public ModifyAccountPropertyTransaction(EntityType type, NetworkType networkType, Integer version,
          TransactionDeadline deadline, BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
          Optional<TransactionInfo> transactionInfo, AccountPropertyType propertyType,
          List<AccountPropertyModification<T>> modifications) {
@@ -165,7 +165,7 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
             BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
             Optional<TransactionInfo> transactionInfo, AccountPropertyType propertyType,
             List<AccountPropertyModification<Address>> modifications) {
-         super(TransactionType.ACCOUNT_PROPERTIES_ADDRESS, networkType, version, deadline, maxFee, signature, signer,
+         super(EntityType.ACCOUNT_PROPERTIES_ADDRESS, networkType, version, deadline, maxFee, signature, signer,
                transactionInfo, propertyType, modifications);
       }
 
@@ -229,7 +229,7 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
             BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
             Optional<TransactionInfo> transactionInfo, AccountPropertyType propertyType,
             List<AccountPropertyModification<UInt64Id>> modifications) {
-         super(TransactionType.ACCOUNT_PROPERTIES_MOSAIC, networkType, version, deadline, maxFee, signature, signer,
+         super(EntityType.ACCOUNT_PROPERTIES_MOSAIC, networkType, version, deadline, maxFee, signature, signer,
                transactionInfo, propertyType, modifications);
       }
 
@@ -274,7 +274,7 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
    /**
     * Transaction type account property modification transaction implementation
     */
-   public static class EntityTypeModification extends ModifyAccountPropertyTransaction<TransactionType> {
+   public static class EntityTypeModification extends ModifyAccountPropertyTransaction<EntityType> {
       private static final int VALUE_BYTES_LENGTH = 2;
 
       /**
@@ -291,13 +291,13 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
       public EntityTypeModification(NetworkType networkType, Integer version, TransactionDeadline deadline,
             BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
             Optional<TransactionInfo> transactionInfo, AccountPropertyType propertyType,
-            List<AccountPropertyModification<TransactionType>> modifications) {
-         super(TransactionType.ACCOUNT_PROPERTIES_ENTITY_TYPE, networkType, version, deadline, maxFee, signature,
+            List<AccountPropertyModification<EntityType>> modifications) {
+         super(EntityType.ACCOUNT_PROPERTIES_ENTITY_TYPE, networkType, version, deadline, maxFee, signature,
                signer, transactionInfo, propertyType, modifications);
       }
 
       @Override
-      protected byte[] getValueBytesFromModification(AccountPropertyModification<TransactionType> mod) {
+      protected byte[] getValueBytesFromModification(AccountPropertyModification<EntityType> mod) {
          // get the bytes from string
          byte[] valueBytes = new byte[VALUE_BYTES_LENGTH];
          ByteBuffer.wrap(valueBytes).order(ByteOrder.LITTLE_ENDIAN).putShort((short) mod.getValue().getValue());
@@ -325,7 +325,7 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
       protected Transaction copyForSigner(PublicAccount signer) {
          return new EntityTypeModification(getNetworkType(), getVersion(), getDeadline(), getMaxFee(), getSignature(),
                Optional.of(signer), getTransactionInfo(), getPropertyType(),
-               (List<AccountPropertyModification<TransactionType>>) getPropertyModifications());
+               (List<AccountPropertyModification<EntityType>>) getPropertyModifications());
       }
    }
 }
