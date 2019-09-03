@@ -227,6 +227,7 @@ public class BlockchainApi {
    public TransactionBuilderFactory transact() {
       TransactionBuilderFactory fac = new TransactionBuilderFactory();
       fac.setNetworkType(getNetworkType());
+      fac.setFeeCalculationStrategy(DEFAULT_FEE_CALCULATION_STRATEGY);
       return fac;
    }
 }
