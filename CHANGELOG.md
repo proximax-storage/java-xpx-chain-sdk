@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 0.5.0 MaxFee calculation and transaction builders
+
+See [milestone](https://github.com/proximax-storage/java-xpx-chain-sdk/milestone/5?closed=1) for fixed issues
+* introduced fee calculation strategies
+* introduced transaction builders as primary API to create transaction instances
+* unified constructors and moved logic to transaction builders
+* version field changes (breaks server backward compatibility)
+* support for blockchain configuration and upgrade transactions/endpoints
+* update of dependency versions
+
 ## 0.4.0 Dragon release support
 
 See [milestone](https://github.com/proximax-storage/java-xpx-chain-sdk/milestone/4?closed=1) for fixed issues
