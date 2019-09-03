@@ -146,22 +146,32 @@ public class AccountHttp extends Http implements AccountRepository {
    }
 
    private Observable<List<Transaction>> transactions(PublicAccount publicAccount, Optional<QueryParams> queryParams) {
-      return this.findTransactions(publicAccount, queryParams, "/transactions");
+      return this.findTransactions(publicAccount.getPublicKey(), queryParams, "/transactions");
    }
 
    @Override
    public Observable<List<Transaction>> incomingTransactions(PublicAccount publicAccount) {
-      return this.incomingTransactions(publicAccount, Optional.empty());
+      return this.incomingTransactions(publicAccount.getPublicKey(), Optional.empty());
    }
 
    @Override
    public Observable<List<Transaction>> incomingTransactions(PublicAccount publicAccount, QueryParams queryParams) {
-      return this.incomingTransactions(publicAccount, Optional.of(queryParams));
+      return this.incomingTransactions(publicAccount.getPublicKey(), Optional.of(queryParams));
    }
 
-   private Observable<List<Transaction>> incomingTransactions(PublicAccount publicAccount,
+   @Override
+   public Observable<List<Transaction>> incomingTransactions(Address address) {
+      return this.incomingTransactions(address.plain(), Optional.empty());
+   }
+
+   @Override
+   public Observable<List<Transaction>> incomingTransactions(Address address, QueryParams queryParams) {
+      return this.incomingTransactions(address.plain(), Optional.of(queryParams));
+   }
+   
+   private Observable<List<Transaction>> incomingTransactions(String accountKey,
          Optional<QueryParams> queryParams) {
-      return this.findTransactions(publicAccount, queryParams, "/transactions/incoming");
+      return this.findTransactions(accountKey, queryParams, "/transactions/incoming");
    }
 
    @Override
@@ -176,7 +186,7 @@ public class AccountHttp extends Http implements AccountRepository {
 
    private Observable<List<Transaction>> outgoingTransactions(PublicAccount publicAccount,
          Optional<QueryParams> queryParams) {
-      return this.findTransactions(publicAccount, queryParams, "/transactions/outgoing");
+      return this.findTransactions(publicAccount.getPublicKey(), queryParams, "/transactions/outgoing");
    }
 
    @Override
@@ -192,7 +202,7 @@ public class AccountHttp extends Http implements AccountRepository {
 
    private Observable<List<AggregateTransaction>> aggregateBondedTransactions(PublicAccount publicAccount,
          Optional<QueryParams> queryParams) {
-      return this.findTransactions(publicAccount, queryParams, "/transactions/partial").flatMapIterable(item -> item)
+      return this.findTransactions(publicAccount.getPublicKey(), queryParams, "/transactions/partial").flatMapIterable(item -> item)
             .map(item -> (AggregateTransaction) item).toList().toObservable();
    }
 
@@ -208,14 +218,14 @@ public class AccountHttp extends Http implements AccountRepository {
 
    private Observable<List<Transaction>> unconfirmedTransactions(PublicAccount publicAccount,
          Optional<QueryParams> queryParams) {
-      return this.findTransactions(publicAccount, queryParams, "/transactions/unconfirmed");
+      return this.findTransactions(publicAccount.getPublicKey(), queryParams, "/transactions/unconfirmed");
    }
 
-   private Observable<List<Transaction>> findTransactions(PublicAccount publicAccount,
+   private Observable<List<Transaction>> findTransactions(String accountKey,
          Optional<QueryParams> queryParams, String path) {
       return this.client
             .get(ROUTE
-                  + publicAccount.getPublicKey() + path + (queryParams.isPresent() ? queryParams.get().toUrl() : ""))
+                  + accountKey + path + (queryParams.isPresent() ? queryParams.get().toUrl() : ""))
             .map(Http::mapStringOrError)
             .map(str -> stream(new Gson().fromJson(str, JsonArray.class)).map(s -> (JsonObject) s)
                   .collect(Collectors.toList()))

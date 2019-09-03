@@ -122,6 +122,26 @@ public interface AccountRepository {
     Observable<List<Transaction>> incomingTransactions(PublicAccount publicAccount, QueryParams queryParams);
 
     /**
+     * Gets an list of transactions for which an account is the recipient of a transaction.
+     * A transaction is said to be incoming with respect to an account if the account is the recipient of a transaction.
+     *
+     * @param address the address
+     * @return Observable of {@link Transaction} list
+     */
+    Observable<List<Transaction>> incomingTransactions(Address address);
+
+    /**
+     * Gets an list of transactions for which an account is the recipient of a transaction.
+     * A transaction is said to be incoming with respect to an account if the account is the recipient of a transaction.
+     * With pagination.
+     *
+     * @param address the address
+     * @param queryParams   QueryParams
+     * @return Observable of {@link Transaction} list
+     */
+    Observable<List<Transaction>> incomingTransactions(Address address, QueryParams queryParams);
+
+    /**
      * Gets an list of transactions for which an account is the sender a transaction.
      * A transaction is said to be outgoing with respect to an account if the account is the sender of a transaction.
      *

@@ -46,9 +46,9 @@ import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.namespace.NamespaceInfo;
+import io.proximax.sdk.model.transaction.EntityType;
 import io.proximax.sdk.model.transaction.ModifyAccountPropertyTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
-import io.proximax.sdk.model.transaction.EntityType;
 import io.proximax.sdk.model.transaction.UInt64Id;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
@@ -293,8 +293,12 @@ class E2EAccountTest extends E2EBaseTest {
    void incomingTransactions() throws ExecutionException, InterruptedException {
       List<Transaction> transactions = accountHttp.incomingTransactions(simpleAccount.getPublicAccount()).toFuture()
             .get();
+      List<Transaction> transactionsByAddr = accountHttp.incomingTransactions(simpleAccount.getPublicAccount().getAddress()).toFuture()
+            .get();
 
       assertEquals(1, transactions.size());
+      assertEquals(1, transactionsByAddr.size());
+      assertEquals(transactions.get(0).getSignature(), transactionsByAddr.get(0).getSignature());
    }
 
    @Test
