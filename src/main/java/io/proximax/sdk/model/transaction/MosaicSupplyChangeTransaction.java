@@ -42,16 +42,16 @@ public class MosaicSupplyChangeTransaction extends Transaction {
    private final BigInteger delta;
 
    /**
-    * @param networkType
-    * @param version
-    * @param deadline
-    * @param maxFee
-    * @param signature
-    * @param signer
-    * @param transactionInfo
-    * @param mosaicId
-    * @param mosaicSupplyType
-    * @param delta
+    * @param networkType network type
+    * @param version transaction version. Use {@link EntityVersion#MOSAIC_SUPPLY_CHANGE} for current version
+    * @param deadline transaction deadline
+    * @param maxFee transaction fee
+    * @param signature optional signature
+    * @param signer optional signer
+    * @param transactionInfo optional transaction info
+    * @param mosaicId ID of mosaic that will change
+    * @param mosaicSupplyType type of the supply change (increase/decrease)
+    * @param delta the change to the supply
     */
    public MosaicSupplyChangeTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline,
          BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,

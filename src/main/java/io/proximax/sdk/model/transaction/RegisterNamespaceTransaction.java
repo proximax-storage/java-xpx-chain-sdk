@@ -45,18 +45,18 @@ public class RegisterNamespaceTransaction extends Transaction {
 
    
    /**
-    * @param networkType
-    * @param version
-    * @param deadline
-    * @param maxFee
-    * @param signature
-    * @param signer
-    * @param transactionInfo
-    * @param namespaceName
-    * @param namespaceId
-    * @param duration
-    * @param parentId
-    * @param namespaceType
+    * @param networkType network type
+    * @param version transaction version. Use {@link EntityVersion#REGISTER_NAMESPACE} for current version
+    * @param deadline transaction deadline
+    * @param maxFee transaction fee
+    * @param signature optional signature
+    * @param signer optional signer
+    * @param transactionInfo optional transaction info
+    * @param namespaceName name of the namespace
+    * @param namespaceId id of the namespace (generated from name and optionally parent)
+    * @param duration number of blocks for which the namespace will exist
+    * @param parentId parent namespace ID for sub-namespaces
+    * @param namespaceType root or sub namespace
     */
    public RegisterNamespaceTransaction(NetworkType networkType, Integer version,
          TransactionDeadline deadline, BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,

@@ -54,7 +54,7 @@ public class ModifyMultisigAccountTransaction extends Transaction {
     * @param transactionInfo optional transaction info
     * @param minApprovalDelta minimum number of cosignatures for transaction approval
     * @param minRemovalDelta minimum number of cosignatures for cosignatory removal
-    * @param modifications
+    * @param modifications the modifications to the account
     */
    public ModifyMultisigAccountTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline,
          BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,

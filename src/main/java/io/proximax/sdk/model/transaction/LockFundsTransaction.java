@@ -44,16 +44,16 @@ public class LockFundsTransaction extends Transaction {
    private final SignedTransaction signedTransaction;
 
    /**
-    * @param networkType
-    * @param version
-    * @param deadline
-    * @param maxFee
-    * @param signature
-    * @param signer
-    * @param transactionInfo
-    * @param mosaic
-    * @param duration
-    * @param signedTransaction
+    * @param networkType network type
+    * @param version transaction version. Use {@link EntityVersion#LOCK} for current version
+    * @param deadline transaction deadline
+    * @param maxFee transaction fee
+    * @param signature optional signature
+    * @param signer optional signer
+    * @param transactionInfo optional transaction info
+    * @param mosaic mosaic to lock
+    * @param duration number of blocks to hold lock for
+    * @param signedTransaction the transaction which will release the lock when confirmed
     */
    public LockFundsTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline,
          BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,

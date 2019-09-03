@@ -18,8 +18,8 @@ public class BlockchainUpgrade {
    private final BlockchainVersion version;
    
    /**
-    * @param height
-    * @param version
+    * @param height the height at which specified version became required
+    * @param version the node version
     */
    public BlockchainUpgrade(BigInteger height, BlockchainVersion version) {
       this.height = height;
