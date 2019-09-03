@@ -28,8 +28,13 @@ import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import io.proximax.sdk.gen.model.NamespaceDTO;
+import io.proximax.sdk.gen.model.NamespaceInfoDTO;
+import io.proximax.sdk.gen.model.NamespaceMetaDTO;
+import io.proximax.sdk.gen.model.NamespaceTypeEnum;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 
 class NamespaceInfoTest {
 
@@ -50,6 +55,7 @@ class NamespaceInfoTest {
                 Optional.empty());
 
         assertEquals(true, namespaceInfo.isActive());
+        assertEquals(namespaceInfo.isActive(), !namespaceInfo.isExpired());
         assertTrue(namespaceInfo.getIndex() == 0);
         assertEquals("5A3CD9B09CD1E8000159249B", namespaceInfo.getMetaId());
         assertTrue(namespaceInfo.getType() == NamespaceType.ROOT_NAMESPACE);
@@ -58,6 +64,8 @@ class NamespaceInfoTest {
         Assertions.assertEquals(new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", NetworkType.MIJIN_TEST), namespaceInfo.getOwner());
         assertEquals(new BigInteger("1"), namespaceInfo.getStartHeight());
         assertEquals(new BigInteger("-1"), namespaceInfo.getEndHeight());
+        assertEquals(Optional.empty(), namespaceInfo.getAddressAlias());
+        assertEquals(Optional.empty(), namespaceInfo.getMosaicAlias());
     }
 
     @Test
@@ -108,6 +116,44 @@ class NamespaceInfoTest {
         assertThrows(Error.class, ()->{namespaceInfo.parentNamespaceId();}, "Is A Root Namespace");
     }
 
+    @Test
+    void testFromDto() {
+       NamespaceId namespaceId = new NamespaceId(new BigInteger("-8884663987180930485"));
+
+       // namespace meta data
+       NamespaceMetaDTO nmdto = new NamespaceMetaDTO();
+       nmdto.setActive(true);
+       nmdto.setId("5A3CD9B09CD1E8000159249B");
+       nmdto.setIndex(0);
+       // namespace description
+       NamespaceDTO ndto = new NamespaceDTO();
+       ndto.setType(NamespaceTypeEnum.NUMBER_0);
+       ndto.setParentId(UInt64Utils.dtoFromBigInt(BigInteger.ZERO));
+       ndto.setOwner("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF");
+       ndto.setStartHeight(UInt64Utils.dtoFromBigInt(BigInteger.ONE));
+       ndto.setEndHeight(UInt64Utils.dtoFromBigInt(BigInteger.TEN));
+       ndto.setDepth(1);
+       ndto.setLevel0(UInt64Utils.dtoFromBigInt(BigInteger.valueOf(-8884663987180930485l)));
+       // namespace info
+       NamespaceInfoDTO nidto = new NamespaceInfoDTO();
+       nidto.setMeta(nmdto);
+       nidto.setNamespace(ndto);
+       
+       NamespaceInfo namespaceInfo = NamespaceInfo.fromDto(nidto, NetworkType.MIJIN_TEST);
+       
+       assertEquals(true, namespaceInfo.isActive());
+       assertEquals(namespaceInfo.isActive(), !namespaceInfo.isExpired());
+       assertEquals(0, namespaceInfo.getIndex());
+       assertEquals("5A3CD9B09CD1E8000159249B", namespaceInfo.getMetaId());
+       assertEquals(NamespaceType.ROOT_NAMESPACE, namespaceInfo.getType());
+       assertEquals(1, namespaceInfo.getDepth());
+       assertEquals(namespaceId, namespaceInfo.getLevels().get(0));
+       Assertions.assertEquals(new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", NetworkType.MIJIN_TEST), namespaceInfo.getOwner());
+       assertEquals(new BigInteger("1"), namespaceInfo.getStartHeight());
+       assertEquals(BigInteger.TEN, namespaceInfo.getEndHeight());
+       assertEquals(Optional.empty(), namespaceInfo.getAddressAlias());
+       assertEquals(Optional.empty(), namespaceInfo.getMosaicAlias());
+    }
 
     NamespaceInfo createRootNamespaceInfo() {
         return new NamespaceInfo(true,
