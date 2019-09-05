@@ -24,10 +24,10 @@ public class SignedTransactionTest {
 
     @Test
     void createASignedTransactionViaConstructor() {
-        SignedTransaction signedTransaction = new SignedTransaction("payload", "hash", TransactionType.TRANSFER);
+        SignedTransaction signedTransaction = new SignedTransaction("payload", "hash", EntityType.TRANSFER);
 
         assertEquals("payload", signedTransaction.getPayload());
         assertEquals("hash", signedTransaction.getHash());
-        assertEquals(TransactionType.TRANSFER, signedTransaction.getType());
+        assertEquals(EntityType.TRANSFER, signedTransaction.getType());
     }
 }

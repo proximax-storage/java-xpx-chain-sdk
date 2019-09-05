@@ -21,7 +21,7 @@ import io.proximax.sdk.model.metadata.MetadataType;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.transaction.ModifyMetadataTransaction;
-import io.proximax.sdk.model.transaction.TransactionType;
+import io.proximax.sdk.model.transaction.EntityType;
 
 /**
  * {@link ModifyMetadataTransactionBuilder} tests
@@ -47,7 +47,7 @@ class ModifyMetadataTransactionBuilderTest {
 
       ModifyMetadataTransaction trans = builder.forAddress(addr).modifications(mod).build();
       
-      assertEquals(TransactionType.MODIFY_ADDRESS_METADATA, trans.getType());
+      assertEquals(EntityType.MODIFY_ADDRESS_METADATA, trans.getType());
       assertEquals(Optional.of(addr), trans.getAddress());
       assertEquals(1, trans.getModifications().size());
       assertEquals(mod, trans.getModifications().get(0));
@@ -62,7 +62,7 @@ class ModifyMetadataTransactionBuilderTest {
 
       ModifyMetadataTransaction trans = builder.forMosaic(mosid).modifications(mod).build();
       
-      assertEquals(TransactionType.MODIFY_MOSAIC_METADATA, trans.getType());
+      assertEquals(EntityType.MODIFY_MOSAIC_METADATA, trans.getType());
       assertEquals(Optional.of(mosid), trans.getMetadataId());
       assertEquals(1, trans.getModifications().size());
       assertEquals(mod, trans.getModifications().get(0));
@@ -76,7 +76,7 @@ class ModifyMetadataTransactionBuilderTest {
 
       ModifyMetadataTransaction trans = builder.forNamespace(nsid).modifications(mod).build();
       
-      assertEquals(TransactionType.MODIFY_NAMESPACE_METADATA, trans.getType());
+      assertEquals(EntityType.MODIFY_NAMESPACE_METADATA, trans.getType());
       assertEquals(Optional.of(nsid), trans.getMetadataId());
       assertEquals(1, trans.getModifications().size());
       assertEquals(mod, trans.getModifications().get(0));

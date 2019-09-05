@@ -49,10 +49,6 @@ public class NetworkHarvestMosaic extends Mosaic {
     * Is supply mutable
     */
    public static final boolean SUPPLYMUTABLE = true;
-   /**
-    * Is levy mutable
-    */
-   public static final boolean LEVYMUTABLE = false;
 
    /**
     * create new instance of network harvest mosaic of specified amount
@@ -72,7 +68,7 @@ public class NetworkHarvestMosaic extends Mosaic {
     */
    public static NetworkHarvestMosaic createRelative(BigInteger amount) {
 
-      BigInteger relativeAmount = new BigDecimal(Math.pow(10, NetworkHarvestMosaic.DIVISIBILITY)).toBigInteger()
+      BigInteger relativeAmount = BigDecimal.valueOf(Math.pow(10, NetworkHarvestMosaic.DIVISIBILITY)).toBigInteger()
             .multiply(amount);
       return new NetworkHarvestMosaic(relativeAmount);
    }

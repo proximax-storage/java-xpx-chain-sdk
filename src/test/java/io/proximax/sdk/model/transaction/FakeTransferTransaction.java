@@ -27,7 +27,7 @@ public class FakeTransferTransaction extends Transaction {
    public FakeTransferTransaction(NetworkType networkType, Integer version,
          TransactionDeadline deadline, BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
          Optional<TransactionInfo> transactionInfo) {
-      super(TransactionType.TRANSFER, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
+      super(EntityType.TRANSFER, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
    }
 
    public FakeTransferTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline, BigInteger maxFee) {

@@ -22,7 +22,7 @@ import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.transaction.DeadlineRaw;
 import io.proximax.sdk.model.transaction.Recipient;
 import io.proximax.sdk.model.transaction.TransactionInfo;
-import io.proximax.sdk.model.transaction.TransactionType;
+import io.proximax.sdk.model.transaction.EntityType;
 import io.proximax.sdk.model.transaction.TransferTransaction;
 
 /**
@@ -50,7 +50,7 @@ class TransactionBuilderTest {
       // create transaction
       TransferTransaction trans = builder.to(recipient)
             .version(7)
-            .type(TransactionType.ACCOUNT_LINK)
+            .type(EntityType.ACCOUNT_LINK)
             .maxFee(BigInteger.TEN)
             .deadline(DeadlineRaw.startNow(BigInteger.valueOf(50000)))
             .signature("CAFE")
@@ -60,8 +60,8 @@ class TransactionBuilderTest {
       // check transaction
       assertEquals(NetworkType.MIJIN_TEST, trans.getNetworkType());
       // type of result will be different from the specified
-      assertEquals(TransactionType.TRANSFER, trans.getType());
-      assertEquals(TransactionType.ACCOUNT_LINK, builder.getType());
+      assertEquals(EntityType.TRANSFER, trans.getType());
+      assertEquals(EntityType.ACCOUNT_LINK, builder.getType());
       assertEquals(7, trans.getVersion());
       assertEquals(BigInteger.TEN, trans.getMaxFee());
       assertEquals(Optional.of(FeeCalculationStrategy.MEDIUM), builder.getFeeCalculationStrategy());

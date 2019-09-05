@@ -53,7 +53,7 @@ public class AggregateTransactionTest extends ResourceBasedTest {
       TransferTransaction transferTx = new TransferTransaction(NetworkType.MIJIN_TEST, 3,
             new Deadline(2, ChronoUnit.HOURS), BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
             Recipient.from(new Address("SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.MIJIN_TEST)),
-            Collections.emptyList(), PlainMessage.Empty);
+            Collections.emptyList(), PlainMessage.EMPTY);
 
       PublicAccount innerSigner = new PublicAccount("9A49366406ACA952B88BADF5F1E9BE6CE4968141035A60BE503273EA65456B24",
             NetworkType.MIJIN_TEST);
@@ -75,7 +75,7 @@ public class AggregateTransactionTest extends ResourceBasedTest {
       TransferTransaction transferTx = new TransferTransaction(NetworkType.MIJIN_TEST, 3,
             new FakeDeadline(), BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
             Recipient.from(new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST)),
-            Collections.singletonList(new Mosaic(NetworkCurrencyMosaic.ID, BigInteger.valueOf(10000000))), PlainMessage.Empty);
+            Collections.singletonList(new Mosaic(NetworkCurrencyMosaic.ID, BigInteger.valueOf(10000000))), PlainMessage.EMPTY);
 
       PublicAccount innerSigner = new PublicAccount("846B4439154579A5903B1459C9CF69CB8153F6D0110A7A0ED61DE29AE4810BF2",
             NetworkType.MIJIN_TEST);

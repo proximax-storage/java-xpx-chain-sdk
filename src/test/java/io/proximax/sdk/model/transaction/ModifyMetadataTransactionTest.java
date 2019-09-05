@@ -37,12 +37,12 @@ class ModifyMetadataTransactionTest extends ResourceBasedTest {
    @Test
    void genericConstructor() {
       Deadline deadLine = new FakeDeadline();
-      ModifyMetadataTransaction trans = new ModifyMetadataTransaction(TransactionType.MODIFY_ADDRESS_METADATA,
+      ModifyMetadataTransaction trans = new ModifyMetadataTransaction(EntityType.MODIFY_ADDRESS_METADATA,
             NetworkType.MIJIN, 63, deadLine, BigInteger.valueOf(765), Optional.of("sign"),
             Optional.of(new PublicAccount("", NetworkType.MIJIN)),
             Optional.of(TransactionInfo.create(BigInteger.ONE, "infohash", "merklehash")), MetadataType.ADDRESS,
             Optional.empty(), Optional.of(new Address("MHAH", NetworkType.MIJIN)), Arrays.asList());
-      assertEquals(TransactionType.MODIFY_ADDRESS_METADATA, trans.getType());
+      assertEquals(EntityType.MODIFY_ADDRESS_METADATA, trans.getType());
       assertEquals(NetworkType.MIJIN, trans.getNetworkType());
       assertEquals(63, trans.getVersion());
       assertEquals(deadLine, trans.getDeadline());
@@ -60,7 +60,7 @@ class ModifyMetadataTransactionTest extends ResourceBasedTest {
    @Test
    void assertFailureWhenTargetMissing() {
       assertThrows(IllegalArgumentException.class,
-            () -> new ModifyMetadataTransaction(TransactionType.MODIFY_ADDRESS_METADATA, NetworkType.MIJIN, 63,
+            () -> new ModifyMetadataTransaction(EntityType.MODIFY_ADDRESS_METADATA, NetworkType.MIJIN, 63,
                   new FakeDeadline(), BigInteger.valueOf(765), Optional.of("sign"),
                   Optional.of(new PublicAccount("", NetworkType.MIJIN)),
                   Optional.of(TransactionInfo.create(BigInteger.ONE, "infohash", "merklehash")), MetadataType.ADDRESS,
@@ -70,7 +70,7 @@ class ModifyMetadataTransactionTest extends ResourceBasedTest {
    @Test
    void assertFailureWhenTargetOverspecified() {
       assertThrows(IllegalArgumentException.class,
-            () -> new ModifyMetadataTransaction(TransactionType.MODIFY_ADDRESS_METADATA, NetworkType.MIJIN, 63,
+            () -> new ModifyMetadataTransaction(EntityType.MODIFY_ADDRESS_METADATA, NetworkType.MIJIN, 63,
                   new FakeDeadline(), BigInteger.valueOf(765), Optional.of("sign"),
                   Optional.of(new PublicAccount("", NetworkType.MIJIN)),
                   Optional.of(TransactionInfo.create(BigInteger.ONE, "infohash", "merklehash")), MetadataType.ADDRESS,
@@ -80,7 +80,7 @@ class ModifyMetadataTransactionTest extends ResourceBasedTest {
 
    @Test
    void serializationAddress() throws IOException {
-      ModifyMetadataTransaction trans = new ModifyMetadataTransaction(TransactionType.MODIFY_ADDRESS_METADATA,
+      ModifyMetadataTransaction trans = new ModifyMetadataTransaction(EntityType.MODIFY_ADDRESS_METADATA,
             NetworkType.MIJIN_TEST, 1, new FakeDeadline(), BigInteger.ZERO, Optional.empty(), Optional.empty(),
             Optional.empty(), MetadataType.ADDRESS, Optional.empty(),
             Optional.of(new Address("SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM", NetworkType.MIJIN_TEST)),
@@ -94,7 +94,7 @@ class ModifyMetadataTransactionTest extends ResourceBasedTest {
 
    @Test
    void serializationMosaic() throws IOException {
-      ModifyMetadataTransaction trans = new ModifyMetadataTransaction(TransactionType.MODIFY_MOSAIC_METADATA,
+      ModifyMetadataTransaction trans = new ModifyMetadataTransaction(EntityType.MODIFY_MOSAIC_METADATA,
             NetworkType.MIJIN_TEST, 1, new FakeDeadline(), BigInteger.ZERO, Optional.empty(), Optional.empty(),
             Optional.empty(), MetadataType.MOSAIC, Optional.of(new MosaicId(BigInteger.ONE)),
             Optional.empty(),
@@ -108,7 +108,7 @@ class ModifyMetadataTransactionTest extends ResourceBasedTest {
 
    @Test
    void serializationNamespace() throws IOException {
-      ModifyMetadataTransaction trans = new ModifyMetadataTransaction(TransactionType.MODIFY_NAMESPACE_METADATA,
+      ModifyMetadataTransaction trans = new ModifyMetadataTransaction(EntityType.MODIFY_NAMESPACE_METADATA,
             NetworkType.MIJIN_TEST, 1, new FakeDeadline(), BigInteger.ZERO, Optional.empty(), Optional.empty(),
             Optional.empty(), MetadataType.NAMESPACE, Optional.of(new NamespaceId("testns")),
             Optional.empty(),
@@ -124,7 +124,7 @@ class ModifyMetadataTransactionTest extends ResourceBasedTest {
    void checkCopyToSigner() throws IOException {
       PublicAccount remoteAccount = new Account(new KeyPair(), NetworkType.MIJIN).getPublicAccount();
       
-      ModifyMetadataTransaction trans = new ModifyMetadataTransaction(TransactionType.MODIFY_NAMESPACE_METADATA,
+      ModifyMetadataTransaction trans = new ModifyMetadataTransaction(EntityType.MODIFY_NAMESPACE_METADATA,
             NetworkType.MIJIN_TEST, 1, new FakeDeadline(), BigInteger.ZERO, Optional.empty(), Optional.empty(),
             Optional.empty(), MetadataType.NAMESPACE, Optional.of(new NamespaceId("testns")),
             Optional.empty(),

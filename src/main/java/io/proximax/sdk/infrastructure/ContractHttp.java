@@ -49,7 +49,7 @@ public class ContractHttp extends Http implements ContractRepository {
    public Observable<List<Contract>> getContracts(Address... addresses) {
       // prepare JSON array with addresses
       JsonArray arr = new JsonArray(addresses.length);
-      Arrays.stream(addresses).map(Address::plain).forEachOrdered(addr -> arr.add(addr));
+      Arrays.stream(addresses).map(Address::plain).forEachOrdered(arr::add);
 
       JsonObject requestBody = new JsonObject();
       requestBody.add("addresses", arr);
@@ -76,7 +76,7 @@ public class ContractHttp extends Http implements ContractRepository {
    public Observable<List<Contract>> getContracts(PublicKey... publicKeys) {
       // prepare JSON array with public keys
       JsonArray arr = new JsonArray(publicKeys.length);
-      Arrays.stream(publicKeys).map(PublicKey::getHexString).forEachOrdered(pubKey -> arr.add(pubKey));
+      Arrays.stream(publicKeys).map(PublicKey::getHexString).forEachOrdered(arr::add);
 
       JsonObject requestBody = new JsonObject();
       requestBody.add("publicKeys", arr);

@@ -50,22 +50,22 @@ public class MosaicDefinitionTransaction extends Transaction {
    private final MosaicProperties mosaicProperties;
 
    /**
-    * @param networkType
-    * @param version
-    * @param deadline
-    * @param maxFee
-    * @param signature
-    * @param signer
-    * @param transactionInfo
-    * @param nonce
-    * @param mosaicId
-    * @param mosaicProperties
+    * @param networkType network type
+    * @param version transaction version. Use {@link EntityVersion#MOSAIC_DEFINITION} for current version
+    * @param deadline transaction deadline
+    * @param maxFee transaction fee
+    * @param signature optional signature
+    * @param signer optional signer
+    * @param transactionInfo optional transaction info
+    * @param nonce nonce used to generate unique mosaic ID
+    * @param mosaicId mosaic ID
+    * @param mosaicProperties mosaic properties
     */
    public MosaicDefinitionTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline,
          BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
          Optional<TransactionInfo> transactionInfo, MosaicNonce nonce, MosaicId mosaicId,
          MosaicProperties mosaicProperties) {
-      super(TransactionType.MOSAIC_DEFINITION, networkType, version, deadline, maxFee, signature, signer,
+      super(EntityType.MOSAIC_DEFINITION, networkType, version, deadline, maxFee, signature, signer,
             transactionInfo);
       // validations
       Validate.notNull(nonce, "nonce must not be null");

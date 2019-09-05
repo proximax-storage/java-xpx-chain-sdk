@@ -15,8 +15,8 @@ import io.proximax.sdk.model.alias.AliasAction;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.transaction.AliasTransaction;
-import io.proximax.sdk.model.transaction.TransactionType;
-import io.proximax.sdk.model.transaction.TransactionVersion;
+import io.proximax.sdk.model.transaction.EntityType;
+import io.proximax.sdk.model.transaction.EntityVersion;
 
 /**
  * builder for {@link AliasTransaction}
@@ -28,7 +28,7 @@ public class AliasTransactionBuilder extends TransactionBuilder<AliasTransaction
    private NamespaceId namespaceId;
    private AliasAction aliasAction;
 
-   private AliasTransactionBuilder(TransactionType type, Integer version) {
+   private AliasTransactionBuilder(EntityType type, Integer version) {
       super(type, version);
       // defaults
       mosaicId = Optional.empty();
@@ -36,11 +36,11 @@ public class AliasTransactionBuilder extends TransactionBuilder<AliasTransaction
    }
 
    public static AliasTransactionBuilder createForAddress() {
-      return new AliasTransactionBuilder(TransactionType.ADDRESS_ALIAS, TransactionVersion.ADDRESS_ALIAS.getValue());
+      return new AliasTransactionBuilder(EntityType.ADDRESS_ALIAS, EntityVersion.ADDRESS_ALIAS.getValue());
    }
 
    public static AliasTransactionBuilder createForMosaic() {
-      return new AliasTransactionBuilder(TransactionType.MOSAIC_ALIAS, TransactionVersion.MOSAIC_ALIAS.getValue());
+      return new AliasTransactionBuilder(EntityType.MOSAIC_ALIAS, EntityVersion.MOSAIC_ALIAS.getValue());
    }
 
    @Override
@@ -67,7 +67,7 @@ public class AliasTransactionBuilder extends TransactionBuilder<AliasTransaction
     * @return self
     */
    public AliasTransactionBuilder mosaicId(MosaicId mosaicId) {
-      Validate.isTrue(getType() == TransactionType.MOSAIC_ALIAS,
+      Validate.isTrue(getType() == EntityType.MOSAIC_ALIAS,
             "Mosaic ID alias can be created only by mosaic alias builder");
       this.mosaicId = Optional.of(mosaicId);
       return self();
@@ -80,7 +80,7 @@ public class AliasTransactionBuilder extends TransactionBuilder<AliasTransaction
     * @return self
     */
    public AliasTransactionBuilder address(Address address) {
-      Validate.isTrue(getType() == TransactionType.ADDRESS_ALIAS,
+      Validate.isTrue(getType() == EntityType.ADDRESS_ALIAS,
             "Address alias can be created only by address alias builder");
       this.address = Optional.of(address);
       return self();

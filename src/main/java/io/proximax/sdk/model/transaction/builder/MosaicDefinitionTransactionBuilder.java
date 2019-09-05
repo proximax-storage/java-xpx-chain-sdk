@@ -11,8 +11,8 @@ import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicNonce;
 import io.proximax.sdk.model.mosaic.MosaicProperties;
 import io.proximax.sdk.model.transaction.MosaicDefinitionTransaction;
-import io.proximax.sdk.model.transaction.TransactionType;
-import io.proximax.sdk.model.transaction.TransactionVersion;
+import io.proximax.sdk.model.transaction.EntityType;
+import io.proximax.sdk.model.transaction.EntityVersion;
 
 /**
  * builder for {@link MosaicDefinitionTransaction}
@@ -25,7 +25,7 @@ public class MosaicDefinitionTransactionBuilder
    private MosaicProperties mosaicProperties;
 
    public MosaicDefinitionTransactionBuilder() {
-      super(TransactionType.MOSAIC_DEFINITION, TransactionVersion.MOSAIC_DEFINITION.getValue());
+      super(EntityType.MOSAIC_DEFINITION, EntityVersion.MOSAIC_DEFINITION.getValue());
       // defaults
    }
 

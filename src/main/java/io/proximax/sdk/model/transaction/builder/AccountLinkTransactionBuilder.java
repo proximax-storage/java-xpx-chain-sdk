@@ -10,8 +10,8 @@ import java.math.BigInteger;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.transaction.AccountLinkAction;
 import io.proximax.sdk.model.transaction.AccountLinkTransaction;
-import io.proximax.sdk.model.transaction.TransactionType;
-import io.proximax.sdk.model.transaction.TransactionVersion;
+import io.proximax.sdk.model.transaction.EntityType;
+import io.proximax.sdk.model.transaction.EntityVersion;
 
 /**
  * builder for {@link AccountLinkTransaction}
@@ -23,7 +23,7 @@ public class AccountLinkTransactionBuilder
    private AccountLinkAction action;
 
    public AccountLinkTransactionBuilder() {
-      super(TransactionType.ACCOUNT_LINK, TransactionVersion.ACCOUNT_LINK.getValue());
+      super(EntityType.ACCOUNT_LINK, EntityVersion.ACCOUNT_LINK.getValue());
    }
 
    @Override

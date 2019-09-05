@@ -12,8 +12,8 @@ import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.namespace.NamespaceType;
 import io.proximax.sdk.model.transaction.IdGenerator;
 import io.proximax.sdk.model.transaction.RegisterNamespaceTransaction;
-import io.proximax.sdk.model.transaction.TransactionType;
-import io.proximax.sdk.model.transaction.TransactionVersion;
+import io.proximax.sdk.model.transaction.EntityType;
+import io.proximax.sdk.model.transaction.EntityVersion;
 
 /**
  * builder for {@link RegisterNamespaceTransaction}
@@ -28,7 +28,7 @@ public class RegisterNamespaceTransactionBuilder
    private NamespaceType namespaceType;
 
    public RegisterNamespaceTransactionBuilder() {
-      super(TransactionType.REGISTER_NAMESPACE, TransactionVersion.REGISTER_NAMESPACE.getValue());
+      super(EntityType.REGISTER_NAMESPACE, EntityVersion.REGISTER_NAMESPACE.getValue());
       // defaults
       duration = Optional.empty();
       parentId = Optional.empty();
@@ -153,7 +153,7 @@ public class RegisterNamespaceTransactionBuilder
     * @return self
     */
    public RegisterNamespaceTransactionBuilder rootNamespace(String name) {
-      namespaceType(NamespaceType.RootNamespace);
+      namespaceType(NamespaceType.ROOT_NAMESPACE);
       namespaceName(name);
       namespaceId(new NamespaceId(name));
       return self();
@@ -167,7 +167,7 @@ public class RegisterNamespaceTransactionBuilder
     * @return self
     */
    public RegisterNamespaceTransactionBuilder subNamespace(NamespaceId parentId, String name) {
-      namespaceType(NamespaceType.SubNamespace);
+      namespaceType(NamespaceType.SUB_NAMESPACE);
       parentId(parentId);
       namespaceName(name);
       namespaceId(new NamespaceId(IdGenerator.generateSubNamespaceIdFromParentId(parentId.getId(), name)));

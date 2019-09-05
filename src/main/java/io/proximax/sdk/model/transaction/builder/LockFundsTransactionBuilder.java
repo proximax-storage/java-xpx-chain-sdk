@@ -11,8 +11,8 @@ import io.proximax.sdk.model.mosaic.Mosaic;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.transaction.LockFundsTransaction;
 import io.proximax.sdk.model.transaction.SignedTransaction;
-import io.proximax.sdk.model.transaction.TransactionType;
-import io.proximax.sdk.model.transaction.TransactionVersion;
+import io.proximax.sdk.model.transaction.EntityType;
+import io.proximax.sdk.model.transaction.EntityVersion;
 
 /**
  * builder for {@link LockFundsTransaction}
@@ -25,7 +25,7 @@ public class LockFundsTransactionBuilder
    private SignedTransaction signedTransaction;
 
    public LockFundsTransactionBuilder() {
-      super(TransactionType.LOCK, TransactionVersion.LOCK.getValue());
+      super(EntityType.LOCK, EntityVersion.LOCK.getValue());
    }
 
    @Override

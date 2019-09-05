@@ -25,9 +25,9 @@ package io.proximax.sdk.model.transaction;
 public class SignedTransaction {
     private final String payload;
     private final String hash;
-    private final TransactionType type;
+    private final EntityType type;
 
-    public SignedTransaction(String payload, String hash, TransactionType type) {
+    public SignedTransaction(String payload, String hash, EntityType type) {
         this.payload = payload;
         this.hash = hash;
         this.type = type;
@@ -56,5 +56,5 @@ public class SignedTransaction {
      *
      * @return transaction type
      */
-    public TransactionType getType() { return type; }
+    public EntityType getType() { return type; }
 }

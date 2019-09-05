@@ -46,7 +46,7 @@ public class ModifyMultisigAccountTransaction extends Transaction {
 
    /**
     * @param networkType network type
-    * @param version transaction version. Use {@link TransactionVersion#MODIFY_MULTISIG_ACCOUNT} for current version
+    * @param version transaction version. Use {@link EntityVersion#MODIFY_MULTISIG_ACCOUNT} for current version
     * @param deadline transaction deadline
     * @param maxFee transaction fee
     * @param signature optional signature
@@ -54,13 +54,13 @@ public class ModifyMultisigAccountTransaction extends Transaction {
     * @param transactionInfo optional transaction info
     * @param minApprovalDelta minimum number of cosignatures for transaction approval
     * @param minRemovalDelta minimum number of cosignatures for cosignatory removal
-    * @param modifications
+    * @param modifications the modifications to the account
     */
    public ModifyMultisigAccountTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline,
          BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
          Optional<TransactionInfo> transactionInfo, int minApprovalDelta, int minRemovalDelta,
          List<MultisigCosignatoryModification> modifications) {
-      super(TransactionType.MODIFY_MULTISIG_ACCOUNT, networkType, version, deadline, maxFee, signature, signer,
+      super(EntityType.MODIFY_MULTISIG_ACCOUNT, networkType, version, deadline, maxFee, signature, signer,
             transactionInfo);
       // validations
       Validate.notNull(modifications, "Modifications must not be null");

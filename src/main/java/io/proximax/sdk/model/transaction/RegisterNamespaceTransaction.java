@@ -45,29 +45,29 @@ public class RegisterNamespaceTransaction extends Transaction {
 
    
    /**
-    * @param networkType
-    * @param version
-    * @param deadline
-    * @param maxFee
-    * @param signature
-    * @param signer
-    * @param transactionInfo
-    * @param namespaceName
-    * @param namespaceId
-    * @param duration
-    * @param parentId
-    * @param namespaceType
+    * @param networkType network type
+    * @param version transaction version. Use {@link EntityVersion#REGISTER_NAMESPACE} for current version
+    * @param deadline transaction deadline
+    * @param maxFee transaction fee
+    * @param signature optional signature
+    * @param signer optional signer
+    * @param transactionInfo optional transaction info
+    * @param namespaceName name of the namespace
+    * @param namespaceId id of the namespace (generated from name and optionally parent)
+    * @param duration number of blocks for which the namespace will exist
+    * @param parentId parent namespace ID for sub-namespaces
+    * @param namespaceType root or sub namespace
     */
    public RegisterNamespaceTransaction(NetworkType networkType, Integer version,
          TransactionDeadline deadline, BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
          Optional<TransactionInfo> transactionInfo, String namespaceName, NamespaceId namespaceId,
          Optional<BigInteger> duration, Optional<NamespaceId> parentId, NamespaceType namespaceType) {
-      super(TransactionType.REGISTER_NAMESPACE, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
+      super(EntityType.REGISTER_NAMESPACE, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
       // validations
       Validate.notNull(namespaceName, "NamespaceName must not be null");
       Validate.notNull(namespaceType, "NamespaceType must not be null");
       Validate.notNull(namespaceId, "NamespaceId must not be null");
-      if (namespaceType == NamespaceType.RootNamespace) {
+      if (namespaceType == NamespaceType.ROOT_NAMESPACE) {
          Validate.notNull(duration, "Duration must not be null");
       } else {
          Validate.notNull(parentId, "ParentId must not be null");
@@ -129,6 +129,11 @@ public class RegisterNamespaceTransaction extends Transaction {
    protected byte[] generateBytes() {
       FlatBufferBuilder builder = new FlatBufferBuilder();
       BigInteger deadlineBigInt = BigInteger.valueOf(getDeadline().getInstant());
+      // duration and parent ID are sent in shared field based on Root/Sub namespace status
+      BigInteger durationParentId = getNamespaceType() == NamespaceType.ROOT_NAMESPACE
+            ? duration.orElseThrow(() -> new IllegalStateException("Root namespace has to have duration specified"))
+            : parentId.orElseThrow(() -> new IllegalStateException("Sub namespace has to have parentId specified"))
+                  .getId();
 
       // Create Vectors
       int signatureVector = RegisterNamespaceTransactionBuffer.createSignatureVector(builder, new byte[64]);
@@ -140,8 +145,7 @@ public class RegisterNamespaceTransaction extends Transaction {
       int namespaceIdVector = RegisterNamespaceTransactionBuffer.createNamespaceIdVector(builder,
             UInt64Utils.fromBigInteger(namespaceId.getId()));
       int durationParentIdVector = RegisterNamespaceTransactionBuffer.createDurationParentIdVector(builder,
-            getNamespaceType() == NamespaceType.RootNamespace ? UInt64Utils.fromBigInteger(duration.get())
-                  : UInt64Utils.fromBigInteger(parentId.get().getId()));
+            UInt64Utils.fromBigInteger(durationParentId));
       int name = builder.createString(namespaceName);
 
       int size = getSerializedSize();

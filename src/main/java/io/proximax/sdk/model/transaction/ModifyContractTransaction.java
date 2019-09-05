@@ -61,7 +61,7 @@ public class ModifyContractTransaction extends Transaction {
          List<MultisigCosignatoryModification> customersModifications,
          List<MultisigCosignatoryModification> executorsModifications,
          List<MultisigCosignatoryModification> verifiersModifications) {
-      super(TransactionType.MODIFY_CONTRACT, networkType, transactionVersion, deadline, maxFee, signature, signer,
+      super(EntityType.MODIFY_CONTRACT, networkType, transactionVersion, deadline, maxFee, signature, signer,
             transactionInfo);
       // validations
       Validate.notNull(durationDelta, "durationDelta can not be null");

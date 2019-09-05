@@ -16,6 +16,7 @@
 package io.proximax.sdk;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -44,5 +45,19 @@ class BlockchainApiTest {
 
       TransactionBuilderFactory fac = api.transact();
       assertEquals(NETWORK, fac.getNetworkType());
+   }
+   
+   @Test
+   void testRetrieveRepositories() throws MalformedURLException {
+      BlockchainApi api = new BlockchainApi(new URL("http://localhost:3000"), NETWORK);
+
+      assertNotNull(api.createAccountRepository());
+      assertNotNull(api.createBlockchainRepository());
+      assertNotNull(api.createContractRepository());
+      assertNotNull(api.createListener());
+      assertNotNull(api.createMetadataRepository());
+      assertNotNull(api.createMosaicRepository());
+      assertNotNull(api.createNamespaceRepository());
+      assertNotNull(api.createTransactionRepository());
    }
 }

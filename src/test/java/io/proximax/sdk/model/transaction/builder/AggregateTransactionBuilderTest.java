@@ -24,8 +24,8 @@ import io.proximax.sdk.model.transaction.AggregateTransactionCosignature;
 import io.proximax.sdk.model.transaction.Deadline;
 import io.proximax.sdk.model.transaction.PlainMessage;
 import io.proximax.sdk.model.transaction.Recipient;
-import io.proximax.sdk.model.transaction.TransactionType;
-import io.proximax.sdk.model.transaction.TransactionVersion;
+import io.proximax.sdk.model.transaction.EntityType;
+import io.proximax.sdk.model.transaction.EntityVersion;
 import io.proximax.sdk.model.transaction.TransferTransaction;
 
 /**
@@ -58,14 +58,14 @@ class AggregateTransactionBuilderTest {
             new Deadline(2, ChronoUnit.HOURS), BigInteger.valueOf(37750), Optional.empty(), Optional.empty(),
             Optional.empty(),
             Recipient.from(new Address("SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.MIJIN_TEST)),
-            Arrays.asList(), PlainMessage.Empty);
+            Arrays.asList(), PlainMessage.EMPTY);
 
       AggregateTransaction agg = completeBuilder.innerTransactions(transferTx).build();
       
       assertEquals(1, agg.getInnerTransactions().size());
       assertEquals(transferTx, agg.getInnerTransactions().get(0));
-      assertEquals(TransactionType.AGGREGATE_COMPLETE, agg.getType());
-      assertEquals(TransactionVersion.AGGREGATE_COMPLETE.getValue(), agg.getVersion());
+      assertEquals(EntityType.AGGREGATE_COMPLETE, agg.getType());
+      assertEquals(EntityVersion.AGGREGATE_COMPLETE.getValue(), agg.getVersion());
    }
 
    @Test
@@ -74,14 +74,14 @@ class AggregateTransactionBuilderTest {
             new Deadline(2, ChronoUnit.HOURS), BigInteger.valueOf(37750), Optional.empty(), Optional.empty(),
             Optional.empty(),
             Recipient.from(new Address("SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.MIJIN_TEST)),
-            Arrays.asList(), PlainMessage.Empty);
+            Arrays.asList(), PlainMessage.EMPTY);
 
       AggregateTransaction agg = bondedBuilder.innerTransactions(transferTx).build();
       
       assertEquals(1, agg.getInnerTransactions().size());
       assertEquals(transferTx, agg.getInnerTransactions().get(0));
-      assertEquals(TransactionType.AGGREGATE_BONDED, agg.getType());
-      assertEquals(TransactionVersion.AGGREGATE_BONDED.getValue(), agg.getVersion());
+      assertEquals(EntityType.AGGREGATE_BONDED, agg.getType());
+      assertEquals(EntityVersion.AGGREGATE_BONDED.getValue(), agg.getVersion());
 
    }
 
@@ -91,7 +91,7 @@ class AggregateTransactionBuilderTest {
             new Deadline(2, ChronoUnit.HOURS), BigInteger.valueOf(37750), Optional.empty(), Optional.empty(),
             Optional.empty(),
             Recipient.from(new Address("SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.MIJIN_TEST)),
-            Arrays.asList(), PlainMessage.Empty);
+            Arrays.asList(), PlainMessage.EMPTY);
       
       PublicAccount puba = new PublicAccount("9A49366406ACA952B88BADF5F1E9BE6CE4968141035A60BE503273EA65456B24",
             NetworkType.MIJIN_TEST);

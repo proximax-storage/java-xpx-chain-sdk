@@ -54,7 +54,7 @@ class TransferTransactionTest extends ResourceBasedTest {
             new Deadline(2, ChronoUnit.HOURS), BigInteger.valueOf(37750), Optional.empty(), Optional.empty(),
             Optional.empty(),
             Recipient.from(new Address("SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.MIJIN_TEST)),
-            Arrays.asList(), PlainMessage.Empty);
+            Arrays.asList(), PlainMessage.EMPTY);
 
       assertEquals(NetworkType.MIJIN_TEST, transferTx.getNetworkType());
       assertEquals(3, transferTx.getVersion());
@@ -74,7 +74,7 @@ class TransferTransactionTest extends ResourceBasedTest {
             BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
             Recipient.from(new Address("SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM", NetworkType.MIJIN_TEST)),
             Arrays.asList(new Mosaic(new MosaicId(new BigInteger("95442763262823")), BigInteger.valueOf(100))),
-            PlainMessage.Empty);
+            PlainMessage.EMPTY);
 
       byte[] actual = transferTransaction.generateBytes();
 //        saveBytes("transfer_trans", actual);
@@ -88,7 +88,7 @@ class TransferTransactionTest extends ResourceBasedTest {
             BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
             Recipient.from(new Address("SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM", NetworkType.MIJIN_TEST)),
             Arrays.asList(new Mosaic(new MosaicId(new BigInteger("95442763262823")), BigInteger.valueOf(100))),
-            PlainMessage.Empty);
+            PlainMessage.EMPTY);
 
       byte[] actual = transferTransaction
             .toAggregate(new PublicAccount("9A49366406ACA952B88BADF5F1E9BE6CE4968141035A60BE503273EA65456B24",
@@ -104,7 +104,7 @@ class TransferTransactionTest extends ResourceBasedTest {
             BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
             Recipient.from(new Address("SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM", NetworkType.MIJIN_TEST)),
             Arrays.asList(new Mosaic(new MosaicId(new BigInteger("95442763262823")), BigInteger.valueOf(100))),
-            PlainMessage.Empty);
+            PlainMessage.EMPTY);
 
       SignedTransaction signedTransaction = transferTransaction.signWith(account,
             "7B631D803F912B00DC0CBED3014BBD17A302BA50B99D233B9C2D9533B842ABDF");

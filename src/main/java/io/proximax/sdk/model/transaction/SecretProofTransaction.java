@@ -39,7 +39,7 @@ public class SecretProofTransaction extends Transaction {
 
    /**
     * @param networkType network type
-    * @param version transaction version. Use {@link TransactionVersion#SECRET_PROOF} for current version
+    * @param version transaction version. Use {@link EntityVersion#SECRET_PROOF} for current version
     * @param deadline transaction deadline
     * @param maxFee transaction fee
     * @param signature optional signature
@@ -54,7 +54,7 @@ public class SecretProofTransaction extends Transaction {
          BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
          Optional<TransactionInfo> transactionInfo, HashType hashType, String secret, String proof,
          Recipient recipient) {
-      super(TransactionType.SECRET_PROOF, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
+      super(EntityType.SECRET_PROOF, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
       // validations
       Validate.notNull(secret, "Secret must not be null");
       Validate.notNull(proof, "Proof must not be null");

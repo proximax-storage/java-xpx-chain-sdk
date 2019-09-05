@@ -12,8 +12,8 @@ import java.util.List;
 
 import io.proximax.sdk.model.transaction.ModifyContractTransaction;
 import io.proximax.sdk.model.transaction.MultisigCosignatoryModification;
-import io.proximax.sdk.model.transaction.TransactionType;
-import io.proximax.sdk.model.transaction.TransactionVersion;
+import io.proximax.sdk.model.transaction.EntityType;
+import io.proximax.sdk.model.transaction.EntityVersion;
 
 /**
  * builder for {@link ModifyContractTransaction}
@@ -28,7 +28,7 @@ public class ModifyContractTransactionBuilder
    private List<MultisigCosignatoryModification> verifiersModifications;
 
    public ModifyContractTransactionBuilder() {
-      super(TransactionType.MODIFY_CONTRACT, TransactionVersion.MODIFY_CONTRACT.getValue());
+      super(EntityType.MODIFY_CONTRACT, EntityVersion.MODIFY_CONTRACT.getValue());
       // defaults
       customersModifications = new ArrayList<>();
       executorsModifications = new ArrayList<>();

@@ -40,7 +40,7 @@ public abstract class Transaction {
    /** standard transaction header size */
    public static final int HEADER_SIZE = 122;
 
-   private final TransactionType type;
+   private final EntityType type;
    private final NetworkType networkType;
    private final Integer version;
    private final TransactionDeadline deadline;
@@ -61,7 +61,7 @@ public abstract class Transaction {
     * @param signer Transaction signer.
     * @param transactionInfo Transaction meta data info.
     */
-   public Transaction(TransactionType type, NetworkType networkType, Integer version, TransactionDeadline deadline,
+   public Transaction(EntityType type, NetworkType networkType, Integer version, TransactionDeadline deadline,
          BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
          Optional<TransactionInfo> transactionInfo) {
       Validate.notNull(type, "Type must not be null");
@@ -108,7 +108,7 @@ public abstract class Transaction {
     *
     * @return transaction type
     */
-   public TransactionType getType() {
+   public EntityType getType() {
       return type;
    }
 

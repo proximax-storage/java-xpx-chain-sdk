@@ -11,7 +11,7 @@ import java.util.List;
 import io.proximax.sdk.model.account.props.AccountPropertyModification;
 import io.proximax.sdk.model.account.props.AccountPropertyType;
 import io.proximax.sdk.model.transaction.ModifyAccountPropertyTransaction;
-import io.proximax.sdk.model.transaction.TransactionType;
+import io.proximax.sdk.model.transaction.EntityType;
 
 /**
  * builder for {@link ModifyAccountPropertyTransaction}
@@ -21,7 +21,7 @@ public abstract class ModifyAccountPropertyTransactionBuilder<T> extends Transac
    private AccountPropertyType propertyType;
    private List<AccountPropertyModification<T>> modifications;
 
-   public ModifyAccountPropertyTransactionBuilder(TransactionType type, Integer version) {
+   public ModifyAccountPropertyTransactionBuilder(EntityType type, Integer version) {
       super(type, version);
       // provide empty lists as defaults
       this.modifications = new ArrayList<>();

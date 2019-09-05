@@ -29,7 +29,7 @@ public class AccountLinkTransaction extends Transaction {
 
    /**
     * @param networkType network type
-    * @param version transaction version. Use {@link TransactionVersion#ACCOUNT_LINK} for current version
+    * @param version transaction version. Use {@link EntityVersion#ACCOUNT_LINK} for current version
     * @param deadline transaction deadline
     * @param maxFee transaction fee
     * @param signature optional signature
@@ -41,7 +41,7 @@ public class AccountLinkTransaction extends Transaction {
    public AccountLinkTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline,
          BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
          Optional<TransactionInfo> transactionInfo, PublicAccount remoteAccount, AccountLinkAction action) {
-      super(TransactionType.ACCOUNT_LINK, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
+      super(EntityType.ACCOUNT_LINK, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
       Validate.notNull(remoteAccount, "remoteAccount has to be specified");
       Validate.notNull(action, "action has to be specified");
       this.remoteAccount = remoteAccount;

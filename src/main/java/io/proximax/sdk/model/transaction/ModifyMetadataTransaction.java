@@ -53,20 +53,20 @@ public class ModifyMetadataTransaction extends Transaction {
    private final List<MetadataModification> modifications;
 
    /**
-    * @param type
-    * @param networkType
-    * @param version
-    * @param deadline
-    * @param maxFee
-    * @param signature
-    * @param signer
-    * @param transactionInfo
-    * @param metadataType
-    * @param metadataId
-    * @param address
-    * @param modifications
+    * @param type transaction type ADDRESS / MOSAIC / NAMESPACE
+    * @param networkType network type
+    * @param version transaction version. Use {@link EntityVersion} for current version
+    * @param deadline transaction deadline
+    * @param maxFee transaction fee
+    * @param signature optional signature
+    * @param signer optional signer
+    * @param transactionInfo optional transaction info
+    * @param metadataType type of the metadata
+    * @param metadataId mosaic or namespace ID for which metadata is modified (used only when address is not specified)
+    * @param address address for which metadata is modified (only to be used when metadataId is not specified)
+    * @param modifications the modification to make
     */
-   public ModifyMetadataTransaction(TransactionType type, NetworkType networkType, Integer version,
+   public ModifyMetadataTransaction(EntityType type, NetworkType networkType, Integer version,
          TransactionDeadline deadline, BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
          Optional<TransactionInfo> transactionInfo, MetadataType metadataType, Optional<UInt64Id> metadataId,
          Optional<Address> address, List<MetadataModification> modifications) {

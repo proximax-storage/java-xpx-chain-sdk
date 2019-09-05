@@ -49,7 +49,7 @@ public class MessageFactoryTest {
         final byte[] encodedPayload = sampleEncodedPayload();
         final Message message = MessageFactory.createMessage(999, encodedPayload);
 
-        assertThat(message, is(PlainMessage.Empty));
+        assertThat(message, is(PlainMessage.EMPTY));
     }
 
     private byte[] sampleEncodedPayload() {

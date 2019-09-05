@@ -44,26 +44,26 @@ public class LockFundsTransaction extends Transaction {
    private final SignedTransaction signedTransaction;
 
    /**
-    * @param networkType
-    * @param version
-    * @param deadline
-    * @param maxFee
-    * @param signature
-    * @param signer
-    * @param transactionInfo
-    * @param mosaic
-    * @param duration
-    * @param signedTransaction
+    * @param networkType network type
+    * @param version transaction version. Use {@link EntityVersion#LOCK} for current version
+    * @param deadline transaction deadline
+    * @param maxFee transaction fee
+    * @param signature optional signature
+    * @param signer optional signer
+    * @param transactionInfo optional transaction info
+    * @param mosaic mosaic to lock
+    * @param duration number of blocks to hold lock for
+    * @param signedTransaction the transaction which will release the lock when confirmed
     */
    public LockFundsTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline,
          BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
          Optional<TransactionInfo> transactionInfo, Mosaic mosaic, BigInteger duration,
          SignedTransaction signedTransaction) {
-      super(TransactionType.LOCK, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
+      super(EntityType.LOCK, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
       Validate.notNull(mosaic, "Mosaic must not be null");
       Validate.notNull(duration, "Duration must not be null");
       Validate.notNull(signedTransaction, "Signed transaction must not be null");
-      Validate.isTrue(signedTransaction.getType() == TransactionType.AGGREGATE_BONDED,
+      Validate.isTrue(signedTransaction.getType() == EntityType.AGGREGATE_BONDED,
             "Signed transaction must be Aggregate Bonded Transaction");
       this.mosaic = mosaic;
       this.duration = duration;

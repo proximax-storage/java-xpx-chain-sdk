@@ -37,11 +37,11 @@ class RegisterNamespaceTransactionTest extends ResourceBasedTest {
       RegisterNamespaceTransaction tx = new RegisterNamespaceTransaction(NetworkType.MIJIN, 23, new FakeDeadline(),
             BigInteger.ONE, Optional.empty(), Optional.empty(), Optional.empty(), "prx",
             new NamespaceId(new BigInteger("4635294387305441662")), Optional.of(BigInteger.ONE),
-            Optional.of(new NamespaceId(BigInteger.TEN)), NamespaceType.SubNamespace);
+            Optional.of(new NamespaceId(BigInteger.TEN)), NamespaceType.SUB_NAMESPACE);
 
       assertEquals("prx", tx.getNamespaceName());
       assertEquals(new NamespaceId(new BigInteger("4635294387305441662")), tx.getNamespaceId());
-      assertEquals(NamespaceType.SubNamespace, tx.getNamespaceType());
+      assertEquals(NamespaceType.SUB_NAMESPACE, tx.getNamespaceType());
       assertEquals(Optional.of(BigInteger.ONE), tx.getDuration());
       assertEquals(Optional.of(new NamespaceId(BigInteger.TEN)), tx.getParentId());
    }
@@ -51,7 +51,7 @@ class RegisterNamespaceTransactionTest extends ResourceBasedTest {
       RegisterNamespaceTransaction registerNamespaceTransaction = new RegisterNamespaceTransaction(
             NetworkType.MIJIN_TEST, 2, new FakeDeadline(), BigInteger.ZERO, Optional.empty(), Optional.empty(),
             Optional.empty(), "newnamespace", new NamespaceId(IdGenerator.generateNamespaceId("newnamespace")),
-            Optional.of(BigInteger.valueOf(10000)), Optional.empty(), NamespaceType.RootNamespace);
+            Optional.of(BigInteger.valueOf(10000)), Optional.empty(), NamespaceType.ROOT_NAMESPACE);
 
       byte[] actual = registerNamespaceTransaction.generateBytes();
 //      saveBytes("register_namespace_root", actual);
@@ -66,7 +66,7 @@ class RegisterNamespaceTransactionTest extends ResourceBasedTest {
             new NamespaceId(IdGenerator.generateSubNamespaceIdFromParentId(new BigInteger("4635294387305441662"),
                   "subnamespace")),
             Optional.empty(), Optional.of(new NamespaceId(new BigInteger("4635294387305441662"))),
-            NamespaceType.SubNamespace);
+            NamespaceType.SUB_NAMESPACE);
 
       byte[] actual = registerNamespaceTransaction.generateBytes();
 //      saveBytes("register_namespace_child", actual);

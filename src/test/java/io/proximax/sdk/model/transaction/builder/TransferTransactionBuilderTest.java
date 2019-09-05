@@ -50,7 +50,7 @@ class TransferTransactionBuilderTest {
       // check transaction
       assertEquals(NetworkType.MIJIN_TEST, trans.getNetworkType());
       assertTrue(trans.getMosaics().isEmpty());
-      assertEquals(PlainMessage.Empty, trans.getMessage());
+      assertEquals(PlainMessage.EMPTY, trans.getMessage());
       assertEquals(recipient, trans.getRecipient());
    }
    
@@ -63,7 +63,7 @@ class TransferTransactionBuilderTest {
       // check transaction
       assertEquals(NetworkType.MIJIN_TEST, trans.getNetworkType());
       assertTrue(trans.getMosaics().isEmpty());
-      assertEquals(PlainMessage.Empty, trans.getMessage());
+      assertEquals(PlainMessage.EMPTY, trans.getMessage());
       assertEquals(Recipient.from(recipient), trans.getRecipient());
    }
    
@@ -76,7 +76,7 @@ class TransferTransactionBuilderTest {
       // check transaction
       assertEquals(NetworkType.MIJIN_TEST, trans.getNetworkType());
       assertTrue(trans.getMosaics().isEmpty());
-      assertEquals(PlainMessage.Empty, trans.getMessage());
+      assertEquals(PlainMessage.EMPTY, trans.getMessage());
       assertEquals(Recipient.from(recipient), trans.getRecipient());
    }
    

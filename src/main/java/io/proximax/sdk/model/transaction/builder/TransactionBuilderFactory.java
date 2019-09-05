@@ -72,7 +72,7 @@ public class TransactionBuilderFactory {
    /**
     * initialize default values for the builder
     * 
-    * @param builder
+    * @param builder the transaction builder to initialize
     */
    protected void initDefaults(TransactionBuilder<?, ?> builder) {
       builder.networkType(networkType);

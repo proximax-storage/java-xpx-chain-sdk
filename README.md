@@ -1,8 +1,6 @@
 <p align="center"><a href="https://github.com/proximax-storage" target="_blank"><img width="150" src="https://github.com/proximax-storage/java-xpx-chain-sdk/raw/master/docs/images/logo.jpg" alt="ProximaX Sirius Blockchain Java SDK"></a></p>
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![star this repo](http://githubbadges.com/star.svg?user=proximax-storage&repo=java-xpx-chain-sdk&style=flat)](https://github.com/proximax-storage/java-xpx-chain-sdk)
-[![fork this repo](http://githubbadges.com/fork.svg?user=proximax-storage&repo=java-xpx-chain-sdk&style=flat)](https://github.com/proximax-storage/java-xpx-chain-sdk/fork)
 [![Coverage Status](https://coveralls.io/repos/github/proximax-storage/java-xpx-chain-sdk/badge.svg?branch=master)](https://coveralls.io/github/proximax-storage/java-xpx-chain-sdk?branch=master)
 [![Build Status](https://travis-ci.com/proximax-storage/java-xpx-chain-sdk.svg?branch=master)](https://travis-ci.com/proximax-storage/java-xpx-chain-sdk)
 
@@ -14,7 +12,7 @@ The ProximaX Sirius Chain Java SDK is a Java library for interacting with the Si
 
 ## Use the library ##
 
-Current version of the library is <b>0.4.0</b>
+Current version of the library is <b>0.5.0</b>
 
 This library requires use of Java8. Library is published to [Maven Central](https://search.maven.org/). To include library and its dependencies, add following to your build script:
 

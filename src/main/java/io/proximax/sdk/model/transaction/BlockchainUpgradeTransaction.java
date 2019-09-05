@@ -46,7 +46,7 @@ public class BlockchainUpgradeTransaction extends Transaction {
 
    /**
     * @param networkType network type
-    * @param version transaction version. Use {@link TransactionVersion#BLOCKCHAIN_UPGRADE} for current version
+    * @param version transaction version. Use {@link EntityVersion#BLOCKCHAIN_UPGRADE} for current version
     * @param deadline transaction deadline
     * @param maxFee transaction fee
     * @param signature optional signature
@@ -58,7 +58,7 @@ public class BlockchainUpgradeTransaction extends Transaction {
    public BlockchainUpgradeTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline,
          BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
          Optional<TransactionInfo> transactionInfo, BigInteger upgradePeriod, BlockchainVersion newVersion) {
-      super(TransactionType.BLOCKCHAIN_UPGRADE, networkType, version, deadline, maxFee, signature, signer,
+      super(EntityType.BLOCKCHAIN_UPGRADE, networkType, version, deadline, maxFee, signature, signer,
             transactionInfo);
       // validations
       Validate.notNull(upgradePeriod, "upgrade period is mandatory");

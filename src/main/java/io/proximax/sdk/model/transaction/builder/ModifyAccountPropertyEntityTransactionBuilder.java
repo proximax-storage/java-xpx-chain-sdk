@@ -8,22 +8,22 @@ package io.proximax.sdk.model.transaction.builder;
 import java.math.BigInteger;
 
 import io.proximax.sdk.model.transaction.ModifyAccountPropertyTransaction;
-import io.proximax.sdk.model.transaction.TransactionType;
-import io.proximax.sdk.model.transaction.TransactionVersion;
+import io.proximax.sdk.model.transaction.EntityType;
+import io.proximax.sdk.model.transaction.EntityVersion;
 
 /**
  * Builder for account address property modification
  */
 public class ModifyAccountPropertyEntityTransactionBuilder
-      extends ModifyAccountPropertyTransactionBuilder<TransactionType> {
+      extends ModifyAccountPropertyTransactionBuilder<EntityType> {
 
    public ModifyAccountPropertyEntityTransactionBuilder() {
-      super(TransactionType.ACCOUNT_PROPERTIES_ENTITY_TYPE,
-            TransactionVersion.ACCOUNT_PROPERTIES_ENTITY_TYPE.getValue());
+      super(EntityType.ACCOUNT_PROPERTIES_ENTITY_TYPE,
+            EntityVersion.ACCOUNT_PROPERTIES_ENTITY_TYPE.getValue());
    }
 
    @Override
-   public ModifyAccountPropertyTransaction<TransactionType> build() {
+   public ModifyAccountPropertyTransaction<EntityType> build() {
       // use or calculate maxFee
       BigInteger maxFee = getMaxFee().orElseGet(() -> getMaxFeeCalculation(
             ModifyAccountPropertyTransaction.EntityTypeModification.calculatePayloadSize(getModifications().size())));

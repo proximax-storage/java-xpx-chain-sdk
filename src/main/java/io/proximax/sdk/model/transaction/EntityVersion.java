@@ -13,137 +13,124 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.proximax.sdk.model.transaction;
 
 /**
- * Enum containing transaction type constants.
- *
- * @since 1.0
+ * Enum containing transaction type versions. Version are declared by server plug-ins
  */
-public enum TransactionType {
+public enum EntityVersion {
 
    // Mosaic
    /**
     * Mosaic definition transaction type.
     */
-   MOSAIC_DEFINITION(0x414D),
+   MOSAIC_DEFINITION(3),
 
    /**
     * Mosaic supply change transaction.
     */
-   MOSAIC_SUPPLY_CHANGE(0x424D),
+   MOSAIC_SUPPLY_CHANGE(2),
 
    // Namespace
    /**
     * Register namespace transaction type.
     */
-   REGISTER_NAMESPACE(0x414E),
+   REGISTER_NAMESPACE(2),
 
    /**
     * Address alias transaction type.
     */
-   ADDRESS_ALIAS(0x424E),
+   ADDRESS_ALIAS(1),
 
    /**
     * Mosaic alias transaction type.
     */
-   MOSAIC_ALIAS(0x434E),
+   MOSAIC_ALIAS(1),
 
    // Transfer
    /**
     * Transfer Transaction transaction type.
     */
-   TRANSFER(0x4154),
+   TRANSFER(3),
 
    // Multisignature
    /**
     * Modify multisig account transaction type.
     */
-   MODIFY_MULTISIG_ACCOUNT(0x4155),
+   MODIFY_MULTISIG_ACCOUNT(3),
 
    /**
     * Aggregate complete transaction type.
     */
-   AGGREGATE_COMPLETE(0x4141),
+   AGGREGATE_COMPLETE(2),
 
    /**
     * Aggregate bonded transaction type
     */
-   AGGREGATE_BONDED(0x4241),
+   AGGREGATE_BONDED(2),
 
    /**
     * Hash Lock transaction type
     */
-   LOCK(0x4148),
+   LOCK(1),
 
    // Account filters
    /**
     * Account properties address transaction type
     */
-   ACCOUNT_PROPERTIES_ADDRESS(0x4150),
+   ACCOUNT_PROPERTIES_ADDRESS(1),
 
    /**
     * Account properties mosaic transaction type
     */
-   ACCOUNT_PROPERTIES_MOSAIC(0x4250),
+   ACCOUNT_PROPERTIES_MOSAIC(1),
 
    /**
     * Account properties entity type transaction type
     */
-   ACCOUNT_PROPERTIES_ENTITY_TYPE(0x4350),
+   ACCOUNT_PROPERTIES_ENTITY_TYPE(1),
 
    // Cross-chain swaps
    /**
     * Secret Lock Transaction type
     */
-   SECRET_LOCK(0x4152),
+   SECRET_LOCK(1),
 
    /**
     * Secret Proof transaction type
     */
-   SECRET_PROOF(0x4252),
+   SECRET_PROOF(1),
 
    // Remote harvesting
    /**
     * Account link transaction type
     */
-   ACCOUNT_LINK(0x414C),
-
+   ACCOUNT_LINK(2),
+   
    /**
-    * transaction to modify address meta datata
+    * modification of metadata
     */
-   MODIFY_ADDRESS_METADATA(0x413d),
-
+   METADATA_MODIFICATION(1),
+   
    /**
-    * transaction to modify mosaic meta datata
+    * contract modification transaction version
     */
-   MODIFY_MOSAIC_METADATA(0x423d),
-
-   /**
-    * transaction to modify namespace meta datata
-    */
-   MODIFY_NAMESPACE_METADATA(0x433d),
-
-   /**
-    * transaction to modify account contract
-    */
-   MODIFY_CONTRACT(0x4157), 
+   MODIFY_CONTRACT(3),
    
    /**
     * Blockchain configuration change transaction
     */
-   BLOCKCHAIN_CONFIG(0x4159),
+   BLOCKCHAIN_CONFIG(1),
    
    /**
     * blockchain version update transaction
     */
-   BLOCKCHAIN_UPGRADE(0x4158);
+   BLOCKCHAIN_UPGRADE(1);
 
-   private int value;
+   private int code;
 
-   TransactionType(int value) {
-      this.value = value;
+   EntityVersion(int code) {
+      this.code = code;
    }
 
    /**
@@ -152,21 +139,6 @@ public enum TransactionType {
     * @return enum value
     */
    public int getValue() {
-      return this.value;
-   }
-
-   /**
-    * retrieve transaction type by the code
-    * 
-    * @param code of the transaction type
-    * @return transaction type
-    */
-   public static TransactionType rawValueOf(int code) {
-      for (TransactionType type : TransactionType.values()) {
-         if (code == type.value) {
-            return type;
-         }
-      }
-      throw new IllegalArgumentException("Unsupported transaction type code " + code);
+      return this.code;
    }
 }

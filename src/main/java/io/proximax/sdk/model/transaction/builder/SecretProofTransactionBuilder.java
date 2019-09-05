@@ -10,8 +10,8 @@ import java.math.BigInteger;
 import io.proximax.sdk.model.transaction.HashType;
 import io.proximax.sdk.model.transaction.Recipient;
 import io.proximax.sdk.model.transaction.SecretProofTransaction;
-import io.proximax.sdk.model.transaction.TransactionType;
-import io.proximax.sdk.model.transaction.TransactionVersion;
+import io.proximax.sdk.model.transaction.EntityType;
+import io.proximax.sdk.model.transaction.EntityVersion;
 
 /**
  * builder for {@link SecretProofTransaction}
@@ -25,7 +25,7 @@ public class SecretProofTransactionBuilder
    private Recipient recipient;
 
    public SecretProofTransactionBuilder() {
-      super(TransactionType.SECRET_PROOF, TransactionVersion.SECRET_PROOF.getValue());
+      super(EntityType.SECRET_PROOF, EntityVersion.SECRET_PROOF.getValue());
    }
 
    @Override

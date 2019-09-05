@@ -20,15 +20,13 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * The plain message model defines a plain string. When sending it to the network we transform the payload to hex-string.
- *
- * @since 1.0
  */
 public class PlainMessage extends Message {
 
     /**
      * Plain message containing an empty string.
      */
-    public static PlainMessage Empty = new PlainMessage("");
+    public static final PlainMessage EMPTY = new PlainMessage("");
 
     /**
      * Constructor

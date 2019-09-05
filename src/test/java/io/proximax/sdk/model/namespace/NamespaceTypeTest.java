@@ -18,7 +18,7 @@ class NamespaceTypeTest {
    @Test
    void checkCode() {
       // check some random item
-      assertEquals(0, NamespaceType.RootNamespace.getValue());
+      assertEquals(0, NamespaceType.ROOT_NAMESPACE.getValue());
    }
 
    @Test

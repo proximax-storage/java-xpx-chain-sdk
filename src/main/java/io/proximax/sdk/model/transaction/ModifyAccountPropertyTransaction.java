@@ -37,18 +37,20 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
    private final List<AccountPropertyModification<T>> modifications;
 
    /**
-    * @param type
-    * @param networkType
-    * @param version
-    * @param deadline
-    * @param maxFee
-    * @param signature
-    * @param signer
-    * @param transactionInfo
-    * @param propertyType
-    * @param modifications
+    * @param type transaction type
+    * @param networkType network type
+    * @param version transaction version. Use {@link EntityVersion#ACCOUNT_PROPERTIES_ADDRESS},
+    * {@link EntityVersion#ACCOUNT_PROPERTIES_MOSAIC}, {@link EntityVersion#ACCOUNT_PROPERTIES_ENTITY_TYPE} for current
+    * version
+    * @param deadline transaction deadline
+    * @param maxFee transaction fee
+    * @param signature optional signature
+    * @param signer optional signer
+    * @param transactionInfo optional transaction info
+    * @param propertyType type of the account property
+    * @param modifications modifications to the property type
     */
-   public ModifyAccountPropertyTransaction(TransactionType type, NetworkType networkType, Integer version,
+   public ModifyAccountPropertyTransaction(EntityType type, NetworkType networkType, Integer version,
          TransactionDeadline deadline, BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
          Optional<TransactionInfo> transactionInfo, AccountPropertyType propertyType,
          List<AccountPropertyModification<T>> modifications) {
@@ -151,21 +153,21 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
       private static final int VALUE_BYTES_LENGTH = 25;
 
       /**
-       * @param networkType
-       * @param version
-       * @param deadline
-       * @param maxFee
-       * @param signature
-       * @param signer
-       * @param transactionInfo
-       * @param propertyType
-       * @param modifications
+       * @param networkType network type
+       * @param version transaction version. Use {@link EntityVersion#ACCOUNT_PROPERTIES_ADDRESS} for current version
+       * @param deadline transaction deadline
+       * @param maxFee transaction fee
+       * @param signature optional signature
+       * @param signer optional signer
+       * @param transactionInfo optional transaction info
+       * @param propertyType type of the account property
+       * @param modifications modifications to the property type
        */
       public AddressModification(NetworkType networkType, Integer version, TransactionDeadline deadline,
             BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
             Optional<TransactionInfo> transactionInfo, AccountPropertyType propertyType,
             List<AccountPropertyModification<Address>> modifications) {
-         super(TransactionType.ACCOUNT_PROPERTIES_ADDRESS, networkType, version, deadline, maxFee, signature, signer,
+         super(EntityType.ACCOUNT_PROPERTIES_ADDRESS, networkType, version, deadline, maxFee, signature, signer,
                transactionInfo, propertyType, modifications);
       }
 
@@ -215,21 +217,21 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
       private static final int VALUE_BYTES_LENGTH = 8;
 
       /**
-       * @param networkType
-       * @param version
-       * @param deadline
-       * @param maxFee
-       * @param signature
-       * @param signer
-       * @param transactionInfo
-       * @param propertyType
-       * @param modifications
+       * @param networkType network type
+       * @param version transaction version. Use {@link EntityVersion#ACCOUNT_PROPERTIES_MOSAIC} for current version
+       * @param deadline transaction deadline
+       * @param maxFee transaction fee
+       * @param signature optional signature
+       * @param signer optional signer
+       * @param transactionInfo optional transaction info
+       * @param propertyType type of the account property
+       * @param modifications modifications to the property type
        */
       public MosaicModification(NetworkType networkType, Integer version, TransactionDeadline deadline,
             BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
             Optional<TransactionInfo> transactionInfo, AccountPropertyType propertyType,
             List<AccountPropertyModification<UInt64Id>> modifications) {
-         super(TransactionType.ACCOUNT_PROPERTIES_MOSAIC, networkType, version, deadline, maxFee, signature, signer,
+         super(EntityType.ACCOUNT_PROPERTIES_MOSAIC, networkType, version, deadline, maxFee, signature, signer,
                transactionInfo, propertyType, modifications);
       }
 
@@ -274,30 +276,31 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
    /**
     * Transaction type account property modification transaction implementation
     */
-   public static class EntityTypeModification extends ModifyAccountPropertyTransaction<TransactionType> {
+   public static class EntityTypeModification extends ModifyAccountPropertyTransaction<EntityType> {
       private static final int VALUE_BYTES_LENGTH = 2;
 
       /**
-       * @param networkType
-       * @param version
-       * @param deadline
-       * @param maxFee
-       * @param signature
-       * @param signer
-       * @param transactionInfo
-       * @param propertyType
-       * @param modifications
+       * @param networkType network type
+       * @param version transaction version. Use {@link EntityVersion#ACCOUNT_PROPERTIES_ENTITY_TYPE} for current
+       * version
+       * @param deadline transaction deadline
+       * @param maxFee transaction fee
+       * @param signature optional signature
+       * @param signer optional signer
+       * @param transactionInfo optional transaction info
+       * @param propertyType type of the account property
+       * @param modifications modifications to the property type
        */
       public EntityTypeModification(NetworkType networkType, Integer version, TransactionDeadline deadline,
             BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
             Optional<TransactionInfo> transactionInfo, AccountPropertyType propertyType,
-            List<AccountPropertyModification<TransactionType>> modifications) {
-         super(TransactionType.ACCOUNT_PROPERTIES_ENTITY_TYPE, networkType, version, deadline, maxFee, signature,
-               signer, transactionInfo, propertyType, modifications);
+            List<AccountPropertyModification<EntityType>> modifications) {
+         super(EntityType.ACCOUNT_PROPERTIES_ENTITY_TYPE, networkType, version, deadline, maxFee, signature, signer,
+               transactionInfo, propertyType, modifications);
       }
 
       @Override
-      protected byte[] getValueBytesFromModification(AccountPropertyModification<TransactionType> mod) {
+      protected byte[] getValueBytesFromModification(AccountPropertyModification<EntityType> mod) {
          // get the bytes from string
          byte[] valueBytes = new byte[VALUE_BYTES_LENGTH];
          ByteBuffer.wrap(valueBytes).order(ByteOrder.LITTLE_ENDIAN).putShort((short) mod.getValue().getValue());
@@ -325,7 +328,7 @@ public abstract class ModifyAccountPropertyTransaction<T> extends Transaction {
       protected Transaction copyForSigner(PublicAccount signer) {
          return new EntityTypeModification(getNetworkType(), getVersion(), getDeadline(), getMaxFee(), getSignature(),
                Optional.of(signer), getTransactionInfo(), getPropertyType(),
-               (List<AccountPropertyModification<TransactionType>>) getPropertyModifications());
+               (List<AccountPropertyModification<EntityType>>) getPropertyModifications());
       }
    }
 }

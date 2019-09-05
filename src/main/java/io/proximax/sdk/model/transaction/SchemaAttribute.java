@@ -20,7 +20,7 @@ package io.proximax.sdk.model.transaction;
 import java.util.Arrays;
 
 abstract class SchemaAttribute {
-    final private String name;
+    private final String name;
 
     SchemaAttribute(String name) {
         this.name = name;
@@ -66,9 +66,6 @@ abstract class SchemaAttribute {
     }
 
     protected int readInt32(int offset, byte[] buffer) {
-        /*final ByteBuffer bb = ByteBuffer.wrap(new byte[]{buffer[offset], buffer[offset + 1], buffer[offset + 2], buffer[offset + 3]});
-        bb.order(ByteOrder.LITTLE_ENDIAN);
-        return bb.getInt();*/
         int value = (buffer[offset + 3] << (Byte.SIZE * 3));
         value |= (buffer[offset + 2] & 0xFF) << (Byte.SIZE * 2);
         value |= (buffer[offset + 1] & 0xFF) << (Byte.SIZE);
@@ -77,9 +74,6 @@ abstract class SchemaAttribute {
     }
 
     protected int readInt16(int offset, byte[] buffer) {
-        /*final ByteBuffer bb = ByteBuffer.wrap(new byte[]{buffer[offset], buffer[offset + 1]});
-        bb.order(ByteOrder.LITTLE_ENDIAN);
-        return bb.getShort();*/
         int value = (buffer[offset + 1] & 0xFF) << (Byte.SIZE);
         value |= (buffer[offset] & 0xFF);
         return value;

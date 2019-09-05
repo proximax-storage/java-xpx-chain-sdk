@@ -46,9 +46,9 @@ import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.namespace.NamespaceInfo;
+import io.proximax.sdk.model.transaction.EntityType;
 import io.proximax.sdk.model.transaction.ModifyAccountPropertyTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
-import io.proximax.sdk.model.transaction.TransactionType;
 import io.proximax.sdk.model.transaction.UInt64Id;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
@@ -126,9 +126,9 @@ class E2EAccountTest extends E2EBaseTest {
    void addAllowEntityTypeProperty() {
       Account acct = new Account(new KeyPair(), getNetworkType());
       signup(acct.getAddress());
-      TransactionType allowedTransType = TransactionType.ACCOUNT_PROPERTIES_ENTITY_TYPE;
+      EntityType allowedTransType = EntityType.ACCOUNT_PROPERTIES_ENTITY_TYPE;
       logger.info("going to allow {} by {}", allowedTransType, acct.getPublicAccount());
-      ModifyAccountPropertyTransaction<TransactionType> trans = transact.accountPropEntityType()
+      ModifyAccountPropertyTransaction<EntityType> trans = transact.accountPropEntityType()
             .propertyType(AccountPropertyType.ALLOW_TRANSACTION)
             .modifications(Arrays.asList(AccountPropertyModification.add(allowedTransType))).build();
       // announce the transaction
@@ -213,15 +213,15 @@ class E2EAccountTest extends E2EBaseTest {
     * @param aps account properties
     * @param blockedAddress address that is blocked
     */
-   private void testAccountPropertiesOnSimpleAccount(AccountProperties aps, TransactionType allowedTransactionType) {
+   private void testAccountPropertiesOnSimpleAccount(AccountProperties aps, EntityType allowedTransactionType) {
       boolean gotMatch = false;
       for (AccountProperty ap : aps.getProperties()) {
          if (ap.getPropertyType().equals(AccountPropertyType.ALLOW_TRANSACTION)) {
             for (Object value : ap.getValues()) {
                try {
                   if (value instanceof Long && isValidTransactionTypeCode(((Long) value).intValue())) {
-                     assertEquals(TransactionType.ACCOUNT_PROPERTIES_ENTITY_TYPE,
-                           TransactionType.rawValueOf(((Long) value).intValue()));
+                     assertEquals(EntityType.ACCOUNT_PROPERTIES_ENTITY_TYPE,
+                           EntityType.rawValueOf(((Long) value).intValue()));
                      gotMatch = true;
                   }
                } catch (RuntimeException e) {
@@ -236,7 +236,7 @@ class E2EAccountTest extends E2EBaseTest {
 
    private static boolean isValidTransactionTypeCode(int code) {
       try {
-         TransactionType.rawValueOf(code);
+         EntityType.rawValueOf(code);
          return true;
       } catch (RuntimeException e) {
          return false;
@@ -293,8 +293,12 @@ class E2EAccountTest extends E2EBaseTest {
    void incomingTransactions() throws ExecutionException, InterruptedException {
       List<Transaction> transactions = accountHttp.incomingTransactions(simpleAccount.getPublicAccount()).toFuture()
             .get();
+      List<Transaction> transactionsByAddr = accountHttp.incomingTransactions(simpleAccount.getPublicAccount().getAddress()).toFuture()
+            .get();
 
       assertEquals(1, transactions.size());
+      assertEquals(1, transactionsByAddr.size());
+      assertEquals(transactions.get(0).getSignature(), transactionsByAddr.get(0).getSignature());
    }
 
    @Test

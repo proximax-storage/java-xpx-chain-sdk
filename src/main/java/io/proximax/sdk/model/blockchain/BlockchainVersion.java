@@ -26,10 +26,10 @@ public class BlockchainVersion {
    private final int build;
 
    /**
-    * @param major
-    * @param minor
-    * @param revision
-    * @param build
+    * @param major major version number
+    * @param minor minor version number
+    * @param revision revision
+    * @param build build
     */
    public BlockchainVersion(int major, int minor, int revision, int build) {
       // validate input is in range
@@ -85,7 +85,7 @@ public class BlockchainVersion {
    /**
     * create new instance using the big integer of 8 bytes
     * 
-    * @param version
+    * @param version serialized version represented as one number
     * @return the version instance representing the version value
     */
    public static BlockchainVersion fromVersionValue(BigInteger version) {
