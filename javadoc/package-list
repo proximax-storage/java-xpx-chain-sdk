@@ -17,5 +17,6 @@ io.proximax.sdk.model.metadata
 io.proximax.sdk.model.mosaic
 io.proximax.sdk.model.namespace
 io.proximax.sdk.model.transaction
+io.proximax.sdk.model.transaction.builder
 io.proximax.sdk.utils
 io.proximax.sdk.utils.dto
