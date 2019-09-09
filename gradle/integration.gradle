@@ -48,3 +48,16 @@ task e2eTest(type: Test) {
     // first run jUni tests then integration tests
     mustRunAfter tasks.test 
 }
+
+task cucumberTest() {
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+    description = 'Runs the cucumber tests' 
+    dependsOn assemble, compileTestJava, integrationTestClasses
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = sourceSets.integrationTest.runtimeClasspath + sourceSets.main.output
+            args = ['--plugin', 'pretty', '--snippets', 'camelcase', '--glue', 'io.proximax.sdk.steps', 'src/main/resources']
+        }
+    }
+}

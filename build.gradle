@@ -120,4 +120,7 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-params:${junitVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    
+    // use cucumber for tests
+    testImplementation 'io.cucumber:cucumber-java:4.7.1'
 }
