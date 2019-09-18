@@ -64,7 +64,7 @@ public class TransferSteps extends BaseSteps {
       TransferUtils.announce(api, getSeedAccount(), tx, getTimeoutSeconds());
    }
 
-   @When("{string} sends {bigdecimal} of {string} to {string} with plaintext message {string} and fee {bigdecimal}")
+   @When("{string} sends {bigdecimal} of {string} to {string} with plaintext message {string} and max fee {bigdecimal}")
    public void sendMosaicWithPlaintextMessage(String sender, BigDecimal amount, String mosaicName, String recipientName,
          String message, BigDecimal fee) throws InterruptedException, ExecutionException {
       Mosaic mosaic = getMosaic(mosaicName, amount);
