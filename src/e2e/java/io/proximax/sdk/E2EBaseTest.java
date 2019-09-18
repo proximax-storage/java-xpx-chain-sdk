@@ -187,7 +187,7 @@ public class E2EBaseTest extends BaseTest {
             sendMosaic(from, seedAccount.getAddress(), mosaic);
          });
       } catch (RuntimeException e) {
-         if (!"Not Found".equals(e.getMessage())) {
+         if (!"404 Not Found".equals(e.getMessage())) {
             fail(e);
          }
       }
