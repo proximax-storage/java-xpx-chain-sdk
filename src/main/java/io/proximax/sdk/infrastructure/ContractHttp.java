@@ -25,9 +25,9 @@ import io.reactivex.Observable;
  */
 public class ContractHttp extends Http implements ContractRepository {
 
-   private static final String CONTRACT_ROUTE = "/contract/";
+   private static final String CONTRACT_ROUTE = "/contract";
    private static final String CONTRACS_SUFFIX = "/contracts";
-   private static final String ACCOUNT_ROUTE = "/account/";
+   private static final String ACCOUNT_ROUTE = "/account";
    private static final String ACCOUNT_CONTRACTS_ROUTE = "/account/contracts";
    
    private static final Type CONTRACT_INFO_LIST_TYPE = new TypeToken<List<ContractInfoDTO>>(){}.getType();
@@ -38,7 +38,7 @@ public class ContractHttp extends Http implements ContractRepository {
 
    @Override
    public Observable<Contract> getContract(Address address) {
-      return this.client.get(CONTRACT_ROUTE + address.plain())
+      return this.client.get(CONTRACT_ROUTE + SLASH + address.plain())
             .map(Http::mapStringOrError)
             .map(str -> gson.fromJson(str, ContractInfoDTO.class))
             .map(ContractInfoDTO::getContract)
@@ -64,7 +64,7 @@ public class ContractHttp extends Http implements ContractRepository {
 
    @Override
    public Observable<Contract> getContract(PublicKey publicKey) {
-      return this.client.get(ACCOUNT_ROUTE + publicKey.getHexString() + CONTRACS_SUFFIX)
+      return this.client.get(ACCOUNT_ROUTE + SLASH + publicKey.getHexString() + CONTRACS_SUFFIX)
             .map(Http::mapStringOrError)
             .map(this::toContractInfoList)
             .flatMapIterable(item -> item)

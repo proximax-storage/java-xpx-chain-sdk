@@ -28,6 +28,8 @@ import io.proximax.sdk.BlockchainApi;
  * base HTTP repository implementation, keeping track of the API, HTTP client and mapper
  */
 public class Http {
+   protected static final String SLASH = "/";
+   
    protected final BlockchainApi api;
    protected final HttpClient client;
    protected final Gson gson;
@@ -74,7 +76,7 @@ public class Http {
     */
    static String mapStringOrError(final HttpResponse response) {
       if (response.getCode() < 200 || response.getCode() > 299) {
-         throw new RuntimeException(response.getStatusMessage());
+         throw new RuntimeException(response.getCode() + " " + response.getStatusMessage());
       }
       try {
          return response.getBodyString();

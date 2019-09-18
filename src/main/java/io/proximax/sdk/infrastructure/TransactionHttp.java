@@ -46,7 +46,7 @@ import io.reactivex.Observable;
  * @since 1.0
  */
 public class TransactionHttp extends Http implements TransactionRepository {
-	private static final String ROUTE = "/transaction/";
+   private static final String ROUTE = "/transaction";
    private static final String KEY_MESSAGE = "message";
    private static final String KEY_PAYLOAD = "payload";
 	
@@ -59,7 +59,7 @@ public class TransactionHttp extends Http implements TransactionRepository {
     @Override
     public Observable<Transaction> getTransaction(String transactionHash) {
         return this.client
-                .get(ROUTE + transactionHash)
+                .get(ROUTE + SLASH + transactionHash)
                 .map(Http::mapStringOrError)
                 .map(GsonUtils::mapToJsonObject)
                 .map(new TransactionMapping());
@@ -85,7 +85,7 @@ public class TransactionHttp extends Http implements TransactionRepository {
     @Override
     public Observable<TransactionStatus> getTransactionStatus(String transactionHash) {
         return this.client
-                .get(ROUTE + transactionHash + "/status")
+                .get(ROUTE + SLASH + transactionHash + "/status")
                 .map(Http::mapStringOrError)
                 .map(str -> gson.fromJson(str, TransactionStatusDTO.class))
                 .map(transactionStatusDTO -> new TransactionStatus(transactionStatusDTO.getGroup(),
