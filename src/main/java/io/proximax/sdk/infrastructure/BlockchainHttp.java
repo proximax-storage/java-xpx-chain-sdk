@@ -47,8 +47,8 @@ public class BlockchainHttp extends Http implements BlockchainRepository {
    private static final String BLOCK = "/block/";
    private static final String CHAIN_HEIGHT = "/chain/height";
    private static final String CHAIN_SCORE = "/chain/score";
-   private static final String CONFIG = "/config/";
-   private static final String UPGRADE = "/upgrade/";
+   private static final String CONFIG = "/config";
+   private static final String UPGRADE = "/upgrade";
    
    private static final Type BLOCK_INFO_LIST_TYPE = new TypeToken<List<BlockInfoDTO>>(){}.getType();
    
@@ -194,7 +194,7 @@ public class BlockchainHttp extends Http implements BlockchainRepository {
 
    @Override
    public Observable<BlockchainConfig> getBlockchainConfiguration(BigInteger height) {
-      return this.client.get(CONFIG + height.toString())
+      return this.client.get(CONFIG + SLASH + height.toString())
             .map(Http::mapStringOrError)
             .map(str -> gson.fromJson(str, CatapultConfigDTO.class))
             .map(CatapultConfigDTO::getCatapultConfig)
@@ -203,7 +203,7 @@ public class BlockchainHttp extends Http implements BlockchainRepository {
 
    @Override
    public Observable<BlockchainUpgrade> getBlockchainUpgrade(BigInteger height) {
-      return this.client.get(UPGRADE + height.toString())
+      return this.client.get(UPGRADE + SLASH + height.toString())
             .map(Http::mapStringOrError)
             .map(str -> gson.fromJson(str, CatapultUpgradeDTO.class))
             .map(CatapultUpgradeDTO::getCatapultConfig)

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.5.1 Security audit
+
+Fixing issues caused by changes introduced because of security audit
+* remove trailing slash from resource URLs
+
 ## 0.5.0 MaxFee calculation and transaction builders
 
 See [milestone](https://github.com/proximax-storage/java-xpx-chain-sdk/milestone/5?closed=1) for fixed issues

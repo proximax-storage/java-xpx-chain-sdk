@@ -51,7 +51,7 @@ import io.reactivex.Observable;
  */
 public class AccountHttp extends Http implements AccountRepository {
 
-   private static final String ROUTE = "/account/";
+   private static final String ROUTE = "/account";
    private static final String PROPERTIES_SUFFIX = "/properties";
 
    private static final Type TYPE_ACCOUNT_LIST = new TypeToken<List<AccountInfoDTO>>(){}.getType();
@@ -64,7 +64,7 @@ public class AccountHttp extends Http implements AccountRepository {
 
    @Override
    public Observable<AccountInfo> getAccountInfo(Address address) {
-      return this.client.get(ROUTE + address.plain()).map(Http::mapStringOrError)
+      return this.client.get(ROUTE + SLASH + address.plain()).map(Http::mapStringOrError)
             .map(str -> gson.fromJson(str, AccountInfoDTO.class))
             .map(AccountInfo::fromDto);
    }
@@ -99,14 +99,14 @@ public class AccountHttp extends Http implements AccountRepository {
 
    @Override
    public Observable<MultisigAccountInfo> getMultisigAccountInfo(Address address) {
-      return this.client.get(ROUTE + address.plain() + "/multisig").map(Http::mapStringOrError)
+      return this.client.get(ROUTE + SLASH + address.plain() + "/multisig").map(Http::mapStringOrError)
             .map(str -> gson.fromJson(str, MultisigAccountInfoDTO.class))
             .map(dto -> MultisigAccountInfo.fromDto(dto, api.getNetworkType()));
    }
 
    @Override
    public Observable<MultisigAccountGraphInfo> getMultisigAccountGraphInfo(Address address) {
-      return this.client.get(ROUTE + address.plain() + "/multisig/graph")
+      return this.client.get(ROUTE + SLASH + address.plain() + "/multisig/graph")
             .map(Http::mapStringOrError)
             .map(this::toMultisigAccountInfo)
             .map(dto -> MultisigAccountGraphInfo.fromDto(dto, api.getNetworkType()));
@@ -114,7 +114,7 @@ public class AccountHttp extends Http implements AccountRepository {
 
    @Override
    public Observable<AccountProperties> getAccountProperties(Address address) {
-      return this.client.get(ROUTE + address.plain() + PROPERTIES_SUFFIX).map(Http::mapStringOrError)
+      return this.client.get(ROUTE + SLASH + address.plain() + PROPERTIES_SUFFIX).map(Http::mapStringOrError)
             .map(str -> gson.fromJson(str, AccountPropertiesInfoDTO.class))
             .map(AccountPropertiesInfoDTO::getAccountProperties).map(AccountProperties::fromDto);
    }
@@ -224,8 +224,7 @@ public class AccountHttp extends Http implements AccountRepository {
    private Observable<List<Transaction>> findTransactions(String accountKey,
          Optional<QueryParams> queryParams, String path) {
       return this.client
-            .get(ROUTE
-                  + accountKey + path + (queryParams.isPresent() ? queryParams.get().toUrl() : ""))
+            .get(ROUTE + SLASH + accountKey + path + (queryParams.isPresent() ? queryParams.get().toUrl() : ""))
             .map(Http::mapStringOrError)
             .map(str -> stream(new Gson().fromJson(str, JsonArray.class)).map(s -> (JsonObject) s)
                   .collect(Collectors.toList()))

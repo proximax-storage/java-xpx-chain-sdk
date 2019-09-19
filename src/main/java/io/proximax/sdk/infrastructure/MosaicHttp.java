@@ -41,7 +41,7 @@ import io.reactivex.Observable;
  */
 public class MosaicHttp extends Http implements MosaicRepository {
 
-   private static final String ROUTE = "/mosaic/";
+   private static final String ROUTE = "/mosaic";
    private static final String NAMES_ROUTE = "/mosaic/names";
 
    private static final Type MOSAIC_INFO_LIST_TYPE = new TypeToken<List<MosaicInfoDTO>>(){}.getType();
@@ -53,7 +53,7 @@ public class MosaicHttp extends Http implements MosaicRepository {
 
    @Override
    public Observable<MosaicInfo> getMosaic(MosaicId mosaicId) {
-      return this.client.get(ROUTE + mosaicId.getIdAsHex())
+      return this.client.get(ROUTE + SLASH + mosaicId.getIdAsHex())
             .map(Http::mapStringOrError)
             .map(str -> gson.fromJson(str, MosaicInfoDTO.class))
             .map(dto -> MosaicInfo.fromDto(dto, api.getNetworkType()));

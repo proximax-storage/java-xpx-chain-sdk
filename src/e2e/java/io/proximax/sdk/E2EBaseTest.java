@@ -56,7 +56,7 @@ public class E2EBaseTest extends BaseTest {
    /** logger */
    private static final Logger logger = LoggerFactory.getLogger(E2EBaseTest.class);
 
-   protected static final BigInteger DEFAULT_DEADLINE_DURATION = BigInteger.valueOf(5*60*1000l);
+   protected static final BigInteger DEFAULT_DEADLINE_DURATION = BigInteger.valueOf(60*60*1000l);
 
    protected BlockchainApi api;
    protected BlockchainRepository blockchainHttp;
@@ -187,7 +187,7 @@ public class E2EBaseTest extends BaseTest {
             sendMosaic(from, seedAccount.getAddress(), mosaic);
          });
       } catch (RuntimeException e) {
-         if (!"Not Found".equals(e.getMessage())) {
+         if (!"404 Not Found".equals(e.getMessage())) {
             fail(e);
          }
       }

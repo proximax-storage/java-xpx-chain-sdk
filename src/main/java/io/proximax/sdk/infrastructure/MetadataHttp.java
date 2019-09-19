@@ -41,7 +41,7 @@ import io.reactivex.Observable;
  * Metadata http repository.
  */
 public class MetadataHttp extends Http implements MetadataRepository {
-   private static final String URL_METADATA = "/metadata/";
+   private static final String URL_METADATA = "/metadata";
    private static final String URL_ACCOUNT = "/account/";
    private static final String URL_MOSAIC = "/mosaic/";
    private static final String URL_NAMESPACE = "/namespace/";
@@ -55,7 +55,7 @@ public class MetadataHttp extends Http implements MetadataRepository {
    @Override
    public Observable<Metadata> getMetadata(String metadataId) {
       return this.client
-         .get(URL_METADATA + metadataId)
+         .get(URL_METADATA + SLASH + metadataId)
          .map(Http::mapStringOrError)
          .map(GsonUtils::mapToJsonObject)
          .map(MetadataMapper::mapToObject);
