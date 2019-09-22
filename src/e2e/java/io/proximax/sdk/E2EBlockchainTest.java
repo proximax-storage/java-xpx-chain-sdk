@@ -207,6 +207,7 @@ public class E2EBlockchainTest extends E2EBaseTest {
    }
 
    @Test
+   @Disabled("Requires nemesis private key to be defined")
    void configTransaction() {
       Account nemesis = Account.createFromPrivateKey(NEMESIS_PRIVATE_KEY, getNetworkType());
       BigInteger height = blockchainHttp.getBlockchainHeight().blockingFirst();
