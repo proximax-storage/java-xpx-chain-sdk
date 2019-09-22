@@ -31,7 +31,7 @@ import java.util.List;
 /**
  * MosaicDefinitionTransactionBodyDTO
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-08-11T15:04:35.591+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-09-22T22:57:50.932+02:00[Europe/Prague]")
 public class MosaicDefinitionTransactionBodyDTO {
   public static final String SERIALIZED_NAME_MOSAIC_NONCE = "mosaicNonce";
   @SerializedName(SERIALIZED_NAME_MOSAIC_NONCE)

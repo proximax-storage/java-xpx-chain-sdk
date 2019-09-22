@@ -196,8 +196,8 @@ public class BlockchainHttp extends Http implements BlockchainRepository {
    public Observable<BlockchainConfig> getBlockchainConfiguration(BigInteger height) {
       return this.client.get(CONFIG + SLASH + height.toString())
             .map(Http::mapStringOrError)
-            .map(str -> gson.fromJson(str, CatapultConfigDTO.class))
-            .map(CatapultConfigDTO::getCatapultConfig)
+            .map(str -> gson.fromJson(str, NetworkConfigDTO.class))
+            .map(NetworkConfigDTO::getNetworkConfig)
             .map(BlockchainConfig::fromDto);
    }
 
@@ -205,8 +205,8 @@ public class BlockchainHttp extends Http implements BlockchainRepository {
    public Observable<BlockchainUpgrade> getBlockchainUpgrade(BigInteger height) {
       return this.client.get(UPGRADE + SLASH + height.toString())
             .map(Http::mapStringOrError)
-            .map(str -> gson.fromJson(str, CatapultUpgradeDTO.class))
-            .map(CatapultUpgradeDTO::getCatapultConfig)
+            .map(str -> gson.fromJson(str, BlockchainUpgradeDTO.class))
+            .map(BlockchainUpgradeDTO::getBlockchainUpgrade)
             .map(BlockchainUpgrade::fromDto);
    }
    

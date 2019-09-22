@@ -28,15 +28,15 @@ import java.io.IOException;
 /**
  * AccountLinkTransactionBodyDTO
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-08-11T15:04:35.591+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-09-22T22:57:50.932+02:00[Europe/Prague]")
 public class AccountLinkTransactionBodyDTO {
   public static final String SERIALIZED_NAME_REMOTE_ACCOUNT_KEY = "remoteAccountKey";
   @SerializedName(SERIALIZED_NAME_REMOTE_ACCOUNT_KEY)
   private String remoteAccountKey;
 
-  public static final String SERIALIZED_NAME_LINK_ACTION = "linkAction";
-  @SerializedName(SERIALIZED_NAME_LINK_ACTION)
-  private LinkActionEnum linkAction;
+  public static final String SERIALIZED_NAME_ACTION = "action";
+  @SerializedName(SERIALIZED_NAME_ACTION)
+  private LinkActionEnum action;
 
   public AccountLinkTransactionBodyDTO remoteAccountKey(String remoteAccountKey) {
     this.remoteAccountKey = remoteAccountKey;
@@ -56,22 +56,22 @@ public class AccountLinkTransactionBodyDTO {
     this.remoteAccountKey = remoteAccountKey;
   }
 
-  public AccountLinkTransactionBodyDTO linkAction(LinkActionEnum linkAction) {
-    this.linkAction = linkAction;
+  public AccountLinkTransactionBodyDTO action(LinkActionEnum action) {
+    this.action = action;
     return this;
   }
 
    /**
-   * Get linkAction
-   * @return linkAction
+   * Get action
+   * @return action
   **/
   @ApiModelProperty(required = true, value = "")
-  public LinkActionEnum getLinkAction() {
-    return linkAction;
+  public LinkActionEnum getAction() {
+    return action;
   }
 
-  public void setLinkAction(LinkActionEnum linkAction) {
-    this.linkAction = linkAction;
+  public void setAction(LinkActionEnum action) {
+    this.action = action;
   }
 
 
@@ -85,12 +85,12 @@ public class AccountLinkTransactionBodyDTO {
     }
     AccountLinkTransactionBodyDTO accountLinkTransactionBodyDTO = (AccountLinkTransactionBodyDTO) o;
     return Objects.equals(this.remoteAccountKey, accountLinkTransactionBodyDTO.remoteAccountKey) &&
-        Objects.equals(this.linkAction, accountLinkTransactionBodyDTO.linkAction);
+        Objects.equals(this.action, accountLinkTransactionBodyDTO.action);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(remoteAccountKey, linkAction);
+    return Objects.hash(remoteAccountKey, action);
   }
 
 
@@ -99,7 +99,7 @@ public class AccountLinkTransactionBodyDTO {
     StringBuilder sb = new StringBuilder();
     sb.append("class AccountLinkTransactionBodyDTO {\n");
     sb.append("    remoteAccountKey: ").append(toIndentedString(remoteAccountKey)).append("\n");
-    sb.append("    linkAction: ").append(toIndentedString(linkAction)).append("\n");
+    sb.append("    action: ").append(toIndentedString(action)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -50,6 +50,6 @@ public class BlockchainUpgrade {
       return new BlockchainUpgrade(
             UInt64Utils.toBigInt(dto.getHeight()),
             BlockchainVersion.fromVersionValue(
-                  UInt64Utils.toBigInt(dto.getCatapultVersion())));
+                  UInt64Utils.toBigInt(dto.getBlockChainVersion())));
    }
 }

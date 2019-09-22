@@ -35,7 +35,7 @@ class BlockchainConfigTest {
    void testFromDto() {
       ConfigDTO confDto = new ConfigDTO();
       confDto.setHeight(UInt64Utils.dtoFromBigInt(BigInteger.TEN));
-      confDto.setBlockChainConfig("config");
+      confDto.setNetworkConfig("config");
       confDto.setSupportedEntityVersions("supent");
       
       // make the conversion
