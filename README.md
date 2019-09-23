@@ -12,7 +12,7 @@ The ProximaX Sirius Chain Java SDK is a Java library for interacting with the Si
 
 ## Use the library ##
 
-See [wiki](https://github.com/proximax-storage/java-xpx-chain-sdk/wiki) or [Maven Central](https://search.maven.org/search?q=a:java-xpx-chain-sdk) for latest version of the project.
+See [wiki](https://github.com/proximax-storage/java-xpx-chain-sdk/wiki) for latest version of the project.
 
 This library requires use of Java8. Releases of library are published to [Maven Central](https://search.maven.org/search?q=a:java-xpx-chain-sdk) and [snapshots](https://oss.sonatype.org/content/repositories/snapshots/io/proximax/java-xpx-chain-sdk/) are available in [Sonatype snapshot repository](https://oss.sonatype.org/content/repositories/snapshots/). To include library and its dependencies, add following to your build script:
 
