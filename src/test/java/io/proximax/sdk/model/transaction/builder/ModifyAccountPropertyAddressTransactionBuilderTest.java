@@ -20,6 +20,7 @@ import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.props.AccountPropertyModification;
 import io.proximax.sdk.model.account.props.AccountPropertyType;
 import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.transaction.EntityType;
 import io.proximax.sdk.model.transaction.ModifyAccountPropertyTransaction;
 
 /**
@@ -37,6 +38,11 @@ class ModifyAccountPropertyAddressTransactionBuilderTest {
       builder.networkType(NETWORK_TYPE);
       builder.deadlineDuration(BigInteger.valueOf(60_000));
       builder.feeCalculationStrategy(FeeCalculationStrategy.MEDIUM);
+   }
+   
+   @Test
+   void checkBuilder() {
+      assertEquals(EntityType.ACCOUNT_PROPERTIES_ADDRESS, builder.getType());
    }
    
    @Test
