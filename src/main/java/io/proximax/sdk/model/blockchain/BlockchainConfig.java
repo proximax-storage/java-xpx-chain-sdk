@@ -75,7 +75,7 @@ public class BlockchainConfig {
    public static BlockchainConfig fromDto(ConfigDTO dto) {
       return new BlockchainConfig(
             UInt64Utils.toBigInt(dto.getHeight()), 
-            dto.getBlockChainConfig(),
+            dto.getNetworkConfig(),
             dto.getSupportedEntityVersions());
    }
 }

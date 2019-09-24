@@ -28,15 +28,15 @@ import java.io.IOException;
 /**
  * UpgradeDTO
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-08-11T15:04:35.591+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-09-22T22:57:50.932+02:00[Europe/Prague]")
 public class UpgradeDTO {
   public static final String SERIALIZED_NAME_HEIGHT = "height";
   @SerializedName(SERIALIZED_NAME_HEIGHT)
   private UInt64DTO height = new UInt64DTO();
 
-  public static final String SERIALIZED_NAME_CATAPULT_VERSION = "catapultVersion";
-  @SerializedName(SERIALIZED_NAME_CATAPULT_VERSION)
-  private UInt64DTO catapultVersion = new UInt64DTO();
+  public static final String SERIALIZED_NAME_BLOCK_CHAIN_VERSION = "blockChainVersion";
+  @SerializedName(SERIALIZED_NAME_BLOCK_CHAIN_VERSION)
+  private UInt64DTO blockChainVersion = new UInt64DTO();
 
   public UpgradeDTO height(UInt64DTO height) {
     this.height = height;
@@ -56,22 +56,22 @@ public class UpgradeDTO {
     this.height = height;
   }
 
-  public UpgradeDTO catapultVersion(UInt64DTO catapultVersion) {
-    this.catapultVersion = catapultVersion;
+  public UpgradeDTO blockChainVersion(UInt64DTO blockChainVersion) {
+    this.blockChainVersion = blockChainVersion;
     return this;
   }
 
    /**
-   * Get catapultVersion
-   * @return catapultVersion
+   * Get blockChainVersion
+   * @return blockChainVersion
   **/
   @ApiModelProperty(required = true, value = "")
-  public UInt64DTO getCatapultVersion() {
-    return catapultVersion;
+  public UInt64DTO getBlockChainVersion() {
+    return blockChainVersion;
   }
 
-  public void setCatapultVersion(UInt64DTO catapultVersion) {
-    this.catapultVersion = catapultVersion;
+  public void setBlockChainVersion(UInt64DTO blockChainVersion) {
+    this.blockChainVersion = blockChainVersion;
   }
 
 
@@ -85,12 +85,12 @@ public class UpgradeDTO {
     }
     UpgradeDTO upgradeDTO = (UpgradeDTO) o;
     return Objects.equals(this.height, upgradeDTO.height) &&
-        Objects.equals(this.catapultVersion, upgradeDTO.catapultVersion);
+        Objects.equals(this.blockChainVersion, upgradeDTO.blockChainVersion);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(height, catapultVersion);
+    return Objects.hash(height, blockChainVersion);
   }
 
 
@@ -99,7 +99,7 @@ public class UpgradeDTO {
     StringBuilder sb = new StringBuilder();
     sb.append("class UpgradeDTO {\n");
     sb.append("    height: ").append(toIndentedString(height)).append("\n");
-    sb.append("    catapultVersion: ").append(toIndentedString(catapultVersion)).append("\n");
+    sb.append("    blockChainVersion: ").append(toIndentedString(blockChainVersion)).append("\n");
     sb.append("}");
     return sb.toString();
   }

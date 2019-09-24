@@ -33,7 +33,7 @@ import java.io.IOException;
  * Delegates the account importance score to a proxy account.
  */
 @ApiModel(description = "Delegates the account importance score to a proxy account.")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-08-11T15:04:35.591+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-09-22T22:57:50.932+02:00[Europe/Prague]")
 public class AccountLinkTransactionDTO {
   public static final String SERIALIZED_NAME_SIGNATURE = "signature";
   @SerializedName(SERIALIZED_NAME_SIGNATURE)
@@ -63,9 +63,9 @@ public class AccountLinkTransactionDTO {
   @SerializedName(SERIALIZED_NAME_REMOTE_ACCOUNT_KEY)
   private String remoteAccountKey;
 
-  public static final String SERIALIZED_NAME_LINK_ACTION = "linkAction";
-  @SerializedName(SERIALIZED_NAME_LINK_ACTION)
-  private LinkActionEnum linkAction;
+  public static final String SERIALIZED_NAME_ACTION = "action";
+  @SerializedName(SERIALIZED_NAME_ACTION)
+  private LinkActionEnum action;
 
   public AccountLinkTransactionDTO signature(String signature) {
     this.signature = signature;
@@ -193,22 +193,22 @@ public class AccountLinkTransactionDTO {
     this.remoteAccountKey = remoteAccountKey;
   }
 
-  public AccountLinkTransactionDTO linkAction(LinkActionEnum linkAction) {
-    this.linkAction = linkAction;
+  public AccountLinkTransactionDTO action(LinkActionEnum action) {
+    this.action = action;
     return this;
   }
 
    /**
-   * Get linkAction
-   * @return linkAction
+   * Get action
+   * @return action
   **/
   @ApiModelProperty(required = true, value = "")
-  public LinkActionEnum getLinkAction() {
-    return linkAction;
+  public LinkActionEnum getAction() {
+    return action;
   }
 
-  public void setLinkAction(LinkActionEnum linkAction) {
-    this.linkAction = linkAction;
+  public void setAction(LinkActionEnum action) {
+    this.action = action;
   }
 
 
@@ -228,12 +228,12 @@ public class AccountLinkTransactionDTO {
         Objects.equals(this.maxFee, accountLinkTransactionDTO.maxFee) &&
         Objects.equals(this.deadline, accountLinkTransactionDTO.deadline) &&
         Objects.equals(this.remoteAccountKey, accountLinkTransactionDTO.remoteAccountKey) &&
-        Objects.equals(this.linkAction, accountLinkTransactionDTO.linkAction);
+        Objects.equals(this.action, accountLinkTransactionDTO.action);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(signature, signer, version, type, maxFee, deadline, remoteAccountKey, linkAction);
+    return Objects.hash(signature, signer, version, type, maxFee, deadline, remoteAccountKey, action);
   }
 
 
@@ -248,7 +248,7 @@ public class AccountLinkTransactionDTO {
     sb.append("    maxFee: ").append(toIndentedString(maxFee)).append("\n");
     sb.append("    deadline: ").append(toIndentedString(deadline)).append("\n");
     sb.append("    remoteAccountKey: ").append(toIndentedString(remoteAccountKey)).append("\n");
-    sb.append("    linkAction: ").append(toIndentedString(linkAction)).append("\n");
+    sb.append("    action: ").append(toIndentedString(action)).append("\n");
     sb.append("}");
     return sb.toString();
   }

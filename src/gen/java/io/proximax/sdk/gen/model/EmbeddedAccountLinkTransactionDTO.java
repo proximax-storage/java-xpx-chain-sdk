@@ -32,7 +32,7 @@ import java.io.IOException;
 /**
  * EmbeddedAccountLinkTransactionDTO
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-08-11T15:04:35.591+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-09-22T22:57:50.932+02:00[Europe/Prague]")
 public class EmbeddedAccountLinkTransactionDTO {
   public static final String SERIALIZED_NAME_SIGNER = "signer";
   @SerializedName(SERIALIZED_NAME_SIGNER)
@@ -58,9 +58,9 @@ public class EmbeddedAccountLinkTransactionDTO {
   @SerializedName(SERIALIZED_NAME_REMOTE_ACCOUNT_KEY)
   private String remoteAccountKey;
 
-  public static final String SERIALIZED_NAME_LINK_ACTION = "linkAction";
-  @SerializedName(SERIALIZED_NAME_LINK_ACTION)
-  private LinkActionEnum linkAction;
+  public static final String SERIALIZED_NAME_ACTION = "action";
+  @SerializedName(SERIALIZED_NAME_ACTION)
+  private LinkActionEnum action;
 
   public EmbeddedAccountLinkTransactionDTO signer(String signer) {
     this.signer = signer;
@@ -170,22 +170,22 @@ public class EmbeddedAccountLinkTransactionDTO {
     this.remoteAccountKey = remoteAccountKey;
   }
 
-  public EmbeddedAccountLinkTransactionDTO linkAction(LinkActionEnum linkAction) {
-    this.linkAction = linkAction;
+  public EmbeddedAccountLinkTransactionDTO action(LinkActionEnum action) {
+    this.action = action;
     return this;
   }
 
    /**
-   * Get linkAction
-   * @return linkAction
+   * Get action
+   * @return action
   **/
   @ApiModelProperty(required = true, value = "")
-  public LinkActionEnum getLinkAction() {
-    return linkAction;
+  public LinkActionEnum getAction() {
+    return action;
   }
 
-  public void setLinkAction(LinkActionEnum linkAction) {
-    this.linkAction = linkAction;
+  public void setAction(LinkActionEnum action) {
+    this.action = action;
   }
 
 
@@ -204,12 +204,12 @@ public class EmbeddedAccountLinkTransactionDTO {
         Objects.equals(this.maxFee, embeddedAccountLinkTransactionDTO.maxFee) &&
         Objects.equals(this.deadline, embeddedAccountLinkTransactionDTO.deadline) &&
         Objects.equals(this.remoteAccountKey, embeddedAccountLinkTransactionDTO.remoteAccountKey) &&
-        Objects.equals(this.linkAction, embeddedAccountLinkTransactionDTO.linkAction);
+        Objects.equals(this.action, embeddedAccountLinkTransactionDTO.action);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(signer, version, type, maxFee, deadline, remoteAccountKey, linkAction);
+    return Objects.hash(signer, version, type, maxFee, deadline, remoteAccountKey, action);
   }
 
 
@@ -223,7 +223,7 @@ public class EmbeddedAccountLinkTransactionDTO {
     sb.append("    maxFee: ").append(toIndentedString(maxFee)).append("\n");
     sb.append("    deadline: ").append(toIndentedString(deadline)).append("\n");
     sb.append("    remoteAccountKey: ").append(toIndentedString(remoteAccountKey)).append("\n");
-    sb.append("    linkAction: ").append(toIndentedString(linkAction)).append("\n");
+    sb.append("    action: ").append(toIndentedString(action)).append("\n");
     sb.append("}");
     return sb.toString();
   }

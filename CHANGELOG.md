@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.6.0 Security audit
+
+Breaking changes introduced by the security audit
+* DTO changes to match changes in REST API
+* e2e test cleanup (+ disabled contract tests as plugin is disabled now)
+
 ## 0.5.1 Security audit
 
 Fixing issues caused by changes introduced because of security audit

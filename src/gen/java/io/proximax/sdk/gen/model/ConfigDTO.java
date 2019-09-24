@@ -28,15 +28,15 @@ import java.io.IOException;
 /**
  * ConfigDTO
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-08-11T15:04:35.591+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-09-22T22:57:50.932+02:00[Europe/Prague]")
 public class ConfigDTO {
   public static final String SERIALIZED_NAME_HEIGHT = "height";
   @SerializedName(SERIALIZED_NAME_HEIGHT)
   private UInt64DTO height = new UInt64DTO();
 
-  public static final String SERIALIZED_NAME_BLOCK_CHAIN_CONFIG = "blockChainConfig";
-  @SerializedName(SERIALIZED_NAME_BLOCK_CHAIN_CONFIG)
-  private String blockChainConfig;
+  public static final String SERIALIZED_NAME_NETWORK_CONFIG = "networkConfig";
+  @SerializedName(SERIALIZED_NAME_NETWORK_CONFIG)
+  private String networkConfig;
 
   public static final String SERIALIZED_NAME_SUPPORTED_ENTITY_VERSIONS = "supportedEntityVersions";
   @SerializedName(SERIALIZED_NAME_SUPPORTED_ENTITY_VERSIONS)
@@ -60,22 +60,22 @@ public class ConfigDTO {
     this.height = height;
   }
 
-  public ConfigDTO blockChainConfig(String blockChainConfig) {
-    this.blockChainConfig = blockChainConfig;
+  public ConfigDTO networkConfig(String networkConfig) {
+    this.networkConfig = networkConfig;
     return this;
   }
 
    /**
-   * Get blockChainConfig
-   * @return blockChainConfig
+   * Get networkConfig
+   * @return networkConfig
   **/
   @ApiModelProperty(example = "[network]  identifier = mijin-test publicKey = B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF generationHash = 7B631D803F912B00DC0CBED3014BBD17A302BA50B99D233B9C2D9533B842ABDF  ", required = true, value = "")
-  public String getBlockChainConfig() {
-    return blockChainConfig;
+  public String getNetworkConfig() {
+    return networkConfig;
   }
 
-  public void setBlockChainConfig(String blockChainConfig) {
-    this.blockChainConfig = blockChainConfig;
+  public void setNetworkConfig(String networkConfig) {
+    this.networkConfig = networkConfig;
   }
 
   public ConfigDTO supportedEntityVersions(String supportedEntityVersions) {
@@ -107,13 +107,13 @@ public class ConfigDTO {
     }
     ConfigDTO configDTO = (ConfigDTO) o;
     return Objects.equals(this.height, configDTO.height) &&
-        Objects.equals(this.blockChainConfig, configDTO.blockChainConfig) &&
+        Objects.equals(this.networkConfig, configDTO.networkConfig) &&
         Objects.equals(this.supportedEntityVersions, configDTO.supportedEntityVersions);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(height, blockChainConfig, supportedEntityVersions);
+    return Objects.hash(height, networkConfig, supportedEntityVersions);
   }
 
 
@@ -122,7 +122,7 @@ public class ConfigDTO {
     StringBuilder sb = new StringBuilder();
     sb.append("class ConfigDTO {\n");
     sb.append("    height: ").append(toIndentedString(height)).append("\n");
-    sb.append("    blockChainConfig: ").append(toIndentedString(blockChainConfig)).append("\n");
+    sb.append("    networkConfig: ").append(toIndentedString(networkConfig)).append("\n");
     sb.append("    supportedEntityVersions: ").append(toIndentedString(supportedEntityVersions)).append("\n");
     sb.append("}");
     return sb.toString();

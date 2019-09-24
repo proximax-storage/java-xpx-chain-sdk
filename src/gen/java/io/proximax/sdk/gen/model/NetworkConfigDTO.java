@@ -26,30 +26,30 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * CatapultConfigDTO
+ * NetworkConfigDTO
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-08-11T15:04:35.591+02:00[Europe/Prague]")
-public class CatapultConfigDTO {
-  public static final String SERIALIZED_NAME_CATAPULT_CONFIG = "catapultConfig";
-  @SerializedName(SERIALIZED_NAME_CATAPULT_CONFIG)
-  private ConfigDTO catapultConfig = null;
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-09-22T22:57:50.932+02:00[Europe/Prague]")
+public class NetworkConfigDTO {
+  public static final String SERIALIZED_NAME_NETWORK_CONFIG = "networkConfig";
+  @SerializedName(SERIALIZED_NAME_NETWORK_CONFIG)
+  private ConfigDTO networkConfig = null;
 
-  public CatapultConfigDTO catapultConfig(ConfigDTO catapultConfig) {
-    this.catapultConfig = catapultConfig;
+  public NetworkConfigDTO networkConfig(ConfigDTO networkConfig) {
+    this.networkConfig = networkConfig;
     return this;
   }
 
    /**
-   * Get catapultConfig
-   * @return catapultConfig
+   * Get networkConfig
+   * @return networkConfig
   **/
   @ApiModelProperty(required = true, value = "")
-  public ConfigDTO getCatapultConfig() {
-    return catapultConfig;
+  public ConfigDTO getNetworkConfig() {
+    return networkConfig;
   }
 
-  public void setCatapultConfig(ConfigDTO catapultConfig) {
-    this.catapultConfig = catapultConfig;
+  public void setNetworkConfig(ConfigDTO networkConfig) {
+    this.networkConfig = networkConfig;
   }
 
 
@@ -61,21 +61,21 @@ public class CatapultConfigDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    CatapultConfigDTO catapultConfigDTO = (CatapultConfigDTO) o;
-    return Objects.equals(this.catapultConfig, catapultConfigDTO.catapultConfig);
+    NetworkConfigDTO networkConfigDTO = (NetworkConfigDTO) o;
+    return Objects.equals(this.networkConfig, networkConfigDTO.networkConfig);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(catapultConfig);
+    return Objects.hash(networkConfig);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class CatapultConfigDTO {\n");
-    sb.append("    catapultConfig: ").append(toIndentedString(catapultConfig)).append("\n");
+    sb.append("class NetworkConfigDTO {\n");
+    sb.append("    networkConfig: ").append(toIndentedString(networkConfig)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -26,30 +26,30 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * CatapultUpgradeDTO
+ * BlockchainUpgradeDTO
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-08-11T15:04:35.591+02:00[Europe/Prague]")
-public class CatapultUpgradeDTO {
-  public static final String SERIALIZED_NAME_CATAPULT_CONFIG = "catapultConfig";
-  @SerializedName(SERIALIZED_NAME_CATAPULT_CONFIG)
-  private UpgradeDTO catapultConfig = null;
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-09-22T22:57:50.932+02:00[Europe/Prague]")
+public class BlockchainUpgradeDTO {
+  public static final String SERIALIZED_NAME_BLOCKCHAIN_UPGRADE = "blockchainUpgrade";
+  @SerializedName(SERIALIZED_NAME_BLOCKCHAIN_UPGRADE)
+  private UpgradeDTO blockchainUpgrade = null;
 
-  public CatapultUpgradeDTO catapultConfig(UpgradeDTO catapultConfig) {
-    this.catapultConfig = catapultConfig;
+  public BlockchainUpgradeDTO blockchainUpgrade(UpgradeDTO blockchainUpgrade) {
+    this.blockchainUpgrade = blockchainUpgrade;
     return this;
   }
 
    /**
-   * Get catapultConfig
-   * @return catapultConfig
+   * Get blockchainUpgrade
+   * @return blockchainUpgrade
   **/
-  @ApiModelProperty(value = "")
-  public UpgradeDTO getCatapultConfig() {
-    return catapultConfig;
+  @ApiModelProperty(required = true, value = "")
+  public UpgradeDTO getBlockchainUpgrade() {
+    return blockchainUpgrade;
   }
 
-  public void setCatapultConfig(UpgradeDTO catapultConfig) {
-    this.catapultConfig = catapultConfig;
+  public void setBlockchainUpgrade(UpgradeDTO blockchainUpgrade) {
+    this.blockchainUpgrade = blockchainUpgrade;
   }
 
 
@@ -61,21 +61,21 @@ public class CatapultUpgradeDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    CatapultUpgradeDTO catapultUpgradeDTO = (CatapultUpgradeDTO) o;
-    return Objects.equals(this.catapultConfig, catapultUpgradeDTO.catapultConfig);
+    BlockchainUpgradeDTO blockchainUpgradeDTO = (BlockchainUpgradeDTO) o;
+    return Objects.equals(this.blockchainUpgrade, blockchainUpgradeDTO.blockchainUpgrade);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(catapultConfig);
+    return Objects.hash(blockchainUpgrade);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class CatapultUpgradeDTO {\n");
-    sb.append("    catapultConfig: ").append(toIndentedString(catapultConfig)).append("\n");
+    sb.append("class BlockchainUpgradeDTO {\n");
+    sb.append("    blockchainUpgrade: ").append(toIndentedString(blockchainUpgrade)).append("\n");
     sb.append("}");
     return sb.toString();
   }

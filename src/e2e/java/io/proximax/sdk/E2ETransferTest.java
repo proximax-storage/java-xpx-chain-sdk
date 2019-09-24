@@ -72,7 +72,16 @@ public class E2ETransferTest extends E2EBaseTest {
    @Test
    void sendPlaintextMessage() {
       // send transaction with plain message
-      transfer(seedAccount,
+      transferSimple(seedAccount,
+            simpleAccount.getAddress(),
+            NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1)),
+            new PlainMessage("java SDK plain message test"));
+   }
+
+   @Test
+   void sendPlaintextMessageAggregate() {
+      // send transaction with plain message
+      transferAggregate(seedAccount,
             simpleAccount.getAddress(),
             NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1)),
             new PlainMessage("java SDK plain message test"));
@@ -84,7 +93,19 @@ public class E2ETransferTest extends E2EBaseTest {
       SecureMessage secureMessage = SecureMessage.create(seedAccount.getKeyPair().getPrivateKey(),
             simpleAccount.getKeyPair().getPublicKey(),
             "java SDK secure message");
-      transfer(seedAccount,
+      transferSimple(seedAccount,
+            simpleAccount.getAddress(),
+            NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1)),
+            secureMessage);
+   }
+
+   @Test
+   void sendSecureMessageAggregate() {
+      // send transaction with encrypted message
+      SecureMessage secureMessage = SecureMessage.create(seedAccount.getKeyPair().getPrivateKey(),
+            simpleAccount.getKeyPair().getPublicKey(),
+            "java SDK secure message");
+      transferAggregate(seedAccount,
             simpleAccount.getAddress(),
             NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1)),
             secureMessage);
@@ -143,11 +164,25 @@ public class E2ETransferTest extends E2EBaseTest {
     * @throws InterruptedException
     * @throws ExecutionException
     */
-   private void transfer(Account from, Address to, Mosaic mosaic, Message message) {
+   private void transferSimple(Account from, Address to, Mosaic mosaic, Message message) {
       SignedTransaction signedTransaction = signTransfer(from, to, mosaic, message);
       logger.info("Transfer announced. {}", transactionHttp.announce(signedTransaction).blockingFirst());
       logger.info("Transfer done. {}",
             listener.confirmed(from.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      sleepForAWhile();
+   }
+
+   /**
+    * create transaction and announce it
+    * 
+    * @param from account used to sign the transaction
+    * @param to target address for the transfer
+    * @param mosaic mosaic to transfer
+    * @param message message for the transfer
+    * @throws InterruptedException
+    * @throws ExecutionException
+    */
+   private void transferAggregate(Account from, Address to, Mosaic mosaic, Message message) {
       SignedTransaction signedAggregateTransaction = signAggregateTransfer(from, to, mosaic, message);
       logger.info("Transfer announced. {}", transactionHttp.announce(signedAggregateTransaction).blockingFirst());
       logger.info("Transfer done. {}",

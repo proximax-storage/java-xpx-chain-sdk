@@ -30,7 +30,7 @@ class BlockchainUpgradeTest {
    @Test
    void testFromDto() {
       UpgradeDTO dto = new UpgradeDTO();
-      dto.setCatapultVersion(UInt64Utils.dtoFromBigInt(BigInteger.valueOf(123456789l)));
+      dto.setBlockChainVersion(UInt64Utils.dtoFromBigInt(BigInteger.valueOf(123456789l)));
       dto.setHeight(UInt64Utils.dtoFromBigInt(BigInteger.TEN));
       
       BlockchainUpgrade up = BlockchainUpgrade.fromDto(dto);

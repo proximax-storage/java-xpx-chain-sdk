@@ -789,7 +789,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CatapultConfigDTO'
+                $ref: '#/components/schemas/NetworkConfigDTO'
         '404':
           description: resource not found
         '409':
@@ -1438,7 +1438,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CatapultUpgradeDTO'
+                $ref: '#/components/schemas/BlockchainUpgradeDTO'
         '404':
           description: resource not found
         '409':
@@ -1555,6 +1555,11 @@ components:
     EntityTypeEnum:
       type: integer
       enum:
+      - 16728
+      - 16729
+      - 16701
+      - 16957
+      - 17213
       - 16717
       - 16973
       - 16718
@@ -1575,6 +1580,11 @@ components:
       - 33091
       description: |
         The entity type:
+        * 0x4158 (16728 decimal) - Blockchain Upgrade Transaction.
+        * 0x4159 (16729 decimal) - Network Config Transaction.
+        * 0x413D (16701 decimal) - Address Metadata Transaction.
+        * 0x423D (16957 decimal) - Mosaic Metadata Transaction.
+        * 0x433D (17213 decimal) - Namespace Metadata Transaction.
         * 0x414D (16717 decimal) - Mosaic Definition Transaction.
         * 0x424D (16973 decimal) - Mosaic Supply Change Transaction.
         * 0x414E (16718 decimal) - Register Namespace Transaction.
@@ -1615,6 +1625,28 @@ components:
         The type of the action:
         * 0 - Link.
         * 1 - Unlink.
+    MetadataTypeEnum:
+      type: integer
+      enum:
+      - 1
+      - 2
+      - 3
+      description: |
+        The type of the metadata:
+        * 1 - Address metadata.
+        * 2 - Mosaic metadata.
+        * 3 - Namespace metadata.
+      example: 0
+    MetadataModificationTypeEnum:
+      type: integer
+      enum:
+      - 0
+      - 1
+      description: |
+        The type of the metadata modification:
+        * 0 - Add metadata.
+        * 1 - Remove metadata.
+      example: 0
     MessageTypeEnum:
       type: integer
       enum:
@@ -1872,44 +1904,44 @@ components:
             - type: string
             - $ref: "#/components/schemas/UInt64DTO"
             - type: integer
-    CatapultConfigDTO:
+    NetworkConfigDTO:
       type: object
       required:
-      - catapultConfig
+      - networkConfig
       properties:
-        catapultConfig:
+        networkConfig:
           $ref: '#/components/schemas/ConfigDTO'
     ConfigDTO:
       type: object
       required:
       - height
-      - blockChainConfig
+      - networkConfig
       - supportedEntityVersions
       properties:
         height:
           $ref: '#/components/schemas/UInt64DTO'
-        blockChainConfig:
+        networkConfig:
           type: string
           example: "[network]\n\nidentifier = mijin-test\npublicKey = B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF\ngenerationHash = 7B631D803F912B00DC0CBED3014BBD17A302BA50B99D233B9C2D9533B842ABDF\n\n"
         supportedEntityVersions:
           type: string
           example: "{\n\t\"entities\": [\n\t\t{\n\t\t\t\"name\": \"Block\",\n\t\t\t\"type\": \"33091\",\n\t\t\t\"supportedVersions\": [3]\n\t\t}]}"
-    CatapultUpgradeDTO:
+    BlockchainUpgradeDTO:
       type: object
       required:
-      - catapultUpgrade
+      - blockchainUpgrade
       properties:
-        catapultConfig:
+        blockchainUpgrade:
           $ref: '#/components/schemas/UpgradeDTO'
     UpgradeDTO:
       type: object
       required:
       - height
-      - catapultVersion
+      - blockChainVersion
       properties:
         height:
           $ref: '#/components/schemas/UInt64DTO'
-        catapultVersion:
+        blockChainVersion:
           $ref: '#/components/schemas/UInt64DTO'
     ContractInfoDTO:
       type: object
@@ -1958,6 +1990,21 @@ components:
           items:
             type: string
             example: "3DCB6E5EFF4D63A38902EF948E895B01D6EA497EBF84B1460C14CA5BEDCAD9F3"
+    MetadataModificationDTO:
+      type: object
+      required:
+      - modificationType
+      - key
+      - value
+      properties:
+        modificationType:
+          $ref: "#/components/schemas/MetadataModificationTypeEnum"
+        key:
+          type: string
+          description: The key of metadata modification.
+        value:
+          type: string
+          description: The value of metadata modification.
     MultisigAccountGraphInfoDTO:
       type: object
       required:
@@ -2696,6 +2743,11 @@ components:
           $ref: "#/components/schemas/TransactionMetaDTO"
         transaction:
           anyOf:
+          - $ref: "#/components/schemas/BlockchainUpgradeTransactionDTO"
+          - $ref: "#/components/schemas/NetworkConfigTransactionDTO"
+          - $ref: "#/components/schemas/AddressMetadataTransactionDTO"
+          - $ref: "#/components/schemas/MosaicMetadataTransactionDTO"
+          - $ref: "#/components/schemas/NamespaceMetadataTransactionDTO"
           - $ref: "#/components/schemas/MosaicDefinitionTransactionDTO"
           - $ref: "#/components/schemas/MosaicSupplyChangeTransactionDTO"
           - $ref: "#/components/schemas/RegisterNamespaceTransactionDTO"
@@ -2738,6 +2790,11 @@ components:
           $ref: "#/components/schemas/EmbeddedTransactionMetaDTO"
         transaction:
           anyOf:
+          - $ref: "#/components/schemas/EmbeddedBlockchainUpgradeTransactionDTO"
+          - $ref: "#/components/schemas/EmbeddedNetworkConfigTransactionDTO"
+          - $ref: "#/components/schemas/EmbeddedAddressMetadataTransactionDTO"
+          - $ref: "#/components/schemas/EmbeddedMosaicMetadataTransactionDTO"
+          - $ref: "#/components/schemas/EmbeddedNamespaceMetadataTransactionDTO"
           - $ref: "#/components/schemas/EmbeddedMosaicDefinitionTransactionDTO"
           - $ref: "#/components/schemas/EmbeddedMosaicSupplyChangeTransactionDTO"
           - $ref: "#/components/schemas/EmbeddedRegisterNamespaceTransactionDTO"
@@ -2771,6 +2828,137 @@ components:
       allOf:
       - $ref: "#/components/schemas/EntityDTO"
       - $ref: "#/components/schemas/TransactionBodyDTO"
+    BlockchainUpgradeBodyDTO:
+      type: object
+      required:
+      - upgradePeriod
+      - newBlockChainVersion
+      properties:
+        upgradePeriod:
+          $ref: "#/components/schemas/UInt64DTO"
+        newBlockChainVersion:
+          $ref: "#/components/schemas/UInt64DTO"
+    BlockchainUpgradeTransactionDTO:
+      type: object
+      description: Transaction that change version of blockchain.
+      allOf:
+      - $ref: "#/components/schemas/TransactionDTO"
+      - $ref: "#/components/schemas/BlockchainUpgradeBodyDTO"
+    EmbeddedBlockchainUpgradeTransactionDTO:
+      type: object
+      allOf:
+      - $ref: "#/components/schemas/EmbeddedTransactionDTO"
+      - $ref: "#/components/schemas/BlockchainUpgradeBodyDTO"
+    NetworkConfigBodyDTO:
+      type: object
+      required:
+      - applyHeightDelta
+      - networkConfig
+      - supportedEntityVersions
+      properties:
+        applyHeightDelta:
+          $ref: "#/components/schemas/UInt64DTO"
+        networkConfig:
+          type: string
+          description: Network config like a raw text.
+        supportedEntityVersions:
+          type: string
+          description: Allowed versions of transaction in json format.
+    NetworkConfigTransactionDTO:
+      type: object
+      description: Transaction that updates config.
+      allOf:
+      - $ref: "#/components/schemas/TransactionDTO"
+      - $ref: "#/components/schemas/NetworkConfigBodyDTO"
+    EmbeddedNetworkConfigTransactionDTO:
+      type: object
+      allOf:
+      - $ref: "#/components/schemas/EmbeddedTransactionDTO"
+      - $ref: "#/components/schemas/NetworkConfigBodyDTO"
+    AddressMetadataBodyDTO:
+      type: object
+      required:
+      - metadataId
+      - metadataType
+      - modifications
+      properties:
+        metadataId:
+          type: string
+          description: The address in hexadecimal.
+        metadataType:
+          $ref: "#/components/schemas/MetadataTypeEnum"
+        modifications:
+          type: array
+          description: The array of metadata modifications.
+          items:
+            $ref: "#/components/schemas/MetadataModificationDTO"
+    AddressMetadataTransactionDTO:
+      type: object
+      description: Transaction that addes metadata to account.
+      allOf:
+      - $ref: "#/components/schemas/TransactionDTO"
+      - $ref: "#/components/schemas/AddressMetadataBodyDTO"
+    EmbeddedAddressMetadataTransactionDTO:
+      type: object
+      allOf:
+      - $ref: "#/components/schemas/EmbeddedTransactionDTO"
+      - $ref: "#/components/schemas/AddressMetadataBodyDTO"
+    MosaicMetadataBodyDTO:
+      type: object
+      required:
+      - metadataId
+      - metadataType
+      - modifications
+      properties:
+        metadataId:
+          $ref: "#/components/schemas/UInt64DTO"
+          description: Mosaic id.
+        metadataType:
+          $ref: "#/components/schemas/MetadataTypeEnum"
+        modifications:
+          type: array
+          description: The array of metadata modifications.
+          items:
+            $ref: "#/components/schemas/MetadataModificationDTO"
+    MosaicMetadataTransactionDTO:
+      type: object
+      description: Transaction that addes metadata to mosaic.
+      allOf:
+      - $ref: "#/components/schemas/TransactionDTO"
+      - $ref: "#/components/schemas/MosaicMetadataBodyDTO"
+    EmbeddedMosaicMetadataTransactionDTO:
+      type: object
+      allOf:
+      - $ref: "#/components/schemas/EmbeddedTransactionDTO"
+      - $ref: "#/components/schemas/MosaicMetadataBodyDTO"
+    NamespaceMetadataBodyDTO:
+      type: object
+      required:
+      - metadataId
+      - metadataType
+      - modifications
+      properties:
+        metadataId:
+          $ref: "#/components/schemas/UInt64DTO"
+          description: Namespace id.
+        metadataType:
+          $ref: "#/components/schemas/MetadataTypeEnum"
+        modifications:
+          type: array
+          description: The array of metadata modifications.
+          items:
+            $ref: "#/components/schemas/MetadataModificationDTO"
+    NamespaceMetadataTransactionDTO:
+      type: object
+      description: Transaction that addes metadata to namespace.
+      allOf:
+      - $ref: "#/components/schemas/TransactionDTO"
+      - $ref: "#/components/schemas/NamespaceMetadataBodyDTO"
+    EmbeddedNamespaceMetadataTransactionDTO:
+      type: object
+      allOf:
+      - $ref: "#/components/schemas/EmbeddedTransactionDTO"
+      - $ref: "#/components/schemas/NamespaceMetadataBodyDTO"
     MosaicDefinitionTransactionBodyDTO:
       type: object
       required:
@@ -3144,12 +3332,12 @@ components:
       type: object
       required:
       - remoteAccountKey
-      - linkAction
+      - action
       properties:
         remoteAccountKey:
           type: string
           description: The public key of the remote account.
-        linkAction:
+        action:
           $ref: "#/components/schemas/LinkActionEnum"
     AccountLinkTransactionDTO:
       type: object
