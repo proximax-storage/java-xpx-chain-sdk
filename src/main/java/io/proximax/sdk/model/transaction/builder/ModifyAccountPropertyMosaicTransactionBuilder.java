@@ -7,9 +7,9 @@ package io.proximax.sdk.model.transaction.builder;
 
 import java.math.BigInteger;
 
-import io.proximax.sdk.model.transaction.ModifyAccountPropertyTransaction;
 import io.proximax.sdk.model.transaction.EntityType;
 import io.proximax.sdk.model.transaction.EntityVersion;
+import io.proximax.sdk.model.transaction.ModifyAccountPropertyTransaction;
 import io.proximax.sdk.model.transaction.UInt64Id;
 
 /**
@@ -18,7 +18,7 @@ import io.proximax.sdk.model.transaction.UInt64Id;
 public class ModifyAccountPropertyMosaicTransactionBuilder extends ModifyAccountPropertyTransactionBuilder<UInt64Id> {
 
    public ModifyAccountPropertyMosaicTransactionBuilder() {
-      super(EntityType.ACCOUNT_PROPERTIES_ADDRESS, EntityVersion.ACCOUNT_PROPERTIES_ADDRESS.getValue());
+      super(EntityType.ACCOUNT_PROPERTIES_MOSAIC, EntityVersion.ACCOUNT_PROPERTIES_MOSAIC.getValue());
    }
 
    @Override

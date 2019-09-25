@@ -18,6 +18,7 @@ import io.proximax.sdk.model.account.props.AccountPropertyModification;
 import io.proximax.sdk.model.account.props.AccountPropertyType;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.MosaicId;
+import io.proximax.sdk.model.transaction.EntityType;
 import io.proximax.sdk.model.transaction.ModifyAccountPropertyTransaction;
 import io.proximax.sdk.model.transaction.UInt64Id;
 
@@ -39,11 +40,17 @@ class ModifyAccountPropertyMosaicTransactionBuilderTest {
    }
    
    @Test
+   void checkBuilder() {
+      assertEquals(EntityType.ACCOUNT_PROPERTIES_MOSAIC, builder.getType());
+   }
+   
+   @Test
    void test() {
       MosaicId mosid = new MosaicId(BigInteger.ONE);
       AccountPropertyModification<UInt64Id> mod = AccountPropertyModification.add(mosid);
       ModifyAccountPropertyTransaction<UInt64Id> trans = builder.propertyType(AccountPropertyType.ALLOW_MOSAIC).modifications(Arrays.asList(mod)).build();
       
+      assertEquals(EntityType.ACCOUNT_PROPERTIES_MOSAIC, trans.getType());
       assertEquals(AccountPropertyType.ALLOW_MOSAIC, trans.getPropertyType());
       assertEquals(1, trans.getPropertyModifications().size());
       assertEquals(mod, trans.getPropertyModifications().get(0));
