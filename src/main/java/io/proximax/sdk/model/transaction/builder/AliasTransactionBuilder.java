@@ -19,7 +19,15 @@ import io.proximax.sdk.model.transaction.EntityType;
 import io.proximax.sdk.model.transaction.EntityVersion;
 
 /**
+ * <p>
  * builder for {@link AliasTransaction}
+ * <p>
+ * <p>
+ * Standard use when managing alias for mosaic: call {@link #link(MosaicId)} or {@link #unlink(MosaicId)}
+ * </p>
+ * <p>
+ * Standard use when managing alias for address: call {@link #link(Address)} or {@link #unlink(Address)}
+ * </p>
  */
 public class AliasTransactionBuilder extends TransactionBuilder<AliasTransactionBuilder, AliasTransaction> {
 

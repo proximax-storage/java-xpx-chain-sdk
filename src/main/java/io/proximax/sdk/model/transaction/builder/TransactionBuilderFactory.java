@@ -221,8 +221,19 @@ public class TransactionBuilderFactory {
     * create builder for blockchain upgrade transaction
     * 
     * @return the builder
+    * @deprecated use {@link #contract()} instead
     */
+   @Deprecated
    public ModifyContractTransactionBuilder modifyContract() {
+      return contract(); 
+   }
+   
+   /**
+    * create builder for blockchain upgrade transaction
+    * 
+    * @return the builder
+    */
+   public ModifyContractTransactionBuilder contract() {
       ModifyContractTransactionBuilder builder = new ModifyContractTransactionBuilder();
       initDefaults(builder);
       return builder; 

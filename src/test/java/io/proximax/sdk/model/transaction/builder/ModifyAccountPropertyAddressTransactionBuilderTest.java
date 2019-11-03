@@ -56,4 +56,26 @@ class ModifyAccountPropertyAddressTransactionBuilderTest {
       assertEquals(mod, trans.getPropertyModifications().get(0));
    }
 
+   @Test
+   void testAllowed() {
+      Address addr = new Account(new KeyPair(), NETWORK_TYPE).getAddress();
+      AccountPropertyModification<Address> mod = AccountPropertyModification.add(addr);
+      ModifyAccountPropertyTransaction<Address> trans = builder.allowed(Arrays.asList(mod)).build();
+      
+      assertEquals(AccountPropertyType.ALLOW_ADDRESS, trans.getPropertyType());
+      assertEquals(1, trans.getPropertyModifications().size());
+      assertEquals(mod, trans.getPropertyModifications().get(0));
+   }
+
+   @Test
+   void testBlocked() {
+      Address addr = new Account(new KeyPair(), NETWORK_TYPE).getAddress();
+      AccountPropertyModification<Address> mod = AccountPropertyModification.add(addr);
+      ModifyAccountPropertyTransaction<Address> trans = builder.blocked(Arrays.asList(mod)).build();
+      
+      assertEquals(AccountPropertyType.BLOCK_ADDRESS, trans.getPropertyType());
+      assertEquals(1, trans.getPropertyModifications().size());
+      assertEquals(mod, trans.getPropertyModifications().get(0));
+   }
+
 }

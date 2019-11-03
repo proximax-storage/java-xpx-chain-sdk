@@ -36,7 +36,7 @@ class MosaicSupplyChangeTransactionBuilderTest {
    }
 
    @Test
-   void increase() {
+   void increaseFor() {
       MosaicId mosid = new MosaicId(BigInteger.valueOf(1234567890l));
       MosaicSupplyChangeTransaction trans = builder.increaseSupplyFor(mosid).delta(BigInteger.TEN).build();
       
@@ -47,9 +47,30 @@ class MosaicSupplyChangeTransactionBuilderTest {
 
 
    @Test
-   void decrease() {
+   void decreaseFor() {
       MosaicId mosid = new MosaicId(BigInteger.valueOf(1234567890l));
       MosaicSupplyChangeTransaction trans = builder.decreaseSupplyFor(mosid).delta(BigInteger.TEN).build();
+      
+      assertEquals(mosid, trans.getMosaicId());
+      assertEquals(MosaicSupplyType.DECREASE, trans.getMosaicSupplyType());
+      assertEquals(BigInteger.TEN, trans.getDelta());
+   }
+
+   @Test
+   void increase() {
+      MosaicId mosid = new MosaicId(BigInteger.valueOf(1234567890l));
+      MosaicSupplyChangeTransaction trans = builder.increase(mosid, BigInteger.TEN).build();
+      
+      assertEquals(mosid, trans.getMosaicId());
+      assertEquals(MosaicSupplyType.INCREASE, trans.getMosaicSupplyType());
+      assertEquals(BigInteger.TEN, trans.getDelta());
+   }
+
+
+   @Test
+   void decrease() {
+      MosaicId mosid = new MosaicId(BigInteger.valueOf(1234567890l));
+      MosaicSupplyChangeTransaction trans = builder.decrease(mosid, BigInteger.TEN).build();
       
       assertEquals(mosid, trans.getMosaicId());
       assertEquals(MosaicSupplyType.DECREASE, trans.getMosaicSupplyType());

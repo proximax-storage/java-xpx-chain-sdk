@@ -16,13 +16,20 @@ import io.proximax.sdk.model.metadata.MetadataModification;
 import io.proximax.sdk.model.metadata.MetadataType;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.namespace.NamespaceId;
-import io.proximax.sdk.model.transaction.ModifyMetadataTransaction;
 import io.proximax.sdk.model.transaction.EntityType;
 import io.proximax.sdk.model.transaction.EntityVersion;
+import io.proximax.sdk.model.transaction.ModifyMetadataTransaction;
 import io.proximax.sdk.model.transaction.UInt64Id;
 
 /**
+ * <p>
  * builder for {@link ModifyMetadataTransaction}
+ * </p>
+ * <p>
+ * Standard use: first initialize builder by call to one of {@link #forAddress(Address)}, {@link #forMosaic(MosaicId)}
+ * or {@link #forNamespace(NamespaceId)}. Then specify modifications to make via call to {@link #modifications(List)} or
+ * {@link #modifications(MetadataModification...)}
+ * </p>
  */
 public class ModifyMetadataTransactionBuilder
       extends TransactionBuilder<ModifyMetadataTransactionBuilder, ModifyMetadataTransaction> {
@@ -143,8 +150,7 @@ public class ModifyMetadataTransactionBuilder
    }
 
    public ModifyMetadataTransactionBuilder forNamespace(NamespaceId namespaceId) {
-      return type(EntityType.MODIFY_NAMESPACE_METADATA).metadataType(MetadataType.NAMESPACE)
-            .metadataId(namespaceId);
+      return type(EntityType.MODIFY_NAMESPACE_METADATA).metadataType(MetadataType.NAMESPACE).metadataId(namespaceId);
    }
 
    /**
@@ -153,7 +159,7 @@ public class ModifyMetadataTransactionBuilder
     * @param modifications the modifications
     * @return self
     */
-   public ModifyMetadataTransactionBuilder modifications(MetadataModification ... modifications) {
+   public ModifyMetadataTransactionBuilder modifications(MetadataModification... modifications) {
       return modifications(Arrays.asList(modifications));
    }
 }

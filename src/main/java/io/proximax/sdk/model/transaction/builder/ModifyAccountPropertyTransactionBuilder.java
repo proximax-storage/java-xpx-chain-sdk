@@ -10,11 +10,11 @@ import java.util.List;
 
 import io.proximax.sdk.model.account.props.AccountPropertyModification;
 import io.proximax.sdk.model.account.props.AccountPropertyType;
-import io.proximax.sdk.model.transaction.ModifyAccountPropertyTransaction;
 import io.proximax.sdk.model.transaction.EntityType;
+import io.proximax.sdk.model.transaction.ModifyAccountPropertyTransaction;
 
 /**
- * builder for {@link ModifyAccountPropertyTransaction}
+ * base class for builders of {@link ModifyAccountPropertyTransaction}
  */
 public abstract class ModifyAccountPropertyTransactionBuilder<T> extends TransactionBuilder<ModifyAccountPropertyTransactionBuilder<T>, ModifyAccountPropertyTransaction<T>> {
    

@@ -13,15 +13,21 @@ import java.util.List;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.mosaic.Mosaic;
 import io.proximax.sdk.model.namespace.NamespaceId;
+import io.proximax.sdk.model.transaction.EntityType;
+import io.proximax.sdk.model.transaction.EntityVersion;
 import io.proximax.sdk.model.transaction.Message;
 import io.proximax.sdk.model.transaction.PlainMessage;
 import io.proximax.sdk.model.transaction.Recipient;
-import io.proximax.sdk.model.transaction.EntityType;
-import io.proximax.sdk.model.transaction.EntityVersion;
 import io.proximax.sdk.model.transaction.TransferTransaction;
 
 /**
+ * <p>
  * builder for {@link TransferTransaction}
+ * </p>
+ * <p>
+ * Standard use: Transfers have {@link #recipient(Recipient)} and can transfer {@link #mosaics(Mosaic...)} and/or
+ * {@link #message(Message)}
+ * </p>
  */
 public class TransferTransactionBuilder extends TransactionBuilder<TransferTransactionBuilder, TransferTransaction> {
    private Recipient recipient;
@@ -144,7 +150,7 @@ public class TransferTransactionBuilder extends TransactionBuilder<TransferTrans
     * @param mosaics the mosaics to set
     * @return self
     */
-   public TransferTransactionBuilder mosaics(Mosaic ... mosaics) {
+   public TransferTransactionBuilder mosaics(Mosaic... mosaics) {
       return mosaics(Arrays.asList(mosaics));
    }
 

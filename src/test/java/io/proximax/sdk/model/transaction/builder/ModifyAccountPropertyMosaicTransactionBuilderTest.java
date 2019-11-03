@@ -56,4 +56,26 @@ class ModifyAccountPropertyMosaicTransactionBuilderTest {
       assertEquals(mod, trans.getPropertyModifications().get(0));
    }
 
+   @Test
+   void testAllowed() {
+      MosaicId mosid = new MosaicId(BigInteger.ONE);
+      AccountPropertyModification<UInt64Id> mod = AccountPropertyModification.add(mosid);
+      ModifyAccountPropertyTransaction<UInt64Id> trans = builder.allowed(Arrays.asList(mod)).build();
+      
+      assertEquals(AccountPropertyType.ALLOW_MOSAIC, trans.getPropertyType());
+      assertEquals(1, trans.getPropertyModifications().size());
+      assertEquals(mod, trans.getPropertyModifications().get(0));
+   }
+
+   @Test
+   void testBlocked() {
+      MosaicId mosid = new MosaicId(BigInteger.ONE);
+      AccountPropertyModification<UInt64Id> mod = AccountPropertyModification.add(mosid);
+      ModifyAccountPropertyTransaction<UInt64Id> trans = builder.blocked(Arrays.asList(mod)).build();
+      
+      assertEquals(AccountPropertyType.BLOCK_MOSAIC, trans.getPropertyType());
+      assertEquals(1, trans.getPropertyModifications().size());
+      assertEquals(mod, trans.getPropertyModifications().get(0));
+   }
+
 }

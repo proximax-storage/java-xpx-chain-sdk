@@ -69,4 +69,15 @@ class ModifyContractTransactionBuilderTest {
       assertEquals("CAFE", trans.getContentHash());
       assertEquals(BigInteger.TEN, trans.getDurationDelta());
    }
+
+   @Test
+   void contractInit() {
+      ModifyContractTransaction trans = builder.init("CAFE", BigInteger.TEN).build();
+      
+      assertTrue(trans.getExecutorsModifications().isEmpty());
+      assertTrue(trans.getCustomersModifications().isEmpty());
+      assertTrue(trans.getVerifiersModifications().isEmpty());
+      assertEquals("CAFE", trans.getContentHash());
+      assertEquals(BigInteger.TEN, trans.getDurationDelta());
+   }
 }

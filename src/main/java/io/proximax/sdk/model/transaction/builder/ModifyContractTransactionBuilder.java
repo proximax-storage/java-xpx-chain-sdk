@@ -10,13 +10,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import io.proximax.sdk.model.transaction.ModifyContractTransaction;
-import io.proximax.sdk.model.transaction.MultisigCosignatoryModification;
 import io.proximax.sdk.model.transaction.EntityType;
 import io.proximax.sdk.model.transaction.EntityVersion;
+import io.proximax.sdk.model.transaction.ModifyContractTransaction;
+import io.proximax.sdk.model.transaction.MultisigCosignatoryModification;
 
 /**
+ * <p>
  * builder for {@link ModifyContractTransaction}
+ * </p>
+ * <p>
+ * Standard use: contract needs to be identified by the contentHash. To create contract call
+ * {@link #init(String, BigInteger)} followed by definition of customers, executors and verifiers
+ * </p>
  */
 public class ModifyContractTransactionBuilder
       extends TransactionBuilder<ModifyContractTransactionBuilder, ModifyContractTransaction> {
@@ -52,6 +58,21 @@ public class ModifyContractTransactionBuilder
       return new ModifyContractTransaction(getNetworkType(), getVersion(), getDeadline(), maxFee, getSignature(),
             getSigner(), getTransactionInfo(), getDurationDelta(), getContentHash(), getCustomersModifications(),
             getExecutorsModifications(), getVerifiersModifications());
+   }
+
+   // ------------------------------------ checked API ------------------------------------------//
+
+   /**
+    * initialize builder with parameters that are mandatory to create new contract. also can be used to change duration
+    * of the contract
+    * 
+    * @param contentHash hash of the contract content
+    * @param durationDelta duration of the contract in blocks for new contract and change in duration for existing
+    * contract
+    * @return self
+    */
+   public ModifyContractTransactionBuilder init(String contentHash, BigInteger durationDelta) {
+      return contentHash(contentHash).durationDelta(durationDelta);
    }
 
    // ------------------------------------- setters ---------------------------------------------//

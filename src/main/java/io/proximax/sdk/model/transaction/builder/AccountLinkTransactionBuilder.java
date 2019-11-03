@@ -14,7 +14,13 @@ import io.proximax.sdk.model.transaction.EntityType;
 import io.proximax.sdk.model.transaction.EntityVersion;
 
 /**
+ * <p>
  * builder for {@link AccountLinkTransaction}
+ * </p>
+ * <p>
+ * Standard use: call {@link #link(PublicAccount)} or {@link #unlink(PublicAccount)} methods to specify the action that
+ * will be performed
+ * </p>
  */
 public class AccountLinkTransactionBuilder
       extends TransactionBuilder<AccountLinkTransactionBuilder, AccountLinkTransaction> {
@@ -34,8 +40,8 @@ public class AccountLinkTransactionBuilder
    @Override
    public AccountLinkTransaction build() {
       // use or calculate maxFee
-      BigInteger maxFee = getMaxFee().orElseGet(
-            () -> getMaxFeeCalculation(AccountLinkTransaction.calculatePayloadSize()));
+      BigInteger maxFee = getMaxFee()
+            .orElseGet(() -> getMaxFeeCalculation(AccountLinkTransaction.calculatePayloadSize()));
       // create transaction instance
       return new AccountLinkTransaction(getNetworkType(), getVersion(), getDeadline(), maxFee, getSignature(),
             getSigner(), getTransactionInfo(), getRemoteAccount(), getAction());
@@ -79,9 +85,9 @@ public class AccountLinkTransactionBuilder
    public AccountLinkAction getAction() {
       return action;
    }
-   
+
    // -------------------------------------- convenience --------------------------------------------//
-   
+
    /**
     * link remote account
     * 
@@ -91,7 +97,7 @@ public class AccountLinkTransactionBuilder
    public AccountLinkTransactionBuilder link(PublicAccount remoteAccount) {
       return action(AccountLinkAction.LINK).remoteAccount(remoteAccount);
    }
-   
+
    /**
     * unlink remote account
     * 

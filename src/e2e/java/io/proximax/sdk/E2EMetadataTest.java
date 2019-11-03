@@ -85,8 +85,8 @@ public class E2EMetadataTest extends E2EBaseTest {
       logger.info("Creating new mosaic {}", id);
       signup(seedAccount.getAddress());
       // create mosaic
-      SignedTransaction mdt = transact.mosaicDefinition().nonce(nonce).mosaicId(id)
-            .mosaicProperties(new MosaicProperties(true, true, 6, Optional.of(BigInteger.valueOf(20)))).build()
+      SignedTransaction mdt = transact.mosaicDefinition()
+            .init(nonce, id, new MosaicProperties(true, true, 6, Optional.of(BigInteger.valueOf(20)))).build()
             .signWith(seedAccount, api.getNetworkGenerationHash());
       Observable<Transaction> confirmation = listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(),
             TimeUnit.SECONDS);

@@ -83,8 +83,7 @@ public class E2EContractTest extends E2EBaseTest {
    void test02CreateContract() {
       logger.info("Creating contract");
       // prepare transaction
-      ModifyContractTransaction trans = transact.modifyContract().durationDelta(BigInteger.valueOf(100l))
-            .contentHash(contentHash)
+      ModifyContractTransaction trans = transact.contract().init(contentHash, BigInteger.valueOf(100l))
             .customersModifications(MultisigCosignatoryModification.add(customer.getPublicAccount()))
             .executorsModifications(MultisigCosignatoryModification.add(executor1.getPublicAccount()),
                   MultisigCosignatoryModification.add(executor2.getPublicAccount()))
@@ -121,7 +120,7 @@ public class E2EContractTest extends E2EBaseTest {
    void test03ChangeExistingContract() {
       logger.info("Changing contract");
       // prepare transaction - add one block to duration, move executor2 to verifiers
-      ModifyContractTransaction trans = transact.modifyContract().durationDelta(BigInteger.ONE).contentHash(contentHash)
+      ModifyContractTransaction trans = transact.contract().durationDelta(BigInteger.ONE).contentHash(contentHash)
             .executorsModifications(MultisigCosignatoryModification.remove(executor2.getPublicAccount()))
             .verifiersModifications(MultisigCosignatoryModification.add(executor2.getPublicAccount())).build();
       // create aggregate transaction for the multisig

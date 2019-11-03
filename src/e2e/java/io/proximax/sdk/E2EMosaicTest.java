@@ -74,8 +74,8 @@ public class E2EMosaicTest extends E2EBaseTest {
    @Test
    void test01CreateMosaic() {
       logger.info("Creating new mosaic");
-      SignedTransaction mdt = transact.mosaicDefinition().nonce(nonce).mosaicId(id)
-            .mosaicProperties(new MosaicProperties(true, true, 6, Optional.of(BigInteger.valueOf(20)))).build()
+      SignedTransaction mdt = transact.mosaicDefinition()
+            .init(nonce, id, new MosaicProperties(true, true, 6, Optional.of(BigInteger.valueOf(20)))).build()
             .signWith(seedAccount, api.getNetworkGenerationHash());
       Observable<Transaction> confirmation = listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(),
             TimeUnit.SECONDS);
@@ -95,7 +95,7 @@ public class E2EMosaicTest extends E2EBaseTest {
    @Test
    void test02ChangeSupply() {
       logger.info("Changing supply");
-      SignedTransaction supplychange = transact.mosaicSupplyChange().increaseSupplyFor(id).delta(BigInteger.TEN).build()
+      SignedTransaction supplychange = transact.mosaicSupplyChange().increase(id, BigInteger.TEN).build()
             .signWith(seedAccount, api.getNetworkGenerationHash());
       transactionHttp.announce(supplychange).blockingFirst();
       logger.info("Supply changed. {}",
@@ -110,7 +110,7 @@ public class E2EMosaicTest extends E2EBaseTest {
    @Test
    void test03DecreaseSupply() {
       logger.info("Changing supply");
-      SignedTransaction supplychange = transact.mosaicSupplyChange().decreaseSupplyFor(id).delta(BigInteger.ONE).build()
+      SignedTransaction supplychange = transact.mosaicSupplyChange().decrease(id, BigInteger.ONE).build()
             .signWith(seedAccount, api.getNetworkGenerationHash());
       transactionHttp.announce(supplychange).blockingFirst();
       logger.info("Supply changed. {}",
@@ -128,14 +128,14 @@ public class E2EMosaicTest extends E2EBaseTest {
       MosaicNonce aNonce = MosaicNonce.createRandom();
       MosaicId aId = new MosaicId(aNonce, seedAccount.getPublicKey());
       // create mosaic
-      MosaicDefinitionTransaction create = transact.mosaicDefinition().nonce(aNonce).mosaicId(aId)
-            .mosaicProperties(new MosaicProperties(true, true, 6, Optional.of(BigInteger.valueOf(20)))).build();
+      MosaicDefinitionTransaction create = transact.mosaicDefinition()
+            .init(aNonce, aId, new MosaicProperties(true, true, 6, Optional.of(BigInteger.valueOf(20)))).build();
       // add supply of 10
-      MosaicSupplyChangeTransaction increaseSupply = transact.mosaicSupplyChange().increaseSupplyFor(aId)
-            .delta(BigInteger.TEN).build();
+      MosaicSupplyChangeTransaction increaseSupply = transact.mosaicSupplyChange().increase(aId, BigInteger.TEN)
+            .build();
       // remove supply of 1
-      MosaicSupplyChangeTransaction decreaseSupply = transact.mosaicSupplyChange().decreaseSupplyFor(aId)
-            .delta(BigInteger.ONE).build();
+      MosaicSupplyChangeTransaction decreaseSupply = transact.mosaicSupplyChange().decrease(aId, BigInteger.ONE)
+            .build();
       // create aggregate transaction
       AggregateTransaction aggregateTransaction = transact.aggregateComplete()
             .innerTransactions(create.toAggregate(seedAccount.getPublicAccount()),
@@ -161,8 +161,8 @@ public class E2EMosaicTest extends E2EBaseTest {
       MosaicNonce aNonce = MosaicNonce.createRandom();
       MosaicId aId = new MosaicId(aNonce, seedAccount.getPublicKey());
       logger.info("Creating new mosaic {}", aId.getIdAsHex());
-      SignedTransaction mdt = transact.mosaicDefinition().nonce(aNonce).mosaicId(aId)
-            .mosaicProperties(new MosaicProperties(true, true, 6, Optional.empty())).build()
+      SignedTransaction mdt = transact.mosaicDefinition()
+            .init(aNonce, aId, new MosaicProperties(true, true, 6, Optional.empty())).build()
             .signWith(seedAccount, api.getNetworkGenerationHash());
       Observable<Transaction> confirmation = listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(),
             TimeUnit.SECONDS);
