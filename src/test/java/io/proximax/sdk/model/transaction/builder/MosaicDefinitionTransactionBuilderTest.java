@@ -42,8 +42,8 @@ class MosaicDefinitionTransactionBuilderTest {
       MosaicNonce nonce = MosaicNonce.createRandom();
       MosaicId mosid = new MosaicId("CAFECAFECAFECAFE");
       MosaicProperties props = new MosaicProperties(true, true, 5, Optional.empty());
-      MosaicDefinitionTransaction trans = builder.nonce(nonce).mosaicId(mosid).mosaicProperties(props).build();
-      
+      MosaicDefinitionTransaction trans = builder.init(nonce, mosid, props).build();
+
       assertEquals(nonce, trans.getNonce());
       assertEquals(mosid, trans.getMosaicId());
       assertEquals(props, trans.getMosaicProperties());
@@ -54,8 +54,8 @@ class MosaicDefinitionTransactionBuilderTest {
       MosaicNonce nonce = MosaicNonce.createRandom();
       MosaicId mosid = new MosaicId("CAFECAFECAFECAFE");
       MosaicProperties props = new MosaicProperties(true, true, 5, Optional.of(BigInteger.ONE));
-      MosaicDefinitionTransaction trans = builder.nonce(nonce).mosaicId(mosid).mosaicProperties(props).build();
-      
+      MosaicDefinitionTransaction trans = builder.init(nonce, mosid, props).build();
+
       assertEquals(nonce, trans.getNonce());
       assertEquals(mosid, trans.getMosaicId());
       assertEquals(props, trans.getMosaicProperties());

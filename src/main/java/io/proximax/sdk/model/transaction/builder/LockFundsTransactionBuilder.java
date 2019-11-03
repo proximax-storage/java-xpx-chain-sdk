@@ -9,16 +9,20 @@ import java.math.BigInteger;
 
 import io.proximax.sdk.model.mosaic.Mosaic;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
-import io.proximax.sdk.model.transaction.LockFundsTransaction;
-import io.proximax.sdk.model.transaction.SignedTransaction;
 import io.proximax.sdk.model.transaction.EntityType;
 import io.proximax.sdk.model.transaction.EntityVersion;
+import io.proximax.sdk.model.transaction.LockFundsTransaction;
+import io.proximax.sdk.model.transaction.SignedTransaction;
 
 /**
+ * <p>
  * builder for {@link LockFundsTransaction}
+ * </p>
+ * <p>
+ * Standard use: to lock funds for aggregate transaction call {@link #forAggregate(BigInteger, SignedTransaction)}
+ * </p>
  */
-public class LockFundsTransactionBuilder
-      extends TransactionBuilder<LockFundsTransactionBuilder, LockFundsTransaction> {
+public class LockFundsTransactionBuilder extends TransactionBuilder<LockFundsTransactionBuilder, LockFundsTransaction> {
 
    private Mosaic mosaic;
    private BigInteger duration;
@@ -36,12 +40,12 @@ public class LockFundsTransactionBuilder
    @Override
    public LockFundsTransaction build() {
       // use or calculate maxFee
-      BigInteger maxFee = getMaxFee().orElseGet(
-            () -> getMaxFeeCalculation(LockFundsTransaction.calculatePayloadSize()));
+      BigInteger maxFee = getMaxFee()
+            .orElseGet(() -> getMaxFeeCalculation(LockFundsTransaction.calculatePayloadSize()));
       // create transaction instance
-      return new LockFundsTransaction(getNetworkType(), getVersion(), getDeadline(), maxFee, getSignature(), getSigner(), getTransactionInfo(), getMosaic(), getDuration(), getSignedTransaction());
+      return new LockFundsTransaction(getNetworkType(), getVersion(), getDeadline(), maxFee, getSignature(),
+            getSigner(), getTransactionInfo(), getMosaic(), getDuration(), getSignedTransaction());
    }
-
 
    // ------------------------------------- setters ---------------------------------------------//
 
@@ -100,7 +104,7 @@ public class LockFundsTransactionBuilder
    public SignedTransaction getSignedTransaction() {
       return signedTransaction;
    }
-   
+
    // -------------------------------------- convenience --------------------------------------------//
 
    /**
@@ -108,8 +112,22 @@ public class LockFundsTransactionBuilder
     * 
     * @param duration the duration in number of blocks
     * @return self
+    * @deprecated use {@link #forAggregate(BigInteger, SignedTransaction)} instead
     */
+   @Deprecated
    public LockFundsTransactionBuilder aggregate(BigInteger duration) {
       return mosaic(NetworkCurrencyMosaic.TEN).duration(duration);
+   }
+
+   /**
+    * lock 10 network currency for specified duration and signed transaction. this is convenience for aggregate
+    * transaction locks
+    * 
+    * @param duration the duration in number of blocks
+    * @param signedAggregateTransaction the aggregate transaction which is getting the lock created
+    * @return self
+    */
+   public LockFundsTransactionBuilder forAggregate(BigInteger duration, SignedTransaction signedAggregateTransaction) {
+      return mosaic(NetworkCurrencyMosaic.TEN).duration(duration).signedTransaction(signedAggregateTransaction);
    }
 }

@@ -10,12 +10,17 @@ import java.math.BigInteger;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicNonce;
 import io.proximax.sdk.model.mosaic.MosaicProperties;
-import io.proximax.sdk.model.transaction.MosaicDefinitionTransaction;
 import io.proximax.sdk.model.transaction.EntityType;
 import io.proximax.sdk.model.transaction.EntityVersion;
+import io.proximax.sdk.model.transaction.MosaicDefinitionTransaction;
 
 /**
+ * <p>
  * builder for {@link MosaicDefinitionTransaction}
+ * </p>
+ * <p>
+ * Standard use: call {@link #init(MosaicNonce, MosaicId, MosaicProperties)} to specify all of the required parameters
+ * </p>
  */
 public class MosaicDefinitionTransactionBuilder
       extends TransactionBuilder<MosaicDefinitionTransactionBuilder, MosaicDefinitionTransaction> {
@@ -42,6 +47,21 @@ public class MosaicDefinitionTransactionBuilder
       // create transaction instance
       return new MosaicDefinitionTransaction(getNetworkType(), getVersion(), getDeadline(), maxFee, getSignature(),
             getSigner(), getTransactionInfo(), getNonce(), getMosaicId(), getMosaicProperties());
+   }
+
+   // ------------------------------------ checked API ------------------------------------------//
+
+   /**
+    * initialize builder with mandatory parameters
+    * 
+    * @param nonce mosaic nonce
+    * @param mosaicId mosaic ID
+    * @param mosaicProperties mosaic properties
+    * @return self
+    */
+   public MosaicDefinitionTransactionBuilder init(MosaicNonce nonce, MosaicId mosaicId,
+         MosaicProperties mosaicProperties) {
+      return nonce(nonce).mosaicId(mosaicId).mosaicProperties(mosaicProperties);
    }
 
    // -------------------------------------- setters --------------------------------------------//

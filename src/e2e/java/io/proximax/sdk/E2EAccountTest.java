@@ -40,7 +40,6 @@ import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.props.AccountProperties;
 import io.proximax.sdk.model.account.props.AccountProperty;
 import io.proximax.sdk.model.account.props.AccountPropertyModification;
-import io.proximax.sdk.model.account.props.AccountPropertyModificationType;
 import io.proximax.sdk.model.account.props.AccountPropertyType;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
@@ -77,10 +76,7 @@ class E2EAccountTest extends E2EBaseTest {
       logger.info("going to block {} by {}", blocked.getPublicAccount(), acct.getPublicAccount());
 
       ModifyAccountPropertyTransaction<Address> trans = transact.accountPropAddress()
-            .propertyType(AccountPropertyType.BLOCK_ADDRESS)
-            .modifications(Arrays
-                  .asList(new AccountPropertyModification<>(AccountPropertyModificationType.ADD, blocked.getAddress())))
-            .build();
+            .blocked(Arrays.asList(AccountPropertyModification.add(blocked.getAddress()))).build();
       // announce the transaction
       transactionHttp.announce(trans.signWith(acct, api.getNetworkGenerationHash())).blockingFirst();
       logger.info("Waiting for  confirmation");
@@ -104,8 +100,7 @@ class E2EAccountTest extends E2EBaseTest {
       UInt64Id allowedMosaic = NetworkCurrencyMosaic.ID;
       logger.info("going to allow {} by {}", allowedMosaic, acct.getPublicAccount());
       ModifyAccountPropertyTransaction<UInt64Id> trans = transact.accountPropMosaic()
-            .propertyType(AccountPropertyType.ALLOW_MOSAIC)
-            .modifications(Arrays.asList(AccountPropertyModification.add(allowedMosaic))).build();
+            .allowed(Arrays.asList(AccountPropertyModification.add(allowedMosaic))).build();
       // announce the transaction
       transactionHttp.announce(trans.signWith(acct, api.getNetworkGenerationHash())).blockingFirst();
       logger.info("Waiting for  confirmation");
@@ -129,8 +124,7 @@ class E2EAccountTest extends E2EBaseTest {
       EntityType allowedTransType = EntityType.ACCOUNT_PROPERTIES_ENTITY_TYPE;
       logger.info("going to allow {} by {}", allowedTransType, acct.getPublicAccount());
       ModifyAccountPropertyTransaction<EntityType> trans = transact.accountPropEntityType()
-            .propertyType(AccountPropertyType.ALLOW_TRANSACTION)
-            .modifications(Arrays.asList(AccountPropertyModification.add(allowedTransType))).build();
+            .allowed(Arrays.asList(AccountPropertyModification.add(allowedTransType))).build();
       // announce the transaction
       transactionHttp.announce(trans.signWith(acct, api.getNetworkGenerationHash())).blockingFirst();
       logger.info("Waiting for  confirmation");
@@ -293,8 +287,8 @@ class E2EAccountTest extends E2EBaseTest {
    void incomingTransactions() throws ExecutionException, InterruptedException {
       List<Transaction> transactions = accountHttp.incomingTransactions(simpleAccount.getPublicAccount()).toFuture()
             .get();
-      List<Transaction> transactionsByAddr = accountHttp.incomingTransactions(simpleAccount.getPublicAccount().getAddress()).toFuture()
-            .get();
+      List<Transaction> transactionsByAddr = accountHttp
+            .incomingTransactions(simpleAccount.getPublicAccount().getAddress()).toFuture().get();
 
       assertEquals(1, transactions.size());
       assertEquals(1, transactionsByAddr.size());

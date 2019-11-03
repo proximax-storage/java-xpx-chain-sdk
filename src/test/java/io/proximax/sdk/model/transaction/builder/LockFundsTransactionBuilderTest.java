@@ -15,9 +15,9 @@ import org.junit.jupiter.api.Test;
 import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
+import io.proximax.sdk.model.transaction.EntityType;
 import io.proximax.sdk.model.transaction.LockFundsTransaction;
 import io.proximax.sdk.model.transaction.SignedTransaction;
-import io.proximax.sdk.model.transaction.EntityType;
 
 /**
  * {@link LockFundsTransactionBuilder} tests
@@ -37,6 +37,17 @@ class LockFundsTransactionBuilderTest {
    }
    @Test
    void test() {
+      SignedTransaction signedTransaction = new SignedTransaction("payload",
+            "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", EntityType.AGGREGATE_BONDED);
+      LockFundsTransaction trans = builder.forAggregate(BigInteger.ONE, signedTransaction).build();
+      
+      assertEquals(BigInteger.ONE, trans.getDuration());
+      assertEquals(NetworkCurrencyMosaic.TEN, trans.getMosaic());
+      assertEquals(signedTransaction, trans.getSignedTransaction());
+   }
+
+   @Test
+   void testAggregate() {
       SignedTransaction signedTransaction = new SignedTransaction("payload",
             "8498B38D89C1DC8A448EA5824938FF828926CD9F7747B1844B59B4B6807E878B", EntityType.AGGREGATE_BONDED);
       LockFundsTransaction trans = builder.aggregate(BigInteger.ONE).signedTransaction(signedTransaction).build();

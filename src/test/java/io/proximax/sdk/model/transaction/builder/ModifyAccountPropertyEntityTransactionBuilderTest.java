@@ -17,8 +17,8 @@ import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.model.account.props.AccountPropertyModification;
 import io.proximax.sdk.model.account.props.AccountPropertyType;
 import io.proximax.sdk.model.blockchain.NetworkType;
-import io.proximax.sdk.model.transaction.ModifyAccountPropertyTransaction;
 import io.proximax.sdk.model.transaction.EntityType;
+import io.proximax.sdk.model.transaction.ModifyAccountPropertyTransaction;
 
 /**
  * {@link ModifyAccountPropertyEntityTransactionBuilder} tests
@@ -43,6 +43,26 @@ class ModifyAccountPropertyEntityTransactionBuilderTest {
       ModifyAccountPropertyTransaction<EntityType> trans = builder.propertyType(AccountPropertyType.ALLOW_TRANSACTION).modifications(Arrays.asList(mod)).build();
       
       assertEquals(AccountPropertyType.ALLOW_TRANSACTION, trans.getPropertyType());
+      assertEquals(1, trans.getPropertyModifications().size());
+      assertEquals(mod, trans.getPropertyModifications().get(0));
+   }
+
+   @Test
+   void testAllowed() {
+      AccountPropertyModification<EntityType> mod = AccountPropertyModification.add(EntityType.MODIFY_CONTRACT);
+      ModifyAccountPropertyTransaction<EntityType> trans = builder.allowed(Arrays.asList(mod)).build();
+      
+      assertEquals(AccountPropertyType.ALLOW_TRANSACTION, trans.getPropertyType());
+      assertEquals(1, trans.getPropertyModifications().size());
+      assertEquals(mod, trans.getPropertyModifications().get(0));
+   }
+
+   @Test
+   void testBlocked() {
+      AccountPropertyModification<EntityType> mod = AccountPropertyModification.add(EntityType.MODIFY_CONTRACT);
+      ModifyAccountPropertyTransaction<EntityType> trans = builder.blocked(Arrays.asList(mod)).build();
+      
+      assertEquals(AccountPropertyType.BLOCK_TRANSACTION, trans.getPropertyType());
       assertEquals(1, trans.getPropertyModifications().size());
       assertEquals(mod, trans.getPropertyModifications().get(0));
    }
