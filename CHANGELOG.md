@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.6.1
+
+Minor release with new features and fixes
+* enhanced transaction builder API
+
 ## 0.6.0 Security audit
 
 Breaking changes introduced by the security audit
