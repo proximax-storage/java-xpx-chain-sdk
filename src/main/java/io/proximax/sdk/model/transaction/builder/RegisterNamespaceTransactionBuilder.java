@@ -10,13 +10,18 @@ import java.util.Optional;
 
 import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.namespace.NamespaceType;
-import io.proximax.sdk.model.transaction.IdGenerator;
-import io.proximax.sdk.model.transaction.RegisterNamespaceTransaction;
 import io.proximax.sdk.model.transaction.EntityType;
 import io.proximax.sdk.model.transaction.EntityVersion;
+import io.proximax.sdk.model.transaction.IdGenerator;
+import io.proximax.sdk.model.transaction.RegisterNamespaceTransaction;
 
 /**
+ * <p>
  * builder for {@link RegisterNamespaceTransaction}
+ * </p>
+ * <p>
+ * Standard use: call {@link #rootNamespace(String)} or {@link #subNamespace(NamespaceId, String)}
+ * </p>
  */
 public class RegisterNamespaceTransactionBuilder
       extends TransactionBuilder<RegisterNamespaceTransactionBuilder, RegisterNamespaceTransaction> {
@@ -158,7 +163,7 @@ public class RegisterNamespaceTransactionBuilder
       namespaceId(new NamespaceId(name));
       return self();
    }
-   
+
    /**
     * create sub-namespace
     * 

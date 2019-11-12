@@ -9,12 +9,17 @@ import java.math.BigInteger;
 
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicSupplyType;
-import io.proximax.sdk.model.transaction.MosaicSupplyChangeTransaction;
 import io.proximax.sdk.model.transaction.EntityType;
 import io.proximax.sdk.model.transaction.EntityVersion;
+import io.proximax.sdk.model.transaction.MosaicSupplyChangeTransaction;
 
 /**
+ * <p>
  * builder for {@link MosaicSupplyChangeTransaction}
+ * </p>
+ * <p>
+ * Standard use: call {@link #increase(MosaicId, BigInteger)} or {@link #decrease(MosaicId, BigInteger)}
+ * </p>
  */
 public class MosaicSupplyChangeTransactionBuilder
       extends TransactionBuilder<MosaicSupplyChangeTransactionBuilder, MosaicSupplyChangeTransaction> {
@@ -107,22 +112,48 @@ public class MosaicSupplyChangeTransactionBuilder
     * 
     * @param mosaicId the mosaic ID to increase supply for
     * @return self
+    * @deprecated use {@link #increase(MosaicId, BigInteger)} instead
     */
+   @Deprecated
    public MosaicSupplyChangeTransactionBuilder increaseSupplyFor(MosaicId mosaicId) {
       mosaicSupplyType(MosaicSupplyType.INCREASE);
       mosaicId(mosaicId);
       return self();
    }
-   
+
+   /**
+    * increase supply for specified mosaic ID
+    * 
+    * @param mosaicId the mosaic ID to increase supply for
+    * @param delta supply amount added to current supply
+    * @return self
+    */
+   public MosaicSupplyChangeTransactionBuilder increase(MosaicId mosaicId, BigInteger delta) {
+      return mosaicSupplyType(MosaicSupplyType.INCREASE).mosaicId(mosaicId).delta(delta);
+   }
+
    /**
     * decrease supply for specified mosaic ID
     * 
     * @param mosaicId the mosaic ID to decrease supply for
     * @return self
+    * @deprecated use {@link #decrease(MosaicId, BigInteger)} instead
     */
+   @Deprecated
    public MosaicSupplyChangeTransactionBuilder decreaseSupplyFor(MosaicId mosaicId) {
       mosaicSupplyType(MosaicSupplyType.DECREASE);
       mosaicId(mosaicId);
       return self();
+   }
+
+   /**
+    * decrease supply for specified mosaic ID
+    * 
+    * @param mosaicId the mosaic ID to decrease supply for
+    * @param delta supply amount subtracted from current supply
+    * @return self
+    */
+   public MosaicSupplyChangeTransactionBuilder decrease(MosaicId mosaicId, BigInteger delta) {
+      return mosaicSupplyType(MosaicSupplyType.DECREASE).mosaicId(mosaicId).delta(delta);
    }
 }

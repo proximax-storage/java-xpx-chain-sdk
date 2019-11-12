@@ -52,4 +52,24 @@ class ModifyAccountPropertyEntityTransactionBuilderTest {
       assertEquals(mod, trans.getPropertyModifications().get(0));
    }
 
+   @Test
+   void testAllowed() {
+      AccountPropertyModification<EntityType> mod = AccountPropertyModification.add(EntityType.MODIFY_CONTRACT);
+      ModifyAccountPropertyTransaction<EntityType> trans = builder.allowed(Arrays.asList(mod)).build();
+      
+      assertEquals(AccountPropertyType.ALLOW_TRANSACTION, trans.getPropertyType());
+      assertEquals(1, trans.getPropertyModifications().size());
+      assertEquals(mod, trans.getPropertyModifications().get(0));
+   }
+
+   @Test
+   void testBlocked() {
+      AccountPropertyModification<EntityType> mod = AccountPropertyModification.add(EntityType.MODIFY_CONTRACT);
+      ModifyAccountPropertyTransaction<EntityType> trans = builder.blocked(Arrays.asList(mod)).build();
+      
+      assertEquals(AccountPropertyType.BLOCK_TRANSACTION, trans.getPropertyType());
+      assertEquals(1, trans.getPropertyModifications().size());
+      assertEquals(mod, trans.getPropertyModifications().get(0));
+   }
+
 }

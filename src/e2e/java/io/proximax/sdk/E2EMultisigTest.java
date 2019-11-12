@@ -24,7 +24,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -43,7 +42,6 @@ import io.proximax.sdk.model.transaction.CosignatureTransaction;
 import io.proximax.sdk.model.transaction.LockFundsTransaction;
 import io.proximax.sdk.model.transaction.ModifyMultisigAccountTransaction;
 import io.proximax.sdk.model.transaction.MultisigCosignatoryModification;
-import io.proximax.sdk.model.transaction.MultisigCosignatoryModificationType;
 import io.proximax.sdk.model.transaction.SignedTransaction;
 import io.proximax.sdk.model.transaction.TransferTransaction;
 
@@ -76,6 +74,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       signup(multisigAccount.getAddress());
       signup(cosig1.getAddress());
       signup(cosig2.getAddress());
+      signup(cosig3.getAddress());
    }
 
    @Test
@@ -88,12 +87,12 @@ public class E2EMultisigTest extends E2EBaseTest {
       sendSomeCash(seedAccount, multisigAccount.getAddress(), 1);
       // give cosig1 10XPX so he can lock funds for aggregate transactions
       sendSomeCash(seedAccount, cosig1.getAddress(), 10); // change the account to multisig with 1 of2 cosignatories
-      ModifyMultisigAccountTransaction changeToMultisig = transact.multisigModification().minApprovalDelta(1).minRemovalDelta(1).modifications(
-            new MultisigCosignatoryModification(MultisigCosignatoryModificationType.ADD,
-                  cosig1.getPublicAccount()),
-            new MultisigCosignatoryModification(MultisigCosignatoryModificationType.ADD,
-                  cosig2.getPublicAccount())).build();
-      AggregateTransaction changeToMultisigAggregate = transact.aggregateComplete().innerTransactions(changeToMultisig.toAggregate(multisigAccount.getPublicAccount())).build();
+      ModifyMultisigAccountTransaction changeToMultisig = transact.multisigModification().minApprovalDelta(1)
+            .minRemovalDelta(1).modifications(MultisigCosignatoryModification.add(cosig1.getPublicAccount()),
+                  MultisigCosignatoryModification.add(cosig2.getPublicAccount()))
+            .build();
+      AggregateTransaction changeToMultisigAggregate = transact.aggregateComplete()
+            .innerTransactions(changeToMultisig.toAggregate(multisigAccount.getPublicAccount())).build();
       SignedTransaction signedChangeToMultisig = api
             .signWithCosigners(changeToMultisigAggregate, multisigAccount, Arrays.asList(cosig1, cosig2));
       // announce the transaction
@@ -109,28 +108,34 @@ public class E2EMultisigTest extends E2EBaseTest {
    @Test
    void test01TransferFromMultisig1Of2Aggregate() {
       // prepare transfer to the seed account
-      TransferTransaction transfer = transact.transfer().mosaics(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))).to(seedAccount.getAddress()).build();
+      TransferTransaction transfer = transact.transfer()
+            .mosaics(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))).to(seedAccount.getAddress()).build();
       // add the modification to the aggregate transaction
-      AggregateTransaction aggregateTransaction = transact.aggregateComplete().innerTransactions(transfer.toAggregate(multisigAccount.getPublicAccount())).build();
+      AggregateTransaction aggregateTransaction = transact.aggregateComplete()
+            .innerTransactions(transfer.toAggregate(multisigAccount.getPublicAccount())).build();
       // sign the aggregate transaction
       SignedTransaction signedTransaction = api.sign(aggregateTransaction, cosig1);
       // announce the transfer
       logger.info("Announced the aggregate complete transfer from multisig: {}",
             transactionHttp.announce(signedTransaction).blockingFirst());
-      logger.info("request to transfer confirmed: {}", listener.confirmed(cosig1.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      logger.info("request to transfer confirmed: {}",
+            listener.confirmed(cosig1.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
       sleepForAWhile();
    }
 
    @Test
    void test01TransferFromMultisig1Of2AggregateBonded() {
       // prepare transfer to the seed account
-      TransferTransaction transfer = transact.transfer().mosaics(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))).to(seedAccount.getAddress()).build();
+      TransferTransaction transfer = transact.transfer()
+            .mosaics(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))).to(seedAccount.getAddress()).build();
       // add the modification to the aggregate transaction. has to be bonded because we are going to test the lock
-      AggregateTransaction aggregateTransaction = transact.aggregateBonded().innerTransactions(transfer.toAggregate(multisigAccount.getPublicAccount())).build();
+      AggregateTransaction aggregateTransaction = transact.aggregateBonded()
+            .innerTransactions(transfer.toAggregate(multisigAccount.getPublicAccount())).build();
       // sign the aggregate bonded transaction
       SignedTransaction signedTransaction = api.sign(aggregateTransaction, cosig1);
       // lock 10 of XPX (required to prevent spamming)
-      LockFundsTransaction lockFundsTransaction = transact.lockFunds().aggregate(BigInteger.valueOf(480)).signedTransaction(signedTransaction).build();
+      LockFundsTransaction lockFundsTransaction = transact.lockFunds()
+            .forAggregate(BigInteger.valueOf(480), signedTransaction).build();
       logger.info("locking account {}", lockFundsTransaction);
       // sign the fund lock
       SignedTransaction lockFundsTransactionSigned = api.sign(lockFundsTransaction, cosig1);
@@ -143,7 +148,8 @@ public class E2EMultisigTest extends E2EBaseTest {
       // announce the multisig change as aggregate bounded
       logger.info("Announced the aggregate bonded transfer from multisig: {}",
             transactionHttp.announceAggregateBonded(signedTransaction).blockingFirst());
-      logger.info("request to make transfer confirmed: {}", listener.confirmed(cosig1.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      logger.info("request to make transfer confirmed: {}",
+            listener.confirmed(cosig1.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
       sleepForAWhile();
    }
 
@@ -152,7 +158,8 @@ public class E2EMultisigTest extends E2EBaseTest {
       logger.info("Going to make the account 2 of 2");
       // modify account to be 2 of 2
       ModifyMultisigAccountTransaction changeTo2of2 = transact.multisigModification().minApprovalDelta(1).build();
-      AggregateTransaction aggregateTransaction = transact.aggregateComplete().innerTransactions(changeTo2of2.toAggregate(multisigAccount.getPublicAccount())).build();
+      AggregateTransaction aggregateTransaction = transact.aggregateComplete()
+            .innerTransactions(changeTo2of2.toAggregate(multisigAccount.getPublicAccount())).build();
       SignedTransaction signedChangeTo2of2 = api.sign(aggregateTransaction, cosig1);
       logger.info("Sent request: {}", transactionHttp.announce(signedChangeTo2of2).toFuture().get());
       // verify that min approvals is set to 2
@@ -165,67 +172,83 @@ public class E2EMultisigTest extends E2EBaseTest {
    @Test
    void test02TransferFromMultisig2Of2Aggregate() {
       // prepare transfer to the seed account
-      TransferTransaction transfer = transact.transfer().mosaics(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))).to(seedAccount.getAddress()).build();
+      TransferTransaction transfer = transact.transfer()
+            .mosaics(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))).to(seedAccount.getAddress()).build();
       // add the modification to the aggregate transaction
-      AggregateTransaction aggregateTransaction = transact.aggregateComplete().innerTransactions(transfer.toAggregate(multisigAccount.getPublicAccount())).build();
+      AggregateTransaction aggregateTransaction = transact.aggregateComplete()
+            .innerTransactions(transfer.toAggregate(multisigAccount.getPublicAccount())).build();
       // sign the aggregate transaction
-      SignedTransaction signedTransaction = cosig1.signTransactionWithCosignatories(aggregateTransaction, api.getNetworkGenerationHash(),
+      SignedTransaction signedTransaction = cosig1.signTransactionWithCosignatories(aggregateTransaction,
+            api.getNetworkGenerationHash(),
             Arrays.asList(cosig2));
       // announce the transfer
       logger.info("Announced the transfer from multisig: {}",
             transactionHttp.announce(signedTransaction).blockingFirst());
-      logger.info("request confirmed: {}", listener.confirmed(cosig1.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      logger.info("request confirmed: {}",
+            listener.confirmed(cosig1.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
       sleepForAWhile();
    }
 
    @Test
    void test02TransferFromMultisig2Of2AggregateBonded() {
       // prepare transfer to the seed account
-      TransferTransaction transfer = transact.transfer().mosaics(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))).to(seedAccount.getAddress()).build();
+      TransferTransaction transfer = transact.transfer()
+            .mosaics(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))).to(seedAccount.getAddress()).build();
       // add the modification to the aggregate transaction. has to be bonded because we are going to test the lock
-      AggregateTransaction aggregateTransaction = transact.aggregateBonded().innerTransactions(transfer.toAggregate(multisigAccount.getPublicAccount())).build();
+      AggregateTransaction aggregateTransaction = transact.aggregateBonded()
+            .innerTransactions(transfer.toAggregate(multisigAccount.getPublicAccount())).build();
       // sign the aggregate bonded transaction
-      SignedTransaction signedTransaction = cosig1.signTransactionWithCosignatories(aggregateTransaction, api.getNetworkGenerationHash(),
+      SignedTransaction signedTransaction = cosig1.signTransactionWithCosignatories(aggregateTransaction,
+            api.getNetworkGenerationHash(),
             Arrays.asList(cosig2));
       // lock 10 of XPX (required to prevent spamming)
-      LockFundsTransaction lockFundsTransaction = transact.lockFunds().aggregate(BigInteger.valueOf(480)).signedTransaction(signedTransaction).build();
+      LockFundsTransaction lockFundsTransaction = transact.lockFunds()
+            .forAggregate(BigInteger.valueOf(480), signedTransaction).build();
       logger.info("locking account {}", lockFundsTransaction);
       // sign the fund lock
       SignedTransaction lockFundsTransactionSigned = api.sign(lockFundsTransaction, cosig1);
       // announce the lock transaction
       logger.info("Sent request to lock funds: {}",
             transactionHttp.announce(lockFundsTransactionSigned).blockingFirst());
-      logger.info("request confirmed: {}", listener.confirmed(cosig1.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      logger.info("request confirmed: {}",
+            listener.confirmed(cosig1.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
       sleepForAWhile();
       // announce the multisig change as aggregate bounded
       logger.info("Announced the transfer from multisig: {}",
             transactionHttp.announceAggregateBonded(signedTransaction).blockingFirst());
-      logger.info("request confirmed: {}", listener.confirmed(cosig1.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      logger.info("request confirmed: {}",
+            listener.confirmed(cosig1.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
       sleepForAWhile();
    }
 
    @Test
    void test02TransferFromMultisig2Of2AggregateBondedSeparateConfirmation() {
       // prepare transfer to the seed account
-      TransferTransaction transfer = transact.transfer().mosaics(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))).to(seedAccount.getAddress()).build();
+      TransferTransaction transfer = transact.transfer()
+            .mosaics(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))).to(seedAccount.getAddress()).build();
       // add the modification to the aggregate transaction. has to be bonded because we are going to test the lock
-      AggregateTransaction aggregateTransaction = transact.aggregateBonded().innerTransactions(transfer.toAggregate(multisigAccount.getPublicAccount())).build();
+      AggregateTransaction aggregateTransaction = transact.aggregateBonded()
+            .innerTransactions(transfer.toAggregate(multisigAccount.getPublicAccount())).build();
       // sign the aggregate bonded transaction
       SignedTransaction signedTransaction = api.sign(aggregateTransaction, cosig1);
       // lock 10 of XPX (required to prevent spamming)
-      LockFundsTransaction lockFundsTransaction = transact.lockFunds().aggregate(BigInteger.valueOf(480)).signedTransaction(signedTransaction).build();
+      LockFundsTransaction lockFundsTransaction = transact.lockFunds()
+            .forAggregate(BigInteger.valueOf(480), signedTransaction).build();
       logger.info("locking account {}", lockFundsTransaction);
       // sign the fund lock
       SignedTransaction lockFundsTransactionSigned = api.sign(lockFundsTransaction, cosig1);
       // announce the lock transaction
       logger.info("Sent request to lock funds: {}",
             transactionHttp.announce(lockFundsTransactionSigned).blockingFirst());
-      logger.info("request confirmed: {}", listener.confirmed(cosig1.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      logger.info("request confirmed: {}",
+            listener.confirmed(cosig1.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
       sleepForAWhile();
       // announce the multisig change as aggregate bounded
       logger.info("Announced the transfer from multisig: {}",
             transactionHttp.announceAggregateBonded(signedTransaction).blockingFirst());
-      logger.info("request confirmed: {}", listener.aggregateBondedAdded(cosig1.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      logger.info("request confirmed: {}",
+            listener.aggregateBondedAdded(cosig1.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS)
+                  .blockingFirst());
       sleepForAWhile();
       // cosign the request
       cosignMultisigTransaction(multisigAccount, cosig2);
@@ -235,25 +258,30 @@ public class E2EMultisigTest extends E2EBaseTest {
    void test03AddCosignatory() throws InterruptedException, ExecutionException {
       logger.info("Going to add third cosignatory");
       // create multisig modification
-      ModifyMultisigAccountTransaction addCosig3 = transact.multisigModification().modifications(new MultisigCosignatoryModification(MultisigCosignatoryModificationType.ADD,
-            cosig3.getPublicAccount())).build();
+      ModifyMultisigAccountTransaction addCosig3 = transact.multisigModification()
+            .modifications(MultisigCosignatoryModification.add(cosig3.getPublicAccount())).build();
       // add the modification to the aggregate bonded transaction
-      AggregateTransaction aggregateTransaction = transact.aggregateBonded().innerTransactions(addCosig3.toAggregate(multisigAccount.getPublicAccount())).build();
+      AggregateTransaction aggregateTransaction = transact.aggregateBonded()
+            .innerTransactions(addCosig3.toAggregate(multisigAccount.getPublicAccount())).build();
       // sign the aggregate bonded transaction
       SignedTransaction signedTransaction = api.signWithCosigners(aggregateTransaction, cosig1, Arrays.asList(cosig3));
       // lock 10 of XPX (required to prevent spamming)
-      LockFundsTransaction lockFundsTransaction = transact.lockFunds().aggregate(BigInteger.valueOf(480)).signedTransaction(signedTransaction).build();
+      LockFundsTransaction lockFundsTransaction = transact.lockFunds()
+            .forAggregate(BigInteger.valueOf(480), signedTransaction).build();
       // sign the fund lock
       SignedTransaction lockFundsTransactionSigned = api.sign(lockFundsTransaction, cosig1);
       // announce the transaction
       logger.info("Sent request to lock funds: {}",
             transactionHttp.announce(lockFundsTransactionSigned).toFuture().get());
-      logger.info("request confirmed: {}", listener.confirmed(cosig1.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      logger.info("request confirmed: {}",
+            listener.confirmed(cosig1.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
       sleepForAWhile();
       // announce the multisig change as aggregate bounded
       logger.info("Announced the multisig change: {}",
             transactionHttp.announceAggregateBonded(signedTransaction).toFuture().get());
-      logger.info("request confirmed: {}", listener.aggregateBondedAdded(cosig1.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      logger.info("request confirmed: {}",
+            listener.aggregateBondedAdded(cosig1.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS)
+                  .blockingFirst());
       sleepForAWhile();
       // change should not be in effect yet
       testMultisigAccount(multisigAccount, true, 2, 1, 2, 2);
@@ -268,16 +296,16 @@ public class E2EMultisigTest extends E2EBaseTest {
    }
 
    @Test
-   @Disabled
    void test05CreateMultilevelMultisig() throws InterruptedException, ExecutionException {
       // change the account to multisig with 1 of2 cosignatories
-      ModifyMultisigAccountTransaction changeToMultisig = transact.multisigModification().minApprovalDelta(1).minRemovalDelta(1).modifications(
-            new MultisigCosignatoryModification(MultisigCosignatoryModificationType.ADD,
-                  cosig1.getPublicAccount()),
-            new MultisigCosignatoryModification(MultisigCosignatoryModificationType.ADD,
-                  multisigAccount.getPublicAccount())).build();
-      AggregateTransaction agg = transact.aggregateComplete().innerTransactions(changeToMultisig.toAggregate(multiMultisigAccount.getPublicAccount())).build();
-      SignedTransaction signedChangeToMultisig = api.signWithCosigners(agg, multiMultisigAccount, Arrays.asList(cosig1, cosig2));
+      ModifyMultisigAccountTransaction changeToMultisig = transact.multisigModification().minApprovalDelta(1)
+            .minRemovalDelta(1).modifications(MultisigCosignatoryModification.add(cosig1.getPublicAccount()),
+                  MultisigCosignatoryModification.add(multisigAccount.getPublicAccount()))
+            .build();
+      AggregateTransaction agg = transact.aggregateComplete()
+            .innerTransactions(changeToMultisig.toAggregate(multiMultisigAccount.getPublicAccount())).build();
+      SignedTransaction signedChangeToMultisig = api
+            .signWithCosigners(agg, multiMultisigAccount, Arrays.asList(cosig1, cosig2, cosig3));
       // announce the transaction
       logger.info("Sent request: {}", transactionHttp.announce(signedChangeToMultisig).toFuture().get());
       // verify that account is multisig
@@ -287,15 +315,13 @@ public class E2EMultisigTest extends E2EBaseTest {
       sleepForAWhile();
       testMultisigAccount(multiMultisigAccount, true, 1, 1, 2, 3);
    }
-   
+
    /**
     * cosign all aggregate bonded transactions pending on the multisig account
     */
    private void cosignMultisigTransaction(Account account, Account signer) {
-      long count = accountHttp.aggregateBondedTransactions(account.getPublicAccount())
-            .flatMapIterable(tx -> tx)
-            .filter(tx -> !tx.isSignedByAccount(signer.getPublicAccount()))
-            .map(tx -> {
+      long count = accountHttp.aggregateBondedTransactions(account.getPublicAccount()).flatMapIterable(tx -> tx)
+            .filter(tx -> !tx.isSignedByAccount(signer.getPublicAccount())).map(tx -> {
                logger.info("Going to co-sign {}", tx);
                final CosignatureTransaction cosignatureTransaction = CosignatureTransaction.create(tx);
                final CosignatureSignedTransaction cosignatureSignedTransaction = signer
@@ -304,7 +330,8 @@ public class E2EMultisigTest extends E2EBaseTest {
             }).count().blockingGet();
       // make sure that we co-signed exactly one transaction
       assertEquals(1, count);
-      logger.info("cosingned transactions: {}", listener.confirmed(signer.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
+      logger.info("cosingned transactions: {}",
+            listener.confirmed(signer.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
       sleepForAWhile();
    }
 
@@ -320,7 +347,8 @@ public class E2EMultisigTest extends E2EBaseTest {
     * @throws InterruptedException
     * @throws ExecutionException
     */
-   private void testMultisigAccount(Account multisig, boolean isMultisig, int minApprovals, int minRemoval, int cosignatories, int levels) {
+   private void testMultisigAccount(Account multisig, boolean isMultisig, int minApprovals, int minRemoval,
+         int cosignatories, int levels) {
       logger.info("Checking status of multisig account");
       MultisigAccountInfo mai = accountHttp.getMultisigAccountInfo(multisig.getAddress()).blockingFirst();
       assertEquals(isMultisig, mai.isMultisig());

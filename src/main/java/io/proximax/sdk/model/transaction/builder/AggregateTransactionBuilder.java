@@ -12,12 +12,18 @@ import java.util.List;
 
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.AggregateTransactionCosignature;
-import io.proximax.sdk.model.transaction.Transaction;
 import io.proximax.sdk.model.transaction.EntityType;
 import io.proximax.sdk.model.transaction.EntityVersion;
+import io.proximax.sdk.model.transaction.Transaction;
 
 /**
+ * <p>
  * builder for {@link AggregateTransaction}
+ * </p>
+ * <p>
+ * Standard use: call {@link #innerTransactions(List)} or {@link #innerTransactions(Transaction...)} to specify
+ * transactions that will be bundled inside of created aggregate transaction
+ * </p>
  */
 public class AggregateTransactionBuilder extends TransactionBuilder<AggregateTransactionBuilder, AggregateTransaction> {
 
@@ -32,8 +38,7 @@ public class AggregateTransactionBuilder extends TransactionBuilder<AggregateTra
    }
 
    public static AggregateTransactionBuilder createBonded() {
-      return new AggregateTransactionBuilder(EntityType.AGGREGATE_BONDED,
-            EntityVersion.AGGREGATE_BONDED.getValue());
+      return new AggregateTransactionBuilder(EntityType.AGGREGATE_BONDED, EntityVersion.AGGREGATE_BONDED.getValue());
    }
 
    public static AggregateTransactionBuilder createComplete() {
@@ -49,12 +54,11 @@ public class AggregateTransactionBuilder extends TransactionBuilder<AggregateTra
    @Override
    public AggregateTransaction build() {
       // use or calculate maxFee
-      BigInteger maxFee = getMaxFee().orElseGet(
-            () -> getMaxFeeCalculation(AggregateTransaction.calculatePayloadSize(getInnerTransactions())));
+      BigInteger maxFee = getMaxFee()
+            .orElseGet(() -> getMaxFeeCalculation(AggregateTransaction.calculatePayloadSize(getInnerTransactions())));
       // create transaction instance
-      return new AggregateTransaction(getType(), getNetworkType(), getVersion(), getDeadline(), maxFee,
-            getSignature(), getSigner(), getTransactionInfo(), getInnerTransactions(),
-            getCosignatures());
+      return new AggregateTransaction(getType(), getNetworkType(), getVersion(), getDeadline(), maxFee, getSignature(),
+            getSigner(), getTransactionInfo(), getInnerTransactions(), getCosignatures());
    }
 
    // ------------------------------------- setters ---------------------------------------------//
@@ -82,7 +86,7 @@ public class AggregateTransactionBuilder extends TransactionBuilder<AggregateTra
    }
 
    // -------------------------------------- getters --------------------------------------------//
-   
+
    /**
     * @return the innerTransactions
     */
@@ -96,26 +100,26 @@ public class AggregateTransactionBuilder extends TransactionBuilder<AggregateTra
    public List<AggregateTransactionCosignature> getCosignatures() {
       return cosignatures;
    }
-   
+
    // -------------------------------------- convenience --------------------------------------------//
-   
+
    /**
     * set list of inner transactions
     * 
     * @param innerTransactions inner transactions
     * @return the builder
     */
-   public AggregateTransactionBuilder innerTransactions(Transaction ... innerTransactions) {
+   public AggregateTransactionBuilder innerTransactions(Transaction... innerTransactions) {
       return innerTransactions(Arrays.asList(innerTransactions));
    }
-   
+
    /**
     * set list of cosignatures
     * 
     * @param cosignatures cosignatures
     * @return the builder
     */
-   public AggregateTransactionBuilder cosignatures(AggregateTransactionCosignature ... cosignatures) {
+   public AggregateTransactionBuilder cosignatures(AggregateTransactionCosignature... cosignatures) {
       return cosignatures(Arrays.asList(cosignatures));
    }
 }

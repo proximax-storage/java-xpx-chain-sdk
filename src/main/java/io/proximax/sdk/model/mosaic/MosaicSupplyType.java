@@ -18,8 +18,6 @@ package io.proximax.sdk.model.mosaic;
 
 /**
  * Enum containing mosaic supply type.
- *
- * @since 1.0
  */
 public enum MosaicSupplyType {
     /**

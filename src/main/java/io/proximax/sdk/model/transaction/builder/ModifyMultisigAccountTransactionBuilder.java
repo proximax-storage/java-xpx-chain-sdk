@@ -10,13 +10,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import io.proximax.sdk.model.transaction.ModifyMultisigAccountTransaction;
-import io.proximax.sdk.model.transaction.MultisigCosignatoryModification;
 import io.proximax.sdk.model.transaction.EntityType;
 import io.proximax.sdk.model.transaction.EntityVersion;
+import io.proximax.sdk.model.transaction.ModifyMultisigAccountTransaction;
+import io.proximax.sdk.model.transaction.MultisigCosignatoryModification;
 
 /**
+ * <p>
  * builder for {@link ModifyMultisigAccountTransaction}
+ * </p>
+ * <p>
+ * Standard use: When converting account to multisig you will need to specify {@link #minApprovalDelta(int)} and
+ * {@link #minRemovalDelta(int)} together with list of cosignatory modifications
+ * </p>
  */
 public class ModifyMultisigAccountTransactionBuilder
       extends TransactionBuilder<ModifyMultisigAccountTransactionBuilder, ModifyMultisigAccountTransaction> {
@@ -41,8 +47,8 @@ public class ModifyMultisigAccountTransactionBuilder
    @Override
    public ModifyMultisigAccountTransaction build() {
       // use or calculate maxFee
-      BigInteger maxFee = getMaxFee()
-            .orElseGet(() -> getMaxFeeCalculation(ModifyMultisigAccountTransaction.calculatePayloadSize(getModifications().size())));
+      BigInteger maxFee = getMaxFee().orElseGet(() -> getMaxFeeCalculation(
+            ModifyMultisigAccountTransaction.calculatePayloadSize(getModifications().size())));
       // create transaction instance
       return new ModifyMultisigAccountTransaction(getNetworkType(), getVersion(), getDeadline(), maxFee, getSignature(),
             getSigner(), getTransactionInfo(), getMinApprovalDelta(), getMinRemovalDelta(), getModifications());
@@ -63,6 +69,7 @@ public class ModifyMultisigAccountTransactionBuilder
 
    /**
     * change in minimum number of cosignatory approvals for removal of cosignatory
+    * 
     * @param minRemovalDelta change in minimum removals
     * @return self
     */
@@ -113,7 +120,7 @@ public class ModifyMultisigAccountTransactionBuilder
     * @param modifications changes
     * @return self
     */
-   public ModifyMultisigAccountTransactionBuilder modifications(MultisigCosignatoryModification ... modifications) {
+   public ModifyMultisigAccountTransactionBuilder modifications(MultisigCosignatoryModification... modifications) {
       return modifications(Arrays.asList(modifications));
    }
 

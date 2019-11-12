@@ -118,9 +118,9 @@ public class E2EAliasTest extends E2EBaseTest {
       sleepForAWhile();
       // create mosaic
       logger.info("Creating new mosaic");
-      SignedTransaction mdt = transact.mosaicDefinition().nonce(mosaicNonce).mosaicId(mosaicId)
-            .mosaicProperties(new MosaicProperties(true, true, 6, Optional.of(BigInteger.valueOf(200)))).build()
-            .signWith(seedAccount, api.getNetworkGenerationHash());
+      SignedTransaction mdt = transact.mosaicDefinition()
+            .init(mosaicNonce, mosaicId, new MosaicProperties(true, true, 6, Optional.of(BigInteger.valueOf(200))))
+            .build().signWith(seedAccount, api.getNetworkGenerationHash());
       Observable<Transaction> confirmation = listener.confirmed(seedAccount.getAddress()).timeout(getTimeoutSeconds(),
             TimeUnit.SECONDS);
       sleepForAWhile();

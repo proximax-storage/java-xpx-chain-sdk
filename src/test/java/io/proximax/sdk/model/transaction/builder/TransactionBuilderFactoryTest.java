@@ -43,6 +43,7 @@ class TransactionBuilderFactoryTest {
       testDefaults(fac.blockchainConfig());
       testDefaults(fac.blockchainUpgrade());
       testDefaults(fac.lockFunds());
+      testDefaults(fac.contract());
       testDefaults(fac.modifyContract());
       testDefaults(fac.modifyMetadata());
       testDefaults(fac.mosaicDefinition());
