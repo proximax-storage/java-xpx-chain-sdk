@@ -9,7 +9,9 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.transaction.EntityType;
 import io.proximax.sdk.model.transaction.EntityVersion;
 import io.proximax.sdk.model.transaction.ModifyMultisigAccountTransaction;
@@ -124,4 +126,25 @@ public class ModifyMultisigAccountTransactionBuilder
       return modifications(Arrays.asList(modifications));
    }
 
+   /**
+    * <p>
+    * change account to mutisig account by adding specified cosigners and specifying minimum approvals and minimum
+    * removals
+    * </p>
+    * <p>
+    * NOTE that if account has already been multisig then cosigners will be added and min approvals and min removals
+    * will be changed by specified deltas
+    * </p>
+    * 
+    * @param cosigners list of cosigners to be added to the account
+    * @param minApprovals change in min approvals
+    * @param minRemovals change in min removals
+    * 
+    * @return self
+    */
+   public ModifyMultisigAccountTransactionBuilder changeToMultisig(List<PublicAccount> cosigners, int minApprovals,
+         int minRemovals) {
+      return minApprovalDelta(minApprovals).minRemovalDelta(minRemovals)
+            .modifications(cosigners.stream().map(MultisigCosignatoryModification::add).collect(Collectors.toList()));
+   }
 }
