@@ -145,7 +145,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       logger.info("request to transfer aggregate bonded confirmed: {}",
             listener.confirmed(cosig1.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
       sleepForAWhile();
-      // announce the multisig change as aggregate bounded
+      // announce the multisig change as aggregate bonded
       logger.info("Announced the aggregate bonded transfer from multisig: {}",
             transactionHttp.announceAggregateBonded(signedTransaction).blockingFirst());
       logger.info("request to make transfer confirmed: {}",
@@ -213,7 +213,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       logger.info("request confirmed: {}",
             listener.confirmed(cosig1.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
       sleepForAWhile();
-      // announce the multisig change as aggregate bounded
+      // announce the multisig change as aggregate bonded
       logger.info("Announced the transfer from multisig: {}",
             transactionHttp.announceAggregateBonded(signedTransaction).blockingFirst());
       logger.info("request confirmed: {}",
@@ -243,7 +243,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       logger.info("request confirmed: {}",
             listener.confirmed(cosig1.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
       sleepForAWhile();
-      // announce the multisig change as aggregate bounded
+      // announce the multisig change as aggregate bonded
       logger.info("Announced the transfer from multisig: {}",
             transactionHttp.announceAggregateBonded(signedTransaction).blockingFirst());
       logger.info("request confirmed: {}",
@@ -276,7 +276,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       logger.info("request confirmed: {}",
             listener.confirmed(cosig1.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
       sleepForAWhile();
-      // announce the multisig change as aggregate bounded
+      // announce the multisig change as aggregate bonded
       logger.info("Announced the multisig change: {}",
             transactionHttp.announceAggregateBonded(signedTransaction).toFuture().get());
       logger.info("request confirmed: {}",

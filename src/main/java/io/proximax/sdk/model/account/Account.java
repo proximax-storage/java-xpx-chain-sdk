@@ -76,8 +76,7 @@ public class Account {
     * @return new random account for specified network type
     */
    public static Account generateNewAccount(NetworkType networkType) {
-      KeyPair keyPair = new KeyPair();
-      return new Account(keyPair.getPrivateKey().toString(), networkType);
+      return new Account(new KeyPair(), networkType);
    }
 
    /**
