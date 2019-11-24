@@ -34,7 +34,7 @@ class NetworkCurrencyMosaicTest {
 
    @Test
    void createRelativeDecimal() {
-      NetworkCurrencyMosaic mosaic = NetworkCurrencyMosaic.createRelative(BigDecimal.valueOf(15, 1));
+      Mosaic mosaic = NetworkCurrencyMosaic.createRelative(BigDecimal.valueOf(15, 1));
       assertEquals(BigInteger.valueOf(1500000), mosaic.getAmount());
       assertEquals(NetworkCurrencyMosaic.ID, mosaic.getId());
 
@@ -42,7 +42,7 @@ class NetworkCurrencyMosaicTest {
 
    @Test
    void createRelativeDecimalWhole() {
-      NetworkCurrencyMosaic mosaic = NetworkCurrencyMosaic.createRelative(BigDecimal.valueOf(15));
+      Mosaic mosaic = NetworkCurrencyMosaic.createRelative(BigDecimal.valueOf(15));
       assertEquals(BigInteger.valueOf(15000000), mosaic.getAmount());
       assertEquals(NetworkCurrencyMosaic.ID, mosaic.getId());
 
@@ -50,11 +50,11 @@ class NetworkCurrencyMosaicTest {
 
    @Test
    void shouldCreateAbsolute() {
-      NetworkCurrencyMosaic mosaic = NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1));
+      Mosaic mosaic = NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1));
       assertEquals(BigInteger.valueOf(1), mosaic.getAmount());
       assertEquals(NetworkCurrencyMosaic.ID, mosaic.getId());
    }
-   
+
    @Test
    void testConstants() {
       assertEquals(1000000l, NetworkCurrencyMosaic.ONE.getAmount().longValue());

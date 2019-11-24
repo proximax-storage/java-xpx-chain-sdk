@@ -18,30 +18,38 @@ package io.proximax.sdk.model.mosaic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
 
 class NetworkHarvestingMosaicTest {
 
-    @Test
-    void shouldCreateViaConstructor() {
-        NetworkHarvestMosaic mosaic = new NetworkHarvestMosaic(BigInteger.valueOf(0));
-        assertEquals(BigInteger.valueOf(0), mosaic.getAmount());
-        assertEquals(NetworkHarvestMosaic.ID, mosaic.getId());
-    }
+   @Test
+   void shouldCreateViaConstructor() {
+      NetworkHarvestMosaic mosaic = new NetworkHarvestMosaic(BigInteger.valueOf(0));
+      assertEquals(BigInteger.valueOf(0), mosaic.getAmount());
+      assertEquals(NetworkHarvestMosaic.ID, mosaic.getId());
+   }
 
-    @Test
-    void shouldCreateRelative() {
-       NetworkHarvestMosaic mosaic = NetworkHarvestMosaic.createRelative(BigInteger.valueOf(1));
-        assertEquals(BigInteger.valueOf(1000), mosaic.getAmount());
-        assertEquals(NetworkHarvestMosaic.ID, mosaic.getId());
-    }
+   @Test
+   void shouldCreateRelative() {
+      Mosaic mosaic = NetworkHarvestMosaic.createRelative(BigDecimal.valueOf(1));
+      assertEquals(BigInteger.valueOf(1000), mosaic.getAmount());
+      assertEquals(NetworkHarvestMosaic.ID, mosaic.getId());
+   }
 
-    @Test
-    void shouldCreateAbsolute() {
-       NetworkHarvestMosaic mosaic = NetworkHarvestMosaic.createAbsolute(BigInteger.valueOf(1));
-        assertEquals(BigInteger.valueOf(1), mosaic.getAmount());
-        assertEquals(NetworkHarvestMosaic.ID, mosaic.getId());
-    }
+   @Test
+   void shouldCreateRelativeDecimal() {
+      Mosaic mosaic = NetworkHarvestMosaic.createRelative(BigDecimal.valueOf(1.1));
+      assertEquals(BigInteger.valueOf(1100), mosaic.getAmount());
+      assertEquals(NetworkHarvestMosaic.ID, mosaic.getId());
+   }
+
+   @Test
+   void shouldCreateAbsolute() {
+      Mosaic mosaic = NetworkHarvestMosaic.createAbsolute(BigInteger.valueOf(1));
+      assertEquals(BigInteger.valueOf(1), mosaic.getAmount());
+      assertEquals(NetworkHarvestMosaic.ID, mosaic.getId());
+   }
 }

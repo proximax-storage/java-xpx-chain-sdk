@@ -19,20 +19,26 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import io.proximax.sdk.model.namespace.NamespaceId;
+import io.proximax.sdk.model.transaction.UInt64Id;
 
 /**
- * NetworkHarvestMosaic mosaic
- *
- * This represents the per-network harvest mosaic. This mosaicId is aliased with namespace name `cat.harvest`.
- *
- * @since 0.10.2
+ * <p>
+ * This represents the per-network harvest mosaic
+ * </p>
+ * <p>
+ * <b>WARNING</b> this is not used at the moment
+ * </p>
  */
 public class NetworkHarvestMosaic extends Mosaic {
+   /**
+    * Namespace with alias to the network currency mosaic
+    */
+   public static final String MOSAIC_NAMESPACE = "prx.harvest";
 
    /**
-    * ID of `harvest` namespace.
+    * ID of network currency
     */
-   public static final NamespaceId ID = new NamespaceId("cat.harvest");
+   public static final UInt64Id ID = new NamespaceId(MOSAIC_NAMESPACE);
    /**
     * Divisibility
     */
@@ -49,38 +55,44 @@ public class NetworkHarvestMosaic extends Mosaic {
     * Is supply mutable
     */
    public static final boolean SUPPLYMUTABLE = true;
+   /**
+    * Is levy mutable
+    */
+   public static final boolean LEVYMUTABLE = false;
+
+   /** one of network currency taking the divisibility into account */
+   public static final Mosaic ONE = createRelative(BigDecimal.ONE);
+   /** ten of network currency taking the divisibility into account */
+   public static final Mosaic TEN = createRelative(BigDecimal.TEN);
 
    /**
-    * create new instance of network harvest mosaic of specified amount
+    * create specified amount of micro XPX
     * 
-    * @param amount amount of mosaic irrespective of divisibility
+    * @param amount amount of micro XPX
     */
    public NetworkHarvestMosaic(BigInteger amount) {
-
-      super(NetworkHarvestMosaic.ID, amount);
+      super(ID, amount);
    }
 
    /**
-    * Create xem with using xem as unit.
+    * Create XPX with using XPX as unit.
     *
     * @param amount amount to send
-    * @return a NetworkCurrencyMosaic instance
+    * @return a XPX instance
     */
-   public static NetworkHarvestMosaic createRelative(BigInteger amount) {
-
-      BigInteger relativeAmount = BigDecimal.valueOf(Math.pow(10, NetworkHarvestMosaic.DIVISIBILITY)).toBigInteger()
-            .multiply(amount);
+   public static Mosaic createRelative(BigDecimal amount) {
+      BigInteger relativeAmount = BigDecimal.valueOf(Math.pow(10, DIVISIBILITY)).multiply(amount)
+            .toBigInteger();
       return new NetworkHarvestMosaic(relativeAmount);
    }
 
    /**
-    * Create xem with using micro xem as unit, 1 NetworkCurrencyMosaic = 1000000 micro NetworkCurrencyMosaic.
+    * Create XPX with using micro XPX as unit, 1 XPX = 1000000 micro XPX.
     *
     * @param amount amount to send
-    * @return a NetworkCurrencyMosaic instance
+    * @return a XPX instance
     */
-   public static NetworkHarvestMosaic createAbsolute(BigInteger amount) {
-
+   public static Mosaic createAbsolute(BigInteger amount) {
       return new NetworkHarvestMosaic(amount);
    }
 }

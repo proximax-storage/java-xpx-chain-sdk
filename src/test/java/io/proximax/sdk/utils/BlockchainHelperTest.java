@@ -5,20 +5,13 @@
  */
 package io.proximax.sdk.utils;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.BlockchainApi;
-import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.blockchain.NetworkType;
 
 /**
@@ -39,22 +32,6 @@ class BlockchainHelperTest {
    void cleanup() {
       this.api = null;
       this.helper = null;
-   }
-
-   @Test
-   void testAccounts() {
-      // make sure that when asking for 5 account 5 accounts are returned
-      assertEquals(5, helper.accountRandom(5).size());
-   }
-
-   @Test
-   @Disabled("not proper test - but cool anyway!")
-   void findAddress() {
-      // note this expects MAIN_NET as addresses there start by X
-      // find account with address starting by XCHG (1M attempts should not take too long)
-      Optional<Account> account = helper.accountRandom().parallel().limit(1_000_000).filter(acc -> acc.getAddress().plain().startsWith("XCHG")).findFirst();
-      assertTrue(account.isPresent(), "Account was not found :(");
-      System.out.println(account.orElseThrow(() -> new IllegalStateException("account not found :(")));
    }
    
 }
