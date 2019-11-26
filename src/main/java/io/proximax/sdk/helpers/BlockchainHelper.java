@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0
  * license that can be found in the LICENSE file.
  */
-package io.proximax.sdk.utils;
+package io.proximax.sdk.helpers;
 
 import java.math.BigInteger;
 import java.util.concurrent.TimeUnit;
@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 import io.proximax.sdk.BlockchainApi;
 
 /**
- * helper class for common operations
+ * helper class for common blockchain operations
  */
 public class BlockchainHelper extends BaseHelper {
 
@@ -30,10 +30,11 @@ public class BlockchainHelper extends BaseHelper {
    }
 
    /**
-    * wait for specified number of blocks. This method blocks or throws timeout exception
+    * <b>BLOCKING</b> wait for specified number of blocks. This method blocks or throws timeout exception
     * 
     * @param count number of blocks to wait for
-    * @param timeoutSeconds timeout after which the wait will be aborted
+    * @param timeoutSeconds timeout after which the wait will be aborted. Always make sure the timeout is much much
+    * larger than expected wait for given number of blocks
     * 
     * @return height of the last block
     */

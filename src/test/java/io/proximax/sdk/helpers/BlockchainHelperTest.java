@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0
  * license that can be found in the LICENSE file.
  */
-package io.proximax.sdk.utils;
+package io.proximax.sdk.helpers;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -12,6 +12,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 import io.proximax.sdk.BlockchainApi;
+import io.proximax.sdk.helpers.BlockchainHelper;
 import io.proximax.sdk.model.blockchain.NetworkType;
 
 /**
