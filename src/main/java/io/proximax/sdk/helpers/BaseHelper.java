@@ -55,6 +55,15 @@ class BaseHelper {
    }
 
    /**
+    * get the blockchain API used by this helper instance
+    * 
+    * @return the API instance
+    */
+   public BlockchainApi getBlockchainApi() {
+      return api;
+   }
+   
+   /**
     * <b>BLOCKING!</b> announce transaction and wait for it to be added to confirmed transactions
     * 
     * @param transaction the transaction to announce to the network

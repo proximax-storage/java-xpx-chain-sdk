@@ -18,12 +18,11 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.BlockchainApi;
-import io.proximax.sdk.helpers.AccountHelper;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.blockchain.NetworkType;
 
 /**
- * TODO add proper description
+ * {@link AccountHelper} tests
  */
 class AccountHelperTest {
    private BlockchainApi api;
