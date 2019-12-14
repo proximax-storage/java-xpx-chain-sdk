@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.proximax.core.crypto.KeyPair;
+import io.proximax.sdk.helpers.TransferHelper;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.mosaic.Mosaic;
@@ -121,6 +122,18 @@ public class E2ETransferTest extends E2EBaseTest {
       listener.status(simpleAccount.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
    }
 
+   @Test
+   void helperSimpleTransfer() {
+      TransferHelper hlp = new TransferHelper(api);
+      hlp.transfer(from, to, mosaic, message, confirmationTimeoutSeconds);
+   }
+   
+   @Test
+   void helperMultisigTransfer() {
+      TransferHelper hlp = new TransferHelper(api);
+      hlp.transferFromMultisig(from, initiator, to, mosaic, message, confirmationTimeoutSeconds, lockBlocks);
+   }
+   
    /**
     * return transactions as specified by arguments signed by the signer account
     * 
