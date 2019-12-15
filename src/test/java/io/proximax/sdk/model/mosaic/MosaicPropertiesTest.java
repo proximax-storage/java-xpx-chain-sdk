@@ -18,6 +18,7 @@ package io.proximax.sdk.model.mosaic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
@@ -104,7 +105,29 @@ class MosaicPropertiesTest {
       assertEquals(1, props.getDivisibility());
       assertEquals(TEN, props.getDuration());
    }
+   
+   @Test
+   void checkHashCode() {
+      MosaicProperties a1 = new MosaicProperties(true, true, 1, Optional.empty());
+      MosaicProperties a2 = new MosaicProperties(true, true, 1, Optional.empty());
+      MosaicProperties b = new MosaicProperties(true, true, 2, Optional.empty());
+      assertEquals(a1.hashCode(), a1.hashCode());
+      assertEquals(a1.hashCode(), a2.hashCode());
+      assertNotEquals(a1.hashCode(), b.hashCode());
+   }
 
+   @Test
+   void checkEquals() {
+      MosaicProperties a1 = new MosaicProperties(true, true, 1, Optional.empty());
+      MosaicProperties a2 = new MosaicProperties(true, true, 1, Optional.empty());
+      MosaicProperties b = new MosaicProperties(true, true, 2, Optional.empty());
+      assertEquals(a1, a1);
+      assertEquals(a1, a2);
+      assertNotEquals(a1, b);
+      assertNotEquals(a1, null);
+      assertNotEquals(a1, "othertype");
+   }
+   
    public static MosaicPropertyDTO createProperty(MosaicPropertyIdEnum id, BigInteger value) {
       MosaicPropertyDTO prop = new MosaicPropertyDTO();
       prop.setId(id);

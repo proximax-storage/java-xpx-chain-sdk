@@ -19,6 +19,7 @@ package io.proximax.sdk.model.mosaic;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.commons.lang3.Validate;
@@ -212,5 +213,23 @@ public class MosaicProperties {
          .map(MosaicPropertyDTO::getValue)
          .map(UInt64Utils::toBigInt)
          .findFirst();
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hash(divisibility, duration, supplyMutable, transferable);
+   }
+
+   @Override
+   public boolean equals(Object obj) {
+      if (this == obj)
+         return true;
+      if (obj == null)
+         return false;
+      if (getClass() != obj.getClass())
+         return false;
+      MosaicProperties other = (MosaicProperties) obj;
+      return divisibility == other.divisibility && Objects.equals(duration, other.duration)
+            && supplyMutable == other.supplyMutable && transferable == other.transferable;
    }
 }

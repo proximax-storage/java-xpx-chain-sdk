@@ -18,6 +18,7 @@ package io.proximax.sdk.model.mosaic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
@@ -33,8 +34,8 @@ class NetworkHarvestingMosaicTest {
 
     @Test
     void shouldCreateRelative() {
-       NetworkHarvestMosaic mosaic = NetworkHarvestMosaic.createRelative(BigInteger.valueOf(1));
-        assertEquals(BigInteger.valueOf(1000), mosaic.getAmount());
+       NetworkHarvestMosaic mosaic = NetworkHarvestMosaic.createRelative(BigDecimal.valueOf(1.5));
+        assertEquals(BigInteger.valueOf(1500), mosaic.getAmount());
         assertEquals(NetworkHarvestMosaic.ID, mosaic.getId());
     }
 

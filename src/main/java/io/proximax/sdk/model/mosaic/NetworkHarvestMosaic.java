@@ -17,6 +17,7 @@ package io.proximax.sdk.model.mosaic;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Optional;
 
 import io.proximax.sdk.model.namespace.NamespaceId;
 
@@ -50,14 +51,21 @@ public class NetworkHarvestMosaic extends Mosaic {
     */
    public static final boolean SUPPLYMUTABLE = true;
 
+   /** factory that can be used to create mosaic instances */
+   public static final MosaicFactory FACTORY = new MosaicFactory(ID, INITIALSUPPLY, SUPPLYMUTABLE, TRANSFERABLE, DIVISIBILITY, Optional.empty());
+
+   /** one of network harvest mosaic taking the divisibility into account */
+   public static final NetworkHarvestMosaic ONE = new NetworkHarvestMosaic(FACTORY.getAbsoluteAmount(BigDecimal.ONE));
+   /** ten of network harvest mosaic taking the divisibility into account */
+   public static final NetworkHarvestMosaic TEN = new NetworkHarvestMosaic(FACTORY.getAbsoluteAmount(BigDecimal.TEN));
+
    /**
     * create new instance of network harvest mosaic of specified amount
     * 
     * @param amount amount of mosaic irrespective of divisibility
     */
    public NetworkHarvestMosaic(BigInteger amount) {
-
-      super(NetworkHarvestMosaic.ID, amount);
+      super(ID, amount);
    }
 
    /**
@@ -66,11 +74,8 @@ public class NetworkHarvestMosaic extends Mosaic {
     * @param amount amount to send
     * @return a NetworkCurrencyMosaic instance
     */
-   public static NetworkHarvestMosaic createRelative(BigInteger amount) {
-
-      BigInteger relativeAmount = BigDecimal.valueOf(Math.pow(10, NetworkHarvestMosaic.DIVISIBILITY)).toBigInteger()
-            .multiply(amount);
-      return new NetworkHarvestMosaic(relativeAmount);
+   public static NetworkHarvestMosaic createRelative(BigDecimal amount) {
+      return new NetworkHarvestMosaic(FACTORY.getAbsoluteAmount(amount));
    }
 
    /**
@@ -80,7 +85,6 @@ public class NetworkHarvestMosaic extends Mosaic {
     * @return a NetworkCurrencyMosaic instance
     */
    public static NetworkHarvestMosaic createAbsolute(BigInteger amount) {
-
       return new NetworkHarvestMosaic(amount);
    }
 }
