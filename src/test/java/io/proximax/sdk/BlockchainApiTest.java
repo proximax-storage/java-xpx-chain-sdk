@@ -89,33 +89,33 @@ class BlockchainApiTest {
    
    @Test
    void testNetworkTypeDefined() throws MalformedURLException {
-      BlockchainApi api = Mockito.spy(new BlockchainApi(new URL("http://localhost:3000"), NETWORK));
-      Mockito.when(api.queryForNetworkType()).thenReturn(NETWORK);
+      BlockchainApi api = Mockito.spy(new BlockchainApi(new URL("http://bogus:1234"), NETWORK));
+      Mockito.doReturn(NETWORK).when(api).queryForNetworkType();
 
       assertEquals(NETWORK, api.getNetworkType());
       assertTrue(api.isNetworkTypeValid());
-      // mock setup + is valid = 2
-      Mockito.verify(api, Mockito.times(2)).queryForNetworkType();
+      // is valid = 1
+      Mockito.verify(api, Mockito.times(1)).queryForNetworkType();
    }
    
    @Test
    void testNetworkTypeInvalid() throws MalformedURLException {
-      BlockchainApi api = Mockito.spy(new BlockchainApi(new URL("http://localhost:3000"), NetworkType.MAIN_NET));
-      Mockito.when(api.queryForNetworkType()).thenReturn(NetworkType.TEST_NET);
+      BlockchainApi api = Mockito.spy(new BlockchainApi(new URL("http://bogus:1234"), NetworkType.MAIN_NET));
+      Mockito.doReturn(NetworkType.TEST_NET).when(api).queryForNetworkType();
 
       assertFalse(api.isNetworkTypeValid());
-      // mock setup + is valid = 2
-      Mockito.verify(api, Mockito.times(2)).queryForNetworkType();
+      // is valid = 1
+      Mockito.verify(api, Mockito.times(1)).queryForNetworkType();
    }
    
    @Test
    void testNetworkTypeQueried() throws MalformedURLException {
-      BlockchainApi api = Mockito.spy(new BlockchainApi(new URL("http://localhost:3000")));
-      Mockito.when(api.queryForNetworkType()).thenReturn(NETWORK);
+      BlockchainApi api = Mockito.spy(new BlockchainApi(new URL("http://bogus:1234")));
+      Mockito.doReturn(NETWORK).when(api).queryForNetworkType();
       
       assertEquals(NETWORK, api.getNetworkType());
       assertTrue(api.isNetworkTypeValid());
-      // mock setup + get network + is valid = 3
-      Mockito.verify(api, Mockito.times(3)).queryForNetworkType();
+      // get network + is valid = 2
+      Mockito.verify(api, Mockito.times(2)).queryForNetworkType();
    }
 }
