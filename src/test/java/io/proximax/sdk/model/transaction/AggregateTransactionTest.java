@@ -34,6 +34,7 @@ import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
 
+import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.ResourceBasedTest;
 import io.proximax.sdk.infrastructure.TransactionMapping;
 import io.proximax.sdk.model.account.Account;
@@ -41,6 +42,7 @@ import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.Mosaic;
+import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.transaction.builder.TransactionBuilderFactory;
 import io.proximax.sdk.utils.GsonUtils;
@@ -114,6 +116,39 @@ public class AggregateTransactionTest extends ResourceBasedTest {
       assertEquals("0000530000005300", signedTransaction.getPayload().substring(240, 256));
       // assertEquals("039054419050B9837EFAB4BBE8A4B9BB32D812F9885C00D8FC1650E1420D000000746573742D6D65737361676568B3FBB18729C1FDE225C57F8CE080FA828F0067E451A3FD81FA628842B0B763",
       // signedTransaction.getPayload().substring(320, 474));
+
+   }
+   
+   @Test
+   void serializeAggregateWithCosigners() throws IOException {
+      NetworkType netType = NetworkType.MIJIN_TEST;
+      TransactionBuilderFactory fac = new TransactionBuilderFactory();
+      fac.setFeeCalculationStrategy(FeeCalculationStrategy.MEDIUM);
+      fac.setNetworkType(netType);
+
+      Account alice = Account.createFromPrivateKey("28FCECEA252231D2C86E1BCF7DD541552BDBBEFBB09324758B3AC199B4AA7B78",
+            netType);
+      Account bob = Account.createFromPrivateKey("75CFAB0E6079DAA58D7FF0990ACA64E571EC58527A16DB9391C87C436261190C",
+            netType);
+      Mosaic amount = new Mosaic(new MosaicId("0dc67fbe1cad29e3"), BigInteger.valueOf(1000));
+      String gen_hash = "7B631D803F912B00DC0CBED3014BBD17A302BA50B99D233B9C2D9533B842ABDF";
+
+      AggregateTransaction aggregateTx = fac.aggregateComplete()
+            .innerTransactions(
+                  fac.transfer().mosaics(amount).to(alice.getAddress()).deadline(new FakeDeadline()).build()
+                        .toAggregate(alice.getPublicAccount()),
+                  fac.transfer().mosaics(amount).to(bob.getAddress()).deadline(new FakeDeadline()).build()
+                        .toAggregate(bob.getPublicAccount()))
+            .deadline(new FakeDeadline()).build();
+
+      SignedTransaction signedTransaction = alice
+            .signTransactionWithCosignatories(aggregateTx, gen_hash, Arrays.asList(bob));
+
+//      saveBytes("aggregate_trans_cosigs", aggregateTx.generateBytes());
+//      saveBytes("aggregate_trans_cosigs_signed", signedTransaction.getPayload().getBytes());
+
+      assertArrayEquals(loadBytes("aggregate_trans_cosigs"), aggregateTx.generateBytes());
+      assertArrayEquals(loadBytes("aggregate_trans_cosigs_signed"), signedTransaction.getPayload().getBytes());
 
    }
    
