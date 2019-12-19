@@ -43,6 +43,8 @@ import io.proximax.sdk.model.account.props.AccountPropertyType;
 import io.proximax.sdk.model.alias.AliasAction;
 import io.proximax.sdk.model.blockchain.BlockchainVersion;
 import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.exchange.AddExchangeOffer;
+import io.proximax.sdk.model.exchange.ExchangeOfferType;
 import io.proximax.sdk.model.metadata.MetadataModification;
 import io.proximax.sdk.model.metadata.MetadataModificationType;
 import io.proximax.sdk.model.metadata.MetadataType;
@@ -61,51 +63,57 @@ import io.reactivex.functions.Function;
 public class TransactionMapping implements Function<JsonObject, Transaction> {
    @Override
    public Transaction apply(JsonObject input) {
-      JsonObject transaction = input.getAsJsonObject("transaction");
-      int type = transaction.get("type").getAsInt();
+      try {
+         JsonObject transaction = input.getAsJsonObject("transaction");
+         int type = transaction.get("type").getAsInt();
 
-      switch (EntityType.rawValueOf(type)) {
-      case TRANSFER:
-         return new TransferTransactionMapping().apply(input);
-      case REGISTER_NAMESPACE:
-         return new NamespaceCreationTransactionMapping().apply(input);
-      case MOSAIC_DEFINITION:
-         return new MosaicCreationTransactionMapping().apply(input);
-      case MOSAIC_SUPPLY_CHANGE:
-         return new MosaicSupplyChangeTransactionMapping().apply(input);
-      case MOSAIC_ALIAS:
-         return new MosaicAliasTransactionMapping().apply(input);
-      case ADDRESS_ALIAS:
-         return new AddressAliasTransactionMapping().apply(input);
-      case MODIFY_MULTISIG_ACCOUNT:
-         return new MultisigModificationTransactionMapping().apply(input);
-      case AGGREGATE_COMPLETE:
-      case AGGREGATE_BONDED:
-         return new AggregateTransactionMapping().apply(input);
-      case LOCK:
-         return new LockFundsTransactionMapping().apply(input);
-      case SECRET_LOCK:
-         return new SecretLockTransactionMapping().apply(input);
-      case SECRET_PROOF:
-         return new SecretProofTransactionMapping().apply(input);
-      case MODIFY_ADDRESS_METADATA:
-      case MODIFY_MOSAIC_METADATA:
-      case MODIFY_NAMESPACE_METADATA:
-         return new ModifyMetadataTransactionMapping().apply(input);
-      case MODIFY_CONTRACT:
-         return new ModifyContractTransactionMapping().apply(input);
-      case ACCOUNT_PROPERTIES_ADDRESS:
-      case ACCOUNT_PROPERTIES_MOSAIC:
-      case ACCOUNT_PROPERTIES_ENTITY_TYPE:
-         return new ModifyAccountPropertiesTransactionMapping().apply(input);
-      case ACCOUNT_LINK:
-         return new AccountLinkTransactionMapping().apply(input);
-      case BLOCKCHAIN_UPGRADE:
-         return new BlockchainUpgradeTransactionMapping().apply(input);
-      case BLOCKCHAIN_CONFIG:
-         return new BlockchainConfigTransactionMapping().apply(input);
-      default:
-         throw new UnsupportedOperationException("Unimplemented transaction type " + type);
+         switch (EntityType.rawValueOf(type)) {
+         case TRANSFER:
+            return new TransferTransactionMapping().apply(input);
+         case REGISTER_NAMESPACE:
+            return new NamespaceCreationTransactionMapping().apply(input);
+         case MOSAIC_DEFINITION:
+            return new MosaicCreationTransactionMapping().apply(input);
+         case MOSAIC_SUPPLY_CHANGE:
+            return new MosaicSupplyChangeTransactionMapping().apply(input);
+         case MOSAIC_ALIAS:
+            return new MosaicAliasTransactionMapping().apply(input);
+         case ADDRESS_ALIAS:
+            return new AddressAliasTransactionMapping().apply(input);
+         case MODIFY_MULTISIG_ACCOUNT:
+            return new MultisigModificationTransactionMapping().apply(input);
+         case AGGREGATE_COMPLETE:
+         case AGGREGATE_BONDED:
+            return new AggregateTransactionMapping().apply(input);
+         case LOCK:
+            return new LockFundsTransactionMapping().apply(input);
+         case SECRET_LOCK:
+            return new SecretLockTransactionMapping().apply(input);
+         case SECRET_PROOF:
+            return new SecretProofTransactionMapping().apply(input);
+         case MODIFY_ADDRESS_METADATA:
+         case MODIFY_MOSAIC_METADATA:
+         case MODIFY_NAMESPACE_METADATA:
+            return new ModifyMetadataTransactionMapping().apply(input);
+         case MODIFY_CONTRACT:
+            return new ModifyContractTransactionMapping().apply(input);
+         case ACCOUNT_PROPERTIES_ADDRESS:
+         case ACCOUNT_PROPERTIES_MOSAIC:
+         case ACCOUNT_PROPERTIES_ENTITY_TYPE:
+            return new ModifyAccountPropertiesTransactionMapping().apply(input);
+         case ACCOUNT_LINK:
+            return new AccountLinkTransactionMapping().apply(input);
+         case BLOCKCHAIN_UPGRADE:
+            return new BlockchainUpgradeTransactionMapping().apply(input);
+         case BLOCKCHAIN_CONFIG:
+            return new BlockchainConfigTransactionMapping().apply(input);
+         case EXCHANGE_OFFER_ADD:
+            return new ExchangeOfferTransactionMapping().apply(input);
+         default:
+            throw new UnsupportedOperationException("Unimplemented transaction type " + type);
+         }
+      } catch (RuntimeException e) {
+         throw new RuntimeException("Failed to map transaction " + input, e);
       }
    }
 
@@ -811,7 +819,15 @@ class BlockchainUpgradeTransactionMapping extends TransactionMapping {
             Optional.of(new PublicAccount(transaction.get("signer").getAsString(), networkType)), 
             Optional.of(transactionInfo), 
             GsonUtils.getBigInteger(transaction.getAsJsonArray("upgradePeriod")), 
-            BlockchainVersion.fromVersionValue(GsonUtils.getBigInteger(transaction.getAsJsonArray("newCatapultVersion"))));
+            BlockchainVersion.fromVersionValue(GsonUtils.getBigInteger(getNewVersion(transaction))));
+   }
+   
+   static JsonArray getNewVersion(JsonObject transaction) {
+      if (transaction.has("newCatapultVersion")) {
+         return transaction.getAsJsonArray("newCatapultVersion");
+      } else {
+         return transaction.getAsJsonArray("newBlockchainVersion");
+      }
    }
 }
 
@@ -836,7 +852,56 @@ class BlockchainConfigTransactionMapping extends TransactionMapping {
             Optional.of(new PublicAccount(transaction.get("signer").getAsString(), networkType)), 
             Optional.of(transactionInfo), 
             GsonUtils.getBigInteger(transaction.getAsJsonArray("applyHeightDelta")), 
-            transaction.get("blockChainConfig").getAsString(),
+            getConfigContent(transaction),
             transaction.get("supportedEntityVersions").getAsString());
+   }
+   
+   static String getConfigContent(JsonObject transaction) {
+      if (transaction.has("blockChainConfig")) {
+         return transaction.get("blockChainConfig").getAsString();
+      } else {
+         return transaction.get("networkConfig").getAsString();
+      }
+   }
+}
+
+/**
+ * Mapping from server response to a transaction
+ */
+class ExchangeOfferTransactionMapping extends TransactionMapping {
+
+   @Override
+   public ExchangeOfferAddTransaction apply(JsonObject input) {
+      TransactionInfo transactionInfo = this.createTransactionInfo(input.getAsJsonObject("meta"));
+
+      JsonObject transaction = input.getAsJsonObject("transaction");
+      DeadlineRaw deadline = new DeadlineRaw(GsonUtils.getBigInteger(transaction.getAsJsonArray("deadline")));
+      NetworkType networkType = extractNetworkType(transaction.get("version"));
+      return new ExchangeOfferAddTransaction(
+            networkType, 
+            extractTransactionVersion(transaction.get("version")), 
+            deadline, 
+            extractFee(transaction), 
+            Optional.of(transaction.get("signature").getAsString()), 
+            Optional.of(new PublicAccount(transaction.get("signer").getAsString(), networkType)), 
+            Optional.of(transactionInfo), 
+            loadOffers(transaction));
+   }
+   
+   static List<AddExchangeOffer> loadOffers(JsonObject transaction) {
+      if (transaction.getAsJsonArray("offers") != null) {
+         return stream(transaction.getAsJsonArray("offers"))
+               .map(item -> (JsonObject) item)
+               .map(json -> new AddExchangeOffer(
+                     new MosaicId(json.get("mosaicId").getAsBigInteger()),
+                     json.get("mosaicAmount").getAsBigInteger(),
+                     json.get("cost").getAsBigInteger(),
+                     ExchangeOfferType.getByCode(json.get("type").getAsInt()),
+                     GsonUtils.getBigInteger(json.getAsJsonArray("duration"))
+                     ))
+               .collect(Collectors.toList());
+      } else {
+         return new ArrayList<>();
+      }
    }
 }

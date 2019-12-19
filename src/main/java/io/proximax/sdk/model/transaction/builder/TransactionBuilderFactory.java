@@ -315,4 +315,15 @@ public class TransactionBuilderFactory {
       initDefaults(builder);
       return builder; 
    }
+
+   /**
+    * create builder for add exchange offer transaction
+    * 
+    * @return the builder
+    */
+   public ExchangeOfferAddTransactionBuilder exchangeAdd() {
+      ExchangeOfferAddTransactionBuilder builder = new ExchangeOfferAddTransactionBuilder();
+      initDefaults(builder);
+      return builder; 
+   }
 }

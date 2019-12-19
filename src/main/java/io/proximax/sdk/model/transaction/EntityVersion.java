@@ -125,7 +125,20 @@ public enum EntityVersion {
    /**
     * blockchain version update transaction
     */
-   BLOCKCHAIN_UPGRADE(1);
+   BLOCKCHAIN_UPGRADE(1),
+   
+   EXCHANGE_OFFER_ADD(1),
+   EXCHANGE_OFFER(1),
+   EXCHANGE_OFFER_REMOVE(1),
+
+   DRIVE_PREPARE(1),
+   DRIVE_JOIN(1),
+   DRIVE_FILESYSTEM(1),
+   DRIVE_FILES_DEPOSIT(1),
+   DRIVE_END(1),
+   DRIVE_FILES_REWARD(1),
+   DRIVE_VERIFICATION_START(1),
+   DRIVE_VERIFICATION_END(1);
 
    private int code;
 
