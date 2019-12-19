@@ -9,6 +9,7 @@ import java.math.BigInteger;
 import java.util.Optional;
 
 import io.proximax.sdk.FeeCalculationStrategy;
+import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.transaction.DeadlineRaw;
@@ -74,7 +75,8 @@ public abstract class TransactionBuilder<B extends TransactionBuilder<B, T>, T e
     * @return the maxFee
     */
    protected BigInteger getMaxFeeCalculation(int transactionPayloadSize) {
-      return feeCalculationStrategy.orElse(FeeCalculationStrategy.ZERO).calculateFee(Transaction.HEADER_SIZE + transactionPayloadSize);
+      return feeCalculationStrategy.orElse(FeeCalculationStrategy.ZERO)
+            .calculateFee(Transaction.HEADER_SIZE + transactionPayloadSize);
    }
 
    // ----------------------------------------- setters --------------------------------------//
@@ -237,4 +239,17 @@ public abstract class TransactionBuilder<B extends TransactionBuilder<B, T>, T e
             duration.orElseThrow(() -> new IllegalStateException("fixed or millis deadline needs to be specified"))));
    }
 
+   // ----------------------------------------- convenience methods -------------------------------------//
+
+   /**
+    * Specify signer of the transaction. This is required for inner transactions of aggregate transactions
+    * 
+    * @param signer the signer to set. This is convenience method accepting {@link Account} instance but what is
+    * required is only {@link PublicAccount} per {@link #signer(PublicAccount)}
+    * 
+    * @return the builder
+    */
+   public B signer(Account signer) {
+      return signer(signer.getPublicAccount());
+   }
 }
