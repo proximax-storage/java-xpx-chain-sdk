@@ -136,9 +136,9 @@ public class AggregateTransactionTest extends ResourceBasedTest {
       AggregateTransaction aggregateTx = fac.aggregateComplete()
             .innerTransactions(
                   fac.transfer().mosaics(amount).to(alice.getAddress()).deadline(new FakeDeadline()).build()
-                        .toAggregate(alice.getPublicAccount()),
+                        .toAggregate(bob.getPublicAccount()),
                   fac.transfer().mosaics(amount).to(bob.getAddress()).deadline(new FakeDeadline()).build()
-                        .toAggregate(bob.getPublicAccount()))
+                        .toAggregate(alice.getPublicAccount()))
             .deadline(new FakeDeadline()).build();
 
       SignedTransaction signedTransaction = alice
