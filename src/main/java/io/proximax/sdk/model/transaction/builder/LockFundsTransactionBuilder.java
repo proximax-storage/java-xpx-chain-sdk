@@ -5,9 +5,12 @@
  */
 package io.proximax.sdk.model.transaction.builder;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import io.proximax.sdk.BlockchainApi;
 import io.proximax.sdk.model.mosaic.Mosaic;
+import io.proximax.sdk.model.mosaic.MosaicFactory;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.transaction.EntityType;
 import io.proximax.sdk.model.transaction.EntityVersion;
@@ -112,7 +115,7 @@ public class LockFundsTransactionBuilder extends TransactionBuilder<LockFundsTra
     * 
     * @param duration the duration in number of blocks
     * @return self
-    * @deprecated use {@link #forAggregate(BigInteger, SignedTransaction)} instead
+    * @deprecated use {@link #forAggregate(MosaicFactory, BigInteger, SignedTransaction)} instead
     */
    @Deprecated
    public LockFundsTransactionBuilder aggregate(BigInteger duration) {
@@ -120,14 +123,31 @@ public class LockFundsTransactionBuilder extends TransactionBuilder<LockFundsTra
    }
 
    /**
-    * lock 10 network currency for specified duration and signed transaction. this is convenience for aggregate
-    * transaction locks
+    * <p>lock 10 network currency for specified duration and signed transaction. this is convenience for aggregate
+    * transaction locks</p>
+    * <p><b>NOTICE</b> this assumes that {@link NetworkCurrencyMosaic} is the network currency mosaic</p>
     * 
     * @param duration the duration in number of blocks
     * @param signedAggregateTransaction the aggregate transaction which is getting the lock created
     * @return self
     */
    public LockFundsTransactionBuilder forAggregate(BigInteger duration, SignedTransaction signedAggregateTransaction) {
-      return mosaic(NetworkCurrencyMosaic.TEN).duration(duration).signedTransaction(signedAggregateTransaction);
+      return forAggregate(NetworkCurrencyMosaic.FACTORY, duration, signedAggregateTransaction);
+   }
+
+   /**
+    * lock 10 network currency for specified duration and signed transaction. this is convenience for aggregate
+    * transaction locks
+    * 
+    * @param networkCurrencyFactory the factory for network currency. Available via call to
+    * {@link BlockchainApi#networkCurrencyMosaic()}
+    * @param duration the duration in number of blocks
+    * @param signedAggregateTransaction the aggregate transaction which is getting the lock created
+    * @return self
+    */
+   public LockFundsTransactionBuilder forAggregate(MosaicFactory networkCurrencyFactory, BigInteger duration,
+         SignedTransaction signedAggregateTransaction) {
+      Mosaic mosaicForTransfer = networkCurrencyFactory.create(BigDecimal.TEN);
+      return mosaic(mosaicForTransfer).duration(duration).signedTransaction(signedAggregateTransaction);
    }
 }

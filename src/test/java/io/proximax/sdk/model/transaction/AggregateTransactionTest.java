@@ -34,6 +34,7 @@ import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
 
+import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.ResourceBasedTest;
 import io.proximax.sdk.infrastructure.TransactionMapping;
 import io.proximax.sdk.model.account.Account;
@@ -41,6 +42,7 @@ import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.Mosaic;
+import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.transaction.builder.TransactionBuilderFactory;
 import io.proximax.sdk.utils.GsonUtils;
@@ -72,10 +74,11 @@ public class AggregateTransactionTest extends ResourceBasedTest {
 
    @Test
    void serialization() throws IOException {
-      TransferTransaction transferTx = new TransferTransaction(NetworkType.MIJIN_TEST, 3,
-            new FakeDeadline(), BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
+      TransferTransaction transferTx = new TransferTransaction(NetworkType.MIJIN_TEST, 3, new FakeDeadline(),
+            BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
             Recipient.from(new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST)),
-            Collections.singletonList(new Mosaic(NetworkCurrencyMosaic.ID, BigInteger.valueOf(10000000))), PlainMessage.EMPTY);
+            Collections.singletonList(new Mosaic(NetworkCurrencyMosaic.ID, BigInteger.valueOf(10000000))),
+            PlainMessage.EMPTY);
 
       PublicAccount innerSigner = new PublicAccount("846B4439154579A5903B1459C9CF69CB8153F6D0110A7A0ED61DE29AE4810BF2",
             NetworkType.MIJIN_TEST);
@@ -90,8 +93,8 @@ public class AggregateTransactionTest extends ResourceBasedTest {
 
    @Test
    void shouldCreateAggregateTransactionAndSignWithMultipleCosignatories() {
-      TransferTransaction transferTx = new TransferTransaction(NetworkType.MIJIN_TEST, 3,
-            new FakeDeadline(), BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
+      TransferTransaction transferTx = new TransferTransaction(NetworkType.MIJIN_TEST, 3, new FakeDeadline(),
+            BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
             Recipient.from(new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST)),
             Arrays.asList(), new PlainMessage("test-message"));
 
@@ -116,11 +119,41 @@ public class AggregateTransactionTest extends ResourceBasedTest {
       // signedTransaction.getPayload().substring(320, 474));
 
    }
-   
+
+   @Test
+   void serializeAggregateWithCosigners() throws IOException {
+      NetworkType netType = NetworkType.MIJIN_TEST;
+      TransactionBuilderFactory fac = new TransactionBuilderFactory();
+      fac.setFeeCalculationStrategy(FeeCalculationStrategy.MEDIUM);
+      fac.setNetworkType(netType);
+
+      Account alice = Account.createFromPrivateKey("28FCECEA252231D2C86E1BCF7DD541552BDBBEFBB09324758B3AC199B4AA7B78",
+            netType);
+      Account bob = Account.createFromPrivateKey("75CFAB0E6079DAA58D7FF0990ACA64E571EC58527A16DB9391C87C436261190C",
+            netType);
+      Mosaic amount = new Mosaic(new MosaicId("0dc67fbe1cad29e3"), BigInteger.valueOf(1000));
+      String gen_hash = "7B631D803F912B00DC0CBED3014BBD17A302BA50B99D233B9C2D9533B842ABDF";
+
+      AggregateTransaction aggregateTx = fac.aggregateComplete().innerTransactions(
+            fac.transfer().mosaics(amount).to(alice).signer(bob).deadline(new FakeDeadline()).build(),
+            fac.transfer().mosaics(amount).to(bob).signer(alice).deadline(new FakeDeadline()).build())
+            .deadline(new FakeDeadline()).build();
+
+      SignedTransaction signedTransaction = alice
+            .signTransactionWithCosignatories(aggregateTx, gen_hash, Arrays.asList(bob));
+
+//      saveBytes("aggregate_trans_cosigs", aggregateTx.generateBytes());
+//      saveBytes("aggregate_trans_cosigs_signed", signedTransaction.getPayload().getBytes());
+
+      assertArrayEquals(loadBytes("aggregate_trans_cosigs"), aggregateTx.generateBytes());
+      assertArrayEquals(loadBytes("aggregate_trans_cosigs_signed"), signedTransaction.getPayload().getBytes());
+
+   }
+
    @Test
    void checkCopyToSigner() {
-      TransferTransaction transferTx = new TransferTransaction(NetworkType.MIJIN_TEST, 3,
-            new FakeDeadline(), BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
+      TransferTransaction transferTx = new TransferTransaction(NetworkType.MIJIN_TEST, 3, new FakeDeadline(),
+            BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
             Recipient.from(new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST)),
             Arrays.asList(), new PlainMessage("test-message"));
 

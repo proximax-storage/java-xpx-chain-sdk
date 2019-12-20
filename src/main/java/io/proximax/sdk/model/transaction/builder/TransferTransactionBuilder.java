@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.mosaic.Mosaic;
 import io.proximax.sdk.model.namespace.NamespaceId;
@@ -134,6 +135,16 @@ public class TransferTransactionBuilder extends TransactionBuilder<TransferTrans
     */
    public TransferTransactionBuilder to(Address address) {
       return recipient(Recipient.from(address));
+   }
+
+   /**
+    * convenience call to {@link TransferTransactionBuilder#recipient(Recipient)}
+    * 
+    * @param namespaceId the recipient to set
+    * @return self
+    */
+   public TransferTransactionBuilder to(Account account) {
+      return to(account.getAddress());
    }
 
    /**
