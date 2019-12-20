@@ -76,6 +76,7 @@ public class BlockchainHttp extends Http implements BlockchainRepository {
     }
 
     private Observable<List<Transaction>> getBlockTransactions(BigInteger height, Optional<QueryParams> queryParams) {
+        
         return this.client
                 .get(BLOCK + height + "/transactions" + (queryParams.isPresent() ? queryParams.get().toUrl() : ""))
                 .map(Http::mapStringOrError)

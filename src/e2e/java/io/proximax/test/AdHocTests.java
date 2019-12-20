@@ -54,13 +54,14 @@ class AdHocTests extends BaseTest {
    @Disabled
    void getTransactions() {
       /*
-       * create debugging listener for the instance and add following line to
+       * create debugging listener in the E2EBaseTest and add line as follows
        * BlockchainHttp.getBlockTransactions(BigInteger height, Optional<QueryParams> queryParams)
-       * 
-       *                 .map(listener::writeTransaction)
+       *         .map(Http::mapStringOrError)
+       *         .map(listener::writeTransaction)
        */
-      long startBlock = 4134;
-      long endBlock = 4271;
+//      BlockchainHttp.listener = new DebuggingListener(api);
+      long startBlock = 213771;
+      long endBlock = 214321;
       BlockchainRepository repo = api.createBlockchainRepository();
       for (long block = startBlock; block < endBlock; block++) {
          repo.getBlockTransactions(BigInteger.valueOf(block)).blockingFirst();
