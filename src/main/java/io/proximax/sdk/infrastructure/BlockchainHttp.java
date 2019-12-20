@@ -138,23 +138,7 @@ public class BlockchainHttp extends Http implements BlockchainRepository {
               .map(Http::mapStringOrError)
               .map(GsonUtils::mapToJsonObject)
               .map(obj -> obj.get("name").getAsString())
-              .map(name -> {
-                  if (name.equalsIgnoreCase("mijinTest"))
-                      return NetworkType.MIJIN_TEST;
-                  else if (name.equalsIgnoreCase("mijin"))
-                      return NetworkType.MIJIN;
-                  else if (name.equalsIgnoreCase("publicTest"))
-                      return NetworkType.TEST_NET;
-                  else if (name.equalsIgnoreCase("public"))
-                      return NetworkType.MAIN_NET;
-                  else if (name.equalsIgnoreCase("privateTest"))
-                      return NetworkType.PRIVATE_TEST;
-                  else if (name.equalsIgnoreCase("private"))
-                      return NetworkType.PRIVATE;
-                  else {
-                      throw new IllegalArgumentException("Network " + name + " is not supported by the sdk");
-                  }
-              });
+              .map(NetworkType::getByName);
   }
 
    @Override

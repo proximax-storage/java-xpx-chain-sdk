@@ -25,32 +25,34 @@ public enum NetworkType {
     /**
      * Main net network
      */
-    MAIN_NET(0xb8),
+    MAIN_NET(0xb8, "public"),
     /**
      * Test net network
      */
-    TEST_NET(0xa8),
+    TEST_NET(0xa8, "publicTest"),
     /**
      * Private network
      */
-    PRIVATE(0xc8),
+    PRIVATE(0xc8, "private"),
     /**
      * Private test network
      */
-    PRIVATE_TEST(0xb0),
+    PRIVATE_TEST(0xb0, "privateTest"),
     /**
      * Mijin net network
      */
-    MIJIN(0x60),
+    MIJIN(0x60, "mijin"),
     /**
      * Mijin test net network
      */
-    MIJIN_TEST(0x90);
+    MIJIN_TEST(0x90, "mijinTest");
 
     private final int value;
-
-    NetworkType(int value) {
+    private final String name;
+    
+    NetworkType(int value, String name) {
         this.value = value;
+        this.name = name;
     }
 
     /**
@@ -79,6 +81,21 @@ public enum NetworkType {
     }
 
     /**
+     * get network type by name
+     * 
+     * @param name name of network type as indicated by the network
+     * @return network type
+     */
+    public static NetworkType getByName(String name) {
+       for (NetworkType tp: values()) {
+          if (tp.getName().equals(name)) {
+             return tp;
+          }
+       }
+       throw new IllegalArgumentException("Unknown netowrk type name: " + name);
+    }
+    
+    /**
      * Returns enum value.
      *
      * @return int
@@ -86,4 +103,11 @@ public enum NetworkType {
     public int getValue() {
         return this.value;
     }
+
+   /**
+    * @return the name of the network type
+    */
+   public String getName() {
+      return name;
+   }
 }

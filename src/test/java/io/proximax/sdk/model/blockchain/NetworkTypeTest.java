@@ -25,22 +25,24 @@ public class NetworkTypeTest {
 
    @Test
    void networkTypes() {
-      testNetworkType(NetworkType.MAIN_NET, 0xb8, 184);
-      testNetworkType(NetworkType.TEST_NET, 0xa8, 168);
-      testNetworkType(NetworkType.PRIVATE, 0xc8, 200);
-      testNetworkType(NetworkType.PRIVATE_TEST, 0xb0, 176);
-      testNetworkType(NetworkType.MIJIN, 0x60, 96);
-      testNetworkType(NetworkType.MIJIN_TEST, 0x90, 144);
+      testNetworkType(NetworkType.MAIN_NET, 0xb8, 184, "public");
+      testNetworkType(NetworkType.TEST_NET, 0xa8, 168, "publicTest");
+      testNetworkType(NetworkType.PRIVATE, 0xc8, 200,"private");
+      testNetworkType(NetworkType.PRIVATE_TEST, 0xb0, 176,"privateTest");
+      testNetworkType(NetworkType.MIJIN, 0x60, 96, "mijin");
+      testNetworkType(NetworkType.MIJIN_TEST, 0x90, 144,"mijinTest");
       // make sure we have them all
       assertEquals(6, NetworkType.values().length);
       // check that exception is thrown for invalid value
-      assertThrows(RuntimeException.class, () -> NetworkType.rawValueOf(-5678));
+      assertThrows(IllegalArgumentException.class, () -> NetworkType.rawValueOf(-5678));
+      assertThrows(IllegalArgumentException.class, () -> NetworkType.getByName("nonexistent"));
    }
 
-   private void testNetworkType(NetworkType networkType, int hexaValue, int decimalValue) {
+   private void testNetworkType(NetworkType networkType, int hexaValue, int decimalValue, String name) {
       assertEquals(decimalValue, networkType.getValue());
       assertEquals(networkType, NetworkType.rawValueOf(decimalValue));
       assertEquals(decimalValue, hexaValue);
-
+      assertEquals(networkType, NetworkType.getByName(name));
+      assertEquals(name, networkType.getName());
    }
 }
