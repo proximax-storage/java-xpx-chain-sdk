@@ -64,6 +64,28 @@ public class CosignatureTransactionTest {
     }
 
     @Test
+    void testConstructor() {
+       TransactionInfo info = TransactionInfo.create(BigInteger.ONE, "CAFFEE", "something");
+       AggregateTransaction aggregateTransaction = new AggregateTransaction(EntityType.AGGREGATE_COMPLETE, NetworkType.MIJIN_TEST, 1, Deadline.create(2, ChronoUnit.HOURS), BigInteger.ZERO, 
+             Optional.empty(), Optional.empty(), Optional.of(info), Collections.emptyList(), Collections.emptyList());
+
+       CosignatureTransaction trans = new CosignatureTransaction(aggregateTransaction);
+       
+       assertEquals(aggregateTransaction, trans.getTransactionToCosign());
+    }
+    
+    @Test
+    void testStaticConstructor() {
+       TransactionInfo info = TransactionInfo.create(BigInteger.ONE, "CAFFEE", "something");
+       AggregateTransaction aggregateTransaction = new AggregateTransaction(EntityType.AGGREGATE_COMPLETE, NetworkType.MIJIN_TEST, 1, Deadline.create(2, ChronoUnit.HOURS), BigInteger.ZERO, 
+             Optional.empty(), Optional.empty(), Optional.of(info), Collections.emptyList(), Collections.emptyList());
+
+       CosignatureTransaction trans = CosignatureTransaction.create(aggregateTransaction);
+       
+       assertEquals(aggregateTransaction, trans.getTransactionToCosign());
+    }
+    
+    @Test
     void shouldThrowExceptionWhenTransactionToCosignHasNotBeenAnnunced() throws Exception {
 
        AggregateTransaction aggregateTransaction = new AggregateTransaction(EntityType.AGGREGATE_COMPLETE, NetworkType.MIJIN_TEST, 1, Deadline.create(2, ChronoUnit.HOURS), BigInteger.ZERO, 
@@ -71,5 +93,19 @@ public class CosignatureTransactionTest {
 
         assertThrows(IllegalArgumentException.class, ()->{CosignatureTransaction.create(aggregateTransaction);}, "Transaction to cosign should be announced before being able to cosign it");
 
+    }
+    
+    @Test
+    void testSigning() {
+       TransactionInfo info = TransactionInfo.create(BigInteger.ONE, "CAFFEE", "something");
+       AggregateTransaction aggregateTransaction = new AggregateTransaction(EntityType.AGGREGATE_COMPLETE, NetworkType.MIJIN_TEST, 1, Deadline.create(2, ChronoUnit.HOURS), BigInteger.ZERO, 
+             Optional.empty(), Optional.empty(), Optional.of(info), Collections.emptyList(), Collections.emptyList());
+
+       CosignatureTransaction trans = new CosignatureTransaction(aggregateTransaction);
+       CosignatureSignedTransaction signed = trans.signWith(account);
+       
+       assertEquals("CAFFEE", signed.getParentHash());
+       assertEquals("240526ae253d7819f1c80329b9003f5fae8caf8d01dba14121ac37b53d5397e0617559439327611b8c552c80278e214a61491b79ba9aa0da826c97d88cf1cc09", signed.getSignature());
+       assertEquals("C2F93346E27CE6AD1A9F8F5E3066F8326593A406BDF357ACB041E2F9AB402EFE", signed.getSigner());
     }
 }

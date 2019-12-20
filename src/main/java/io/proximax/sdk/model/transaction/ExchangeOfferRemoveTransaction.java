@@ -22,7 +22,7 @@ import io.proximax.sdk.model.exchange.RemoveExchangeOffer;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
- * Exchange offer transaction
+ * Remove exchange offer transaction used to remove standing offer
  */
 public class ExchangeOfferRemoveTransaction extends Transaction {
    private final Schema schema = new ExchangeOfferRemoveTransactionSchema();

@@ -22,7 +22,7 @@ import io.proximax.sdk.model.exchange.AddExchangeOffer;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
- * Exchange offer transaction
+ * Add exchange offer transaction used to create new offer
  */
 public class ExchangeOfferAddTransaction extends Transaction {
    private final Schema schema = new ExchangeOfferAddTransactionSchema();

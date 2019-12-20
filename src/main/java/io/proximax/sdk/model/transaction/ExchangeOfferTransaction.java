@@ -23,7 +23,7 @@ import io.proximax.sdk.model.exchange.ExchangeOffer;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
- * Exchange offer transaction. Offer to fulfill someone's offer
+ * Exchange offer transaction. Offer to fulfill someone else's offer
  */
 public class ExchangeOfferTransaction extends Transaction {
    private final Schema schema = new ExchangeOfferTransactionSchema();
@@ -72,7 +72,8 @@ public class ExchangeOfferTransaction extends Transaction {
          int mosaicAmountOffset = ExchangeOfferBuffer.createMosaicAmountVector(builder,
                UInt64Utils.fromBigInteger(offer.getMosaicAmount()));
          int costOffset = ExchangeOfferBuffer.createCostVector(builder, UInt64Utils.fromBigInteger(offer.getCost()));
-         int ownerOffset = ExchangeOfferBuffer.createOwnerVector(builder, HexEncoder.getBytes(offer.getOwner()));
+         int ownerOffset = ExchangeOfferBuffer.createOwnerVector(builder,
+               HexEncoder.getBytes(offer.getOwner().getPublicKey()));
 
          // populate flat-buffer
          ExchangeOfferBuffer.startExchangeOfferBuffer(builder);

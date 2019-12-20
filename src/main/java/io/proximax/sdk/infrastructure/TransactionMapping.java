@@ -902,10 +902,10 @@ class ExchangeOfferTransactionMapping extends TransactionMapping {
             Optional.of(transaction.get("signature").getAsString()), 
             Optional.of(new PublicAccount(transaction.get("signer").getAsString(), networkType)), 
             Optional.of(transactionInfo), 
-            loadOffers(transaction));
+            loadOffers(transaction, networkType));
    }
    
-   static List<ExchangeOffer> loadOffers(JsonObject transaction) {
+   static List<ExchangeOffer> loadOffers(JsonObject transaction, NetworkType networkType) {
       if (transaction.getAsJsonArray("offers") != null) {
          return stream(transaction.getAsJsonArray("offers"))
                .map(item -> (JsonObject) item)
@@ -914,7 +914,7 @@ class ExchangeOfferTransactionMapping extends TransactionMapping {
                      Hacks.getBigInt(Hacks.inOfferOrNot(json, "mosaicAmount")),
                      Hacks.getBigInt(Hacks.inOfferOrNot(json, "cost")),
                      ExchangeOfferType.getByCode(Hacks.inOfferOrNot(json, "type").getAsInt()),
-                     json.get("owner").getAsString()
+                     new PublicAccount(json.get("owner").getAsString(), networkType)
                      ))
                .collect(Collectors.toList());
       } else {

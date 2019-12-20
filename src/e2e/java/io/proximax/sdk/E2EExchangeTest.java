@@ -117,7 +117,7 @@ public class E2EExchangeTest extends E2EBaseTest {
       {
          // seed account can offer
          ExchangeOffer offer = new ExchangeOffer(EXCHANGED_MOSAIC, BigInteger.valueOf(500),
-               BigInteger.valueOf(250), ExchangeOfferType.BUY, simpleAccount.getPublicKey());
+               BigInteger.valueOf(250), ExchangeOfferType.BUY, simpleAccount.getPublicAccount());
          ExchangeOfferTransaction offerTrans = transact.exchangeOffer().offers(offer).build();
          SignedTransaction signedOfferTrans = api.sign(offerTrans, getSeedAccount());
          logger.info("Announced offer for half. {}", transactionHttp.announce(signedOfferTrans).blockingFirst());
@@ -159,7 +159,7 @@ public class E2EExchangeTest extends E2EBaseTest {
       {
          // seed account can offer 500 harvest mosaic for 250 network currency
          ExchangeOffer offer = new ExchangeOffer(desiredMosaic, BigInteger.valueOf(desiredAmount),
-               BigInteger.valueOf(offeredPrice), ExchangeOfferType.BUY, simpleAccount.getPublicKey());
+               BigInteger.valueOf(offeredPrice), ExchangeOfferType.BUY, simpleAccount.getPublicAccount());
          ExchangeOfferTransaction offerTrans = transact.exchangeOffer().offers(offer).build();
          SignedTransaction signedOfferTrans = api.sign(offerTrans, getSeedAccount());
          logger.info("Announced offer: {}", transactionHttp.announce(signedOfferTrans).blockingFirst());

@@ -6,7 +6,7 @@
 package io.proximax.sdk.model.exchange;
 
 /**
- * TODO add proper description
+ * Type of the exchange offer indicating either desire to buy or sell specified mosaic
  */
 public enum ExchangeOfferType {
    SELL(0),

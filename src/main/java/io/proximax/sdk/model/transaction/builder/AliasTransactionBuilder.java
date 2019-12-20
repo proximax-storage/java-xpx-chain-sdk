@@ -21,7 +21,7 @@ import io.proximax.sdk.model.transaction.EntityVersion;
 /**
  * <p>
  * builder for {@link AliasTransaction}
- * <p>
+ * </p>
  * <p>
  * Standard use when managing alias for mosaic: call {@link #link(MosaicId)} or {@link #unlink(MosaicId)}
  * </p>
