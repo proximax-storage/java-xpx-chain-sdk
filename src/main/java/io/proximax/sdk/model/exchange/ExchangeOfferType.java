@@ -9,8 +9,8 @@ package io.proximax.sdk.model.exchange;
  * TODO add proper description
  */
 public enum ExchangeOfferType {
-   BUY(0),
-   SELL(1);
+   SELL(0),
+   BUY(1);
    
    private final int code;
 
