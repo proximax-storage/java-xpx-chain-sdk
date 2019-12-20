@@ -326,4 +326,26 @@ public class TransactionBuilderFactory {
       initDefaults(builder);
       return builder; 
    }
+
+   /**
+    * create builder for remove exchange offer transaction
+    * 
+    * @return the builder
+    */
+   public ExchangeOfferRemoveTransactionBuilder exchangeRemove() {
+      ExchangeOfferRemoveTransactionBuilder builder = new ExchangeOfferRemoveTransactionBuilder();
+      initDefaults(builder);
+      return builder; 
+   }
+
+   /**
+    * create builder for exchange offer transaction
+    * 
+    * @return the builder
+    */
+   public ExchangeOfferTransactionBuilder exchangeOffer() {
+      ExchangeOfferTransactionBuilder builder = new ExchangeOfferTransactionBuilder();
+      initDefaults(builder);
+      return builder; 
+   }
 }
