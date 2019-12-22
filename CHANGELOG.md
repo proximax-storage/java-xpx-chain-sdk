@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.6.2 Exchange
+
+Minor release with new features and fixes
+* added MosaicFactory to better support frequent mosaic instantiation and non-standard network currencies
+* added support for exchange transactions
+
 ## 0.6.1
 
 Minor release with new features and fixes

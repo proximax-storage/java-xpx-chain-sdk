@@ -1,0 +1,70 @@
+namespace io.proximax.sdk.gen.buffers;
+
+table AddExchangeOfferTransactionBuffer {
+    size: uint;
+    signature: [ubyte];
+    signer: [ubyte];
+    version: uint;
+    type: ushort;
+    maxFee: [uint];
+    deadline:[uint];
+    offersCount:ubyte;
+    offers: [AddExchangeOfferBuffer];
+}
+
+table ExchangeOfferTransactionBuffer {
+    size: uint;
+    signature: [ubyte];
+    signer: [ubyte];
+    version: uint;
+    type: ushort;
+    maxFee: [uint];
+    deadline:[uint];
+    offersCount:ubyte;
+    offers: [ExchangeOfferBuffer];
+}
+
+table RemoveExchangeOfferTransactionBuffer {
+    size: uint;
+    signature: [ubyte];
+    signer: [ubyte];
+    version: uint;
+    type: ushort;
+    maxFee: [uint];
+    deadline:[uint];
+    offersCount:ubyte;
+    offers: [RemoveExchangeOfferBuffer];
+}
+
+table AddExchangeOfferBuffer {
+    mosaicId:[uint];
+    mosaicAmount:[uint];
+    cost:[uint];
+    type:ubyte;
+    duration:[uint];
+}
+
+table ExchangeOfferBuffer {
+    mosaicId:[uint];
+    mosaicAmount:[uint];
+    cost:[uint];
+    type:ubyte;
+    owner:[ubyte];
+}
+
+table RemoveExchangeOfferBuffer {
+    mosaicId:[uint];
+    type:ubyte;
+}
+
+root_type AddExchangeOfferBuffer;
+
+root_type ExchangeOfferBuffer;
+
+root_type RemoveExchangeOfferBuffer;
+
+root_type AddExchangeOfferTransactionBuffer;
+
+root_type ExchangeOfferTransactionBuffer;
+
+root_type RemoveExchangeOfferTransactionBuffer;

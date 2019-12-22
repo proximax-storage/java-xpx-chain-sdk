@@ -134,14 +134,15 @@ public class E2EBaseTest extends BaseTest {
     */
    protected void signup(Address addr) {
       // output nothing by default
-      Consumer<? super Object> logme = (obj) -> logger.trace("listener fired: {}", obj);
-      disposables.add(listener.status(addr).subscribe(logme, logme));
-      disposables.add(listener.unconfirmedAdded(addr).subscribe(logme, logme));
-      disposables.add(listener.unconfirmedRemoved(addr).subscribe(logme, logme));
-      disposables.add(listener.aggregateBondedAdded(addr).subscribe(logme, logme));
-      disposables.add(listener.aggregateBondedRemoved(addr).subscribe(logme, logme));
-      disposables.add(listener.cosignatureAdded(addr).subscribe(logme, logme));
-      disposables.add(listener.confirmed(addr).subscribe(logme, logme));
+      Consumer<? super Object> logAll = (obj) -> logger.debug("listener fired: {}", obj);
+      Consumer<? super Object> logStatus = (obj) -> logger.warn("status fired: {}", obj);
+      disposables.add(listener.status(addr).subscribe(logStatus, logStatus));
+      disposables.add(listener.unconfirmedAdded(addr).subscribe(logAll, logAll));
+      disposables.add(listener.unconfirmedRemoved(addr).subscribe(logAll, logAll));
+      disposables.add(listener.aggregateBondedAdded(addr).subscribe(logAll, logAll));
+      disposables.add(listener.aggregateBondedRemoved(addr).subscribe(logAll, logAll));
+      disposables.add(listener.cosignatureAdded(addr).subscribe(logAll, logAll));
+      disposables.add(listener.confirmed(addr).subscribe(logAll, logAll));
    }
    /**
     * send XPX from account to recipient

@@ -185,6 +185,19 @@ public class E2EBlockchainTest extends E2EBaseTest {
       assertNotNull(upgrade.getVersion());
    }
 
+   @Test
+   void loadTransactions() {
+      for (int i = 0; i<1000; i++) {
+         loadTransactions(i);
+      }
+   }
+   
+   void loadTransactions(int block) {
+      // try to load first 100 transactions and see if we can parse them
+      List<Transaction> transactions = blockchainHttp.getBlockTransactions(BigInteger.valueOf(block), new QueryParams(100)).blockingFirst();
+      assertTrue(transactions.size() <= 100);
+   }
+   
    /**
     * this test requires upgrade of nodes to version 1.2.3.4 after 1_000_000_000 blocks get generated => will break the
     * blockchain!!!!
