@@ -30,6 +30,9 @@ import io.proximax.sdk.infrastructure.NamespaceHttp;
 import io.proximax.sdk.infrastructure.TransactionHttp;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.mosaic.MosaicFactory;
+import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
+import io.proximax.sdk.model.mosaic.NetworkHarvestMosaic;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.SignedTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
@@ -42,8 +45,17 @@ public class BlockchainApi {
    /** default fee calculation strategy */
    public static final FeeCalculationStrategy DEFAULT_FEE_CALCULATION_STRATEGY = FeeCalculationStrategy.MEDIUM;
    
+   // defaults for the mosaic factories
+   private static final MosaicFactory DEFAULT_NETWORK_CURRENCY_FACTORY = NetworkCurrencyMosaic.FACTORY;
+   private static final MosaicFactory DEFAULT_NETWORK_HARVEST_FACTORY = NetworkHarvestMosaic.FACTORY;
+   
+   
    /** URL of the node */
    private final URL url;
+   /** currency mosaic factory */
+   private final MosaicFactory currencyMosaicFactory;
+   /** harvest mosaic factory */
+   private final MosaicFactory harvestMosaicFactory;
    /** network type of the node */
    private NetworkType networkType;
    /** network generation hash used for signing */
@@ -55,7 +67,7 @@ public class BlockchainApi {
     * @param url URL of the node
     */
    public BlockchainApi(URL url) {
-      this.url = url;
+      this(url, null);
    }
 
    /**
@@ -65,10 +77,25 @@ public class BlockchainApi {
     * @param networkType network type of the node
     */
    public BlockchainApi(URL url, NetworkType networkType) {
-      this.url = url;
-      this.networkType = networkType;
+      this(url, networkType, DEFAULT_NETWORK_CURRENCY_FACTORY, DEFAULT_NETWORK_HARVEST_FACTORY);
    }
 
+   /**
+    * create new instance that connects to specified node
+    * 
+    * @param url URL of the node
+    * @param networkType network type of the node
+    * @param currencyMosaicFactory factory to create network currency mosaic and provide information about the mosaic
+    * @param harvestMosaicFactory factory to create network harvest mosaic and provide information about the mosaic
+    */
+   public BlockchainApi(URL url, NetworkType networkType, MosaicFactory currencyMosaicFactory, MosaicFactory harvestMosaicFactory) {
+      this.url = url;
+      this.networkType = networkType;
+      this.currencyMosaicFactory = currencyMosaicFactory;
+      this.harvestMosaicFactory = harvestMosaicFactory;
+   }
+
+   
    /**
     * check that the network type matches what is reported by the node
     * 
@@ -217,7 +244,7 @@ public class BlockchainApi {
     * 
     * @return network type of the node
     */
-   private NetworkType queryForNetworkType() {
+   protected NetworkType queryForNetworkType() {
       return createBlockchainRepository().getNetworkType().timeout(30, TimeUnit.SECONDS).blockingFirst();
    }
    
@@ -229,5 +256,19 @@ public class BlockchainApi {
       fac.setNetworkType(getNetworkType());
       fac.setFeeCalculationStrategy(DEFAULT_FEE_CALCULATION_STRATEGY);
       return fac;
+   }
+   
+   /**
+    * @return factory for network currency mosaic
+    */
+   public MosaicFactory networkCurrencyMosaic() {
+      return currencyMosaicFactory;
+   }
+   
+   /**
+    * @return factory for network harvest mosaic
+    */
+   public MosaicFactory networkHarvestMosaic() {
+      return harvestMosaicFactory;
    }
 }

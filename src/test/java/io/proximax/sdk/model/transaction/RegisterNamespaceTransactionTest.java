@@ -26,6 +26,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.ResourceBasedTest;
+import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.namespace.NamespaceType;
@@ -44,6 +45,22 @@ class RegisterNamespaceTransactionTest extends ResourceBasedTest {
       assertEquals(NamespaceType.SUB_NAMESPACE, tx.getNamespaceType());
       assertEquals(Optional.of(BigInteger.ONE), tx.getDuration());
       assertEquals(Optional.of(new NamespaceId(BigInteger.TEN)), tx.getParentId());
+   }
+
+   @Test
+   void copyForSigner() {
+      PublicAccount signer = new PublicAccount("CAFFEE", NetworkType.MIJIN);
+      RegisterNamespaceTransaction tx = (RegisterNamespaceTransaction)new RegisterNamespaceTransaction(NetworkType.MIJIN, 23, new FakeDeadline(),
+            BigInteger.ONE, Optional.empty(), Optional.empty(), Optional.empty(), "prx",
+            new NamespaceId(new BigInteger("4635294387305441662")), Optional.of(BigInteger.ONE),
+            Optional.of(new NamespaceId(BigInteger.TEN)), NamespaceType.SUB_NAMESPACE).copyForSigner(signer);
+
+      assertEquals("prx", tx.getNamespaceName());
+      assertEquals(new NamespaceId(new BigInteger("4635294387305441662")), tx.getNamespaceId());
+      assertEquals(NamespaceType.SUB_NAMESPACE, tx.getNamespaceType());
+      assertEquals(Optional.of(BigInteger.ONE), tx.getDuration());
+      assertEquals(Optional.of(new NamespaceId(BigInteger.TEN)), tx.getParentId());
+      assertEquals(Optional.of(signer), tx.getSigner());
    }
 
    @Test

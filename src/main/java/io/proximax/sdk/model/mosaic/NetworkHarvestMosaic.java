@@ -17,6 +17,7 @@ package io.proximax.sdk.model.mosaic;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Optional;
 
 import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.transaction.UInt64Id;
@@ -60,10 +61,13 @@ public class NetworkHarvestMosaic extends Mosaic {
     */
    public static final boolean LEVYMUTABLE = false;
 
-   /** one of network currency taking the divisibility into account */
-   public static final Mosaic ONE = createRelative(BigDecimal.ONE);
-   /** ten of network currency taking the divisibility into account */
-   public static final Mosaic TEN = createRelative(BigDecimal.TEN);
+   /** factory that can be used to create mosaic instances */
+   public static final MosaicFactory FACTORY = new MosaicFactory(ID, INITIALSUPPLY, SUPPLYMUTABLE, TRANSFERABLE, DIVISIBILITY, Optional.empty());
+
+   /** one of network harvest mosaic taking the divisibility into account */
+   public static final NetworkHarvestMosaic ONE = new NetworkHarvestMosaic(FACTORY.getAbsoluteAmount(BigDecimal.ONE));
+   /** ten of network harvest mosaic taking the divisibility into account */
+   public static final NetworkHarvestMosaic TEN = new NetworkHarvestMosaic(FACTORY.getAbsoluteAmount(BigDecimal.TEN));
 
    /**
     * create specified amount of micro XPX
@@ -81,9 +85,7 @@ public class NetworkHarvestMosaic extends Mosaic {
     * @return a XPX instance
     */
    public static Mosaic createRelative(BigDecimal amount) {
-      BigInteger relativeAmount = BigDecimal.valueOf(Math.pow(10, DIVISIBILITY)).multiply(amount)
-            .toBigInteger();
-      return new NetworkHarvestMosaic(relativeAmount);
+      return new NetworkHarvestMosaic(FACTORY.getAbsoluteAmount(amount));
    }
 
    /**

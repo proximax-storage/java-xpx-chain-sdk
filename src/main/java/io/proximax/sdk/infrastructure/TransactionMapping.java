@@ -43,6 +43,10 @@ import io.proximax.sdk.model.account.props.AccountPropertyType;
 import io.proximax.sdk.model.alias.AliasAction;
 import io.proximax.sdk.model.blockchain.BlockchainVersion;
 import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.exchange.AddExchangeOffer;
+import io.proximax.sdk.model.exchange.ExchangeOffer;
+import io.proximax.sdk.model.exchange.ExchangeOfferType;
+import io.proximax.sdk.model.exchange.RemoveExchangeOffer;
 import io.proximax.sdk.model.metadata.MetadataModification;
 import io.proximax.sdk.model.metadata.MetadataModificationType;
 import io.proximax.sdk.model.metadata.MetadataType;
@@ -61,51 +65,61 @@ import io.reactivex.functions.Function;
 public class TransactionMapping implements Function<JsonObject, Transaction> {
    @Override
    public Transaction apply(JsonObject input) {
-      JsonObject transaction = input.getAsJsonObject("transaction");
-      int type = transaction.get("type").getAsInt();
+      try {
+         JsonObject transaction = input.getAsJsonObject("transaction");
+         int type = transaction.get("type").getAsInt();
 
-      switch (EntityType.rawValueOf(type)) {
-      case TRANSFER:
-         return new TransferTransactionMapping().apply(input);
-      case REGISTER_NAMESPACE:
-         return new NamespaceCreationTransactionMapping().apply(input);
-      case MOSAIC_DEFINITION:
-         return new MosaicCreationTransactionMapping().apply(input);
-      case MOSAIC_SUPPLY_CHANGE:
-         return new MosaicSupplyChangeTransactionMapping().apply(input);
-      case MOSAIC_ALIAS:
-         return new MosaicAliasTransactionMapping().apply(input);
-      case ADDRESS_ALIAS:
-         return new AddressAliasTransactionMapping().apply(input);
-      case MODIFY_MULTISIG_ACCOUNT:
-         return new MultisigModificationTransactionMapping().apply(input);
-      case AGGREGATE_COMPLETE:
-      case AGGREGATE_BONDED:
-         return new AggregateTransactionMapping().apply(input);
-      case LOCK:
-         return new LockFundsTransactionMapping().apply(input);
-      case SECRET_LOCK:
-         return new SecretLockTransactionMapping().apply(input);
-      case SECRET_PROOF:
-         return new SecretProofTransactionMapping().apply(input);
-      case MODIFY_ADDRESS_METADATA:
-      case MODIFY_MOSAIC_METADATA:
-      case MODIFY_NAMESPACE_METADATA:
-         return new ModifyMetadataTransactionMapping().apply(input);
-      case MODIFY_CONTRACT:
-         return new ModifyContractTransactionMapping().apply(input);
-      case ACCOUNT_PROPERTIES_ADDRESS:
-      case ACCOUNT_PROPERTIES_MOSAIC:
-      case ACCOUNT_PROPERTIES_ENTITY_TYPE:
-         return new ModifyAccountPropertiesTransactionMapping().apply(input);
-      case ACCOUNT_LINK:
-         return new AccountLinkTransactionMapping().apply(input);
-      case BLOCKCHAIN_UPGRADE:
-         return new BlockchainUpgradeTransactionMapping().apply(input);
-      case BLOCKCHAIN_CONFIG:
-         return new BlockchainConfigTransactionMapping().apply(input);
-      default:
-         throw new UnsupportedOperationException("Unimplemented transaction type " + type);
+         switch (EntityType.rawValueOf(type)) {
+         case TRANSFER:
+            return new TransferTransactionMapping().apply(input);
+         case REGISTER_NAMESPACE:
+            return new NamespaceCreationTransactionMapping().apply(input);
+         case MOSAIC_DEFINITION:
+            return new MosaicCreationTransactionMapping().apply(input);
+         case MOSAIC_SUPPLY_CHANGE:
+            return new MosaicSupplyChangeTransactionMapping().apply(input);
+         case MOSAIC_ALIAS:
+            return new MosaicAliasTransactionMapping().apply(input);
+         case ADDRESS_ALIAS:
+            return new AddressAliasTransactionMapping().apply(input);
+         case MODIFY_MULTISIG_ACCOUNT:
+            return new MultisigModificationTransactionMapping().apply(input);
+         case AGGREGATE_COMPLETE:
+         case AGGREGATE_BONDED:
+            return new AggregateTransactionMapping().apply(input);
+         case LOCK:
+            return new LockFundsTransactionMapping().apply(input);
+         case SECRET_LOCK:
+            return new SecretLockTransactionMapping().apply(input);
+         case SECRET_PROOF:
+            return new SecretProofTransactionMapping().apply(input);
+         case MODIFY_ADDRESS_METADATA:
+         case MODIFY_MOSAIC_METADATA:
+         case MODIFY_NAMESPACE_METADATA:
+            return new ModifyMetadataTransactionMapping().apply(input);
+         case MODIFY_CONTRACT:
+            return new ModifyContractTransactionMapping().apply(input);
+         case ACCOUNT_PROPERTIES_ADDRESS:
+         case ACCOUNT_PROPERTIES_MOSAIC:
+         case ACCOUNT_PROPERTIES_ENTITY_TYPE:
+            return new ModifyAccountPropertiesTransactionMapping().apply(input);
+         case ACCOUNT_LINK:
+            return new AccountLinkTransactionMapping().apply(input);
+         case BLOCKCHAIN_UPGRADE:
+            return new BlockchainUpgradeTransactionMapping().apply(input);
+         case BLOCKCHAIN_CONFIG:
+            return new BlockchainConfigTransactionMapping().apply(input);
+         case EXCHANGE_OFFER_ADD:
+            return new ExchangeOfferAddTransactionMapping().apply(input);
+         case EXCHANGE_OFFER_REMOVE:
+            return new ExchangeOfferRemoveTransactionMapping().apply(input);
+         case EXCHANGE_OFFER:
+            return new ExchangeOfferTransactionMapping().apply(input);
+         default:
+            throw new UnsupportedOperationException("Unimplemented transaction type " + type);
+         }
+      } catch (RuntimeException e) {
+         throw new RuntimeException("Failed to map transaction " + input, e);
       }
    }
 
@@ -322,7 +336,7 @@ class ModifyAccountPropertiesTransactionMapping extends TransactionMapping {
    static List<AccountPropertyModification<Address>> getAddressMods(JsonObject transaction) {
       return stream(transaction.getAsJsonArray("modifications")).map(obj -> (JsonObject) obj).map(json -> {
          AccountPropertyModificationType modType = AccountPropertyModificationType
-               .getByCode(getModType(json).getAsInt());
+               .getByCode(Hacks.getType(json).getAsInt());
          return new AccountPropertyModification<>(modType, Address.createFromEncoded(json.get("value").getAsString()));
       }).collect(Collectors.toList());
    }
@@ -337,7 +351,7 @@ class ModifyAccountPropertiesTransactionMapping extends TransactionMapping {
       return stream(transaction.getAsJsonArray("modifications"))
             .map(obj -> (JsonObject) obj)
             .map(json -> {
-               AccountPropertyModificationType modType = AccountPropertyModificationType.getByCode(getModType(json).getAsInt());
+               AccountPropertyModificationType modType = AccountPropertyModificationType.getByCode(Hacks.getType(json).getAsInt());
                return new AccountPropertyModification<>(modType, (UInt64Id)new MosaicId(GsonUtils.getBigInteger(json.get("value").getAsJsonArray())));
             }).collect(Collectors.toList());
    }
@@ -351,24 +365,11 @@ class ModifyAccountPropertiesTransactionMapping extends TransactionMapping {
    static List<AccountPropertyModification<EntityType>> getEntityTypeMods(JsonObject transaction) {
       return stream(transaction.getAsJsonArray("modifications")).map(obj -> (JsonObject) obj).map(json -> {
          AccountPropertyModificationType modType = AccountPropertyModificationType
-               .getByCode(getModType(json).getAsInt());
+               .getByCode(Hacks.getType(json).getAsInt());
          return new AccountPropertyModification<>(modType, EntityType.rawValueOf(json.get("value").getAsInt()));
       }).collect(Collectors.toList());
    }
    
-   /**
-    * helper method to support different names of modification type field
-    * 
-    * @param json modification object
-    * @return element representing the modification type
-    */
-   static JsonElement getModType(JsonObject json) {
-      if (json.has("type")) {
-         return json.get("type");
-      } else {
-         return json.get("modificationType");
-      }
-   }
 }
 
 /**
@@ -419,7 +420,7 @@ class MosaicCreationTransactionMapping extends TransactionMapping {
       return new MosaicDefinitionTransaction(extractNetworkType(version), extractTransactionVersion(version), deadline,
             extractFee(transaction), Optional.of(transaction.get("signature").getAsString()),
             Optional.of(new PublicAccount(transaction.get("signer").getAsString(), extractNetworkType(version))),
-            Optional.of(transactionInfo), extractNonce(transaction),
+            Optional.of(transactionInfo), Hacks.extractNonce(transaction),
             new MosaicId(GsonUtils.getBigInteger(transaction.getAsJsonArray("mosaicId"))),
             extractProperties(transaction.getAsJsonArray("properties")));
    }
@@ -446,23 +447,6 @@ class MosaicCreationTransactionMapping extends TransactionMapping {
       return GsonUtils.stream(mosaicProperties).map(JsonElement::getAsJsonObject)
             .filter(obj -> (obj.has("key") ? obj.get("key") : obj.get("id")).getAsByte() == index)
             .map(obj -> obj.getAsJsonArray("value")).map(GsonUtils::getBigInteger).findFirst();
-   }
-
-   /**
-    * retrieve fee from the transaction. listener returns fee as uint64 "fee" and services return string "maxFee" and
-    * this method provides support for both
-    * 
-    * @param transaction transaction object with fee or maxFee field
-    * @return value of the fee
-    */
-   public static MosaicNonce extractNonce(JsonObject transaction) {
-      if (transaction.has("mosaicNonce")) {
-         return MosaicNonce.createFromBigInteger(transaction.get("mosaicNonce").getAsBigInteger());
-      } else if (transaction.has("nonce")) {
-         return MosaicNonce.createFromBigInteger(transaction.get("nonce").getAsBigInteger());
-      } else {
-         throw new IllegalArgumentException("Fee is missing in the transaction description");
-      }
    }
 }
 
@@ -626,7 +610,7 @@ class AggregateTransactionMapping extends TransactionMapping {
       for (int i = 0; i < transaction.getAsJsonArray("transactions").size(); i++) {
          JsonObject innerTransaction = transaction.getAsJsonArray("transactions").get(i).getAsJsonObject();
          innerTransaction.getAsJsonObject("transaction").add("deadline", transaction.getAsJsonArray("deadline"));
-         setFee(innerTransaction.getAsJsonObject("transaction"), transaction);
+         Hacks.setFee(innerTransaction.getAsJsonObject("transaction"), transaction);
          innerTransaction.getAsJsonObject("transaction").add("fee", transaction.getAsJsonArray("fee"));
          innerTransaction.getAsJsonObject("transaction").add("signature", transaction.get("signature"));
          if (!innerTransaction.has("meta")) {
@@ -654,22 +638,6 @@ class AggregateTransactionMapping extends TransactionMapping {
             Optional.of(transactionInfo), 
             transactions,
             cosignatures);
-   }
-
-   /**
-    * copy the fee field from the source to target object
-    * 
-    * @param target JSON object to copy the fee to
-    * @param source JSON object to take the fee from
-    */
-   private void setFee(JsonObject target, JsonObject source) {
-      if (source.has("maxFee")) {
-         target.add("maxFee", source.get("maxFee"));
-      } else if (source.has("fee")) {
-         target.add("fee", source.get("fee"));
-      } else {
-         throw new IllegalArgumentException("Fee is missing in the transaction description");
-      }
    }
 }
 
@@ -772,21 +740,7 @@ class AccountLinkTransactionMapping extends TransactionMapping {
             Optional.of(new PublicAccount(transaction.get("signer").getAsString(), networkType)),
             Optional.of(transactionInfo), 
             new PublicAccount(transaction.get("remoteAccountKey").getAsString(), networkType),
-            AccountLinkAction.getByCode(getAction(transaction).getAsByte()));
-   }
-   
-   /**
-    * helper method to retrieve account link action as it uses different field names in listener and transaction
-    * 
-    * @param json transaction object
-    * @return JSON element representing the action
-    */
-   static JsonElement getAction(JsonObject json) {
-      if (json.has("action")) {
-         return json.get("action");
-      } else {
-         return json.get("linkAction");
-      }
+            AccountLinkAction.getByCode(Hacks.getAction(transaction).getAsByte()));
    }
 }
 
@@ -811,7 +765,7 @@ class BlockchainUpgradeTransactionMapping extends TransactionMapping {
             Optional.of(new PublicAccount(transaction.get("signer").getAsString(), networkType)), 
             Optional.of(transactionInfo), 
             GsonUtils.getBigInteger(transaction.getAsJsonArray("upgradePeriod")), 
-            BlockchainVersion.fromVersionValue(GsonUtils.getBigInteger(transaction.getAsJsonArray("newCatapultVersion"))));
+            BlockchainVersion.fromVersionValue(GsonUtils.getBigInteger(Hacks.getNewVersion(transaction))));
    }
 }
 
@@ -836,7 +790,228 @@ class BlockchainConfigTransactionMapping extends TransactionMapping {
             Optional.of(new PublicAccount(transaction.get("signer").getAsString(), networkType)), 
             Optional.of(transactionInfo), 
             GsonUtils.getBigInteger(transaction.getAsJsonArray("applyHeightDelta")), 
-            transaction.get("blockChainConfig").getAsString(),
+            getConfigContent(transaction),
             transaction.get("supportedEntityVersions").getAsString());
+   }
+   
+   static String getConfigContent(JsonObject transaction) {
+      if (transaction.has("blockChainConfig")) {
+         return transaction.get("blockChainConfig").getAsString();
+      } else {
+         return transaction.get("networkConfig").getAsString();
+      }
+   }
+}
+
+/**
+ * Mapping from server response to a transaction
+ */
+class ExchangeOfferAddTransactionMapping extends TransactionMapping {
+
+   @Override
+   public ExchangeOfferAddTransaction apply(JsonObject input) {
+      TransactionInfo transactionInfo = this.createTransactionInfo(input.getAsJsonObject("meta"));
+
+      JsonObject transaction = input.getAsJsonObject("transaction");
+      DeadlineRaw deadline = new DeadlineRaw(GsonUtils.getBigInteger(transaction.getAsJsonArray("deadline")));
+      NetworkType networkType = extractNetworkType(transaction.get("version"));
+      return new ExchangeOfferAddTransaction(
+            networkType, 
+            extractTransactionVersion(transaction.get("version")), 
+            deadline, 
+            extractFee(transaction), 
+            Optional.of(transaction.get("signature").getAsString()), 
+            Optional.of(new PublicAccount(transaction.get("signer").getAsString(), networkType)), 
+            Optional.of(transactionInfo), 
+            loadOffers(transaction));
+   }
+   
+   static List<AddExchangeOffer> loadOffers(JsonObject transaction) {
+      if (transaction.getAsJsonArray("offers") != null) {
+         return stream(transaction.getAsJsonArray("offers"))
+               .map(item -> (JsonObject) item)
+               .map(json -> new AddExchangeOffer(
+                     new MosaicId(Hacks.getBigInt(Hacks.inOfferOrNot(json, "mosaicId"))),
+                     Hacks.getBigInt(Hacks.inOfferOrNot(json, "mosaicAmount")),
+                     Hacks.getBigInt(Hacks.inOfferOrNot(json, "cost")),
+                     ExchangeOfferType.getByCode(Hacks.inOfferOrNot(json, "type").getAsInt()),
+                     Hacks.getBigInt(json.getAsJsonArray("duration"))
+                     ))
+               .collect(Collectors.toList());
+      } else {
+         return new ArrayList<>();
+      }
+   }
+}
+
+/**
+ * Mapping from server response to a transaction
+ */
+class ExchangeOfferRemoveTransactionMapping extends TransactionMapping {
+
+   @Override
+   public ExchangeOfferRemoveTransaction apply(JsonObject input) {
+      TransactionInfo transactionInfo = this.createTransactionInfo(input.getAsJsonObject("meta"));
+
+      JsonObject transaction = input.getAsJsonObject("transaction");
+      DeadlineRaw deadline = new DeadlineRaw(GsonUtils.getBigInteger(transaction.getAsJsonArray("deadline")));
+      NetworkType networkType = extractNetworkType(transaction.get("version"));
+      return new ExchangeOfferRemoveTransaction(
+            networkType, 
+            extractTransactionVersion(transaction.get("version")), 
+            deadline, 
+            extractFee(transaction), 
+            Optional.of(transaction.get("signature").getAsString()), 
+            Optional.of(new PublicAccount(transaction.get("signer").getAsString(), networkType)), 
+            Optional.of(transactionInfo), 
+            loadOffers(transaction));
+   }
+   
+   static List<RemoveExchangeOffer> loadOffers(JsonObject transaction) {
+      if (transaction.getAsJsonArray("offers") != null) {
+         return stream(transaction.getAsJsonArray("offers"))
+               .map(item -> (JsonObject) item)
+               .map(json -> new RemoveExchangeOffer(
+                     new MosaicId(Hacks.getBigInt(Hacks.inOfferOrNot(json, "mosaicId"))),
+                     ExchangeOfferType.getByCode(Hacks.inOfferOrNot(json, "type", "offerType").getAsInt())
+                     ))
+               .collect(Collectors.toList());
+      } else {
+         return new ArrayList<>();
+      }
+   }
+}
+
+/**
+ * Mapping from server response to a transaction
+ */
+class ExchangeOfferTransactionMapping extends TransactionMapping {
+
+   @Override
+   public ExchangeOfferTransaction apply(JsonObject input) {
+      TransactionInfo transactionInfo = this.createTransactionInfo(input.getAsJsonObject("meta"));
+
+      JsonObject transaction = input.getAsJsonObject("transaction");
+      DeadlineRaw deadline = new DeadlineRaw(GsonUtils.getBigInteger(transaction.getAsJsonArray("deadline")));
+      NetworkType networkType = extractNetworkType(transaction.get("version"));
+      return new ExchangeOfferTransaction(
+            networkType, 
+            extractTransactionVersion(transaction.get("version")), 
+            deadline, 
+            extractFee(transaction), 
+            Optional.of(transaction.get("signature").getAsString()), 
+            Optional.of(new PublicAccount(transaction.get("signer").getAsString(), networkType)), 
+            Optional.of(transactionInfo), 
+            loadOffers(transaction, networkType));
+   }
+   
+   static List<ExchangeOffer> loadOffers(JsonObject transaction, NetworkType networkType) {
+      if (transaction.getAsJsonArray("offers") != null) {
+         return stream(transaction.getAsJsonArray("offers"))
+               .map(item -> (JsonObject) item)
+               .map(json -> new ExchangeOffer(
+                     new MosaicId(Hacks.getBigInt(Hacks.inOfferOrNot(json, "mosaicId"))),
+                     Hacks.getBigInt(Hacks.inOfferOrNot(json, "mosaicAmount")),
+                     Hacks.getBigInt(Hacks.inOfferOrNot(json, "cost")),
+                     ExchangeOfferType.getByCode(Hacks.inOfferOrNot(json, "type").getAsInt()),
+                     new PublicAccount(json.get("owner").getAsString(), networkType)
+                     ))
+               .collect(Collectors.toList());
+      } else {
+         return new ArrayList<>();
+      }
+   }
+}
+
+class Hacks {
+   static JsonElement inOfferOrNot(JsonObject json, String... names) {
+      for (String name : names) {
+         if (json.has("offer")) {
+            return json.getAsJsonObject("offer").get(name);
+         } else if (json.has(name)) {
+            return json.get(name);
+         }
+      }
+      throw new IllegalStateException("could not find required field: " + json.toString());
+   }
+   
+   static BigInteger getBigInt(JsonElement json) {
+      if (json.isJsonArray()) {
+         return GsonUtils.getBigInteger(json.getAsJsonArray());
+      } else {
+         return json.getAsBigInteger();
+      }
+   }
+   
+   /**
+    * helper method to support different names of modification type field
+    * 
+    * @param json modification object
+    * @return element representing the modification type
+    */
+   static JsonElement getType(JsonObject json) {
+      if (json.has("type")) {
+         return json.get("type");
+      } else if (json.has("modificationType")) {
+         return json.get("modificationType");
+      } else {
+         throw new IllegalStateException("No known type field in: " + json.toString());
+      }
+   }
+   
+   /**
+    * retrieve fee from the transaction. listener returns fee as uint64 "fee" and services return string "maxFee" and
+    * this method provides support for both
+    * 
+    * @param transaction transaction object with fee or maxFee field
+    * @return value of the fee
+    */
+   static MosaicNonce extractNonce(JsonObject transaction) {
+      if (transaction.has("mosaicNonce")) {
+         return MosaicNonce.createFromBigInteger(transaction.get("mosaicNonce").getAsBigInteger());
+      } else if (transaction.has("nonce")) {
+         return MosaicNonce.createFromBigInteger(transaction.get("nonce").getAsBigInteger());
+      } else {
+         throw new IllegalArgumentException("Fee is missing in the transaction description");
+      }
+   }
+   
+   /**
+    * copy the fee field from the source to target object
+    * 
+    * @param target JSON object to copy the fee to
+    * @param source JSON object to take the fee from
+    */
+   static void setFee(JsonObject target, JsonObject source) {
+      if (source.has("maxFee")) {
+         target.add("maxFee", source.get("maxFee"));
+      } else if (source.has("fee")) {
+         target.add("fee", source.get("fee"));
+      } else {
+         throw new IllegalArgumentException("Fee is missing in the transaction description");
+      }
+   }
+   
+   /**
+    * helper method to retrieve account link action as it uses different field names in listener and transaction
+    * 
+    * @param json transaction object
+    * @return JSON element representing the action
+    */
+   static JsonElement getAction(JsonObject json) {
+      if (json.has("action")) {
+         return json.get("action");
+      } else {
+         return json.get("linkAction");
+      }
+   }
+   
+   
+   static JsonArray getNewVersion(JsonObject transaction) {
+      if (transaction.has("newCatapultVersion")) {
+         return transaction.getAsJsonArray("newCatapultVersion");
+      } else {
+         return transaction.getAsJsonArray("newBlockchainVersion");
+      }
    }
 }
