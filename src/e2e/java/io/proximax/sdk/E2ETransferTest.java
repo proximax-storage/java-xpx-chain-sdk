@@ -18,6 +18,7 @@ package io.proximax.sdk;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -29,8 +30,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.proximax.core.crypto.KeyPair;
+import io.proximax.sdk.helpers.AccountHelper;
 import io.proximax.sdk.helpers.TransferHelper;
 import io.proximax.sdk.model.account.Account;
+import io.proximax.sdk.model.account.AccountInfo;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.mosaic.Mosaic;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
@@ -63,11 +66,6 @@ public class E2ETransferTest extends E2EBaseTest {
    void closeDown() {
       // return the funds
       returnAllToSeed(simpleAccount);
-      sleepForAWhile();
-      // check that target account has expected number of incoming transactions
-      int transactions = accountHttp.incomingTransactions(simpleAccount.getPublicAccount()).blockingFirst().size();
-      // TODO why 2? we did 4 transfers but 2 were aggregate?
-      assertEquals(2, transactions);
    }
 
    @Test
@@ -125,13 +123,55 @@ public class E2ETransferTest extends E2EBaseTest {
    @Test
    void helperSimpleTransfer() {
       TransferHelper hlp = new TransferHelper(api);
-      hlp.transfer(from, to, mosaic, message, confirmationTimeoutSeconds);
+      // prepare transfer info
+      Mosaic mosaic = NetworkCurrencyMosaic.createRelative(1.234);
+      Account recipient = new Account(new KeyPair(), getNetworkType());
+      // make twice the transfer of 1.234 network currency
+      hlp.transfer(seedAccount, recipient.getAddress(), mosaic, 120);
+      hlp.transfer(seedAccount, recipient.getAddress(), mosaic, PlainMessage.create("hello"), 120);
+      // wait a bit
+      sleepForAWhile();
+      // retrieve account info
+      AccountInfo recptInfo = accountHttp.getAccountInfo(recipient.getAddress()).blockingFirst();
+      assertEquals(1, recptInfo.getMosaics().size());
+      assertEquals(mosaic.getAmount().multiply(BigInteger.valueOf(2)), recptInfo.getMosaics().get(0).getAmount());
+      // return the funds
+      returnAllToSeed(recipient);
    }
    
    @Test
    void helperMultisigTransfer() {
-      TransferHelper hlp = new TransferHelper(api);
-      hlp.transferFromMultisig(from, initiator, to, mosaic, message, confirmationTimeoutSeconds, lockBlocks);
+      TransferHelper trn = new TransferHelper(api);
+      AccountHelper act = new AccountHelper(api);
+      // prepare data
+      Account multi = signup(new Account(new KeyPair(), getNetworkType()));
+      Account cosig1 = signup(new Account(new KeyPair(), getNetworkType()));
+      Account cosig2 = signup(new Account(new KeyPair(), getNetworkType()));
+      Account cosig3 = signup(new Account(new KeyPair(), getNetworkType()));
+      // send 10 network currency to the to-be-multisig account so the lock can happen
+      trn.transfer(seedAccount, multi.getAddress(), NetworkCurrencyMosaic.createRelative(10.5), 120);
+      trn.transfer(seedAccount, cosig1.getAddress(), NetworkCurrencyMosaic.createRelative(10.5), 120);
+      // convert account to multisig
+      String transactionHash = act.accountToMultisig(multi,
+            Arrays.asList(cosig1.getPublicAccount(), cosig2.getPublicAccount(), cosig3.getPublicAccount()),
+            2,
+            2,
+            500,
+            1200);
+      // now cosigners need to opt-in by cosigning the multisig change
+      act.cosignAggregateTransaction(multi.getPublicAccount(), transactionHash, 120, cosig1, cosig2, cosig3);
+      // wait a bit just to be sure
+      sleepForAWhile();
+      // make transfer from the multisig
+      String transferHash = trn.transferFromMultisig(multi.getPublicAccount(),
+            cosig1,
+            seedAccount.getAddress(),
+            NetworkCurrencyMosaic.TEN,
+            PlainMessage.EMPTY,
+            120,
+            50);
+      // cosign the transfer by cosig2
+      act.cosignAggregateTransaction(multi.getPublicAccount(), transferHash, 120, cosig2);
    }
    
    /**

@@ -85,6 +85,16 @@ public class NetworkCurrencyMosaic extends Mosaic {
    }
 
    /**
+    * Create XPX with using XPX as unit.
+    *
+    * @param amount amount to send
+    * @return a XPX instance
+    */
+   public static Mosaic createRelative(double amount) {
+      return createRelative(BigDecimal.valueOf(amount));
+   }
+
+   /**
     * Create XPX with using micro XPX as unit, 1 XPX = 1000000 micro XPX.
     *
     * @param amount amount to send

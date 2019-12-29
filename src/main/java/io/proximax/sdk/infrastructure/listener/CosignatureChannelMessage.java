@@ -39,7 +39,7 @@ public class CosignatureChannelMessage extends ListenerMessage<CosignatureSigned
     * @param address address for which to observe the events
     * @return observable of cosignature transaction
     */
-   public static Observable<CosignatureSignedTransaction> subscribeTo(Subject<ListenerMessage> messageSubject, Address address) {
+   public static Observable<CosignatureSignedTransaction> subscribeTo(Subject<ListenerMessage<?>> messageSubject, Address address) {
       return messageSubject
                .filter(message -> message.isRelevant(CHANNEL, address))
                .map(message -> (CosignatureChannelMessage) message)

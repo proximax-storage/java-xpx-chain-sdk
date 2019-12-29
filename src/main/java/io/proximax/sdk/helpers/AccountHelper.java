@@ -71,14 +71,15 @@ public class AccountHelper extends BaseHelper {
     * @param minRemovals minimum approvals for removal of cosigner
     * @param optinBlocks number of blocks to wait for cosigner opt-in
     * @param confirmationTimeoutSeconds timeout before transaction expires
+    * @return the hash of the transaction
     */
-   public void accountToMultisig(Account account, List<PublicAccount> cosigners, int minApprovals, int minRemovals,
+   public String accountToMultisig(Account account, List<PublicAccount> cosigners, int minApprovals, int minRemovals,
          int optinBlocks, int confirmationTimeoutSeconds) {
       // first prepare the actual transaction to change account to multisig account
       ModifyMultisigAccountTransaction multisigChangeTrans = transact.multisigModification()
             .changeToMultisig(cosigners, minApprovals, minRemovals).build();
       // aggregate bonded transaction is required for cosigner opt-in so use that
-      announceAsAggregateBonded(account,
+      return announceAsAggregateBonded(account,
             optinBlocks,
             confirmationTimeoutSeconds,
             multisigChangeTrans.toAggregate(account.getPublicAccount()));

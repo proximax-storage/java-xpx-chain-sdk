@@ -44,7 +44,7 @@ public class SimpleChannelMessage extends ListenerMessage<String> {
     * @param address address for which to observe the events
     * @return the observable of Strings
     */
-   public static Observable<String> subscribeTo(Subject<ListenerMessage> messageSubject, ListenerChannel channel, Address address) {
+   public static Observable<String> subscribeTo(Subject<ListenerMessage<?>> messageSubject, ListenerChannel channel, Address address) {
       return messageSubject
                .filter(message -> message.isRelevant(channel, address))
                .map(message -> (SimpleChannelMessage) message)

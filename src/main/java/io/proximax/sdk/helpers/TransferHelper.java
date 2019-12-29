@@ -42,6 +42,21 @@ public class TransferHelper extends BaseHelper {
    }
 
    /**
+    * <b>BLOCKING</b> transfer mosaic from standard (non-multisig) account
+    * 
+    * @param from the source account
+    * @param to target address
+    * @param mosaic mosaic to transfer
+    * @param confirmationTimeoutSeconds seconds to wait for transaction confirmation
+    */
+   public void transfer(Account from, Address to, Mosaic mosaic, int confirmationTimeoutSeconds) {
+      // prepare transfer transaction
+      TransferTransaction transferTx = transact.transfer().mosaics(mosaic).to(to).build();
+      // announce the transaction
+      transactionConfirmed(transferTx, from, confirmationTimeoutSeconds);
+   }
+
+   /**
     * <b>BLOCKING</b> make transfer from multisignature account. Cosigners are expected to approve the transaction
     * before lockBlocks elapsed
     * 
@@ -52,12 +67,13 @@ public class TransferHelper extends BaseHelper {
     * @param message transfer message
     * @param confirmationTimeoutSeconds time to wait for transaction confirmation
     * @param lockBlocks number of blocks to wait for cosigners to cosign the transaction
+    * @return transaction hash
     */
-   public void transferFromMultisig(PublicAccount from, Account initiator, Address to, Mosaic mosaic, Message message,
+   public String transferFromMultisig(PublicAccount from, Account initiator, Address to, Mosaic mosaic, Message message,
          int confirmationTimeoutSeconds, int lockBlocks) {
       // prepare transfer transaction
       TransferTransaction transferTx = transact.transfer().mosaics(mosaic).to(to).message(message).build();
       // announce as aggregate bonded to allow cosigners to act
-      announceAsAggregateBonded(initiator, lockBlocks, confirmationTimeoutSeconds, transferTx.toAggregate(from));
+      return announceAsAggregateBonded(initiator, lockBlocks, confirmationTimeoutSeconds, transferTx.toAggregate(from));
    }
 }

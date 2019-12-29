@@ -49,7 +49,7 @@ public class StatusChannelMessage extends ListenerMessage<TransactionStatusError
     * @param address address for which to observe the events
     * @return the observable of status errors
     */
-   public static Observable<TransactionStatusError> subscribeTo(Subject<ListenerMessage> messageSubject, Address address) {
+   public static Observable<TransactionStatusError> subscribeTo(Subject<ListenerMessage<?>> messageSubject, Address address) {
       return messageSubject
                .filter(message -> message.isRelevant(CHANNEL, address))
                .map(message -> (StatusChannelMessage) message)

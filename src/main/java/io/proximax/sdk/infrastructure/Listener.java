@@ -50,7 +50,7 @@ import okhttp3.WebSocketListener;
  * Listener repository implementation
  */
 public class Listener extends Http implements ListenerRepository {
-   private final Subject<ListenerMessage> messageSubject;
+   private final Subject<ListenerMessage<?>> messageSubject;
    private String uid;
    private WebSocket webSocket;
    private final ListenerMessageMapping mapping = new ListenerMessageMapping();

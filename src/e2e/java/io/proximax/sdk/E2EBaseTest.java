@@ -144,6 +144,19 @@ public class E2EBaseTest extends BaseTest {
       disposables.add(listener.cosignatureAdded(addr).subscribe(logAll, logAll));
       disposables.add(listener.confirmed(addr).subscribe(logAll, logAll));
    }
+   
+   /**
+    * subscribe to all channels for the account's address
+    * 
+    * @param acct
+    * @return the account
+    */
+   protected Account signup(Account acct) {
+      signup(acct.getAddress());
+      return acct;
+   }
+   
+   
    /**
     * send XPX from account to recipient
     * 

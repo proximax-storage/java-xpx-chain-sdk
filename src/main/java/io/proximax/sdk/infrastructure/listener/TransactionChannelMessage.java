@@ -53,7 +53,7 @@ public class TransactionChannelMessage extends ListenerMessage<Transaction> {
     * @param address address for which to observe the events
     * @return the observable of transactions
     */
-   public static Observable<Transaction> subscribeTo(Subject<ListenerMessage> messageSubject, ListenerChannel channel,
+   public static Observable<Transaction> subscribeTo(Subject<ListenerMessage<?>> messageSubject, ListenerChannel channel,
          Address address) {
       return messageSubject.filter(message -> message.isForChannel(channel))
             .map(message -> (TransactionChannelMessage) message).map(ListenerMessage::getPayload)

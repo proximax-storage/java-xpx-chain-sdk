@@ -69,7 +69,7 @@ public class BlockChannelMessage extends ListenerMessage<BlockInfo> {
     * @param messageSubject subject to subscribe to
     * @return observable block info
     */
-   public static Observable<BlockInfo> subscribeTo(Subject<ListenerMessage> messageSubject) {
+   public static Observable<BlockInfo> subscribeTo(Subject<ListenerMessage<?>> messageSubject) {
       return messageSubject
                .filter(message -> message.isForChannel(CHANNEL))
                .map(message -> (BlockChannelMessage) message)
