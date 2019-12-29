@@ -144,7 +144,6 @@ class BaseHelper {
     */
    public void cosignAggregateTransaction(PublicAccount multisigAccount, String transactionHash,
          int confirmationTimeoutSeconds, Account... cosigners) {
-      sleepForAWhile();
       final AccountRepository accounts = api.createAccountRepository();
       final TransactionRepository transactions = api.createTransactionRepository();
       // retrieve the aggregate transaction that is to be cosigned
@@ -156,7 +155,6 @@ class BaseHelper {
       // announce cosignatures for all accounts
       for (Account cosig : cosigners) {
          if (!trans.isSignedByAccount(cosig.getPublicAccount())) {
-            sleepForAWhile();
             final CosignatureTransaction cosignatureTransaction = CosignatureTransaction.create(trans);
             final CosignatureSignedTransaction cosignatureSignedTransaction = cosig
                   .signCosignatureTransaction(cosignatureTransaction);
