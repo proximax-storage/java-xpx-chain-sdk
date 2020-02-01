@@ -1,4 +1,4 @@
-<p align="center"><a href="https://github.com/proximax-storage" target="_blank"><img width="150" src="https://github.com/proximax-storage/java-xpx-chain-sdk/raw/master/docs/images/logo.jpg" alt="ProximaX Sirius Blockchain Java SDK"></a></p>
+<p align="center"><a href="https://github.com/proximax-storage" target="_blank"><img width="300" srchttps://user-images.githubusercontent.com/29048783/72933958-c8836400-3d30-11ea-99d5-678e20f43e19.png" alt="ProximaX Sirius Blockchain Java SDK"></a></p>
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Coverage Status](https://coveralls.io/repos/github/proximax-storage/java-xpx-chain-sdk/badge.svg?branch=master)](https://coveralls.io/github/proximax-storage/java-xpx-chain-sdk?branch=master)
