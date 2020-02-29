@@ -5,6 +5,7 @@
 Minor release with new features and fixes
 * added MosaicFactory to better support frequent mosaic instantiation and non-standard network currencies
 * added support for exchange transactions
+* added support for unsigned version field for entity info on the chain
 
 ## 0.6.1
 
