@@ -1733,6 +1733,7 @@ components:
         * 0xF243 (62019 decimal) - Mosaic_Alias_Resolution.
     NetworkTypeEnum:
       type: integer
+      format: int64
       description: |
         The entity version. The higher byte represents the network
         identifier:
