@@ -187,12 +187,19 @@ public class E2EBlockchainTest extends E2EBaseTest {
 
    @Test
    void loadTransactions() {
-      for (int i = 0; i<1000; i++) {
+      // get chain height
+      final long height = blockchainHttp.getBlockchainHeight().blockingFirst().longValue();
+      // go over first 50 blocks
+      for (int i = 0; i<Math.min(height, 50); i++) {
+         loadTransactions(i);
+      }
+      // first 50 blocks got already scanned so start at 50 or last 1000
+      for (long i = Math.max(height-1000, 50l); i<height; i++) {
          loadTransactions(i);
       }
    }
    
-   void loadTransactions(int block) {
+   void loadTransactions(long block) {
       // try to load first 100 transactions and see if we can parse them
       List<Transaction> transactions = blockchainHttp.getBlockTransactions(BigInteger.valueOf(block), new QueryParams(100)).blockingFirst();
       assertTrue(transactions.size() <= 100);

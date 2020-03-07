@@ -84,7 +84,7 @@ class BlockInfoTest {
       BlockDTO blockDto = new BlockDTO();
       blockDto.setSignature("37351C8244AC166BE6664E3FA954E99A3239AC46E51E2B32CEA1C72DD0851100A7731868E932E1A9BEF8A27D48E1FFEE401E933EB801824373E7537E51733E0F");
       blockDto.setSigner("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF");
-      blockDto.setVersion(36867);
+      blockDto.setVersion(36867l);
       blockDto.setType(EntityTypeEnum.NUMBER_16705);
       blockDto.setHeight(getUint64Dto(2));
       blockDto.setTimestamp(getUint64Dto(3));

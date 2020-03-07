@@ -14,20 +14,10 @@
 package io.proximax.sdk.gen.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
+
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.proximax.sdk.gen.model.BlockDTOAllOf;
-import io.proximax.sdk.gen.model.EntityDTO;
-import io.proximax.sdk.gen.model.EntityTypeEnum;
-import io.proximax.sdk.gen.model.UInt64DTO;
-import io.proximax.sdk.gen.model.VerifiableEntityDTO;
-import io.swagger.annotations.ApiModel;
+
 import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
 
 /**
  * BlockDTO
@@ -44,7 +34,7 @@ public class BlockDTO {
 
   public static final String SERIALIZED_NAME_VERSION = "version";
   @SerializedName(SERIALIZED_NAME_VERSION)
-  private Integer version;
+  private Long version;
 
   public static final String SERIALIZED_NAME_TYPE = "type";
   @SerializedName(SERIALIZED_NAME_TYPE)
@@ -130,7 +120,7 @@ public class BlockDTO {
     this.signer = signer;
   }
 
-  public BlockDTO version(Integer version) {
+  public BlockDTO version(Long version) {
     this.version = version;
     return this;
   }
@@ -140,11 +130,11 @@ public class BlockDTO {
    * @return version
   **/
   @ApiModelProperty(example = "36867", required = true, value = "The entity version. The higher byte represents the network identifier: * 0x68 (MAIN_NET) - Public main network. * 0x98 (TEST_NET) - Public test network. * 0x60 (MIJIN) - Private network. * 0x90 (MIJIN_TEST) - Private test network. ")
-  public Integer getVersion() {
+  public Long getVersion() {
     return version;
   }
 
-  public void setVersion(Integer version) {
+  public void setVersion(Long version) {
     this.version = version;
   }
 
