@@ -13,6 +13,7 @@ io.proximax.sdk.model.account.props
 io.proximax.sdk.model.alias
 io.proximax.sdk.model.blockchain
 io.proximax.sdk.model.contract
+io.proximax.sdk.model.exchange
 io.proximax.sdk.model.metadata
 io.proximax.sdk.model.mosaic
 io.proximax.sdk.model.namespace
