@@ -22,6 +22,8 @@ plugins {
     id 'java-library-distribution'
     // publishing to maven repository
     id 'maven-publish'
+    // support for integration tests
+    id 'org.unbroken-dome.test-sets' version '2.2.1'
     // sign the artifacts and pom
     id 'signing'
     // code coverage reporting
@@ -34,8 +36,6 @@ plugins {
 
 // define contents of the build
 apply from: "$rootDir/gradle/content.gradle"
-// load setup for integration tests
-apply from: "$rootDir/gradle/integration.gradle"
 // load setup for coverage reports
 apply from: "$rootDir/gradle/coverage.gradle"
 // loak setup for publishing
@@ -68,10 +68,15 @@ test {
     useJUnitPlatform()
 }
 
+// declare e2e test set
+testSets {
+    e2e
+}
+
 // versions of dependencies
 ext {
     okHttp3Version = '3.14.1'
-    junitVersion = '5.4.2'
+    junitVersion = '5.6.0'
 }
 
 dependencies {
