@@ -65,7 +65,7 @@ public class AggregateTransactionTest extends ResourceBasedTest {
             .networkType(NetworkType.MIJIN_TEST).build();
 
       assertEquals(NetworkType.MIJIN_TEST, aggregateTx.getNetworkType());
-      assertTrue(2 == aggregateTx.getVersion());
+      assertEquals(3, aggregateTx.getVersion());
       long nowSinceNemesis = new Deadline(0, ChronoUnit.SECONDS).getInstant();
       assertTrue(nowSinceNemesis < aggregateTx.getDeadline().getInstant());
       assertEquals(BigInteger.valueOf(0), aggregateTx.getMaxFee());
@@ -87,7 +87,7 @@ public class AggregateTransactionTest extends ResourceBasedTest {
             .networkType(NetworkType.MIJIN_TEST).build();
 
       byte[] actual = aggregateTx.generateBytes();
-//        saveBytes("aggregate_trans", actual);
+//      saveBytes("aggregate_trans", actual);
       assertArrayEquals(loadBytes("aggregate_trans"), actual);
    }
 
