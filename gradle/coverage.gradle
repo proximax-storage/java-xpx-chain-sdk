@@ -14,17 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 jacocoTestReport {
     reports {
         xml.enabled true
         html.enabled true
     }
     afterEvaluate {
-        classDirectories = files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: [
-                'io/proximax/sdk/gen/**'
-            ])
-        })
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: ['io/proximax/sdk/gen/**'])
+        }))
+    }
+}
+
+test {
+    jacoco {
+        excludes = ['io.proximax.sdk.gen.*']
     }
 }
