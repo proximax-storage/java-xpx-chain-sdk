@@ -115,6 +115,8 @@ public class TransactionMapping implements Function<JsonObject, Transaction> {
             return new ExchangeOfferRemoveTransactionMapping().apply(input);
          case EXCHANGE_OFFER:
             return new ExchangeOfferTransactionMapping().apply(input);
+         case DRIVE_PREPARE:
+            return new DrivePrepareTransactionMapping().apply(input);
          default:
             throw new UnsupportedOperationException("Unimplemented transaction type " + type);
          }
@@ -921,6 +923,40 @@ class ExchangeOfferTransactionMapping extends TransactionMapping {
          return new ArrayList<>();
       }
    }
+}
+
+/**
+ * Mapping from server response to a transaction
+ */
+class DrivePrepareTransactionMapping extends TransactionMapping {
+
+   @Override
+   public DrivePrepareTransaction apply(JsonObject input) {
+      TransactionInfo transactionInfo = this.createTransactionInfo(input.getAsJsonObject("meta"));
+
+      JsonObject transaction = input.getAsJsonObject("transaction");
+      DeadlineRaw deadline = new DeadlineRaw(GsonUtils.getBigInteger(transaction.getAsJsonArray("deadline")));
+      NetworkType networkType = extractNetworkType(transaction.get("version"));
+
+      return new DrivePrepareTransaction(
+            networkType, 
+            extractTransactionVersion(transaction.get("version")), 
+            deadline,
+            extractFee(transaction), 
+            Optional.of(transaction.get("signature").getAsString()),
+            Optional.of(new PublicAccount(transaction.get("signer").getAsString(), networkType)),
+            Optional.of(transactionInfo), 
+            transaction.get("owner").getAsString(),
+            GsonUtils.getBigInteger(transaction.get("duration").getAsJsonArray()),
+            GsonUtils.getBigInteger(transaction.get("billingPeriod").getAsJsonArray()),
+            GsonUtils.getBigInteger(transaction.get("billingPrice").getAsJsonArray()),
+            GsonUtils.getBigInteger(transaction.get("driveSize").getAsJsonArray()),
+            transaction.get("replicas").getAsInt(),
+            transaction.get("minReplicators").getAsInt(),
+            transaction.get("percentApprovers").getAsInt()
+            );
+   }
+
 }
 
 class Hacks {
