@@ -62,12 +62,12 @@ public enum EntityVersion {
    /**
     * Aggregate complete transaction type.
     */
-   AGGREGATE_COMPLETE(2),
+   AGGREGATE_COMPLETE(3),
 
    /**
     * Aggregate bonded transaction type
     */
-   AGGREGATE_BONDED(2),
+   AGGREGATE_BONDED(3),
 
    /**
     * Hash Lock transaction type
