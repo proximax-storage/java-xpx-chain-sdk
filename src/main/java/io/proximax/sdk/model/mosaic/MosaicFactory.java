@@ -30,12 +30,13 @@ public class MosaicFactory {
 
    /**
     * 
-    * @param mosaicId
-    * @param initialSupply
-    * @param supplyMutable
-    * @param transferable
-    * @param divisibility
-    * @param duration
+    * @param mosaicId id of the mosaic to produce
+    * @param initialSupply initial supply of the mosaic
+    * @param supplyMutable indication whether supply is mutable
+    * @param transferable indication whether mosaic can be transferred
+    * @param divisibility number of digits after decimal point (e.g. divisibility 3 means that absolute amount of 1500
+    * equals to 1.5 of given mosaic in real value
+    * @param duration number of blocks that the mosaic will be valid for
     */
    public MosaicFactory(UInt64Id mosaicId, BigInteger initialSupply, boolean supplyMutable, boolean transferable,
          int divisibility, Optional<BigInteger> duration) {

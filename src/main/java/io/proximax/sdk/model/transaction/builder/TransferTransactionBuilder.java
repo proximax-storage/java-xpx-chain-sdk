@@ -140,7 +140,7 @@ public class TransferTransactionBuilder extends TransactionBuilder<TransferTrans
    /**
     * convenience call to {@link TransferTransactionBuilder#recipient(Recipient)}
     * 
-    * @param namespaceId the recipient to set
+    * @param account the recipient to set
     * @return self
     */
    public TransferTransactionBuilder to(Account account) {
