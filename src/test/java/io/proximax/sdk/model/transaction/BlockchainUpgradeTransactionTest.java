@@ -19,7 +19,7 @@ import io.proximax.sdk.ResourceBasedTest;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.BlockchainVersion;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 
 /**
  * {@link BlockchainUpgradeTransaction} tests
@@ -28,7 +28,7 @@ class BlockchainUpgradeTransactionTest extends ResourceBasedTest {
 
    @Test
    void testConstructor() {
-      BlockchainUpgradeTransaction trans = new BlockchainUpgradeTransaction(NetworkType.MIJIN, 1, new FakeDeadline(),
+      BlockchainUpgradeTransaction trans = new BlockchainUpgradeTransaction(NetworkType.TEST_NET, 1, new FakeDeadline(),
             BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), BigInteger.ONE,
             new BlockchainVersion(1, 2, 3, 4));
 
@@ -38,7 +38,7 @@ class BlockchainUpgradeTransactionTest extends ResourceBasedTest {
 
    @Test
    void serialization() throws IOException {
-      BlockchainUpgradeTransaction trans = new BlockchainUpgradeTransaction(NetworkType.MIJIN, 1, new FakeDeadline(),
+      BlockchainUpgradeTransaction trans = new BlockchainUpgradeTransaction(NetworkType.TEST_NET, 1, new FakeDeadline(),
             BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), BigInteger.ONE,
             new BlockchainVersion(1, 2, 3, 4));
 
@@ -49,9 +49,9 @@ class BlockchainUpgradeTransactionTest extends ResourceBasedTest {
 
    @Test
    void checkCopyToSigner() throws IOException {
-      PublicAccount remoteAccount = new Account(new KeyPair(), NetworkType.MIJIN).getPublicAccount();
+      PublicAccount remoteAccount = new Account(new KeyPair(), NetworkType.TEST_NET).getPublicAccount();
       
-      BlockchainUpgradeTransaction trans = new BlockchainUpgradeTransaction(NetworkType.MIJIN, 1, new FakeDeadline(),
+      BlockchainUpgradeTransaction trans = new BlockchainUpgradeTransaction(NetworkType.TEST_NET, 1, new FakeDeadline(),
             BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), BigInteger.ONE,
             new BlockchainVersion(1, 2, 3, 4));
 

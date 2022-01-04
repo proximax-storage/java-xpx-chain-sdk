@@ -19,10 +19,10 @@ import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.ResourceBasedTest;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.exchange.ExchangeOffer;
 import io.proximax.sdk.model.exchange.ExchangeOfferType;
 import io.proximax.sdk.model.mosaic.MosaicId;
+import io.proximax.sdk.model.network.NetworkType;
 
 /**
  * {@link ExchangeOfferAddTransaction} tests
@@ -33,10 +33,10 @@ class ExchangeOfferTransactionTest extends ResourceBasedTest {
    @Test
    void testConstructor() throws IOException {
       PublicAccount owner = new PublicAccount("ABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFAB",
-            NetworkType.MIJIN);
+            NetworkType.TEST_NET);
       ExchangeOffer offer = new ExchangeOffer(MOSAIC_ID, BigInteger.ZERO, BigInteger.ONE, ExchangeOfferType.SELL,
             owner);
-      ExchangeOfferTransaction trans = new ExchangeOfferTransaction(NetworkType.MIJIN, 1, new FakeDeadline(),
+      ExchangeOfferTransaction trans = new ExchangeOfferTransaction(NetworkType.TEST_NET, 1, new FakeDeadline(),
             BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), Arrays.asList(offer));
 
       assertEquals(Arrays.asList(offer), trans.getOffers());
@@ -45,10 +45,10 @@ class ExchangeOfferTransactionTest extends ResourceBasedTest {
    @Test
    void serialization() throws IOException {
       PublicAccount owner = new PublicAccount("ABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFAB",
-            NetworkType.MIJIN);
+            NetworkType.TEST_NET);
       ExchangeOffer offer = new ExchangeOffer(MOSAIC_ID, BigInteger.ZERO, BigInteger.ONE, ExchangeOfferType.SELL,
             owner);
-      ExchangeOfferTransaction trans = new ExchangeOfferTransaction(NetworkType.MIJIN, 1, new FakeDeadline(),
+      ExchangeOfferTransaction trans = new ExchangeOfferTransaction(NetworkType.TEST_NET, 1, new FakeDeadline(),
             BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), Arrays.asList(offer));
 
       byte[] actual = trans.generateBytes();
@@ -58,13 +58,13 @@ class ExchangeOfferTransactionTest extends ResourceBasedTest {
 
    @Test
    void checkCopyToSigner() throws IOException {
-      PublicAccount remoteAccount = new Account(new KeyPair(), NetworkType.MIJIN).getPublicAccount();
+      PublicAccount remoteAccount = new Account(new KeyPair(), NetworkType.TEST_NET).getPublicAccount();
 
       PublicAccount owner = new PublicAccount("ABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFAB",
-            NetworkType.MIJIN);
+            NetworkType.TEST_NET);
       ExchangeOffer offer = new ExchangeOffer(MOSAIC_ID, BigInteger.ZERO, BigInteger.ONE, ExchangeOfferType.SELL,
             owner);
-      ExchangeOfferTransaction trans = new ExchangeOfferTransaction(NetworkType.MIJIN, 1, new FakeDeadline(),
+      ExchangeOfferTransaction trans = new ExchangeOfferTransaction(NetworkType.TEST_NET, 1, new FakeDeadline(),
             BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), Arrays.asList(offer));
 
       Transaction t = trans.copyForSigner(remoteAccount);

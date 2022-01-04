@@ -21,49 +21,49 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import org.junit.jupiter.api.Test;
 
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 
 class PublicAccountTest {
-    private final String publicKey = "b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf";
+    private final String publicKey = "0D22E9D42F124072E14C4F804E4FC7F5431C831EAF03BEFD55D521B9A9D0B89D";
 
 
     @Test
     void shouldCreatePublicAccountViaConstructor() {
-        PublicAccount publicAccount = new PublicAccount(publicKey, NetworkType.MIJIN_TEST);
+        PublicAccount publicAccount = new PublicAccount(publicKey, NetworkType.TEST_NET);
         assertEquals(publicKey, publicAccount.getPublicKey());
-        assertEquals("SARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJETM3ZSP", publicAccount.getAddress().plain());
+        assertEquals("VDPQS6FBYDN3SD2QJPHUWRYWNHSSOQ2Q35VI7TDP", publicAccount.getAddress().plain());
     }
 
     @Test
     void shouldCreatePublicAccountViaStaticConstructor() {
-        PublicAccount publicAccount = PublicAccount.createFromPublicKey(publicKey, NetworkType.MIJIN_TEST);
+        PublicAccount publicAccount = PublicAccount.createFromPublicKey(publicKey, NetworkType.TEST_NET);
         assertEquals(publicKey, publicAccount.getPublicKey());
-        assertEquals("SARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJETM3ZSP", publicAccount.getAddress().plain());
+        assertEquals("VDPQS6FBYDN3SD2QJPHUWRYWNHSSOQ2Q35VI7TDP", publicAccount.getAddress().plain());
     }
 
     @Test
     void equalityIsBasedOnPublicKeyAndNetwork() {
-        PublicAccount publicAccount = new PublicAccount(publicKey, NetworkType.MIJIN_TEST);
-        PublicAccount publicAccount2 = new PublicAccount(publicKey, NetworkType.MIJIN_TEST);
+        PublicAccount publicAccount = new PublicAccount(publicKey, NetworkType.TEST_NET);
+        PublicAccount publicAccount2 = new PublicAccount(publicKey, NetworkType.TEST_NET);
         assertEquals(publicAccount, publicAccount2);
     }
 
     @Test
     void equalityReturnsFalseIfNetworkIsDifferent() {
-        PublicAccount publicAccount = new PublicAccount(publicKey, NetworkType.MIJIN_TEST);
+        PublicAccount publicAccount = new PublicAccount(publicKey, NetworkType.TEST_NET);
         PublicAccount publicAccount2 = new PublicAccount(publicKey, NetworkType.MAIN_NET);
         assertNotEquals(publicAccount, publicAccount2);
     }
     
     @Test
     void equalityReturnsFalseForNull() {
-       PublicAccount publicAccount = new PublicAccount(publicKey, NetworkType.MIJIN_TEST);
+       PublicAccount publicAccount = new PublicAccount(publicKey, NetworkType.TEST_NET);
        assertNotEquals(publicAccount, null);
     }
     
     @Test
     void equalityReturnsFalseForDifferentClass() {
-       PublicAccount publicAccount = new PublicAccount(publicKey, NetworkType.MIJIN_TEST);
+       PublicAccount publicAccount = new PublicAccount(publicKey, NetworkType.TEST_NET);
        assertNotEquals(publicAccount, "hello");
     }
 }

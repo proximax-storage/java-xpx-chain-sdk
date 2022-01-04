@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.proximax.sdk.model.blockchain;
+package io.proximax.sdk.model.network;
 
 /**
  * Static class containing network type constants.

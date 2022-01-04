@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 
 public class AggregateTransactionCosignatureTest {
 
@@ -29,12 +29,12 @@ public class AggregateTransactionCosignatureTest {
    void createAnAggregateCosignatureViaConstructor() {
       AggregateTransactionCosignature aggregateTransactionCosignature = new AggregateTransactionCosignature("signature",
             new PublicAccount("9A49366406ACA952B88BADF5F1E9BE6CE4968141035A60BE503273EA65456B24",
-                  NetworkType.MIJIN_TEST));
+                  NetworkType.TEST_NET));
 
       assertEquals("signature", aggregateTransactionCosignature.getSignature());
       assertEquals(
             new PublicAccount("9A49366406ACA952B88BADF5F1E9BE6CE4968141035A60BE503273EA65456B24",
-                  NetworkType.MIJIN_TEST),
+                  NetworkType.TEST_NET),
             aggregateTransactionCosignature.getSigner());
    }
 }

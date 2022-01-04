@@ -34,20 +34,20 @@ import io.proximax.sdk.gen.buffers.MetadataModificationBuffer;
 import io.proximax.sdk.gen.buffers.ModifyMetadataTransactionBuffer;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.metadata.Field;
 import io.proximax.sdk.model.metadata.MetadataModification;
 import io.proximax.sdk.model.metadata.MetadataModificationType;
-import io.proximax.sdk.model.metadata.MetadataType;
+import io.proximax.sdk.model.metadata.OldMetadataType;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
  * Transaction requesting modification of metadata
  */
 public class ModifyMetadataTransaction extends Transaction {
-   private final Schema schema = new ModifyMetadataTransactionSchema();
+   private final Schema schema = new MetadataTransactionSchema();
 
-   private final MetadataType metadataType;
+   private final OldMetadataType metadataType;
    private final Optional<UInt64Id> metadataId;
    private final Optional<Address> address;
    private final List<MetadataModification> modifications;
@@ -68,7 +68,7 @@ public class ModifyMetadataTransaction extends Transaction {
     */
    public ModifyMetadataTransaction(EntityType type, NetworkType networkType, Integer version,
          TransactionDeadline deadline, BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,
-         Optional<TransactionInfo> transactionInfo, MetadataType metadataType, Optional<UInt64Id> metadataId,
+         Optional<TransactionInfo> transactionInfo, OldMetadataType metadataType, Optional<UInt64Id> metadataId,
          Optional<Address> address, List<MetadataModification> modifications) {
       super(type, networkType, version, deadline, maxFee, signature, signer, transactionInfo);
       // validations
@@ -85,7 +85,7 @@ public class ModifyMetadataTransaction extends Transaction {
    /**
     * @return the metadataType
     */
-   public MetadataType getMetadataType() {
+   public OldMetadataType getMetadataType() {
       return metadataType;
    }
 

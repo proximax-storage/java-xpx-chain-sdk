@@ -32,20 +32,20 @@ import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.ResourceBasedTest;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 
 class ModifyMultisigAccountTransactionTest extends ResourceBasedTest {
 
    @Test
    void createAMultisigModificationTransactionViaConstructor() {
       ModifyMultisigAccountTransaction modifyMultisigAccountTransaction = new ModifyMultisigAccountTransaction(
-            NetworkType.MIJIN_TEST, 3, new Deadline(2, ChronoUnit.HOURS), BigInteger.ZERO, Optional.empty(),
+            NetworkType.TEST_NET, 3, new Deadline(2, ChronoUnit.HOURS), BigInteger.ZERO, Optional.empty(),
             Optional.empty(), Optional.empty(), 2, 1,
             Collections.singletonList(new MultisigCosignatoryModification(MultisigCosignatoryModificationType.ADD,
                   PublicAccount.createFromPublicKey("68b3fbb18729c1fde225c57f8ce080fa828f0067e451a3fd81fa628842b0b763",
-                        NetworkType.MIJIN_TEST))));
+                        NetworkType.TEST_NET))));
 
-      assertEquals(NetworkType.MIJIN_TEST, modifyMultisigAccountTransaction.getNetworkType());
+      assertEquals(NetworkType.TEST_NET, modifyMultisigAccountTransaction.getNetworkType());
       assertTrue(3 == modifyMultisigAccountTransaction.getVersion());
       long nowSinceNemesis = new Deadline(0, ChronoUnit.SECONDS).getInstant();
       assertTrue(nowSinceNemesis < modifyMultisigAccountTransaction.getDeadline().getInstant());
@@ -62,15 +62,15 @@ class ModifyMultisigAccountTransactionTest extends ResourceBasedTest {
    @DisplayName("Serialization")
    void serialization() throws IOException {
       ModifyMultisigAccountTransaction modifyMultisigAccountTransaction = new ModifyMultisigAccountTransaction(
-            NetworkType.MIJIN_TEST, 3, new FakeDeadline(), BigInteger.ZERO, Optional.empty(), Optional.empty(),
+            NetworkType.TEST_NET, 3, new FakeDeadline(), BigInteger.ZERO, Optional.empty(), Optional.empty(),
             Optional.empty(), 2, 1,
             Arrays.asList(new MultisigCosignatoryModification(MultisigCosignatoryModificationType.ADD,
                   PublicAccount.createFromPublicKey("68b3fbb18729c1fde225c57f8ce080fa828f0067e451a3fd81fa628842b0b763",
-                        NetworkType.MIJIN_TEST)),
+                        NetworkType.TEST_NET)),
                   new MultisigCosignatoryModification(MultisigCosignatoryModificationType.ADD,
                         PublicAccount.createFromPublicKey(
                               "cf893ffcc47c33e7f68ab1db56365c156b0736824a0c1e273f9e00b8df8f01eb",
-                              NetworkType.MIJIN_TEST))
+                              NetworkType.TEST_NET))
 
             ));
 

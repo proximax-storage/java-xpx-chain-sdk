@@ -20,7 +20,7 @@ import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.ResourceBasedTest;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 
 /**
  * {@link ModifyContractTransaction} tests
@@ -30,14 +30,14 @@ class ModifyContractTransactionTest extends ResourceBasedTest {
 
    @Test
    void constructor() throws IOException {
-      ModifyContractTransaction trans = new ModifyContractTransaction(NetworkType.MIJIN, 3, new FakeDeadline(), BigInteger.valueOf(324), 
-            Optional.empty(), Optional.empty(), Optional.empty(), BigInteger.valueOf(5), "CAFE", Arrays.asList(MultisigCosignatoryModification.add(new PublicAccount(PUBKEYHASH, NetworkType.MIJIN))),
-            Arrays.asList(MultisigCosignatoryModification.remove(new PublicAccount(PUBKEYHASH, NetworkType.MIJIN))), Arrays.asList());
+      ModifyContractTransaction trans = new ModifyContractTransaction(NetworkType.TEST_NET, 3, new FakeDeadline(), BigInteger.valueOf(324), 
+            Optional.empty(), Optional.empty(), Optional.empty(), BigInteger.valueOf(5), "CAFE", Arrays.asList(MultisigCosignatoryModification.add(new PublicAccount(PUBKEYHASH, NetworkType.TEST_NET))),
+            Arrays.asList(MultisigCosignatoryModification.remove(new PublicAccount(PUBKEYHASH, NetworkType.TEST_NET))), Arrays.asList());
       assertEquals("CAFE", trans.getContentHash());
-      assertEquals(Arrays.asList(MultisigCosignatoryModification.add(new PublicAccount(PUBKEYHASH, NetworkType.MIJIN))),
+      assertEquals(Arrays.asList(MultisigCosignatoryModification.add(new PublicAccount(PUBKEYHASH, NetworkType.TEST_NET))),
             trans.getCustomersModifications());
       assertEquals(
-            Arrays.asList(MultisigCosignatoryModification.remove(new PublicAccount(PUBKEYHASH, NetworkType.MIJIN))),
+            Arrays.asList(MultisigCosignatoryModification.remove(new PublicAccount(PUBKEYHASH, NetworkType.TEST_NET))),
             trans.getExecutorsModifications());
       assertTrue(trans.getVerifiersModifications().isEmpty());
       assertEquals(BigInteger.valueOf(5), trans.getDurationDelta());
@@ -45,11 +45,11 @@ class ModifyContractTransactionTest extends ResourceBasedTest {
 
    @Test
    void serialization() throws IOException {
-      ModifyContractTransaction trans = new ModifyContractTransaction(NetworkType.MIJIN, 3, new FakeDeadline(),
+      ModifyContractTransaction trans = new ModifyContractTransaction(NetworkType.TEST_NET, 3, new FakeDeadline(),
             BigInteger.valueOf(324), Optional.empty(), Optional.empty(), Optional.empty(), BigInteger.valueOf(5),
             "CAFE",
-            Arrays.asList(MultisigCosignatoryModification.add(new PublicAccount(PUBKEYHASH, NetworkType.MIJIN))),
-            Arrays.asList(MultisigCosignatoryModification.remove(new PublicAccount(PUBKEYHASH, NetworkType.MIJIN))),
+            Arrays.asList(MultisigCosignatoryModification.add(new PublicAccount(PUBKEYHASH, NetworkType.TEST_NET))),
+            Arrays.asList(MultisigCosignatoryModification.remove(new PublicAccount(PUBKEYHASH, NetworkType.TEST_NET))),
             Arrays.asList());
       // used saveBytes to store the file data
       byte[] actual = trans.generateBytes();
@@ -59,13 +59,13 @@ class ModifyContractTransactionTest extends ResourceBasedTest {
 
    @Test
    void checkCopyToSigner() throws IOException {
-      PublicAccount remoteAccount = new Account(new KeyPair(), NetworkType.MIJIN).getPublicAccount();
+      PublicAccount remoteAccount = new Account(new KeyPair(), NetworkType.TEST_NET).getPublicAccount();
       
-      ModifyContractTransaction trans = new ModifyContractTransaction(NetworkType.MIJIN, 3, new FakeDeadline(),
+      ModifyContractTransaction trans = new ModifyContractTransaction(NetworkType.TEST_NET, 3, new FakeDeadline(),
             BigInteger.valueOf(324), Optional.empty(), Optional.empty(), Optional.empty(), BigInteger.valueOf(5),
             "CAFE",
-            Arrays.asList(MultisigCosignatoryModification.add(new PublicAccount(PUBKEYHASH, NetworkType.MIJIN))),
-            Arrays.asList(MultisigCosignatoryModification.remove(new PublicAccount(PUBKEYHASH, NetworkType.MIJIN))),
+            Arrays.asList(MultisigCosignatoryModification.add(new PublicAccount(PUBKEYHASH, NetworkType.TEST_NET))),
+            Arrays.asList(MultisigCosignatoryModification.remove(new PublicAccount(PUBKEYHASH, NetworkType.TEST_NET))),
             Arrays.asList());
 
       Transaction t = trans.copyForSigner(remoteAccount);

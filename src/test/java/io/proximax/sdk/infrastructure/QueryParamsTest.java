@@ -18,7 +18,6 @@
 package io.proximax.sdk.infrastructure;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -29,26 +28,6 @@ class QueryParamsTest {
         QueryParams queryParams = new QueryParams(15, ID);
         assertEquals(15, queryParams.getPageSize());
         assertEquals(ID, queryParams.getId());
-    }
-
-    @Test
-    void rejectNegativePageSize() {
-       assertThrows(IllegalArgumentException.class, () -> new QueryParams(-1, ID));
-    }
-
-    @Test
-    void reject9PageSize() {
-       assertThrows(IllegalArgumentException.class, () -> new QueryParams(9, ID));
-    }
-
-    @Test
-    void reject101PageSize() {
-       assertThrows(IllegalArgumentException.class, () -> new QueryParams(101, ID));
-    }
-
-    @Test
-    void rejectNullPageSize() {
-       assertThrows(NullPointerException.class, () -> new QueryParams(null, ID));
     }
 
     @Test

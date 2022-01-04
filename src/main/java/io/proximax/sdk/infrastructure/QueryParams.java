@@ -30,6 +30,10 @@ public class QueryParams {
    private final Integer pageSize;
    private final String id;
 
+   public enum Order {
+    ASC,
+    DESC
+}
    /**
     * create new query parameter specifying only page size
     * 
@@ -48,6 +52,7 @@ public class QueryParams {
       this(PAGE_SIZE_DEFAULT, id);
       Validate.notNull(id, "ID is mandatory when only ID is to be specified");
    }
+
 
    /**
     * create new query parameter instance
@@ -79,6 +84,8 @@ public class QueryParams {
    public Integer getPageSize() {
       return pageSize;
    }
+
+  
 
    /**
     * Converts query params into url params.

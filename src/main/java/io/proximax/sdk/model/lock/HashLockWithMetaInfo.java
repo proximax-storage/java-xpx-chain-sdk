@@ -1,0 +1,45 @@
+/*
+ * Copyright 2022 ProximaX Limited. All rights reserved.
+ * Use of this source code is governed by the Apache 2.0
+ * license that can be found in the LICENSE file.
+ */
+package io.proximax.sdk.model.lock;
+
+import static io.proximax.sdk.utils.dto.UInt64Utils.toBigInt;
+import io.proximax.sdk.gen.model.HashLockWithMetaDTO;
+import io.proximax.sdk.model.account.Address;
+import io.proximax.sdk.model.mosaic.MosaicId;
+
+public class HashLockWithMetaInfo {
+    private final MetaLock id;
+    private final HashLockInfo lock;
+
+    public HashLockWithMetaInfo(MetaLock id, HashLockInfo lock) {
+        this.id = id;
+        this.lock = lock;
+    }
+
+    /**
+     * @return id
+     */
+    public MetaLock getId() {
+        return id;
+    }
+
+    /**
+     * @return lock
+     */
+    public HashLockInfo getLock() {
+        return lock;
+    }
+
+    public static HashLockWithMetaInfo fromDto(HashLockWithMetaDTO dto) {
+        return new HashLockWithMetaInfo(
+                new MetaLock(dto.getMeta().getId()),
+                new HashLockInfo(new LockInfo(dto.getLock().getAccount(),
+                        Address.createFromEncoded(dto.getLock().getAccountAddress()),
+                        new MosaicId(toBigInt(dto.getLock().getMosaicId())), toBigInt(dto.getLock().getAmount()),
+                        toBigInt(dto.getLock().getHeight())), dto.getLock().getStatus(),dto.getLock().getHash()));
+    }
+
+}

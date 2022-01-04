@@ -21,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
+import io.proximax.sdk.model.network.NetworkType;
+
 public class NetworkTypeTest {
 
    @Test

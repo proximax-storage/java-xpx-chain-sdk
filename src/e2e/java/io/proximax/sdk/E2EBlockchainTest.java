@@ -27,27 +27,28 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
-import io.proximax.sdk.infrastructure.QueryParams;
+import io.proximax.sdk.infrastructure.QueryParams.Order;
+import io.proximax.sdk.infrastructure.TransactionQueryParams;
+import io.proximax.sdk.infrastructure.TransactionSortingField;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.blockchain.BlockInfo;
 import io.proximax.sdk.model.blockchain.BlockchainConfig;
-import io.proximax.sdk.model.blockchain.BlockchainUpgrade;
 import io.proximax.sdk.model.blockchain.BlockchainVersion;
 import io.proximax.sdk.model.blockchain.BlocksLimit;
 import io.proximax.sdk.model.blockchain.MerklePath;
 import io.proximax.sdk.model.blockchain.Receipts;
-import io.proximax.sdk.model.transaction.BlockchainConfigTransaction;
 import io.proximax.sdk.model.transaction.BlockchainUpgradeTransaction;
-import io.proximax.sdk.model.transaction.Transaction;
+import io.proximax.sdk.model.transaction.EntityType;
+import io.proximax.sdk.model.transaction.TransactionSearch;
 
 /**
  * E2E tests that demonstrate blockchain repository
@@ -68,25 +69,17 @@ public class E2EBlockchainTest extends E2EBaseTest {
 
    @Test
    void listTransactions() {
-      QueryParams queryParams = new QueryParams(15);
-      List<Transaction> transactions = blockchainHttp.getBlockTransactions(BigInteger.ONE, queryParams).blockingFirst();
-      assertTrue(!transactions.isEmpty());
-      assertTrue(transactions.size() <= 15);
-   }
+      TransactionQueryParams queryParams = new TransactionQueryParams(0, 0, Order.ASC, null, null,
+                        TransactionSortingField.BLOCK, null, null, null,
+                        null,
+                        null,
+            null);
+      TransactionSearch transactions = blockchainHttp.getBlockTransactions(BigInteger.ONE, queryParams).blockingFirst();
 
-   @Test
-   void blocksShouldBeAdded() {
-      BigInteger height1 = blockchainHttp.getBlockchainHeight().blockingFirst();
-      logger.info("Waiting for next block");
-      listener.newBlock().timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
-      BigInteger height2 = blockchainHttp.getBlockchainHeight().blockingFirst();
-      // it should go up
-      assertTrue(height1.compareTo(height2) < 0);
-   }
+      assertEquals(9932, transactions.getPaginations().getTotalEntries());
+      assertEquals(20, transactions.getTransactions().size());
+      assertEquals(EntityType.rawValueOf(16973), transactions.getTransactions().get(19).getType());
 
-   @Test
-   void checkScore() {
-      blockchainHttp.getBlockchainScore().blockingFirst();
    }
 
    @Test
@@ -94,25 +87,6 @@ public class E2EBlockchainTest extends E2EBaseTest {
       blockchainHttp.getBlockchainStorage().blockingFirst();
    }
 
-   @Test
-   void nemesisNotEmpty() {
-      assertTrue(!blockchainHttp.getBlockTransactions(BigInteger.ONE).blockingFirst().isEmpty());
-   }
-
-   @Test
-   void retrieveNodeInfo() {
-      assertTrue(blockchainHttp.getNodeInfo().blockingFirst().getPublicKey() != null);
-   }
-
-   @Test
-   void retrieveNodeTime() {
-      assertTrue(blockchainHttp.getNodeTime().blockingFirst().getReceiveTimestamp() != null);
-   }
-
-   @Test
-   void networkTypeIsAsDeclared() {
-      assertEquals(getNetworkType(), blockchainHttp.getNetworkType().blockingFirst());
-   }
 
    @Test
    void block1Receipts() {
@@ -156,15 +130,6 @@ public class E2EBlockchainTest extends E2EBaseTest {
       assertTrue(blocks.size() <= limit.getLimit());
    }
 
-   @Test
-   @Disabled("something weird happening there")
-   void recentBlocksWithLimit() {
-      BigInteger height = blockchainHttp.getBlockchainHeight().blockingFirst();
-      BlocksLimit limit = BlocksLimit.LIMIT_25;
-      List<BlockInfo> blocks = blockchainHttp.getBlocksByHeightWithLimit(height, limit).blockingFirst();
-      // there can not be 25 blocks if we started from last one
-      assertTrue(blocks.size() < limit.getLimit(), blocks.size() + " is expected to be less than " + limit.getLimit());
-   }
 
    @Test
    void checkBlockchainConfiguration() throws IOException {
@@ -178,31 +143,18 @@ public class E2EBlockchainTest extends E2EBaseTest {
       assertNotNull(entities.getAsJsonArray("entities").get(0).getAsJsonObject().get("name"));
    }
 
-   @Test
-   void checkBlockchainUpgrade() {
-      BlockchainUpgrade upgrade = blockchainHttp.getBlockchainUpgrade(BigInteger.ONE).blockingFirst();
-      assertEquals(BigInteger.ONE, upgrade.getHeight());
-      assertNotNull(upgrade.getVersion());
-   }
+  
 
-   @Test
-   void loadTransactions() {
-      // get chain height
-      final long height = blockchainHttp.getBlockchainHeight().blockingFirst().longValue();
-      // go over first 50 blocks
-      for (int i = 0; i<Math.min(height, 50); i++) {
-         loadTransactions(i);
-      }
-      // first 50 blocks got already scanned so start at 50 or last 1000
-      for (long i = Math.max(height-1000, 50l); i<height; i++) {
-         loadTransactions(i);
-      }
-   }
    
    void loadTransactions(long block) {
       // try to load first 100 transactions and see if we can parse them
-      List<Transaction> transactions = blockchainHttp.getBlockTransactions(BigInteger.valueOf(block), new QueryParams(100)).blockingFirst();
-      assertTrue(transactions.size() <= 100);
+      TransactionSearch transactions = blockchainHttp.getBlockTransactions(BigInteger.valueOf(block), 
+            new TransactionQueryParams(0, 0, Order.ASC, null, null,
+                  TransactionSortingField.BLOCK, null, null, null,
+                  null,
+                  null,
+                  null)).blockingFirst();
+      assertTrue(transactions.getPaginations().getPageSize() <= 100);
    }
    
    /**
@@ -226,18 +178,4 @@ public class E2EBlockchainTest extends E2EBaseTest {
       assertEquals(upgradePeriod, conFirmedTrans.getUpgradePeriod());
    }
 
-   @Test
-   @Disabled("Requires nemesis private key to be defined")
-   void configTransaction() {
-      Account nemesis = Account.createFromPrivateKey(NEMESIS_PRIVATE_KEY, getNetworkType());
-      BigInteger height = blockchainHttp.getBlockchainHeight().blockingFirst();
-      BlockchainConfig configuration = blockchainHttp.getBlockchainConfiguration(height).blockingFirst();
-      String conf = configuration.getConfig();
-      String entities = configuration.getSupportedEntityVersions();
-      // prepare transaction
-      BlockchainConfigTransaction trans = transact.blockchainConfig().applyHeightDelta(BigInteger.valueOf(3))
-            .blockchainConfig(conf).supportedEntityVersions(entities).build();
-      transactionHttp.announce(api.sign(trans, nemesis)).blockingFirst();
-      listener.confirmed(nemesis.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
-   }
 }

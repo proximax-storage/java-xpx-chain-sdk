@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import io.proximax.sdk.gen.model.CommunicationTimestamps;
 import io.proximax.sdk.gen.model.NodeTimeDTO;
 import io.proximax.sdk.gen.model.UInt64DTO;
+import io.proximax.sdk.model.node.NodeTime;
 
 /**
  * {@link NodeTime} tests

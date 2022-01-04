@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 ProximaX
+ * Copyright 2022 ProximaX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,8 @@ import java.util.Arrays;
 /**
  * Schema for metadata modification transaction
  */
-public class ModifyMetadataTransactionSchema extends Schema {
-   ModifyMetadataTransactionSchema() {
+public class MetadataTransactionSchema extends Schema {
+   MetadataTransactionSchema() {
       super(Arrays.asList(
             new ScalarAttribute("size", Constants.SIZEOF_INT),
             new ArrayAttribute("signature", Constants.SIZEOF_BYTE),
@@ -31,15 +31,13 @@ public class ModifyMetadataTransactionSchema extends Schema {
             new ArrayAttribute("maxFee", Constants.SIZEOF_INT),
             new ArrayAttribute("deadline", Constants.SIZEOF_INT),
             
-            new ScalarAttribute("metadataType", Constants.SIZEOF_BYTE),
-            new ArrayAttribute("metadataId", Constants.SIZEOF_BYTE),
-            new TableArrayAttribute("modifications",
-                  Arrays.asList(
-                        new ScalarAttribute("size", Constants.SIZEOF_INT),
-                        new ScalarAttribute("modificationType", Constants.SIZEOF_BYTE),
-                        new ScalarAttribute("keySize", Constants.SIZEOF_BYTE),
-                        new ArrayAttribute("valueSize", Constants.SIZEOF_BYTE),
-                        new ArrayAttribute("key", Constants.SIZEOF_BYTE),
-                        new ArrayAttribute("value", Constants.SIZEOF_BYTE)))));
+            new ArrayAttribute("targetKey", Constants.SIZEOF_BYTE),
+            new ArrayAttribute("scopedMetadataKey", Constants.SIZEOF_INT),
+            new ArrayAttribute("targetId", Constants.SIZEOF_INT),
+            new ScalarAttribute("valueSizeDelta", Constants.SIZEOF_SHORT),
+            new ScalarAttribute("valueSize", Constants.SIZEOF_SHORT),
+            new ArrayAttribute("value", Constants.SIZEOF_BYTE)
+            
+      ));
    }
 }

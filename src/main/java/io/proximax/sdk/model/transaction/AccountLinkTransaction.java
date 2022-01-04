@@ -15,7 +15,7 @@ import com.google.flatbuffers.FlatBufferBuilder;
 import io.proximax.core.utils.HexEncoder;
 import io.proximax.sdk.gen.buffers.AccountLinkTransactionBuffer;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
@@ -99,6 +99,10 @@ public class AccountLinkTransaction extends Transaction {
       // validate size
       byte[] output = schema.serialize(builder.sizedByteArray());
       Validate.isTrue(output.length == size, "Serialized transaction has incorrect length: " + this.getClass());
+      System.out.println("output: " + output);
+
+      System.out.println("size: " + size);
+
       return output;
    }
 

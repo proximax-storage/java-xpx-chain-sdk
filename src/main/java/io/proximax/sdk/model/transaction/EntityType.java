@@ -122,12 +122,32 @@ public enum EntityType {
     * transaction to modify namespace meta datata
     */
    MODIFY_NAMESPACE_METADATA(0x433d),
+   /**
+     * Modify account metadata transaction type - NEM 
+     */
+   ACCOUNT_METADATA_V2(0x413F),
 
+   /**
+    * Modify mosaic metadata transaction type - NEM
+    */
+   MOSAIC_METADATA_V2(0x423F),
+
+   /**
+    * Modify namespace metadata transaction type - NEM
+    */
+   NAMESPACE_METADATA_V2(0x433F),
    /**
     * transaction to modify account contract
     */
-   MODIFY_CONTRACT(0x4157), 
-   
+   MODIFY_CONTRACT(0x4157),
+   /**
+    * Modify mosaic levy transaction type
+    */
+   MODIFY_MOSAIC_LEVY(0x434D),
+   /**
+    * Remove mosaic levy transaction type
+    */
+   REMOVE_MOSAIC_LEVY(0x444D),
    /**
     * Blockchain configuration change transaction
     */

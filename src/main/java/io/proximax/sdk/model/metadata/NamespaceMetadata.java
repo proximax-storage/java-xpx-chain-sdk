@@ -32,7 +32,7 @@ public class NamespaceMetadata extends Metadata {
     * @param id id of the namespace
     */
    public NamespaceMetadata(List<Field> fields, NamespaceId id) {
-      super(MetadataType.NAMESPACE, fields);
+      super(OldMetadataType.NAMESPACE, fields);
       this.id = id;
    }
 

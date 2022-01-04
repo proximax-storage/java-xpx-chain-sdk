@@ -28,10 +28,10 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.MosaicFactory;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.mosaic.NetworkHarvestMosaic;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.model.transaction.builder.TransactionBuilderFactory;
 
 /**

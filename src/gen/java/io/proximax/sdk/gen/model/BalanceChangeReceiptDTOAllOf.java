@@ -10,25 +10,18 @@
  * Do not edit the class manually.
  */
 
-
 package io.proximax.sdk.gen.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
+
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.proximax.sdk.gen.model.UInt64DTO;
-import io.swagger.annotations.ApiModel;
+
 import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
 
 /**
  * BalanceChangeReceiptDTOAllOf
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-09-22T22:57:50.932+02:00[Europe/Prague]")
+@javax.annotation.processing.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-09-22T22:57:50.932+02:00[Europe/Prague]")
 public class BalanceChangeReceiptDTOAllOf {
   public static final String SERIALIZED_NAME_ACCOUNT = "account";
   @SerializedName(SERIALIZED_NAME_ACCOUNT)
@@ -47,10 +40,11 @@ public class BalanceChangeReceiptDTOAllOf {
     return this;
   }
 
-   /**
+  /**
    * The target account public key.
+   * 
    * @return account
-  **/
+   **/
   @ApiModelProperty(example = "D799E559AB735A5E62187306E80C1679EE3E1170532280C968D974E351CB412F", required = true, value = "The target account public key.")
   public String getAccount() {
     return account;
@@ -65,10 +59,11 @@ public class BalanceChangeReceiptDTOAllOf {
     return this;
   }
 
-   /**
+  /**
    * Get mosaicId
+   * 
    * @return mosaicId
-  **/
+   **/
   @ApiModelProperty(required = true, value = "")
   public UInt64DTO getMosaicId() {
     return mosaicId;
@@ -83,10 +78,11 @@ public class BalanceChangeReceiptDTOAllOf {
     return this;
   }
 
-   /**
+  /**
    * Get amount
+   * 
    * @return amount
-  **/
+   **/
   @ApiModelProperty(required = true, value = "")
   public UInt64DTO getAmount() {
     return amount;
@@ -95,7 +91,6 @@ public class BalanceChangeReceiptDTOAllOf {
   public void setAmount(UInt64DTO amount) {
     this.amount = amount;
   }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -115,7 +110,6 @@ public class BalanceChangeReceiptDTOAllOf {
   public int hashCode() {
     return Objects.hash(account, mosaicId, amount);
   }
-
 
   @Override
   public String toString() {
@@ -140,4 +134,3 @@ public class BalanceChangeReceiptDTOAllOf {
   }
 
 }
-

@@ -13,15 +13,13 @@
 
 package io.proximax.sdk.gen.model;
 
-import java.util.Objects;
-import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 /**
  * UInt64DTO
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-09-22T22:57:50.932+02:00[Europe/Prague]")
+@javax.annotation.processing.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-09-22T22:57:50.932+02:00[Europe/Prague]")
 public class UInt64DTO extends ArrayList<Long> {
 
   @Override

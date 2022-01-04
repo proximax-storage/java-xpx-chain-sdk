@@ -18,14 +18,10 @@ package io.proximax.sdk;
 
 import java.util.List;
 
-import io.proximax.sdk.model.account.Address;
-import io.proximax.sdk.model.metadata.AddressMetadata;
-import io.proximax.sdk.model.metadata.Metadata;
-import io.proximax.sdk.model.metadata.MosaicMetadata;
-import io.proximax.sdk.model.metadata.NamespaceMetadata;
-import io.proximax.sdk.model.mosaic.MosaicId;
-import io.proximax.sdk.model.namespace.NamespaceId;
-import io.proximax.sdk.model.transaction.UInt64Id;
+import io.proximax.sdk.infrastructure.MetadataQueryParams;
+import io.proximax.sdk.model.metadata.MetadataEntry;
+import io.proximax.sdk.model.metadata.MetadataSearch;
+
 import io.reactivex.Observable;
 
 /**
@@ -36,57 +32,25 @@ public interface MetadataRepository {
    /**
     * Gets the metadata (mosaic or namespace) for a given metadataId
     * 
-    * @param metadataId id of the metadata
-    * @return metadata information assigned to the id
+    * @param compositeHash compositeHash of the metadata
+    * @return MetadataEntry information assigned to the compositeHash
     */
-   Observable<Metadata> getMetadata(UInt64Id metadataId);
-
-   /**
-    * Gets the metadata (address) for a given address
-    * 
-    * @param address of the account
-    * @return metadata information assigned to the id
-    */
-   Observable<Metadata> getMetadata(Address address);
-   
-   /**
-    * Gets the metadata(AccountMetadataInfo, MosaicMetadataInfo or NamespaceMetadataInfo) for a given metadataId
-    * 
-    * @param metadataId generic string representing the metadata ID
-    * @return metadata instance
-    */
-   Observable<Metadata> getMetadata(String metadataId);
+   Observable<MetadataEntry> getMetadata(String compositeHash);
    
    /**
     * Get metadatas(namespace/mosaic/account) for a list of metadata IDs
     * 
-    * @param metadataIds List of metadata IDs represented as String values. For Mosaic and Namespace this is
-    *    hex-encoded uint64, for Address it is the plain representation of address
-    * @return observable of metadata instances
+    * @param compositeHashes List of compositeHashes represented as String values.
+    * @return observable of MetadataEntry instances
     */
-   Observable<Metadata> getMetadata(List<String> metadataIds);
+   Observable<List<MetadataEntry>> getMetadatas(List<String> compositeHashes);
    
    /**
-    * Get address metadata
-    * 
-    * @param address address to retrieve metadata from
-    * @return address metadata
+    * Gets an list of Metadata with pagination.
+    *
+    * @param publicAccount PublicAccount
+    * @param queryParams   QueryParams
+    * @return Observable of {@link Transaction} list
     */
-   Observable<AddressMetadata> getMetadataFromAddress(Address address);
-   
-   /**
-    * Get mosaic metadata
-    * 
-    * @param mosaicId id of the mosaic
-    * @return mosaic metadata
-    */
-   Observable<MosaicMetadata> getMetadataFromMosaic(MosaicId mosaicId);
-   
-   /**
-    * Get namespace metadata
-    * 
-    * @param namespaceId id of the namespace
-    * @return namespace metadata
-    */
-   Observable<NamespaceMetadata> getMetadataFromNamespace(NamespaceId namespaceId);
+   Observable<MetadataSearch> MetadataEntrySearch(MetadataQueryParams queryParams);
 }

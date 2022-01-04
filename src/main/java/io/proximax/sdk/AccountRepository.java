@@ -18,8 +18,9 @@ package io.proximax.sdk;
 
 import java.util.List;
 
-import io.proximax.sdk.infrastructure.QueryParams;
+import io.proximax.sdk.infrastructure.TransactionQueryParams;
 import io.proximax.sdk.model.account.AccountInfo;
+import io.proximax.sdk.model.account.AccountNames;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.MultisigAccountGraphInfo;
 import io.proximax.sdk.model.account.MultisigAccountInfo;
@@ -27,6 +28,7 @@ import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.account.props.AccountProperties;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
+import io.proximax.sdk.model.transaction.TransactionSearch;
 import io.reactivex.Observable;
 
 /**
@@ -43,6 +45,13 @@ public interface AccountRepository {
      */
     Observable<AccountInfo> getAccountInfo(Address address);
 
+    /**
+     * Gets an AccountInfo for an account.
+     *
+     * @param publicAccount {@link PublicAccount}
+     * @return Observable of {@link AccountInfo}
+     */
+    Observable<AccountInfo> getAccountInfo(PublicAccount publicAccount);
     /**
      * Gets AccountsInfo for different accounts.
      *
@@ -89,17 +98,17 @@ public interface AccountRepository {
      * @param publicAccount PublicAccount
      * @return Observable of {@link Transaction} list
      */
-    Observable<List<Transaction>> transactions(PublicAccount publicAccount);
+    Observable<TransactionSearch> transactions(PublicAccount publicAccount);
 
     /**
      * Gets an list of confirmed transactions for which an account is signer or receiver.
      * With pagination.
      *
      * @param publicAccount PublicAccount
-     * @param queryParams   QueryParams
+     * @param queryParams   TransactionQueryParams
      * @return Observable of {@link Transaction} list
      */
-    Observable<List<Transaction>> transactions(PublicAccount publicAccount, QueryParams queryParams);
+    Observable<TransactionSearch> transactions(PublicAccount publicAccount, TransactionQueryParams queryParams);
 
     /**
      * Gets an list of transactions for which an account is the recipient of a transaction.
@@ -108,7 +117,7 @@ public interface AccountRepository {
      * @param publicAccount PublicAccount
      * @return Observable of {@link Transaction} list
      */
-    Observable<List<Transaction>> incomingTransactions(PublicAccount publicAccount);
+    Observable<TransactionSearch> incomingTransactions(PublicAccount publicAccount);
 
     /**
      * Gets an list of transactions for which an account is the recipient of a transaction.
@@ -116,10 +125,10 @@ public interface AccountRepository {
      * With pagination.
      *
      * @param publicAccount PublicAccount
-     * @param queryParams   QueryParams
+     * @param queryParams   TransactionQueryParams
      * @return Observable of {@link Transaction} list
      */
-    Observable<List<Transaction>> incomingTransactions(PublicAccount publicAccount, QueryParams queryParams);
+    Observable<TransactionSearch> incomingTransactions(PublicAccount publicAccount, TransactionQueryParams queryParams);
 
     /**
      * Gets an list of transactions for which an account is the recipient of a transaction.
@@ -128,7 +137,7 @@ public interface AccountRepository {
      * @param address the address
      * @return Observable of {@link Transaction} list
      */
-    Observable<List<Transaction>> incomingTransactions(Address address);
+    Observable<TransactionSearch> incomingTransactions(Address address);
 
     /**
      * Gets an list of transactions for which an account is the recipient of a transaction.
@@ -136,10 +145,10 @@ public interface AccountRepository {
      * With pagination.
      *
      * @param address the address
-     * @param queryParams   QueryParams
+     * @param queryParams   TransactionQueryParams
      * @return Observable of {@link Transaction} list
      */
-    Observable<List<Transaction>> incomingTransactions(Address address, QueryParams queryParams);
+    Observable<TransactionSearch> incomingTransactions(Address address, TransactionQueryParams queryParams);
 
     /**
      * Gets an list of transactions for which an account is the sender a transaction.
@@ -148,7 +157,7 @@ public interface AccountRepository {
      * @param publicAccount PublicAccount
      * @return Observable of {@link Transaction}
      */
-    Observable<List<Transaction>> outgoingTransactions(PublicAccount publicAccount);
+    Observable<TransactionSearch> outgoingTransactions(PublicAccount publicAccount);
 
     /**
      * Gets an list of transactions for which an account is the sender a transaction.
@@ -156,10 +165,10 @@ public interface AccountRepository {
      * With pagination.
      *
      * @param publicAccount PublicAccount
-     * @param queryParams   QueryParams
+     * @param queryParams   TransactionQueryParams
      * @return Observable of {@link Transaction} list
      */
-    Observable<List<Transaction>> outgoingTransactions(PublicAccount publicAccount, QueryParams queryParams);
+    Observable<TransactionSearch> outgoingTransactions(PublicAccount publicAccount, TransactionQueryParams queryParams);
 
     /**
      * Gets an list of transactions for which an account is the sender or has sign the transaction.
@@ -176,10 +185,10 @@ public interface AccountRepository {
      * With pagination.
      *
      * @param publicAccount PublicAccount
-     * @param queryParams   QueryParams
+     * @param queryParams   TransactionQueryParams
      * @return Observable of {@link Transaction} list
      */
-    Observable<List<AggregateTransaction>> aggregateBondedTransactions(PublicAccount publicAccount, QueryParams queryParams);
+    Observable<List<AggregateTransaction>> aggregateBondedTransactions(PublicAccount publicAccount, TransactionQueryParams queryParams);
 
     /**
      * Gets the list of transactions for which an account is the sender or receiver and which have not yet been included in a block.
@@ -189,7 +198,7 @@ public interface AccountRepository {
      * @param publicAccount PublicAccount
      * @return Observable of {@link Transaction} list
      */
-    Observable<List<Transaction>> unconfirmedTransactions(PublicAccount publicAccount);
+    Observable<TransactionSearch> unconfirmedTransactions(PublicAccount publicAccount);
 
     /**
      * Gets the list of transactions for which an account is the sender or receiver and which have not yet been included in a block.
@@ -198,8 +207,18 @@ public interface AccountRepository {
      * With pagination.
      *
      * @param publicAccount PublicAccount
-     * @param queryParams   QueryParams
+     * @param queryParams   TransactionQueryParams
      * @return Observable of {@link Transaction} list
      */
-    Observable<List<Transaction>> unconfirmedTransactions(PublicAccount publicAccount, QueryParams queryParams);
+    Observable<TransactionSearch> unconfirmedTransactions(PublicAccount publicAccount,
+            TransactionQueryParams queryParams);
+    
+    /**
+     *
+     * @param Address List of {@link Address}
+     * 
+     * @return Observable of {@link AccountNames} list
+     */
+    Observable<List<AccountNames>> getAccountsNames(List<Address> addresses);
+
 }

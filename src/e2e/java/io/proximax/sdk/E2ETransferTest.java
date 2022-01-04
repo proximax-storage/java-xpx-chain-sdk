@@ -28,7 +28,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.mosaic.Mosaic;
@@ -50,7 +49,8 @@ public class E2ETransferTest extends E2EBaseTest {
    /** logger */
    private static final Logger logger = LoggerFactory.getLogger(E2ETransferTest.class);
 
-   private final Account simpleAccount = new Account(new KeyPair(), getNetworkType());
+   private final Account simpleAccount = Account.createFromPrivateKey(
+         "D54AC0CB0FF50FB44233782B3A6B5FDE2F1C83B9AE2F1352119F93713F3AB923", getNetworkType());
 
    @BeforeAll
    void addListener() {
@@ -64,13 +64,14 @@ public class E2ETransferTest extends E2EBaseTest {
       returnAllToSeed(simpleAccount);
       sleepForAWhile();
       // check that target account has expected number of incoming transactions
-      int transactions = accountHttp.incomingTransactions(simpleAccount.getPublicAccount()).blockingFirst().size();
-      // TODO why 2? we did 4 transfers but 2 were aggregate?
-      assertEquals(2, transactions);
+      int transactions = accountHttp.incomingTransactions(simpleAccount.getPublicAccount()).blockingFirst().getTransactions().size();
+      assertEquals(1, transactions);
    }
 
    @Test
    void sendPlaintextMessage() {
+
+      
       // send transaction with plain message
       transferSimple(seedAccount,
             simpleAccount.getAddress(),
@@ -97,6 +98,9 @@ public class E2ETransferTest extends E2EBaseTest {
             simpleAccount.getAddress(),
             NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1)),
             secureMessage);
+
+            logger.info("account public key : {} account address : {} account private key : {} ", simpleAccount.getPublicKey(),
+                  simpleAccount.getAddress(), simpleAccount.getPrivateKey());
    }
 
    @Test
@@ -184,6 +188,7 @@ public class E2ETransferTest extends E2EBaseTest {
     */
    private void transferAggregate(Account from, Address to, Mosaic mosaic, Message message) {
       SignedTransaction signedAggregateTransaction = signAggregateTransfer(from, to, mosaic, message);
+   
       logger.info("Transfer announced. {}", transactionHttp.announce(signedAggregateTransaction).blockingFirst());
       logger.info("Transfer done. {}",
             listener.confirmed(from.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());

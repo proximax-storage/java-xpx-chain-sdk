@@ -17,6 +17,7 @@ package io.proximax.sdk;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
@@ -34,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.model.account.Account;
+import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.mosaic.Mosaic;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicNames;
@@ -56,7 +58,7 @@ import io.reactivex.Observable;
 @TestMethodOrder(MethodOrderer.Alphanumeric.class)
 public class E2EAliasTest extends E2EBaseTest {
    private static final String ROOT_NAME = "test-root-alias-"
-         + new Double(Math.floor(Math.random() * 10000)).intValue();
+         + new BigDecimal(Math.floor(Math.random() * 10000)).intValue();
    private static final String CHILD1_NAME = "mos";
    private static final String CHILD2_NAME = "acc";
 
@@ -73,7 +75,7 @@ public class E2EAliasTest extends E2EBaseTest {
    void initStuff() {
       account = new Account(new KeyPair(), getNetworkType());
       mosaicNonce = MosaicNonce.createRandom();
-      mosaicId = new MosaicId(mosaicNonce, seedAccount.getPublicKey());
+      mosaicId = new MosaicId(mosaicNonce, PublicAccount.createFromPublicKey(seedAccount.getPublicKey(),getNetworkType()));
       signup(seedAccount.getAddress());
    }
 
@@ -141,7 +143,7 @@ public class E2EAliasTest extends E2EBaseTest {
 
    @Test
    void test03CreateAccountAlias() {
-      sendSomeCash(seedAccount, account.getAddress(), 1);
+      sendSomeCash(seedAccount, account.getAddress(), 10);
       sendSomeCash(account, seedAccount.getAddress(), 1);
       logger.info("creating alias for address");
       AliasTransaction alias = transact.aliasAddress().link(account.getAddress()).namespaceId(accNamespaceId).build();

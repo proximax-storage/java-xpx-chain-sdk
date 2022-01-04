@@ -14,9 +14,9 @@ import java.math.BigInteger;
 import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.Mosaic;
 import io.proximax.sdk.model.mosaic.MosaicId;
+import io.proximax.sdk.model.network.NetworkType;
 
 /**
  * {@link ExchangeOffer} tests
@@ -30,7 +30,7 @@ class ExchangeOfferTest {
       BigInteger cost = BigInteger.ONE;
       ExchangeOfferType type = ExchangeOfferType.SELL;
       PublicAccount owner = new PublicAccount("ABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFAB",
-            NetworkType.MIJIN);
+            NetworkType.TEST_NET);
 
       ExchangeOffer offer = new ExchangeOffer(MOSAIC_ID, amount, cost, type, owner);
 
@@ -48,7 +48,7 @@ class ExchangeOfferTest {
       BigInteger cost = BigInteger.ONE;
       ExchangeOfferType type = ExchangeOfferType.SELL;
       PublicAccount owner = new PublicAccount("ABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFAB",
-            NetworkType.MIJIN);
+            NetworkType.TEST_NET);
 
       ExchangeOffer offer = new ExchangeOffer(new Mosaic(MOSAIC_ID, amount), cost, type, owner);
 
@@ -66,9 +66,9 @@ class ExchangeOfferTest {
       BigInteger cost = BigInteger.ONE;
       ExchangeOfferType type = ExchangeOfferType.SELL;
       PublicAccount owner = new PublicAccount("ABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFAB",
-            NetworkType.MIJIN);
+            NetworkType.TEST_NET);
       PublicAccount owner2 = new PublicAccount("AAAAEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFAB",
-            NetworkType.MIJIN);
+            NetworkType.TEST_NET);
 
       ExchangeOffer a1 = new ExchangeOffer(MOSAIC_ID, amount, cost, type, owner);
       ExchangeOffer a2 = new ExchangeOffer(MOSAIC_ID, amount, cost, type, owner);
@@ -87,9 +87,9 @@ class ExchangeOfferTest {
       BigInteger cost = BigInteger.ONE;
       ExchangeOfferType type = ExchangeOfferType.SELL;
       PublicAccount owner = new PublicAccount("ABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFAB",
-            NetworkType.MIJIN);
+            NetworkType.TEST_NET);
       PublicAccount owner2 = new PublicAccount("AAAAEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFAB",
-            NetworkType.MIJIN);
+            NetworkType.TEST_NET);
 
       ExchangeOffer a1 = new ExchangeOffer(MOSAIC_ID, amount, cost, type, owner);
       ExchangeOffer a2 = new ExchangeOffer(MOSAIC_ID, amount, cost, type, owner);
@@ -106,7 +106,7 @@ class ExchangeOfferTest {
       BigInteger cost = BigInteger.ONE;
       ExchangeOfferType type = ExchangeOfferType.SELL;
       PublicAccount owner = new PublicAccount("ABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFAB",
-            NetworkType.MIJIN);
+            NetworkType.TEST_NET);
 
       ExchangeOffer offer = new ExchangeOffer(MOSAIC_ID, amount, cost, type, owner);
 

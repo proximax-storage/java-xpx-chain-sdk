@@ -1,0 +1,20 @@
+namespace io.proximax.sdk.gen.buffers;
+
+table MetadataAccountTransactionBuffer {
+    size: uint;
+    signature: [ubyte];
+    signer: [ubyte];
+    version: uint;
+    type: ushort;
+    maxFee: [uint];
+    deadline:[uint];
+    targetKey: [ubyte];
+    scopedMetadataKey: [uint];
+    /// In case of address it is empty array. In case of mosaic or namespace id it is 8 byte array(or 2 uint32 array)
+  //  targetId: [uint];
+    valueSizeDelta: short;
+    valueSize: ushort;
+    value: [ubyte];
+}
+
+root_type MetadataAccountTransactionBuffer;

@@ -28,8 +28,8 @@ import io.proximax.core.utils.Base32Encoder;
 import io.proximax.sdk.gen.buffers.SecretLockTransactionBuffer;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.Mosaic;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 public class SecretLockTransaction extends Transaction {

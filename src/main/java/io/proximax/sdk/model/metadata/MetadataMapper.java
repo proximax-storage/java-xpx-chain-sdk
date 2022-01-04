@@ -58,7 +58,7 @@ public class MetadataMapper {
     */
    public static Metadata mapToObject(JsonObject json) {
       JsonObject meta = json.getAsJsonObject(META_KEY_METADATA);
-      MetadataType type = MetadataType.getByCode(meta.get(META_KEY_TYPE).getAsInt());
+      OldMetadataType type = OldMetadataType.getByCode(meta.get(META_KEY_TYPE).getAsInt());
       List<Field> fields = loadFields(meta.getAsJsonArray(META_KEY_FIELDS));
       switch (type) {
       case NONE:
@@ -81,7 +81,7 @@ public class MetadataMapper {
     * @return the metadata instance
     */
    private static Metadata getNoneMetadata(List<Field> fields) {
-      return new Metadata(MetadataType.NONE, fields);
+      return new Metadata(OldMetadataType.NONE, fields);
    }
    
    /**

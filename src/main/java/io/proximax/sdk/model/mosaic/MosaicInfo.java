@@ -23,7 +23,7 @@ import java.util.Optional;
 
 import io.proximax.sdk.gen.model.MosaicInfoDTO;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 
 /**
  * The mosaic info structure contains its properties, the owner and the namespace to which it belongs to.

@@ -18,7 +18,7 @@ package io.proximax.sdk.model.account;
 
 import java.util.Objects;
 
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 
 /**
  * The public account structure contains account's address and public key.

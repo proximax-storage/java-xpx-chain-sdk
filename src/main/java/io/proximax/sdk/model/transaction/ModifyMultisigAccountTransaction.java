@@ -29,7 +29,7 @@ import io.proximax.core.utils.HexEncoder;
 import io.proximax.sdk.gen.buffers.CosignatoryModificationBuffer;
 import io.proximax.sdk.gen.buffers.ModifyMultisigAccountTransactionBuffer;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**

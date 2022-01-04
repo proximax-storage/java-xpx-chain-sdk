@@ -18,9 +18,9 @@ import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
-import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.namespace.NamespaceId;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.model.transaction.PlainMessage;
 import io.proximax.sdk.model.transaction.Recipient;
 import io.proximax.sdk.model.transaction.TransferTransaction;
@@ -30,7 +30,7 @@ import io.proximax.sdk.model.transaction.TransferTransaction;
  */
 class TransferTransactionBuilderTest {
 
-   private static final NetworkType NETWORK_TYPE = NetworkType.MIJIN_TEST;
+   private static final NetworkType NETWORK_TYPE = NetworkType.TEST_NET;
 
    private TransferTransactionBuilder builder;
 
@@ -48,7 +48,7 @@ class TransferTransactionBuilderTest {
       // create transaction
       TransferTransaction trans = builder.to(recipient).build();
       // check transaction
-      assertEquals(NetworkType.MIJIN_TEST, trans.getNetworkType());
+      assertEquals(NetworkType.TEST_NET, trans.getNetworkType());
       assertTrue(trans.getMosaics().isEmpty());
       assertEquals(PlainMessage.EMPTY, trans.getMessage());
       assertEquals(recipient, trans.getRecipient());
@@ -61,7 +61,7 @@ class TransferTransactionBuilderTest {
       // create transaction
       TransferTransaction trans = builder.to(recipient).build();
       // check transaction
-      assertEquals(NetworkType.MIJIN_TEST, trans.getNetworkType());
+      assertEquals(NetworkType.TEST_NET, trans.getNetworkType());
       assertTrue(trans.getMosaics().isEmpty());
       assertEquals(PlainMessage.EMPTY, trans.getMessage());
       assertEquals(Recipient.from(recipient), trans.getRecipient());
@@ -74,7 +74,7 @@ class TransferTransactionBuilderTest {
       // create transaction
       TransferTransaction trans = builder.to(recipient).build();
       // check transaction
-      assertEquals(NetworkType.MIJIN_TEST, trans.getNetworkType());
+      assertEquals(NetworkType.TEST_NET, trans.getNetworkType());
       assertTrue(trans.getMosaics().isEmpty());
       assertEquals(PlainMessage.EMPTY, trans.getMessage());
       assertEquals(Recipient.from(recipient), trans.getRecipient());
@@ -87,7 +87,7 @@ class TransferTransactionBuilderTest {
       // create transaction
       TransferTransaction trans = builder.mosaics(NetworkCurrencyMosaic.TEN).to(recipient).message(PlainMessage.create("hello world")).build();
       // check transaction
-      assertEquals(NetworkType.MIJIN_TEST, trans.getNetworkType());
+      assertEquals(NetworkType.TEST_NET, trans.getNetworkType());
       assertEquals(Arrays.asList(NetworkCurrencyMosaic.TEN), trans.getMosaics());
       assertEquals("hello world", trans.getMessage().getPayload());
       assertEquals(recipient, trans.getRecipient());

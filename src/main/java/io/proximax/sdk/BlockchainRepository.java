@@ -19,9 +19,15 @@ package io.proximax.sdk;
 import java.math.BigInteger;
 import java.util.List;
 
-import io.proximax.sdk.infrastructure.QueryParams;
-import io.proximax.sdk.model.blockchain.*;
+import io.proximax.sdk.infrastructure.TransactionQueryParams;
+import io.proximax.sdk.model.blockchain.BlockInfo;
+import io.proximax.sdk.model.blockchain.BlockchainConfig;
+import io.proximax.sdk.model.blockchain.BlockchainStorageInfo;
+import io.proximax.sdk.model.blockchain.BlocksLimit;
+import io.proximax.sdk.model.blockchain.MerklePath;
+import io.proximax.sdk.model.blockchain.Receipts;
 import io.proximax.sdk.model.transaction.Transaction;
+import io.proximax.sdk.model.transaction.TransactionSearch;
 import io.reactivex.Observable;
 
 /**
@@ -45,31 +51,17 @@ public interface BlockchainRepository {
      * @param height BigInteger
      * @return Observable of {@link Transaction} list
      */
-    Observable<List<Transaction>> getBlockTransactions(BigInteger height);
+    Observable<TransactionSearch> getBlockTransactions(BigInteger height);
 
     /**
      * Gets list of transactions included in a block for a block height
      * With pagination.
      *
-     * @param height      BigInteger
-     * @param queryParams QueryParams
+     * @param height                 BigInteger
+     * @param TransactionQueryParams Transaction QueryParams
      * @return Observable of {@link Transaction} list
      */
-    Observable<List<Transaction>> getBlockTransactions(BigInteger height, QueryParams queryParams);
-
-    /**
-     * Gets current blockchain height.
-     *
-     * @return Observable of BigInteger
-     */
-    Observable<BigInteger> getBlockchainHeight();
-
-    /**
-     * Gets current blockchain score.
-     *
-     * @return Observable of BigInteger
-     */
-    Observable<BigInteger> getBlockchainScore();
+    Observable<TransactionSearch> getBlockTransactions(BigInteger height, TransactionQueryParams queryParams);
 
     /**
      * Gets blockchain storage info.
@@ -77,27 +69,6 @@ public interface BlockchainRepository {
      * @return Observable of {@link BlockchainStorageInfo}
      */
     Observable<BlockchainStorageInfo> getBlockchainStorage();
-    
-    /**
-     * retrieve node information
-     * 
-     * @return the node info
-     */
-    Observable<NodeInfo> getNodeInfo();
-    
-    /**
-     * retrieve node time
-     * 
-     * @return the node time
-     */
-    Observable<NodeTime> getNodeTime();
-    
-    /**
-     * Get current network type.
-     *
-     * @return network type enum.
-     */
-    Observable<NetworkType> getNetworkType();
     
     /**
      * Get block receipts
@@ -142,12 +113,6 @@ public interface BlockchainRepository {
      */
     Observable<BlockchainConfig> getBlockchainConfiguration(BigInteger height);
     
-    /**
-     * get information about blockchain upgrade at given height
-     * 
-     * @param height the height at which the information is requested
-     * @return the blockchain upgrade information
-     */
-    Observable<BlockchainUpgrade> getBlockchainUpgrade(BigInteger height);
+ 
 
 }

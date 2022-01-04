@@ -25,13 +25,13 @@ import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
 
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 
 class MultisigAccountInfoTest {
-    private final PublicAccount account1 = new PublicAccount("b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf", NetworkType.MIJIN_TEST);
-    private final PublicAccount account2 = new PublicAccount("846b4439154579a5903b1459c9cf69cb8153f6d0110a7a0ed61de29ae4810bf2", NetworkType.MIJIN_TEST);
-    private final PublicAccount account3 = new PublicAccount("cf893ffcc47c33e7f68ab1db56365c156b0736824a0c1e273f9e00b8df8f01eb", NetworkType.MIJIN_TEST);
-    private final PublicAccount account4 = new PublicAccount("68b3fbb18729c1fde225c57f8ce080fa828f0067e451a3fd81fa628842b0b763", NetworkType.MIJIN_TEST);
+    private final PublicAccount account1 = new PublicAccount("b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf", NetworkType.TEST_NET);
+    private final PublicAccount account2 = new PublicAccount("846b4439154579a5903b1459c9cf69cb8153f6d0110a7a0ed61de29ae4810bf2", NetworkType.TEST_NET);
+    private final PublicAccount account3 = new PublicAccount("cf893ffcc47c33e7f68ab1db56365c156b0736824a0c1e273f9e00b8df8f01eb", NetworkType.TEST_NET);
+    private final PublicAccount account4 = new PublicAccount("68b3fbb18729c1fde225c57f8ce080fa828f0067e451a3fd81fa628842b0b763", NetworkType.TEST_NET);
 
     @Test
     void shouldBeCreated() {

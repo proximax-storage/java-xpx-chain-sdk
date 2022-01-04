@@ -26,16 +26,19 @@ import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
 
+import io.proximax.sdk.model.account.PublicAccount;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 class MosaicIdTest {
    private static final MosaicNonce NONCE = new MosaicNonce(new byte[4]);
    private static final String PUB_KEY = "B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF";
    private static final BigInteger ID = UInt64Utils.fromIntArray(new int[] { 481110499, 231112638 });
+   private static final NetworkType networkType = NetworkType.TEST_NET;
 
    @Test
    void createAMosaicIdFromMosaicNameViaConstructor() {
-      MosaicId mosaicId = new MosaicId(NONCE, PUB_KEY);
+      MosaicId mosaicId = new MosaicId(NONCE, PublicAccount.createFromPublicKey(PUB_KEY, networkType) );
       assertEquals(ID, mosaicId.getId());
       assertEquals("0dc67fbe1cad29e3", mosaicId.getIdAsHex());
       assertEquals(NONCE, mosaicId.getNonce().orElse(new MosaicNonce(new byte[] { 1, 2, 3, 4 })));
@@ -45,6 +48,7 @@ class MosaicIdTest {
 
    @Test
    void createAMosaicIdFromHexString() {
+      
       MosaicId mosaicId = new MosaicId("0dc67fbe1cad29e3");
       assertEquals(ID, mosaicId.getId());
       assertEquals("0dc67fbe1cad29e3", mosaicId.getIdAsHex());
@@ -60,22 +64,23 @@ class MosaicIdTest {
 
    @Test
    void createAMosaicIdFromIdViaConstructor() {
-      MosaicId mosaicId = new MosaicId(new BigInteger("-8884663987180930485"));
-      assertEquals(new BigInteger("-8884663987180930485"), mosaicId.getId());
+      MosaicId mosaicId = new MosaicId(new BigInteger("8166850853064302584"));
+      assertEquals(new BigInteger("8166850853064302584"), mosaicId.getId());
    }
 
    @Test
    void shouldCompareMosaicIdsForEquality() {
-      MosaicId mosaicId = new MosaicId(new BigInteger("-8884663987180930485"));
-      MosaicId mosaicId2 = new MosaicId(new BigInteger("-8884663987180930485"));
+      MosaicId mosaicId = new MosaicId(new BigInteger("8166850853064302584"));
+      MosaicId mosaicId2 = new MosaicId(new BigInteger("8166850853064302584"));
       assertTrue(mosaicId.equals(mosaicId2));
    }
 
    @Test
    void someMoreData() {
       MosaicId mosaicId = new MosaicId(MosaicNonce.createFromHex("B76FE378"),
-            "4AFF7B4BA8C1C26A7917575993346627CB6C80DE62CD92F7F9AEDB7064A3DE62");
-      MosaicId mosaicId2 = new MosaicId(new BigInteger("3AD842A8C0AFC518", 16));
+           PublicAccount.createFromPublicKey(
+                  PUB_KEY, networkType) );
+      MosaicId mosaicId2 = new MosaicId("71567b94be7e5ff8");
       assertTrue(mosaicId.equals(mosaicId2));
    }
    

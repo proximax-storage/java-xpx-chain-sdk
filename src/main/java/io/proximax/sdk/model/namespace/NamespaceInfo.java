@@ -28,8 +28,8 @@ import io.proximax.sdk.gen.model.NamespaceInfoDTO;
 import io.proximax.sdk.gen.model.UInt64DTO;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.MosaicId;
+import io.proximax.sdk.model.network.NetworkType;
 
 /**
  * NamespaceInfo contains the state information of a namespace.

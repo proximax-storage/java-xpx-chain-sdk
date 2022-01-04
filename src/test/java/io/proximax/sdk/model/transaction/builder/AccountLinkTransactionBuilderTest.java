@@ -16,7 +16,7 @@ import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.model.transaction.AccountLinkAction;
 import io.proximax.sdk.model.transaction.AccountLinkTransaction;
 
@@ -25,7 +25,7 @@ import io.proximax.sdk.model.transaction.AccountLinkTransaction;
  */
 class AccountLinkTransactionBuilderTest {
 
-   private static final NetworkType NETWORK_TYPE = NetworkType.MIJIN_TEST;
+   private static final NetworkType NETWORK_TYPE = NetworkType.TEST_NET;
 
    private AccountLinkTransactionBuilder builder;
    

@@ -29,19 +29,19 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.ResourceBasedTest;
-import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicSupplyType;
+import io.proximax.sdk.model.network.NetworkType;
 
 class MosaicSupplyChangeTransactionTest extends ResourceBasedTest {
 
    @Test
    void createAMosaicSupplyChangeTransactionViaConstructor() {
-      MosaicSupplyChangeTransaction mosaicSupplyChangeTx = new MosaicSupplyChangeTransaction(NetworkType.MIJIN_TEST, 2,
+      MosaicSupplyChangeTransaction mosaicSupplyChangeTx = new MosaicSupplyChangeTransaction(NetworkType.TEST_NET, 2,
             new Deadline(2, ChronoUnit.HOURS), BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
             new MosaicId(new BigInteger("6300565133566699912")), MosaicSupplyType.INCREASE, BigInteger.valueOf(10));
 
-      assertEquals(NetworkType.MIJIN_TEST, mosaicSupplyChangeTx.getNetworkType());
+      assertEquals(NetworkType.TEST_NET, mosaicSupplyChangeTx.getNetworkType());
       assertTrue(2 == mosaicSupplyChangeTx.getVersion());
       long nowSinceNemesis = new Deadline(0, ChronoUnit.SECONDS).getInstant();
       assertTrue(nowSinceNemesis < mosaicSupplyChangeTx.getDeadline().getInstant());
@@ -54,7 +54,7 @@ class MosaicSupplyChangeTransactionTest extends ResourceBasedTest {
    @Test
    @DisplayName("Serialization")
    void serialization() throws IOException {
-      MosaicSupplyChangeTransaction mosaicSupplyChangeTx = new MosaicSupplyChangeTransaction(NetworkType.MIJIN_TEST, 2,
+      MosaicSupplyChangeTransaction mosaicSupplyChangeTx = new MosaicSupplyChangeTransaction(NetworkType.TEST_NET, 2,
             new FakeDeadline(), BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
             new MosaicId(new BigInteger("6300565133566699912")), MosaicSupplyType.INCREASE, BigInteger.valueOf(10));
 

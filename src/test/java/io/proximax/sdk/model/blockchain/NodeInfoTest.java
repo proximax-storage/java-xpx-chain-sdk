@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.gen.model.NodeInfoDTO;
 import io.proximax.sdk.gen.model.RolesTypeEnum;
+import io.proximax.sdk.model.node.NodeInfo;
 
 /**
  * {@link NodeInfo} tests

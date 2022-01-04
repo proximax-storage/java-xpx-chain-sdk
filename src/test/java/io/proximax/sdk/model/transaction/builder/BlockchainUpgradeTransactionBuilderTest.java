@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.model.blockchain.BlockchainVersion;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.model.transaction.BlockchainUpgradeTransaction;
 
 /**
@@ -22,7 +22,7 @@ import io.proximax.sdk.model.transaction.BlockchainUpgradeTransaction;
  */
 class BlockchainUpgradeTransactionBuilderTest {
 
-   private static final NetworkType NETWORK_TYPE = NetworkType.MIJIN_TEST;
+   private static final NetworkType NETWORK_TYPE = NetworkType.TEST_NET;
 
    private BlockchainUpgradeTransactionBuilder builder;
 

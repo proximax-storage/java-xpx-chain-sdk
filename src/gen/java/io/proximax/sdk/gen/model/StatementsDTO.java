@@ -13,26 +13,20 @@
 
 package io.proximax.sdk.gen.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.proximax.sdk.gen.model.ResolutionStatementDTO;
-import io.proximax.sdk.gen.model.TransactionStatementDTO;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import com.google.gson.annotations.SerializedName;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * The collection of transaction statements and resolutions triggered for the block requested.
  */
 @ApiModel(description = "The collection of transaction statements and resolutions triggered for the block requested.")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-09-22T22:57:50.932+02:00[Europe/Prague]")
+@javax.annotation.processing.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-09-22T22:57:50.932+02:00[Europe/Prague]")
 public class StatementsDTO {
   public static final String SERIALIZED_NAME_TRANSACTION_STATEMENTS = "transactionStatements";
   @SerializedName(SERIALIZED_NAME_TRANSACTION_STATEMENTS)

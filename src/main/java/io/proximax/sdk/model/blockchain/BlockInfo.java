@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import io.proximax.sdk.gen.model.BlockInfoDTO;
 import io.proximax.sdk.model.account.PublicAccount;
+import io.proximax.sdk.model.network.NetworkType;
 
 /**
  * The block info structure describes basic information of a block.

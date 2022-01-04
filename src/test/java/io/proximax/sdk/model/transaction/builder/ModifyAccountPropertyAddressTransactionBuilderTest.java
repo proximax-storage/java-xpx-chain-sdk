@@ -19,7 +19,7 @@ import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.props.AccountPropertyModification;
 import io.proximax.sdk.model.account.props.AccountPropertyType;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.model.transaction.EntityType;
 import io.proximax.sdk.model.transaction.ModifyAccountPropertyTransaction;
 
@@ -28,7 +28,7 @@ import io.proximax.sdk.model.transaction.ModifyAccountPropertyTransaction;
  */
 class ModifyAccountPropertyAddressTransactionBuilderTest {
 
-   private static final NetworkType NETWORK_TYPE = NetworkType.MIJIN_TEST;
+   private static final NetworkType NETWORK_TYPE = NetworkType.TEST_NET;
 
    private ModifyAccountPropertyAddressTransactionBuilder builder;
 

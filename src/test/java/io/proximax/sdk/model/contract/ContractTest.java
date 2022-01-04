@@ -23,7 +23,7 @@ import io.proximax.core.crypto.PublicKey;
 import io.proximax.sdk.ResourceBasedTest;
 import io.proximax.sdk.gen.model.ContractInfoDTO;
 import io.proximax.sdk.model.account.Address;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 import io.reactivex.Observable;
 
 /**
@@ -36,7 +36,7 @@ class ContractTest extends ResourceBasedTest {
    
    @Test
    void checkConstructor() {
-      Address address = new Address("SDRDGF-TDLLCB-67D4HP-GIMIHP-NSRYRJ-RT7DOB-GWZY", NetworkType.MIJIN_TEST);
+      Address address = new Address("VD3YBI-RQMWXS-6HHUJB-XFZJ56-62BJPX-OTKOOV-6HDO", NetworkType.TEST_NET);
       BigInteger start = BigInteger.ONE;
       BigInteger duration = BigInteger.TEN;
       Contract c = new Contract("multisigstr", address, start, duration, "contentHash", CUSTOMERS, EXECUTORS, VERIFIERS);
@@ -67,7 +67,7 @@ class ContractTest extends ResourceBasedTest {
    }
 
    private static Contract createContract(String contentHash) {
-      Address address = new Address("SDRDGF-TDLLCB-67D4HP-GIMIHP-NSRYRJ-RT7DOB-GWZY", NetworkType.MIJIN_TEST);
+      Address address = new Address("SDRDGF-TDLLCB-67D4HP-GIMIHP-NSRYRJ-RT7DOB-GWZY", NetworkType.TEST_NET);
       BigInteger start = BigInteger.ONE;
       BigInteger duration = BigInteger.TEN;
       return new Contract("multisigstr", address, start, duration, contentHash, CUSTOMERS, EXECUTORS, VERIFIERS);

@@ -26,7 +26,7 @@ class NamespaceMetadataTest {
       NamespaceId id = new NamespaceId(BigInteger.ONE);
       NamespaceMetadata meta = new NamespaceMetadata(fields, id);
       
-      assertEquals(MetadataType.NAMESPACE, meta.getType());
+      assertEquals(OldMetadataType.NAMESPACE, meta.getType());
       assertEquals(id, meta.getId());
       assertEquals(fields, meta.getFields());
    }

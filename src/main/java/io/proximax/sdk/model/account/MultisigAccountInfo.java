@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 import io.proximax.sdk.gen.model.MultisigAccountInfoDTO;
 import io.proximax.sdk.gen.model.MultisigDTO;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 
 /**
  * The multisig account info structure describes information of a multisig account.

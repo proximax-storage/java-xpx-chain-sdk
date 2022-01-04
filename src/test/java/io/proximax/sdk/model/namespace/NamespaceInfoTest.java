@@ -33,7 +33,7 @@ import io.proximax.sdk.gen.model.NamespaceInfoDTO;
 import io.proximax.sdk.gen.model.NamespaceMetaDTO;
 import io.proximax.sdk.gen.model.NamespaceTypeEnum;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 class NamespaceInfoTest {
@@ -48,7 +48,7 @@ class NamespaceInfoTest {
                 1,
                 Arrays.asList(namespaceId),
                 new NamespaceId(new BigInteger("0")),
-                new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", NetworkType.MIJIN_TEST),
+                new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", NetworkType.TEST_NET),
                 new BigInteger("1"),
                 new BigInteger("-1"),
                 Optional.empty(),
@@ -61,7 +61,7 @@ class NamespaceInfoTest {
         assertTrue(namespaceInfo.getType() == NamespaceType.ROOT_NAMESPACE);
         assertTrue(namespaceInfo.getDepth() == 1);
         assertEquals(namespaceId, namespaceInfo.getLevels().get(0));
-        Assertions.assertEquals(new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", NetworkType.MIJIN_TEST), namespaceInfo.getOwner());
+        Assertions.assertEquals(new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", NetworkType.TEST_NET), namespaceInfo.getOwner());
         assertEquals(new BigInteger("1"), namespaceInfo.getStartHeight());
         assertEquals(new BigInteger("-1"), namespaceInfo.getEndHeight());
         assertEquals(Optional.empty(), namespaceInfo.getAddressAlias());
@@ -139,7 +139,7 @@ class NamespaceInfoTest {
        nidto.setMeta(nmdto);
        nidto.setNamespace(ndto);
        
-       NamespaceInfo namespaceInfo = NamespaceInfo.fromDto(nidto, NetworkType.MIJIN_TEST);
+       NamespaceInfo namespaceInfo = NamespaceInfo.fromDto(nidto, NetworkType.TEST_NET);
        
        assertEquals(true, namespaceInfo.isActive());
        assertEquals(namespaceInfo.isActive(), !namespaceInfo.isExpired());
@@ -148,7 +148,7 @@ class NamespaceInfoTest {
        assertEquals(NamespaceType.ROOT_NAMESPACE, namespaceInfo.getType());
        assertEquals(1, namespaceInfo.getDepth());
        assertEquals(namespaceId, namespaceInfo.getLevels().get(0));
-       Assertions.assertEquals(new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", NetworkType.MIJIN_TEST), namespaceInfo.getOwner());
+       Assertions.assertEquals(new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", NetworkType.TEST_NET), namespaceInfo.getOwner());
        assertEquals(new BigInteger("1"), namespaceInfo.getStartHeight());
        assertEquals(BigInteger.TEN, namespaceInfo.getEndHeight());
        assertEquals(Optional.empty(), namespaceInfo.getAddressAlias());
@@ -163,7 +163,7 @@ class NamespaceInfoTest {
                 1,
                 Arrays.asList(new NamespaceId(new BigInteger("-8884663987180930485"))),
                 new NamespaceId(new BigInteger("0")),
-                new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", NetworkType.MIJIN_TEST),
+                new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", NetworkType.TEST_NET),
                 new BigInteger("1"),
                 new BigInteger("-1"),
                 Optional.empty(),
@@ -178,7 +178,7 @@ class NamespaceInfoTest {
                 1,
                 Arrays.asList(new NamespaceId(new BigInteger("-3087871471161192663")), new NamespaceId(new BigInteger("-1087871471161192663"))),
                 new NamespaceId(new BigInteger("-3087871471161192663")),
-                new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", NetworkType.MIJIN_TEST),
+                new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", NetworkType.TEST_NET),
                 new BigInteger("1"),
                 new BigInteger("-1"),
                 Optional.empty(),

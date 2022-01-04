@@ -12,11 +12,11 @@ import java.math.BigInteger;
  */
 public enum FeeCalculationStrategy {
    ZERO(0),
-   LOW(25),
-   MEDIUM(250),
-   HIGH(2500);
+   LOW(15000),
+   MEDIUM(150000),
+   HIGH(1500000);
    
-   private static final int MAX_FEE = 5_000_000;
+   private static final int MAX_FEE = 75000000;
    
    private final int coefficient;
 

@@ -3,11 +3,12 @@
  * Use of this source code is governed by the Apache 2.0
  * license that can be found in the LICENSE file.
  */
-package io.proximax.sdk.model.blockchain;
+package io.proximax.sdk.model.ChainUpgrade;
 
 import java.math.BigInteger;
 
 import io.proximax.sdk.gen.model.UpgradeDTO;
+import io.proximax.sdk.model.blockchain.BlockchainVersion;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**

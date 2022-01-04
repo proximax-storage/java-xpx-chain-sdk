@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URL;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -33,9 +32,12 @@ import org.junit.jupiter.api.TestInstance;
 import io.proximax.sdk.BaseTest;
 import io.proximax.sdk.BlockchainApi;
 import io.proximax.sdk.BlockchainRepository;
+import io.proximax.sdk.infrastructure.QueryParams.Order;
 import io.proximax.sdk.model.blockchain.BlockInfo;
 import io.proximax.sdk.model.blockchain.BlockchainStorageInfo;
-import io.proximax.sdk.model.transaction.Transaction;
+import io.proximax.sdk.model.blockchain.Receipts;
+import io.proximax.sdk.model.transaction.EntityType;
+import io.proximax.sdk.model.transaction.TransactionSearch;
 import io.reactivex.observers.TestObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -62,41 +64,30 @@ class BlockchainHttpTest extends BaseTest {
 
     @Test
     void getBlockTransactions() throws ExecutionException, InterruptedException {
-        List<Transaction> transactions = blockchainHttp
+        TransactionSearch transactions = blockchainHttp
                 .getBlockTransactions(BigInteger.valueOf(1))
                 .toFuture()
                 .get();
 
-        assertEquals(10, transactions.size());
+        assertEquals(1, transactions.getPaginations().getPageNumber());
+        assertEquals(35, transactions.getPaginations().getTotalEntries());
+        assertEquals(20, transactions.getTransactions().size());
+        assertEquals(EntityType.rawValueOf(16724), transactions.getTransactions().get(0).getType());
 
-        List<Transaction> nextTransactions = blockchainHttp
-                .getBlockTransactions(BigInteger.valueOf(1), new QueryParams(15, transactions.get(0).getTransactionInfo().get().getId().get()))
+        TransactionSearch nextTransactions = blockchainHttp
+                .getBlockTransactions(BigInteger.valueOf(1), new TransactionQueryParams(0, 0, Order.ASC, null, null,
+                        TransactionSortingField.BLOCK, null, null, null,
+                        null,
+                        null,
+                        null))
                 .toFuture()
                 .get();
 
-        assertEquals(15, nextTransactions.size());
-        assertEquals(transactions.get(1).getTransactionInfo().get().getHash(), nextTransactions.get(0).getTransactionInfo().get().getHash());
+        assertTrue(nextTransactions.getPaginations()!=null);
+        assertEquals(EntityType.rawValueOf(16973), nextTransactions.getTransactions().get(19).getType());
     }
 
-    @Test
-    void getBlockchainHeight() throws ExecutionException, InterruptedException {
-        BigInteger blockchainHeight = blockchainHttp
-                .getBlockchainHeight()
-                .toFuture()
-                .get();
-
-        assertTrue(blockchainHeight.intValue() > 0);
-    }
-
-    @Test
-    void getBlockchainScore() throws ExecutionException, InterruptedException {
-        BigInteger blockchainScore = blockchainHttp
-                .getBlockchainScore()
-                .toFuture()
-                .get();
-
-        assertTrue(blockchainScore.intValue() != 0);
-    }
+  
 
     @Test
     void getBlockchainStorage() throws ExecutionException, InterruptedException {
@@ -108,6 +99,18 @@ class BlockchainHttpTest extends BaseTest {
         assertTrue(blockchainStorageInfo.getNumAccounts() > 0);
         assertTrue(blockchainStorageInfo.getNumTransactions() > 0);
         assertTrue(blockchainStorageInfo.getNumBlocks() > 0);
+    }
+
+    @Test
+    void getBlockReceipts() throws ExecutionException, InterruptedException {
+        Receipts blockReceiptsInfo = blockchainHttp
+                .getBlockReceipts(BigInteger.TWO)
+                .toFuture()
+                .get();
+
+        assertTrue(blockReceiptsInfo.getAddressResolutionStatements().size() == 0);
+        assertTrue(blockReceiptsInfo.getAddressResolutionStatements().size() == 0);
+        assertTrue(blockReceiptsInfo.getTransactionStatements().size() > 0);
     }
 
     @Test

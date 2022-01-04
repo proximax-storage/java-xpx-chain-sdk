@@ -18,7 +18,7 @@ import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.ResourceBasedTest;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 
 /**
  * {@link BlockchainConfigTransaction} tests
@@ -29,7 +29,7 @@ class BlockchainConfigTransactionTest extends ResourceBasedTest {
    void testConstructor() throws IOException {
       String conf = getResourceAsString("config/blockchain.properties");
       String entities = getResourceAsString("config/entities.json");
-      BlockchainConfigTransaction trans = new BlockchainConfigTransaction(NetworkType.MIJIN, 1, new FakeDeadline(),
+      BlockchainConfigTransaction trans = new BlockchainConfigTransaction(NetworkType.TEST_NET, 1, new FakeDeadline(),
             BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), BigInteger.valueOf(3), conf,
             entities);
 
@@ -42,7 +42,7 @@ class BlockchainConfigTransactionTest extends ResourceBasedTest {
    void serialization() throws IOException {
       String conf = getResourceAsString("config/blockchain.properties");
       String entities = getResourceAsString("config/entities.json");
-      BlockchainConfigTransaction trans = new BlockchainConfigTransaction(NetworkType.MIJIN, 1, new FakeDeadline(),
+      BlockchainConfigTransaction trans = new BlockchainConfigTransaction(NetworkType.TEST_NET, 1, new FakeDeadline(),
             BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), BigInteger.valueOf(3), conf,
             entities);
 
@@ -53,11 +53,11 @@ class BlockchainConfigTransactionTest extends ResourceBasedTest {
    
    @Test
    void checkCopyToSigner() throws IOException {
-      PublicAccount remoteAccount = new Account(new KeyPair(), NetworkType.MIJIN).getPublicAccount();
+      PublicAccount remoteAccount = new Account(new KeyPair(), NetworkType.TEST_NET).getPublicAccount();
       
       String conf = getResourceAsString("config/blockchain.properties");
       String entities = getResourceAsString("config/entities.json");
-      BlockchainConfigTransaction trans = new BlockchainConfigTransaction(NetworkType.MIJIN, 1, new FakeDeadline(),
+      BlockchainConfigTransaction trans = new BlockchainConfigTransaction(NetworkType.TEST_NET, 1, new FakeDeadline(),
             BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), BigInteger.valueOf(3), conf,
             entities);
 

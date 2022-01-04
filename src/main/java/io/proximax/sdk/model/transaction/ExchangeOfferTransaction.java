@@ -18,8 +18,8 @@ import io.proximax.core.utils.HexEncoder;
 import io.proximax.sdk.gen.buffers.ExchangeOfferBuffer;
 import io.proximax.sdk.gen.buffers.ExchangeOfferTransactionBuffer;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.exchange.ExchangeOffer;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**

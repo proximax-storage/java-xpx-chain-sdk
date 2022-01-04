@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import io.proximax.sdk.gen.model.MultisigAccountGraphInfoDTO;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 
 /**
  * The multisig account graph info structure describes the information of all the mutlisig levels an account is involved

@@ -11,7 +11,7 @@ import com.google.gson.JsonObject;
 
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.blockchain.BlockInfo;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.utils.dto.TransactionMappingUtils;
 import io.reactivex.Observable;
 import io.reactivex.subjects.Subject;

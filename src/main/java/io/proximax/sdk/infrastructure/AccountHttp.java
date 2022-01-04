@@ -16,14 +16,10 @@
 
 package io.proximax.sdk.infrastructure;
 
-import static io.proximax.sdk.utils.GsonUtils.stream;
-
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -31,10 +27,12 @@ import com.google.gson.reflect.TypeToken;
 import io.proximax.sdk.AccountRepository;
 import io.proximax.sdk.BlockchainApi;
 import io.proximax.sdk.gen.model.AccountInfoDTO;
+import io.proximax.sdk.gen.model.AccountNamesDTO;
 import io.proximax.sdk.gen.model.AccountPropertiesInfoDTO;
 import io.proximax.sdk.gen.model.MultisigAccountGraphInfoDTO;
 import io.proximax.sdk.gen.model.MultisigAccountInfoDTO;
 import io.proximax.sdk.model.account.AccountInfo;
+import io.proximax.sdk.model.account.AccountNames;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.MultisigAccountGraphInfo;
 import io.proximax.sdk.model.account.MultisigAccountInfo;
@@ -42,6 +40,8 @@ import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.account.props.AccountProperties;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
+import io.proximax.sdk.model.transaction.TransactionSearch;
+import io.proximax.sdk.utils.GsonUtils;
 import io.reactivex.Observable;
 
 /**
@@ -53,10 +53,15 @@ public class AccountHttp extends Http implements AccountRepository {
 
    private static final String ROUTE = "/account";
    private static final String PROPERTIES_SUFFIX = "/properties";
-
-   private static final Type TYPE_ACCOUNT_LIST = new TypeToken<List<AccountInfoDTO>>(){}.getType();
-   private static final Type TYPE_MULTISIGACCT_LIST = new TypeToken<List<MultisigAccountGraphInfoDTO>>(){}.getType();
-   private static final Type TYPE_ACCTPROPS_LIST = new TypeToken<List<AccountPropertiesInfoDTO>>(){}.getType();
+   private static final String CONFIRMED_TRANSACTION = "/transactions/confirmed";
+   private static final String UNCONFIRMED_TRANSACTION = "/transactions/unconfirmed";
+   private static final Type TYPE_ACCOUNT_LIST = new TypeToken<List<AccountInfoDTO>>() {
+   }.getType();
+   private static final Type TYPE_MULTISIGACCT_LIST = new TypeToken<List<MultisigAccountGraphInfoDTO>>() {
+   }.getType();
+   private static final Type TYPE_ACCTPROPS_LIST = new TypeToken<List<AccountPropertiesInfoDTO>>() {
+   }.getType();
+   private static final Type TYPE_ACCOUNT_NAMES_LIST=new TypeToken<List<AccountNamesDTO>>(){}.getType();
    
    public AccountHttp(BlockchainApi api) {
       super(api);
@@ -69,18 +74,15 @@ public class AccountHttp extends Http implements AccountRepository {
             .map(AccountInfo::fromDto);
    }
 
-   private List<AccountInfoDTO> toAccountInfo(String json) {
-      return gson.fromJson(json, TYPE_ACCOUNT_LIST);
+   @Override
+   public Observable<AccountInfo> getAccountInfo(PublicAccount publicAccount) {
+      return this.client.get(ROUTE + SLASH + publicAccount.getPublicKey()).map(Http::mapStringOrError)
+            .map(str -> gson.fromJson(str, AccountInfoDTO.class))
+            .map(AccountInfo::fromDto);
    }
-   
-   private List<MultisigAccountGraphInfoDTO> toMultisigAccountInfo(String json) {
-      return gson.fromJson(json, TYPE_MULTISIGACCT_LIST);
-   }
-   
-   private List<AccountPropertiesInfoDTO> toAccountProperties(String json) {
-      return gson.fromJson(json, TYPE_ACCTPROPS_LIST);
-   }
-   
+
+ 
+
    @Override
    public Observable<List<AccountInfo>> getAccountsInfo(List<Address> addresses) {
       // prepare JSON array with addresses
@@ -132,102 +134,183 @@ public class AccountHttp extends Http implements AccountRepository {
             .map(this::toAccountProperties)
             .flatMapIterable(item -> item).map(AccountPropertiesInfoDTO::getAccountProperties)
             .map(AccountProperties::fromDto).toList().toObservable();
-
    }
 
    @Override
-   public Observable<List<Transaction>> transactions(PublicAccount publicAccount) {
-      return this.transactions(publicAccount, Optional.empty());
+   public Observable<List<AccountNames>> getAccountsNames(List<Address> addresses) {
+      // prepare JSON array with addresses
+      JsonArray arr = new JsonArray(addresses.size());
+      addresses.stream().map(Address::plain).forEachOrdered(arr::add);
+
+      JsonObject requestBody = new JsonObject();
+      requestBody.add("addresses", arr);
+      // post to the API
+      return this.client.post(ROUTE + "/names", requestBody).map(Http::mapStringOrError)
+            .map(this::toAccountNames)
+            .flatMapIterable(item -> item)
+            .map(dto -> AccountNames.fromDto(dto))
+            .toList().toObservable();
    }
 
+
    @Override
-   public Observable<List<Transaction>> transactions(PublicAccount publicAccount, QueryParams queryParams) {
+   public Observable<TransactionSearch> transactions(PublicAccount publicAccount) {
+      TransactionQueryParams queryParams = new TransactionQueryParams(null, null, null, null, null,
+            null, null, null,
+            null,
+            publicAccount,
+            null,
+            null);
       return this.transactions(publicAccount, Optional.of(queryParams));
    }
 
-   private Observable<List<Transaction>> transactions(PublicAccount publicAccount, Optional<QueryParams> queryParams) {
-      return this.findTransactions(publicAccount.getPublicKey(), queryParams, "/transactions");
+   @Override
+   public Observable<TransactionSearch> transactions(PublicAccount publicAccount, TransactionQueryParams queryParams) {
+      return this.transactions(publicAccount, Optional.of(queryParams));
+   }
+
+   private Observable<TransactionSearch> transactions(PublicAccount publicAccount,
+         Optional<TransactionQueryParams> queryParams) {
+      return this.findTransactions(publicAccount.getPublicKey(), queryParams, CONFIRMED_TRANSACTION);
    }
 
    @Override
-   public Observable<List<Transaction>> incomingTransactions(PublicAccount publicAccount) {
-      return this.incomingTransactions(publicAccount.getPublicKey(), Optional.empty());
-   }
-
-   @Override
-   public Observable<List<Transaction>> incomingTransactions(PublicAccount publicAccount, QueryParams queryParams) {
+   public Observable<TransactionSearch> incomingTransactions(PublicAccount publicAccount) {
+      TransactionQueryParams queryParams = new TransactionQueryParams(null, null, null, null, null,
+            null, null, null,
+            null,
+            publicAccount,
+            null,
+            null);
       return this.incomingTransactions(publicAccount.getPublicKey(), Optional.of(queryParams));
    }
 
    @Override
-   public Observable<List<Transaction>> incomingTransactions(Address address) {
-      return this.incomingTransactions(address.plain(), Optional.empty());
+   public Observable<TransactionSearch> incomingTransactions(PublicAccount publicAccount,
+         TransactionQueryParams queryParams) {
+      return this.incomingTransactions(publicAccount.getPublicKey(), Optional.of(queryParams));
    }
 
    @Override
-   public Observable<List<Transaction>> incomingTransactions(Address address, QueryParams queryParams) {
+   public Observable<TransactionSearch> incomingTransactions(Address address) {
+      TransactionQueryParams queryParams = new TransactionQueryParams(null, null, null, null, null,
+            null, null, null,
+            null,
+            null,
+            null,
+            address);
       return this.incomingTransactions(address.plain(), Optional.of(queryParams));
    }
-   
-   private Observable<List<Transaction>> incomingTransactions(String accountKey,
-         Optional<QueryParams> queryParams) {
-      return this.findTransactions(accountKey, queryParams, "/transactions/incoming");
+
+   @Override
+   public Observable<TransactionSearch> incomingTransactions(Address address, TransactionQueryParams queryParams) {
+      return this.incomingTransactions(address.plain(), Optional.of(queryParams));
+   }
+
+   private Observable<TransactionSearch> incomingTransactions(String accountKey,
+         Optional<TransactionQueryParams> queryParams) {
+      return this.findTransactions(accountKey, queryParams, CONFIRMED_TRANSACTION);
    }
 
    @Override
-   public Observable<List<Transaction>> outgoingTransactions(PublicAccount publicAccount) {
-      return this.outgoingTransactions(publicAccount, Optional.empty());
-   }
-
-   @Override
-   public Observable<List<Transaction>> outgoingTransactions(PublicAccount publicAccount, QueryParams queryParams) {
+   public Observable<TransactionSearch> outgoingTransactions(PublicAccount publicAccount) {
+      TransactionQueryParams queryParams = new TransactionQueryParams(null, null, null, null, null,
+            null, null, null,
+            null,
+            publicAccount,
+            null,
+            null);
       return this.outgoingTransactions(publicAccount, Optional.of(queryParams));
    }
 
-   private Observable<List<Transaction>> outgoingTransactions(PublicAccount publicAccount,
-         Optional<QueryParams> queryParams) {
-      return this.findTransactions(publicAccount.getPublicKey(), queryParams, "/transactions/outgoing");
+   @Override
+   public Observable<TransactionSearch> outgoingTransactions(PublicAccount publicAccount,
+         TransactionQueryParams queryParams) {
+      return this.outgoingTransactions(publicAccount, Optional.of(queryParams));
+   }
+
+   private Observable<TransactionSearch> outgoingTransactions(PublicAccount publicAccount,
+         Optional<TransactionQueryParams> queryParams) {
+      return this.findTransactions(publicAccount.getPublicKey(), queryParams, CONFIRMED_TRANSACTION);
    }
 
    @Override
    public Observable<List<AggregateTransaction>> aggregateBondedTransactions(PublicAccount publicAccount) {
-      return this.aggregateBondedTransactions(publicAccount, Optional.empty());
+      TransactionQueryParams queryParams = new TransactionQueryParams(null, null, null, null, null,
+            null, null, null,
+            null,
+            null,
+            null,
+            publicAccount.getAddress());
+      return this.aggregateBondedTransactions(publicAccount, Optional.of(queryParams));
    }
 
    @Override
    public Observable<List<AggregateTransaction>> aggregateBondedTransactions(PublicAccount publicAccount,
-         QueryParams queryParams) {
+         TransactionQueryParams queryParams) {
       return this.aggregateBondedTransactions(publicAccount, Optional.of(queryParams));
    }
 
    private Observable<List<AggregateTransaction>> aggregateBondedTransactions(PublicAccount publicAccount,
-         Optional<QueryParams> queryParams) {
-      return this.findTransactions(publicAccount.getPublicKey(), queryParams, "/transactions/partial").flatMapIterable(item -> item)
+         Optional<TransactionQueryParams> queryParams) {
+      return this.findAggregateTransactions(publicAccount.getPublicKey(), queryParams, "/transactions/partial")
+            .flatMapIterable(item -> item)
             .map(item -> (AggregateTransaction) item).toList().toObservable();
    }
 
    @Override
-   public Observable<List<Transaction>> unconfirmedTransactions(PublicAccount publicAccount) {
-      return this.unconfirmedTransactions(publicAccount, Optional.empty());
-   }
-
-   @Override
-   public Observable<List<Transaction>> unconfirmedTransactions(PublicAccount publicAccount, QueryParams queryParams) {
+   public Observable<TransactionSearch> unconfirmedTransactions(PublicAccount publicAccount) {
+      TransactionQueryParams queryParams = new TransactionQueryParams(null, null, null, null, null,
+            null, null, null,
+            null,
+            publicAccount,
+            null,
+            null);
       return this.unconfirmedTransactions(publicAccount, Optional.of(queryParams));
    }
 
-   private Observable<List<Transaction>> unconfirmedTransactions(PublicAccount publicAccount,
-         Optional<QueryParams> queryParams) {
-      return this.findTransactions(publicAccount.getPublicKey(), queryParams, "/transactions/unconfirmed");
+   @Override
+   public Observable<TransactionSearch> unconfirmedTransactions(PublicAccount publicAccount,
+         TransactionQueryParams queryParams) {
+      return this.unconfirmedTransactions(publicAccount, Optional.of(queryParams));
    }
 
-   private Observable<List<Transaction>> findTransactions(String accountKey,
-         Optional<QueryParams> queryParams, String path) {
+   private Observable<TransactionSearch> unconfirmedTransactions(PublicAccount publicAccount,
+         Optional<TransactionQueryParams> queryParams) {
+      return this.findTransactions(publicAccount.getPublicKey(), queryParams, UNCONFIRMED_TRANSACTION);
+   }
+
+   private Observable<TransactionSearch> findTransactions(String accountKey,
+         Optional<TransactionQueryParams> queryParams, String path) {
       return this.client
-            .get(ROUTE + SLASH + accountKey + path + (queryParams.isPresent() ? queryParams.get().toUrl() : ""))
+            .get(path + queryParams.get().toUrl())
             .map(Http::mapStringOrError)
-            .map(str -> stream(new Gson().fromJson(str, JsonArray.class)).map(s -> (JsonObject) s)
-                  .collect(Collectors.toList()))
-            .flatMapIterable(item -> item).map(new TransactionMapping()).toList().toObservable();
+            .map(GsonUtils::mapToJsonObject)
+            .map(new TransactionSearchMapping());
+   }
+
+   private Observable<List<Transaction>> findAggregateTransactions(String accountKey,
+         Optional<TransactionQueryParams> queryParams, String path) {
+      return this.client
+            .get(path + queryParams.get().toUrl())
+            .map(Http::mapStringOrError)
+            .map(GsonUtils::mapToJsonObject)
+            .map(new TransactionAggregateMapping());
+   }
+
+   private List<AccountInfoDTO> toAccountInfo(String json) {
+      return gson.fromJson(json, TYPE_ACCOUNT_LIST);
+   }
+
+   private List<MultisigAccountGraphInfoDTO> toMultisigAccountInfo(String json) {
+      return gson.fromJson(json, TYPE_MULTISIGACCT_LIST);
+   }
+
+   private List<AccountPropertiesInfoDTO> toAccountProperties(String json) {
+      return gson.fromJson(json, TYPE_ACCTPROPS_LIST);
+   }
+
+   private List<AccountNamesDTO> toAccountNames(String json) {
+      return gson.fromJson(json, TYPE_ACCOUNT_NAMES_LIST);
    }
 }

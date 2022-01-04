@@ -22,7 +22,7 @@ import org.apache.commons.lang3.Validate;
 
 import io.proximax.core.crypto.KeyPair;
 import io.proximax.core.crypto.PrivateKey;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.CosignatureSignedTransaction;
 import io.proximax.sdk.model.transaction.CosignatureTransaction;

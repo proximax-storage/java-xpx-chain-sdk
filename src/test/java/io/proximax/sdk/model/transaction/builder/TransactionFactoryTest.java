@@ -12,13 +12,13 @@ import java.math.BigInteger;
 import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.FeeCalculationStrategy;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 
 /**
  * {@link TransactionBuilderFactory} tests
  */
 class TransactionFactoryTest {
-   private static final NetworkType NETWORK_TYPE = NetworkType.MIJIN_TEST;
+   private static final NetworkType NETWORK_TYPE = NetworkType.TEST_NET;
    
    @Test
    void prepareFactory() {

@@ -30,7 +30,7 @@ public class AddressMetadata extends Metadata {
     * @param address the address
     */
    public AddressMetadata(List<Field> fields, Address address) {
-      super(MetadataType.ADDRESS, fields);
+      super(OldMetadataType.ADDRESS, fields);
       this.address = address;
    }
 

@@ -12,6 +12,7 @@ import java.math.BigInteger;
 import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.gen.model.UpgradeDTO;
+import io.proximax.sdk.model.ChainUpgrade.BlockchainUpgrade;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**

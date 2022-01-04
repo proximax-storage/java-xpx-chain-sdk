@@ -14,8 +14,8 @@ import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.model.account.Address;
-import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.model.transaction.HashType;
 import io.proximax.sdk.model.transaction.SecretLockTransaction;
 
@@ -24,7 +24,7 @@ import io.proximax.sdk.model.transaction.SecretLockTransaction;
  */
 class SecretLockTransactionBuilderTest {
 
-   private static final NetworkType NETWORK_TYPE = NetworkType.MIJIN_TEST;
+   private static final NetworkType NETWORK_TYPE = NetworkType.TEST_NET;
 
    private SecretLockTransactionBuilder builder;
 
@@ -38,7 +38,7 @@ class SecretLockTransactionBuilderTest {
    
    @Test
    void test() {
-      Address recipient = new Address("SADD", NETWORK_TYPE);
+      Address recipient = new Address("VDPQS6FBYDN3SD2QJPHUWRYWNHSSOQ2Q35VI7TDP", NETWORK_TYPE);
       String secret = "3fc8ba10229ab5778d05d9c4b7f56676a88bf9295c185acfc0f961db5408cafe";
 
       SecretLockTransaction trans = builder.mosaic(NetworkCurrencyMosaic.TEN).recipient(recipient).duration(BigInteger.ONE).hashType(HashType.SHA3_256).secret(secret).build();
@@ -53,7 +53,7 @@ class SecretLockTransactionBuilderTest {
    
    @Test
    void testConvenienceSecret() {
-      Address recipient = new Address("SADD", NETWORK_TYPE);
+      Address recipient = new Address("VDPQS6FBYDN3SD2QJPHUWRYWNHSSOQ2Q35VI7TDP", NETWORK_TYPE);
       String secret = "3fc8ba10229ab5778d05d9c4b7f56676a88bf9295c185acfc0f961db5408cafe";
 
       SecretLockTransaction trans = builder.mosaic(NetworkCurrencyMosaic.TEN).recipient(recipient).duration(BigInteger.ONE).secret(HashType.SHA3_256, secret).build();

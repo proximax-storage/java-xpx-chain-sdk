@@ -14,21 +14,9 @@
 package io.proximax.sdk.gen.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import io.proximax.sdk.gen.model.AddressMetadataBodyDTO;
-import io.proximax.sdk.gen.model.EntityTypeEnum;
-import io.proximax.sdk.gen.model.MetadataModificationDTO;
-import io.proximax.sdk.gen.model.MetadataTypeEnum;
-import io.proximax.sdk.gen.model.TransactionDTO;
-import io.proximax.sdk.gen.model.UInt64DTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +24,7 @@ import java.util.List;
  * Transaction that addes metadata to account.
  */
 @ApiModel(description = "Transaction that addes metadata to account.")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-09-22T22:57:50.932+02:00[Europe/Prague]")
+@javax.annotation.processing.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-09-22T22:57:50.932+02:00[Europe/Prague]")
 public class AddressMetadataTransactionDTO {
   public static final String SERIALIZED_NAME_SIGNATURE = "signature";
   @SerializedName(SERIALIZED_NAME_SIGNATURE)

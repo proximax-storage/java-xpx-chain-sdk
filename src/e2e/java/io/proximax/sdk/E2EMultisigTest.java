@@ -65,7 +65,11 @@ public class E2EMultisigTest extends E2EBaseTest {
    @AfterAll
    void returnFunds() {
       // send back 10XPX to the seed account from cosig1
-      sendSomeCash(cosig1, seedAccount.getAddress(), 10);
+      sendSomeCash(cosig1, seedAccount.getAddress(), 100);
+      sendSomeCash(cosig2, seedAccount.getAddress(), 100);
+      sendSomeCash(cosig3, seedAccount.getAddress(), 100);
+      sendSomeCash(multisigAccount, seedAccount.getAddress(), 1);
+
    }
 
    @BeforeAll
@@ -75,6 +79,10 @@ public class E2EMultisigTest extends E2EBaseTest {
       signup(cosig1.getAddress());
       signup(cosig2.getAddress());
       signup(cosig3.getAddress());
+      logger.info("cosig1: {}", cosig1);
+      logger.info("cosig2: {}", cosig2);
+      logger.info("cosig3: {}", cosig3);
+
    }
 
    @Test
@@ -86,7 +94,7 @@ public class E2EMultisigTest extends E2EBaseTest {
       // send 1XPX to the to-be-multisig account so we can test transfers later on
       sendSomeCash(seedAccount, multisigAccount.getAddress(), 1);
       // give cosig1 10XPX so he can lock funds for aggregate transactions
-      sendSomeCash(seedAccount, cosig1.getAddress(), 10); // change the account to multisig with 1 of2 cosignatories
+      sendSomeCash(seedAccount, cosig1.getAddress(), 100); // change the account to multisig with 1 of2 cosignatories
       ModifyMultisigAccountTransaction changeToMultisig = transact.multisigModification().minApprovalDelta(1)
             .minRemovalDelta(1).modifications(MultisigCosignatoryModification.add(cosig1.getPublicAccount()),
                   MultisigCosignatoryModification.add(cosig2.getPublicAccount()))
@@ -94,7 +102,8 @@ public class E2EMultisigTest extends E2EBaseTest {
       AggregateTransaction changeToMultisigAggregate = transact.aggregateComplete()
             .innerTransactions(changeToMultisig.toAggregate(multisigAccount.getPublicAccount())).build();
       SignedTransaction signedChangeToMultisig = api
-            .signWithCosigners(changeToMultisigAggregate, multisigAccount, Arrays.asList(cosig1, cosig2));
+                  .signWithCosigners(changeToMultisigAggregate, multisigAccount, Arrays.asList(cosig1, cosig2));
+            
       // announce the transaction
       logger.info("Sent request: {}", transactionHttp.announce(signedChangeToMultisig).toFuture().get());
       // verify that account is multisig
@@ -115,6 +124,7 @@ public class E2EMultisigTest extends E2EBaseTest {
             .innerTransactions(transfer.toAggregate(multisigAccount.getPublicAccount())).build();
       // sign the aggregate transaction
       SignedTransaction signedTransaction = api.sign(aggregateTransaction, cosig1);
+      logger.info("Get Payload: {}", signedTransaction.getPayload());
       // announce the transfer
       logger.info("Announced the aggregate complete transfer from multisig: {}",
             transactionHttp.announce(signedTransaction).blockingFirst());
@@ -223,6 +233,8 @@ public class E2EMultisigTest extends E2EBaseTest {
 
    @Test
    void test02TransferFromMultisig2Of2AggregateBondedSeparateConfirmation() {
+         sendSomeCash(seedAccount, cosig2.getAddress(), 100); // change the account to multisig with 1 of2 cosignatories
+
       // prepare transfer to the seed account
       TransferTransaction transfer = transact.transfer()
             .mosaics(NetworkCurrencyMosaic.createAbsolute(BigInteger.valueOf(1))).to(seedAccount.getAddress()).build();
@@ -256,6 +268,8 @@ public class E2EMultisigTest extends E2EBaseTest {
 
    @Test
    void test03AddCosignatory() throws InterruptedException, ExecutionException {
+         sendSomeCash(seedAccount, cosig3.getAddress(), 100);
+
       logger.info("Going to add third cosignatory");
       // create multisig modification
       ModifyMultisigAccountTransaction addCosig3 = transact.multisigModification()

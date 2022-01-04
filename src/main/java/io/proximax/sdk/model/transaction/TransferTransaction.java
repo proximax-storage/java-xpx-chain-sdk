@@ -28,8 +28,8 @@ import io.proximax.sdk.gen.buffers.MessageBuffer;
 import io.proximax.sdk.gen.buffers.MosaicBuffer;
 import io.proximax.sdk.gen.buffers.TransferTransactionBuffer;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.Mosaic;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**

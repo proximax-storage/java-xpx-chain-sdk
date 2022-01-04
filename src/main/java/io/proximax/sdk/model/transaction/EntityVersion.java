@@ -118,6 +118,35 @@ public enum EntityVersion {
    MODIFY_CONTRACT(3),
    
    /**
+     * modify account metadata v2 transactions version
+     */
+   ACCOUNT_METADATA_V2(1),
+
+   /**
+    * Modify mosaic metadata v2 transactions version
+    * 
+    */
+   MOSAIC_METADATA_V2(1),
+
+   /**
+    * modify namespace metadata v2 transactions version
+    * 
+    */
+   NAMESPACE_METADATA_V2(1),
+
+   /**
+    * modify mosaic modify levy transactions version
+    * 
+    */
+   MODIFY_MOSAIC_LEVY(1),
+
+   /**
+    * modify remove mosaic levy transactions version
+    * 
+    */
+   REMOVE_MOSAIC_LEVY(1),
+
+   /**
     * Blockchain configuration change transaction
     */
    BLOCKCHAIN_CONFIG(1),

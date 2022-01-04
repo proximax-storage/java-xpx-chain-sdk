@@ -17,7 +17,7 @@ import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.model.transaction.ModifyContractTransaction;
 import io.proximax.sdk.model.transaction.MultisigCosignatoryModification;
 
@@ -26,7 +26,7 @@ import io.proximax.sdk.model.transaction.MultisigCosignatoryModification;
  */
 class ModifyContractTransactionBuilderTest {
    
-   private static final NetworkType NETWORK_TYPE = NetworkType.MIJIN_TEST;
+   private static final NetworkType NETWORK_TYPE = NetworkType.TEST_NET;
 
    private ModifyContractTransactionBuilder builder;
    

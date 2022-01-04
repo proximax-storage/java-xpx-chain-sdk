@@ -1,0 +1,22 @@
+namespace io.proximax.sdk.gen.buffers;
+
+table MosaicLevyBuffer {
+	type: ubyte;
+	recipient: [ubyte];
+	mosaicId:[uint];
+	fee: [uint];
+}
+
+table ModifyMosaicLevyTransactionBuffer {
+	size: uint;
+	signature: [ubyte];
+	signer: [ubyte];
+	version: uint;
+	type: ushort;
+	maxFee: [uint];
+	deadline:[uint];
+	mosaicId:[uint];
+	levy:MosaicLevyBuffer;
+}
+
+root_type ModifyMosaicLevyTransactionBuffer;

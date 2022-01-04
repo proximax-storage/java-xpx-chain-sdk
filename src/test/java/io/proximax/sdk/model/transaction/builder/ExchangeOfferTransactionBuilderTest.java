@@ -15,10 +15,10 @@ import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.exchange.ExchangeOffer;
 import io.proximax.sdk.model.exchange.ExchangeOfferType;
 import io.proximax.sdk.model.mosaic.MosaicId;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.model.transaction.ExchangeOfferTransaction;
 
 /**
@@ -26,7 +26,7 @@ import io.proximax.sdk.model.transaction.ExchangeOfferTransaction;
  */
 class ExchangeOfferTransactionBuilderTest {
 
-   private static final NetworkType NETWORK_TYPE = NetworkType.MIJIN_TEST;
+   private static final NetworkType NETWORK_TYPE = NetworkType.TEST_NET;
    private static final MosaicId MOSAIC_ID = new MosaicId(BigInteger.valueOf(1234567890l));
 
    private ExchangeOfferTransactionBuilder builder;
@@ -44,7 +44,7 @@ class ExchangeOfferTransactionBuilderTest {
       BigInteger cost = BigInteger.ONE;
       ExchangeOfferType type = ExchangeOfferType.SELL;
       PublicAccount owner = new PublicAccount("ABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFABABCDEFAB",
-            NetworkType.MIJIN);
+            NetworkType.TEST_NET);
       
       ExchangeOffer offer = new ExchangeOffer(MOSAIC_ID, amount, cost, type, owner);
       

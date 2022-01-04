@@ -16,9 +16,9 @@ import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.model.account.Address;
-import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.namespace.NamespaceId;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.model.transaction.AliasTransaction;
 
 /**
@@ -26,7 +26,7 @@ import io.proximax.sdk.model.transaction.AliasTransaction;
  */
 class AliasTransactionBuilderTest {
 
-   private static final NetworkType NETWORK_TYPE = NetworkType.MIJIN_TEST;
+   private static final NetworkType NETWORK_TYPE = NetworkType.TEST_NET;
 
    private AliasTransactionBuilder addressBuilder;
    private AliasTransactionBuilder mosaicBuilder;
@@ -58,7 +58,7 @@ class AliasTransactionBuilderTest {
 
    @Test
    void testLinkAddress() {
-      Address addr = new Address("SADD", NETWORK_TYPE);
+      Address addr = new Address("VCZGEQBIOSJMWW3VWMVL4PLMZNTMSOII246PIH6Z", NETWORK_TYPE);
       NamespaceId nsid = new NamespaceId("test.namespace");
       
       AliasTransaction trans = addressBuilder.link(addr).namespaceId(nsid).build();
@@ -80,7 +80,7 @@ class AliasTransactionBuilderTest {
 
    @Test
    void testUnlinkAddress() {
-      Address addr = new Address("SADD", NETWORK_TYPE);
+      Address addr = new Address("VCZGEQBIOSJMWW3VWMVL4PLMZNTMSOII246PIH6Z", NETWORK_TYPE);
       NamespaceId nsid = new NamespaceId("test.namespace");
       
       AliasTransaction trans = addressBuilder.unlink(addr).namespaceId(nsid).build();
@@ -92,7 +92,7 @@ class AliasTransactionBuilderTest {
    @Test
    void testTypeValidation() {
       MosaicId mosid = new MosaicId(BigInteger.valueOf(123456789));
-      Address addr = new Address("SADD", NETWORK_TYPE);
+      Address addr = new Address("VCZGEQBIOSJMWW3VWMVL4PLMZNTMSOII246PIH6Z", NETWORK_TYPE);
       NamespaceId nsid = new NamespaceId("test.namespace");
       
       assertThrows(IllegalArgumentException.class, () -> addressBuilder.mosaicId(mosid).namespaceId(nsid).build());

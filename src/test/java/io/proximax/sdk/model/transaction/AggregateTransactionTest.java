@@ -40,10 +40,10 @@ import io.proximax.sdk.infrastructure.TransactionMapping;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.Mosaic;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.model.transaction.builder.TransactionBuilderFactory;
 import io.proximax.sdk.utils.GsonUtils;
 
@@ -52,19 +52,19 @@ public class AggregateTransactionTest extends ResourceBasedTest {
    @Test
    void createAAggregateTransactionViaStaticConstructor() {
 
-      TransferTransaction transferTx = new TransferTransaction(NetworkType.MIJIN_TEST, 3,
+      TransferTransaction transferTx = new TransferTransaction(NetworkType.TEST_NET, 3,
             new Deadline(2, ChronoUnit.HOURS), BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
-            Recipient.from(new Address("SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.MIJIN_TEST)),
+            Recipient.from(new Address("VCZGEQ-BIOSJM-WW3VWM-VL4PLM-ZNTMSO-II246P-IH6Z", NetworkType.TEST_NET)),
             Collections.emptyList(), PlainMessage.EMPTY);
 
-      PublicAccount innerSigner = new PublicAccount("9A49366406ACA952B88BADF5F1E9BE6CE4968141035A60BE503273EA65456B24",
-            NetworkType.MIJIN_TEST);
+      PublicAccount innerSigner = new PublicAccount("F06FE22FBA1E116B8F0E673BA4EE424B16BD6EA7548ED259F3DCEBF8D74C49B9",
+            NetworkType.TEST_NET);
 
       AggregateTransaction aggregateTx = new TransactionBuilderFactory().aggregateComplete()
             .innerTransactions(transferTx.toAggregate(innerSigner)).deadline(new Deadline(2, ChronoUnit.HOURS))
-            .networkType(NetworkType.MIJIN_TEST).build();
+            .networkType(NetworkType.TEST_NET).build();
 
-      assertEquals(NetworkType.MIJIN_TEST, aggregateTx.getNetworkType());
+      assertEquals(NetworkType.TEST_NET, aggregateTx.getNetworkType());
       assertEquals(3, aggregateTx.getVersion());
       long nowSinceNemesis = new Deadline(0, ChronoUnit.SECONDS).getInstant();
       assertTrue(nowSinceNemesis < aggregateTx.getDeadline().getInstant());
@@ -74,17 +74,17 @@ public class AggregateTransactionTest extends ResourceBasedTest {
 
    @Test
    void serialization() throws IOException {
-      TransferTransaction transferTx = new TransferTransaction(NetworkType.MIJIN_TEST, 3, new FakeDeadline(),
+      TransferTransaction transferTx = new TransferTransaction(NetworkType.TEST_NET, 3, new FakeDeadline(),
             BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
-            Recipient.from(new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST)),
+            Recipient.from(new Address("VCZGEQBIOSJMWW3VWMVL4PLMZNTMSOII246PIH6Z", NetworkType.TEST_NET)),
             Collections.singletonList(new Mosaic(NetworkCurrencyMosaic.ID, BigInteger.valueOf(10000000))),
             PlainMessage.EMPTY);
 
-      PublicAccount innerSigner = new PublicAccount("846B4439154579A5903B1459C9CF69CB8153F6D0110A7A0ED61DE29AE4810BF2",
-            NetworkType.MIJIN_TEST);
+      PublicAccount innerSigner = new PublicAccount("F06FE22FBA1E116B8F0E673BA4EE424B16BD6EA7548ED259F3DCEBF8D74C49B9",
+            NetworkType.TEST_NET);
       AggregateTransaction aggregateTx = new TransactionBuilderFactory().aggregateComplete()
             .innerTransactions(transferTx.toAggregate(innerSigner)).deadline(new FakeDeadline())
-            .networkType(NetworkType.MIJIN_TEST).build();
+            .networkType(NetworkType.TEST_NET).build();
 
       byte[] actual = aggregateTx.generateBytes();
 //      saveBytes("aggregate_trans", actual);
@@ -93,24 +93,24 @@ public class AggregateTransactionTest extends ResourceBasedTest {
 
    @Test
    void shouldCreateAggregateTransactionAndSignWithMultipleCosignatories() {
-      TransferTransaction transferTx = new TransferTransaction(NetworkType.MIJIN_TEST, 3, new FakeDeadline(),
+      TransferTransaction transferTx = new TransferTransaction(NetworkType.TEST_NET, 3, new FakeDeadline(),
             BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
-            Recipient.from(new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST)),
+            Recipient.from(new Address("VB6K3ABE44ZQ4UU2SQEJ2MONQKANV4ZXW66Q5HT3", NetworkType.TEST_NET)),
             Arrays.asList(), new PlainMessage("test-message"));
 
-      PublicAccount innerSigner = new PublicAccount("B694186EE4AB0558CA4AFCFDD43B42114AE71094F5A1FC4A913FE9971CACD21D",
-            NetworkType.MIJIN_TEST);
+      PublicAccount innerSigner = new PublicAccount("F06FE22FBA1E116B8F0E673BA4EE424B16BD6EA7548ED259F3DCEBF8D74C49B9",
+            NetworkType.TEST_NET);
       AggregateTransaction aggregateTx = new TransactionBuilderFactory().aggregateComplete()
             .innerTransactions(transferTx.toAggregate(innerSigner)).deadline(new FakeDeadline())
-            .networkType(NetworkType.MIJIN_TEST).build();
+            .networkType(NetworkType.TEST_NET).build();
 
-      Account cosignatoryAccount = new Account("2a2b1f5d366a5dd5dc56c3c757cf4fe6c66e2787087692cf329d7a49a594658b",
-            NetworkType.MIJIN_TEST);
-      Account cosignatoryAccount2 = new Account("b8afae6f4ad13a1b8aad047b488e0738a437c7389d4ff30c359ac068910c1d59",
-            NetworkType.MIJIN_TEST);
+      Account cosignatoryAccount = new Account("1253749245020f997e1a5e43ad3edaf45a8fc36a1103ac894c48bdfabcd2ea40",
+            NetworkType.TEST_NET);
+      Account cosignatoryAccount2 = new Account("b972e62b4f49de3b1ce68443ad1f33824889c254d50bee9edb1c05791396d635",
+            NetworkType.TEST_NET);
 
       SignedTransaction signedTransaction = cosignatoryAccount.signTransactionWithCosignatories(aggregateTx,
-            "7B631D803F912B00DC0CBED3014BBD17A302BA50B99D233B9C2D9533B842ABDF",
+            "AC87FDA8FD94B72F3D0790A7D62F248111BD5E37B95B16E4216DA99C212530A5",
             Arrays.asList(cosignatoryAccount2));
 
       assertEquals("31010000", signedTransaction.getPayload().substring(0, 8));
@@ -122,17 +122,17 @@ public class AggregateTransactionTest extends ResourceBasedTest {
 
    @Test
    void serializeAggregateWithCosigners() throws IOException {
-      NetworkType netType = NetworkType.MIJIN_TEST;
+      NetworkType netType = NetworkType.TEST_NET;
       TransactionBuilderFactory fac = new TransactionBuilderFactory();
       fac.setFeeCalculationStrategy(FeeCalculationStrategy.MEDIUM);
       fac.setNetworkType(netType);
 
-      Account alice = Account.createFromPrivateKey("28FCECEA252231D2C86E1BCF7DD541552BDBBEFBB09324758B3AC199B4AA7B78",
+      Account alice = Account.createFromPrivateKey("4b43e9897409e8b010806985fe8c00b2f5b3148c62aa1efe703d6061fa0761bf",
             netType);
-      Account bob = Account.createFromPrivateKey("75CFAB0E6079DAA58D7FF0990ACA64E571EC58527A16DB9391C87C436261190C",
+      Account bob = Account.createFromPrivateKey("1253749245020f997e1a5e43ad3edaf45a8fc36a1103ac894c48bdfabcd2ea40",
             netType);
       Mosaic amount = new Mosaic(new MosaicId("0dc67fbe1cad29e3"), BigInteger.valueOf(1000));
-      String gen_hash = "7B631D803F912B00DC0CBED3014BBD17A302BA50B99D233B9C2D9533B842ABDF";
+      String gen_hash = "AC87FDA8FD94B72F3D0790A7D62F248111BD5E37B95B16E4216DA99C212530A5";
 
       AggregateTransaction aggregateTx = fac.aggregateComplete().innerTransactions(
             fac.transfer().mosaics(amount).to(alice).signer(bob).deadline(new FakeDeadline()).build(),
@@ -152,16 +152,16 @@ public class AggregateTransactionTest extends ResourceBasedTest {
 
    @Test
    void checkCopyToSigner() {
-      TransferTransaction transferTx = new TransferTransaction(NetworkType.MIJIN_TEST, 3, new FakeDeadline(),
+      TransferTransaction transferTx = new TransferTransaction(NetworkType.TEST_NET, 3, new FakeDeadline(),
             BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(),
-            Recipient.from(new Address("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", NetworkType.MIJIN_TEST)),
+            Recipient.from(new Address("VAUFFX5Q4YXDBHGRJQPUK7QXGNSNFJETVBHNASLR", NetworkType.TEST_NET)),
             Arrays.asList(), new PlainMessage("test-message"));
 
-      PublicAccount innerSigner = new PublicAccount("B694186EE4AB0558CA4AFCFDD43B42114AE71094F5A1FC4A913FE9971CACD21D",
-            NetworkType.MIJIN_TEST);
+      PublicAccount innerSigner = new PublicAccount("39468C1395B9A315A7306AFB3066A3BF1BA593D1C349E83BC7F0B7DF521B5BA5",
+            NetworkType.TEST_NET);
       AggregateTransaction aggregateTx = new TransactionBuilderFactory().aggregateComplete()
             .innerTransactions(transferTx.toAggregate(innerSigner)).deadline(new FakeDeadline())
-            .networkType(NetworkType.MIJIN_TEST).build();
+            .networkType(NetworkType.TEST_NET).build();
 
       assertThrows(UnsupportedOperationException.class, () -> aggregateTx.copyForSigner(innerSigner));
    }
@@ -170,20 +170,20 @@ public class AggregateTransactionTest extends ResourceBasedTest {
    @Disabled
    void shouldFindAccountInAsASignerOfTheTransaction() {
       JsonObject aggregateTransferTransactionDTO = GsonUtils.mapToJsonObject(
-            "{\"meta\":{\"hash\":\"671653C94E2254F2A23EFEDB15D67C38332AED1FBD24B063C0A8E675582B6A96\",\"height\":[18160,0],\"id\":\"5A0069D83F17CF0001777E55\",\"index\":0,\"merkleComponentHash\":\"81E5E7AE49998802DABC816EC10158D3A7879702FF29084C2C992CD1289877A7\"},\"transaction\":{\"cosignatures\":[{\"signature\":\"5780C8DF9D46BA2BCF029DCC5D3BF55FE1CB5BE7ABCF30387C4637DDEDFC2152703CA0AD95F21BB9B942F3CC52FCFC2064C7B84CF60D1A9E69195F1943156C07\",\"signer\":\"A5F82EC8EBB341427B6785C8111906CD0DF18838FB11B51CE0E18B5E79DFF630\"}],\"deadline\":[3266625578,11],\"fee\":[0,0],\"signature\":\"939673209A13FF82397578D22CC96EB8516A6760C894D9B7535E3A1E068007B9255CFA9A914C97142A7AE18533E381C846B69D2AE0D60D1DC8A55AD120E2B606\",\"signer\":\"7681ED5023141D9CDCF184E5A7B60B7D466739918ED5DA30F7E71EA7B86EFF2D\",\"transactions\":[{\"meta\":{\"aggregateHash\":\"3D28C804EDD07D5A728E5C5FFEC01AB07AFA5766AE6997B38526D36015A4D006\",\"aggregateId\":\"5A0069D83F17CF0001777E55\",\"height\":[18160,0],\"id\":\"5A0069D83F17CF0001777E56\",\"index\":0},\"transaction\":{\"message\":{\"payload\":\"746573742D6D657373616765\",\"type\":0},\"mosaics\":[{\"amount\":[3863990592,95248],\"id\":[3646934825,3576016193]}],\"recipient\":\"9050B9837EFAB4BBE8A4B9BB32D812F9885C00D8FC1650E142\",\"signer\":\"B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF\",\"type\":16724,\"version\":36867}}],\"type\":16705,\"version\":36867}}");
+                  "{\"meta\":{\"height\":[130996,0],\"hash\":\"1E9BD8D5D13D85466555D799298A397CF1399AA6389363027BEBA97604212B2A\",\"merkleComponentHash\":\"1E9BD8D5D13D85466555D799298A397CF1399AA6389363027BEBA97604212B2A\",\"index\":0,\"id\":\"6191E454A4E1A152670C2653\"},\"transaction\":{\"signature\":\"2EEF3260F5202074867629EE761295217F5FC3FB1AC3E201F3E2F7FFD54F0B2D2BB02A41B2E6BDD03E4F05F011E7ECE30C1D3D4CBC0B7BD83E11E55FAC97D906\",\"signer\":\"42B85DF37E6349B20E48F82ADA20F53E0EED60FA190CDAC792A8E1C02EFEFB85\",\"version\":2818572290,\"type\":16705,\"maxFee\":[0,0],\"deadline\":[1392261397,41],\"cosignatures\":[],\"transactions\":[{\"meta\":{\"height\":[130996,0],\"aggregateHash\":\"1E9BD8D5D13D85466555D799298A397CF1399AA6389363027BEBA97604212B2A\",\"uniqueAggregateHash\":\"86C47C9D2CF804EF8B910B7AEF5E81F12F8503BF84CD11243941E4913409216F\",\"aggregateId\":\"6191E454A4E1A152670C2653\",\"index\":0,\"id\":\"6191E454A4E1A152670C2654\"},\"transaction\":{\"signer\":\"42B85DF37E6349B20E48F82ADA20F53E0EED60FA190CDAC792A8E1C02EFEFB85\",\"version\":2818572291,\"type\":16724,\"recipient\":\"A8EAB19AB426757D083D0656EA9EBEA2B8378A073D8E2AFFB3\",\"message\":{\"type\":0,\"payload\":\"746573742D6D657373616765\"},\"mosaics\":[{\"id\":[2434186742,3220914849],\"amount\":[1000000000,0]}]}}]}}");
 
       AggregateTransaction aggregateTransferTransaction = (AggregateTransaction) new TransactionMapping()
             .apply(aggregateTransferTransactionDTO);
 
       assertTrue(aggregateTransferTransaction.isSignedByAccount(
-            PublicAccount.createFromPublicKey("A5F82EC8EBB341427B6785C8111906CD0DF18838FB11B51CE0E18B5E79DFF630",
-                  NetworkType.MIJIN_TEST)));
+            PublicAccount.createFromPublicKey("42B85DF37E6349B20E48F82ADA20F53E0EED60FA190CDAC792A8E1C02EFEFB85",
+                  NetworkType.TEST_NET)));
       assertTrue(aggregateTransferTransaction.isSignedByAccount(
-            PublicAccount.createFromPublicKey("7681ED5023141D9CDCF184E5A7B60B7D466739918ED5DA30F7E71EA7B86EFF2D",
-                  NetworkType.MIJIN_TEST)));
+            PublicAccount.createFromPublicKey("42B85DF37E6349B20E48F82ADA20F53E0EED60FA190CDAC792A8E1C02EFEFB85",
+                  NetworkType.TEST_NET)));
       assertFalse(aggregateTransferTransaction.isSignedByAccount(
-            PublicAccount.createFromPublicKey("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF",
-                  NetworkType.MIJIN_TEST)));
+            PublicAccount.createFromPublicKey("42B85DF37E6349B20E48F82ADA20F53E0EED60FA190CDAC792A8E1C02EFEFB85",
+                  NetworkType.TEST_NET)));
 
    }
 }

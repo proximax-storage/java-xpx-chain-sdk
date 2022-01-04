@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.model.account.Account;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.model.transaction.DeadlineRaw;
 import io.proximax.sdk.model.transaction.Recipient;
 import io.proximax.sdk.model.transaction.TransactionInfo;
@@ -30,7 +30,7 @@ import io.proximax.sdk.model.transaction.TransferTransaction;
  */
 class TransactionBuilderTest {
 
-   private static final NetworkType NETWORK_TYPE = NetworkType.MIJIN_TEST;
+   private static final NetworkType NETWORK_TYPE = NetworkType.TEST_NET;
 
    private TransferTransactionBuilder builder;
 
@@ -58,7 +58,7 @@ class TransactionBuilderTest {
             .transactionInfo(transInfo)
             .build();
       // check transaction
-      assertEquals(NetworkType.MIJIN_TEST, trans.getNetworkType());
+      assertEquals(NetworkType.TEST_NET, trans.getNetworkType());
       // type of result will be different from the specified
       assertEquals(EntityType.TRANSFER, trans.getType());
       assertEquals(EntityType.ACCOUNT_LINK, builder.getType());

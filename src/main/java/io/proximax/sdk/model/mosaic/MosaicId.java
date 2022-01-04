@@ -20,6 +20,7 @@ import java.math.BigInteger;
 import java.util.Objects;
 import java.util.Optional;
 
+import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.transaction.IdGenerator;
 import io.proximax.sdk.model.transaction.UInt64Id;
 import io.proximax.sdk.utils.dto.UInt64Utils;
@@ -39,8 +40,8 @@ public class MosaicId implements UInt64Id {
     * @param nonce random integer
     * @param ownerPublicKeyHex hexadecimal representation of owner's public key
     */
-   public MosaicId(MosaicNonce nonce, String ownerPublicKeyHex) {
-      this.id = IdGenerator.generateMosaicId(nonce.getNonceAsInt(), ownerPublicKeyHex);
+   public MosaicId(MosaicNonce nonce, PublicAccount ownerPublicKeyHex) {
+      this.id = IdGenerator.generateMosaicId(nonce.getNonceAsInt(), ownerPublicKeyHex.getPublicKey());
       this.nonce = Optional.of(nonce);
    }
 
@@ -53,6 +54,7 @@ public class MosaicId implements UInt64Id {
       if (!hex.matches("^[0-9A-Fa-f]{16}$")) {
          throw new IllegalIdentifierException("invalid hex string " + hex);
       }
+      
       this.id = new BigInteger(hex, 16);
       this.nonce = Optional.empty();
    }

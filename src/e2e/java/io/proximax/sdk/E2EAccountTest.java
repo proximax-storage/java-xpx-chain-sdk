@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -33,9 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.gen.model.UInt64DTO;
-import io.proximax.sdk.infrastructure.QueryParams;
 import io.proximax.sdk.model.account.Account;
-import io.proximax.sdk.model.account.AccountInfo;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.props.AccountProperties;
 import io.proximax.sdk.model.account.props.AccountProperty;
@@ -47,7 +44,6 @@ import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.namespace.NamespaceInfo;
 import io.proximax.sdk.model.transaction.EntityType;
 import io.proximax.sdk.model.transaction.ModifyAccountPropertyTransaction;
-import io.proximax.sdk.model.transaction.Transaction;
 import io.proximax.sdk.model.transaction.UInt64Id;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
@@ -150,7 +146,7 @@ class E2EAccountTest extends E2EBaseTest {
    private void testAccountProperties(AccountProperties aps, Address blockedAddress) {
       boolean gotMatch = false;
       for (AccountProperty ap : aps.getProperties()) {
-         if (ap.getPropertyType().equals(AccountPropertyType.BLOCK_ADDRESS)) {
+         if (ap.getPropertyType().equals(AccountPropertyType.ALLOW_ADDRESS)) {
             for (Object value : ap.getValues()) {
                // value should be string and should represent encoded address of the blocked account
                if (value instanceof String && blockedAddress.equals(Address.createFromEncoded((String) value))) {
@@ -237,85 +233,5 @@ class E2EAccountTest extends E2EBaseTest {
       }
    }
 
-   @Test
-   void getAccountInfo() throws ExecutionException, InterruptedException {
-      AccountInfo accountInfo = accountHttp.getAccountInfo(simpleAccount.getAddress()).toFuture().get();
 
-      assertEquals(simpleAccount.getPublicKey(), accountInfo.getPublicKey());
-   }
-
-   @Test
-   void getAccountsInfo() {
-      List<String> accountKeys = accountHttp
-            .getAccountsInfo(Arrays.asList(simpleAccount.getAddress(), seedAccount.getAddress()))
-            .flatMapIterable(list -> list).map(AccountInfo::getPublicKey).toList().blockingGet();
-
-      assertEquals(2, accountKeys.size());
-      assertTrue(accountKeys.contains(simpleAccount.getPublicKey()));
-      assertTrue(accountKeys.contains(seedAccount.getPublicKey()));
-   }
-
-   @Test
-   void transactions() throws ExecutionException, InterruptedException {
-      List<Transaction> transactions = accountHttp.transactions(simpleAccount.getPublicAccount()).toFuture().get();
-
-      assertEquals(2, transactions.size());
-   }
-
-   @Test
-   void transactionsWithPagination() throws ExecutionException, InterruptedException {
-      // get list of transactions
-      List<Transaction> transactions = accountHttp.transactions(simpleAccount.getPublicAccount()).toFuture().get();
-      // there should be 2 as we did transfer to and from the account previously
-      assertEquals(2, transactions.size());
-      // now make another request for page size 1 and start after first transaction ID in the list
-      List<Transaction> nextTransactions = accountHttp.transactions(simpleAccount.getPublicAccount(),
-            new QueryParams(10, transactions.get(0).getTransactionInfo().get().getId().get())).toFuture().get();
-      // the result should be page with one item which is the second transaction
-      assertEquals(1, nextTransactions.size());
-      assertEquals(transactions.get(1).getTransactionInfo().get().getHash(),
-            nextTransactions.get(0).getTransactionInfo().get().getHash());
-      // now try another request and start after second item which is last
-      List<Transaction> noTransactions = accountHttp.transactions(simpleAccount.getPublicAccount(),
-            new QueryParams(10, transactions.get(1).getTransactionInfo().get().getId().get())).toFuture().get();
-      // the result should be page with no items because we skipped both transactions
-      assertEquals(0, noTransactions.size());
-
-   }
-
-   @Test
-   void incomingTransactions() throws ExecutionException, InterruptedException {
-      List<Transaction> transactions = accountHttp.incomingTransactions(simpleAccount.getPublicAccount()).toFuture()
-            .get();
-      List<Transaction> transactionsByAddr = accountHttp
-            .incomingTransactions(simpleAccount.getPublicAccount().getAddress()).toFuture().get();
-
-      assertEquals(1, transactions.size());
-      assertEquals(1, transactionsByAddr.size());
-      assertEquals(transactions.get(0).getSignature(), transactionsByAddr.get(0).getSignature());
-   }
-
-   @Test
-   void outgoingTransactions() throws ExecutionException, InterruptedException {
-      List<Transaction> transactions = accountHttp.outgoingTransactions(simpleAccount.getPublicAccount()).toFuture()
-            .get();
-
-      assertEquals(1, transactions.size());
-   }
-
-   @Test
-   void unconfirmedTransactions() throws ExecutionException, InterruptedException {
-      sleepForAWhile();
-      List<Transaction> transactions = accountHttp.unconfirmedTransactions(simpleAccount.getPublicAccount()).toFuture()
-            .get();
-
-      assertEquals(0, transactions.size());
-   }
-
-   @Test
-   void throwExceptionWhenBlockDoesNotExists() {
-      accountHttp.getAccountInfo(Address.createFromRawAddress("SARDGFTDLLCB67D4HPGIMIHPNSRYRJRT7DOBGWZY"))
-//                .subscribeOn(Schedulers.single())
-            .test().awaitDone(2, TimeUnit.SECONDS).assertFailure(RuntimeException.class);
-   }
 }
