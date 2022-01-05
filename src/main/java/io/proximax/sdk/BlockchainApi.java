@@ -159,23 +159,8 @@ public class BlockchainApi {
    public ConfigRepository createConfigRepository() {
       return new ConfigHttp(this);
    }
-   /**
-    * create network repository
-    * 
-    * @return the network repository
-    */
-   public NetworkRepository createNetworkRepository() {
-      return new NetworkHttp(this);
-   }
-
-   /**
-    * create node repository
-    * 
-    * @return the node repository
-    */
-   public NodeRepository createNodeRepository() {
-      return new NodeHttp(this);
-   }
+   
+  
    /**
     * create contract repository
     * 
@@ -229,6 +214,23 @@ public class BlockchainApi {
       return new NamespaceHttp(this);
    }
 
+   /**
+    * create network repository
+    * 
+    * @return the network repository
+    */
+   public NetworkRepository createNetworkRepository() {
+      return new NetworkHttp(this);
+   }
+
+   /**
+    * create node repository
+    * 
+    * @return the node repository
+    */
+   public NodeRepository createNodeRepository() {
+      return new NodeHttp(this);
+   }
    /**
     * create transaction repository
     * 

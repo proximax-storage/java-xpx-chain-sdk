@@ -20,6 +20,7 @@ import java.math.BigInteger;
 import java.util.Objects;
 import java.util.Optional;
 
+import io.proximax.sdk.model.mosaic.IllegalIdentifierException;
 import io.proximax.sdk.model.transaction.IdGenerator;
 import io.proximax.sdk.model.transaction.UInt64Id;
 import io.proximax.sdk.utils.dto.UInt64Utils;
@@ -38,11 +39,11 @@ public class NamespaceId implements UInt64Id {
     *
     * @param id string representing domain levels
     */
-   public NamespaceId(String id) {
-      this.id = IdGenerator.generateNamespaceId(id);
-      this.fullName = Optional.of(id);
+   public NamespaceId(String namespaceName) {
+      this.id = IdGenerator.generateNamespaceId(namespaceName);
+      this.fullName = Optional.of(namespaceName);
    }
-
+  
    /**
     * Create NamespaceId from biginteger id
     *
