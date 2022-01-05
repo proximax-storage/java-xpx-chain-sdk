@@ -21,11 +21,11 @@ import java.util.List;
 
 import io.proximax.sdk.infrastructure.TransactionQueryParams;
 import io.proximax.sdk.model.blockchain.BlockInfo;
-import io.proximax.sdk.model.blockchain.BlockchainConfig;
 import io.proximax.sdk.model.blockchain.BlockchainStorageInfo;
 import io.proximax.sdk.model.blockchain.BlocksLimit;
 import io.proximax.sdk.model.blockchain.MerklePath;
 import io.proximax.sdk.model.blockchain.Receipts;
+import io.proximax.sdk.model.config.BlockchainConfig;
 import io.proximax.sdk.model.transaction.Transaction;
 import io.proximax.sdk.model.transaction.TransactionSearch;
 import io.reactivex.Observable;
@@ -105,13 +105,6 @@ public interface BlockchainRepository {
      */
     Observable<List<BlockInfo>> getBlocksByHeightWithLimit(BigInteger height, BlocksLimit limit);
     
-    /**
-     * retrieve network configuration
-     * 
-     * @param height the block height at which retrieved configuration was/is valid
-     * @return network configuration at give height
-     */
-    Observable<BlockchainConfig> getBlockchainConfiguration(BigInteger height);
     
  
 

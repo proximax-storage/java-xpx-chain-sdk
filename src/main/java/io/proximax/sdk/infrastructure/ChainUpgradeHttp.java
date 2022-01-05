@@ -5,7 +5,7 @@ import java.math.BigInteger;
 import io.proximax.sdk.BlockchainApi;
 import io.proximax.sdk.ChainUpgradeRepository;
 import io.proximax.sdk.gen.model.BlockchainUpgradeDTO;
-import io.proximax.sdk.model.ChainUpgrade.BlockchainUpgrade;
+import io.proximax.sdk.model.chainUpgrade.BlockchainUpgrade;
 import io.reactivex.Observable;
 
 public class ChainUpgradeHttp extends Http implements ChainUpgradeRepository{

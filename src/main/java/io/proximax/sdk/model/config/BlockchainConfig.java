@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0
  * license that can be found in the LICENSE file.
  */
-package io.proximax.sdk.model.blockchain;
+package io.proximax.sdk.model.config;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

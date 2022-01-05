@@ -28,10 +28,8 @@ import io.proximax.sdk.BlockchainRepository;
 import io.proximax.sdk.gen.model.BlockInfoDTO;
 import io.proximax.sdk.gen.model.MerkleProofInfo;
 import io.proximax.sdk.gen.model.MerkleProofInfoDTO;
-import io.proximax.sdk.gen.model.NetworkConfigDTO;
 import io.proximax.sdk.gen.model.StorageInfoDTO;
 import io.proximax.sdk.model.blockchain.BlockInfo;
-import io.proximax.sdk.model.blockchain.BlockchainConfig;
 import io.proximax.sdk.model.blockchain.BlockchainStorageInfo;
 import io.proximax.sdk.model.blockchain.BlocksLimit;
 import io.proximax.sdk.model.blockchain.MerklePath;
@@ -47,7 +45,6 @@ import io.reactivex.Observable;
  */
 public class BlockchainHttp extends Http implements BlockchainRepository {
     private static final String BLOCK = "/block/";
-    private static final String CONFIG = "/config";
 
     private static final Type BLOCK_INFO_LIST_TYPE = new TypeToken<List<BlockInfoDTO>>() {
     }.getType();
@@ -138,18 +135,7 @@ public class BlockchainHttp extends Http implements BlockchainRepository {
                 .flatMapIterable(item -> item)
                 .map(blockInfoDTO -> BlockInfo.fromDto(blockInfoDTO, api.getNetworkType()))
                 .toList().toObservable();
-    }
-
-    @Override
-    public Observable<BlockchainConfig> getBlockchainConfiguration(BigInteger height) {
-        return this.client.get(CONFIG + SLASH + height.toString())
-                .map(Http::mapStringOrError)
-                .map(str -> gson.fromJson(str, NetworkConfigDTO.class))
-                .map(NetworkConfigDTO::getNetworkConfig)
-                .map(BlockchainConfig::fromDto);
-    }
-
-  
+    } 
 
     /**
      * allow use of gson list deserialization in stream

@@ -16,11 +16,10 @@
 
 package io.proximax.sdk;
 
+import io.proximax.sdk.model.chainUpgrade.BlockchainUpgrade;
 import io.reactivex.Observable;
 
 import java.math.BigInteger;
-
-import io.proximax.sdk.model.ChainUpgrade.BlockchainUpgrade;
 
 /**
  * Chain Upgrade interface repository.

@@ -41,11 +41,11 @@ import io.proximax.sdk.infrastructure.TransactionQueryParams;
 import io.proximax.sdk.infrastructure.TransactionSortingField;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.blockchain.BlockInfo;
-import io.proximax.sdk.model.blockchain.BlockchainConfig;
 import io.proximax.sdk.model.blockchain.BlockchainVersion;
 import io.proximax.sdk.model.blockchain.BlocksLimit;
 import io.proximax.sdk.model.blockchain.MerklePath;
 import io.proximax.sdk.model.blockchain.Receipts;
+import io.proximax.sdk.model.config.BlockchainConfig;
 import io.proximax.sdk.model.transaction.BlockchainUpgradeTransaction;
 import io.proximax.sdk.model.transaction.EntityType;
 import io.proximax.sdk.model.transaction.TransactionSearch;
@@ -131,17 +131,7 @@ public class E2EBlockchainTest extends E2EBaseTest {
    }
 
 
-   @Test
-   void checkBlockchainConfiguration() throws IOException {
-      BlockchainConfig config = blockchainHttp.getBlockchainConfiguration(BigInteger.ONE).blockingFirst();
-      Properties props = new Properties();
-      props.load(new ByteArrayInputStream(config.getConfig().getBytes(StandardCharsets.UTF_8)));
-      JsonObject entities = new Gson().fromJson(config.getSupportedEntityVersions(), JsonObject.class);
-      // make some assertions but fact that we got here is good sign
-      assertEquals(BigInteger.ONE, config.getHeight());
-      assertNotNull(props.getProperty("namespaceRentalFeeSinkPublicKey"));
-      assertNotNull(entities.getAsJsonArray("entities").get(0).getAsJsonObject().get("name"));
-   }
+  
 
   
 

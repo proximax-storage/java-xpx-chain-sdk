@@ -23,7 +23,6 @@ import io.proximax.sdk.utils.MetadataCalculationUtils;
 public class MosaicMetadataTransactionBuilderTest {
     private static final NetworkType NETWORK_TYPE = NetworkType.TEST_NET;
     private MosaicMetadataTransactionBuilder builder;
-    private static final Logger logger = LoggerFactory.getLogger(MosaicMetadataTransactionBuilderTest.class);
 
     @BeforeEach
     void setUp() {
@@ -42,19 +41,9 @@ public class MosaicMetadataTransactionBuilderTest {
         String value = "test";
         String oldValue = "";
         var ScopedMetadataKey = MetadataCalculationUtils.getScopedMetadataKey(scopedMetadataKey);
-        var valueDifferenceBytes = MetadataCalculationUtils.getValueDifferenceBytes(value, oldValue);
         var valueSize = MetadataCalculationUtils.getValueSize(value, oldValue);
         var valueSizeDeltaValue = MetadataCalculationUtils.getValueSizeDeltaValue(value, oldValue);
-
-        System.out.println("valueSizeDeltaValue: " + valueSizeDeltaValue);
-        System.out.println("valueDifferenceBytes: " + valueDifferenceBytes.length);
-
-        System.out.println("ValueSize: " + valueSize);
-
-        System.out.println("ScopedMetadataKey: " + ScopedMetadataKey);
-
-        logger.info("valueDifferenceBytes {}", valueDifferenceBytes);
-
+       
         MosaicMetadataTransaction mosaic_metadata = builder
                 .create(targetPublicKey, targetMosaicId, scopedMetadataKey, value, oldValue).build();
 

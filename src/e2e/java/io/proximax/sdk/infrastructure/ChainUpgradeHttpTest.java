@@ -29,7 +29,7 @@ import org.junit.jupiter.api.TestInstance;
 import io.proximax.sdk.BaseTest;
 import io.proximax.sdk.BlockchainApi;
 import io.proximax.sdk.ChainUpgradeRepository;
-import io.proximax.sdk.model.ChainUpgrade.BlockchainUpgrade;
+import io.proximax.sdk.model.chainUpgrade.BlockchainUpgrade;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 
