@@ -16,19 +16,11 @@
 package io.proximax.sdk;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -45,7 +37,6 @@ import io.proximax.sdk.model.blockchain.BlockchainVersion;
 import io.proximax.sdk.model.blockchain.BlocksLimit;
 import io.proximax.sdk.model.blockchain.MerklePath;
 import io.proximax.sdk.model.blockchain.Receipts;
-import io.proximax.sdk.model.config.BlockchainConfig;
 import io.proximax.sdk.model.transaction.BlockchainUpgradeTransaction;
 import io.proximax.sdk.model.transaction.EntityType;
 import io.proximax.sdk.model.transaction.TransactionSearch;

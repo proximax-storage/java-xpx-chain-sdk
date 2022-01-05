@@ -20,7 +20,6 @@ import java.math.BigInteger;
 import java.util.Objects;
 import java.util.Optional;
 
-import io.proximax.sdk.model.mosaic.IllegalIdentifierException;
 import io.proximax.sdk.model.transaction.IdGenerator;
 import io.proximax.sdk.model.transaction.UInt64Id;
 import io.proximax.sdk.utils.dto.UInt64Utils;

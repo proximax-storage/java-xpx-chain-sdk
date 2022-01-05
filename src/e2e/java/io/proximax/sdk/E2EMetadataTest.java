@@ -29,7 +29,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicNonce;

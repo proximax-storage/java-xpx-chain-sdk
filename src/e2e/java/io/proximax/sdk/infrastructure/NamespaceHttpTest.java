@@ -20,28 +20,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-
-import javax.xml.stream.events.Namespace;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+
 import io.proximax.sdk.BaseTest;
+import io.proximax.sdk.BlockchainApi;
 import io.proximax.sdk.NamespaceRepository;
-import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.namespace.NamespaceInfo;
 import io.proximax.sdk.model.namespace.NamespaceName;
 import io.proximax.sdk.model.network.NetworkType;
-import io.proximax.sdk.BlockchainApi;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 

@@ -31,7 +31,6 @@ import com.google.gson.reflect.TypeToken;
 
 import io.proximax.sdk.BlockchainApi;
 import io.proximax.sdk.TransactionRepository;
-import io.proximax.sdk.gen.model.TransactionDTO;
 import io.proximax.sdk.gen.model.TransactionStatusDTO;
 import io.proximax.sdk.model.transaction.CosignatureSignedTransaction;
 import io.proximax.sdk.model.transaction.DeadlineRaw;
