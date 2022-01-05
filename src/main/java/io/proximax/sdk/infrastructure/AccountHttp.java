@@ -40,6 +40,7 @@ import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.account.props.AccountProperties;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
+import io.proximax.sdk.model.transaction.TransactionGroupType;
 import io.proximax.sdk.model.transaction.TransactionSearch;
 import io.proximax.sdk.utils.GsonUtils;
 import io.reactivex.Observable;
@@ -53,8 +54,11 @@ public class AccountHttp extends Http implements AccountRepository {
 
    private static final String ROUTE = "/account";
    private static final String PROPERTIES_SUFFIX = "/properties";
-   private static final String CONFIRMED_TRANSACTION = "/transactions/confirmed";
-   private static final String UNCONFIRMED_TRANSACTION = "/transactions/unconfirmed";
+   private static final String TRANSACTION = "/transactions";
+   //private static final String UNCONFIRMED_TRANSACTION = "/transactions/unconfirmed";
+   //private static final String PARTIAL_TRANSACTION = "/transactions/partial";
+
+   
    private static final Type TYPE_ACCOUNT_LIST = new TypeToken<List<AccountInfoDTO>>() {
    }.getType();
    private static final Type TYPE_MULTISIGACCT_LIST = new TypeToken<List<MultisigAccountGraphInfoDTO>>() {
@@ -171,7 +175,7 @@ public class AccountHttp extends Http implements AccountRepository {
 
    private Observable<TransactionSearch> transactions(PublicAccount publicAccount,
          Optional<TransactionQueryParams> queryParams) {
-      return this.findTransactions(publicAccount.getPublicKey(), queryParams, CONFIRMED_TRANSACTION);
+      return this.findTransactions(publicAccount.getPublicKey(), queryParams,  TRANSACTION + SLASH + TransactionGroupType.CONFIRMED);
    }
 
    @Override
@@ -209,7 +213,8 @@ public class AccountHttp extends Http implements AccountRepository {
 
    private Observable<TransactionSearch> incomingTransactions(String accountKey,
          Optional<TransactionQueryParams> queryParams) {
-      return this.findTransactions(accountKey, queryParams, CONFIRMED_TRANSACTION);
+      return this.findTransactions(accountKey, queryParams, 
+            TRANSACTION + SLASH + TransactionGroupType.CONFIRMED);
    }
 
    @Override
@@ -231,7 +236,7 @@ public class AccountHttp extends Http implements AccountRepository {
 
    private Observable<TransactionSearch> outgoingTransactions(PublicAccount publicAccount,
          Optional<TransactionQueryParams> queryParams) {
-      return this.findTransactions(publicAccount.getPublicKey(), queryParams, CONFIRMED_TRANSACTION);
+      return this.findTransactions(publicAccount.getPublicKey(), queryParams,  TRANSACTION + SLASH + TransactionGroupType.CONFIRMED);
    }
 
    @Override
@@ -253,7 +258,7 @@ public class AccountHttp extends Http implements AccountRepository {
 
    private Observable<List<AggregateTransaction>> aggregateBondedTransactions(PublicAccount publicAccount,
          Optional<TransactionQueryParams> queryParams) {
-      return this.findAggregateTransactions(publicAccount.getPublicKey(), queryParams, "/transactions/partial")
+      return this.findAggregateTransactions(publicAccount.getPublicKey(), queryParams, TRANSACTION + SLASH + TransactionGroupType.PARTIAL)
             .flatMapIterable(item -> item)
             .map(item -> (AggregateTransaction) item).toList().toObservable();
    }
@@ -277,7 +282,8 @@ public class AccountHttp extends Http implements AccountRepository {
 
    private Observable<TransactionSearch> unconfirmedTransactions(PublicAccount publicAccount,
          Optional<TransactionQueryParams> queryParams) {
-      return this.findTransactions(publicAccount.getPublicKey(), queryParams, UNCONFIRMED_TRANSACTION);
+      return this.findTransactions(publicAccount.getPublicKey(), queryParams, 
+            TRANSACTION + SLASH + TransactionGroupType.UNCONFIRMED);
    }
 
    private Observable<TransactionSearch> findTransactions(String accountKey,
