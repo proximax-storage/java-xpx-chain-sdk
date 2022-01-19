@@ -37,8 +37,7 @@ public class TransactionCount {
     /**
      * create mosaic levy instance from the DTO
      *
-     * @param dto        Transaction Count DTO
-     * @param entityType Entity Type
+     * @param jsonArray  JsonArray
      * @return List of Transaction count
      */
     public static List<TransactionCount> fromJson(JsonArray jsonArray) {

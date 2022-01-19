@@ -65,7 +65,7 @@ public interface MosaicRepository {
      * Gets list of MosaicRichList.
      * </p>
      * 
-     * @param MosaicRichListDTO List of MosaicRichList
+     * @param mosaicId List of MosaicRichList
      * @return Observable of {@link MosaicRichList} list
      */
     Observable<List<MosaicRichList>> getMosaicRichList(MosaicId mosaicId);
@@ -75,7 +75,7 @@ public interface MosaicRepository {
      * Gets list of MosaicRichList.
      * </p>
      * 
-     * @param MosaicRichListDTO List of MosaicRichList
+     * @param mosaicId Mosaic id
      * @param queryParams    QueryParams
      * @return Observable of {@link MosaicRichList} list
      */

@@ -80,7 +80,7 @@ public class MosaicRichList {
     /**
      * create mosaic info instance from the DTO
      * 
-     * @param dto mosaic info DTO
+     * @param jsonArray mosaic info DTO
      *
      * @return mosaic info
      */

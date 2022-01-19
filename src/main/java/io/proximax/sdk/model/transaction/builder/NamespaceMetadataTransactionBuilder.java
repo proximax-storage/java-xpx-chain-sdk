@@ -115,7 +115,7 @@ public class NamespaceMetadataTransactionBuilder
     /**
      * define value
      * 
-     * @param value value
+     * @param oldValue
      * @return self
      */
     public NamespaceMetadataTransactionBuilder oldvalue(String oldValue) {
@@ -178,17 +178,13 @@ public class NamespaceMetadataTransactionBuilder
     // -------------------------------------- convenience --------------------------------------------//
     /**
      * convenience call to
-     * {@link NamespaceMetadataTransactionBuilder#deadline(deadline).targetPublicKey(targetPublicKey).targetNamespaceId(targetNamespaceId).scopedMetadataKey(scopedMetadataKey).value(value).oldValue(oldValue).maxFee(maxFeeValue)}
+     * {@link NamespaceMetadataTransactionBuilder#create targetPublicKey(targetPublicKey).targetNamespaceId(targetNamespaceId).scopedMetadataKey(scopedMetadataKey).value(value).oldValue(oldValue).maxFee(maxFeeValue)}
      * 
      * @param targetPublicKey   target public key
      * @param scopedMetadataKey scoped metadata key
      * @param targetNamespaceId target NamespaceId
-     * @param valueSizeDelta    value size delta
-     * @param valueSize         value size
      * @param value             value
      * @param oldValue          old value
-     * @param valueDifferences  value differences
-     * @param maxfee            max fee
      * @return self
      */
     public NamespaceMetadataTransactionBuilder create(PublicAccount targetPublicKey,

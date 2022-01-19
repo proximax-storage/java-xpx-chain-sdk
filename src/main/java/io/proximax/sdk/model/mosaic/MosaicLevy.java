@@ -102,6 +102,7 @@ public class MosaicLevy {
      * @param recipient             Recipient of the levy
      * @param mosaicId              ID of the mosaic
      * @param amount                Amount of special fee
+     * @return MosaicLevy           MosaicLevy
      */
     public static MosaicLevy createWithAbsoluteFee(Recipient recipient, MosaicId mosaicId,
             int amount) {

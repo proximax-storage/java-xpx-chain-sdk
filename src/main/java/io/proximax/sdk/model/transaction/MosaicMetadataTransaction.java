@@ -44,13 +44,14 @@ public class MosaicMetadataTransaction extends Transaction {
      * @param maxFee            transaction fee
      * @param signature         optional signature
      * @param signer            optional signer
+     * @param transactionInfo   optional transaction info
      * @param targetPublicKey   target public key
      * @param scopedMetadataKey scoped metadata key
      * @param targetMosaicId    target mosaicId
      * @param valueSizeDelta    value size delta
      * @param valueSize         value size
+     * @param oldValue          old value
      * @param value             value
-     * @param valueDifferences  value differences
      */
     public MosaicMetadataTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline,
             BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,

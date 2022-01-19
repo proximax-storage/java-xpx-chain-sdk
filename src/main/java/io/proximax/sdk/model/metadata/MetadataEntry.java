@@ -145,7 +145,6 @@ public class MetadataEntry {
      * create mosaic info instance from the DTO
      * 
      * @param dto         mosaic info DTO
-     * @param networkType network type
      * @return metadata v2 info
      */
     public static MetadataEntry fromDto(MetadataInfoDTO dto) {

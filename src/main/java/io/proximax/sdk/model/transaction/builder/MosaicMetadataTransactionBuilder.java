@@ -18,10 +18,7 @@ import io.proximax.sdk.utils.MetadataCalculationUtils;
  * <p>
  * builder for {@link MosaicMetadataTransaction}
  * </p>
- * <p>
- * Standard use when create mosaic levy: call
- * {@link #create(PublicAccount targetPublicKey, BigInteger scopedMetadataKey,MosaicId targetMosaicId, Short valueSizeDelta, Integer valueSize, String value, String oldValue)}
- * </p>
+ *
  */
 public class MosaicMetadataTransactionBuilder
         extends TransactionBuilder<MosaicMetadataTransactionBuilder, MosaicMetadataTransaction> {
@@ -127,7 +124,7 @@ public class MosaicMetadataTransactionBuilder
     /**
      * define old value
      * 
-     * @param old value value
+     * @param oldValue
      * @return self
      */
     public MosaicMetadataTransactionBuilder oldvalue(String oldValue) {
@@ -189,17 +186,13 @@ public class MosaicMetadataTransactionBuilder
     // --------------------------------------------//
     /**
      * convenience call to
-     * {@link MosaicMetadataTransactionBuilder#deadline(deadline).targetPublicKey(targetPublicKey).targetMosaicId(targetMosaicId).scopedMetadataKey(scopedMetadataKey).value(value).oldValue(oldValue).maxFee(maxFeeValue)}
+     * {@link MosaicMetadataTransactionBuilder targetPublicKey(targetPublicKey).targetMosaicId(targetMosaicId).scopedMetadataKey(scopedMetadataKey).value(value).oldValue(oldValue).maxFee(maxFeeValue)}
      * 
      * @param targetPublicKey   target public key
      * @param scopedMetadataKey scoped metadata key
      * @param targetMosaicId    target mosaicId
-     * @param valueSizeDelta    value size delta
-     * @param valueSize         value size
      * @param value             value
      * @param oldValue          old value
-     * @param valueDifferences  value differences
-     * @param maxfee            max fee
      * @return self
      */
     public MosaicMetadataTransactionBuilder create(PublicAccount targetPublicKey,
@@ -207,30 +200,7 @@ public class MosaicMetadataTransactionBuilder
         var valueSizeDeltaValue = MetadataCalculationUtils.getValueSizeDeltaValue(value, oldValue);
         var ValueSize = MetadataCalculationUtils.getValueSize(value, oldValue);
         var ScopedMetadataKey = MetadataCalculationUtils.getScopedMetadataKey(scopedMetadataKey);
-      
 
-        // byte[] ScopedKey = StringUtils.getBytes(scopedMetadataKey);
-        // byte[] scopeMetadatakey = Hashes.sha3_256(ScopedKey);
-        // BigInteger ScopedMetadataKey = new BigInteger(scopeMetadatakey);
-
-        // byte[] OldValue = StringUtils.getBytes(oldValue);
-        // byte[] NewValue = StringUtils.getBytes(value);
-        // Integer ValueSize = Math.max(OldValue.length, NewValue.length);
-
-        // Integer valueSizeDelta = (OldValue.length) - (NewValue.length);
-        // Short valueSizeDeltaValue = valueSizeDelta.shortValue();
-
-        // byte[] valueDifferenceBytes = new byte[ValueSize];
-        // byte[] newValueByteArray = new byte[ValueSize];
-        // byte[] oldValueByteArray = new byte[ValueSize];
-
-        // System.arraycopy(NewValue, 0, newValueByteArray, 0, NewValue.length);
-        // System.arraycopy(OldValue, 0, oldValueByteArray, 0, OldValue.length);
-
-        // for (int i = 0; i < ValueSize; i++) {
-
-        //     valueDifferenceBytes[i] = (byte) (newValueByteArray[i] ^ oldValueByteArray[i]);
-        // }
         return targetPublicKey(targetPublicKey).targetMosaicId(targetMosaicId).value(value).valueSizeDelta(valueSizeDeltaValue).valueSize(
                 ValueSize).scopedMetadataKey(
                 ScopedMetadataKey).oldvalue(oldValue);

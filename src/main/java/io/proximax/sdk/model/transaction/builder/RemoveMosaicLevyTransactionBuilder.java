@@ -63,7 +63,7 @@ public RemoveMosaicLevyTransactionBuilder() {
 
     // ----------------------------------------- convenience methods -------------------------------------//
     /**
-     * @param mosaidId the mosaid Id to set
+     * @param mosaicID the mosaid Id to set
      * @return self
      */
     public RemoveMosaicLevyTransactionBuilder create(MosaicId mosaicID) {

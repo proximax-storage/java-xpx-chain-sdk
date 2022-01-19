@@ -41,9 +41,10 @@ public class NamespaceMetadataTransaction extends Transaction{
      * @param maxFee            transaction fee
      * @param signature         optional signature
      * @param signer            optional signer
+     * @param transactionInfo   optional transaction info
      * @param targetPublicKey   target public key
      * @param scopedMetadataKey scoped metadata key
-     * @param targetNamespaceId    target NamespaceId
+     * @param targetNamespaceId target NamespaceId
      * @param valueSizeDelta    value size delta
      * @param valueSize         value size
      * @param value             value

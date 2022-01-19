@@ -102,7 +102,7 @@ public class AccountMetadataTransactionBuilder
     /**
      * define old value
      * 
-     * @param value value
+     * @param  oldValue
      * @return self
      */
     public AccountMetadataTransactionBuilder oldValue(String oldValue) {
@@ -157,17 +157,12 @@ public class AccountMetadataTransactionBuilder
     // -------------------------------------- convenience --------------------------------------------//
     /**
      * convenience call to
-     * {@link AccountMetadataTransactionBuilder#deadline(deadline).targetPublicKey(targetPublicKey).scopedMetadataKey(scopedMetadataKey).value(value).oldValue(oldValue).maxFee(maxFeeValue)}
+     * {@link AccountMetadataTransactionBuilder#create targetPublicKey(targetPublicKey).scopedMetadataKey(scopedMetadataKey).value(value).oldValue(oldValue).maxFee(maxFeeValue)}
      * 
      * @param targetPublicKey   target public key
      * @param scopedMetadataKey scoped metadata key
-     * @param targetMosaicId    target mosaicId
-     * @param valueSizeDelta    value size delta
-     * @param valueSize         value size
      * @param value             value
      * @param oldValue          old value
-     * @param valueDifferences  value differences
-     * @param maxfee            max fee
      * @return self
      */
     public AccountMetadataTransactionBuilder create(PublicAccount targetPublicKey,

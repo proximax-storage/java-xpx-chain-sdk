@@ -57,7 +57,6 @@ public interface TransactionRepository {
      * Gets an list of transaction status for different transaction hashes.
      *
      * @param transactionHashes List of String
-     * @param group             Transaction Group
      * @return Observable of {@link TransactionStatus} list
      */
     Observable<List<TransactionStatus>> getTransactionStatuses(List<String> transactionHashes);
@@ -66,7 +65,6 @@ public interface TransactionRepository {
      * Gets transaction count based on the given entity type(s)
      *
      * @param transactionType List of Entities Type
-     * @param group           Transaction Group
      * @return Observable of {@link TransactionCount} list
      */
     Observable<List<TransactionCount>> getTransactionsCount(List<Integer> transactionType);
@@ -101,7 +99,7 @@ public interface TransactionRepository {
      * Search transaction
      * </p>
      * 
-     * @param TransactionGroupType transaction group type
+     * @param transactionGroupType transaction group type
      * @return Observable of {@link TransactionSearch}
      */
     Observable<TransactionSearch> transactionSearch(TransactionGroupType transactionGroupType);
@@ -109,8 +107,8 @@ public interface TransactionRepository {
     /**
      * Search transaction
      * 
-     * @param TransactionGroupType   transaction group type
-     * @param TransactionQueryParams transaction query params
+     * @param transactionGroupType   transaction group type
+     * @param queryParams transaction query params
      * @return Observable of {@link TransactionSearch}
      */
     Observable<TransactionSearch> transactionSearch(TransactionGroupType transactionGroupType,TransactionQueryParams queryParams);

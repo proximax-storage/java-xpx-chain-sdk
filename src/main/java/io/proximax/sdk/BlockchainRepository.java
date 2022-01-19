@@ -57,7 +57,7 @@ public interface BlockchainRepository {
      * With pagination.
      *
      * @param height                 BigInteger
-     * @param TransactionQueryParams Transaction QueryParams
+     * @param queryParams Transaction QueryParams
      * @return Observable of {@link Transaction} list
      */
     Observable<TransactionSearch> getBlockTransactions(BigInteger height, TransactionQueryParams queryParams);

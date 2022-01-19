@@ -33,7 +33,7 @@ public interface LockRepository {
      * GET '/account/{address}/lock'
      * </p>
      * 
-     * @param  {@link Address}
+     * @param  address {@link Address}
      * @return observable list of {@link HashLockWithMetaInfo}
      */
     Observable<List<HashLockWithMetaInfo>> getAccountLockHash(Address address);
@@ -46,7 +46,7 @@ public interface LockRepository {
      * GET '/account/{publicKey}/lock'
      * </p>
      * 
-     * @param {@link PublicKey} 
+     * @param publicKey {@link PublicKey}
      * @return observable list of {@link HashLockWithMetaInfo}
      */
     Observable<List<HashLockWithMetaInfo>> getAccountLockHash(PublicKey publicKey);
@@ -59,7 +59,7 @@ public interface LockRepository {
      * GET '/account/{address}/lock/secret'
      * </p>
      * 
-     * @param {@link Address}
+     * @param address {@link Address}
      * @return observable list of {@link SecretLockWithMetaInfo}
      */
     Observable<List<SecretLockWithMetaInfo>> getAccountLockSecret(Address address);
@@ -72,7 +72,7 @@ public interface LockRepository {
      * GET '/account/{publicKey}/lock/secret'
      * </p>
      * 
-     * @param {@link PublicKey}
+     * @param publicKey {@link PublicKey}
      * @return observable list of {@link SecretLockWithMetaInfo}
      */
     Observable<List<SecretLockWithMetaInfo>> getAccountLockSecret(PublicKey publicKey);
@@ -111,7 +111,7 @@ public interface LockRepository {
      * GET '/lock/secret/{secretHash}'
      * </p>
      * 
-     * @param lockHash the lockHash to check
+     * @param secretHash the lockHash to check
      * @return observable link of {@link SecretLockWithMetaInfo}
      */
     Observable<List<SecretLockWithMetaInfo>> getSecretHash(String secretHash);

@@ -70,8 +70,8 @@ public class AccountExchanges {
 
     /**
      * 
-     * @param {@link AccountExchangeDTO}
-     * @param {@link NetworkType}
+     * @param dto {@link ExchangeDTO}
+     * @param networkType {@link NetworkType}
      * 
      * @return {@link AccountExchanges}
      */

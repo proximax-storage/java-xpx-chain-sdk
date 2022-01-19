@@ -33,7 +33,7 @@ public class ModifyMosaicLevyTransaction extends Transaction {
         /**
          * @param networkType     network type
          * @param version         transaction version. Use
-         *                        {@link EntityVersion#MOSAIC_MODIFY_LEVY} for
+         *                        {@link EntityVersion#MODIFY_MOSAIC_LEVY} for
          *                        current version
          * @param deadline        transaction deadline
          * @param maxFee          transaction fee
@@ -41,8 +41,7 @@ public class ModifyMosaicLevyTransaction extends Transaction {
          * @param signer          optional signer
          * @param transactionInfo optional transaction info
          * @param mosaicLevy      mosaic levy
-         * @param mosaicID        ID of mosaic that will change
-         * 
+         * @param mosaicId        mosaic id
          */
         public ModifyMosaicLevyTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline,
                         BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,

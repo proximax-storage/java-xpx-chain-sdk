@@ -58,7 +58,7 @@ public class MetadataSearch {
     /**
      * create receipts instance from raw JsonObject
      * 
-     * @param json the data form server
+     * @param input the data form server
      * @return the receipts
      */
     public static MetadataSearch fromJson(JsonObject input) {

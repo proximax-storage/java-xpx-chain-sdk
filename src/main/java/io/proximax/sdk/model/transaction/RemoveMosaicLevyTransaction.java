@@ -30,14 +30,14 @@ public class RemoveMosaicLevyTransaction extends Transaction{
     /**
      * @param networkType     network type
      * @param version         transaction version. Use
-     *                        {@link EntityVersion#MOSAIC_MODIFY_LEVY} for
+     *                        {@link EntityVersion#MODIFY_MOSAIC_LEVY} for
      *                        current version
      * @param deadline        transaction deadline
      * @param maxFee          transaction fee
      * @param signature       optional signature
      * @param signer          optional signer
      * @param transactionInfo optional transaction info
-     * @param mosaicID        ID of mosaic that will change
+     * @param mosaicId        ID of mosaic that will change
      * 
      */
  public RemoveMosaicLevyTransaction(NetworkType networkType, Integer version, TransactionDeadline deadline,BigInteger maxFee, Optional<String> signature, Optional<PublicAccount> signer,

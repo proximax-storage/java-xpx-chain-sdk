@@ -86,7 +86,7 @@ public class OfferInfo {
 
     /**
      * 
-     * @param {@link OfferInfoDTO}
+     * @param dto {@link OfferInfoDTO}
      * @return {@link OfferInfo}
      */
     public static OfferInfo fromDTO(OfferInfoDTO dto) {

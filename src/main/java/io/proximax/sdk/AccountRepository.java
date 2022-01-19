@@ -16,20 +16,15 @@
 
 package io.proximax.sdk;
 
-import java.util.List;
-
 import io.proximax.sdk.infrastructure.TransactionQueryParams;
-import io.proximax.sdk.model.account.AccountInfo;
-import io.proximax.sdk.model.account.AccountNames;
-import io.proximax.sdk.model.account.Address;
-import io.proximax.sdk.model.account.MultisigAccountGraphInfo;
-import io.proximax.sdk.model.account.MultisigAccountInfo;
-import io.proximax.sdk.model.account.PublicAccount;
+import io.proximax.sdk.model.account.*;
 import io.proximax.sdk.model.account.props.AccountProperties;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
 import io.proximax.sdk.model.transaction.TransactionSearch;
 import io.reactivex.Observable;
+
+import java.util.List;
 
 /**
  * Account interface repository.
@@ -215,7 +210,7 @@ public interface AccountRepository {
     
     /**
      *
-     * @param Address List of {@link Address}
+     * @param addresses List of {@link Address}
      * 
      * @return Observable of {@link AccountNames} list
      */

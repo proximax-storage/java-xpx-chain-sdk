@@ -45,7 +45,6 @@ public class AccountMetadataTransaction extends Transaction {
      * @param signer            optional signer
      * @param targetPublicKey   target public key
      * @param scopedMetadataKey scoped metadata key
-     * @param targetMosaicId    target mosaicId
      * @param valueSizeDelta    value size delta
      * @param valueSize         value size
      * @param value             value

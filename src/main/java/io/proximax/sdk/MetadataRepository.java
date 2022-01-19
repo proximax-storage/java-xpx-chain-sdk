@@ -48,9 +48,8 @@ public interface MetadataRepository {
    /**
     * Gets an list of Metadata with pagination.
     *
-    * @param publicAccount PublicAccount
     * @param queryParams   QueryParams
-    * @return Observable of {@link Transaction} list
+    * @return Observable of {@link MetadataSearch} list
     */
    Observable<MetadataSearch> MetadataEntrySearch(MetadataQueryParams queryParams);
 }

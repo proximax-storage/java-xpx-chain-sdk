@@ -102,8 +102,8 @@ public class MosaicExchange {
     }
 
     /**
-     * @param {@link ExchangesDTO}
-     * @param {@link NetworkType}
+     * @param dto {@link ExchangesDTO}
+     * @param networkType {@link NetworkType}
      * 
      * @return {@link MosaicExchange}
      */
