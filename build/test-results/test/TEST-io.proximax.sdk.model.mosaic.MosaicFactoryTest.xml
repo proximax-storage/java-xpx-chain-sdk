@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.sdk.model.mosaic.MosaicFactoryTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:14" hostname="LAPTOP-A5KJ7JLN" time="0.003">
+  <properties/>
+  <testcase name="checkHashCode()" classname="io.proximax.sdk.model.mosaic.MosaicFactoryTest" time="0.0"/>
+  <testcase name="checkEquals()" classname="io.proximax.sdk.model.mosaic.MosaicFactoryTest" time="0.0"/>
+  <testcase name="testCreate()" classname="io.proximax.sdk.model.mosaic.MosaicFactoryTest" time="0.0"/>
+  <testcase name="testConstructor()" classname="io.proximax.sdk.model.mosaic.MosaicFactoryTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

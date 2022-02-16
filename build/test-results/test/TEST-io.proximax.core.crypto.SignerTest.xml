@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.core.crypto.SignerTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:11" hostname="LAPTOP-A5KJ7JLN" time="0.03">
+  <properties/>
+  <testcase name="canCreateSignerFromKeyPair()" classname="io.proximax.core.crypto.SignerTest" time="0.003"/>
+  <testcase name="signDelegatesToDsaSigner()" classname="io.proximax.core.crypto.SignerTest" time="0.012"/>
+  <testcase name="verifyDelegatesToDsaSigner()" classname="io.proximax.core.crypto.SignerTest" time="0.004"/>
+  <testcase name="isCanonicalSignatureDelegatesToDsaSigner()" classname="io.proximax.core.crypto.SignerTest" time="0.004"/>
+  <testcase name="makeSignatureCanonicalDelegatesToDsaSigner()" classname="io.proximax.core.crypto.SignerTest" time="0.002"/>
+  <testcase name="ctorDelegatesToEngineCreateDsaSigner()" classname="io.proximax.core.crypto.SignerTest" time="0.002"/>
+  <testcase name="canCreateSignerFromSigner()" classname="io.proximax.core.crypto.SignerTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

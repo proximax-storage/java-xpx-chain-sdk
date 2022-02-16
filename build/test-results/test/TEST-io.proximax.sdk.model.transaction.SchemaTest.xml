@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.sdk.model.transaction.SchemaTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:15" hostname="LAPTOP-A5KJ7JLN" time="0.0">
+  <properties/>
+  <testcase name="should concat the different serialized objects into the result" classname="io.proximax.sdk.model.transaction.SchemaTest" time="0.0"/>
+  <testcase name="should copy the serialized object into the result" classname="io.proximax.sdk.model.transaction.SchemaTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

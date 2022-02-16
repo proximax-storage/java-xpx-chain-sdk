@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldElementTest" tests="19" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:04" hostname="LAPTOP-A5KJ7JLN" time="0.367">
+  <properties/>
+  <testcase name="decodeReturnsCorrectFieldElement()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldElementTest" time="0.051"/>
+  <testcase name="isNonZeroReturnsTrueIfFieldElementIsNonZero()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldElementTest" time="0.001"/>
+  <testcase name="getRawReturnsUnderlyingArray()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldElementTest" time="0.001"/>
+  <testcase name="multiplyReturnsCorrectResult()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldElementTest" time="0.023"/>
+  <testcase name="cannotCreateFieldElementFromArrayWithIncorrectLength()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldElementTest" time="0.002"/>
+  <testcase name="isNonZeroReturnsFalseIfFieldElementIsZero()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldElementTest" time="0.001"/>
+  <testcase name="subtractReturnsCorrectResult()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldElementTest" time="0.017"/>
+  <testcase name="toStringReturnsCorrectRepresentation()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldElementTest" time="0.001"/>
+  <testcase name="canCreateFieldElementFromArrayWithCorrectLength()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldElementTest" time="0.001"/>
+  <testcase name="isNegativeReturnsCorrectResult()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldElementTest" time="0.085"/>
+  <testcase name="decodeReturnsCorrectFieldElementForSimpleByteArrays()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldElementTest" time="0.001"/>
+  <testcase name="equalsOnlyReturnsTrueForEquivalentObjects()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldElementTest" time="0.001"/>
+  <testcase name="squareAndDoubleReturnsCorrectResult()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldElementTest" time="0.014"/>
+  <testcase name="squareReturnsCorrectResult()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldElementTest" time="0.014"/>
+  <testcase name="negateReturnsCorrectResult()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldElementTest" time="0.011"/>
+  <testcase name="hashCodesAreEqualForEquivalentObjects()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldElementTest" time="0.001"/>
+  <testcase name="sqrtReturnsCorrectResult()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldElementTest" time="0.033"/>
+  <testcase name="addReturnsCorrectResult()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldElementTest" time="0.019"/>
+  <testcase name="invertReturnsCorrectResult()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldElementTest" time="0.082"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

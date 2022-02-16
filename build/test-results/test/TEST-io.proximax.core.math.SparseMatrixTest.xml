@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.core.math.SparseMatrixTest" tests="60" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:12" hostname="LAPTOP-A5KJ7JLN" time="0.144">
+  <properties/>
+  <testcase name="allDenseMatrixColumnsCanBeNormalized()" classname="io.proximax.core.math.SparseMatrixTest" time="0.006"/>
+  <testcase name="removeNegativesZerosOutAllElementsWithNegativeValues()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="matrixSumCanBeCalculatedForSparseMatrix()" classname="io.proximax.core.math.SparseMatrixTest" time="0.002"/>
+  <testcase name="equalsReturnsTrueForEquivalentDenseMatrices()" classname="io.proximax.core.math.SparseMatrixTest" time="0.002"/>
+  <testcase name="sparseMatrixCanBeMultipliedElementWiseWithSameSizeMatrix()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="isZeroMatrixReturnsTrueIfAndOnlyIfAllElementsAreZero()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="matrixValuesCanBeSet()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="matrixColumnSumsCanBeCalculated()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="sparseMatrixCanBeTransposed()" classname="io.proximax.core.math.SparseMatrixTest" time="0.0"/>
+  <testcase name="matrixIsInitializedToZero()" classname="io.proximax.core.math.SparseMatrixTest" time="0.0"/>
+  <testcase name="matrixCanBeMultipliedByVectorOfSameSize()" classname="io.proximax.core.math.SparseMatrixTest" time="0.0"/>
+  <testcase name="equalsReturnsTrueForEquivalentSparseMatrices()" classname="io.proximax.core.math.SparseMatrixTest" time="0.036"/>
+  <testcase name="allSparseMatrixColumnsCanBeNormalized()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="matrixValuesCanBeIncremented()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="hasNextReturnsFalseImmediatelyForZeroRow()" classname="io.proximax.core.math.SparseMatrixTest" time="0.003"/>
+  <testcase name="denseMatrixCanBeScaled()" classname="io.proximax.core.math.SparseMatrixTest" time="0.0"/>
+  <testcase name="isSameSizeReturnsTrueWhenMatriciesHaveSameSize()" classname="io.proximax.core.math.SparseMatrixTest" time="0.0"/>
+  <testcase name="matrixAbsSumCanBeCalculatedForDenseMatrix()" classname="io.proximax.core.math.SparseMatrixTest" time="0.0"/>
+  <testcase name="sparseMatrixCanBeScaled()" classname="io.proximax.core.math.SparseMatrixTest" time="0.0"/>
+  <testcase name="absoluteValueOfMatrixCanBeTaken()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="denseMatrixCanBeMultipliedByScalar()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="matrixRowSumsCanBeCalculated()" classname="io.proximax.core.math.SparseMatrixTest" time="0.0"/>
+  <testcase name="denseMatrixCanBeTransposed()" classname="io.proximax.core.math.SparseMatrixTest" time="0.0"/>
+  <testcase name="sparseMatrixCanBeMultipliedByVectorOfSameSize()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="denseMatrixCanBeAddedWithSameSizeMatrix()" classname="io.proximax.core.math.SparseMatrixTest" time="0.0"/>
+  <testcase name="sparseMatrixCanBeRounded()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="equalsReturnsFalseForMatrixObjectsWithDifferentDimensions()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="matrixSetCannotBeIndexedOutOfBounds()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="nextReturnsCorrectMatrixElementsInOrder()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="matrixCannotBeMultipliedByVectorOfDifferentSize()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="matrixCannotBeMultipliedElementWiseWithDifferentSizeMatrix()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="matrixCanBeAddedToByScalar()" classname="io.proximax.core.math.SparseMatrixTest" time="0.0"/>
+  <testcase name="matrixGetCannotBeIndexedOutOfBounds()" classname="io.proximax.core.math.SparseMatrixTest" time="0.0"/>
+  <testcase name="sparseMatrixCanBeMultipliedByScalar()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="equalsReturnsFalseForNonMatrixObjects()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="hashCodesAreEqualForObjectsWithEquivalentDimensions()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="denseMatrixCanBeMultipliedElementWiseWithSameSizeMatrix()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="denseMatrixCanBeRounded()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="squareRootOfMatrixCanBeTaken()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="zeroMatrixCanBeNormalized()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="matrixWithZeroSumColumnsCanBeNormalized()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="matrixCannotBeAddedWithDifferentSizeMatrix()" classname="io.proximax.core.math.SparseMatrixTest" time="0.0"/>
+  <testcase name="hasNextReturnsFalseAfterAllElementsHaveBeenIteratedForNonZeroRow()" classname="io.proximax.core.math.SparseMatrixTest" time="0.0"/>
+  <testcase name="sparseMatrixCanBeAddedWithSameSizeMatrix()" classname="io.proximax.core.math.SparseMatrixTest" time="0.0"/>
+  <testcase name="removeLessThanZerosOutAllElementsLessThanSpecifiedValue()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="hasNextReturnsTrueIfMoreColumnsAreAvailable()" classname="io.proximax.core.math.SparseMatrixTest" time="0.0"/>
+  <testcase name="matrixAbsSumCanBeCalculatedForSparseMatrix()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="matrixSumCanBeCalculatedForDenseMatrix()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="lastEntryInRowCanBeRemoved()" classname="io.proximax.core.math.SparseMatrixTest" time="0.0"/>
+  <testcase name="removeLessThanShrinksNumberOfEntries()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="rowCanBeReallocatedIfLowerColumnElementDoesNotFit()" classname="io.proximax.core.math.SparseMatrixTest" time="0.0"/>
+  <testcase name="removeKeepsColumnsSorted()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="forEachReturnsAllNonZeroElements()" classname="io.proximax.core.math.SparseMatrixTest" time="0.002"/>
+  <testcase name="rowCanBeReallocatedIfHigherColumnElementDoesNotFit()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="removeLessThanKeepsColumnsSorted()" classname="io.proximax.core.math.SparseMatrixTest" time="0.0"/>
+  <testcase name="entryCanBeRemoved()" classname="io.proximax.core.math.SparseMatrixTest" time="0.001"/>
+  <testcase name="entryCanBeRemovedWhenValuesAreAddedOutOfOrder()" classname="io.proximax.core.math.SparseMatrixTest" time="0.0"/>
+  <testcase name="getNumEntriesReturnsTotalNumberOfNonZeroElements()" classname="io.proximax.core.math.SparseMatrixTest" time="0.0"/>
+  <testcase name="sparseMatrixStringRepresentationIsCorrect()" classname="io.proximax.core.math.SparseMatrixTest" time="0.027"/>
+  <testcase name="setAtUncheckedKeepsColumnsSorted()" classname="io.proximax.core.math.SparseMatrixTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

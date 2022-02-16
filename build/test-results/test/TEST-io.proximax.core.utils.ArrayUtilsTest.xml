@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.core.utils.ArrayUtilsTest" tests="32" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:12" hostname="LAPTOP-A5KJ7JLN" time="0.079">
+  <properties/>
+  <testcase name="compareReturnsNonZeroForDifferentSizedArrays()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.0"/>
+  <testcase name="canConvertPositiveBigIntegerToByteArray()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.0"/>
+  <testcase name="concatCanCombineMoreThanTwoArrays()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.001"/>
+  <testcase name="duplicateIsNotReference()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.001"/>
+  <testcase name="splitFailsIfSplitIndexIsNegative()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.002"/>
+  <testcase name="compareReturnsNonZeroForArraysOfSameLengthWithDifferentPositiveElementValue()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.001"/>
+  <testcase name="byteArrayConversionTruncatesLargeInteger()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.0"/>
+  <testcase name="getBitReturnOneIfBitIsSet()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.0"/>
+  <testcase name="duplicateCanDuplicateNonEmptyArray()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.0"/>
+  <testcase name="canSplitArrayAtEnd()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.001"/>
+  <testcase name="concatCanCombineNonEmptyArrayWithNonEmptyArray()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.0"/>
+  <testcase name="concatCanCombineEmptyArrayWithNonEmptyArray()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.0"/>
+  <testcase name="canSplitEmptyArray()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.0"/>
+  <testcase name="duplicateThrowsExceptionOnNull()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.001"/>
+  <testcase name="isEqualsReturnsZeroForUnequalByteArrays()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.025"/>
+  <testcase name="splitFailsIfSplitIndexIsGreaterThanInputLength()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.001"/>
+  <testcase name="getBitReturnZeroIfBitIsNotSet()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.001"/>
+  <testcase name="canConvertBigIntegerWithLeadingZerosToByteArray()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.001"/>
+  <testcase name="concatCanCombineEmptyArrayWithEmptyArray()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.001"/>
+  <testcase name="compareReturnsZeroForArraysOfSameLengthWithEqualElementValues()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.0"/>
+  <testcase name="compareReturnsNonZeroForEmptyAndNonEmptyArrays()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.0"/>
+  <testcase name="canConvertNegativeBigIntegerToByteArray()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.001"/>
+  <testcase name="compareReturnsNonZeroForArraysOfSameLengthWithDifferentNegativeElementValue()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.0"/>
+  <testcase name="canConvertByteArrayToNegativeBigInteger()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.0"/>
+  <testcase name="canSplitArrayAtMiddle()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.0"/>
+  <testcase name="concatCanCombineNonEmptyArrayWithEmptyArray()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.0"/>
+  <testcase name="canConvertByteArrayWithLeadingZerosToBigInteger()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.0"/>
+  <testcase name="canConvertByteArrayToPositiveBigInteger()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.001"/>
+  <testcase name="isEqualsReturnsOneForEqualByteArrays()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.025"/>
+  <testcase name="canSplitArrayAtBeginning()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.0"/>
+  <testcase name="duplicateCanDuplicateEmptyArray()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.0"/>
+  <testcase name="compareReturnsZeroForEmptyArrays()" classname="io.proximax.core.utils.ArrayUtilsTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:05" hostname="LAPTOP-A5KJ7JLN" time="0.005">
+  <properties/>
+  <testcase name="pIsAsExpected()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldTest" time="0.0"/>
+  <testcase name="iIsAsExpected()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldTest" time="0.0"/>
+  <testcase name="zeroIsAsExpected()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldTest" time="0.0"/>
+  <testcase name="dTimesTwoIsAsExpected()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldTest" time="0.001"/>
+  <testcase name="oneIsAsExpected()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldTest" time="0.0"/>
+  <testcase name="twoIsAsExpected()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldTest" time="0.0"/>
+  <testcase name="dIsAsExpected()" classname="io.proximax.core.crypto.ed25519.arithmetic.Ed25519FieldTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.sdk.model.transaction.SecureMessageTest" tests="7" skipped="1" failures="0" errors="0" timestamp="2022-01-19T12:20:15" hostname="LAPTOP-A5KJ7JLN" time="0.091">
+  <properties/>
+  <testcase name="decodeFromNis1()" classname="io.proximax.sdk.model.transaction.SecureMessageTest" time="0.0">
+    <skipped/>
+  </testcase>
+  <testcase name="failRetrievingDecodedPayloadUsingWrongPrivateKey()" classname="io.proximax.sdk.model.transaction.SecureMessageTest" time="0.013"/>
+  <testcase name="failRetrievingDecodedPayloadUsingWrongPublicKey()" classname="io.proximax.sdk.model.transaction.SecureMessageTest" time="0.013"/>
+  <testcase name="shouldRetrieveDecodedPayloadUsingSenderPrivateKey()" classname="io.proximax.sdk.model.transaction.SecureMessageTest" time="0.023"/>
+  <testcase name="failRetrievingDecodedPayloadUsingWrongBothKeys()" classname="io.proximax.sdk.model.transaction.SecureMessageTest" time="0.012"/>
+  <testcase name="shouldRetrieveDecodedPayloadUsingRecipientPrivateKey()" classname="io.proximax.sdk.model.transaction.SecureMessageTest" time="0.021"/>
+  <testcase name="shouldCreateSecureMessageFromDecodedPayload()" classname="io.proximax.sdk.model.transaction.SecureMessageTest" time="0.006"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

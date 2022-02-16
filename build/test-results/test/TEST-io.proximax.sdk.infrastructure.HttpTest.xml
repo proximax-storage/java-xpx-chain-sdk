@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.sdk.infrastructure.HttpTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:13" hostname="LAPTOP-A5KJ7JLN" time="0.025">
+  <properties/>
+  <testcase name="invalidRespones()" classname="io.proximax.sdk.infrastructure.HttpTest" time="0.006"/>
+  <testcase name="constructor()" classname="io.proximax.sdk.infrastructure.HttpTest" time="0.001"/>
+  <testcase name="parsingResponses()" classname="io.proximax.sdk.infrastructure.HttpTest" time="0.017"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.core.math.ColumnVectorTest" tests="43" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:11" hostname="LAPTOP-A5KJ7JLN" time="0.177">
+  <properties/>
+  <testcase name="vectorStringRepresentationIsCorrect()" classname="io.proximax.core.math.ColumnVectorTest" time="0.011"/>
+  <testcase name="correlationCannotBeCalculatedForDifferentSizedVectors()" classname="io.proximax.core.math.ColumnVectorTest" time="0.004"/>
+  <testcase name="cannotAlignVectorWithNonZeroInFirstPosition()" classname="io.proximax.core.math.ColumnVectorTest" time="0.001"/>
+  <testcase name="vectorWithNegativeValuesCanBeNormalized()" classname="io.proximax.core.math.ColumnVectorTest" time="0.011"/>
+  <testcase name="vectorCanBeScaledByArbitraryFactor()" classname="io.proximax.core.math.ColumnVectorTest" time="0.002"/>
+  <testcase name="l1DistanceCanBeCalculatedBetweenTwoVectorsOfSameSize()" classname="io.proximax.core.math.ColumnVectorTest" time="0.003"/>
+  <testcase name="vectorMedianCanBeCalculated()" classname="io.proximax.core.math.ColumnVectorTest" time="0.068"/>
+  <testcase name="vectorMustHaveNonZeroSize()" classname="io.proximax.core.math.ColumnVectorTest" time="0.003"/>
+  <testcase name="vectorValuesCanBeSet()" classname="io.proximax.core.math.ColumnVectorTest" time="0.001"/>
+  <testcase name="vectorCanBeRounded()" classname="io.proximax.core.math.ColumnVectorTest" time="0.005"/>
+  <testcase name="vectorAbsoluteValueCanBeTaken()" classname="io.proximax.core.math.ColumnVectorTest" time="0.002"/>
+  <testcase name="zeroVectorCanBeNormalized()" classname="io.proximax.core.math.ColumnVectorTest" time="0.001"/>
+  <testcase name="l2DistanceCanBeCalculatedBetweenTwoVectorsOfSameSize()" classname="io.proximax.core.math.ColumnVectorTest" time="0.001"/>
+  <testcase name="vectorWithNonZeroSumCanBeNormalized()" classname="io.proximax.core.math.ColumnVectorTest" time="0.001"/>
+  <testcase name="vectorAbsSumCanBeCalculated()" classname="io.proximax.core.math.ColumnVectorTest" time="0.001"/>
+  <testcase name="correlationCanBeCalculatedForPartiallyCorrelatedVectors()" classname="io.proximax.core.math.ColumnVectorTest" time="0.004"/>
+  <testcase name="rawVectorIsMutable()" classname="io.proximax.core.math.ColumnVectorTest" time="0.0"/>
+  <testcase name="setAllSetsAllVectorElementValues()" classname="io.proximax.core.math.ColumnVectorTest" time="0.0"/>
+  <testcase name="vectorCanBeSquareRooted()" classname="io.proximax.core.math.ColumnVectorTest" time="0.001"/>
+  <testcase name="vectorCanBeMultipliedByScalar()" classname="io.proximax.core.math.ColumnVectorTest" time="0.001"/>
+  <testcase name="vectorCannotBeMultipliedByVectorWithMoreColumns()" classname="io.proximax.core.math.ColumnVectorTest" time="0.002"/>
+  <testcase name="vectorMaxCanBeCalculated()" classname="io.proximax.core.math.ColumnVectorTest" time="0.001"/>
+  <testcase name="twoVectorsOfSameSizeCanBeAddedTogetherElementWise()" classname="io.proximax.core.math.ColumnVectorTest" time="0.004"/>
+  <testcase name="canAlignVectorWithNonZeroValueInFirstPosition()" classname="io.proximax.core.math.ColumnVectorTest" time="0.001"/>
+  <testcase name="equalsOnlyReturnsTrueForEquivalentObjects()" classname="io.proximax.core.math.ColumnVectorTest" time="0.001"/>
+  <testcase name="l1DistanceCannotBeCalculatedForDifferentSizedVectors()" classname="io.proximax.core.math.ColumnVectorTest" time="0.003"/>
+  <testcase name="vectorCannotBeIndexedOutOfBounds()" classname="io.proximax.core.math.ColumnVectorTest" time="0.003"/>
+  <testcase name="correlationCanBeCalculatedForPerfectlyCorrelatedVectors()" classname="io.proximax.core.math.ColumnVectorTest" time="0.001"/>
+  <testcase name="rawVectorIsAccessible()" classname="io.proximax.core.math.ColumnVectorTest" time="0.001"/>
+  <testcase name="magnitudeCanBeCalculatedForVector()" classname="io.proximax.core.math.ColumnVectorTest" time="0.001"/>
+  <testcase name="differentSizedVectorsCannotBeAddedTogether()" classname="io.proximax.core.math.ColumnVectorTest" time="0.003"/>
+  <testcase name="isZeroVectorReturnsTrueIfAndOnlyIfAllElementsAreZero()" classname="io.proximax.core.math.ColumnVectorTest" time="0.0"/>
+  <testcase name="vectorValuesCanBeIncremented()" classname="io.proximax.core.math.ColumnVectorTest" time="0.001"/>
+  <testcase name="vectorSumCanBeCalculated()" classname="io.proximax.core.math.ColumnVectorTest" time="0.0"/>
+  <testcase name="vectorIsInitializedToZero()" classname="io.proximax.core.math.ColumnVectorTest" time="0.001"/>
+  <testcase name="vectorCannotBeMultipliedByVectorWithFewerColumns()" classname="io.proximax.core.math.ColumnVectorTest" time="0.002"/>
+  <testcase name="removeNegativesSetsNegativeValuesToZero()" classname="io.proximax.core.math.ColumnVectorTest" time="0.004"/>
+  <testcase name="scalarCanBeAddedToVector()" classname="io.proximax.core.math.ColumnVectorTest" time="0.001"/>
+  <testcase name="hashCodesAreEqualForEquivalentObjects()" classname="io.proximax.core.math.ColumnVectorTest" time="0.001"/>
+  <testcase name="l2DistanceCannotBeCalculatedForDifferentSizedVectors()" classname="io.proximax.core.math.ColumnVectorTest" time="0.003"/>
+  <testcase name="vectorCanBeMultipliedByVectorElementWise()" classname="io.proximax.core.math.ColumnVectorTest" time="0.0"/>
+  <testcase name="correlationCanBeCalculatedForPerfectlyAntiCorrelatedVectors()" classname="io.proximax.core.math.ColumnVectorTest" time="0.001"/>
+  <testcase name="vectorCanBeInitializedAroundRawVector()" classname="io.proximax.core.math.ColumnVectorTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

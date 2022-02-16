@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.sdk.model.account.PublicAccountTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:14" hostname="LAPTOP-A5KJ7JLN" time="0.007">
+  <properties/>
+  <testcase name="equalityReturnsFalseIfNetworkIsDifferent()" classname="io.proximax.sdk.model.account.PublicAccountTest" time="0.001"/>
+  <testcase name="equalityReturnsFalseForNull()" classname="io.proximax.sdk.model.account.PublicAccountTest" time="0.001"/>
+  <testcase name="equalityReturnsFalseForDifferentClass()" classname="io.proximax.sdk.model.account.PublicAccountTest" time="0.001"/>
+  <testcase name="equalityIsBasedOnPublicKeyAndNetwork()" classname="io.proximax.sdk.model.account.PublicAccountTest" time="0.001"/>
+  <testcase name="shouldCreatePublicAccountViaConstructor()" classname="io.proximax.sdk.model.account.PublicAccountTest" time="0.001"/>
+  <testcase name="shouldCreatePublicAccountViaStaticConstructor()" classname="io.proximax.sdk.model.account.PublicAccountTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

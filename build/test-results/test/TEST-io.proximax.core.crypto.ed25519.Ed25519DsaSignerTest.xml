@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.core.crypto.ed25519.Ed25519DsaSignerTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:09" hostname="LAPTOP-A5KJ7JLN" time="0.414">
+  <properties/>
+  <testcase name="signedDataCanBeVerified()" classname="io.proximax.core.crypto.ed25519.Ed25519DsaSignerTest" time="0.004"/>
+  <testcase name="isCanonicalReturnsTrueForCanonicalSignature()" classname="io.proximax.core.crypto.ed25519.Ed25519DsaSignerTest" time="0.002"/>
+  <testcase name="cannotSignPayloadWithoutPrivateKey()" classname="io.proximax.core.crypto.ed25519.Ed25519DsaSignerTest" time="0.002"/>
+  <testcase name="verifyCallsIsCanonicalSignature()" classname="io.proximax.core.crypto.ed25519.Ed25519DsaSignerTest" time="0.039"/>
+  <testcase name="signaturesReturnedBySignAreDeterministic()" classname="io.proximax.core.crypto.ed25519.Ed25519DsaSignerTest" time="0.002"/>
+  <testcase name="dataSignedWithKeyPairCannotBeVerifiedWithDifferentKeyPair()" classname="io.proximax.core.crypto.ed25519.Ed25519DsaSignerTest" time="0.005"/>
+  <testcase name="signReturnsVerifiableSignature()" classname="io.proximax.core.crypto.ed25519.Ed25519DsaSignerTest" time="0.019"/>
+  <testcase name="replacingRWithGroupOrderPlusRInSignatureRuinsSignature()" classname="io.proximax.core.crypto.ed25519.Ed25519DsaSignerTest" time="0.002"/>
+  <testcase name="isCanonicalReturnsFalseForNonCanonicalSignature()" classname="io.proximax.core.crypto.ed25519.Ed25519DsaSignerTest" time="0.001"/>
+  <testcase name="verifyReturnsFalseIfPublicKeyIsZeroArray()" classname="io.proximax.core.crypto.ed25519.Ed25519DsaSignerTest" time="0.025"/>
+  <testcase name="makeCanonicalMakesNonCanonicalSignatureCanonical()" classname="io.proximax.core.crypto.ed25519.Ed25519DsaSignerTest" time="0.001"/>
+  <testcase name="signReturnsExpectedSignature()" classname="io.proximax.core.crypto.ed25519.Ed25519DsaSignerTest" time="0.299"/>
+  <testcase name="signThrowsIfGeneratedSignatureIsNotCanonical()" classname="io.proximax.core.crypto.ed25519.Ed25519DsaSignerTest" time="0.005"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

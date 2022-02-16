@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.sdk.model.mosaic.MosaicLevyTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:15" hostname="LAPTOP-A5KJ7JLN" time="0.041">
+  <properties/>
+  <testcase name="shouldCreateMosaicInfoViaConstructor()" classname="io.proximax.sdk.model.mosaic.MosaicLevyTest" time="0.032"/>
+  <testcase name="fromDto()" classname="io.proximax.sdk.model.mosaic.MosaicLevyTest" time="0.009"/>
+  <system-out><![CDATA[20:20:15.087 [Test worker] INFO io.proximax.sdk.model.mosaic.MosaicLevyTest - Recipent : Optional[Address [address=VCAWORKQTHTWOZ2YWOF5QKBLF7WAAQLMD5FKNEDK, networkType=TEST_NET]]
+20:20:15.102 [Test worker] INFO io.proximax.sdk.model.mosaic.MosaicLevyTest - MosaicId : -5653727437816892965
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

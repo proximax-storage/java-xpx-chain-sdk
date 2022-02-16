@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Built-By: https://github.com/proximax-storage/java-xpx-chain-sdk
+Build-Timestamp: 2022-01-19T20:09:05.158+0800
+Build-Revision: 0.7.0-SNAPSHOT
+Created-By: Gradle 6.9
+Build-Jdk: 11.0.13 (Azul Systems, Inc. 11.0.13+8-LTS)
+Build-OS: Windows 10 amd64 10.0
+Specification-Title: ProximaX Sirius Blockchain Java SDK
+Implementation-Vendor: ProximaX
+Bundle-License: https://www.apache.org/licenses/LICENSE-2.0.txt
+

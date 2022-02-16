@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.sdk.model.namespace.NamespaceInfoTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:15" hostname="LAPTOP-A5KJ7JLN" time="0.016">
+  <properties/>
+  <testcase name="shouldReturnRootFalseWhenNamespaceInfoIsFromSubNamespace()" classname="io.proximax.sdk.model.namespace.NamespaceInfoTest" time="0.003"/>
+  <testcase name="shouldReturnSubNamespaceFalseWhenNamespaceInfoIsFromRootNamespace()" classname="io.proximax.sdk.model.namespace.NamespaceInfoTest" time="0.0"/>
+  <testcase name="testFromDto()" classname="io.proximax.sdk.model.namespace.NamespaceInfoTest" time="0.005"/>
+  <testcase name="createANamespaceInfoViaConstructor()" classname="io.proximax.sdk.model.namespace.NamespaceInfoTest" time="0.001"/>
+  <testcase name="shouldReturnRootTrueWhenNamespaceInfoIsFromRootNamespace()" classname="io.proximax.sdk.model.namespace.NamespaceInfoTest" time="0.0"/>
+  <testcase name="shouldReturnSubNamespaceTrueWhenNamespaceInfoIsFromSubNamespace()" classname="io.proximax.sdk.model.namespace.NamespaceInfoTest" time="0.0"/>
+  <testcase name="shouldReturnParentNamespaceIdWhenNamespaceInfoIsFromSubNamespace()" classname="io.proximax.sdk.model.namespace.NamespaceInfoTest" time="0.0"/>
+  <testcase name="shouldReturnRootNamespaceId()" classname="io.proximax.sdk.model.namespace.NamespaceInfoTest" time="0.001"/>
+  <testcase name="shouldParentNamespaceIdThrowErrorWhenNamespaceInfoIsFromRootNamespace()" classname="io.proximax.sdk.model.namespace.NamespaceInfoTest" time="0.001"/>
+  <testcase name="shouldReturnSubNamespaceId()" classname="io.proximax.sdk.model.namespace.NamespaceInfoTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

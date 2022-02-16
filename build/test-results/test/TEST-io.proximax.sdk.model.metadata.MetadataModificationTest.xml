@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.sdk.model.metadata.MetadataModificationTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:14" hostname="LAPTOP-A5KJ7JLN" time="0.009">
+  <properties/>
+  <testcase name="checkRemove()" classname="io.proximax.sdk.model.metadata.MetadataModificationTest" time="0.006"/>
+  <testcase name="checkConstructor()" classname="io.proximax.sdk.model.metadata.MetadataModificationTest" time="0.0"/>
+  <testcase name="checkAdd()" classname="io.proximax.sdk.model.metadata.MetadataModificationTest" time="0.001"/>
+  <testcase name="checkNullConstructorChecks()" classname="io.proximax.sdk.model.metadata.MetadataModificationTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

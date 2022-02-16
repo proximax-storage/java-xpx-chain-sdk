@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.sdk.model.account.AddressTest" tests="25" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:14" hostname="LAPTOP-A5KJ7JLN" time="0.088">
+  <properties/>
+  <testcase name="[1] SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26, MIJIN" classname="io.proximax.sdk.model.account.AddressTest" time="0.034"/>
+  <testcase name="[2] MDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26, MAIN_NET" classname="io.proximax.sdk.model.account.AddressTest" time="0.001"/>
+  <testcase name="[3] VDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26, MAIN_NET" classname="io.proximax.sdk.model.account.AddressTest" time="0.0"/>
+  <testcase name="[4] XDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26, TEST_NET" classname="io.proximax.sdk.model.account.AddressTest" time="0.001"/>
+  <testcase name="[5] WDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26, PRIVATE" classname="io.proximax.sdk.model.account.AddressTest" time="0.0"/>
+  <testcase name="[6] ZDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26, PRIVATE_TEST" classname="io.proximax.sdk.model.account.AddressTest" time="0.001"/>
+  <testcase name="[7] WDRDGF-TDLLCB-67D4HP-GIMIHP-NSRYRJ-RT7DOB-GWZY, MIJIN_TEST" classname="io.proximax.sdk.model.account.AddressTest" time="0.001"/>
+  <testcase name="testAddressWithSpacesCreation()" classname="io.proximax.sdk.model.account.AddressTest" time="0.0"/>
+  <testcase name="testLowerCaseAddressCreation()" classname="io.proximax.sdk.model.account.AddressTest" time="0.0"/>
+  <testcase name="equality()" classname="io.proximax.sdk.model.account.AddressTest" time="0.0"/>
+  <testcase name="[1] SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26, MIJIN_TEST" classname="io.proximax.sdk.model.account.AddressTest" time="0.001"/>
+  <testcase name="[2] MDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26, MIJIN" classname="io.proximax.sdk.model.account.AddressTest" time="0.001"/>
+  <testcase name="[3] VDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26, TEST_NET" classname="io.proximax.sdk.model.account.AddressTest" time="0.001"/>
+  <testcase name="[4] XDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26, MAIN_NET" classname="io.proximax.sdk.model.account.AddressTest" time="0.001"/>
+  <testcase name="[5] WDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26, PRIVATE_TEST" classname="io.proximax.sdk.model.account.AddressTest" time="0.001"/>
+  <testcase name="[6] ZDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26, PRIVATE" classname="io.proximax.sdk.model.account.AddressTest" time="0.001"/>
+  <testcase name="[1] b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf, MIJIN_TEST, SARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJETM3ZSP" classname="io.proximax.sdk.model.account.AddressTest" time="0.001"/>
+  <testcase name="[2] b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf, MIJIN, MARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJE5K5RYU" classname="io.proximax.sdk.model.account.AddressTest" time="0.001"/>
+  <testcase name="[3] b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf, TEST_NET, VARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJGOH3FCE" classname="io.proximax.sdk.model.account.AddressTest" time="0.001"/>
+  <testcase name="[4] b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf, MAIN_NET, XARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJF6CHIGW" classname="io.proximax.sdk.model.account.AddressTest" time="0.001"/>
+  <testcase name="[5] b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf, PRIVATE_TEST, WARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJHPRCU4F" classname="io.proximax.sdk.model.account.AddressTest" time="0.001"/>
+  <testcase name="[6] b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf, PRIVATE, ZARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJF2S3UOQ" classname="io.proximax.sdk.model.account.AddressTest" time="0.001"/>
+  <testcase name="testAddressCreation()" classname="io.proximax.sdk.model.account.AddressTest" time="0.001"/>
+  <testcase name="addressInPrettyFormat()" classname="io.proximax.sdk.model.account.AddressTest" time="0.001"/>
+  <testcase name="noEquality()" classname="io.proximax.sdk.model.account.AddressTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

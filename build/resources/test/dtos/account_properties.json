@@ -1,0 +1,23 @@
+[
+	{
+		"accountProperties": {
+			"address": "A8B26240287492CB5B75B32ABE3D6CCB66C93908D73CF41FD9",
+			"properties": [
+				{
+					"propertyType": 129,
+					"values": []
+				},
+				{
+					"propertyType": 130,
+					"values": []
+				},
+				{
+					"propertyType": 132,
+					"values": [
+						16724
+					]
+				}
+			]
+		}
+	}
+]

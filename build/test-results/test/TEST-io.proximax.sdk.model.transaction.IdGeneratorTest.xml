@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.sdk.model.transaction.IdGeneratorTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:15" hostname="LAPTOP-A5KJ7JLN" time="0.011">
+  <properties/>
+  <testcase name="namespacePathSupportsMultiLevelNamespaces()" classname="io.proximax.sdk.model.transaction.IdGeneratorTest" time="0.001"/>
+  <testcase name="mosaicIdGeneratesCorrectWellKnowId()" classname="io.proximax.sdk.model.transaction.IdGeneratorTest" time="0.001"/>
+  <testcase name="namespaceInvalid()" classname="io.proximax.sdk.model.transaction.IdGeneratorTest" time="0.005"/>
+  <testcase name="namespacePathGeneratesCorrectWellKnownChildPath()" classname="io.proximax.sdk.model.transaction.IdGeneratorTest" time="0.001"/>
+  <testcase name="namespacePathGeneratesCorrectWellKnownRootPath()" classname="io.proximax.sdk.model.transaction.IdGeneratorTest" time="0.0"/>
+  <testcase name="namespacePathRejectsNamesWithTooManyParts()" classname="io.proximax.sdk.model.transaction.IdGeneratorTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.core.crypto.CipherTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:03" hostname="LAPTOP-A5KJ7JLN" time="0.749">
+  <properties/>
+  <testcase name="encryptDelegatesToBlockCipher()" classname="io.proximax.core.crypto.CipherTest" time="0.333"/>
+  <testcase name="decryptDelegatesToBlockCipher()" classname="io.proximax.core.crypto.CipherTest" time="0.006"/>
+  <testcase name="canCreateCipherFromKeyPairs()" classname="io.proximax.core.crypto.CipherTest" time="0.394"/>
+  <testcase name="canCreateCipherFromCipher()" classname="io.proximax.core.crypto.CipherTest" time="0.001"/>
+  <testcase name="ctorDelegatesToEngineCreateBlockCipher()" classname="io.proximax.core.crypto.CipherTest" time="0.012"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

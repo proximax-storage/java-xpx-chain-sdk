@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.sdk.utils.dto.UInt64Test" tests="20" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:16" hostname="LAPTOP-A5KJ7JLN" time="0.034">
+  <properties/>
+  <testcase name="zeroShouldReturnAnArrayOfTwoWithTwoZeros()" classname="io.proximax.sdk.utils.dto.UInt64Test" time="0.0"/>
+  <testcase name="hexShouldBePadded()" classname="io.proximax.sdk.utils.dto.UInt64Test" time="0.0"/>
+  <testcase name="bigIntegerNEMToHex()" classname="io.proximax.sdk.utils.dto.UInt64Test" time="0.001"/>
+  <testcase name="bigIntegerXEMToHex()" classname="io.proximax.sdk.utils.dto.UInt64Test" time="0.0"/>
+  <testcase name="[1] [100, 0], 100" classname="io.proximax.sdk.utils.dto.UInt64Test" time="0.0"/>
+  <testcase name="[2] [1000, 0], 1000" classname="io.proximax.sdk.utils.dto.UInt64Test" time="0.0"/>
+  <testcase name="[3] [100000, 0], 100000" classname="io.proximax.sdk.utils.dto.UInt64Test" time="0.0"/>
+  <testcase name="[4] [12345, 99999], 429492434645049" classname="io.proximax.sdk.utils.dto.UInt64Test" time="0.001"/>
+  <testcase name="[5] [1111, 2222], 9543417332823" classname="io.proximax.sdk.utils.dto.UInt64Test" time="0.0"/>
+  <testcase name="oneShouldBeReturnedAsIntArray()" classname="io.proximax.sdk.utils.dto.UInt64Test" time="0.0"/>
+  <testcase name="[1] [100, 0], 100" classname="io.proximax.sdk.utils.dto.UInt64Test" time="0.001"/>
+  <testcase name="[2] [1000, 0], 1000" classname="io.proximax.sdk.utils.dto.UInt64Test" time="0.001"/>
+  <testcase name="[3] [100000, 0], 100000" classname="io.proximax.sdk.utils.dto.UInt64Test" time="0.0"/>
+  <testcase name="[4] [12345, 99999], 429492434645049" classname="io.proximax.sdk.utils.dto.UInt64Test" time="0.001"/>
+  <testcase name="[5] [1111, 2222], 9543417332823" classname="io.proximax.sdk.utils.dto.UInt64Test" time="0.0"/>
+  <testcase name="[1] [100, 0], 100" classname="io.proximax.sdk.utils.dto.UInt64Test" time="0.001"/>
+  <testcase name="[2] [1000, 0], 1000" classname="io.proximax.sdk.utils.dto.UInt64Test" time="0.0"/>
+  <testcase name="[3] [100000, 0], 100000" classname="io.proximax.sdk.utils.dto.UInt64Test" time="0.001"/>
+  <testcase name="[4] [12345, 99999], 429492434645049" classname="io.proximax.sdk.utils.dto.UInt64Test" time="0.0"/>
+  <testcase name="[5] [1111, 2222], 9543417332823" classname="io.proximax.sdk.utils.dto.UInt64Test" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

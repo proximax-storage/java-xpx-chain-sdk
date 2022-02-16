@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.core.math.SparseBitmapTest" tests="31" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:11" hostname="LAPTOP-A5KJ7JLN" time="0.06">
+  <properties/>
+  <testcase name="bitsCanBeSetAfterClearing()" classname="io.proximax.core.math.SparseBitmapTest" time="0.007"/>
+  <testcase name="toListReturnsSetBits()" classname="io.proximax.core.math.SparseBitmapTest" time="0.0"/>
+  <testcase name="iteratorReturnsSetBits()" classname="io.proximax.core.math.SparseBitmapTest" time="0.003"/>
+  <testcase name="cardinalityReturnsTheNumberOfSetBits()" classname="io.proximax.core.math.SparseBitmapTest" time="0.001"/>
+  <testcase name="andCardinalityReturnsTheNumberOfIntersectingBits()" classname="io.proximax.core.math.SparseBitmapTest" time="0.002"/>
+  <testcase name="createFromSortedDataCanCreateBitmapAroundNoBits()" classname="io.proximax.core.math.SparseBitmapTest" time="0.0"/>
+  <testcase name="batchOrCanCreateBitmapFromMultipleBitmaps()" classname="io.proximax.core.math.SparseBitmapTest" time="0.001"/>
+  <testcase name="bitsCanBeSetInOrderWithoutAscendingCheck()" classname="io.proximax.core.math.SparseBitmapTest" time="0.001"/>
+  <testcase name="andNotCreatesCorrectBitmap()" classname="io.proximax.core.math.SparseBitmapTest" time="0.001"/>
+  <testcase name="toStringReturnsCorrectRepresentationForNonEmptyBitmap()" classname="io.proximax.core.math.SparseBitmapTest" time="0.001"/>
+  <testcase name="batchOrCanCreateBitmapFromOneBitmap()" classname="io.proximax.core.math.SparseBitmapTest" time="0.0"/>
+  <testcase name="toStringReturnsCorrectRepresentationForEmptyBitmap()" classname="io.proximax.core.math.SparseBitmapTest" time="0.0"/>
+  <testcase name="batchOrCanCreateBitmapFromZeroBitmaps()" classname="io.proximax.core.math.SparseBitmapTest" time="0.0"/>
+  <testcase name="bitsCanBeSetInOrder()" classname="io.proximax.core.math.SparseBitmapTest" time="0.001"/>
+  <testcase name="equalsOnlyReturnsTrueForEquivalentObjects()" classname="io.proximax.core.math.SparseBitmapTest" time="0.002"/>
+  <testcase name="createFromSortedDataCanCreateBitmapAroundBitsInSortedOrder()" classname="io.proximax.core.math.SparseBitmapTest" time="0.002"/>
+  <testcase name="createEmptyCanCreateEmptyBitmap()" classname="io.proximax.core.math.SparseBitmapTest" time="0.0"/>
+  <testcase name="andCreatesCorrectBitmap()" classname="io.proximax.core.math.SparseBitmapTest" time="0.001"/>
+  <testcase name="bitsCanBeSetOutOfOrderWithoutAscendingCheck()" classname="io.proximax.core.math.SparseBitmapTest" time="0.001"/>
+  <testcase name="getHighestBitReturnsCorrectResultWhenNoBitsAreSet()" classname="io.proximax.core.math.SparseBitmapTest" time="0.001"/>
+  <testcase name="createFromSortedDataCanCreateBitmapAroundBitsInSortedOrderWithDuplicates()" classname="io.proximax.core.math.SparseBitmapTest" time="0.001"/>
+  <testcase name="getHighestBitReturnsCorrectResultWhenBitsAreSet()" classname="io.proximax.core.math.SparseBitmapTest" time="0.001"/>
+  <testcase name="orCreatesCorrectBitmap()" classname="io.proximax.core.math.SparseBitmapTest" time="0.001"/>
+  <testcase name="getReturnsFalseOutOfBounds()" classname="io.proximax.core.math.SparseBitmapTest" time="0.001"/>
+  <testcase name="hashCodesAreEqualForEquivalentObjects()" classname="io.proximax.core.math.SparseBitmapTest" time="0.002"/>
+  <testcase name="createFromUnsortedDataCanCreateBitmapAroundBitsInSortedOrderWithDuplicates()" classname="io.proximax.core.math.SparseBitmapTest" time="0.0"/>
+  <testcase name="clearZerosOutAllBits()" classname="io.proximax.core.math.SparseBitmapTest" time="0.0"/>
+  <testcase name="bitsCannotBeSetOutOfOrder()" classname="io.proximax.core.math.SparseBitmapTest" time="0.002"/>
+  <testcase name="createFromUnsortedDataCanCreateBitmapAroundBitsInSortedOrder()" classname="io.proximax.core.math.SparseBitmapTest" time="0.0"/>
+  <testcase name="createFromUnsortedDataCanCreateBitmapAroundBitsInUnsortedOrder()" classname="io.proximax.core.math.SparseBitmapTest" time="0.001"/>
+  <testcase name="createFromUnsortedDataCanCreateBitmapAroundNoBits()" classname="io.proximax.core.math.SparseBitmapTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

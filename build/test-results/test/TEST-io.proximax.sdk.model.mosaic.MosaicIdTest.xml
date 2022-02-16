@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.sdk.model.mosaic.MosaicIdTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:14" hostname="LAPTOP-A5KJ7JLN" time="0.014">
+  <properties/>
+  <testcase name="checkToStringWorks()" classname="io.proximax.sdk.model.mosaic.MosaicIdTest" time="0.002"/>
+  <testcase name="createAMosaicIdFromIdViaConstructor()" classname="io.proximax.sdk.model.mosaic.MosaicIdTest" time="0.001"/>
+  <testcase name="checkHashCode()" classname="io.proximax.sdk.model.mosaic.MosaicIdTest" time="0.001"/>
+  <testcase name="createAMosaicIdFromHexString()" classname="io.proximax.sdk.model.mosaic.MosaicIdTest" time="0.001"/>
+  <testcase name="createAMosaicIdFromMosaicNameViaConstructor()" classname="io.proximax.sdk.model.mosaic.MosaicIdTest" time="0.002"/>
+  <testcase name="badHexForConstructor()" classname="io.proximax.sdk.model.mosaic.MosaicIdTest" time="0.002"/>
+  <testcase name="shouldCompareMosaicIdsForEquality()" classname="io.proximax.sdk.model.mosaic.MosaicIdTest" time="0.0"/>
+  <testcase name="checkEquals()" classname="io.proximax.sdk.model.mosaic.MosaicIdTest" time="0.001"/>
+  <testcase name="someMoreData()" classname="io.proximax.sdk.model.mosaic.MosaicIdTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.core.utils.CircularStackTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:12" hostname="LAPTOP-A5KJ7JLN" time="0.017">
+  <properties/>
+  <testcase name="canIterateOverStackFromOldestToNewestElement()" classname="io.proximax.core.utils.CircularStackTest" time="0.001"/>
+  <testcase name="poppingFromStackDecreasesSizeByOne()" classname="io.proximax.core.utils.CircularStackTest" time="0.0"/>
+  <testcase name="canAddLimitElementsToCircularStack()" classname="io.proximax.core.utils.CircularStackTest" time="0.001"/>
+  <testcase name="canIterateOverStackFromNewestToOldestElementByPoppingAllElements()" classname="io.proximax.core.utils.CircularStackTest" time="0.001"/>
+  <testcase name="canAddSingleElementToCircularStack()" classname="io.proximax.core.utils.CircularStackTest" time="0.001"/>
+  <testcase name="peekOnEmptyStackThrowsException()" classname="io.proximax.core.utils.CircularStackTest" time="0.003"/>
+  <testcase name="canCopyLargerToSmaller()" classname="io.proximax.core.utils.CircularStackTest" time="0.001"/>
+  <testcase name="canCopySmallerToLarger()" classname="io.proximax.core.utils.CircularStackTest" time="0.0"/>
+  <testcase name="addingMoreThanLimitElementsToCircularStackAgesOutOlderElements()" classname="io.proximax.core.utils.CircularStackTest" time="0.001"/>
+  <testcase name="popFromEmptyStackThrowsException()" classname="io.proximax.core.utils.CircularStackTest" time="0.002"/>
+  <testcase name="copyIsAShallowCopy()" classname="io.proximax.core.utils.CircularStackTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

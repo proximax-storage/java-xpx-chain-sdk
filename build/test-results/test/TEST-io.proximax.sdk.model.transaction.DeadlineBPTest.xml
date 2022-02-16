@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.sdk.model.transaction.DeadlineBPTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:15" hostname="LAPTOP-A5KJ7JLN" time="0.164">
+  <properties/>
+  <testcase name="shouldCreateADeadlineForTwoHoursFromNowWithStaticConstructor()" classname="io.proximax.sdk.model.transaction.DeadlineBPTest" time="0.034"/>
+  <testcase name="checkToString()" classname="io.proximax.sdk.model.transaction.DeadlineBPTest" time="0.129"/>
+  <testcase name="shouldCreateADeadlineForTwoHoursFromNow()" classname="io.proximax.sdk.model.transaction.DeadlineBPTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

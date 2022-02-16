@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.sdk.model.transaction.SchemaAttributeTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:15" hostname="LAPTOP-A5KJ7JLN" time="0.005">
+  <properties/>
+  <testcase name="should read int16" classname="io.proximax.sdk.model.transaction.SchemaAttributeTest" time="0.0"/>
+  <testcase name="should read int32" classname="io.proximax.sdk.model.transaction.SchemaAttributeTest" time="0.001"/>
+  <testcase name="should calculate offset" classname="io.proximax.sdk.model.transaction.SchemaAttributeTest" time="0.0"/>
+  <testcase name="should calculate indirect" classname="io.proximax.sdk.model.transaction.SchemaAttributeTest" time="0.0"/>
+  <testcase name="should find vector in byte array" classname="io.proximax.sdk.model.transaction.SchemaAttributeTest" time="0.0"/>
+  <testcase name="should calculate vector length" classname="io.proximax.sdk.model.transaction.SchemaAttributeTest" time="0.001"/>
+  <testcase name="should find param in byte array" classname="io.proximax.sdk.model.transaction.SchemaAttributeTest" time="0.001"/>
+  <testcase name="should find vector in start position and byte array" classname="io.proximax.sdk.model.transaction.SchemaAttributeTest" time="0.0"/>
+  <testcase name="should find object start position" classname="io.proximax.sdk.model.transaction.SchemaAttributeTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

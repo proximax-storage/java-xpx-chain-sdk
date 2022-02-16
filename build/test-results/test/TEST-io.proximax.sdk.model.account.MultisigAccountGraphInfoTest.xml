@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.sdk.model.account.MultisigAccountGraphInfoTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:14" hostname="LAPTOP-A5KJ7JLN" time="0.017">
+  <properties/>
+  <testcase name="fromDto()" classname="io.proximax.sdk.model.account.MultisigAccountGraphInfoTest" time="0.015"/>
+  <testcase name="returnTheLevels()" classname="io.proximax.sdk.model.account.MultisigAccountGraphInfoTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

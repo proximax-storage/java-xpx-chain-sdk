@@ -11,8 +11,6 @@ import java.math.BigInteger;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.mosaic.MosaicId;

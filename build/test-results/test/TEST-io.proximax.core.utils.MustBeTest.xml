@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.core.utils.MustBeTest" tests="21" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:12" hostname="LAPTOP-A5KJ7JLN" time="0.016">
+  <properties/>
+  <testcase name="emptyThrowsIfCollectionIsNotEmpty()" classname="io.proximax.core.utils.MustBeTest" time="0.002"/>
+  <testcase name="matchThrowsIfStringIsTooLong()" classname="io.proximax.core.utils.MustBeTest" time="0.002"/>
+  <testcase name="matchThrowsIfStringIsEmpty()" classname="io.proximax.core.utils.MustBeTest" time="0.0"/>
+  <testcase name="falseValueDoesNotThrowIfValueIsFalse()" classname="io.proximax.core.utils.MustBeTest" time="0.0"/>
+  <testcase name="notWhitespaceDoesNotThrowIfStringContainsAtLeastOneNonWhitespaceChar()" classname="io.proximax.core.utils.MustBeTest" time="0.001"/>
+  <testcase name="emptyDoesNotThrowIfCollectionIsEmpty()" classname="io.proximax.core.utils.MustBeTest" time="0.0"/>
+  <testcase name="notWhitespaceThrowsIfStringContainsNoNonWhitespaceChars()" classname="io.proximax.core.utils.MustBeTest" time="0.002"/>
+  <testcase name="notNullDoesNotThrowIfObjectIsNotNull()" classname="io.proximax.core.utils.MustBeTest" time="0.0"/>
+  <testcase name="falseValueThrowsIfValueIsTrue()" classname="io.proximax.core.utils.MustBeTest" time="0.001"/>
+  <testcase name="trueValueDoesNotThrowIfValueIsTrue()" classname="io.proximax.core.utils.MustBeTest" time="0.0"/>
+  <testcase name="trueValueThrowsIfValueIsFalse()" classname="io.proximax.core.utils.MustBeTest" time="0.001"/>
+  <testcase name="notWhitespaceThrowsIfStringIsTooLong()" classname="io.proximax.core.utils.MustBeTest" time="0.001"/>
+  <testcase name="inRangeThrowsIfLongValueIsLessThanMinValue()" classname="io.proximax.core.utils.MustBeTest" time="0.001"/>
+  <testcase name="inRangeDoesNotThrowIfValueIsInRange()" classname="io.proximax.core.utils.MustBeTest" time="0.0"/>
+  <testcase name="matchDoesNotThrowIfAllConditionsAreSatisfied()" classname="io.proximax.core.utils.MustBeTest" time="0.0"/>
+  <testcase name="inRangeThrowsIfLongValueIsGreaterThanMaxValue()" classname="io.proximax.core.utils.MustBeTest" time="0.0"/>
+  <testcase name="inRangeThrowsIfValueIsLessThanMinValue()" classname="io.proximax.core.utils.MustBeTest" time="0.001"/>
+  <testcase name="matchThrowsIfStringIsNull()" classname="io.proximax.core.utils.MustBeTest" time="0.001"/>
+  <testcase name="inRangeDoesNotThrowIfLongValueIsInRange()" classname="io.proximax.core.utils.MustBeTest" time="0.0"/>
+  <testcase name="matchThrowsIfStringDoesNotMatchPattern()" classname="io.proximax.core.utils.MustBeTest" time="0.0"/>
+  <testcase name="inRangeThrowsIfValueIsGreaterThanMaxValue()" classname="io.proximax.core.utils.MustBeTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

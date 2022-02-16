@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/java-xpx-chain-sdk.iml" filepath="$PROJECT_DIR$/.idea/modules/java-xpx-chain-sdk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/java-xpx-chain-sdk.e2e.iml" filepath="$PROJECT_DIR$/.idea/modules/java-xpx-chain-sdk.e2e.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/java-xpx-chain-sdk.main.iml" filepath="$PROJECT_DIR$/.idea/modules/java-xpx-chain-sdk.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/java-xpx-chain-sdk.test.iml" filepath="$PROJECT_DIR$/.idea/modules/java-xpx-chain-sdk.test.iml" />
+    </modules>
+  </component>
+</project>

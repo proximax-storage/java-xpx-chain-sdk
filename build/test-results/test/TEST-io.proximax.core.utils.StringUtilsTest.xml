@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.core.utils.StringUtilsTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:12" hostname="LAPTOP-A5KJ7JLN" time="0.005">
+  <properties/>
+  <testcase name="stringCanBeConvertedToByteArray()" classname="io.proximax.core.utils.StringUtilsTest" time="0.0"/>
+  <testcase name="repeat()" classname="io.proximax.core.utils.StringUtilsTest" time="0.001"/>
+  <testcase name="replaceVariableMustMatchVariableCaseSensitively()" classname="io.proximax.core.utils.StringUtilsTest" time="0.0"/>
+  <testcase name="replaceVariableReplaceOnlyExactVariables()" classname="io.proximax.core.utils.StringUtilsTest" time="0.001"/>
+  <testcase name="replaceVariableOnStringWithVariablesReturnsCorrectResults()" classname="io.proximax.core.utils.StringUtilsTest" time="0.0"/>
+  <testcase name="replaceVariableCanReplaceMultipleOccurrencesOfVariable()" classname="io.proximax.core.utils.StringUtilsTest" time="0.001"/>
+  <testcase name="isNullOrEmptyReturnsCorrectResult()" classname="io.proximax.core.utils.StringUtilsTest" time="0.0"/>
+  <testcase name="replaceVariableOnStringWithoutVariablesReturnsStringItself()" classname="io.proximax.core.utils.StringUtilsTest" time="0.0"/>
+  <testcase name="replaceVariableCanReplaceVariableOccurrencesBetweenText()" classname="io.proximax.core.utils.StringUtilsTest" time="0.0"/>
+  <testcase name="isNullOrWhitespaceReturnsCorrectResult()" classname="io.proximax.core.utils.StringUtilsTest" time="0.0"/>
+  <testcase name="byteArrayCanBeConvertedToString()" classname="io.proximax.core.utils.StringUtilsTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

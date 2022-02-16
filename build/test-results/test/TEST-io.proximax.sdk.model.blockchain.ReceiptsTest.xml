@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.proximax.sdk.model.blockchain.ReceiptsTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:14" hostname="LAPTOP-A5KJ7JLN" time="0.004">
+  <properties/>
+  <testcase name="testFromDto()" classname="io.proximax.sdk.model.blockchain.ReceiptsTest" time="0.003"/>
+  <testcase name="testConstructor()" classname="io.proximax.sdk.model.blockchain.ReceiptsTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
