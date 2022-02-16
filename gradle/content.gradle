@@ -1,0 +1,101 @@
+/*
+ * Copyright 2018 NEM
+ * Copyright 2019 ProximaX
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// package sources
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    archiveClassifier = 'sources'
+    // include all source files
+    from sourceSets.main.allJava
+    // include files with project info
+    from (rootDir) {
+        include 'LICENSE'
+        include 'CHANGELOG.md'
+        include 'README.md'
+        into ("META-INF")
+    }
+    manifest {
+        attributes(
+            'Built-By'             : 'https://github.com/proximax-storage/java-xpx-chain-sdk',
+            'Build-Timestamp'      : new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
+            'Build-Revision'       : project.version,
+            'Created-By'           : "Gradle ${gradle.gradleVersion}",
+            'Build-Jdk'            : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
+            'Build-OS'             : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}",
+            'Specification-Title'  : 'ProximaX Sirius Blockchain Java SDK',
+            'Implementation-Vendor': 'ProximaX',
+            'Bundle-License'       : 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+        )
+    }
+}
+// package javadoc
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    archiveClassifier = 'javadoc'
+    from javadoc
+    // include files with project info
+    from (rootDir) {
+        include 'LICENSE'
+        include 'CHANGELOG.md'
+        include 'README.md'
+        into ("META-INF")
+    }
+    manifest {
+        attributes(
+            'Built-By'             : 'https://github.com/proximax-storage/java-xpx-chain-sdk',
+            'Build-Timestamp'      : new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
+            'Build-Revision'       : project.version,
+            'Created-By'           : "Gradle ${gradle.gradleVersion}",
+            'Build-Jdk'            : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
+            'Build-OS'             : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}",
+            'Specification-Title'  : 'ProximaX Sirius Blockchain Java SDK',
+            'Implementation-Vendor': 'ProximaX',
+            'Bundle-License'       : 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+        )
+    }
+}
+
+// adjust main jar file
+jar {
+    // include files with project info
+    from (rootDir) {
+        include 'LICENSE'
+        include 'CHANGELOG.md'
+        include 'README.md'
+        into ("META-INF")
+    }
+    manifest {
+        attributes(
+            'Built-By'             : 'https://github.com/proximax-storage/java-xpx-chain-sdk',
+            'Build-Timestamp'      : new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
+            'Build-Revision'       : project.version,
+            'Created-By'           : "Gradle ${gradle.gradleVersion}",
+            'Build-Jdk'            : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
+            'Build-OS'             : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}",
+            'Specification-Title'  : 'ProximaX Sirius Blockchain Java SDK',
+            'Implementation-Vendor': 'ProximaX',
+            'Bundle-License'       : 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+        )
+    }
+}
+
+// add sources and javadoc to release artifacts
+artifacts {
+    archives jar
+    archives sourcesJar
+    archives javadocJar
+}

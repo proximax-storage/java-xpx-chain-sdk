@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="io.proximax.sdk.model.mosaic.NetworkHarvestingMosaicTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:15" hostname="LAPTOP-A5KJ7JLN" time="0.001">
-  <properties/>
-  <testcase name="shouldCreateRelative()" classname="io.proximax.sdk.model.mosaic.NetworkHarvestingMosaicTest" time="0.0"/>
-  <testcase name="shouldCreateViaConstructor()" classname="io.proximax.sdk.model.mosaic.NetworkHarvestingMosaicTest" time="0.0"/>
-  <testcase name="shouldCreateAbsolute()" classname="io.proximax.sdk.model.mosaic.NetworkHarvestingMosaicTest" time="0.0"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

@@ -1,0 +1,18 @@
+# Gradle build files
+/.gradle
+/build
+
+# Eclipse project files
+/bin
+/.project
+/.classpath
+/.settings
+
+# VisualStudio Code project files
+/.vscode
+
+# IntelliJ project files
+/.idea
+/*.iml
+/out
+/gen

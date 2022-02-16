@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="io.proximax.sdk.infrastructure.QueryParamsTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:13" hostname="LAPTOP-A5KJ7JLN" time="0.01">
-  <properties/>
-  <testcase name="shouldCreateQueryParamsViaCostructor()" classname="io.proximax.sdk.infrastructure.QueryParamsTest" time="0.002"/>
-  <testcase name="urlIsOK()" classname="io.proximax.sdk.infrastructure.QueryParamsTest" time="0.007"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

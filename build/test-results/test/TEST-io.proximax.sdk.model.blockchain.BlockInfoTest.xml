@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="io.proximax.sdk.model.blockchain.BlockInfoTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:14" hostname="LAPTOP-A5KJ7JLN" time="0.09">
-  <properties/>
-  <testcase name="createANewBlockInforomDto()" classname="io.proximax.sdk.model.blockchain.BlockInfoTest" time="0.087"/>
-  <testcase name="createANewBlockInfo()" classname="io.proximax.sdk.model.blockchain.BlockInfoTest" time="0.003"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

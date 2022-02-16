@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="io.proximax.sdk.model.account.props.AccountPropertyModificationTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:14" hostname="LAPTOP-A5KJ7JLN" time="0.007">
-  <properties/>
-  <testcase name="testStaticRemove()" classname="io.proximax.sdk.model.account.props.AccountPropertyModificationTest" time="0.006"/>
-  <testcase name="testStaticAdd()" classname="io.proximax.sdk.model.account.props.AccountPropertyModificationTest" time="0.001"/>
-  <testcase name="testConstructor()" classname="io.proximax.sdk.model.account.props.AccountPropertyModificationTest" time="0.0"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

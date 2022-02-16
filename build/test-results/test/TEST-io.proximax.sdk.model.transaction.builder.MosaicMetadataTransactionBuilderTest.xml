@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="io.proximax.sdk.model.transaction.builder.MosaicMetadataTransactionBuilderTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-01-19T12:20:15" hostname="LAPTOP-A5KJ7JLN" time="0.009">
-  <properties/>
-  <testcase name="test()" classname="io.proximax.sdk.model.transaction.builder.MosaicMetadataTransactionBuilderTest" time="0.009"/>
-  <system-out><![CDATA[-55357547110036927803955703308646656059679544715179787632780787460622465209231
--55357547110036927803955703308646656059679544715179787632780787460622465209231
-]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
