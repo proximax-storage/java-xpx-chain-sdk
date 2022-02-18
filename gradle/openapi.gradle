@@ -26,6 +26,6 @@ openApiGenerate {
     modelPackage = "io.proximax.sdk.gen.model"
     generateAliasAsModel = true
     configOptions = [
-        dateLibrary: "java8"
+        dateLibrary: "java11"
     ]
 }

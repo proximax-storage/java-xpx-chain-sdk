@@ -16,3 +16,5 @@
 /*.iml
 /out
 /gen
+
+/src/gen/java/io/proximax/sdk/gen/buffers
