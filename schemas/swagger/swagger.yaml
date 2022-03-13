@@ -7,65 +7,65 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   description: ""
 tags:
-- name: Account routes
-  description: |
-    Account related
-    endpoints.
-- name: Block routes
-  description: |
-    Block related endpoints.
-- name: Config routes
-  description: |
-    Config related endpoints.
-- name: Chain routes
-  description: |
-    Chain related endpoints.
-- name: Diagnostic routes
-  description: |
-    Diagnostic related endpoints.
-- name: Metadata V2 routes
-  description: |
-    Metadata V2 related endpoints.
-- name: Mosaic routes
-  description: |
-    Mosaic related endpoints.
-- name: Namespace routes
-  description: |
-    Namespace related endpoints.
-- name: Transaction routes
-  description: |
-    Transaction related endpoints.
-- name: Network routes
-  description: |
-    Network related endpoints.
-- name: Node routes
-  description: |
-    Node related endpoints.
-- name: Upgrade routes
-  description: |
-    Upgrade related endpoints.
-- name: Lock routes
-  description: |
-    Lock related endpoints.
-- name: Exchange routes
-  description: |
-    Exchange related endpoints.
-    
+  - name: Account routes
+    description: |
+      Account related
+      endpoints.
+  - name: Block routes
+    description: |
+      Block related endpoints.
+  - name: Config routes
+    description: |
+      Config related endpoints.
+  - name: Chain routes
+    description: |
+      Chain related endpoints.
+  - name: Diagnostic routes
+    description: |
+      Diagnostic related endpoints.
+  - name: Metadata V2 routes
+    description: |
+      Metadata V2 related endpoints.
+  - name: Mosaic routes
+    description: |
+      Mosaic related endpoints.
+  - name: Namespace routes
+    description: |
+      Namespace related endpoints.
+  - name: Transaction routes
+    description: |
+      Transaction related endpoints.
+  - name: Network routes
+    description: |
+      Network related endpoints.
+  - name: Node routes
+    description: |
+      Node related endpoints.
+  - name: Upgrade routes
+    description: |
+      Upgrade related endpoints.
+  - name: Lock routes
+    description: |
+      Lock related endpoints.
+  - name: Exchange routes
+    description: |
+      Exchange related endpoints.
+
 paths:
   "/account/{accountId}":
     get:
       tags:
-      - Account routes
+        - Account routes
       summary: Get account information
       description: Returns the account information.
       operationId: getAccountInfo
       parameters:
-      - name: accountId
-        in: path
-        description: The public key or address of the account.
-        required: true
-        schema:
-          type: string
+        - name: accountId
+          in: path
+          description: The public key or address of the account.
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: success
@@ -80,7 +80,7 @@ paths:
   /account:
     post:
       tags:
-      - Account routes
+        - Account routes
       summary: Get accounts information
       description: Returns the account information for an array of accounts.
       operationId: getAccountsInfo
@@ -103,7 +103,7 @@ paths:
   "/account/{accountId}/properties":
     get:
       tags:
-      - Account routes
+        - Account routes
       summary: Get account configurable properties information
       description: |
         Returns the [configurable
@@ -111,12 +111,12 @@ paths:
         a given account.
       operationId: getAccountProperties
       parameters:
-      - name: accountId
-        in: path
-        description: The public key or address of the account.
-        required: true
-        schema:
-          type: string
+        - name: accountId
+          in: path
+          description: The public key or address of the account.
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: success
@@ -131,7 +131,7 @@ paths:
   /account/properties:
     post:
       tags:
-      - Account routes
+        - Account routes
       summary: Get account properties for given array of addresses
       description: |
         Returns the [configurable
@@ -157,19 +157,19 @@ paths:
   "/account/{accountId}/multisig":
     get:
       tags:
-      - Account routes
+        - Account routes
       summary: Get multisig account information
       description: Returns the [multisig
         account](https://nemtech.github.io/concepts/multisig-account.html)
         information.
       operationId: getAccountMultisig
       parameters:
-      - name: accountId
-        in: path
-        description: The public key or address of the account.
-        required: true
-        schema:
-          type: string
+        - name: accountId
+          in: path
+          description: The public key or address of the account.
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: success
@@ -184,19 +184,19 @@ paths:
   "/account/{accountId}/multisig/graph":
     get:
       tags:
-      - Account routes
+        - Account routes
       summary: Get multisig account graph information
       description: Returns the [multisig
         account](https://nemtech.github.io/concepts/multisig-account.html)
         graph.
       operationId: getAccountMultisigGraph
       parameters:
-      - name: accountId
-        in: path
-        description: The public key or address of the account.
-        required: true
-        schema:
-          type: string
+        - name: accountId
+          in: path
+          description: The public key or address of the account.
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: success
@@ -213,31 +213,31 @@ paths:
   "/blocks/{height}/limit/{limit}":
     get:
       tags:
-      - Block routes
+        - Block routes
       summary: Get blocks information
       description: Gets up to limit number of blocks after given block height.
       operationId: getBlocksByHeightWithLimit
       parameters:
-      - name: height
-        in: path
-        description: The height of the block. If height -1 is not a multiple of the limit
-          provided, the inferior closest multiple + 1 is used instead.
-        required: true
-        schema:
-          type: integer
-          format: int64
-          minimum: 1
-      - name: limit
-        in: path
-        description: The number of blocks to be returned.
-        required: true
-        schema:
-          type: integer
-          enum:
-          - 25
-          - 50
-          - 75
-          - 100
+        - name: height
+          in: path
+          description: The height of the block. If height -1 is not a multiple of the limit
+            provided, the inferior closest multiple + 1 is used instead.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+        - name: limit
+          in: path
+          description: The number of blocks to be returned.
+          required: true
+          schema:
+            type: integer
+            enum:
+              - 25
+              - 50
+              - 75
+              - 100
       responses:
         "200":
           description: success
@@ -253,19 +253,19 @@ paths:
   "/block/{height}":
     get:
       tags:
-      - Block routes
+        - Block routes
       summary: Get block information
       description: Gets a block from the chain that has the given height.
       operationId: getBlockByHeight
       parameters:
-      - name: height
-        in: path
-        description: The height of the block.
-        required: true
-        schema:
-          type: integer
-          format: int64
-          minimum: 1
+        - name: height
+          in: path
+          description: The height of the block.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
       responses:
         "200":
           description: success
@@ -280,30 +280,30 @@ paths:
   "/block/{height}/transaction/{hash}/merkle":
     get:
       tags:
-      - Block routes
+        - Block routes
       summary: Get the merkle path for a given a transaction and block
       description: Returns the merkle path for a
         [transaction](https://nemtech.github.io/concepts/transaction.html)
-                     included in a block. The path is the complementary data needed to
-                     calculate the merkle root. A client can compare if the calculated root
-                     equals the one recorded in the block header, verifying that the
-                     transaction was included in the block.
+        included in a block. The path is the complementary data needed to
+        calculate the merkle root. A client can compare if the calculated root
+        equals the one recorded in the block header, verifying that the
+        transaction was included in the block.
       operationId: getMerkleTransaction
       parameters:
-      - name: height
-        in: path
-        description: The height of the block.
-        required: true
-        schema:
-          type: integer
-          format: int64
-          minimum: 1
-      - name: hash
-        in: path
-        description: The hash of the transaction.
-        required: true
-        schema:
-          type: string
+        - name: height
+          in: path
+          description: The height of the block.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+        - name: hash
+          in: path
+          description: The hash of the transaction.
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: success
@@ -318,20 +318,20 @@ paths:
   "/block/{height}/receipts":
     get:
       tags:
-      - Block routes
+        - Block routes
       summary: Get receipts from a block
       description: Returns the [receipts](https://nemtech.github.io/concepts/receipt.html)
         linked to a block.
       operationId: getBlockReceipts
       parameters:
-      - name: height
-        in: path
-        description: The height of the block.
-        required: true
-        schema:
-          type: integer
-          format: int64
-          minimum: 1
+        - name: height
+          in: path
+          description: The height of the block.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
       responses:
         "200":
           description: success
@@ -346,7 +346,7 @@ paths:
   "/block/{height}/receipt/{hash}/merkle":
     get:
       tags:
-      - Block routes
+        - Block routes
       summary: Get the merkle path for a given a receipt statement hash and block
       description: Returns the merkle path for a [receipt statement or
         resolution](https://nemtech.github.io/concepts/receipt.html) linked to a
@@ -356,20 +356,20 @@ paths:
         the block.
       operationId: getMerkleReceipts
       parameters:
-      - name: height
-        in: path
-        description: The height of the block.
-        required: true
-        schema:
-          type: integer
-          format: int64
-          minimum: 1
-      - name: hash
-        in: path
-        description: The hash of the receipt statement or resolution.
-        required: true
-        schema:
-          type: string
+        - name: height
+          in: path
+          description: The height of the block.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+        - name: hash
+          in: path
+          description: The hash of the receipt statement or resolution.
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: success
@@ -384,7 +384,7 @@ paths:
   /chain/height:
     get:
       tags:
-      - Chain routes
+        - Chain routes
       summary: Get the current height of the chain
       description: Returns the current height of the blockchain.
       operationId: getBlockchainHeight
@@ -398,7 +398,7 @@ paths:
   /chain/score:
     get:
       tags:
-      - Chain routes
+        - Chain routes
       summary: Get the current score of the chain
       description: |
         Gets the current score of the blockchain. The higher the score, the
@@ -419,7 +419,7 @@ paths:
   /diagnostic/storage:
     get:
       tags:
-      - Diagnostic routes
+        - Diagnostic routes
       summary: Get the storage information of the node
       description: Returns diagnostic information about the node storage.
       operationId: getDiagnosticStorage
@@ -433,7 +433,7 @@ paths:
   /diagnostic/server:
     get:
       tags:
-      - Diagnostic routes
+        - Diagnostic routes
       summary: Get the version of the running rest component
       description: Returns the version of the running rest component.
       operationId: getServerInfo
@@ -447,19 +447,19 @@ paths:
   '/config/{height}':
     get:
       tags:
-      - Config routes
+        - Config routes
       summary: Get config of network
       description: Gets config of network at height.
       operationId: getConfig
       parameters:
-      - name: height
-        in: path
-        description: The height of the blockchain to get config.
-        required: true
-        schema:
-          type: integer
-          format: int64
-          minimum: 1
+        - name: height
+          in: path
+          description: The height of the blockchain to get config.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
       responses:
         '200':
           description: success
@@ -470,21 +470,21 @@ paths:
         '404':
           description: resource not found
         '409':
-          description: invalid argument  
+          description: invalid argument
   '/metadata_v2/{compositeHash}':
     get:
       tags:
-      - Metadata V2 routes
+        - Metadata V2 routes
       summary: Get metadata (namespace/mosaic/account) for an compositeHashes
       description: Gets an V2 metadata.
       operationId: getNemMetadata
       parameters:
-      - name: compositeHash
-        in: path
-        description: The composited hash.
-        required: true
-        schema:
-          type: string
+        - name: compositeHash
+          in: path
+          description: The composited hash.
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: success
@@ -524,7 +524,7 @@ paths:
           description: invalid argument
     post:
       tags:
-      - Metadata V2 routes
+        - Metadata V2 routes
       summary: Get metadatas (namespace/mosaic/account) for compositeHashes
       description: Gets v2 metadatas.
       operationId: getNemMetadatas
@@ -543,22 +543,22 @@ paths:
         "400":
           description: invalid content
         "409":
-          description: invalid argument        
+          description: invalid argument
   "/mosaic/{mosaicId}":
     get:
       tags:
-      - Mosaic routes
+        - Mosaic routes
       summary: Get mosaic information
       description: Gets the mosaic definition for a given mosaicId.
       operationId: getMosaic
       parameters:
-      - name: mosaicId
-        in: path
-        description: The mosaic identifier.
-        required: true
-        schema:
-          type: string
-          format: hex
+        - name: mosaicId
+          in: path
+          description: The mosaic identifier.
+          required: true
+          schema:
+            type: string
+            format: hex
       responses:
         "200":
           description: success
@@ -573,18 +573,18 @@ paths:
   "/mosaic/{mosaicId}/levy":
     get:
       tags:
-      - Mosaic routes
+        - Mosaic routes
       summary: Get mosaic levy information
       description: Gets the mosaic levy definition for a given mosaicId.
       operationId: getMosaicLevy
       parameters:
-      - name: mosaicId
-        in: path
-        description: The mosaic identifier.
-        required: true
-        schema:
-          type: string
-          format: hex
+        - name: mosaicId
+          in: path
+          description: The mosaic identifier.
+          required: true
+          schema:
+            type: string
+            format: hex
       responses:
         "200":
           description: success
@@ -599,30 +599,30 @@ paths:
   "/mosaic/{mosaicId}/richlist":
     get:
       tags:
-      - Mosaic routes
+        - Mosaic routes
       summary: Get mosaic information
       description: Retrieve owners of a given mosaic sorted on descending order based on amount. (REST only)
       operationId: getMosaicRichList
       parameters:
-      - name: mosaicId
-        in: path
-        description: The mosaic identifier.
-        required: true
-        schema:
-          type: string
-          format: hex
-      - name: page
-        in: query
-        description: The page of list (starts at 0).
-        required: false
-        schema:
-          type: integer
-      - name: pageSize
-        in: query
-        description: The count of items on a page (max 100, default 25).
-        required: false
-        schema:
-          type: integer
+        - name: mosaicId
+          in: path
+          description: The mosaic identifier.
+          required: true
+          schema:
+            type: string
+            format: hex
+        - name: page
+          in: query
+          description: The page of list (starts at 0).
+          required: false
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: The count of items on a page (max 100, default 25).
+          required: false
+          schema:
+            type: integer
       responses:
         "200":
           description: success
@@ -639,7 +639,7 @@ paths:
   /mosaic:
     post:
       tags:
-      - Mosaic routes
+        - Mosaic routes
       summary: Get mosaics information for an array of mosaics
       description: Gets an array of mosaic definition.
       operationId: getMosaics
@@ -662,7 +662,7 @@ paths:
   /mosaic/names:
     post:
       tags:
-      - Mosaic routes
+        - Mosaic routes
       summary: Get readable names for a set of mosaics
       description: Returns friendly names for mosaics.
       operationId: getMosaicsNames
@@ -685,18 +685,18 @@ paths:
   "/namespace/{namespaceId}":
     get:
       tags:
-      - Namespace routes
+        - Namespace routes
       summary: Get namespace information
       description: Gets the namespace for a given namespaceId.
       operationId: getNamespace
       parameters:
-      - name: namespaceId
-        in: path
-        description: The namespace identifier.
-        required: true
-        schema:
-          type: string
-          format: hex
+        - name: namespaceId
+          in: path
+          description: The namespace identifier.
+          required: true
+          schema:
+            type: string
+            format: hex
       responses:
         "200":
           description: success
@@ -711,27 +711,27 @@ paths:
   "/account/{accountId}/namespaces":
     get:
       tags:
-      - Namespace routes
+        - Namespace routes
       summary: Get namespaces owned by an account
       description: Gets an array of namespaces for a given account address.
       operationId: getNamespacesFromAccount
       parameters:
-      - name: accountId
-        in: path
-        description: The address or public key of the account.
-        required: true
-        schema:
-          type: string
-      - name: pageSize
-        in: query
-        description: The number of namespaces to return.
-        schema:
-          type: integer
-      - name: id
-        in: query
-        description: The namespace id up to which namespace objects are returned.
-        schema:
-          type: string
+        - name: accountId
+          in: path
+          description: The address or public key of the account.
+          required: true
+          schema:
+            type: string
+        - name: pageSize
+          in: query
+          description: The number of namespaces to return.
+          schema:
+            type: integer
+        - name: id
+          in: query
+          description: The namespace id up to which namespace objects are returned.
+          schema:
+            type: string
       responses:
         "200":
           description: success
@@ -747,21 +747,21 @@ paths:
   /account/namespaces:
     post:
       tags:
-      - Namespace routes
+        - Namespace routes
       summary: Get namespaces for given array of addresses
       description: Gets namespaces for a given array of addresses.
       operationId: getNamespacesFromAccounts
       parameters:
-      - name: pageSize
-        in: query
-        description: The number of namespaces to return.
-        schema:
-          type: integer
-      - name: id
-        in: query
-        description: The namespace id up to which namespace objects are returned.
-        schema:
-          type: string
+        - name: pageSize
+          in: query
+          description: The number of namespaces to return.
+          schema:
+            type: integer
+        - name: id
+          in: query
+          description: The namespace id up to which namespace objects are returned.
+          schema:
+            type: string
       requestBody:
         $ref: "#/components/requestBodies/accountIds"
       responses:
@@ -781,7 +781,7 @@ paths:
   /account/names:
     post:
       tags:
-      - Account routes
+        - Account routes
       summary:  Get readable names for a set of accountIds.
       description: Returns friendly names for accounts.
       operationId: getAccountsNames
@@ -804,7 +804,7 @@ paths:
   /namespace/names:
     post:
       tags:
-      - Namespace routes
+        - Namespace routes
       summary: Get readable names for a set of namespaces
       description: Returns friendly names for namespaces.
       operationId: getNamespacesNames
@@ -831,10 +831,10 @@ paths:
   "/transactions":
     put:
       tags:
-      - Transaction routes
+        - Transaction routes
       summary: Announce a new transaction
       description: Announces a transaction to the network. It is recommended to use the
-                    SDK to announce transactions as they should be.
+        SDK to announce transactions as they should be.
       operationId: announceTransaction
       requestBody:
         $ref: "#/components/requestBodies/transactionPayload"
@@ -852,30 +852,30 @@ paths:
   "/transactions/{group}":
     get:
       tags:
-      - Transaction routes
+        - Transaction routes
       summary: Get transactions information
       description: Returns transactions information by given group.
       operationId: getTransactionsByGroup
       parameters:
-      - name: group
-        in: path
-        description: The group of the transaction.
-        required: true
-        schema:
-          type: string
-          enum: [confirmed, unconfirmed, partial]
-      - $ref: '#/components/parameters/heightQuery'
-      - $ref: '#/components/parameters/fromHeightQuery'
-      - $ref: '#/components/parameters/toHeightQuery'
-      - $ref: '#/components/parameters/addressQuery'
-      - $ref: '#/components/parameters/signerPublicKeyQuery'
-      - $ref: '#/components/parameters/recipientAddressQuery'
-      - $ref: '#/components/parameters/transactionTypeQuery'
-      - $ref: '#/components/parameters/embeddedQuery'
-      - $ref: '#/components/parameters/pageSizeQuery'
-      - $ref: '#/components/parameters/pageNumberQuery'
-      - $ref: '#/components/parameters/offsetQuery'
-      - $ref: '#/components/parameters/orderQuery'
+        - name: group
+          in: path
+          description: The group of the transaction.
+          required: true
+          schema:
+            type: string
+            enum: [confirmed, unconfirmed, partial]
+        - $ref: '#/components/parameters/heightQuery'
+        - $ref: '#/components/parameters/fromHeightQuery'
+        - $ref: '#/components/parameters/toHeightQuery'
+        - $ref: '#/components/parameters/addressQuery'
+        - $ref: '#/components/parameters/signerPublicKeyQuery'
+        - $ref: '#/components/parameters/recipientAddressQuery'
+        - $ref: '#/components/parameters/transactionTypeQuery'
+        - $ref: '#/components/parameters/embeddedQuery'
+        - $ref: '#/components/parameters/pageSizeQuery'
+        - $ref: '#/components/parameters/pageNumberQuery'
+        - $ref: '#/components/parameters/offsetQuery'
+        - $ref: '#/components/parameters/orderQuery'
       responses:
         "200":
           description: success
@@ -890,35 +890,33 @@ paths:
           description: resource not found
         "409":
           description: invalid argument
-    post:   
+    post:
       tags:
-      - Transaction routes
+        - Transaction routes
       summary: Get transactions information
       description: Return transactions information of given array of transactionsId or transactionsHashes by given transactions group.
       operationId: getTransactionsByGroupAndId
       parameters:
-      - name: group
-        in: path
-        description: The group of the transaction 
-        required: true
-        schema:
-          type: string
-          enum: [confirmed, unconfirmed, partial]
+        - name: group
+          in: path
+          description: The group of the transaction
+          required: true
+          schema:
+            type: string
+            enum: [confirmed, unconfirmed, partial]
       requestBody:
         content:
           application/json:
             schema:
-              anyOf:
-              - $ref: '#/components/schemas/transactionIds'
-              - $ref: '#/components/schemas/transactionHashes'
+              $ref: '#/components/schemas/getTransactionsByGroupAndIdSchema'
         required: true
-      responses:     
+      responses:
         "200":
           description: success
           content:
             application/json:
               schema:
-                  $ref: "#/components/schemas/TransactionInfoDTO"
+                $ref: "#/components/schemas/TransactionInfoDTO"
         "400":
           description: invalid content
         "409":
@@ -926,26 +924,24 @@ paths:
   "/transactions/{group}/{transactionId}":
     get:
       tags:
-      - Transaction routes
+        - Transaction routes
       summary: Get transactions information
       description: Returns transaction information by a given transactionId and group.
       operationId: getTransactionByGroupAndID
       parameters:
-      - name: group
-        in: path
-        description: The group of the transaction.
-        required: true
-        schema:
-          type: string
-          enum: [confirmed, unconfirmed, partial]
-      - name: transactionId
-        in: path
-        description: The transactionId or transactionsHash.
-        required: true
-        schema:
-          anyOf:
-          - $ref: '#/components/schemas/TransactionId'
-          - $ref: '#/components/schemas/HashDTO'
+        - name: group
+          in: path
+          description: The group of the transaction.
+          required: true
+          schema:
+            type: string
+            enum: [confirmed, unconfirmed, partial]
+        - name: transactionId
+          in: path
+          description: The transactionId or transactionsHash.
+          required: true
+          schema:
+            $ref: '#/components/schemas/getTransactionByGroupAndIDSchema'
       responses:
         "200":
           description: success
@@ -963,7 +959,7 @@ paths:
   "/transactions/count":
     post:
       tags:
-      - Transaction routes
+        - Transaction routes
       summary: Get count of Transaction Type
       description: Returns the number of transactions based on the transaction types.
       operationId: getTransactionsCount
@@ -977,8 +973,7 @@ paths:
                   type: array
                   description: The array of transaction types.
                   items:
-                    anyOf:
-                      - $ref: '#/components/schemas/EntityTypeEnum'
+                    $ref: '#/components/schemas/getTransactionsCountItems'
         required: true
       responses:
         "200":
@@ -998,8 +993,7 @@ paths:
                       type: integer
                       example: 34
                     type:
-                      anyOf:
-                        - $ref: '#/components/schemas/EntityTypeEnum'
+                      $ref: '#/components/schemas/getTransactionsCountItems'
         "400":
           description: invalid content
         "409":
@@ -1007,7 +1001,7 @@ paths:
   "/transactions/partial":
     put:
       tags:
-      - Transaction routes
+        - Transaction routes
       summary: Announce an aggregate bonded transaction
       description: Announces an [aggregate bonded
         transaction](https://nemtech.github.io/concepts/aggregate-transaction.html#aggregate-bonded)
@@ -1029,7 +1023,7 @@ paths:
   "/transactions/cosignature":
     put:
       tags:
-      - Transaction routes
+        - Transaction routes
       summary: Announce a cosignature transaction
       description: Announces a [cosignature
         transaction](https://nemtech.github.io/concepts/aggregate-transaction.html#cosignature-transaction)
@@ -1051,17 +1045,17 @@ paths:
   "/transactionStatus/{hash}":
     get:
       tags:
-      - Transaction routes
+        - Transaction routes
       summary: Get transaction status
       description: Returns the transaction status for a given hash.
       operationId: getTransactionStatus
       parameters:
-      - name: hash
-        in: path
-        description: The transaction hash.
-        required: true
-        schema:
-          type: string
+        - name: hash
+          in: path
+          description: The transaction hash.
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: success
@@ -1076,7 +1070,7 @@ paths:
   "/transactionStatus":
     post:
       tags:
-      - Transaction routes
+        - Transaction routes
       summary: Get transactions status.
       description: Returns an array of transaction statuses for a given array of transaction hashes.
       operationId: getTransactionsStatuses
@@ -1103,7 +1097,7 @@ paths:
   /network:
     get:
       tags:
-      - Network routes
+        - Network routes
       summary: Get the current network type of the chain
       description: Returns the current network type.
       operationId: getNetworkType
@@ -1117,7 +1111,7 @@ paths:
   /node/info:
     get:
       tags:
-      - Node routes
+        - Node routes
       summary: Get the node information
       description: |
         Supplies additional information about the application running on a node.
@@ -1132,7 +1126,7 @@ paths:
   /node/time:
     get:
       tags:
-      - Node routes
+        - Node routes
       summary: Get the node time
       description: Gets the node time at the moment the reply was sent and received.
       operationId: getNodeTime
@@ -1146,19 +1140,19 @@ paths:
   '/upgrade/{height}':
     get:
       tags:
-      - Upgrade routes
+        - Upgrade routes
       summary: Get software info of network
       description:  Get software info of network at height.
       operationId: getUpgrade
       parameters:
-      - name: height
-        in: path
-        description: The height of the blockchain to get software info.
-        required: true
-        schema:
-          type: integer
-          format: int64
-          minimum: 1
+        - name: height
+          in: path
+          description: The height of the blockchain to get software info.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
       responses:
         '200':
           description: success
@@ -1170,21 +1164,21 @@ paths:
           description: resource not found
         '409':
           description: invalid argument
-  
+
   '/account/{accountId}/exchange':
     get:
       tags:
-      - Exchange routes
+        - Exchange routes
       summary: Get exchange offers by account id
-      description: Return exchange offer by account id. 
+      description: Return exchange offer by account id.
       operationId: getAccountExchangeOffers
       parameters:
-      - name: accountId
-        in: path
-        description: The public key or address of an account.
-        required: true
-        schema:
-          type: string
+        - name: accountId
+          in: path
+          description: The public key or address of an account.
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: success
@@ -1202,24 +1196,24 @@ paths:
   '/exchange/{offerType}/{mosaicId}':
     get:
       tags:
-      - Exchange routes
+        - Exchange routes
       summary: Get exchange offer by type and mosaic id
-      description: Get exchange offer by type and mosaic id. 
+      description: Get exchange offer by type and mosaic id.
       operationId: getExchangeOffers
       parameters:
-      - name: offerType
-        in: path
-        description: The type of exchange offer.
-        required: true
-        schema:
-          type: string
-      - name: mosaicId
-        in: path
-        description: The mosaic identifier.
-        required: true
-        schema:
-          type: string
-          format: hex
+        - name: offerType
+          in: path
+          description: The type of exchange offer.
+          required: true
+          schema:
+            type: string
+        - name: mosaicId
+          in: path
+          description: The mosaic identifier.
+          required: true
+          schema:
+            type: string
+            format: hex
       responses:
         "200":
           description: success
@@ -1236,9 +1230,9 @@ paths:
   '/exchange/mosaics':
     get:
       tags:
-      - Exchange routes
+        - Exchange routes
       summary: Get a list of mosaics id with exchange offers
-      description: Get a list of mosaics id with exchange offer 
+      description: Get a list of mosaics id with exchange offer
       operationId: getExchangeMosaics
       responses:
         "200":
@@ -1256,17 +1250,17 @@ paths:
   '/account/{accountId}/lock/hash':
     get:
       tags:
-      - Lock routes
+        - Lock routes
       summary: Get account lock hash
-      description: Get account lock hash. 
+      description: Get account lock hash.
       operationId: getAccountLockHash
       parameters:
-      - name: accountId
-        in: path
-        description: The public key or address of the account.
-        required: true
-        schema:
-          type: string
+        - name: accountId
+          in: path
+          description: The public key or address of the account.
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: success
@@ -1283,17 +1277,17 @@ paths:
   '/account/{accountId}/lock/secret':
     get:
       tags:
-      - Lock routes
+        - Lock routes
       summary: Get account lock secret
       description: Get account lock secret.
       operationId: getAccountLocksecret
       parameters:
-      - name: accountId
-        in: path
-        description: The public key or address of the account.
-        required: true
-        schema:
-          type: string
+        - name: accountId
+          in: path
+          description: The public key or address of the account.
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: success
@@ -1310,17 +1304,17 @@ paths:
   '/lock/secret/{secret}':
     get:
       tags:
-      - Lock routes
+        - Lock routes
       summary: Get secret hash
-      description: Get secret hash. 
+      description: Get secret hash.
       operationId: getSecretHash
       parameters:
-      - name: secret
-        in: path
-        description: The proof hashed.
-        required: true
-        schema:
-          type: string
+        - name: secret
+          in: path
+          description: The proof hashed.
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: success
@@ -1335,17 +1329,17 @@ paths:
   '/lock/hash/{hash}':
     get:
       tags:
-      - Lock routes
+        - Lock routes
       summary: Get lock hash
-      description: Get lock hash. 
+      description: Get lock hash.
       operationId: getLockHash
       parameters:
-      - name: hash
-        in: path
-        description: The hash.
-        required: true
-        schema:
-          type: string
+        - name: hash
+          in: path
+          description: The hash.
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: success
@@ -1360,17 +1354,17 @@ paths:
   '/lock/compositeHash/{compositeHash}':
     get:
       tags:
-      - Lock routes
+        - Lock routes
       summary: Get composite hash
-      description: Get composite hash. 
+      description: Get composite hash.
       operationId: getCompositeHash
       parameters:
-      - name: compositeHash
-        in: path
-        description: The composite hash of account addres and secret.
-        required: true
-        schema:
-          type: string
+        - name: compositeHash
+          in: path
+          description: The composite hash of account addres and secret.
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: success
@@ -1382,12 +1376,12 @@ paths:
           description: resource not found
         "409":
           description: invalid argument
-  
+
 externalDocs:
   description: ProximaX Developer Center
   url: 'https://proximax.io/'
 servers:
-- url: http://bcstage1.xpxsirius.io:3000
+  - url: http://bctestnet1.brimstone.xpxsirius.io:3000
 components:
   parameters:
     metadataType:
@@ -1466,7 +1460,7 @@ components:
       in: query
       description: Filter by target public key.
       schema:
-        $ref: '#/components/schemas/publicKeys'   
+        $ref: '#/components/schemas/publicKeys'
 
     addressQuery:
       name: address
@@ -1518,7 +1512,7 @@ components:
       schema:
         type: integer
         format: uint64
-        minimum: 1 
+        minimum: 1
     transactionTypeQuery:
       name: type[]
       in: query
@@ -1526,8 +1520,7 @@ components:
       schema:
         type: array
         items:
-         anyOf:
-         - $ref: '#/components/schemas/EntityTypeEnum'
+          $ref: '#/components/schemas/transactionTypeQueryItems'
 
 
 
@@ -2102,10 +2095,10 @@ components:
     AccountLinkTypeEnum:
       type: integer
       enum:
-      - 0
-      - 1
-      - 2
-      - 3
+        - 0
+        - 1
+        - 2
+        - 3
       description: |
         The account link types:
         * 0 -  Unlinked. Account is not linked to another account.
@@ -2116,8 +2109,8 @@ components:
     AliasActionEnum:
       type: integer
       enum:
-      - 0
-      - 1
+        - 0
+        - 1
       description: |
         The alias action:
         * 0 -  Link alias.
@@ -2126,9 +2119,9 @@ components:
     AliasTypeEnum:
       type: integer
       enum:
-      - 0
-      - 1
-      - 2
+        - 0
+        - 1
+        - 2
       description: |
         The alias type:
         * 0 -  No alias.
@@ -2139,13 +2132,13 @@ components:
       type: integer
       example: 1
       enum:
-      - 1
-      - 2
-      - 4
-      - 5
-      - 129
-      - 130
-      - 132
+        - 1
+        - 2
+        - 4
+        - 5
+        - 129
+        - 130
+        - 132
       description: |
         The account properties type:
         * 0x01 (1 decimal) - The property type only allows receiving transactions from an address.
@@ -2158,8 +2151,8 @@ components:
     AccountPropertiesModificationTypeEnum:
       type: integer
       enum:
-      - 0
-      - 1
+        - 0
+        - 1
       description: |
         The account properties modification type:
         * 0 - Add property.
@@ -2168,53 +2161,53 @@ components:
     EntityTypeEnum:
       type: integer
       enum:
-      - 16728
-      - 16729
-      - 16701
-      - 16957
-      - 17213
-      - 16717
-      - 16973
-      - 16718
-      - 16974
-      - 17230
-      - 16724
-      - 16725
-      - 16705
-      - 16961
-      - 16712
-      - 16720
-      - 16976
-      - 17232
-      - 16722
-      - 16978
-      - 16716
-      - 32835
-      - 33091
-      - 16737
-      - 16993
-      - 16703
-      - 16959
-      - 17215
-      - 17229
-      - 17485
-      - 18778
-      - 19034
-      - 16735
-      - 16991
-      - 17247
-      - 16736
-      - 16992
-      - 17248
-      - 17504
-      - 17760
-      - 16738
-      - 16994
-      - 17250
-      - 17506
-      - 17762
-      - 18018
-      - 20066
+        - 16728
+        - 16729
+        - 16701
+        - 16957
+        - 17213
+        - 16717
+        - 16973
+        - 16718
+        - 16974
+        - 17230
+        - 16724
+        - 16725
+        - 16705
+        - 16961
+        - 16712
+        - 16720
+        - 16976
+        - 17232
+        - 16722
+        - 16978
+        - 16716
+        - 32835
+        - 33091
+        - 16737
+        - 16993
+        - 16703
+        - 16959
+        - 17215
+        - 17229
+        - 17485
+        - 18778
+        - 19034
+        - 16735
+        - 16991
+        - 17247
+        - 16736
+        - 16992
+        - 17248
+        - 17504
+        - 17760
+        - 16738
+        - 16994
+        - 17250
+        - 17506
+        - 17762
+        - 18018
+        - 20066
 
       description: |
         The entity type:
@@ -2281,10 +2274,10 @@ components:
     HashAlgorithmEnum:
       type: integer
       enum:
-      - 0
-      - 1
-      - 2
-      - 3
+        - 0
+        - 1
+        - 2
+        - 3
       description: |
         The hash algorithm used to hash te proof:
         * 0 (Op_Sha3_256)  - The proof is hashed using sha3 256.
@@ -2294,8 +2287,8 @@ components:
     LinkActionEnum:
       type: integer
       enum:
-      - 0
-      - 1
+        - 0
+        - 1
       description: |
         The type of the action:
         * 0 - Link.
@@ -2303,9 +2296,9 @@ components:
     MetadataTypeEnum:
       type: integer
       enum:
-      - 0
-      - 1
-      - 2
+        - 0
+        - 1
+        - 2
       description: |
         The type of the metadata:
         * 1 - Address metadata.
@@ -2315,8 +2308,8 @@ components:
     MetadataModificationTypeEnum:
       type: integer
       enum:
-      - 0
-      - 1
+        - 0
+        - 1
       description: |
         The type of the metadata modification:
         * 0 - Add metadata.
@@ -2325,7 +2318,7 @@ components:
     MessageTypeEnum:
       type: integer
       enum:
-      - 0
+        - 0
       description: |
         The type of the message:
         * 0 - Regular message.
@@ -2333,9 +2326,9 @@ components:
     MosaicPropertyIdEnum:
       type: integer
       enum:
-      - 0
-      - 1
-      - 2
+        - 0
+        - 1
+        - 2
       description: |
         The mosaic propery id means:
         * 0 - MosaicFlags
@@ -2345,8 +2338,8 @@ components:
     MosaicDirectionEnum:
       type: integer
       enum:
-      - 0
-      - 1
+        - 0
+        - 1
       description: |
         The supply modification direction:
         * 0  - Decrease.
@@ -2355,8 +2348,8 @@ components:
     MultisigModificationTypeEnum:
       type: integer
       enum:
-      - 0
-      - 1
+        - 0
+        - 1
       description: |
         The type of the modification:
         * 0 - Add cosignatory.
@@ -2365,8 +2358,8 @@ components:
     NamespaceTypeEnum:
       type: integer
       enum:
-      - 0
-      - 1
+        - 0
+        - 1
       description: |
         The namespace type:
         * 0 -  Root namespace.
@@ -2375,20 +2368,20 @@ components:
     ReceiptTypeEnum:
       type: integer
       enum:
-      - 4685
-      - 4941
-      - 4686
-      - 8515
-      - 8776
-      - 9042
-      - 12616
-      - 12626
-      - 16717
-      - 16718
-      - 20803
-      - 57652
-      - 61763
-      - 62019
+        - 4685
+        - 4941
+        - 4686
+        - 8515
+        - 8776
+        - 9042
+        - 12616
+        - 12626
+        - 16717
+        - 16718
+        - 20803
+        - 57652
+        - 61763
+        - 62019
       description: |
         The type of the receipt:
         * 0x134D (4941 decimal) - Mosaic_Rental_Fee.
@@ -2419,8 +2412,8 @@ components:
     RolesTypeEnum:
       type: string
       enum:
-      - owner
-      - replicator
+        - owner
+        - replicator
       description: |
         The role of the node:
         * owner - show drives where an account is a participant as owner
@@ -2429,9 +2422,9 @@ components:
     OfferTypeEnum:
       type: integer
       enum:
-      - 0
-      - 1
-      - 2
+        - 0
+        - 1
+        - 2
       description: |
         The role of the node:
         * 0 - A sell offer.
@@ -2445,22 +2438,22 @@ components:
         type: integer
         format: int32
       example:
-      - lower
-      - higher
+        - lower
+        - higher
     HashDTO:
       type: string
       example: "C8FC3FB54FDDFBCE0E8C71224990124E4EEC5AD5D30E592EDFA9524669A23810"
     TransactionId:
       type: string
       example:
-          - 59B8DA0F0CB2720001103922
-          - 59B8D8E60CB2720001103904
+        - 59B8DA0F0CB2720001103922
+        - 59B8D8E60CB2720001103904
     # Account endpoints
     AccountInfoDTO:
       type: object
       required:
-      - meta
-      - account
+        - meta
+        - account
       properties:
         meta:
           $ref: "#/components/schemas/AccountMetaDTO"
@@ -2469,11 +2462,11 @@ components:
     AccountMetaDTO:
       type: object
       required:
-      - height
-      - hash
-      - merkleComponentHash
-      - index
-      - id
+        - height
+        - hash
+        - merkleComponentHash
+        - index
+        - id
       properties:
         height:
           $ref: "#/components/schemas/UInt64DTO"
@@ -2488,13 +2481,13 @@ components:
     AccountDTO:
       type: object
       required:
-      - address
-      - addressHeight
-      - publicKey
-      - publicKeyHeight
-      - mosaics
-      - accountType
-      - linkedAccountKey
+        - address
+        - addressHeight
+        - publicKey
+        - publicKeyHeight
+        - mosaics
+        - accountType
+        - linkedAccountKey
       properties:
         address:
           type: string
@@ -2531,8 +2524,8 @@ components:
     AccountNamesDTO:
       type: object
       required:
-      - address
-      - names
+        - address
+        - names
       properties:
         address:
           type: string
@@ -2542,22 +2535,22 @@ components:
           type: array
           description: The mosaic linked namespace names.
           example:
-          - alias1
-          - alias2
+            - alias1
+            - alias2
           items:
             type: string
     AccountPropertiesInfoDTO:
       type: object
       required:
-      - accountProperties
+        - accountProperties
       properties:
         accountProperties:
           $ref: "#/components/schemas/AccountPropertiesDTO"
     AccountPropertiesDTO:
       type: object
       required:
-      - address
-      - properties
+        - address
+        - properties
       properties:
         address:
           type: string
@@ -2567,11 +2560,16 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/AccountPropertyDTO"
+    AccountPropertyDTOItems:
+      oneOf:
+        - type: string
+        - $ref: "#/components/schemas/UInt64DTO"
+        - type: integer
     AccountPropertyDTO:
       type: object
       required:
-      - propertyType
-      - values
+        - propertyType
+        - values
       properties:
         propertyType:
           $ref: "#/components/schemas/AccountPropertyTypeEnum"
@@ -2579,15 +2577,17 @@ components:
           type: array
           description: The address, transaction type or mosaic id to filter.
           items:
-            oneOf:
-            - type: string
-            - $ref: "#/components/schemas/UInt64DTO"
-            - type: integer
+            $ref: "#/components/schemas/AccountPropertyDTOItems"
+    AccountPropertiesModificationDTOItems:
+      oneOf:
+        - type: string
+        - $ref: "#/components/schemas/UInt64DTO"
+        - type: integer
     AccountPropertiesModificationDTO:
       type: object
       required:
-      - type
-      - values
+        - type
+        - values
       properties:
         type:
           $ref: "#/components/schemas/AccountPropertiesModificationTypeEnum"
@@ -2595,23 +2595,20 @@ components:
           type: array
           description: The address, transaction type or mosaic id to filter.
           items:
-            oneOf:
-            - type: string
-            - $ref: "#/components/schemas/UInt64DTO"
-            - type: integer
+            $ref: "#/components/schemas/AccountPropertiesModificationDTOItems"
     NetworkConfigDTO:
       type: object
       required:
-      - networkConfig
+        - networkConfig
       properties:
         networkConfig:
           $ref: '#/components/schemas/ConfigDTO'
     ConfigDTO:
       type: object
       required:
-      - height
-      - networkConfig
-      - supportedEntityVersions
+        - height
+        - networkConfig
+        - supportedEntityVersions
       properties:
         height:
           $ref: '#/components/schemas/UInt64DTO'
@@ -2624,15 +2621,15 @@ components:
     BlockchainUpgradeDTO:
       type: object
       required:
-      - blockchainUpgrade
+        - blockchainUpgrade
       properties:
         blockchainUpgrade:
           $ref: '#/components/schemas/UpgradeDTO'
     UpgradeDTO:
       type: object
       required:
-      - height
-      - blockChainVersion
+        - height
+        - blockChainVersion
       properties:
         height:
           $ref: '#/components/schemas/UInt64DTO'
@@ -2641,9 +2638,9 @@ components:
     MetadataModificationDTO:
       type: object
       required:
-      - modificationType
-      - key
-      - value
+        - modificationType
+        - key
+        - value
       properties:
         modificationType:
           $ref: "#/components/schemas/MetadataModificationTypeEnum"
@@ -2656,8 +2653,8 @@ components:
     MultisigAccountGraphInfoDTO:
       type: object
       required:
-      - level
-      - multisigEntries
+        - level
+        - multisigEntries
       properties:
         level:
           type: integer
@@ -2671,18 +2668,18 @@ components:
     MultisigAccountInfoDTO:
       type: object
       required:
-      - multisig
+        - multisig
       properties:
         multisig:
           $ref: "#/components/schemas/MultisigDTO"
     MultisigDTO:
       type: object
       required:
-      - account
-      - minApproval
-      - minRemoval
-      - cosignatories
-      - multisigAccounts
+        - account
+        - minApproval
+        - minRemoval
+        - cosignatories
+        - multisigAccounts
       properties:
         account:
           type: string
@@ -2704,22 +2701,22 @@ components:
           type: array
           description: The array of public keys of the cosignatory accounts.
           example:
-          - 5D9513282B65A12A1B68DCB67DB64245721F7AE7822BE441FE813173803C512C
-          - AC1A6E1D8DE5B17D2C6B1293F1CAD3829EEACF38D09311BB3C8E5A880092DE26
+            - 5D9513282B65A12A1B68DCB67DB64245721F7AE7822BE441FE813173803C512C
+            - AC1A6E1D8DE5B17D2C6B1293F1CAD3829EEACF38D09311BB3C8E5A880092DE26
           items:
             type: string
         multisigAccounts:
           type: array
           description: The array of multisig accounts where the account is cosignatory.
           example:
-          - 565059F55E68F904214E8BE1D610B5BBEA4CE46CC13D246D45BC1DAE5D32A0D2
+            - 565059F55E68F904214E8BE1D610B5BBEA4CE46CC13D246D45BC1DAE5D32A0D2
           items:
             type: string
     CosignatoryModificationDTO:
       type: object
       required:
-      - modificationType
-      - cosignatoryPublicKey
+        - modificationType
+        - cosignatoryPublicKey
       properties:
         modificationType:
           $ref: "#/components/schemas/MultisigModificationTypeEnum"
@@ -2731,8 +2728,8 @@ components:
     BlockInfoDTO:
       type: object
       required:
-      - meta
-      - block
+        - meta
+        - block
       properties:
         meta:
           $ref: "#/components/schemas/BlockMetaDTO"
@@ -2741,11 +2738,11 @@ components:
     BlockMetaDTO:
       type: object
       required:
-      - hash
-      - generationHash
-      - totalFee
-      - subCacheMerkleRoots
-      - numTransactions
+        - hash
+        - generationHash
+        - totalFee
+        - subCacheMerkleRoots
+        - numTransactions
       properties:
         hash:
           type: string
@@ -2759,13 +2756,13 @@ components:
             type: string
             format: hex
           example:
-          - 782451A35BCE10E5DCB2BBB5A1A8C067F8673DC65EB6BAAE3EE533044BF742CC
-          - 646AE657A9717BECF338279C45613C8F64FB69572E22F4CAE2A36097C2190F02
-          - 65D0CDEB6F8C29A9B164C64FFBC7AD97DF2BA407FE868E1BBC11983DBFF3FB5A
-          - 0
-          - 0
-          - 0
-          - 0
+            - 782451A35BCE10E5DCB2BBB5A1A8C067F8673DC65EB6BAAE3EE533044BF742CC
+            - 646AE657A9717BECF338279C45613C8F64FB69572E22F4CAE2A36097C2190F02
+            - 65D0CDEB6F8C29A9B164C64FFBC7AD97DF2BA407FE868E1BBC11983DBFF3FB5A
+            - 0
+            - 0
+            - 0
+            - 0
         totalFee:
           $ref: "#/components/schemas/UInt64DTO"
         numTransactions:
@@ -2777,9 +2774,9 @@ components:
     EntityDTO:
       type: object
       required:
-      - signer
-      - version
-      - type
+        - signer
+        - version
+        - type
       properties:
         signer:
           type: string
@@ -2792,7 +2789,7 @@ components:
     VerifiableEntityDTO:
       type: object
       required:
-      - signature
+        - signature
       properties:
         signature:
           type: string
@@ -2804,86 +2801,86 @@ components:
     BlockDTO:
       type: object
       allOf:
-      - $ref: "#/components/schemas/VerifiableEntityDTO"
-      - $ref: "#/components/schemas/EntityDTO"
-      - type: object
-        required:
-        - height
-        - timestamp
-        - difficulty
-        - feeMultiplier
-        - previousBlockHash
-        - blockTransactionsHash
-        - blockReceiptsHash
-        - stateHash
-        - beneficiary
-        - feeInterest
-        - feeInterestDenominator
-        properties:
-          height:
-            $ref: "#/components/schemas/UInt64DTO"
-          timestamp:
-            $ref: "#/components/schemas/UInt64DTO"
-          difficulty:
-            $ref: "#/components/schemas/UInt64DTO"
-          feeMultiplier:
-            type: integer
-            description: The fee multiplier applied to transactions contained in block.
-            example: 0
-          previousBlockHash:
-            type: string
-            description: The hash of the previous block.
-            example:
-            - 0
-          blockTransactionsHash:
-            type: string
-            description: |
-              The transactions included in a block are hashed forming a merkle
-              tree. The root of the tree summarizes them.
-            example: 8F8C6EB33332F69196AD0D30D7CD90FAC1332089DF460DF0CF4A8A28C1C17AD4
-          blockReceiptsHash:
-            type: string
-            description: |
-              The collection of receipts  are hashed into a merkle tree and
-              linked
-
-              to a block. The block header stores the root hash.
-            example: sZznHmvGSZKIy1Ney2O0tKxJ4sOgk5jYYhqsua1RCRo=
-          stateHash:
-            type: string
-            description: |
-              For each block, the state of the blockchain is stored in
-              RocksDB,
-
-              forming a patricia tree. The root of the tree summarizes the state of the blockchain for the given block.
-            example: 011811795453FA9FBD9DAC969085F8938BBFEDE3A3FDDC0C93B8FD6C4E7B2840
-          beneficiary:
-            type: string
-            description: The public key of the optional beneficiary designated by
-              harvester.
-            example: 0
-          feeInterest:
-            type: integer
-            description: The part of the transaction fee harvester is willing to get.
-              From 0 up to FeeInterestDenominator. The customer gets
-              (FeeInterest / FeeInterestDenominator)'th part of the maximum transaction fee.
-            example: 0
-          feeInterestDenominator:
-            type: integer
-            description: Denominator of the transaction fee.
-            example: 0
+        - $ref: "#/components/schemas/VerifiableEntityDTO"
+        - $ref: "#/components/schemas/EntityDTO"
+        - type: object
+          required:
+            - height
+            - timestamp
+            - difficulty
+            - feeMultiplier
+            - previousBlockHash
+            - blockTransactionsHash
+            - blockReceiptsHash
+            - stateHash
+            - beneficiary
+            - feeInterest
+            - feeInterestDenominator
+          properties:
+            height:
+              $ref: "#/components/schemas/UInt64DTO"
+            timestamp:
+              $ref: "#/components/schemas/UInt64DTO"
+            difficulty:
+              $ref: "#/components/schemas/UInt64DTO"
+            feeMultiplier:
+              type: integer
+              description: The fee multiplier applied to transactions contained in block.
+              example: 0
+            previousBlockHash:
+              type: string
+              description: The hash of the previous block.
+              example:
+                - 0
+            blockTransactionsHash:
+              type: string
+              description: |
+                The transactions included in a block are hashed forming a merkle
+                tree. The root of the tree summarizes them.
+              example: 8F8C6EB33332F69196AD0D30D7CD90FAC1332089DF460DF0CF4A8A28C1C17AD4
+            blockReceiptsHash:
+              type: string
+              description: |
+                The collection of receipts  are hashed into a merkle tree and
+                linked
+                
+                to a block. The block header stores the root hash.
+              example: sZznHmvGSZKIy1Ney2O0tKxJ4sOgk5jYYhqsua1RCRo=
+            stateHash:
+              type: string
+              description: |
+                For each block, the state of the blockchain is stored in
+                RocksDB,
+                
+                forming a patricia tree. The root of the tree summarizes the state of the blockchain for the given block.
+              example: 011811795453FA9FBD9DAC969085F8938BBFEDE3A3FDDC0C93B8FD6C4E7B2840
+            beneficiary:
+              type: string
+              description: The public key of the optional beneficiary designated by
+                harvester.
+              example: 0
+            feeInterest:
+              type: integer
+              description: The part of the transaction fee harvester is willing to get.
+                From 0 up to FeeInterestDenominator. The customer gets
+                (FeeInterest / FeeInterestDenominator)'th part of the maximum transaction fee.
+              example: 0
+            feeInterestDenominator:
+              type: integer
+              description: Denominator of the transaction fee.
+              example: 0
     HeightInfoDTO:
       type: object
       required:
-      - height
+        - height
       properties:
         height:
           $ref: "#/components/schemas/UInt64DTO"
     BlockchainScoreDTO:
       type: object
       required:
-      - scoreHigh
-      - scoreLow
+        - scoreHigh
+        - scoreLow
       properties:
         scoreHigh:
           $ref: "#/components/schemas/UInt64DTO"
@@ -2892,8 +2889,8 @@ components:
     MerkleProofInfoDTO:
       type: object
       required:
-      - payload
-      - type
+        - payload
+        - type
       properties:
         payload:
           $ref: "#/components/schemas/merkleProofInfo"
@@ -2904,9 +2901,9 @@ components:
     StorageInfoDTO:
       type: object
       required:
-      - numBlocks
-      - numTransactions
-      - numAccounts
+        - numBlocks
+        - numTransactions
+        - numAccounts
       properties:
         numBlocks:
           type: integer
@@ -2925,9 +2922,9 @@ components:
       description: The collection of transaction statements and resolutions triggered for
         the block requested.
       required:
-      - transactionStatements
-      - addressResolutionStatements
-      - mosaicResolutionStatements
+        - transactionStatements
+        - addressResolutionStatements
+        - mosaicResolutionStatements
       properties:
         transactionStatements:
           type: array
@@ -2944,13 +2941,19 @@ components:
           description: The array of mosaic resolutions for the block requested.
           items:
             $ref: "#/components/schemas/ResolutionStatementDTO"
+    TransactionStatementDTOItems:
+      anyOf:
+        - $ref: "#/components/schemas/BalanceTransferReceiptDTO"
+        - $ref: "#/components/schemas/BalanceChangeReceiptDTO"
+        - $ref: "#/components/schemas/ArtifactExpiryReceiptDTO"
+        - $ref: "#/components/schemas/InflationReceiptDTO"
     TransactionStatementDTO:
       type: object
       description: The collection of receipts related to a transaction.
       required:
-      - height
-      - source
-      - receipts
+        - height
+        - source
+        - receipts
       properties:
         height:
           $ref: "#/components/schemas/UInt64DTO"
@@ -2960,19 +2963,15 @@ components:
           type: array
           description: The array of receipts.
           items:
-            anyOf:
-            - $ref: "#/components/schemas/BalanceTransferReceiptDTO"
-            - $ref: "#/components/schemas/BalanceChangeReceiptDTO"
-            - $ref: "#/components/schemas/ArtifactExpiryReceiptDTO"
-            - $ref: "#/components/schemas/InflationReceiptDTO"
+            $ref: "#/components/schemas/TransactionStatementDTOItems"
     ResolutionStatementDTO:
       type: object
       description: A resolution statement keeps the relation between a namespace alias used
         in a transaction and the real address or mosaicId.
       required:
-      - height
-      - unresolved
-      - resolutionEntries
+        - height
+        - unresolved
+        - resolutionEntries
       properties:
         height:
           $ref: "#/components/schemas/UInt64DTO"
@@ -2989,8 +2988,8 @@ components:
     ResolutionEntryDTO:
       type: object
       required:
-      - source
-      - resolved
+        - source
+        - resolved
       properties:
         source:
           $ref: "#/components/schemas/SourceDTO"
@@ -3000,8 +2999,8 @@ components:
       type: object
       description: The transaction that triggered the receipt.
       required:
-      - primaryId
-      - secondaryId
+        - primaryId
+        - secondaryId
       properties:
         primaryId:
           type: integer
@@ -3016,8 +3015,8 @@ components:
     ReceiptDTO:
       type: object
       required:
-      - version
-      - type
+        - version
+        - type
       properties:
         version:
           type: integer
@@ -3028,82 +3027,82 @@ components:
       type: object
       description: The invisible state change triggered a mosaic transfer.
       allOf:
-      - $ref: "#/components/schemas/ReceiptDTO"
-      - type: object
-        required:
-        - sender
-        - recipient
-        - mosaicId
-        - amount
-        properties:
-          sender:
-            type: string
-            description: The public key of the sender.
-            example: D799E559AB735A5E62187306E80C1679EE3E1170532280C968D974E351CB412F
-          recipient:
-            type: string
-            description: The public key of the recipient.
-            example: D799E559AB735A5E62187306E80C1679EE3E1170532280C968D974E351CB412F
-          mosaicId:
-            $ref: "#/components/schemas/UInt64DTO"
-          amount:
-            $ref: "#/components/schemas/UInt64DTO"
+        - $ref: "#/components/schemas/ReceiptDTO"
+        - type: object
+          required:
+            - sender
+            - recipient
+            - mosaicId
+            - amount
+          properties:
+            sender:
+              type: string
+              description: The public key of the sender.
+              example: D799E559AB735A5E62187306E80C1679EE3E1170532280C968D974E351CB412F
+            recipient:
+              type: string
+              description: The public key of the recipient.
+              example: D799E559AB735A5E62187306E80C1679EE3E1170532280C968D974E351CB412F
+            mosaicId:
+              $ref: "#/components/schemas/UInt64DTO"
+            amount:
+              $ref: "#/components/schemas/UInt64DTO"
     BalanceChangeReceiptDTO:
       type: object
       description: The invisible state change changed an account balance.
       allOf:
-      - $ref: "#/components/schemas/ReceiptDTO"
-      - type: object
-        required:
-        - account
-        - mosaicId
-        - amount
-        properties:
-          account:
-            type: string
-            description: The target account public key.
-            example: D799E559AB735A5E62187306E80C1679EE3E1170532280C968D974E351CB412F
-          mosaicId:
-            $ref: "#/components/schemas/UInt64DTO"
-          amount:
-            $ref: "#/components/schemas/UInt64DTO"
+        - $ref: "#/components/schemas/ReceiptDTO"
+        - type: object
+          required:
+            - account
+            - mosaicId
+            - amount
+          properties:
+            account:
+              type: string
+              description: The target account public key.
+              example: D799E559AB735A5E62187306E80C1679EE3E1170532280C968D974E351CB412F
+            mosaicId:
+              $ref: "#/components/schemas/UInt64DTO"
+            amount:
+              $ref: "#/components/schemas/UInt64DTO"
     ArtifactExpiryReceiptDTO:
       type: object
       description: An artifact namespace or mosaic expired.
       allOf:
-      - $ref: "#/components/schemas/ReceiptDTO"
-      - type: object
-        required:
-        - artifactId
-        properties:
-          artifactId:
-            $ref: "#/components/schemas/UInt64DTO"
+        - $ref: "#/components/schemas/ReceiptDTO"
+        - type: object
+          required:
+            - artifactId
+          properties:
+            artifactId:
+              $ref: "#/components/schemas/UInt64DTO"
     InflationReceiptDTO:
       type: object
       description: Native currency mosaics were created due to inflation.
       allOf:
-      - $ref: "#/components/schemas/ReceiptDTO"
-      - type: object
-        required:
-        - mosaicId
-        - amount
-        properties:
-          mosaicId:
-            $ref: "#/components/schemas/UInt64DTO"
-          amount:
-            $ref: "#/components/schemas/UInt64DTO"
+        - $ref: "#/components/schemas/ReceiptDTO"
+        - type: object
+          required:
+            - mosaicId
+            - amount
+          properties:
+            mosaicId:
+              $ref: "#/components/schemas/UInt64DTO"
+            amount:
+              $ref: "#/components/schemas/UInt64DTO"
     ServerDTO:
       type: object
       required:
-      - serverInfo
+        - serverInfo
       properties:
         serverInfo:
           $ref: "#/components/schemas/ServerInfoDTO"
     ServerInfoDTO:
       type: object
       required:
-      - restVersion
-      - sdkVersion
+        - restVersion
+        - sdkVersion
       properties:
         restVersion:
           type: string
@@ -3117,15 +3116,15 @@ components:
     MosaicMetaDTO:
       type: object
       required:
-      - id
+        - id
       properties:
         id:
           type: string
     MetadataDTO:
       type: object
       required:
-      - metadataType
-      - fields
+        - metadataType
+        - fields
       properties:
         metadataType:
           type: integer
@@ -3137,8 +3136,8 @@ components:
     FieldDTO:
       type: object
       required:
-      - key
-      - value
+        - key
+        - value
       properties:
         key:
           type: string
@@ -3149,58 +3148,58 @@ components:
     AddressMetadataInfoDTO:
       type: object
       required:
-      - metadata
+        - metadata
       properties:
         metadata:
           $ref: '#/components/schemas/AddressMetadataDTO'
     AddressMetadataDTO:
       allOf:
-      - $ref: '#/components/schemas/MetadataDTO'
-      - type: object
-        required:
-        - metadataId
-        properties:
-          metadataId:
-            type: string
-            example: "90936FF3536858CBEA8EE0EAAB99FE9EC4EF5EF1F66366569A"
+        - $ref: '#/components/schemas/MetadataDTO'
+        - type: object
+          required:
+            - metadataId
+          properties:
+            metadataId:
+              type: string
+              example: "90936FF3536858CBEA8EE0EAAB99FE9EC4EF5EF1F66366569A"
     MosaicMetadataInfoDTO:
       type: object
       required:
-      - metadata
+        - metadata
       properties:
         metadata:
           $ref: '#/components/schemas/MosaicMetadataDTO'
     MosaicMetadataDTO:
       allOf:
-      - $ref: '#/components/schemas/MetadataDTO'
-      - type: object
-        required:
-        - metadataId
-        properties:
-          metadataType:
-            type: integer
-            example: 2
-          metadataId:
-            $ref: '#/components/schemas/UInt64DTO'
+        - $ref: '#/components/schemas/MetadataDTO'
+        - type: object
+          required:
+            - metadataId
+          properties:
+            metadataType:
+              type: integer
+              example: 2
+            metadataId:
+              $ref: '#/components/schemas/UInt64DTO'
     NamespaceMetadataInfoDTO:
       type: object
       required:
-      - metadata
+        - metadata
       properties:
         metadata:
           $ref: '#/components/schemas/NamespaceMetadataDTO'
     NamespaceMetadataDTO:
       allOf:
-      - $ref: '#/components/schemas/MetadataDTO'
-      - type: object
-        required:
-        - metadataId
-        properties:
-          metadataType:
-            type: integer
-            example: 3
-          metadataId:
-            $ref: '#/components/schemas/UInt64DTO'
+        - $ref: '#/components/schemas/MetadataDTO'
+        - type: object
+          required:
+            - metadataId
+          properties:
+            metadataType:
+              type: integer
+              example: 3
+            metadataId:
+              $ref: '#/components/schemas/UInt64DTO'
 
     # Metadata V2 enpoints
     MetadataNemPage:
@@ -3229,51 +3228,51 @@ components:
     MetadataNemInfoDTO:
       type: object
       required:
-      - metadata
+        - metadata
       properties:
         metadataEntry:
           $ref: '#/components/schemas/MetadataNemDTO'
         id:
-            type: string
-            example: "610AB681D05149F167E3EE94"      
+          type: string
+          example: "610AB681D05149F167E3EE94"
     MetadataNemDTO:
       allOf:
-      - type: object
-        required:
-        - metadataId
-        properties:
-          version:
-            type: integer
-            example: 1
-          compositeHash:
-            type: string
-            example: "764B3AA022FB929CAA204670A817205DC08F2B172D501F36D4F0EC4EA50AFAE9"
-          sourceAddress:
-            type: string
-            example: "90FDBE9800BA25E21C440AF033A51141D8CC012C63327DE2A2"
-          targetKey:
-            type: string
-            example: "570BE65B22A4E52EC3E57421F2E493B32C046B8B795282ED69EA53806F44FFFF"
-          scopedMetadataKey:
-            $ref: '#/components/schemas/UInt64DTO'
-          targetId:
-            $ref: '#/components/schemas/UInt64DTO'
-          metadataType:
-            type: integer
-            example: 0
-          valueSize:
-            type: integer
-            example: 10
-          value:
-            type: string
-            example: "48656C6C6F2068656C6C"
+        - type: object
+          required:
+            - metadataId
+          properties:
+            version:
+              type: integer
+              example: 1
+            compositeHash:
+              type: string
+              example: "764B3AA022FB929CAA204670A817205DC08F2B172D501F36D4F0EC4EA50AFAE9"
+            sourceAddress:
+              type: string
+              example: "90FDBE9800BA25E21C440AF033A51141D8CC012C63327DE2A2"
+            targetKey:
+              type: string
+              example: "570BE65B22A4E52EC3E57421F2E493B32C046B8B795282ED69EA53806F44FFFF"
+            scopedMetadataKey:
+              $ref: '#/components/schemas/UInt64DTO'
+            targetId:
+              $ref: '#/components/schemas/UInt64DTO'
+            metadataType:
+              type: integer
+              example: 0
+            valueSize:
+              type: integer
+              example: 10
+            value:
+              type: string
+              example: "48656C6C6F2068656C6C"
 
     # Mosaic enpoints
     MosaicDTO:
       type: object
       required:
-      - id
-      - amount
+        - id
+        - amount
       properties:
         id:
           $ref: "#/components/schemas/UInt64DTO"
@@ -3282,8 +3281,8 @@ components:
     MosaicRichListDTO:
       type: object
       required:
-      - address
-      - amount
+        - address
+        - amount
       properties:
         address:
           type: string
@@ -3296,8 +3295,8 @@ components:
     MosaicInfoDTO:
       type: object
       required:
-      - meta
-      - mosaic
+        - meta
+        - mosaic
       properties:
         meta:
           $ref: "#/components/schemas/MosaicMetaDTO"
@@ -3322,12 +3321,12 @@ components:
     MosaicDefinitionDTO:
       type: object
       required:
-      - mosaicId
-      - supply
-      - height
-      - owner
-      - properties
-      - revision
+        - mosaicId
+        - supply
+        - height
+        - owner
+        - properties
+        - revision
       properties:
         mosaicId:
           $ref: "#/components/schemas/UInt64DTO"
@@ -3357,8 +3356,8 @@ components:
     MosaicNamesDTO:
       type: object
       required:
-      - mosaicId
-      - names
+        - mosaicId
+        - names
       properties:
         mosaicId:
           $ref: "#/components/schemas/UInt64DTO"
@@ -3366,16 +3365,16 @@ components:
           type: array
           description: The mosaic linked namespace names.
           example:
-          - cat.currency
+            - cat.currency
           items:
             type: string
     # Namespace endpoints
     NamespaceMetaDTO:
       type: object
       required:
-      - id
-      - active
-      - index
+        - id
+        - active
+        - index
       properties:
         id:
           type: string
@@ -3386,8 +3385,8 @@ components:
     NamespaceInfoDTO:
       type: object
       required:
-      - meta
-      - namespace
+        - meta
+        - namespace
       properties:
         meta:
           $ref: "#/components/schemas/NamespaceMetaDTO"
@@ -3396,15 +3395,15 @@ components:
     NamespaceDTO:
       type: object
       required:
-      - owner
-      - ownerAddress
-      - startHeight
-      - endHeight
-      - depth
-      - level0
-      - type
-      - alias
-      - parentId
+        - owner
+        - ownerAddress
+        - startHeight
+        - endHeight
+        - depth
+        - level0
+        - type
+        - alias
+        - parentId
       properties:
         owner:
           type: string
@@ -3437,8 +3436,8 @@ components:
     NamespaceNameDTO:
       type: object
       required:
-      - namespaceId
-      - name
+        - namespaceId
+        - name
       properties:
         namespaceId:
           $ref: "#/components/schemas/UInt64DTO"
@@ -3449,7 +3448,7 @@ components:
     AliasDTO:
       type: object
       required:
-      - type
+        - type
       properties:
         type:
           $ref: "#/components/schemas/AliasTypeEnum"
@@ -3463,11 +3462,11 @@ components:
     TransactionMetaDTO:
       type: object
       required:
-      - height
-      - hash
-      - merkleComponentHash
-      - index
-      - id
+        - height
+        - hash
+        - merkleComponentHash
+        - index
+        - id
       properties:
         height:
           $ref: "#/components/schemas/UInt64DTO"
@@ -3479,53 +3478,55 @@ components:
           type: integer
         id:
           type: string
+    TransactionInfoDTOTransactions:
+      anyOf:
+        - $ref: "#/components/schemas/BlockchainUpgradeTransactionDTO"
+        - $ref: "#/components/schemas/NetworkConfigTransactionDTO"
+        - $ref: "#/components/schemas/AddressMetadataTransactionDTO"
+        - $ref: "#/components/schemas/MosaicMetadataTransactionDTO"
+        - $ref: "#/components/schemas/NamespaceMetadataTransactionDTO"
+        - $ref: "#/components/schemas/MosaicDefinitionTransactionDTO"
+        - $ref: "#/components/schemas/MosaicSupplyChangeTransactionDTO"
+        - $ref: "#/components/schemas/RegisterNamespaceTransactionDTO"
+        - $ref: "#/components/schemas/AddressAliasTransactionDTO"
+        - $ref: "#/components/schemas/MosaicAliasTransactionDTO"
+        - $ref: "#/components/schemas/TransferTransactionDTO"
+        - $ref: "#/components/schemas/ModifyMultisigAccountTransactionDTO"
+        - $ref: "#/components/schemas/AggregateTransactionDTO"
+        - $ref: "#/components/schemas/HashLockTransactionDTO"
+        - $ref: "#/components/schemas/AccountPropertiesTransactionDTO"
+        - $ref: "#/components/schemas/SecretLockTransactionDTO"
+        - $ref: "#/components/schemas/SecretProofTransactionDTO"
+        - $ref: "#/components/schemas/AccountLinkTransactionDTO"
+        - $ref: "#/components/schemas/AddExchangeOfferTransactionDTO"
+        - $ref: "#/components/schemas/ExchangeOfferTransactionDTO"
+        - $ref: "#/components/schemas/RemoveExchangeOfferTransactionDTO"
+        - $ref: "#/components/schemas/PrepareDriveTransactionDTO"
+        - $ref: "#/components/schemas/JoinToDriveTransactionDTO"
+        - $ref: "#/components/schemas/DriveFileSystemTransactionDTO"
+        - $ref: "#/components/schemas/FilesDepositTransactionDTO"
+        - $ref: "#/components/schemas/EndDriveTransactionDTO"
+        - $ref: "#/components/schemas/DriveFilesRewardTransactionDTO"
+        - $ref: "#/components/schemas/StartDriveVerificationTransactionDTO"
+        - $ref: "#/components/schemas/EndDriveVerificationTransactionDTO"
     TransactionInfoDTO:
       type: object
       required:
-      - meta
-      - transaction
+        - meta
+        - transaction
       properties:
         meta:
           $ref: "#/components/schemas/TransactionMetaDTO"
         transaction:
-          anyOf:
-          - $ref: "#/components/schemas/BlockchainUpgradeTransactionDTO"
-          - $ref: "#/components/schemas/NetworkConfigTransactionDTO"
-          - $ref: "#/components/schemas/AddressMetadataTransactionDTO"
-          - $ref: "#/components/schemas/MosaicMetadataTransactionDTO"
-          - $ref: "#/components/schemas/NamespaceMetadataTransactionDTO"
-          - $ref: "#/components/schemas/MosaicDefinitionTransactionDTO"
-          - $ref: "#/components/schemas/MosaicSupplyChangeTransactionDTO"
-          - $ref: "#/components/schemas/RegisterNamespaceTransactionDTO"
-          - $ref: "#/components/schemas/AddressAliasTransactionDTO"
-          - $ref: "#/components/schemas/MosaicAliasTransactionDTO"
-          - $ref: "#/components/schemas/TransferTransactionDTO"
-          - $ref: "#/components/schemas/ModifyMultisigAccountTransactionDTO"
-          - $ref: "#/components/schemas/AggregateTransactionDTO"
-          - $ref: "#/components/schemas/HashLockTransactionDTO"
-          - $ref: "#/components/schemas/AccountPropertiesTransactionDTO"
-          - $ref: "#/components/schemas/SecretLockTransactionDTO"
-          - $ref: "#/components/schemas/SecretProofTransactionDTO"
-          - $ref: "#/components/schemas/AccountLinkTransactionDTO"
-          - $ref: "#/components/schemas/AddExchangeOfferTransactionDTO"
-          - $ref: "#/components/schemas/ExchangeOfferTransactionDTO"
-          - $ref: "#/components/schemas/RemoveExchangeOfferTransactionDTO"
-          - $ref: "#/components/schemas/PrepareDriveTransactionDTO"
-          - $ref: "#/components/schemas/JoinToDriveTransactionDTO"
-          - $ref: "#/components/schemas/DriveFileSystemTransactionDTO"
-          - $ref: "#/components/schemas/FilesDepositTransactionDTO"
-          - $ref: "#/components/schemas/EndDriveTransactionDTO"
-          - $ref: "#/components/schemas/DriveFilesRewardTransactionDTO"
-          - $ref: "#/components/schemas/StartDriveVerificationTransactionDTO"
-          - $ref: "#/components/schemas/EndDriveVerificationTransactionDTO"
+          $ref: "#/components/schemas/TransactionInfoDTOTransactions"
     EmbeddedTransactionMetaDTO:
       type: object
       required:
-      - height
-      - hash
-      - merkleComponentHash
-      - index
-      - id
+        - height
+        - hash
+        - merkleComponentHash
+        - index
+        - id
       properties:
         height:
           $ref: "#/components/schemas/UInt64DTO"
@@ -3537,38 +3538,40 @@ components:
           type: integer
         id:
           type: string
+    EmbeddedTransactionInfoDTOTransactions:
+      anyOf:
+        - $ref: "#/components/schemas/EmbeddedBlockchainUpgradeTransactionDTO"
+        - $ref: "#/components/schemas/EmbeddedNetworkConfigTransactionDTO"
+        - $ref: "#/components/schemas/EmbeddedAddressMetadataTransactionDTO"
+        - $ref: "#/components/schemas/EmbeddedMosaicMetadataTransactionDTO"
+        - $ref: "#/components/schemas/EmbeddedNamespaceMetadataTransactionDTO"
+        - $ref: "#/components/schemas/EmbeddedMosaicDefinitionTransactionDTO"
+        - $ref: "#/components/schemas/EmbeddedMosaicSupplyChangeTransactionDTO"
+        - $ref: "#/components/schemas/EmbeddedRegisterNamespaceTransactionDTO"
+        - $ref: "#/components/schemas/EmbeddedAddressAliasTransactionDTO"
+        - $ref: "#/components/schemas/EmbeddedMosaicAliasTransactionDTO"
+        - $ref: "#/components/schemas/EmbeddedTransferTransactionDTO"
+        - $ref: "#/components/schemas/EmbeddedModifyMultisigAccountTransactionDTO"
+        - $ref: "#/components/schemas/EmbeddedHashLockTransactionDTO"
+        - $ref: "#/components/schemas/EmbeddedAccountPropertiesTransactionDTO"
+        - $ref: "#/components/schemas/EmbeddedSecretLockTransactionDTO"
+        - $ref: "#/components/schemas/EmbeddedSecretProofTransactionDTO"
+        - $ref: "#/components/schemas/EmbeddedAccountLinkTransactionDTO"
     EmbeddedTransactionInfoDTO:
       type: object
       required:
-      - meta
-      - transaction
+        - meta
+        - transaction
       properties:
         meta:
           $ref: "#/components/schemas/EmbeddedTransactionMetaDTO"
         transaction:
-          anyOf:
-          - $ref: "#/components/schemas/EmbeddedBlockchainUpgradeTransactionDTO"
-          - $ref: "#/components/schemas/EmbeddedNetworkConfigTransactionDTO"
-          - $ref: "#/components/schemas/EmbeddedAddressMetadataTransactionDTO"
-          - $ref: "#/components/schemas/EmbeddedMosaicMetadataTransactionDTO"
-          - $ref: "#/components/schemas/EmbeddedNamespaceMetadataTransactionDTO"
-          - $ref: "#/components/schemas/EmbeddedMosaicDefinitionTransactionDTO"
-          - $ref: "#/components/schemas/EmbeddedMosaicSupplyChangeTransactionDTO"
-          - $ref: "#/components/schemas/EmbeddedRegisterNamespaceTransactionDTO"
-          - $ref: "#/components/schemas/EmbeddedAddressAliasTransactionDTO"
-          - $ref: "#/components/schemas/EmbeddedMosaicAliasTransactionDTO"
-          - $ref: "#/components/schemas/EmbeddedTransferTransactionDTO"
-          - $ref: "#/components/schemas/EmbeddedModifyMultisigAccountTransactionDTO"
-          - $ref: "#/components/schemas/EmbeddedHashLockTransactionDTO"
-          - $ref: "#/components/schemas/EmbeddedAccountPropertiesTransactionDTO"
-          - $ref: "#/components/schemas/EmbeddedSecretLockTransactionDTO"
-          - $ref: "#/components/schemas/EmbeddedSecretProofTransactionDTO"
-          - $ref: "#/components/schemas/EmbeddedAccountLinkTransactionDTO"
+          $ref: "#/components/schemas/EmbeddedTransactionInfoDTOTransactions"
     TransactionBodyDTO:
       type: object
       required:
-      - max_fee
-      - deadline
+        - max_fee
+        - deadline
       properties:
         max_fee:
           $ref: "#/components/schemas/UInt64DTO"
@@ -3577,19 +3580,19 @@ components:
     TransactionDTO:
       type: object
       allOf:
-      - $ref: "#/components/schemas/VerifiableEntityDTO"
-      - $ref: "#/components/schemas/EntityDTO"
-      - $ref: "#/components/schemas/TransactionBodyDTO"
+        - $ref: "#/components/schemas/VerifiableEntityDTO"
+        - $ref: "#/components/schemas/EntityDTO"
+        - $ref: "#/components/schemas/TransactionBodyDTO"
     EmbeddedTransactionDTO:
       type: object
       allOf:
-      - $ref: "#/components/schemas/EntityDTO"
-      - $ref: "#/components/schemas/TransactionBodyDTO"
+        - $ref: "#/components/schemas/EntityDTO"
+        - $ref: "#/components/schemas/TransactionBodyDTO"
     BlockchainUpgradeBodyDTO:
       type: object
       required:
-      - upgradePeriod
-      - newBlockChainVersion
+        - upgradePeriod
+        - newBlockChainVersion
       properties:
         upgradePeriod:
           $ref: "#/components/schemas/UInt64DTO"
@@ -3599,19 +3602,19 @@ components:
       type: object
       description: Transaction that change version of blockchain.
       allOf:
-      - $ref: "#/components/schemas/TransactionDTO"
-      - $ref: "#/components/schemas/BlockchainUpgradeBodyDTO"
+        - $ref: "#/components/schemas/TransactionDTO"
+        - $ref: "#/components/schemas/BlockchainUpgradeBodyDTO"
     EmbeddedBlockchainUpgradeTransactionDTO:
       type: object
       allOf:
-      - $ref: "#/components/schemas/EmbeddedTransactionDTO"
-      - $ref: "#/components/schemas/BlockchainUpgradeBodyDTO"
+        - $ref: "#/components/schemas/EmbeddedTransactionDTO"
+        - $ref: "#/components/schemas/BlockchainUpgradeBodyDTO"
     NetworkConfigBodyDTO:
       type: object
       required:
-      - applyHeightDelta
-      - networkConfig
-      - supportedEntityVersions
+        - applyHeightDelta
+        - networkConfig
+        - supportedEntityVersions
       properties:
         applyHeightDelta:
           $ref: "#/components/schemas/UInt64DTO"
@@ -3625,19 +3628,19 @@ components:
       type: object
       description: Transaction that updates config.
       allOf:
-      - $ref: "#/components/schemas/TransactionDTO"
-      - $ref: "#/components/schemas/NetworkConfigBodyDTO"
+        - $ref: "#/components/schemas/TransactionDTO"
+        - $ref: "#/components/schemas/NetworkConfigBodyDTO"
     EmbeddedNetworkConfigTransactionDTO:
       type: object
       allOf:
-      - $ref: "#/components/schemas/EmbeddedTransactionDTO"
-      - $ref: "#/components/schemas/NetworkConfigBodyDTO"
+        - $ref: "#/components/schemas/EmbeddedTransactionDTO"
+        - $ref: "#/components/schemas/NetworkConfigBodyDTO"
     AddressMetadataBodyDTO:
       type: object
       required:
-      - metadataId
-      - metadataType
-      - modifications
+        - metadataId
+        - metadataType
+        - modifications
       properties:
         metadataId:
           type: string
@@ -3653,19 +3656,19 @@ components:
       type: object
       description: Transaction that addes metadata to account.
       allOf:
-      - $ref: "#/components/schemas/TransactionDTO"
-      - $ref: "#/components/schemas/AddressMetadataBodyDTO"
+        - $ref: "#/components/schemas/TransactionDTO"
+        - $ref: "#/components/schemas/AddressMetadataBodyDTO"
     EmbeddedAddressMetadataTransactionDTO:
       type: object
       allOf:
-      - $ref: "#/components/schemas/EmbeddedTransactionDTO"
-      - $ref: "#/components/schemas/AddressMetadataBodyDTO"
+        - $ref: "#/components/schemas/EmbeddedTransactionDTO"
+        - $ref: "#/components/schemas/AddressMetadataBodyDTO"
     MosaicMetadataBodyDTO:
       type: object
       required:
-      - metadataId
-      - metadataType
-      - modifications
+        - metadataId
+        - metadataType
+        - modifications
       properties:
         metadataId:
           $ref: "#/components/schemas/UInt64DTO"
@@ -3681,19 +3684,19 @@ components:
       type: object
       description: Transaction that addes metadata to mosaic.
       allOf:
-      - $ref: "#/components/schemas/TransactionDTO"
-      - $ref: "#/components/schemas/MosaicMetadataBodyDTO"
+        - $ref: "#/components/schemas/TransactionDTO"
+        - $ref: "#/components/schemas/MosaicMetadataBodyDTO"
     EmbeddedMosaicMetadataTransactionDTO:
       type: object
       allOf:
-      - $ref: "#/components/schemas/EmbeddedTransactionDTO"
-      - $ref: "#/components/schemas/MosaicMetadataBodyDTO"
+        - $ref: "#/components/schemas/EmbeddedTransactionDTO"
+        - $ref: "#/components/schemas/MosaicMetadataBodyDTO"
     NamespaceMetadataBodyDTO:
       type: object
       required:
-      - metadataId
-      - metadataType
-      - modifications
+        - metadataId
+        - metadataType
+        - modifications
       properties:
         metadataId:
           $ref: "#/components/schemas/UInt64DTO"
@@ -3709,19 +3712,19 @@ components:
       type: object
       description: Transaction that addes metadata to namespace.
       allOf:
-      - $ref: "#/components/schemas/TransactionDTO"
-      - $ref: "#/components/schemas/NamespaceMetadataBodyDTO"
+        - $ref: "#/components/schemas/TransactionDTO"
+        - $ref: "#/components/schemas/NamespaceMetadataBodyDTO"
     EmbeddedNamespaceMetadataTransactionDTO:
       type: object
       allOf:
-      - $ref: "#/components/schemas/EmbeddedTransactionDTO"
-      - $ref: "#/components/schemas/NamespaceMetadataBodyDTO"
+        - $ref: "#/components/schemas/EmbeddedTransactionDTO"
+        - $ref: "#/components/schemas/NamespaceMetadataBodyDTO"
     MosaicDefinitionTransactionBodyDTO:
       type: object
       required:
-      - mosaicNonce
-      - mosaicId
-      - properties
+        - mosaicNonce
+        - mosaicId
+        - properties
       properties:
         mosaicNonce:
           type: integer
@@ -3737,19 +3740,19 @@ components:
       type: object
       description: Transaction that creates a new mosaic.
       allOf:
-      - $ref: "#/components/schemas/TransactionDTO"
-      - $ref: "#/components/schemas/MosaicDefinitionTransactionBodyDTO"
+        - $ref: "#/components/schemas/TransactionDTO"
+        - $ref: "#/components/schemas/MosaicDefinitionTransactionBodyDTO"
     EmbeddedMosaicDefinitionTransactionDTO:
       type: object
       allOf:
-      - $ref: "#/components/schemas/EmbeddedTransactionDTO"
-      - $ref: "#/components/schemas/MosaicDefinitionTransactionBodyDTO"
+        - $ref: "#/components/schemas/EmbeddedTransactionDTO"
+        - $ref: "#/components/schemas/MosaicDefinitionTransactionBodyDTO"
     MosaicSupplyChangeTransactionBodyDTO:
       type: object
       required:
-      - mosaicId
-      - direction
-      - delta
+        - mosaicId
+        - direction
+        - delta
       properties:
         mosaicId:
           $ref: "#/components/schemas/UInt64DTO"
@@ -3761,21 +3764,21 @@ components:
       type: object
       description: Transaction to increase or decrease a mosaic’s supply.
       allOf:
-      - $ref: "#/components/schemas/TransactionDTO"
-      - $ref: "#/components/schemas/MosaicSupplyChangeTransactionBodyDTO"
+        - $ref: "#/components/schemas/TransactionDTO"
+        - $ref: "#/components/schemas/MosaicSupplyChangeTransactionBodyDTO"
     EmbeddedMosaicSupplyChangeTransactionDTO:
       type: object
       allOf:
-      - $ref: "#/components/schemas/EmbeddedTransactionDTO"
-      - $ref: "#/components/schemas/MosaicSupplyChangeTransactionBodyDTO"
+        - $ref: "#/components/schemas/EmbeddedTransactionDTO"
+        - $ref: "#/components/schemas/MosaicSupplyChangeTransactionBodyDTO"
     RegisterNamespaceTransactionBodyDTO:
       type: object
       required:
-      - namespaceType
-      - duration
-      - namespaceId
-      - name
-      - parentId
+        - namespaceType
+        - duration
+        - namespaceId
+        - name
+        - parentId
       properties:
         namespaceType:
           $ref: "#/components/schemas/NamespaceTypeEnum"
@@ -3792,19 +3795,19 @@ components:
       type: object
       description: Transaction that creates or renew a namespace.
       allOf:
-      - $ref: "#/components/schemas/TransactionDTO"
-      - $ref: "#/components/schemas/RegisterNamespaceTransactionBodyDTO"
+        - $ref: "#/components/schemas/TransactionDTO"
+        - $ref: "#/components/schemas/RegisterNamespaceTransactionBodyDTO"
     EmbeddedRegisterNamespaceTransactionDTO:
       type: object
       allOf:
-      - $ref: "#/components/schemas/EmbeddedTransactionDTO"
-      - $ref: "#/components/schemas/RegisterNamespaceTransactionBodyDTO"
+        - $ref: "#/components/schemas/EmbeddedTransactionDTO"
+        - $ref: "#/components/schemas/RegisterNamespaceTransactionBodyDTO"
     AddressAliasTransactionBodyDTO:
       type: object
       required:
-      - aliasAction
-      - namespaceId
-      - address
+        - aliasAction
+        - namespaceId
+        - address
       properties:
         aliasAction:
           $ref: "#/components/schemas/AliasActionEnum"
@@ -3817,19 +3820,19 @@ components:
       type: object
       description: Transaction that attaches a namespace to an account.
       allOf:
-      - $ref: "#/components/schemas/TransactionDTO"
-      - $ref: "#/components/schemas/AddressAliasTransactionBodyDTO"
+        - $ref: "#/components/schemas/TransactionDTO"
+        - $ref: "#/components/schemas/AddressAliasTransactionBodyDTO"
     EmbeddedAddressAliasTransactionDTO:
       type: object
       allOf:
-      - $ref: "#/components/schemas/EmbeddedTransactionDTO"
-      - $ref: "#/components/schemas/AddressAliasTransactionBodyDTO"
+        - $ref: "#/components/schemas/EmbeddedTransactionDTO"
+        - $ref: "#/components/schemas/AddressAliasTransactionBodyDTO"
     MosaicAliasTransactionBodyDTO:
       type: object
       required:
-      - aliasAction
-      - namespaceId
-      - mosaicId
+        - aliasAction
+        - namespaceId
+        - mosaicId
       properties:
         aliasAction:
           $ref: "#/components/schemas/AliasActionEnum"
@@ -3841,18 +3844,18 @@ components:
       type: object
       description: Transaction that attaches a namespace to a mosaic.
       allOf:
-      - $ref: "#/components/schemas/TransactionDTO"
-      - $ref: "#/components/schemas/MosaicAliasTransactionBodyDTO"
+        - $ref: "#/components/schemas/TransactionDTO"
+        - $ref: "#/components/schemas/MosaicAliasTransactionBodyDTO"
     EmbeddedMosaicAliasTransactionDTO:
       type: object
       allOf:
-      - $ref: "#/components/schemas/EmbeddedTransactionDTO"
-      - $ref: "#/components/schemas/MosaicAliasTransactionBodyDTO"
+        - $ref: "#/components/schemas/EmbeddedTransactionDTO"
+        - $ref: "#/components/schemas/MosaicAliasTransactionBodyDTO"
     MessageDTO:
       type: object
       required:
-      - type
-      - payload
+        - type
+        - payload
       properties:
         type:
           $ref: "#/components/schemas/MessageTypeEnum"
@@ -3862,9 +3865,9 @@ components:
     TransferTransactionBodyDTO:
       type: object
       required:
-      - recipient
-      - mosaics
-      - message
+        - recipient
+        - mosaics
+        - message
       properties:
         recipient:
           type: string
@@ -3885,19 +3888,19 @@ components:
       type: object
       description: Transaction that transfers mosaics and messages to another account.
       allOf:
-      - $ref: "#/components/schemas/TransactionDTO"
-      - $ref: "#/components/schemas/TransferTransactionBodyDTO"
+        - $ref: "#/components/schemas/TransactionDTO"
+        - $ref: "#/components/schemas/TransferTransactionBodyDTO"
     EmbeddedTransferTransactionDTO:
       type: object
       allOf:
-      - $ref: "#/components/schemas/EmbeddedTransactionDTO"
-      - $ref: "#/components/schemas/TransferTransactionBodyDTO"
+        - $ref: "#/components/schemas/EmbeddedTransactionDTO"
+        - $ref: "#/components/schemas/TransferTransactionBodyDTO"
     ModifyMultisigAccountTransactionBodyDTO:
       type: object
       required:
-      - minRemovalDelta
-      - minApprovalDelta
-      - modifications
+        - minRemovalDelta
+        - minApprovalDelta
+        - modifications
       properties:
         minRemovalDelta:
           type: integer
@@ -3922,17 +3925,17 @@ components:
       type: object
       description: Transaction that creates or modifies a multisig account.
       allOf:
-      - $ref: "#/components/schemas/TransactionDTO"
-      - $ref: "#/components/schemas/ModifyMultisigAccountTransactionBodyDTO"
+        - $ref: "#/components/schemas/TransactionDTO"
+        - $ref: "#/components/schemas/ModifyMultisigAccountTransactionBodyDTO"
     EmbeddedModifyMultisigAccountTransactionDTO:
       allOf:
-      - $ref: "#/components/schemas/EmbeddedTransactionDTO"
-      - $ref: "#/components/schemas/ModifyMultisigAccountTransactionBodyDTO"
+        - $ref: "#/components/schemas/EmbeddedTransactionDTO"
+        - $ref: "#/components/schemas/ModifyMultisigAccountTransactionBodyDTO"
     AggregateTransactionBodyDTO:
       type: object
       required:
-      - cosignatures
-      - transactions
+        - cosignatures
+        - transactions
       properties:
         cosignatures:
           type: array
@@ -3948,26 +3951,26 @@ components:
       type: object
       description: Transaction that combines multiple transactions together.
       allOf:
-      - $ref: "#/components/schemas/TransactionDTO"
-      - $ref: "#/components/schemas/AggregateTransactionBodyDTO"
+        - $ref: "#/components/schemas/TransactionDTO"
+        - $ref: "#/components/schemas/AggregateTransactionBodyDTO"
     CosignatureDTO:
       type: object
       allOf:
-      - $ref: "#/components/schemas/VerifiableEntityDTO"
-      - type: object
-        required:
-        - signer
-        properties:
-          signer:
-            type: string
-            description: The public key of the transaction signer.
-            example: D799E559AB735A5E62187306E80C1679EE3E1170532280C968D974E351CB412F
+        - $ref: "#/components/schemas/VerifiableEntityDTO"
+        - type: object
+          required:
+            - signer
+          properties:
+            signer:
+              type: string
+              description: The public key of the transaction signer.
+              example: D799E559AB735A5E62187306E80C1679EE3E1170532280C968D974E351CB412F
     HashLockTransactionBodyDTO:
       type: object
       required:
-      - mosaic
-      - duration
-      - hash
+        - mosaic
+        - duration
+        - hash
       properties:
         mosaic:
           $ref: "#/components/schemas/MosaicDTO"
@@ -3983,18 +3986,18 @@ components:
       type: object
       description: Transaction to lock funds before sending an aggregate bonded transaction.
       allOf:
-      - $ref: "#/components/schemas/TransactionDTO"
-      - $ref: "#/components/schemas/HashLockTransactionBodyDTO"
+        - $ref: "#/components/schemas/TransactionDTO"
+        - $ref: "#/components/schemas/HashLockTransactionBodyDTO"
     EmbeddedHashLockTransactionDTO:
       type: object
       allOf:
-      - $ref: "#/components/schemas/EmbeddedTransactionDTO"
-      - $ref: "#/components/schemas/HashLockTransactionDTO"
+        - $ref: "#/components/schemas/EmbeddedTransactionDTO"
+        - $ref: "#/components/schemas/HashLockTransactionDTO"
     AccountPropertiesTransactionBodyDTO:
       type: object
       required:
-      - propertyType
-      - modifications
+        - propertyType
+        - modifications
       properties:
         propertyType:
           $ref: "#/components/schemas/AccountPropertyTypeEnum"
@@ -4007,22 +4010,22 @@ components:
       description: Transaction that prevents receiving transactions from undesired
         addresses, mosaics or sending certain transaction types.
       allOf:
-      - $ref: "#/components/schemas/TransactionDTO"
-      - $ref: "#/components/schemas/AccountPropertiesTransactionBodyDTO"
+        - $ref: "#/components/schemas/TransactionDTO"
+        - $ref: "#/components/schemas/AccountPropertiesTransactionBodyDTO"
     EmbeddedAccountPropertiesTransactionDTO:
       type: object
       allOf:
-      - $ref: "#/components/schemas/EmbeddedTransactionDTO"
-      - $ref: "#/components/schemas/AccountPropertiesTransactionBodyDTO"
+        - $ref: "#/components/schemas/EmbeddedTransactionDTO"
+        - $ref: "#/components/schemas/AccountPropertiesTransactionBodyDTO"
     SecretLockTransactionBodyDTO:
       type: object
       required:
-      - duration
-      - mosaicId
-      - amount
-      - hashAlgorithm
-      - secret
-      - recipient
+        - duration
+        - mosaicId
+        - amount
+        - hashAlgorithm
+        - secret
+        - recipient
       properties:
         duration:
           $ref: "#/components/schemas/UInt64DTO"
@@ -4047,19 +4050,19 @@ components:
         revealed. If the duration is reached, the locked funds go back to the
         sender of the transaction.
       allOf:
-      - $ref: "#/components/schemas/TransactionDTO"
-      - $ref: "#/components/schemas/SecretLockTransactionBodyDTO"
+        - $ref: "#/components/schemas/TransactionDTO"
+        - $ref: "#/components/schemas/SecretLockTransactionBodyDTO"
     EmbeddedSecretLockTransactionDTO:
       type: object
       allOf:
-      - $ref: "#/components/schemas/EmbeddedTransactionDTO"
-      - $ref: "#/components/schemas/SecretLockTransactionBodyDTO"
+        - $ref: "#/components/schemas/EmbeddedTransactionDTO"
+        - $ref: "#/components/schemas/SecretLockTransactionBodyDTO"
     SecretProofTransactionBodyDTO:
       type: object
       required:
-      - hashAlgorithm
-      - secret
-      - proof
+        - hashAlgorithm
+        - secret
+        - proof
       properties:
         hashAlgorithm:
           $ref: "#/components/schemas/HashAlgorithmEnum"
@@ -4078,18 +4081,18 @@ components:
       type: object
       description: Transaction that revealed a proof.
       allOf:
-      - $ref: "#/components/schemas/TransactionDTO"
-      - $ref: "#/components/schemas/SecretProofTransactionBodyDTO"
+        - $ref: "#/components/schemas/TransactionDTO"
+        - $ref: "#/components/schemas/SecretProofTransactionBodyDTO"
     EmbeddedSecretProofTransactionDTO:
       type: object
       allOf:
-      - $ref: "#/components/schemas/EmbeddedTransactionDTO"
-      - $ref: "#/components/schemas/SecretProofTransactionBodyDTO"
+        - $ref: "#/components/schemas/EmbeddedTransactionDTO"
+        - $ref: "#/components/schemas/SecretProofTransactionBodyDTO"
     AccountLinkTransactionBodyDTO:
       type: object
       required:
-      - remoteAccountKey
-      - action
+        - remoteAccountKey
+        - action
       properties:
         remoteAccountKey:
           type: string
@@ -4100,24 +4103,24 @@ components:
       type: object
       description: Delegates the account importance score to a proxy account.
       allOf:
-      - $ref: "#/components/schemas/TransactionDTO"
-      - $ref: "#/components/schemas/AccountLinkTransactionBodyDTO"
+        - $ref: "#/components/schemas/TransactionDTO"
+        - $ref: "#/components/schemas/AccountLinkTransactionBodyDTO"
     EmbeddedAccountLinkTransactionDTO:
       type: object
       allOf:
-      - $ref: "#/components/schemas/EmbeddedTransactionDTO"
-      - $ref: "#/components/schemas/AccountLinkTransactionBodyDTO"
+        - $ref: "#/components/schemas/EmbeddedTransactionDTO"
+        - $ref: "#/components/schemas/AccountLinkTransactionBodyDTO"
     AnnounceTransactionInfoDTO:
       type: object
       required:
-      - message
+        - message
       properties:
         message:
           type: string
     TransactionStatusDTO:
       type: object
       required:
-      - status
+        - status
       properties:
         group:
           type: string
@@ -4134,8 +4137,8 @@ components:
     NetworkTypeDTO:
       type: object
       required:
-      - name
-      - description
+        - name
+        - description
       properties:
         name:
           type: string
@@ -4188,7 +4191,7 @@ components:
         - duration
       properties:
         duration:
-            $ref: "#/components/schemas/UInt64DTO"
+          $ref: "#/components/schemas/UInt64DTO"
     ExchangeOfferTransactionBodyDTO:
       type: object
       allOf:
@@ -4211,7 +4214,7 @@ components:
           $ref: "#/components/schemas/OfferTypeEnum"
     OfferDTO:
       type: object
-      required: 
+      required:
         - mosaicId
         - mosaicAmount
         - cost
@@ -4260,7 +4263,7 @@ components:
         - price
         - offer
         - owner
-        - type 
+        - type
       properties:
         mosaicId:
           type: array
@@ -4290,10 +4293,10 @@ components:
           example: "D9A659A3AA42FD62BE88E1D96B0F10EB91F6097F8D24EC8FD7C94EC6455735EC"
         type:
           type: integer
-          example: 0      
+          example: 0
     OfferInfoDTO:
       type: object
-      required: 
+      required:
         - mosaicId
         - amount
         - initialAmount
@@ -4391,7 +4394,7 @@ components:
       properties:
         verificationFailures:
           type: array
-          items: 
+          items:
             $ref: "#/components/schemas/FailureVerificationDTO"
     PrepareDriveTransactionBodyDTO:
       type: object
@@ -4412,20 +4415,20 @@ components:
           description: The public key of the owner of the drive.
           example: "EFF9BC7472263D03EF6362B1F200FD3061BCD1BABE78F82119FB88811227CE85"
         duration:
-            $ref: "#/components/schemas/UInt64DTO"
-        billingPeriod: 
           $ref: "#/components/schemas/UInt64DTO"
-        billingPrice: 
+        billingPeriod:
+          $ref: "#/components/schemas/UInt64DTO"
+        billingPrice:
           $ref: "#/components/schemas/UInt64DTO"
         driveSize:
           $ref: "#/components/schemas/UInt64DTO"
-        replicas: 
+        replicas:
           type: integer
           example: 3
-        minReplicators: 
+        minReplicators:
           type: integer
           example: 2
-        percentApprovers: 
+        percentApprovers:
           type: integer
           example: 67
     DriveFileSystemTransactionBodyDTO:
@@ -4489,7 +4492,7 @@ components:
         fileSize:
           $ref: "#/components/schemas/UInt64DTO"
     FileDepositDTO:
-      type: object 
+      type: object
       required:
         - fileHash
       properties:
@@ -4528,7 +4531,7 @@ components:
             $ref: "#/components/schemas/DriveDTO"
     DriveDTO:
       type: object
-      required: 
+      required:
         - multisig
         - multisigAddress
         - start
@@ -4556,68 +4559,68 @@ components:
         multisigAddress:
           type: string
           example: "9048760066A50F0F65820D3008A79CF73E1034A564BF44AB3E"
-        start: 
-          $ref: "#/components/schemas/UInt64DTO" 
-        end: 
+        start:
           $ref: "#/components/schemas/UInt64DTO"
-        state: 
+        end:
+          $ref: "#/components/schemas/UInt64DTO"
+        state:
           type: integer
           example: 1
-        owner: 
+        owner:
           type: string
           example: "6A98356A93F288DC198F8932C2BEAF57F7FFDC51BC9267814C6BA0FB60B9A84A"
-        rootHash: 
+        rootHash:
           type: string
           example: "0100000000000000000000000000000000000000000000000000000000000000"
-        duration: 
+        duration:
           $ref: "#/components/schemas/UInt64DTO"
-        billingPeriod: 
+        billingPeriod:
           $ref: "#/components/schemas/UInt64DTO"
-        billingPrice: 
+        billingPrice:
           $ref: "#/components/schemas/UInt64DTO"
-        size: 
+        size:
           $ref: "#/components/schemas/UInt64DTO"
-        occupiedSpace: 
+        occupiedSpace:
           $ref: "#/components/schemas/UInt64DTO"
-        replicas: 
+        replicas:
           type: integer
           example: 3
-        minReplicators: 
+        minReplicators:
           type: integer
           example: 2
-        percentApprovers: 
+        percentApprovers:
           type: integer
           example: 67
-        billingHistory: 
+        billingHistory:
           type: array
           items:
             $ref: "#/components/schemas/BillingHistoryDTO"
-        files: 
+        files:
           type: array
           items:
             $ref: "#/components/schemas/FileDTO"
-        replicators: 
+        replicators:
           type: array
           items:
             $ref: "#/components/schemas/ReplicatorsDTO"
-        removedReplicators: 
+        removedReplicators:
           type: array
           items: {}
           example: []
-        uploadPayments: 
+        uploadPayments:
           type: array
           items:
             $ref: "#/components/schemas/PaymentsDTO"
     BillingHistoryDTO:
       type: object
-      required: 
+      required:
         - start
         - end
         - payments
       properties:
-        start: 
-          $ref: "#/components/schemas/UInt64DTO" 
-        end: 
+        start:
+          $ref: "#/components/schemas/UInt64DTO"
+        end:
           $ref: "#/components/schemas/UInt64DTO"
         payments:
           type: array
@@ -4625,7 +4628,7 @@ components:
             $ref: "#/components/schemas/PaymentsDTO"
     PaymentsDTO:
       type: object
-      required: 
+      required:
         - receiver
         - amount
         - height
@@ -4643,7 +4646,7 @@ components:
             $ref: "#/components/schemas/UInt64DTO"
     ReplicatorsDTO:
       type: object
-      required: 
+      required:
         - replicator
         - start
         - end
@@ -4667,7 +4670,7 @@ components:
           example: []
     FileDTO:
       type: object
-      required: 
+      required:
         - fileHash
         - size
       properties:
@@ -4676,7 +4679,7 @@ components:
           example: "AA2D2427E105A9B60DF634553849135DF629F1408A018D02B07A70CAFFB43093"
         size:
           $ref: "#/components/schemas/UInt64DTO"
-        
+
     # Lock endpoints
     SecretLockWithMeta:
       type: object
@@ -4705,7 +4708,7 @@ components:
         account:
           type: string
           example: "CFC31B3080B36BC3D59DF4AB936AC72F4DC15CE3C3E1B1EC5EA41415A4C33FEE"
-        accountAddress: 
+        accountAddress:
           type: string
           example: "9052838D173BA9DC1822C12F8CC2EA1A3B88939772B7F26D84"
         mosaicId:
@@ -4753,7 +4756,7 @@ components:
         account:
           type: string
           example: "CFC31B3080B36BC3D59DF4AB936AC72F4DC15CE3C3E1B1EC5EA41415A4C33FEE"
-        accountAddress: 
+        accountAddress:
           type: string
           example: "9052838D173BA9DC1822C12F8CC2EA1A3B88939772B7F26D84"
         mosaicId:
@@ -4768,7 +4771,7 @@ components:
         hash:
           type: string
           example: "67829ABA183FDA679273373C9973F23F0D8611371ED31C23C6D80FCAD0AE5C87"
-    
+
     MetaLockDTO:
       type: object
       required:
@@ -4782,13 +4785,13 @@ components:
     NodeInfoDTO:
       type: object
       required:
-      - publicKey
-      - port
-      - networkIdentifier
-      - version
-      - roles
-      - host
-      - friendlyName
+        - publicKey
+        - port
+        - networkIdentifier
+        - version
+        - roles
+        - host
+        - friendlyName
       properties:
         publicKey:
           type: string
@@ -4821,7 +4824,7 @@ components:
     NodeTimeDTO:
       type: object
       required:
-      - communicationTimestamps
+        - communicationTimestamps
       properties:
         communicationTimestamps:
           $ref: "#/components/schemas/communicationTimestamps"
@@ -4836,7 +4839,7 @@ components:
             type: string
             format: hex
           example:
-          - d525ad41d95fcf29
+            - d525ad41d95fcf29
     namespaceIds:
       type: object
       properties:
@@ -4847,7 +4850,7 @@ components:
             type: string
             format: hex
           example:
-          - 84b3552d375ffa4b
+            - 84b3552d375ffa4b
     publicKeys:
       type: object
       properties:
@@ -4856,8 +4859,8 @@ components:
           items:
             type: string
           example:
-          - "8599BA6DB5B81BB69F96B88DD80A3B9EB7BBF8849CBD979100E89D69C30356E0"
-          - "3DCB6E5EFF4D63A38902EF948E895B01D6EA497EBF84B1460C14CA5BEDCAD9F3"
+            - "8599BA6DB5B81BB69F96B88DD80A3B9EB7BBF8849CBD979100E89D69C30356E0"
+            - "3DCB6E5EFF4D63A38902EF948E895B01D6EA497EBF84B1460C14CA5BEDCAD9F3"
     metadataIds:
       type: object
       properties:
@@ -4867,9 +4870,9 @@ components:
             type: string
             format: hex
           example:
-          - d525ad41d95fcf29
-          - SCJW742TNBMMX2UO4DVKXGP6T3CO6XXR6ZRWMVU2
-          - 321DE652C4D3362FC2DDF7800F6582F4A10CFEA134B81F8AB6E4BE78BBA4D18E
+            - d525ad41d95fcf29
+            - SCJW742TNBMMX2UO4DVKXGP6T3CO6XXR6ZRWMVU2
+            - 321DE652C4D3362FC2DDF7800F6582F4A10CFEA134B81F8AB6E4BE78BBA4D18E
     metadataKey:
       type: string
       format: hex
@@ -4884,15 +4887,29 @@ components:
           items:
             type: string
           example:
-          - AC1A6E1D8DE5B17D2C6B1293F1CAD3829EEACF38D09311BB3C8E5A880092DE26
+            - AC1A6E1D8DE5B17D2C6B1293F1CAD3829EEACF38D09311BB3C8E5A880092DE26
         addresses:
           type: array
           description: The array of addresses.
           items:
             type: string
           example:
-          - SDRDGFTDLLCB67D4HPGIMIHPNSRYRJRT7DOBGWZY
-          - SBCPGZ3S2SCC3YHBBTYDCUZV4ZZEPHM2KGCP4QXX
+            - SDRDGFTDLLCB67D4HPGIMIHPNSRYRJRT7DOBGWZY
+            - SBCPGZ3S2SCC3YHBBTYDCUZV4ZZEPHM2KGCP4QXX
+    transactionTypeQueryItems:
+      anyOf:
+        - $ref: '#/components/schemas/EntityTypeEnum'
+    getTransactionsCountItems:
+      anyOf:
+        - $ref: '#/components/schemas/EntityTypeEnum'
+    getTransactionsByGroupAndIdSchema:
+      anyOf:
+        - $ref: '#/components/schemas/transactionIds'
+        - $ref: '#/components/schemas/transactionHashes'
+    getTransactionByGroupAndIDSchema:
+      anyOf:
+        - $ref: '#/components/schemas/TransactionId'
+        - $ref: '#/components/schemas/HashDTO'
     transactionIds:
       type: object
       properties:
@@ -4902,8 +4919,8 @@ components:
           items:
             type: string
           example:
-          - 59B8DA0F0CB2720001103922
-          - 59B8D8E60CB2720001103904
+            - 59B8DA0F0CB2720001103922
+            - 59B8D8E60CB2720001103904
     transactionHashes:
       type: object
       properties:
@@ -4913,7 +4930,7 @@ components:
           items:
             type: string
           example:
-          - 5AF72FE39C0515E823903918A0BFE9625DD752C7BD63969C8869F25E9D155DE5
+            - 5AF72FE39C0515E823903918A0BFE9625DD752C7BD63969C8869F25E9D155DE5
     transactionPayload:
       type: object
       properties:
@@ -4964,4 +4981,4 @@ components:
           items:
             type: string
           example:
-          - 764b3aa022fb929caa204670a817205dc08f2b172d501f36d4f0ec4ea50afae9
+            - 764b3aa022fb929caa204670a817205dc08f2b172d501f36d4f0ec4ea50afae9
