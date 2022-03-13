@@ -25,7 +25,6 @@ import io.proximax.sdk.infrastructure.BlockchainHttp;
 import io.proximax.sdk.infrastructure.ChainHttp;
 import io.proximax.sdk.infrastructure.ChainUpgradeHttp;
 import io.proximax.sdk.infrastructure.ConfigHttp;
-import io.proximax.sdk.infrastructure.ContractHttp;
 import io.proximax.sdk.infrastructure.ExchangeHttp;
 import io.proximax.sdk.infrastructure.Listener;
 import io.proximax.sdk.infrastructure.LockHttp;
@@ -158,16 +157,6 @@ public class BlockchainApi {
     */
    public ConfigRepository createConfigRepository() {
       return new ConfigHttp(this);
-   }
-   
-  
-   /**
-    * create contract repository
-    * 
-    * @return the contract repository
-    */
-   public ContractRepository createContractRepository() {
-      return new ContractHttp(this);
    }
 
    /**

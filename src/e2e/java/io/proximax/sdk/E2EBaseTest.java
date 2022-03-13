@@ -56,7 +56,7 @@ public class E2EBaseTest extends BaseTest {
    /** logger */
    private static final Logger logger = LoggerFactory.getLogger(E2EBaseTest.class);
   
-   protected static final BigInteger DEFAULT_DEADLINE_DURATION = BigInteger.valueOf(60*60*1000l);
+   protected static final BigInteger DEFAULT_DEADLINE_DURATION = BigInteger.valueOf(60*60*1000);
 
    protected BlockchainApi api;
    protected BlockchainRepository blockchainHttp;
@@ -67,7 +67,6 @@ public class E2EBaseTest extends BaseTest {
    protected NetworkRepository networkHttp;
    protected NodeRepository nodeHttp;
    protected MetadataRepository metadataHttp;
-   protected ContractRepository contractHttp;
 
    protected TransactionBuilderFactory transact;
 
@@ -94,7 +93,6 @@ public class E2EBaseTest extends BaseTest {
       networkHttp = api.createNetworkRepository();
       nodeHttp = api.createNodeRepository();
       metadataHttp = api.createMetadataRepository();
-      contractHttp = api.createContractRepository();
       logger.info("Created HTTP interfaces");
       // create and initialize transaction factory
       transact = api.transact();
@@ -167,7 +165,7 @@ public class E2EBaseTest extends BaseTest {
     * send XPX from account to recipient
     * 
     * @param recipient address who gets the funds
-    * @param amount amount of XPX taking the divisibility into account
+    * @param mosaicToTransfer amount of XPX taking the divisibility into account
     */
    protected void sendMosaic(Account sender, Address recipient, Mosaic mosaicToTransfer) {
       TransferTransaction transfer = api.transact().transfer().mosaics(mosaicToTransfer).to(recipient)

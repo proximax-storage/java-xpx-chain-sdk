@@ -20,7 +20,7 @@ class NodeInfoTest {
 
    @Test
    void testConstructor() {
-      NodeInfo ni = new NodeInfo("pubkey", 1, 2, 3, 1, "host", "friend");
+      NodeInfo ni = new NodeInfo("pubkey", 1, 2, 3, "OWNER", "host", "friend");
       doAsserts(ni);
    }
 
@@ -31,7 +31,7 @@ class NodeInfoTest {
       dto.setPort(1);
       dto.setNetworkIdentifier(2);
       dto.setVersion(3);
-      dto.setRoles(RolesTypeEnum.NUMBER_1);
+      dto.setRoles(RolesTypeEnum.OWNER);
       dto.setHost("host");
       dto.setFriendlyName("friend");
       doAsserts(NodeInfo.fromDto(dto));
@@ -42,7 +42,7 @@ class NodeInfoTest {
       assertEquals(1, ni.getPort());
       assertEquals(2, ni.getNetworkIdentifier());
       assertEquals(3, ni.getVersion());
-      assertEquals(RolesTypeEnum.NUMBER_1.getValue(), ni.getRoles());
+      assertEquals(RolesTypeEnum.OWNER.getValue(), ni.getRoles());
       assertEquals("host", ni.getHost());
       assertEquals("friend", ni.getFriendlyName());
    }

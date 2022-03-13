@@ -21,6 +21,7 @@ import static io.proximax.sdk.utils.GsonUtils.getJsonPrimitive;
 import static io.proximax.sdk.utils.dto.UInt64Utils.toBigInt;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -103,8 +104,8 @@ public class TransactionHttp extends Http implements TransactionRepository {
                                 .map(transactionStatusDTO -> new TransactionStatus(transactionStatusDTO.getGroup(),
                                                 transactionStatusDTO.getStatus(),
                                                 transactionStatusDTO.getHash(),
-                                                new DeadlineRaw(toBigInt(transactionStatusDTO.getDeadline())),
-                                                toBigInt(transactionStatusDTO.getHeight())));
+                                                new DeadlineRaw(toBigInt(new ArrayList<>(transactionStatusDTO.getDeadline()))),
+                                                toBigInt(new ArrayList<>(transactionStatusDTO.getHeight()))));
         }
 
         @Override
@@ -119,8 +120,8 @@ public class TransactionHttp extends Http implements TransactionRepository {
                                 .map(transactionStatusDTO -> new TransactionStatus(transactionStatusDTO.getGroup(),
                                                 transactionStatusDTO.getStatus(),
                                                 transactionStatusDTO.getHash(),
-                                                new DeadlineRaw(toBigInt(transactionStatusDTO.getDeadline())),
-                                                toBigInt(transactionStatusDTO.getHeight())))
+                                                new DeadlineRaw(toBigInt(new ArrayList<>(transactionStatusDTO.getDeadline()))),
+                                                toBigInt(new ArrayList<>(transactionStatusDTO.getHeight()))))
                                 .toList()
                                 .toObservable();
         }

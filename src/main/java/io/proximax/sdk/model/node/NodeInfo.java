@@ -15,7 +15,7 @@ public class NodeInfo {
    private final Integer port;
    private final Integer networkIdentifier;
    private final Integer version;
-   private final Integer roles;
+   private final String roles;
    private final String host;
    private final String friendlyName;
    
@@ -30,7 +30,7 @@ public class NodeInfo {
     * @param host host name
     * @param friendlyName friendly node name
     */
-   public NodeInfo(String publicKey, Integer port, Integer networkIdentifier, Integer version, Integer roles,
+   public NodeInfo(String publicKey, Integer port, Integer networkIdentifier, Integer version, String roles,
          String host, String friendlyName) {
       this.publicKey = publicKey;
       this.port = port;
@@ -72,7 +72,7 @@ public class NodeInfo {
    /**
     * @return the roles
     */
-   public Integer getRoles() {
+   public String getRoles() {
       return roles;
    }
 

@@ -6,6 +6,7 @@
 package io.proximax.sdk.model.node;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 
 import io.proximax.sdk.gen.model.CommunicationTimestamps;
 import io.proximax.sdk.gen.model.NodeTimeDTO;
@@ -51,7 +52,7 @@ public class NodeTime {
     */
    public static NodeTime fromDto(NodeTimeDTO dto) {
       CommunicationTimestamps timestamps = dto.getCommunicationTimestamps();
-      return new NodeTime(UInt64Utils.toBigInt(timestamps.getSendTimestamp()),
-            UInt64Utils.toBigInt(timestamps.getReceiveTimestamp()));
+      return new NodeTime(UInt64Utils.toBigInt(new ArrayList<>(timestamps.getSendTimestamp())),
+            UInt64Utils.toBigInt(new ArrayList<>(timestamps.getReceiveTimestamp())));
    }
 }

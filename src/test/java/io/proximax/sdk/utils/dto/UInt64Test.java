@@ -20,14 +20,13 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-
-import io.proximax.sdk.gen.model.UInt64DTO;
 
 class UInt64Test {
 
@@ -76,9 +75,9 @@ class UInt64Test {
     @ParameterizedTest
     @MethodSource("provider")
     void dtoToBigInteger(int[] input, BigInteger expected) {
-    	UInt64DTO uint = new UInt64DTO();
-    	uint.add(Long.valueOf(input[0]));
-    	uint.add(Long.valueOf(input[1]));
+        ArrayList<Integer> uint = new ArrayList<>();
+    	uint.add(input[0]);
+    	uint.add(input[1]);
     	assertEquals(expected, UInt64Utils.toBigInt(uint));
     	
     }

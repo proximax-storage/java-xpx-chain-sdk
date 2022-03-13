@@ -19,6 +19,8 @@ package io.proximax.sdk.model.namespace;
 import io.proximax.sdk.gen.model.NamespaceNameDTO;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
+import java.util.ArrayList;
+
 /**
  * The namespace name info structure describes basic information of a namespace and name.
  */
@@ -63,7 +65,7 @@ public class NamespaceName {
      */
     public static NamespaceName fromDto(NamespaceNameDTO dto) {
        return new NamespaceName(
-             new NamespaceId(UInt64Utils.toBigInt(dto.getNamespaceId())),
+             new NamespaceId(UInt64Utils.toBigInt(new ArrayList<>(dto.getNamespaceId()))),
              dto.getName());
     }
 }

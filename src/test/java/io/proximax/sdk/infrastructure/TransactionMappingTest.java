@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 import org.spongycastle.util.encoders.Hex;
@@ -38,7 +39,6 @@ import io.proximax.core.crypto.KeyPair;
 import io.proximax.core.crypto.PrivateKey;
 import io.proximax.core.crypto.PublicKey;
 import io.proximax.sdk.ResourceBasedTest;
-import io.proximax.sdk.gen.model.UInt64DTO;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.namespace.NamespaceType;
 import io.proximax.sdk.model.network.NetworkType;
@@ -306,8 +306,8 @@ public class TransactionMappingTest extends ResourceBasedTest {
     }
 
     private BigInteger extractBigInteger(JsonArray input) {
-        UInt64DTO uInt64DTO = new UInt64DTO();
-        GsonUtils.stream(input).forEach(item -> uInt64DTO.add(item.getAsLong()));
+        ArrayList<Integer> uInt64DTO = new ArrayList<>();
+        GsonUtils.stream(input).forEach(item -> uInt64DTO.add(item.getAsInt()));
         return UInt64Utils.toBigInt(uInt64DTO);
     }
 }

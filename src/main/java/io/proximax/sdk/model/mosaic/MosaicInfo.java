@@ -19,6 +19,7 @@ package io.proximax.sdk.model.mosaic;
 import static io.proximax.sdk.utils.dto.UInt64Utils.toBigInt;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import io.proximax.sdk.gen.model.MosaicInfoDTO;
@@ -137,9 +138,9 @@ public class MosaicInfo {
 	public static MosaicInfo fromDto(MosaicInfoDTO dto, NetworkType networkType) {
 	   return new MosaicInfo(
 	         dto.getMeta().getId(),
-            new MosaicId(toBigInt(dto.getMosaic().getMosaicId())),
-            toBigInt(dto.getMosaic().getSupply()),
-            toBigInt(dto.getMosaic().getHeight()),
+            new MosaicId(toBigInt(new ArrayList<>(dto.getMosaic().getMosaicId()))),
+            toBigInt(new ArrayList<>(dto.getMosaic().getSupply())),
+            toBigInt(new ArrayList<>(dto.getMosaic().getHeight())),
             new PublicAccount(dto.getMosaic().getOwner(), networkType),
             MosaicProperties.fromDto(dto.getMosaic().getProperties())
       );

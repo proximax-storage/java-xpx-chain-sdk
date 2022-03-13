@@ -23,8 +23,8 @@ import com.google.gson.reflect.TypeToken;
 import io.proximax.core.crypto.PublicKey;
 import io.proximax.sdk.BlockchainApi;
 import io.proximax.sdk.LockRepository;
-import io.proximax.sdk.gen.model.HashLockWithMetaDTO;
-import io.proximax.sdk.gen.model.SecretLockWithMetaDTO;
+import io.proximax.sdk.gen.model.HashLockWithMeta;
+import io.proximax.sdk.gen.model.SecretLockWithMeta;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.lock.HashLockWithMetaInfo;
 import io.proximax.sdk.model.lock.SecretLockWithMetaInfo;
@@ -36,9 +36,9 @@ public class LockHttp extends Http implements LockRepository {
     private static final String hash = "/hash";
     private static final String secret = "/secret";
 
-    private static final Type TYPE_HASH_LOCK_WITH_META_INFO_LIST = new TypeToken<List<HashLockWithMetaDTO>>() {
+    private static final Type TYPE_HASH_LOCK_WITH_META_INFO_LIST = new TypeToken<List<HashLockWithMeta>>() {
     }.getType();
-    private static final Type TYPE_SECRET_LOCK_WITH_META_INFO_LIST = new TypeToken<List<SecretLockWithMetaDTO>>() {
+    private static final Type TYPE_SECRET_LOCK_WITH_META_INFO_LIST = new TypeToken<List<SecretLockWithMeta>>() {
     }.getType();
 
     public LockHttp(BlockchainApi api) {
@@ -92,7 +92,7 @@ public class LockHttp extends Http implements LockRepository {
         return this.client.get(lock + SLASH + "compositeHash" + SLASH + compositeHash)
                 .map(Http::mapStringOrError)
                 .map(str -> gson.fromJson(str,
-                        SecretLockWithMetaDTO.class))
+                        SecretLockWithMeta.class))
                 .map(SecretLockWithMetaInfo::fromDto);
     }
 
@@ -101,7 +101,7 @@ public class LockHttp extends Http implements LockRepository {
         return this.client.get(lock + hash + SLASH + lockHash)
                 .map(Http::mapStringOrError)
                 .map(str -> gson.fromJson(str,
-                        HashLockWithMetaDTO.class))
+                        HashLockWithMeta.class))
                 .map(HashLockWithMetaInfo::fromDto);
     }
 
@@ -115,11 +115,11 @@ public class LockHttp extends Http implements LockRepository {
                 .toList().toObservable();
     }
 
-    private List<SecretLockWithMetaDTO> toSecretLockMetaInfo(String json) {
+    private List<SecretLockWithMeta> toSecretLockMetaInfo(String json) {
         return gson.fromJson(json, TYPE_SECRET_LOCK_WITH_META_INFO_LIST);
     }
 
-    private List<HashLockWithMetaDTO> toHashLockMetaInfo(String json) {
+    private List<HashLockWithMeta> toHashLockMetaInfo(String json) {
         return gson.fromJson(json, TYPE_HASH_LOCK_WITH_META_INFO_LIST);
     }
 }

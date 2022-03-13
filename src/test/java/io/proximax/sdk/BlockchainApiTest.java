@@ -61,7 +61,6 @@ class BlockchainApiTest {
 
       assertNotNull(api.createAccountRepository());
       assertNotNull(api.createBlockchainRepository());
-      assertNotNull(api.createContractRepository());
       assertNotNull(api.createListener());
       assertNotNull(api.createMetadataRepository());
       assertNotNull(api.createMosaicRepository());

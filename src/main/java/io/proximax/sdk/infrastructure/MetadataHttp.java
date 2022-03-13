@@ -27,7 +27,7 @@ import com.google.gson.reflect.TypeToken;
 
 import io.proximax.sdk.BlockchainApi;
 import io.proximax.sdk.MetadataRepository;
-import io.proximax.sdk.gen.model.MetadataInfoDTO;
+import io.proximax.sdk.gen.model.MetadataNemInfoDTO;
 import io.proximax.sdk.model.metadata.MetadataEntry;
 import io.proximax.sdk.model.metadata.MetadataSearch;
 import io.proximax.sdk.utils.GsonUtils;
@@ -38,7 +38,7 @@ import io.reactivex.Observable;
  */
 public class MetadataHttp extends Http implements MetadataRepository {
    private static final String URL_METADATA = "/metadata_v2";
-   private static final Type METADATA_V2_INFO = new TypeToken<List<MetadataInfoDTO>>() {
+   private static final Type METADATA_V2_INFO = new TypeToken<List<MetadataNemInfoDTO>>() {
    }.getType();
 
    public MetadataHttp(BlockchainApi api) {
@@ -51,7 +51,7 @@ public class MetadataHttp extends Http implements MetadataRepository {
             .get(URL_METADATA + SLASH + compositeHash)
             .map(Http::mapStringOrError)
             .map(str -> gson.fromJson(str,
-                  MetadataInfoDTO.class))
+                  MetadataNemInfoDTO.class))
             .map(dto -> MetadataEntry.fromDto(dto));
    }
 
@@ -87,7 +87,7 @@ public class MetadataHttp extends Http implements MetadataRepository {
     * @param json json string representing list
     * @return list of metadata entry DTOs
     */
-   private List<MetadataInfoDTO> toMetadataV2Info(String json) {
+   private List<MetadataNemInfoDTO> toMetadataV2Info(String json) {
       return gson.fromJson(json, METADATA_V2_INFO);
    }
 }

@@ -19,6 +19,7 @@ package io.proximax.sdk.model.account;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,7 +30,6 @@ import io.proximax.core.utils.HexEncoder;
 import io.proximax.sdk.gen.model.AccountDTO;
 import io.proximax.sdk.gen.model.AccountInfoDTO;
 import io.proximax.sdk.gen.model.MosaicDTO;
-import io.proximax.sdk.gen.model.UInt64DTO;
 import io.proximax.sdk.model.mosaic.Mosaic;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.network.NetworkType;
@@ -58,9 +58,9 @@ class AccountInfoTest {
     
     @Test
     void fromDto() {
-       UInt64DTO uint = new UInt64DTO();
-       uint.add(10l);
-       uint.add(0l);
+       ArrayList<Integer> uint = new ArrayList<>();
+       uint.add(10);
+       uint.add(0);
 
        MosaicDTO mosaicDto = new MosaicDTO();
        mosaicDto.setAmount(uint);

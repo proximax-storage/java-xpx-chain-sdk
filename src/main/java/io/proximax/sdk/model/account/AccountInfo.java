@@ -19,6 +19,7 @@ package io.proximax.sdk.model.account;
 import static io.proximax.sdk.utils.dto.UInt64Utils.toBigInt;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -115,11 +116,11 @@ public class AccountInfo {
        AccountDTO accountDTO = dto.getAccount();
        return new AccountInfo(
              Address.createFromRawAddress(AccountDTOUtils.getAddressEncoded(accountDTO)),
-             toBigInt(accountDTO.getAddressHeight()), accountDTO.getPublicKey(),
-             toBigInt(accountDTO.getPublicKeyHeight()),
+             toBigInt(new ArrayList<>(accountDTO.getAddressHeight())), accountDTO.getPublicKey(),
+             toBigInt(new ArrayList<>(accountDTO.getPublicKeyHeight())),
              accountDTO.getMosaics().stream()
-                   .map(mosaicDTO -> new Mosaic(new MosaicId(toBigInt(mosaicDTO.getId())),
-                         toBigInt(mosaicDTO.getAmount())))
+                   .map(mosaicDTO -> new Mosaic(new MosaicId(toBigInt(new ArrayList<>(mosaicDTO.getId()))),
+                         toBigInt(new ArrayList<>(mosaicDTO.getAmount()))))
                    .collect(Collectors.toList()),
              accountDTO.getLinkedAccountKey());
     }

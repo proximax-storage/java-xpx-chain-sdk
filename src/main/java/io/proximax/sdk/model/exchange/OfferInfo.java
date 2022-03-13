@@ -9,43 +9,43 @@ import static io.proximax.sdk.utils.dto.UInt64Utils.toBigInt;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import io.proximax.sdk.gen.model.OfferInfoDTO;
-import io.proximax.sdk.model.mosaic.MosaicId;
-import io.proximax.sdk.model.transaction.UInt64Id;
+import io.proximax.sdk.utils.dto.UInt64Utils;
 
 public class OfferInfo {
-    private final UInt64Id mosaicId;
-    private final BigInteger amount;
+    private final List<BigInteger> mosaicId;
+    private final List<BigInteger> amount;
     private final BigDecimal price;
-    private final BigInteger initialAmount;
-    private final BigInteger initialCost;
-    private final BigInteger deadline;
-    private final BigInteger residualCost;
+    private final List<BigInteger> initialAmount;
+    private final List<BigInteger> initialCost;
+    private final List<BigInteger> deadline;
 
     public OfferInfo(
-            UInt64Id mosaicId, BigInteger amount, BigDecimal price, BigInteger initialAmount,
-            BigInteger initialCost, BigInteger deadline, BigInteger residualCost) {
+            List<BigInteger> mosaicId, List<BigInteger> amount, BigDecimal price, List<BigInteger> initialAmount,
+            List<BigInteger> initialCost, List<BigInteger> deadline) {
         this.mosaicId = mosaicId;
         this.amount = amount;
         this.price = price;
         this.initialAmount = initialAmount;
         this.initialCost = initialCost;
         this.deadline = deadline;
-        this.residualCost = residualCost;
     }
 
     /**
-     * @return mosaicId
+     * @return mosaicIds
      */
-    public UInt64Id getMosaicId() {
+    public List<BigInteger> getMosaicId() {
         return mosaicId;
     }
 
     /**
-     * @return amount
+     * @return amounts
      */
-    public BigInteger getAmount() {
+    public List<BigInteger> getAmount() {
         return amount;
     }
 
@@ -59,29 +59,22 @@ public class OfferInfo {
     /**
      * @return initialAmount
      */
-    public BigInteger getInitialAmount() {
+    public List<BigInteger> getInitialAmount() {
         return initialAmount;
     }
 
     /**
      * @return initialCost
      */
-    public BigInteger getInitialCost() {
+    public List<BigInteger> getInitialCost() {
         return initialCost;
     }
 
     /**
      * @return deadline
      */
-    public BigInteger getDeadline() {
+    public List<BigInteger> getDeadline() {
         return deadline;
-    }
-
-    /**
-     * @return residualCost
-     */
-    public BigInteger getResidualCost() {
-        return residualCost;
     }
 
     /**
@@ -92,8 +85,11 @@ public class OfferInfo {
     public static OfferInfo fromDTO(OfferInfoDTO dto) {
 
         return new OfferInfo(
-                new MosaicId(toBigInt(dto.getMosaicId())), toBigInt(dto.getAmount()), dto.getPrice(),
-                toBigInt(dto.getInitialAmount()), toBigInt(dto.getInitialCost()), toBigInt(dto.getDeadline()), toBigInt(dto.getResidualCost()));
+                dto.getMosaicId().stream().map(v -> UInt64Utils.toBigInt(new ArrayList<>(v))).collect(Collectors.toList()),
+                dto.getAmount().stream().map(v -> UInt64Utils.toBigInt(new ArrayList<>(v))).collect(Collectors.toList()),
+                dto.getPrice(),
+                dto.getInitialAmount().stream().map(v -> UInt64Utils.toBigInt(new ArrayList<>(v))).collect(Collectors.toList()),
+                dto.getInitialCost().stream().map(v -> UInt64Utils.toBigInt(new ArrayList<>(v))).collect(Collectors.toList()),
+                dto.getDeadline().stream().map(v -> UInt64Utils.toBigInt(new ArrayList<>(v))).collect(Collectors.toList()));
     }
-
 }

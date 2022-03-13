@@ -6,9 +6,12 @@
 
 package io.proximax.sdk.model.lock;
 
-import io.proximax.sdk.gen.model.SecretLockWithMetaDTO;
+import io.proximax.sdk.gen.model.SecretLockWithMeta;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.mosaic.MosaicId;
+
+import java.util.ArrayList;
+
 import static io.proximax.sdk.utils.dto.UInt64Utils.toBigInt;
 
 public class SecretLockWithMetaInfo {
@@ -34,12 +37,18 @@ public class SecretLockWithMetaInfo {
         return lock;
     }
 
-    public static SecretLockWithMetaInfo fromDto(SecretLockWithMetaDTO dto) {
+    public static SecretLockWithMetaInfo fromDto(SecretLockWithMeta dto) {
         return new SecretLockWithMetaInfo(
                 new MetaLock(dto.getMeta().getId()),
                 new SecretLockInfo(new LockInfo(dto.getLock().getAccount(),
                         Address.createFromEncoded(dto.getLock().getAccountAddress()),
-                        new MosaicId(toBigInt(dto.getLock().getMosaicId())), toBigInt(dto.getLock().getAmount()),
-                        toBigInt(dto.getLock().getHeight())), dto.getLock().getStatus(), dto.getLock().getHashAlgorithm(), dto.getLock().getSecret(),dto.getLock().getRecipient(),dto.getLock().getCompositeHash()));
+                        new MosaicId(toBigInt(new ArrayList<>(dto.getLock().getMosaicId()))),
+                        toBigInt(new ArrayList<>(dto.getLock().getAmount())),
+                        toBigInt(new ArrayList<>(dto.getLock().getHeight()))),
+                        dto.getLock().getStatus(),
+                        dto.getLock().getHashAlgorithm(),
+                        dto.getLock().getSecret(),
+                        dto.getLock().getRecipient(),
+                        dto.getLock().getCompositeHash()));
     }
 }

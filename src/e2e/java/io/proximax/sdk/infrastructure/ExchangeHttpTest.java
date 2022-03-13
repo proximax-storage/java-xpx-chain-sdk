@@ -17,9 +17,6 @@
 package io.proximax.sdk.infrastructure;
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URL;
@@ -40,6 +37,8 @@ import io.proximax.sdk.model.exchange.ExchangeMosaicsList;
 import io.proximax.sdk.model.exchange.MosaicExchange;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.network.NetworkType;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ExchangeHttpTest extends BaseTest{
@@ -66,11 +65,9 @@ public class ExchangeHttpTest extends BaseTest{
         AccountExchanges accountExchanges = exchangeHttp.getAccountExchanges(address).toFuture().get();
         assertEquals(PublicAccount.createFromPublicKey(publicKey, NetworkType.TEST_NET), accountExchanges.getOwner());
         assertEquals(Address.createFromEncoded(ownerAddress), accountExchanges.getOwnerAddress());
-        assertEquals(3, accountExchanges.getVersion());
-        assertTrue(accountExchanges.getBuyOffers() != null);
-        assertEquals(BigInteger.valueOf(1000), accountExchanges.getBuyOffers().get(0).getAmount());
-        assertEquals(BigInteger.valueOf(394459), accountExchanges.getBuyOffers().get(0).getDeadline());
-        assertEquals(BigInteger.valueOf(500), accountExchanges.getBuyOffers().get(0).getResidualCost());
+        assertNotNull(accountExchanges.getBuyOffers());
+        assertEquals(BigInteger.valueOf(1000), accountExchanges.getBuyOffers().get(0).getAmount().get(0));
+        assertEquals(BigInteger.valueOf(394459), accountExchanges.getBuyOffers().get(0).getDeadline().get(0));
     }
     
     @Test

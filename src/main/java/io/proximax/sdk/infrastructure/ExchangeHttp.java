@@ -7,7 +7,7 @@ import com.google.gson.reflect.TypeToken;
 
 import io.proximax.sdk.BlockchainApi;
 import io.proximax.sdk.ExchangeRepository;
-import io.proximax.sdk.gen.model.ExchangeDTO;
+import io.proximax.sdk.gen.model.AccountExchangeDTO;
 import io.proximax.sdk.gen.model.ExchangesDTO;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.exchange.AccountExchanges;
@@ -35,7 +35,7 @@ public class ExchangeHttp extends Http implements ExchangeRepository {
                 .get(account + SLASH + address.plain() + exchange)
                 .map(Http::mapStringOrError)
                 .map(str -> gson.fromJson(str,
-                        ExchangeDTO.class))
+                        AccountExchangeDTO.class))
                 .map(dto -> AccountExchanges.fromDto(dto, api.getNetworkType()));
     }
 
@@ -60,7 +60,7 @@ public class ExchangeHttp extends Http implements ExchangeRepository {
 
     /**
      * allow use of gson list deserialization in stream
-     * 
+     *
      * @param json json string representing list
      * @return list of block info DTOs
      */

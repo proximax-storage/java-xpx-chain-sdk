@@ -8,12 +8,12 @@ package io.proximax.sdk.model.blockchain;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.gen.model.CommunicationTimestamps;
 import io.proximax.sdk.gen.model.NodeTimeDTO;
-import io.proximax.sdk.gen.model.UInt64DTO;
 import io.proximax.sdk.model.node.NodeTime;
 
 /**
@@ -49,10 +49,10 @@ class NodeTimeTest {
     * @param smallNumber small positive number in the range of uint
     * @return the uint64 DTO instance
     */
-   private UInt64DTO getDto(BigInteger smallNumber) {
-      UInt64DTO dto = new UInt64DTO();
-      dto.add(smallNumber.longValue());
-      dto.add(0l);
+   private ArrayList<Integer> getDto(BigInteger smallNumber) {
+      ArrayList<Integer> dto = new ArrayList<>();
+      dto.add(smallNumber.intValue());
+      dto.add(0);
       return dto;
    }
 }

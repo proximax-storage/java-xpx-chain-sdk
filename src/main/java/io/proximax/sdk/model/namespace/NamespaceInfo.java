@@ -25,7 +25,6 @@ import java.util.Optional;
 
 import io.proximax.sdk.gen.model.AliasDTO;
 import io.proximax.sdk.gen.model.NamespaceInfoDTO;
-import io.proximax.sdk.gen.model.UInt64DTO;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
 import io.proximax.sdk.model.mosaic.MosaicId;
@@ -217,11 +216,11 @@ public class NamespaceInfo {
          // see address reference
          String address = alias.getAddress();
          if (address != null) {
-            addressAlias = Optional.ofNullable(Address.createFromEncoded(address));
+            addressAlias = Optional.of(Address.createFromEncoded(address));
          }
          // see mosaic reference
-         UInt64DTO mosaicId = alias.getMosaicId();
-         if (mosaicId != null && mosaicId.size() == 2) {
+         ArrayList<Integer> mosaicId = new ArrayList<>(alias.getMosaicId());
+         if (mosaicId.size() == 2) {
             mosaicAlias = Optional.of(new MosaicId(toBigInt(mosaicId)));
          }
       }
@@ -230,10 +229,10 @@ public class NamespaceInfo {
             dto.getMeta().getId(),
             NamespaceType.rawValueOf(dto.getNamespace().getType().getValue()),
             dto.getNamespace().getDepth(), extractLevels(dto),
-            new NamespaceId(toBigInt(dto.getNamespace().getParentId())),
+            new NamespaceId(toBigInt(new ArrayList<>(dto.getNamespace().getParentId()))),
             new PublicAccount(dto.getNamespace().getOwner(), networkType),
-            toBigInt(dto.getNamespace().getStartHeight()),
-            toBigInt(dto.getNamespace().getEndHeight()),
+            toBigInt(new ArrayList<>(dto.getNamespace().getStartHeight())),
+            toBigInt(new ArrayList<>(dto.getNamespace().getEndHeight())),
             addressAlias,
             mosaicAlias);
    }
@@ -246,9 +245,9 @@ public class NamespaceInfo {
     */
    private static List<NamespaceId> extractLevels(NamespaceInfoDTO namespaceInfoDTO) {
       List<NamespaceId> levels = new ArrayList<>();
-      addLevel(levels, namespaceInfoDTO.getNamespace().getLevel0());
-      addLevel(levels, namespaceInfoDTO.getNamespace().getLevel1());
-      addLevel(levels, namespaceInfoDTO.getNamespace().getLevel2());
+      addLevel(levels, new ArrayList<>(namespaceInfoDTO.getNamespace().getLevel0()));
+      addLevel(levels, new ArrayList<>(namespaceInfoDTO.getNamespace().getLevel1()));
+      addLevel(levels, new ArrayList<>(namespaceInfoDTO.getNamespace().getLevel2()));
       return levels;
    }
 
@@ -258,7 +257,7 @@ public class NamespaceInfo {
     * @param levels list of levels
     * @param levelDto the level DTO
     */
-   private static void addLevel(List<NamespaceId> levels, UInt64DTO levelDto) {
+   private static void addLevel(List<NamespaceId> levels, ArrayList<Integer> levelDto) {
       if (levelDto != null && !levelDto.isEmpty()) {
          levels.add(new NamespaceId(toBigInt(levelDto)));
       }

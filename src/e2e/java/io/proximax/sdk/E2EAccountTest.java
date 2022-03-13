@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -31,7 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.proximax.core.crypto.KeyPair;
-import io.proximax.sdk.gen.model.UInt64DTO;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.props.AccountProperties;
@@ -183,8 +183,8 @@ class E2EAccountTest extends E2EBaseTest {
                logger.info("allowed mosaic: {}", value);
                // value should be string and should represent encoded address of the blocked account
                if (value instanceof List) {
-                  UInt64DTO dto = new UInt64DTO();
-                  dto.addAll((List<Long>) value);
+                  ArrayList<Integer> dto = new ArrayList<>();
+                  dto.addAll((ArrayList<Integer>) value);
                   MosaicId retrievedMosaic = new MosaicId(UInt64Utils.toBigInt(dto));
                   if (retrievedMosaic.equals(allowedMosaic)) {
                      gotMatch = true;

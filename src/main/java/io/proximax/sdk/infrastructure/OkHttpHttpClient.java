@@ -76,14 +76,14 @@ public class OkHttpHttpClient implements HttpClient {
 
    @Override
    public Observable<HttpResponse> postAbs(String absoluteUrl, JsonObject jsonObject) {
-      RequestBody body = RequestBody.create(JSON, jsonObject.toString());
+      RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
       final Request request = new Request.Builder().post(body).url(absoluteUrl).build();
       return createHttpResponseObservable(request);
    }
 
    @Override
    public Observable<HttpResponse> putAbs(String absoluteUrl, JsonObject jsonObject) {
-      RequestBody body = RequestBody.create(JSON, jsonObject.toString());
+      RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
       final Request request = new Request.Builder().put(body).url(absoluteUrl).build();
       return createHttpResponseObservable(request);
    }

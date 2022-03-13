@@ -16,6 +16,8 @@
 package io.proximax.sdk.model.mosaic;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+
 import static io.proximax.sdk.utils.dto.UInt64Utils.toBigInt;
 
 import io.proximax.sdk.gen.model.MosaicLevyInfoDTO;
@@ -91,10 +93,10 @@ public class MosaicLevyInfo {
      */
     public static MosaicLevyInfo fromDto(MosaicLevyInfoDTO dto, NetworkType networkType) {
         return new MosaicLevyInfo(
-                MosaicLevyType.rawValueOf(dto.getMosaicLevyType().getValue()),
+                MosaicLevyType.rawValueOf(dto.getType().getValue()),
                 new Recipient(Address.createFromEncoded(dto.getRecipient())),
-                new MosaicId(toBigInt(dto.getMosaicId())),
-                toBigInt(dto.getFee()));
+                new MosaicId(toBigInt(new ArrayList<>(dto.getMosaicId()))),
+                toBigInt(new ArrayList<>(dto.getFee())));
     }
 
   

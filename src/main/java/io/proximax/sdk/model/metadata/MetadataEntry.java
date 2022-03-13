@@ -18,7 +18,9 @@ package io.proximax.sdk.model.metadata;
 import static io.proximax.sdk.utils.dto.UInt64Utils.toBigInt;
 
 import java.math.BigInteger;
-import io.proximax.sdk.gen.model.MetadataInfoDTO;
+import java.util.ArrayList;
+
+import io.proximax.sdk.gen.model.MetadataNemInfoDTO;
 import io.proximax.sdk.model.account.Address;
 
 /**
@@ -147,14 +149,14 @@ public class MetadataEntry {
      * @param dto         mosaic info DTO
      * @return metadata v2 info
      */
-    public static MetadataEntry fromDto(MetadataInfoDTO dto) {
+    public static MetadataEntry fromDto(MetadataNemInfoDTO dto) {
         return new MetadataEntry(
                 dto.getMetadataEntry().getVersion(),
                 dto.getMetadataEntry().getCompositeHash(),
                 Address.createFromEncoded(dto.getMetadataEntry().getSourceAddress()),
                 dto.getMetadataEntry().getTargetKey(),
-                toBigInt(dto.getMetadataEntry().getScopedMetadataKey()),
-                toBigInt(dto.getMetadataEntry().getTargetId()),
+                toBigInt(new ArrayList<>(dto.getMetadataEntry().getScopedMetadataKey())),
+                toBigInt(new ArrayList<>(dto.getMetadataEntry().getTargetId())),
                 MetadataType.getByCode(dto.getMetadataEntry().getMetadataType()),
                 dto.getMetadataEntry().getValueSize(),
                 dto.getMetadataEntry().getValue(),

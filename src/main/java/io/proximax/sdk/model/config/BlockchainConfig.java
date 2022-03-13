@@ -9,6 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import io.proximax.sdk.gen.model.ConfigDTO;
@@ -74,7 +75,7 @@ public class BlockchainConfig {
     */
    public static BlockchainConfig fromDto(ConfigDTO dto) {
       return new BlockchainConfig(
-            UInt64Utils.toBigInt(dto.getHeight()), 
+            UInt64Utils.toBigInt(new ArrayList<>(dto.getHeight())),
             dto.getNetworkConfig(),
             dto.getSupportedEntityVersions());
    }

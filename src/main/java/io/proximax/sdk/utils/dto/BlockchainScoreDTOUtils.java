@@ -16,6 +16,7 @@
 package io.proximax.sdk.utils.dto;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 
 import io.proximax.sdk.gen.model.BlockchainScoreDTO;
 
@@ -40,8 +41,8 @@ public class BlockchainScoreDTOUtils {
      * @return BigInteger created from the low and high scores
      */
     public static BigInteger toBigInt(BlockchainScoreDTO score) {
-    	int low = UInt64Utils.toBigInt(score.getScoreLow()).intValue();
-    	int high = UInt64Utils.toBigInt(score.getScoreHigh()).intValue();
+    	int low = UInt64Utils.toBigInt(new ArrayList<>(score.getScoreLow())).intValue();
+    	int high = UInt64Utils.toBigInt(new ArrayList<>(score.getScoreHigh())).intValue();
     	return UInt64Utils.fromIntArray(new int[]{low, high});
     }
 

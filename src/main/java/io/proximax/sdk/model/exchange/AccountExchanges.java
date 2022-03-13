@@ -5,30 +5,24 @@
  */
 package io.proximax.sdk.model.exchange;
 
-import static io.proximax.sdk.utils.dto.UInt64Utils.toBigInt;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
 import io.proximax.sdk.gen.model.AccountExchangeDTO;
-import io.proximax.sdk.gen.model.ExchangeDTO;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.network.NetworkType;
 
 public class AccountExchanges {
     private final PublicAccount owner;
     private final Address ownerAddress;
-    private final Integer version;
 
     private final List<OfferInfo> buyOffers;
     private final List<OfferInfo> sellOffers;
 
-    public AccountExchanges(PublicAccount owner, Address ownerAddress,  Integer version,List<OfferInfo> buyOffers, List<OfferInfo> sellOffers) {
+    public AccountExchanges(PublicAccount owner, Address ownerAddress, List<OfferInfo> buyOffers, List<OfferInfo> sellOffers) {
         this.owner = owner;
         this.ownerAddress = ownerAddress;
-        this.version = version;
         this.buyOffers = buyOffers;
         this.sellOffers = sellOffers;
     }
@@ -38,13 +32,6 @@ public class AccountExchanges {
      */
     public PublicAccount getOwner() {
         return owner;
-    }
-
-    /**
-     * @return version
-     */
-    public Integer getVersion() {
-        return version;
     }
 
     /**
@@ -70,31 +57,17 @@ public class AccountExchanges {
 
     /**
      * 
-     * @param dto {@link ExchangeDTO}
+     * @param dto {@link AccountExchangeDTO}
      * @param networkType {@link NetworkType}
      * 
      * @return {@link AccountExchanges}
      */
-    public static AccountExchanges fromDto(ExchangeDTO dto, NetworkType networkType) {
+    public static AccountExchanges fromDto(AccountExchangeDTO dto, NetworkType networkType) {
 
         return new AccountExchanges(
-                PublicAccount.createFromPublicKey(dto.getExchangeInfo().getOwner(), networkType),
-                Address.createFromEncoded(dto.getExchangeInfo().getOwnerAddress()),
-                dto.getExchangeInfo().getVersion(),
-                dto.getExchangeInfo()
-                        .getBuyOffers().stream()
-                .map(buyoffer -> new OfferInfo(new MosaicId(toBigInt(buyoffer.getMosaicId())),
-                                toBigInt(buyoffer.getAmount()),
-                                buyoffer.getPrice(), toBigInt(buyoffer.getInitialAmount()), toBigInt(buyoffer
-                                        .getInitialCost()),
-                                toBigInt(buyoffer.getDeadline()),toBigInt(buyoffer.getResidualCost())))
-                                        .collect(Collectors.toList()),
-                dto.getExchangeInfo().getSellOffers().stream().map(sellOffer -> new OfferInfo(new MosaicId(toBigInt(sellOffer
-                         .getMosaicId())), toBigInt(sellOffer.getAmount()),
-                        sellOffer.getPrice(), toBigInt(sellOffer.getInitialAmount()), toBigInt(sellOffer
-                                 .getInitialCost()),
-                         toBigInt(sellOffer.getDeadline()), toBigInt(sellOffer
-                                .getResidualCost())))
-                                 .collect(Collectors.toList()));
+                PublicAccount.createFromPublicKey(dto.getOwner(), networkType),
+                Address.createFromEncoded(dto.getOwner()),
+                dto.getBuyOffers().stream().map(OfferInfo::fromDTO).collect(Collectors.toList()),
+                dto.getSellOffers().stream().map(OfferInfo::fromDTO).collect(Collectors.toList()));
     }
 }

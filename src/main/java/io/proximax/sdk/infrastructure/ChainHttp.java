@@ -1,6 +1,7 @@
 package io.proximax.sdk.infrastructure;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 
 import io.proximax.sdk.BlockchainApi;
 import io.proximax.sdk.ChainRepository;
@@ -24,7 +25,7 @@ public class ChainHttp extends Http implements ChainRepository{
                 .get(CHAIN_HEIGHT)
                 .map(Http::mapStringOrError)
                 .map(str -> gson.fromJson(str, HeightInfoDTO.class))
-                .map(blockchainHeight -> UInt64Utils.toBigInt(blockchainHeight.getHeight()));
+                .map(blockchainHeight -> UInt64Utils.toBigInt(new ArrayList<>(blockchainHeight.getHeight())));
     }
 
     public Observable<BigInteger> getBlockchainScore() {

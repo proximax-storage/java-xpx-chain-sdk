@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.proximax.sdk.gen.model.MosaicLevyInfoDTO;
-import io.proximax.sdk.gen.model.MosaicLevyTypeEnum;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.model.transaction.Recipient;
@@ -43,7 +42,7 @@ class MosaicLevyTest {
     void fromDto() {
         MosaicLevyInfoDTO mosaicLevyInfo = new MosaicLevyInfoDTO();
         mosaicLevyInfo.setMosaicId(UInt64Utils.dtoFromBigInt(new BigInteger("6556029556961470127")));
-        mosaicLevyInfo.setMosaicLevyType(MosaicLevyTypeEnum.NUMBER_0);
+        mosaicLevyInfo.setType(MosaicLevyInfoDTO.TypeEnum.NUMBER_1);
         mosaicLevyInfo.setFee(UInt64Utils.dtoFromBigInt(BigInteger.TEN));
         mosaicLevyInfo.setRecipient("A88167455099E7676758B38BD8282B2FEC00416C1F4AA6906A");
         MosaicLevyInfo accountInfo = MosaicLevyInfo.fromDto(mosaicLevyInfo, NetworkType.TEST_NET);

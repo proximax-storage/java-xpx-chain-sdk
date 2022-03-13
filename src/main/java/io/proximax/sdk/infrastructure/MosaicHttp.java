@@ -19,6 +19,7 @@ package io.proximax.sdk.infrastructure;
 import static io.proximax.sdk.utils.GsonUtils.getJsonArray;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -84,7 +85,7 @@ public class MosaicHttp extends Http implements MosaicRepository {
             .map(Http::mapStringOrError)
             .map(this::toMosaicNamesList)
             .flatMapIterable(item -> item)
-            .map(mosaicNameDTO -> new MosaicNames(new MosaicId(UInt64Utils.toBigInt(mosaicNameDTO.getMosaicId())),
+            .map(mosaicNameDTO -> new MosaicNames(new MosaicId(UInt64Utils.toBigInt(new ArrayList<>(mosaicNameDTO.getMosaicId()))),
                   mosaicNameDTO.getNames()))
             .toList().toObservable();
    }

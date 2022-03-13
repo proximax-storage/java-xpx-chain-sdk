@@ -24,7 +24,7 @@ class BlockchainScoreDTOUtilsTest {
       dto.setScoreLow(UInt64Utils.dtoFromBigInt(BigInteger.ONE));
       dto.setScoreHigh(UInt64Utils.dtoFromBigInt(BigInteger.TEN));
       // test
-      assertEquals(BigInteger.valueOf(42949672961l), BlockchainScoreDTOUtils.toBigInt(dto));
+      assertEquals(BigInteger.valueOf(42949672961L), BlockchainScoreDTOUtils.toBigInt(dto));
    }
 
 }
