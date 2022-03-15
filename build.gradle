@@ -38,6 +38,10 @@ plugins {
     id "io.netifi.flatbuffers" version "1.0.7"
 }
 
+flatbuffers {
+    flatcPath = './build/flatbuffers/flatc'
+}
+
 // define contents of the build
 apply from: "$rootDir/gradle/content.gradle"
 // load setup for coverage reports
@@ -48,6 +52,8 @@ apply from: "$rootDir/gradle/publishing.gradle"
 apply from: "$rootDir/gradle/travis.gradle"
 // load support for openapi code generator
 apply from: "$rootDir/gradle/openapi.gradle"
+// load support for clone & build flatc
+apply from: "$rootDir/gradle/flatbuffers.gradle"
 // load support java
 apply plugin: 'java'
 
@@ -180,9 +186,12 @@ task flatBuffersGenerate(type: FlatBuffers) {
     inputDir = file("schemas/flatbuffers")
     outputDir = file("src/gen/java")
     language = 'java'
-    extraArgs = '--no-warnings'
 }
 
+flatBuffersCloneRepository.finalizedBy tasks.flatBuffersRunCmake
+flatBuffersRunCmake.finalizedBy tasks.flatBuffersRunMake
+
+compileJava.dependsOn tasks.flatBuffersCloneRepository
 compileJava.dependsOn tasks.flatBuffersGenerate
 compileJava.dependsOn tasks.openApiGenerate
 compileJava.dependsOn tasks.removeMetafiles

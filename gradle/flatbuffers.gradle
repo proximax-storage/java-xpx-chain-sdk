@@ -1,0 +1,33 @@
+/*
+ * Copyright 2022 ProximaX Limited. All rights reserved.
+ * Use of this source code is governed by the Apache 2.0
+ * license that can be found in the LICENSE file.
+ */
+
+task flatBuffersCloneRepository(type: Exec) {
+    description 'Clone flatbuffers repository'
+    def folder = new File( './build/flatbuffers' )
+    if( folder.exists() ) {
+        commandLine "echo", "./build/flatbuffers exists!"
+    } else {
+        commandLine "git", "clone",  "--branch", "v1.12.0", "https://github.com/google/flatbuffers.git", "./build/flatbuffers"
+    }
+}
+
+task flatBuffersRunCmake(type: Exec) {
+    def folder = new File( './build/flatbuffers/CMakeCache.txt' )
+    if( folder.exists() ) {
+        commandLine "echo", "Cmake configuration exists!"
+    } else {
+        commandLine "cmake", "-B./build/flatbuffers", "-S./build/flatbuffers"
+    }
+}
+
+task flatBuffersRunMake(type: Exec) {
+    def flatc = new File( './build/flatbuffers/flatc' )
+    if( flatc.exists() ) {
+        commandLine "echo", "flatc exists!"
+    } else {
+        commandLine "make", "-C", file('./build/flatbuffers').absolutePath
+    }
+}
