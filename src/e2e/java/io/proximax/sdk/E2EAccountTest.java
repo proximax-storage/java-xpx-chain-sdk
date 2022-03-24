@@ -201,7 +201,7 @@ class E2EAccountTest extends E2EBaseTest {
     * check that simple account has block as expected
     * 
     * @param aps account properties
-    * @param blockedAddress address that is blocked
+    * @param allowedTransactionType address that is blocked
     */
    private void testAccountPropertiesOnSimpleAccount(AccountProperties aps, EntityType allowedTransactionType) {
       boolean gotMatch = false;
