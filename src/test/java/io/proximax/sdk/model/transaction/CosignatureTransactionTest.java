@@ -33,7 +33,7 @@ import com.google.gson.JsonObject;
 
 import io.proximax.sdk.infrastructure.TransactionMapping;
 import io.proximax.sdk.model.account.Account;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.utils.GsonUtils;
 
 public class CosignatureTransactionTest {
@@ -41,7 +41,7 @@ public class CosignatureTransactionTest {
 
     @BeforeAll
     public static void setup() {
-        account = new Account("26b64cb10f005e5988a36744ca19e20d835ccc7c105aaa5f3b212da593180930", NetworkType.MIJIN_TEST);
+        account = new Account("26b64cb10f005e5988a36744ca19e20d835ccc7c105aaa5f3b212da593180930", NetworkType.TEST_NET);
     }
 
     @Test
@@ -66,7 +66,7 @@ public class CosignatureTransactionTest {
     @Test
     void testConstructor() {
        TransactionInfo info = TransactionInfo.create(BigInteger.ONE, "CAFFEE", "something");
-       AggregateTransaction aggregateTransaction = new AggregateTransaction(EntityType.AGGREGATE_COMPLETE, NetworkType.MIJIN_TEST, 1, Deadline.create(2, ChronoUnit.HOURS), BigInteger.ZERO, 
+       AggregateTransaction aggregateTransaction = new AggregateTransaction(EntityType.AGGREGATE_COMPLETE, NetworkType.TEST_NET, 1, Deadline.create(2, ChronoUnit.HOURS), BigInteger.ZERO, 
              Optional.empty(), Optional.empty(), Optional.of(info), Collections.emptyList(), Collections.emptyList());
 
        CosignatureTransaction trans = new CosignatureTransaction(aggregateTransaction);
@@ -77,7 +77,7 @@ public class CosignatureTransactionTest {
     @Test
     void testStaticConstructor() {
        TransactionInfo info = TransactionInfo.create(BigInteger.ONE, "CAFFEE", "something");
-       AggregateTransaction aggregateTransaction = new AggregateTransaction(EntityType.AGGREGATE_COMPLETE, NetworkType.MIJIN_TEST, 1, Deadline.create(2, ChronoUnit.HOURS), BigInteger.ZERO, 
+       AggregateTransaction aggregateTransaction = new AggregateTransaction(EntityType.AGGREGATE_COMPLETE, NetworkType.TEST_NET, 1, Deadline.create(2, ChronoUnit.HOURS), BigInteger.ZERO, 
              Optional.empty(), Optional.empty(), Optional.of(info), Collections.emptyList(), Collections.emptyList());
 
        CosignatureTransaction trans = CosignatureTransaction.create(aggregateTransaction);
@@ -88,7 +88,7 @@ public class CosignatureTransactionTest {
     @Test
     void shouldThrowExceptionWhenTransactionToCosignHasNotBeenAnnunced() throws Exception {
 
-       AggregateTransaction aggregateTransaction = new AggregateTransaction(EntityType.AGGREGATE_COMPLETE, NetworkType.MIJIN_TEST, 1, Deadline.create(2, ChronoUnit.HOURS), BigInteger.ZERO, 
+       AggregateTransaction aggregateTransaction = new AggregateTransaction(EntityType.AGGREGATE_COMPLETE, NetworkType.TEST_NET, 1, Deadline.create(2, ChronoUnit.HOURS), BigInteger.ZERO, 
              Optional.empty(), Optional.empty(), Optional.empty(), Collections.emptyList(), Collections.emptyList());
 
         assertThrows(IllegalArgumentException.class, ()->{CosignatureTransaction.create(aggregateTransaction);}, "Transaction to cosign should be announced before being able to cosign it");
@@ -98,7 +98,7 @@ public class CosignatureTransactionTest {
     @Test
     void testSigning() {
        TransactionInfo info = TransactionInfo.create(BigInteger.ONE, "CAFFEE", "something");
-       AggregateTransaction aggregateTransaction = new AggregateTransaction(EntityType.AGGREGATE_COMPLETE, NetworkType.MIJIN_TEST, 1, Deadline.create(2, ChronoUnit.HOURS), BigInteger.ZERO, 
+       AggregateTransaction aggregateTransaction = new AggregateTransaction(EntityType.AGGREGATE_COMPLETE, NetworkType.TEST_NET, 1, Deadline.create(2, ChronoUnit.HOURS), BigInteger.ZERO, 
              Optional.empty(), Optional.empty(), Optional.of(info), Collections.emptyList(), Collections.emptyList());
 
        CosignatureTransaction trans = new CosignatureTransaction(aggregateTransaction);

@@ -31,7 +31,7 @@ import io.proximax.sdk.gen.model.MosaicInfoDTO;
 import io.proximax.sdk.gen.model.MosaicMetaDTO;
 import io.proximax.sdk.gen.model.MosaicPropertyIdEnum;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 class MosaicInfoTest {
@@ -43,7 +43,7 @@ class MosaicInfoTest {
       MosaicId mosaicId = new MosaicId(new BigInteger("-3087871471161192663"));
       MosaicInfo mosaicInfo = new MosaicInfo("5A3CD9B09CD1E8000159249B", mosaicId, new BigInteger("100"),
             new BigInteger("0"), new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF",
-                  NetworkType.MIJIN_TEST),
+                  NetworkType.TEST_NET),
             mosaicProperties);
 
       checkMosaicInfo(mosaicInfo, mosaicId);
@@ -67,7 +67,7 @@ class MosaicInfoTest {
       dto.setMeta(meta);
       dto.setMosaic(mosaic);
       
-      checkMosaicInfo(MosaicInfo.fromDto(dto, NetworkType.MIJIN_TEST), new MosaicId(new BigInteger("-3087871471161192663")));
+      checkMosaicInfo(MosaicInfo.fromDto(dto, NetworkType.TEST_NET), new MosaicId(new BigInteger("-3087871471161192663")));
 
    }
    
@@ -78,7 +78,7 @@ class MosaicInfoTest {
       assertEquals(new BigInteger("0"), mosaicInfo.getHeight());
       assertEquals(
             new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF",
-                  NetworkType.MIJIN_TEST),
+                  NetworkType.TEST_NET),
             mosaicInfo.getOwner());
       assertTrue(mosaicInfo.isSupplyMutable());
       assertTrue(mosaicInfo.isTransferable());
@@ -93,7 +93,7 @@ class MosaicInfoTest {
       MosaicInfo mosaicInfo = new MosaicInfo("5A3CD9B09CD1E8000159249B",
             new MosaicId(new BigInteger("-3087871471161192663")), new BigInteger("100"), new BigInteger("0"),
             new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF",
-                  NetworkType.MIJIN_TEST),
+                  NetworkType.TEST_NET),
             mosaicProperties);
 
       assertTrue(mosaicInfo.isSupplyMutable());
@@ -106,7 +106,7 @@ class MosaicInfoTest {
       MosaicInfo mosaicInfo = new MosaicInfo("5A3CD9B09CD1E8000159249B",
             new MosaicId(new BigInteger("-3087871471161192663")), new BigInteger("100"), new BigInteger("0"),
             new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF",
-                  NetworkType.MIJIN_TEST),
+                  NetworkType.TEST_NET),
             mosaicProperties);
 
       assertFalse(mosaicInfo.isSupplyMutable());
@@ -119,7 +119,7 @@ class MosaicInfoTest {
       MosaicInfo mosaicInfo = new MosaicInfo("5A3CD9B09CD1E8000159249B",
             new MosaicId(new BigInteger("-3087871471161192663")), new BigInteger("100"), new BigInteger("0"),
             new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF",
-                  NetworkType.MIJIN_TEST),
+                  NetworkType.TEST_NET),
             mosaicProperties);
 
       assertTrue(mosaicInfo.isTransferable());
@@ -132,7 +132,7 @@ class MosaicInfoTest {
       MosaicInfo mosaicInfo = new MosaicInfo("5A3CD9B09CD1E8000159249B",
             new MosaicId(new BigInteger("-3087871471161192663")), new BigInteger("100"), new BigInteger("0"),
             new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF",
-                  NetworkType.MIJIN_TEST),
+                  NetworkType.TEST_NET),
             mosaicProperties);
 
       assertFalse(mosaicInfo.isTransferable());
@@ -145,7 +145,7 @@ class MosaicInfoTest {
       MosaicInfo mosaicInfo = new MosaicInfo("5A3CD9B09CD1E8000159249B",
             new MosaicId(new BigInteger("-3087871471161192663")), new BigInteger("100"), new BigInteger("0"),
             new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF",
-                  NetworkType.MIJIN_TEST),
+                  NetworkType.TEST_NET),
             mosaicProperties);
 
       assertTrue(mosaicInfo.toString().startsWith("MosaicInfo "));

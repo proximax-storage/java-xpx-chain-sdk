@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.model.account.Address;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.model.transaction.HashType;
 import io.proximax.sdk.model.transaction.Recipient;
 import io.proximax.sdk.model.transaction.SecretProofTransaction;
@@ -24,7 +24,7 @@ import io.proximax.sdk.model.transaction.SecretProofTransaction;
  */
 class SecretProofTransactionBuilderTest {
 
-   private static final NetworkType NETWORK_TYPE = NetworkType.MIJIN_TEST;
+   private static final NetworkType NETWORK_TYPE = NetworkType.TEST_NET;
 
    private SecretProofTransactionBuilder builder;
 
@@ -38,7 +38,7 @@ class SecretProofTransactionBuilderTest {
    
    @Test
    void test() {
-      Recipient recipient = Recipient.from(new Address("SADD", NETWORK_TYPE));
+      Recipient recipient = Recipient.from(new Address("VDPQS6FBYDN3SD2QJPHUWRYWNHSSOQ2Q35VI7TDP", NETWORK_TYPE));
       String secret = "3fc8ba10229ab5778d05d9c4b7f56676a88bf9295c185acfc0f961db5408cafe";
 
       SecretProofTransaction trans = builder.recipient(recipient).proof("CAFE").hashType(HashType.SHA3_256).secret(secret).build();
@@ -51,7 +51,7 @@ class SecretProofTransactionBuilderTest {
    
    @Test
    void testConvenienceSecret() {
-      Recipient recipient = Recipient.from(new Address("SADD", NETWORK_TYPE));
+      Recipient recipient = Recipient.from(new Address("VDPQS6FBYDN3SD2QJPHUWRYWNHSSOQ2Q35VI7TDP", NETWORK_TYPE));
       String secret = "3fc8ba10229ab5778d05d9c4b7f56676a88bf9295c185acfc0f961db5408cafe";
 
       SecretProofTransaction trans = builder.recipient(recipient).proof("CAFE").secret(HashType.SHA3_256, secret).build();

@@ -22,14 +22,14 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import io.proximax.sdk.model.account.Account;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 
 /**
  * base class for all integration tests
  */
 public abstract class BaseTest {
    /** timeout in seconds to wait for response */
-   private static final Integer DEFAULT_WAIT_TIMEOUT_SECONDS = 30;
+   private static final Integer DEFAULT_WAIT_TIMEOUT_SECONDS = 60;
 
    // system environment property names
    private static final String SYS_ENV_PRIVATE_KEY = "E2E_SEED_PRIVATE_KEY";

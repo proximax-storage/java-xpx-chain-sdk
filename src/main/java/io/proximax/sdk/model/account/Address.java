@@ -23,7 +23,7 @@ import io.proximax.core.crypto.Hashes;
 import io.proximax.core.utils.ArrayUtils;
 import io.proximax.core.utils.Base32Encoder;
 import io.proximax.core.utils.HexEncoder;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 
 /**
  * The address structure describes an address with its network.
@@ -47,6 +47,9 @@ public class Address {
                 .replace("-", "")
                 .trim()
                 .toUpperCase();
+        if (address.length() < 40) {
+             throw new IllegalArgumentException("Address " + address + " has to be 40 characters long");
+         }       
         this.networkType = Objects.requireNonNull(networkType, "networkType must not be null");
         char addressNetwork = this.address.charAt(0);
         if (networkType.equals(NetworkType.MAIN_NET) && addressNetwork != 'X') {
@@ -83,7 +86,7 @@ public class Address {
         } else if (addressNetwork == 'M') {
             return new Address(rawAddress, NetworkType.MIJIN);
         } else if (addressNetwork == 'S') {
-            return new Address(rawAddress, NetworkType.MIJIN_TEST);
+            return new Address(rawAddress, NetworkType.TEST_NET);
         }
         throw new IllegalArgumentException("Address is invalid");
     }

@@ -26,7 +26,7 @@ import com.google.flatbuffers.FlatBufferBuilder;
 import io.proximax.core.utils.StringUtils;
 import io.proximax.sdk.gen.buffers.CatapultConfigTransactionBuffer;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**

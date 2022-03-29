@@ -16,6 +16,7 @@
 package io.proximax.sdk.model.metadata;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -25,7 +26,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import io.proximax.sdk.gen.model.UInt64DTO;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.namespace.NamespaceId;
@@ -58,7 +58,7 @@ public class MetadataMapper {
     */
    public static Metadata mapToObject(JsonObject json) {
       JsonObject meta = json.getAsJsonObject(META_KEY_METADATA);
-      MetadataType type = MetadataType.getByCode(meta.get(META_KEY_TYPE).getAsInt());
+      OldMetadataType type = OldMetadataType.getByCode(meta.get(META_KEY_TYPE).getAsInt());
       List<Field> fields = loadFields(meta.getAsJsonArray(META_KEY_FIELDS));
       switch (type) {
       case NONE:
@@ -81,7 +81,7 @@ public class MetadataMapper {
     * @return the metadata instance
     */
    private static Metadata getNoneMetadata(List<Field> fields) {
-      return new Metadata(MetadataType.NONE, fields);
+      return new Metadata(OldMetadataType.NONE, fields);
    }
    
    /**
@@ -121,9 +121,9 @@ public class MetadataMapper {
     * @return uint64 value
     */
    private static BigInteger extractBigInteger(JsonArray json) {
-      UInt64DTO uint = new UInt64DTO();
-      uint.add(json.get(0).getAsLong());
-      uint.add(json.get(1).getAsLong());
+      ArrayList<Integer> uint = new ArrayList<>();
+      uint.add(json.get(0).getAsInt());
+      uint.add(json.get(1).getAsInt());
       return UInt64Utils.toBigInt(uint);
    }
    

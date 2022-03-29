@@ -55,8 +55,8 @@ import io.reactivex.functions.Consumer;
 public class E2EBaseTest extends BaseTest {
    /** logger */
    private static final Logger logger = LoggerFactory.getLogger(E2EBaseTest.class);
-
-   protected static final BigInteger DEFAULT_DEADLINE_DURATION = BigInteger.valueOf(60*60*1000l);
+  
+   protected static final BigInteger DEFAULT_DEADLINE_DURATION = BigInteger.valueOf(60*60*1000);
 
    protected BlockchainApi api;
    protected BlockchainRepository blockchainHttp;
@@ -64,9 +64,10 @@ public class E2EBaseTest extends BaseTest {
    protected TransactionRepository transactionHttp;
    protected MosaicRepository mosaicHttp;
    protected NamespaceRepository namespaceHttp;
+   protected NetworkRepository networkHttp;
+   protected NodeRepository nodeHttp;
    protected MetadataRepository metadataHttp;
-   protected ContractRepository contractHttp;
-   
+
    protected TransactionBuilderFactory transact;
 
    protected ListenerRepository listener;
@@ -89,8 +90,9 @@ public class E2EBaseTest extends BaseTest {
       transactionHttp = api.createTransactionRepository();
       mosaicHttp = api.createMosaicRepository();
       namespaceHttp = api.createNamespaceRepository();
+      networkHttp = api.createNetworkRepository();
+      nodeHttp = api.createNodeRepository();
       metadataHttp = api.createMetadataRepository();
-      contractHttp = api.createContractRepository();
       logger.info("Created HTTP interfaces");
       // create and initialize transaction factory
       transact = api.transact();
@@ -154,8 +156,7 @@ public class E2EBaseTest extends BaseTest {
       BigInteger bigAmount = BigInteger.valueOf(amount);
       Mosaic mosaicToTransfer = NetworkCurrencyMosaic.createRelative(BigDecimal.valueOf(amount));
       sendMosaic(sender, recipient, mosaicToTransfer);
-      BigInteger endAmount = accountHttp.getAccountInfo(recipient).map(acct -> acct.getMosaics().get(0).getAmount())
-            .blockingFirst();
+      BigInteger endAmount = accountHttp.getAccountInfo(recipient).map(acct -> acct.getMosaics().get(0).getAmount()).blockingFirst();
       BigInteger mosaicScale = mosaicToTransfer.getAmount().divide(bigAmount);
       assertTrue(bigAmount.multiply(mosaicScale).compareTo(endAmount) <= 0);
    }
@@ -164,7 +165,7 @@ public class E2EBaseTest extends BaseTest {
     * send XPX from account to recipient
     * 
     * @param recipient address who gets the funds
-    * @param amount amount of XPX taking the divisibility into account
+    * @param mosaicToTransfer amount of XPX taking the divisibility into account
     */
    protected void sendMosaic(Account sender, Address recipient, Mosaic mosaicToTransfer) {
       TransferTransaction transfer = api.transact().transfer().mosaics(mosaicToTransfer).to(recipient)
@@ -199,7 +200,7 @@ public class E2EBaseTest extends BaseTest {
     */
    protected void sleepForAWhile() {
       try {
-         Thread.sleep(2000l);
+         Thread.sleep(3000l);
       } catch (InterruptedException e) {
          // do nothing
       }

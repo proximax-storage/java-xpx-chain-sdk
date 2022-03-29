@@ -11,7 +11,7 @@ import java.util.Optional;
 import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.model.transaction.DeadlineRaw;
 import io.proximax.sdk.model.transaction.EntityType;
 import io.proximax.sdk.model.transaction.Transaction;

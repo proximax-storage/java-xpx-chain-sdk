@@ -17,8 +17,8 @@ import com.google.flatbuffers.FlatBufferBuilder;
 import io.proximax.sdk.gen.buffers.AddExchangeOfferBuffer;
 import io.proximax.sdk.gen.buffers.AddExchangeOfferTransactionBuffer;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.exchange.AddExchangeOffer;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**

@@ -22,17 +22,23 @@ import java.util.concurrent.TimeUnit;
 
 import io.proximax.sdk.infrastructure.AccountHttp;
 import io.proximax.sdk.infrastructure.BlockchainHttp;
-import io.proximax.sdk.infrastructure.ContractHttp;
+import io.proximax.sdk.infrastructure.ChainHttp;
+import io.proximax.sdk.infrastructure.ChainUpgradeHttp;
+import io.proximax.sdk.infrastructure.ConfigHttp;
+import io.proximax.sdk.infrastructure.ExchangeHttp;
 import io.proximax.sdk.infrastructure.Listener;
+import io.proximax.sdk.infrastructure.LockHttp;
 import io.proximax.sdk.infrastructure.MetadataHttp;
 import io.proximax.sdk.infrastructure.MosaicHttp;
 import io.proximax.sdk.infrastructure.NamespaceHttp;
+import io.proximax.sdk.infrastructure.NetworkHttp;
+import io.proximax.sdk.infrastructure.NodeHttp;
 import io.proximax.sdk.infrastructure.TransactionHttp;
 import io.proximax.sdk.model.account.Account;
-import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.MosaicFactory;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
 import io.proximax.sdk.model.mosaic.NetworkHarvestMosaic;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.SignedTransaction;
 import io.proximax.sdk.model.transaction.Transaction;
@@ -127,14 +133,49 @@ public class BlockchainApi {
    }
 
    /**
-    * create contract repository
+    * create chain repository
     * 
-    * @return the contract repository
+    * @return the chain repository
     */
-   public ContractRepository createContractRepository() {
-      return new ContractHttp(this);
+   public ChainRepository createChainRepository() {
+      return new ChainHttp(this);
    }
 
+   /**
+    * create chain upgrade repository
+    * 
+    * @return the chain upgrade repository
+    */
+   public ChainUpgradeRepository createChainUpgradeRepository() {
+      return new ChainUpgradeHttp(this);
+   }
+   
+   /**
+    * create config repository
+    * 
+    * @return the config upgrade repository
+    */
+   public ConfigRepository createConfigRepository() {
+      return new ConfigHttp(this);
+   }
+
+   /**
+    * create exchange repository
+    * 
+    * @return the exchange repository
+    */
+   public ExchangeRepository createExchangeRepository() {
+      return new ExchangeHttp(this);
+   }
+
+   /**
+    * create lock repository
+    * 
+    * @return the lock repository
+    */
+   public LockRepository createLockRepository() {
+      return new LockHttp(this);
+   }
    /**
     * create metadata repository
     * 
@@ -162,6 +203,23 @@ public class BlockchainApi {
       return new NamespaceHttp(this);
    }
 
+   /**
+    * create network repository
+    * 
+    * @return the network repository
+    */
+   public NetworkRepository createNetworkRepository() {
+      return new NetworkHttp(this);
+   }
+
+   /**
+    * create node repository
+    * 
+    * @return the node repository
+    */
+   public NodeRepository createNodeRepository() {
+      return new NodeHttp(this);
+   }
    /**
     * create transaction repository
     * 
@@ -245,7 +303,7 @@ public class BlockchainApi {
     * @return network type of the node
     */
    protected NetworkType queryForNetworkType() {
-      return createBlockchainRepository().getNetworkType().timeout(30, TimeUnit.SECONDS).blockingFirst();
+      return createNetworkRepository().getNetworkType().timeout(30, TimeUnit.SECONDS).blockingFirst();
    }
    
    /**

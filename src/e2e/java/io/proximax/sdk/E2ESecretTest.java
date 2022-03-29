@@ -28,10 +28,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongycastle.util.encoders.Hex;
 
-import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.HashType;
 import io.proximax.sdk.model.transaction.Recipient;
@@ -48,8 +48,11 @@ import io.proximax.sdk.model.transaction.SignedTransaction;
 public class E2ESecretTest extends E2EBaseTest {
    /** logger */
    private static final Logger logger = LoggerFactory.getLogger(E2ESecretTest.class);
-
-   private final Account simpleAccount = new Account(new KeyPair(), getNetworkType());
+   private static final Account seedAccount = Account.createFromPrivateKey(
+         "feab2970d23c9a6f0170adf9b846575831c63084bcf1f0d7e70644818c546017", NetworkType.TEST_NET);
+   private final Account simpleAccount = Account.createFromPrivateKey(
+         "D54AC0CB0FF50FB44233782B3A6B5FDE2F1C83B9AE2F1352119F93713F3AB923", getNetworkType());
+   
 
    @BeforeAll
    void addListener() {
@@ -97,6 +100,8 @@ public class E2ESecretTest extends E2EBaseTest {
       SecretProofTransaction secretProoftx = transact.secretProof().hashType(hashType).secret(secret).proof(proof)
             .recipient(Recipient.from(to)).build();
       SignedTransaction secretProoftxSigned = api.sign(secretProoftx, from);
+      logger.info("secretProoftxSigned Payload: {}", secretProoftxSigned.getPayload());
+      logger.info("secretProoftxSigned hash: {}", secretProoftxSigned.getHash());
       transactionHttp.announce(secretProoftxSigned).blockingFirst();
       logger.info("Proof confirmed: {}",
             listener.confirmed(from.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
@@ -134,6 +139,7 @@ public class E2ESecretTest extends E2EBaseTest {
       SecretLockTransaction secretLocktx = transact.secretLock().mosaic(NetworkCurrencyMosaic.ONE)
             .duration(BigInteger.valueOf(10)).hashType(hashType).secret(secret).recipient(to).build();
       SignedTransaction lockFundsTransactionSigned = api.sign(secretLocktx, from);
+      logger.info("lockFundsTransactionSigned Payload: {}", lockFundsTransactionSigned.getPayload());
       transactionHttp.announce(lockFundsTransactionSigned).blockingFirst();
       logger.info("Lock confirmed: {}",
             listener.confirmed(from.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst());
@@ -144,7 +150,10 @@ public class E2ESecretTest extends E2EBaseTest {
             .recipient(Recipient.from(to)).build();
       AggregateTransaction secretProofAggregatetx = transact.aggregateComplete()
             .innerTransactions(secretProoftx.toAggregate(from.getPublicAccount())).build();
+
       SignedTransaction secretProofTransactionSigned = api.sign(secretProofAggregatetx, from);
+      logger.info("secretProofTransactionSigned Payload: {}", secretProofTransactionSigned.getPayload());
+      logger.info("secretProofTransactionSigned Hash: {}", secretProofTransactionSigned.getHash());
       transactionHttp.announce(secretProofTransactionSigned).blockingFirst();
 
       logger.info("Proof confirmed: {}",

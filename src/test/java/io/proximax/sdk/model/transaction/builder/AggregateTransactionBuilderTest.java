@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.model.transaction.AggregateTransaction;
 import io.proximax.sdk.model.transaction.AggregateTransactionCosignature;
 import io.proximax.sdk.model.transaction.Deadline;
@@ -33,7 +33,7 @@ import io.proximax.sdk.model.transaction.TransferTransaction;
  */
 class AggregateTransactionBuilderTest {
 
-   private static final NetworkType NETWORK_TYPE = NetworkType.MIJIN_TEST;
+   private static final NetworkType NETWORK_TYPE = NetworkType.TEST_NET;
 
    private AggregateTransactionBuilder completeBuilder;
    private AggregateTransactionBuilder bondedBuilder;
@@ -54,10 +54,10 @@ class AggregateTransactionBuilderTest {
    
    @Test
    void testCompleteNoCosig() {
-      TransferTransaction transferTx = new TransferTransaction(NetworkType.MIJIN_TEST, 3,
+      TransferTransaction transferTx = new TransferTransaction(NetworkType.TEST_NET, 3,
             new Deadline(2, ChronoUnit.HOURS), BigInteger.valueOf(37750), Optional.empty(), Optional.empty(),
             Optional.empty(),
-            Recipient.from(new Address("SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.MIJIN_TEST)),
+            Recipient.from(new Address("VCZGEQ-BIOSJM-WW3VWM-VL4PLM-ZNTMSO-II246P-IH6Z", NetworkType.TEST_NET)),
             Arrays.asList(), PlainMessage.EMPTY);
 
       AggregateTransaction agg = completeBuilder.innerTransactions(transferTx).build();
@@ -70,10 +70,10 @@ class AggregateTransactionBuilderTest {
 
    @Test
    void testBondedNoCosig() {
-      TransferTransaction transferTx = new TransferTransaction(NetworkType.MIJIN_TEST, 3,
+      TransferTransaction transferTx = new TransferTransaction(NetworkType.TEST_NET, 3,
             new Deadline(2, ChronoUnit.HOURS), BigInteger.valueOf(37750), Optional.empty(), Optional.empty(),
             Optional.empty(),
-            Recipient.from(new Address("SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.MIJIN_TEST)),
+            Recipient.from(new Address("VCZGEQ-BIOSJM-WW3VWM-VL4PLM-ZNTMSO-II246P-IH6Z", NetworkType.TEST_NET)),
             Arrays.asList(), PlainMessage.EMPTY);
 
       AggregateTransaction agg = bondedBuilder.innerTransactions(transferTx).build();
@@ -87,14 +87,14 @@ class AggregateTransactionBuilderTest {
 
    @Test
    void testCompleteWithCosig() {
-      TransferTransaction transferTx = new TransferTransaction(NetworkType.MIJIN_TEST, 3,
+      TransferTransaction transferTx = new TransferTransaction(NetworkType.TEST_NET, 3,
             new Deadline(2, ChronoUnit.HOURS), BigInteger.valueOf(37750), Optional.empty(), Optional.empty(),
             Optional.empty(),
-            Recipient.from(new Address("SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.MIJIN_TEST)),
+            Recipient.from(new Address("VCZGEQ-BIOSJM-WW3VWM-VL4PLM-ZNTMSO-II246P-IH6Z", NetworkType.TEST_NET)),
             Arrays.asList(), PlainMessage.EMPTY);
       
-      PublicAccount puba = new PublicAccount("9A49366406ACA952B88BADF5F1E9BE6CE4968141035A60BE503273EA65456B24",
-            NetworkType.MIJIN_TEST);
+      PublicAccount puba = new PublicAccount("F06FE22FBA1E116B8F0E673BA4EE424B16BD6EA7548ED259F3DCEBF8D74C49B9",
+            NetworkType.TEST_NET);
       AggregateTransactionCosignature cosig = new AggregateTransactionCosignature("signature",
             puba);
 

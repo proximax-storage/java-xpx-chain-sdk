@@ -27,8 +27,7 @@ import org.junit.jupiter.api.Test;
 
 public class TransactionInfoTest {
 
-    @Test
-    void createATransactionInfoWithStaticConstructorCreateForTransactionsGetUsingListener() {
+    @Test void createATransactionInfoWithStaticConstructorCreateForTransactionsGetUsingListener() {
         TransactionInfo transactionInfo = TransactionInfo.create(new BigInteger("121855"),
                 "B6C7648A3DDF71415650805E9E7801424FE03BBEE7D21F9C57B60220D3E95B2F", "B6C7648A3DDF71415650805E9E7801424FE03BBEE7D21F9C57B60220D3E95B2F");
 
@@ -44,8 +43,7 @@ public class TransactionInfoTest {
         assertEquals("B6C7648A3DDF71415650805E9E7801424FE03BBEE7D21F9C57B60220D3E95B2F", transactionInfo.getMerkleComponentHash().get());
     }
 
-    @Test
-    void createATransactionInfoWithStaticConstructorCreateForStandaloneTransactions() {
+    @Test void createATransactionInfoWithStaticConstructorCreateForStandaloneTransactions() {
         TransactionInfo transactionInfo = TransactionInfo.create(new BigInteger("121855"),1, "5A3D23889CD1E800015929A9",
                 "B6C7648A3DDF71415650805E9E7801424FE03BBEE7D21F9C57B60220D3E95B2F", "B6C7648A3DDF71415650805E9E7801424FE03BBEE7D21F9C57B60220D3E95B2F");
 
@@ -63,22 +61,23 @@ public class TransactionInfoTest {
     }
 
 
-    @Test
-    void createATransactionInfoWithStaticConstructorCreateForAggregateInnerTransactions() {
-        TransactionInfo transactionInfo = TransactionInfo.createAggregate(new BigInteger("121855"),1, "5A3D23889CD1E800015929A9",
-                "3D28C804EDD07D5A728E5C5FFEC01AB07AFA5766AE6997B38526D36015A4D006", "5A0069D83F17CF0001777E55");
+    @Test void createATransactionInfoWithStaticConstructorCreateForAggregateInnerTransactions() {
+        TransactionInfo transactionInfo = TransactionInfo.createAggregate(new BigInteger("130996"),0, "6191E454A4E1A152670C2654",
+                "1E9BD8D5D13D85466555D799298A397CF1399AA6389363027BEBA97604212B2A", "6191E454A4E1A152670C2653",
+                "86C47C9D2CF804EF8B910B7AEF5E81F12F8503BF84CD11243941E4913409216F");
 
-        assertEquals(new BigInteger("121855"), transactionInfo.getHeight());
+        assertEquals(new BigInteger("130996"), transactionInfo.getHeight());
         assertTrue(transactionInfo.getIndex().isPresent());
         assertTrue(transactionInfo.getId().isPresent());
         assertFalse(transactionInfo.getHash().isPresent());
         assertFalse(transactionInfo.getMerkleComponentHash().isPresent());
         assertTrue(transactionInfo.getAggregateHash().isPresent());
         assertTrue(transactionInfo.getAggregateId().isPresent());
-        assertEquals(1, transactionInfo.getIndex().get());
-        assertEquals("5A3D23889CD1E800015929A9", transactionInfo.getId().get());
-        assertEquals("3D28C804EDD07D5A728E5C5FFEC01AB07AFA5766AE6997B38526D36015A4D006", transactionInfo.getAggregateHash().get());
-        assertEquals("5A0069D83F17CF0001777E55", transactionInfo.getAggregateId().get());
+        assertEquals(0, transactionInfo.getIndex().get());
+        assertEquals("6191E454A4E1A152670C2654", transactionInfo.getId().get());
+        assertEquals("1E9BD8D5D13D85466555D799298A397CF1399AA6389363027BEBA97604212B2A", transactionInfo.getAggregateHash().get());
+        assertEquals("6191E454A4E1A152670C2653", transactionInfo.getAggregateId().get());
+        assertEquals("86C47C9D2CF804EF8B910B7AEF5E81F12F8503BF84CD11243941E4913409216F", transactionInfo.getUniqueAggregateHash().get());
     }
 
     @Test

@@ -18,11 +18,8 @@ package io.proximax.sdk;
 
 import java.util.List;
 
-import io.proximax.sdk.model.transaction.CosignatureSignedTransaction;
-import io.proximax.sdk.model.transaction.SignedTransaction;
-import io.proximax.sdk.model.transaction.Transaction;
-import io.proximax.sdk.model.transaction.TransactionAnnounceResponse;
-import io.proximax.sdk.model.transaction.TransactionStatus;
+import io.proximax.sdk.infrastructure.TransactionQueryParams;
+import io.proximax.sdk.model.transaction.*;
 import io.reactivex.Observable;
 
 /**
@@ -36,7 +33,7 @@ public interface TransactionRepository {
      * Gets a transaction for a given hash.
      *
      * @param transactionHash String
-     * @return Observable of Transaction
+     * @return Observable of {@link Transaction}
      */
     Observable<Transaction> getTransaction(String transactionHash);
 
@@ -44,15 +41,15 @@ public interface TransactionRepository {
      * Gets an list of transactions for different transaction hashes.
      *
      * @param transactionHashes List of String
-     * @return Observable of Transaction list
+     * @return Observable of {@link Transaction} list
      */
-    Observable<List<Transaction>> getTransactions(List<String> transactionHashes);
+    Observable<TransactionList> getTransactions(List<String> transactionHashes);
 
     /**
      * Gets a transaction status for a transaction hash.
      *
      * @param transactionHash String
-     * @return Observable of TransactionStatus
+     * @return Observable of {@link TransactionStatus}
      */
     Observable<TransactionStatus> getTransactionStatus(String transactionHash);
 
@@ -60,9 +57,17 @@ public interface TransactionRepository {
      * Gets an list of transaction status for different transaction hashes.
      *
      * @param transactionHashes List of String
-     * @return Observable of TransactionStatus list
+     * @return Observable of {@link TransactionStatus} list
      */
     Observable<List<TransactionStatus>> getTransactionStatuses(List<String> transactionHashes);
+
+    /**
+     * Gets transaction count based on the given entity type(s)
+     *
+     * @param transactionType List of Entities Type
+     * @return Observable of {@link TransactionCount} list
+     */
+    Observable<List<TransactionCount>> getTransactionsCount(List<Integer> transactionType);
 
     /**
      * Send a signed transaction.
@@ -76,7 +81,7 @@ public interface TransactionRepository {
      * Send a signed transaction with missing signatures.
      *
      * @param signedTransaction SignedTransaction
-     * @return Observable of TransactionAnnounceResponse
+     * @return Observable of {@link TransactionAnnounceResponse}
      */
     Observable<TransactionAnnounceResponse> announceAggregateBonded(SignedTransaction signedTransaction);
 
@@ -84,7 +89,27 @@ public interface TransactionRepository {
      * Send a co-signature signed transaction of an already announced transaction.
      *
      * @param cosignatureSignedTransaction CosignatureSignedTransaction
-     * @return Observable of TransactionAnnounceResponse
+     * @return Observable of {@link TransactionAnnounceResponse}
      */
-    Observable<TransactionAnnounceResponse> announceAggregateBondedCosignature(CosignatureSignedTransaction cosignatureSignedTransaction);
+    Observable<TransactionAnnounceResponse> announceAggregateBondedCosignature(
+            CosignatureSignedTransaction cosignatureSignedTransaction);
+
+    /**
+     * <p>
+     * Search transaction
+     * </p>
+     * 
+     * @param transactionGroupType transaction group type
+     * @return Observable of {@link TransactionSearch}
+     */
+    Observable<TransactionSearch> transactionSearch(TransactionGroupType transactionGroupType);
+    
+    /**
+     * Search transaction
+     * 
+     * @param transactionGroupType   transaction group type
+     * @param queryParams transaction query params
+     * @return Observable of {@link TransactionSearch}
+     */
+    Observable<TransactionSearch> transactionSearch(TransactionGroupType transactionGroupType,TransactionQueryParams queryParams);
 }

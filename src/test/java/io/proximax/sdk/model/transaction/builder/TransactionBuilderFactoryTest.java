@@ -16,7 +16,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.FeeCalculationStrategy;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.model.transaction.DeadlineRaw;
 
 /**
@@ -24,7 +24,7 @@ import io.proximax.sdk.model.transaction.DeadlineRaw;
  */
 class TransactionBuilderFactoryTest {
 
-   private static final NetworkType NETWORK_TYPE = NetworkType.MIJIN_TEST;
+   private static final NetworkType NETWORK_TYPE = NetworkType.TEST_NET;
    private static final BigInteger DELAY = BigInteger.valueOf(60_000);
    
    @Test
@@ -47,7 +47,8 @@ class TransactionBuilderFactoryTest {
       testDefaults(fac.lockFunds());
       testDefaults(fac.contract());
       testDefaults(fac.modifyContract());
-      testDefaults(fac.modifyMetadata());
+      testDefaults(fac.mosaicMetadata());
+      testDefaults(fac.modifyMosaicLevy());
       testDefaults(fac.mosaicDefinition());
       testDefaults(fac.mosaicSupplyChange());
       testDefaults(fac.multisigModification());
@@ -81,7 +82,8 @@ class TransactionBuilderFactoryTest {
       testNoDefaults(fac.lockFunds());
       testNoDefaults(fac.contract());
       testNoDefaults(fac.modifyContract());
-      testNoDefaults(fac.modifyMetadata());
+      testNoDefaults(fac.mosaicMetadata());
+      testNoDefaults(fac.modifyMosaicLevy());
       testNoDefaults(fac.mosaicDefinition());
       testNoDefaults(fac.mosaicSupplyChange());
       testNoDefaults(fac.multisigModification());

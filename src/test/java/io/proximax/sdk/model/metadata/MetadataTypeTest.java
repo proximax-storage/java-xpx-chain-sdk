@@ -11,26 +11,26 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 /**
- * {@link MetadataType} tests
+ * {@link OldMetadataType} tests
  */
 class MetadataTypeTest {
 
    @Test
    void checkCode() {
       // check some random item
-      assertEquals(1, MetadataType.ADDRESS.getCode());
+      assertEquals(1, OldMetadataType.ADDRESS.getCode());
    }
 
    @Test
    void checkGetByCode() {
-      for (MetadataType item: MetadataType.values()) {
-         assertEquals(item, MetadataType.getByCode(item.getCode()));
+      for (OldMetadataType item: OldMetadataType.values()) {
+         assertEquals(item, OldMetadataType.getByCode(item.getCode()));
       }
    }
    
    @Test
    void testBadCode() {
-      assertThrows(RuntimeException.class, () -> MetadataType.getByCode(-8));
+      assertThrows(RuntimeException.class, () -> OldMetadataType.getByCode(-8));
    }
 
 }

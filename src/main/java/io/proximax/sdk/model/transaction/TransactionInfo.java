@@ -35,8 +35,10 @@ public class TransactionInfo {
     private final Optional<String> merkleComponentHash;
     private final Optional<String> aggregateHash;
     private final Optional<String> aggregateId;
+    private final Optional<String> uniqueAggregateHash;
 
-    private TransactionInfo(BigInteger height, Optional<Integer> index, Optional<String> id, Optional<String> hash, Optional<String> merkleComponentHash, Optional<String> aggregateHash, Optional<String> aggregateId) {
+    
+    private TransactionInfo(BigInteger height, Optional<Integer> index, Optional<String> id, Optional<String> hash, Optional<String> merkleComponentHash, Optional<String> aggregateHash, Optional<String> aggregateId, Optional<String> uniqueAggregateHash) {
         Validate.notNull(height, "Height must not be null");
         this.height = height;
 
@@ -46,20 +48,24 @@ public class TransactionInfo {
         this.merkleComponentHash = merkleComponentHash;
         this.aggregateHash = aggregateHash;
         this.aggregateId = aggregateId;
+        this.uniqueAggregateHash = uniqueAggregateHash;
     }
 
     /**
      * Create transaction info object for aggregate transaction inner transaction.
      *
-     * @param height        Block height in which the transaction was included.
-     * @param index         The transaction index.
-     * @param id            transaction id.
-     * @param aggregateHash The hash of the aggregate transaction.
-     * @param aggregateId   The id of the aggregate transaction.
+     * @param height              Block height in which the transaction was
+     *                            included.
+     * @param index               The transaction index.
+     * @param id                  transaction id.
+     * @param aggregateHash       The hash of the aggregate transaction.
+     * @param aggregateId         The id of the aggregate transaction.
+     * @param uniqueAggregateHash The unique hash of the aggregate transaction.
+     * 
      * @return instance of TransactionInfo
      */
-    public static TransactionInfo createAggregate(BigInteger height, Integer index, String id, String aggregateHash, String aggregateId) {
-        return new TransactionInfo(height, Optional.of(index), Optional.of(id), Optional.empty(), Optional.empty(), Optional.of(aggregateHash), Optional.of(aggregateId));
+    public static TransactionInfo createAggregate(BigInteger height, Integer index, String id, String aggregateHash, String aggregateId, String uniqueAggregateHash) {
+        return new TransactionInfo(height, Optional.of(index), Optional.of(id), Optional.empty(), Optional.empty(), Optional.of(aggregateHash), Optional.of(aggregateId), Optional.of(uniqueAggregateHash));
     }
 
     /**
@@ -73,7 +79,7 @@ public class TransactionInfo {
      * @return instance of TransactionInfo
      */
     public static TransactionInfo create(BigInteger height, Integer index, String id, String hash, String merkleComponentHash) {
-        return new TransactionInfo(height, Optional.of(index), Optional.of(id), Optional.of(hash), Optional.of(merkleComponentHash), Optional.empty(), Optional.empty());
+        return new TransactionInfo(height, Optional.of(index), Optional.of(id), Optional.of(hash), Optional.of(merkleComponentHash), Optional.empty(), Optional.empty(), Optional.empty());
     }
 
     /**
@@ -85,7 +91,7 @@ public class TransactionInfo {
      * @return instance of TransactionInfo
      */
     public static TransactionInfo create(BigInteger height, String hash, String merkleComponentHash) {
-        return new TransactionInfo(height, Optional.empty(), Optional.empty(), Optional.of(hash), Optional.of(merkleComponentHash), Optional.empty(), Optional.empty());
+        return new TransactionInfo(height, Optional.empty(), Optional.empty(), Optional.of(hash), Optional.of(merkleComponentHash), Optional.empty(), Optional.empty(), Optional.empty());
     }
 
     /**
@@ -151,10 +157,13 @@ public class TransactionInfo {
         return aggregateId;
     }
 
+    public Optional<String> getUniqueAggregateHash() {
+        return uniqueAggregateHash;
+    }
     
    @Override
    public int hashCode() {
-      return Objects.hash(aggregateHash, aggregateId, hash, height, id, index, merkleComponentHash);
+      return Objects.hash(aggregateHash, aggregateId, uniqueAggregateHash,hash, height, id, index, merkleComponentHash );
    }
 
    @Override
@@ -166,16 +175,12 @@ public class TransactionInfo {
       if (getClass() != obj.getClass())
          return false;
       TransactionInfo other = (TransactionInfo) obj;
-      return Objects.equals(aggregateHash, other.aggregateHash) && Objects.equals(aggregateId, other.aggregateId)
-            && Objects.equals(hash, other.hash) && Objects.equals(height, other.height) && Objects.equals(id, other.id)
-            && Objects.equals(index, other.index) && Objects.equals(merkleComponentHash, other.merkleComponentHash);
+        return Objects.equals(aggregateHash, other.aggregateHash) && Objects.equals(aggregateId, other.aggregateId)&& Objects.equals(uniqueAggregateHash, other.uniqueAggregateHash)&&Objects.equals(hash, other.hash) && Objects.equals(height, other.height) && Objects.equals(id, other.id) && Objects.equals(index, other.index) && Objects.equals(merkleComponentHash, other.merkleComponentHash);
    }
 
    @Override
    public String toString() {
-      return "TransactionInfo [height=" + height + ", index=" + index + ", id=" + id + ", hash=" + hash
-            + ", merkleComponentHash=" + merkleComponentHash + ", aggregateHash=" + aggregateHash + ", aggregateId="
-            + aggregateId + "]";
+      return "TransactionInfo [height=" + height + ", index=" + index + ", id=" + id + ", hash=" + hash + ", merkleComponentHash=" + merkleComponentHash + ", aggregateHash=" + aggregateHash + ", aggregateId=" + aggregateId + ", uniqueAggregateHash=" + uniqueAggregateHash +"]";
    }
     
     

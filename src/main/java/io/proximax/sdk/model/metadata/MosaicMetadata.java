@@ -30,7 +30,7 @@ public class MosaicMetadata extends Metadata {
     * @param id mosaic ID
     */
    public MosaicMetadata(List<Field> fields, MosaicId id) {
-      super(MetadataType.MOSAIC, fields);
+      super(OldMetadataType.MOSAIC, fields);
       this.id = id;
    }
 

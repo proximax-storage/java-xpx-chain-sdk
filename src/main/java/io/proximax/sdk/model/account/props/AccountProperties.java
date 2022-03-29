@@ -17,6 +17,7 @@
 
 package io.proximax.sdk.model.account.props;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,7 +64,7 @@ public class AccountProperties {
             dto.getProperties().stream()
                   .map(propDto -> new AccountProperty(
                         AccountPropertyType.getByCode(propDto.getPropertyType().getValue()),
-                        GsonUtils.ensureLongs(propDto.getValues())))
+                        GsonUtils.ensureLongs(new ArrayList<>(propDto.getValues()))))
                   .collect(Collectors.toList()));
    }
 }

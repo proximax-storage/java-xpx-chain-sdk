@@ -18,9 +18,12 @@ package io.proximax.sdk;
 
 import java.util.List;
 
+import io.proximax.sdk.infrastructure.QueryParams;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicInfo;
+import io.proximax.sdk.model.mosaic.MosaicLevyInfo;
 import io.proximax.sdk.model.mosaic.MosaicNames;
+import io.proximax.sdk.model.mosaic.MosaicRichList;
 import io.reactivex.Observable;
 
 /**
@@ -56,4 +59,35 @@ public interface MosaicRepository {
      * @return Observable of {@link MosaicNames} list
      */
     Observable<List<MosaicNames>> getMosaicNames(List<MosaicId> mosaicIds);
+
+    /**
+     * <p>
+     * Gets list of MosaicRichList.
+     * </p>
+     * 
+     * @param mosaicId List of MosaicRichList
+     * @return Observable of {@link MosaicRichList} list
+     */
+    Observable<List<MosaicRichList>> getMosaicRichList(MosaicId mosaicId);
+    
+    /**
+     * <p>
+     * Gets list of MosaicRichList.
+     * </p>
+     * 
+     * @param mosaicId Mosaic id
+     * @param queryParams    QueryParams
+     * @return Observable of {@link MosaicRichList} list
+     */
+    Observable<List<MosaicRichList>> getMosaicRichList(MosaicId mosaicId, QueryParams queryParams);
+
+    /**
+     * <p>
+     * Gets mosaic levy info for mosaicId.
+     * </p>
+     * 
+     * @param mosaicId Mosaic Id
+     * @return Observable of {@link MosaicLevyInfo}
+     */
+    Observable<MosaicLevyInfo> getMosaicLevyInfo(MosaicId mosaicId);
 }

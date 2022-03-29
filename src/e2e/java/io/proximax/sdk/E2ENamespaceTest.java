@@ -17,6 +17,7 @@ package io.proximax.sdk;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Optional;
@@ -49,7 +50,7 @@ import io.reactivex.schedulers.Schedulers;
 @TestMethodOrder(MethodOrderer.Alphanumeric.class)
 public class E2ENamespaceTest extends E2EBaseTest {
    private static final String ROOT_NAME = "test-root-namespace-"
-         + new Double(Math.floor(Math.random() * 10000)).intValue();
+         + new BigDecimal(Math.floor(Math.random() * 10000)).intValue();
    private static final String CHILD1_NAME = "c1";
 
    /** logger */

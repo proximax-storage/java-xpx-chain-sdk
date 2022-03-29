@@ -18,9 +18,11 @@
 package io.proximax.sdk.model.mosaic;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
 
@@ -63,7 +65,7 @@ public class MosaicProperties {
 
    /**
     * create new instance of mosaic properties
-    * 
+    *
     * @param supplyMutable supply mutability
     * @param transferable ownership transferability
     * @param divisibility number of decimal places
@@ -86,7 +88,7 @@ public class MosaicProperties {
 
    /**
     * create new instance
-    * 
+    *
     * @param flags flags field
     * @param divisibility divisibility value
     * @param duration optional duration
@@ -96,7 +98,7 @@ public class MosaicProperties {
       return new MosaicProperties(checkFlag(flags, FLAG_SUPPLY_MUTABLE), checkFlag(flags, FLAG_TRANSFERABLE),
             divisibility, duration);
    }
-   
+
    /**
     * Returns true if supply is mutable
     *
@@ -176,7 +178,7 @@ public class MosaicProperties {
 
    /**
     * Convert array of numbers into named properties
-    * 
+    *
     * @param mosaicPropertiesDTO array of numeric values
     * @return mosaic properties instance
     */
@@ -188,10 +190,10 @@ public class MosaicProperties {
       // create new instance
       return MosaicProperties.create(flags.intValue(), divisibility.intValue(), duration);
    }
-   
+
    /**
     * check the flag presence
-    * 
+    *
     * @param flags all flags
     * @param flag flag we are searching for
     * @return true if flag is present, false otherwise
@@ -202,7 +204,7 @@ public class MosaicProperties {
 
    /**
     * get property value from the DTO
-    * 
+    *
     * @param mosaicProperties all the properties
     * @param id id of desired property
     * @return optional value of the property
@@ -211,7 +213,7 @@ public class MosaicProperties {
       return mosaicProperties.stream()
          .filter(prop -> prop.getId().getValue().intValue() == id.getCode())
          .map(MosaicPropertyDTO::getValue)
-         .map(UInt64Utils::toBigInt)
+         .map(v -> UInt64Utils.toBigInt(new ArrayList<>(v)))
          .findFirst();
    }
 

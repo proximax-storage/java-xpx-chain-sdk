@@ -13,7 +13,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.model.account.Address;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 
 /**
  * {@link AddressMetadata} tests
@@ -23,9 +23,9 @@ class AddressMetadataTest {
    @Test
    void checkConstructor() {
       List<Field> fields = Arrays.asList(new Field("key", "value"));
-      Address address = new Address("SDRDGF-TDLLCB-67D4HP-GIMIHP-NSRYRJ-RT7DOB-GWZY", NetworkType.MIJIN_TEST);
+      Address address = new Address("SDRDGF-TDLLCB-67D4HP-GIMIHP-NSRYRJ-RT7DOB-GWZY", NetworkType.TEST_NET);
       AddressMetadata meta = new AddressMetadata(fields, address);
-      assertEquals(MetadataType.ADDRESS, meta.getType());
+      assertEquals(OldMetadataType.ADDRESS, meta.getType());
       assertEquals(fields, meta.getFields());
       assertEquals(address, meta.getAddress());
       assertEquals("SDRDGFTDLLCB67D4HPGIMIHPNSRYRJRT7DOBGWZY", meta.getId());

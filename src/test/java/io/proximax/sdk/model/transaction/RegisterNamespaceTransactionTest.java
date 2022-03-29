@@ -27,15 +27,15 @@ import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.ResourceBasedTest;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.namespace.NamespaceId;
 import io.proximax.sdk.model.namespace.NamespaceType;
+import io.proximax.sdk.model.network.NetworkType;
 
 class RegisterNamespaceTransactionTest extends ResourceBasedTest {
 
    @Test
    void constructor() {
-      RegisterNamespaceTransaction tx = new RegisterNamespaceTransaction(NetworkType.MIJIN, 23, new FakeDeadline(),
+      RegisterNamespaceTransaction tx = new RegisterNamespaceTransaction(NetworkType.TEST_NET, 23, new FakeDeadline(),
             BigInteger.ONE, Optional.empty(), Optional.empty(), Optional.empty(), "prx",
             new NamespaceId(new BigInteger("4635294387305441662")), Optional.of(BigInteger.ONE),
             Optional.of(new NamespaceId(BigInteger.TEN)), NamespaceType.SUB_NAMESPACE);
@@ -49,8 +49,8 @@ class RegisterNamespaceTransactionTest extends ResourceBasedTest {
 
    @Test
    void copyForSigner() {
-      PublicAccount signer = new PublicAccount("CAFFEE", NetworkType.MIJIN);
-      RegisterNamespaceTransaction tx = (RegisterNamespaceTransaction)new RegisterNamespaceTransaction(NetworkType.MIJIN, 23, new FakeDeadline(),
+      PublicAccount signer = new PublicAccount("CAFFEE", NetworkType.TEST_NET);
+      RegisterNamespaceTransaction tx = (RegisterNamespaceTransaction)new RegisterNamespaceTransaction(NetworkType.TEST_NET, 23, new FakeDeadline(),
             BigInteger.ONE, Optional.empty(), Optional.empty(), Optional.empty(), "prx",
             new NamespaceId(new BigInteger("4635294387305441662")), Optional.of(BigInteger.ONE),
             Optional.of(new NamespaceId(BigInteger.TEN)), NamespaceType.SUB_NAMESPACE).copyForSigner(signer);
@@ -66,7 +66,7 @@ class RegisterNamespaceTransactionTest extends ResourceBasedTest {
    @Test
    void serializationRootNamespace() throws IOException {
       RegisterNamespaceTransaction registerNamespaceTransaction = new RegisterNamespaceTransaction(
-            NetworkType.MIJIN_TEST, 2, new FakeDeadline(), BigInteger.ZERO, Optional.empty(), Optional.empty(),
+            NetworkType.TEST_NET, 2, new FakeDeadline(), BigInteger.ZERO, Optional.empty(), Optional.empty(),
             Optional.empty(), "newnamespace", new NamespaceId(IdGenerator.generateNamespaceId("newnamespace")),
             Optional.of(BigInteger.valueOf(10000)), Optional.empty(), NamespaceType.ROOT_NAMESPACE);
 
@@ -78,7 +78,7 @@ class RegisterNamespaceTransactionTest extends ResourceBasedTest {
    @Test
    void serializationSubNamespace() throws IOException {
       RegisterNamespaceTransaction registerNamespaceTransaction = new RegisterNamespaceTransaction(
-            NetworkType.MIJIN_TEST, 2, new FakeDeadline(), BigInteger.ZERO, Optional.empty(), Optional.empty(),
+            NetworkType.TEST_NET, 2, new FakeDeadline(), BigInteger.ZERO, Optional.empty(), Optional.empty(),
             Optional.empty(), "subnamespace",
             new NamespaceId(IdGenerator.generateSubNamespaceIdFromParentId(new BigInteger("4635294387305441662"),
                   "subnamespace")),

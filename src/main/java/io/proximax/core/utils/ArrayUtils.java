@@ -169,4 +169,7 @@ public class ArrayUtils {
     public static int getBit(final byte[] h, final int i) {
         return (h[i >> 3] >> (i & 7)) & 1;
     }
+
+    public static void reverse(byte[] valueDifferenceBytes) {
+    }
 }

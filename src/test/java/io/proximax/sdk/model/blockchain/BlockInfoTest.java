@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -29,8 +30,8 @@ import io.proximax.sdk.gen.model.BlockDTO;
 import io.proximax.sdk.gen.model.BlockInfoDTO;
 import io.proximax.sdk.gen.model.BlockMetaDTO;
 import io.proximax.sdk.gen.model.EntityTypeEnum;
-import io.proximax.sdk.gen.model.UInt64DTO;
 import io.proximax.sdk.model.account.PublicAccount;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 class BlockInfoTest {
@@ -43,8 +44,8 @@ class BlockInfoTest {
                Optional.of(25),
                "37351C8244AC166BE6664E3FA954E99A3239AC46E51E2B32CEA1C72DD0851100A7731868E932E1A9BEF8A27D48E1" +
                        "FFEE401E933EB801824373E7537E51733E0F",
-               new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", NetworkType.MIJIN_TEST),
-               NetworkType.MIJIN_TEST,
+               new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", NetworkType.TEST_NET),
+               NetworkType.TEST_NET,
                3,
                32768,
                UInt64Utils.fromIntArray(new int[]{1, 0}),
@@ -60,8 +61,8 @@ class BlockInfoTest {
        assertEquals(new Integer(25), blockInfo.getNumTransactions().get());
        assertEquals("37351C8244AC166BE6664E3FA954E99A3239AC46E51E2B32CEA1C72DD0851100A7731868E932E1A9BEF8A27D48E1" +
                "FFEE401E933EB801824373E7537E51733E0F", blockInfo.getSignature());
-       Assertions.assertEquals(new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", NetworkType.MIJIN_TEST), blockInfo.getSigner());
-       assertEquals(NetworkType.MIJIN_TEST, blockInfo.getNetworkType());
+       Assertions.assertEquals(new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", NetworkType.TEST_NET), blockInfo.getSigner());
+       assertEquals(NetworkType.TEST_NET, blockInfo.getNetworkType());
        assertEquals(3, blockInfo.getVersion());
        assertEquals(32768, blockInfo.getType());
        assertEquals(UInt64Utils.fromIntArray(new int[]{1, 0}), blockInfo.getHeight());
@@ -84,7 +85,7 @@ class BlockInfoTest {
       BlockDTO blockDto = new BlockDTO();
       blockDto.setSignature("37351C8244AC166BE6664E3FA954E99A3239AC46E51E2B32CEA1C72DD0851100A7731868E932E1A9BEF8A27D48E1FFEE401E933EB801824373E7537E51733E0F");
       blockDto.setSigner("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF");
-      blockDto.setVersion(36867l);
+      blockDto.setVersion(36867);
       blockDto.setType(EntityTypeEnum.NUMBER_16705);
       blockDto.setHeight(getUint64Dto(2));
       blockDto.setTimestamp(getUint64Dto(3));
@@ -96,16 +97,16 @@ class BlockInfoTest {
       dto.setBlock(blockDto);
       dto.setMeta(metaDto);
       
-      BlockInfo blockInfo = BlockInfo.fromDto(dto, NetworkType.MIJIN_TEST);
+      BlockInfo blockInfo = BlockInfo.fromDto(dto, NetworkType.TEST_NET);
       /// do the assertions
        assertEquals("24E92B511B54EDB48A4850F9B42485FDD1A30589D92C775632DDDD71D7D1D691", blockInfo.getHash());
        assertEquals("57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6", blockInfo.getGenerationHash());
        assertEquals(BigInteger.valueOf(1), blockInfo.getTotalFee().get());
-       assertEquals(new Integer(25), blockInfo.getNumTransactions().get());
+       assertEquals(25, blockInfo.getNumTransactions().get());
        assertEquals("37351C8244AC166BE6664E3FA954E99A3239AC46E51E2B32CEA1C72DD0851100A7731868E932E1A9BEF8A27D48E1" +
                "FFEE401E933EB801824373E7537E51733E0F", blockInfo.getSignature());
-       Assertions.assertEquals(new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", NetworkType.MIJIN_TEST), blockInfo.getSigner());
-       assertEquals(NetworkType.MIJIN_TEST, blockInfo.getNetworkType());
+       Assertions.assertEquals(new PublicAccount("B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF", NetworkType.TEST_NET), blockInfo.getSigner());
+       assertEquals(NetworkType.TEST_NET, blockInfo.getNetworkType());
        assertEquals(3, blockInfo.getVersion());
        assertEquals(16705, blockInfo.getType());
        assertEquals(BigInteger.valueOf(2), blockInfo.getHeight());
@@ -118,10 +119,10 @@ class BlockInfoTest {
        assertTrue(blockInfo.toString().startsWith("BlockInfo"));
    }
    
-   private static UInt64DTO getUint64Dto(long val) {
-      UInt64DTO uint = new UInt64DTO();
-      uint.add(val);
-      uint.add(0l);
+   private static ArrayList<Integer> getUint64Dto(long val) {
+       ArrayList<Integer> uint = new ArrayList<>();
+      uint.add((int) val);
+      uint.add(0);
       return uint;
    }
 }

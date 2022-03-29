@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 ProximaX
+ * Copyright 2022 ProximaX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ package io.proximax.sdk.model.metadata;
  */
 public enum MetadataType {
 
-   NONE(0), ADDRESS(1), MOSAIC(2), NAMESPACE(3);
+   ADDRESS(0), MOSAIC(1), NAMESPACE(2);
 
    private final int code;
 

@@ -20,16 +20,16 @@ import com.google.gson.JsonObject;
 
 import io.proximax.core.utils.Base32Encoder;
 import io.proximax.sdk.model.account.Address;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 
 /**
  * {@link ListenerMessage} tests
  */
 class ListenerMessageTest {
-   private static final Address ADDRESS = new Address("SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26",
-         NetworkType.MIJIN_TEST);
-   private static final Address ADDRESS2 = new Address("SDBLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26",
-         NetworkType.MIJIN_TEST);
+   private static final Address ADDRESS = new Address("VD3YBI-RQMWXS-6HHUJB-XFZJ56-62BJPX-OTKOOV-6HDO",
+         NetworkType.TEST_NET);
+   private static final Address ADDRESS2 = new Address("VCMY23-PRJYEV-EZWLNY-3GCPYD-OYLMOL-ZCJWUV-YK7U",
+         NetworkType.TEST_NET);
 
    @Test
    void constructor() {

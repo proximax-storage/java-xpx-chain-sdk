@@ -19,10 +19,12 @@ package io.proximax.sdk.model.blockchain;
 import static io.proximax.sdk.utils.dto.UInt64Utils.toBigInt;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import io.proximax.sdk.gen.model.BlockInfoDTO;
 import io.proximax.sdk.model.account.PublicAccount;
+import io.proximax.sdk.model.network.NetworkType;
 
 /**
  * The block info structure describes basic information of a block.
@@ -212,19 +214,19 @@ public class BlockInfo {
     public static BlockInfo fromDto(BlockInfoDTO dto, NetworkType networkType) {
        return new BlockInfo(dto.getMeta().getHash(),
              dto.getMeta().getGenerationHash(),
-             Optional.of(toBigInt(dto.getMeta().getTotalFee())),
+             Optional.of(toBigInt(new ArrayList<>(dto.getMeta().getTotalFee()))),
              Optional.of(dto.getMeta().getNumTransactions()),
              dto.getBlock().getSignature(),
              new PublicAccount(dto.getBlock().getSigner(), networkType),
              networkType,
-             (int) Long.parseLong(Integer.toHexString(dto.getBlock().getVersion().intValue()).substring(2, 4), 16),
+             (int) Long.parseLong(Integer.toHexString(dto.getBlock().getVersion()).substring(2, 4), 16),
              dto.getBlock().getType().getValue(),
-             toBigInt(dto.getBlock().getHeight()),
-             toBigInt(dto.getBlock().getTimestamp()),
-             toBigInt(dto.getBlock().getDifficulty()),
+             toBigInt(new ArrayList<>(dto.getBlock().getHeight())),
+             toBigInt(new ArrayList<>(dto.getBlock().getTimestamp())),
+             toBigInt(new ArrayList<>(dto.getBlock().getDifficulty())),
              dto.getBlock().getPreviousBlockHash(),
              dto.getBlock().getBlockTransactionsHash(),
-             Optional.ofNullable(dto.getBlock().getBlockReceiptsHash()));
+             Optional.of(dto.getBlock().getBlockReceiptsHash()));
     }
 
    @Override

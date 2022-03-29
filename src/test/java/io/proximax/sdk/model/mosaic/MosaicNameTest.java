@@ -20,6 +20,7 @@ import static io.proximax.sdk.utils.GsonUtils.stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,7 +32,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import io.proximax.sdk.ResourceBasedTest;
-import io.proximax.sdk.gen.model.UInt64DTO;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 class MosaicNameTest extends ResourceBasedTest {
@@ -58,15 +58,15 @@ class MosaicNameTest extends ResourceBasedTest {
     
     private static MosaicId getMosaicID(JsonObject json) {
        JsonArray ints = json.get("mosaicId").getAsJsonArray();
-       UInt64DTO dto = new UInt64DTO();
-       dto.add(ints.get(0).getAsLong());
-       dto.add(ints.get(1).getAsLong());
+        ArrayList<Integer> dto = new ArrayList<>();
+       dto.add(ints.get(0).getAsInt());
+       dto.add(ints.get(1).getAsInt());
        return new MosaicId(UInt64Utils.toBigInt(dto));
     }
     
     private static List<String> getNames(JsonObject json) {
        return stream(json.get("names").getAsJsonArray())
-             .map(el -> el.getAsString())
+             .map(JsonElement::getAsString)
              .collect(Collectors.toList());
     }
 }

@@ -20,7 +20,7 @@ import java.math.BigInteger;
 import java.util.Optional;
 
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 
 public class FakeTransferTransaction extends Transaction {
 

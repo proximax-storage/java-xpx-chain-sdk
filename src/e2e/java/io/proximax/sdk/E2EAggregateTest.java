@@ -57,7 +57,7 @@ public class E2EAggregateTest extends E2EBaseTest {
    private final Account bob = new Account(new KeyPair(), getNetworkType());
    private final Account mike = new Account(new KeyPair(), getNetworkType());
 
-   private final MosaicId mosaicX = new MosaicId(UInt64Utils.fromLongArray(new long[] { 481110499, 231112638 }));
+   private final MosaicId mosaicX = new MosaicId(UInt64Utils.fromLongArray(new long[] { 1173232007, 1792145974 }));
    private final MosaicId mosaicY = new MosaicId(UInt64Utils.fromLongArray(new long[] { 519256100, 642862634 }));
 
    @BeforeAll
@@ -117,6 +117,8 @@ public class E2EAggregateTest extends E2EBaseTest {
       // alice sign and announce the lock
       logger.info("announcing {}", lock);
       SignedTransaction signedLock = api.sign(lock, alice);
+      logger.info("SignedLock hash {}", signedLock.getHash());
+
       transactionHttp.announce(signedLock).blockingFirst();
       // wait for lock confirmation
       logger.info("got confirmation: {}",
@@ -247,6 +249,7 @@ public class E2EAggregateTest extends E2EBaseTest {
       // alice sign and announce the lock
       logger.info("announcing {}", lock);
       SignedTransaction signedLock = api.sign(lock, alice);
+      logger.info("SignedLock hash {}", signedLock.getHash());
       transactionHttp.announce(signedLock).blockingFirst();
       // wait for lock confirmation
       listener.confirmed(alice.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();
@@ -334,6 +337,7 @@ public class E2EAggregateTest extends E2EBaseTest {
       // alice sign and announce the lock
       logger.info("announcing {}", lock);
       SignedTransaction signedLock = api.sign(lock, alice);
+      logger.info("SignedLock hash {}", signedLock.getHash());
       transactionHttp.announce(signedLock).blockingFirst();
       // wait for lock confirmation
       listener.confirmed(alice.getAddress()).timeout(getTimeoutSeconds(), TimeUnit.SECONDS).blockingFirst();

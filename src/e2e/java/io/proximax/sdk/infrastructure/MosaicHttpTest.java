@@ -33,14 +33,19 @@ import org.junit.jupiter.api.TestInstance;
 import io.proximax.sdk.BaseTest;
 import io.proximax.sdk.BlockchainApi;
 import io.proximax.sdk.MosaicRepository;
+import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicInfo;
+import io.proximax.sdk.model.mosaic.MosaicLevyInfo;
 import io.proximax.sdk.model.mosaic.MosaicNames;
+import io.proximax.sdk.model.mosaic.MosaicRichList;
 import io.reactivex.schedulers.Schedulers;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MosaicHttpTest extends BaseTest {
-   private static final MosaicId ID = new MosaicId(new BigInteger("0DC67FBE1CAD29E3", 16));
+   private static final MosaicId ID = new MosaicId("6BABA790155EA5C6");
+
+   private static final MosaicId ID_names = new MosaicId("6ad1fa3645ee1987");
 
    private MosaicRepository mosaicHttp;
 
@@ -53,7 +58,7 @@ class MosaicHttpTest extends BaseTest {
    void getMosaic() throws ExecutionException, InterruptedException {
       MosaicInfo mosaicInfo = mosaicHttp.getMosaic(ID).toFuture().get();
 
-      assertEquals(new BigInteger("1"), mosaicInfo.getHeight());
+      assertEquals(new BigInteger("265120"), mosaicInfo.getHeight());
       assertEquals(ID, mosaicInfo.getMosaicId());
    }
 
@@ -66,10 +71,37 @@ class MosaicHttpTest extends BaseTest {
 
    @Test
    void getMosaicNames() throws ExecutionException, InterruptedException {
-      List<MosaicNames> mosaicNames = mosaicHttp.getMosaicNames(Collections.singletonList(ID)).toFuture().get();
+
+      List<MosaicNames> mosaicNames = mosaicHttp.getMosaicNames(Collections.singletonList(ID_names)).toFuture().get();
 
       assertEquals("prx.xpx", mosaicNames.get(0).getNames().get(0));
-      assertEquals(ID, mosaicNames.get(0).getMosaicId());
+      assertEquals(ID_names, mosaicNames.get(0).getMosaicId());
+   }
+
+   @Test
+   void getMosaicLevyInfo() throws ExecutionException, InterruptedException {
+      MosaicLevyInfo mosaicLevyInfo = mosaicHttp.getMosaicLevyInfo(ID).toFuture().get();
+
+      assertEquals(1, mosaicLevyInfo.getType().getValue());
+      assertEquals("6BABA790155EA5C6", mosaicLevyInfo.getMosaicId().getIdAsHex().toUpperCase());
+      assertEquals(Address.createFromEncoded("A88167455099E7676758B38BD8282B2FEC00416C1F4AA6906A"),
+            mosaicLevyInfo.getRecipient().getAddress().get());
+      assertEquals(100, mosaicLevyInfo.getFee().intValue());
+   }
+
+   @Test
+   void getMosaicRichList() throws ExecutionException, InterruptedException {
+
+      List<MosaicRichList> mosaicRichListInfo = mosaicHttp.getMosaicRichList(ID).toFuture().get();
+      Address address = Address.createFromEncoded(
+            "A8F459E424CB8E2323266962B8E48B855578E49E54E22CD9A9");
+      String publickey = "42B85DF37E6349B20E48F82ADA20F53E0EED60FA190CDAC792A8E1C02EFEFB85";
+
+      assertEquals(address, mosaicRichListInfo.get(0).getAddress());
+      assertEquals(
+            publickey,
+            mosaicRichListInfo.get(0).getPublicKey());
+      assertEquals(BigInteger.valueOf(1000000), mosaicRichListInfo.get(0).getAmount());
    }
 
    @Test

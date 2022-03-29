@@ -1,0 +1,14 @@
+namespace io.proximax.sdk.gen.buffers;
+
+table RemoveMosaicLevyTransactionBuffer {
+	size: uint;
+	signature: [ubyte];
+	signer: [ubyte];
+	version: uint;
+	type: ushort;
+	maxFee: [uint];
+	deadline:[uint];
+	mosaicId:[uint];
+}
+
+root_type RemoveMosaicLevyTransactionBuffer;

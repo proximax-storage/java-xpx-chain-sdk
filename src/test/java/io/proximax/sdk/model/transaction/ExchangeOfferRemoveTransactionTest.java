@@ -19,10 +19,10 @@ import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.ResourceBasedTest;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.exchange.ExchangeOfferType;
 import io.proximax.sdk.model.exchange.RemoveExchangeOffer;
 import io.proximax.sdk.model.mosaic.MosaicId;
+import io.proximax.sdk.model.network.NetworkType;
 
 /**
  * {@link ExchangeOfferAddTransaction} tests
@@ -33,7 +33,7 @@ class ExchangeOfferRemoveTransactionTest extends ResourceBasedTest {
    @Test
    void testConstructor() throws IOException {
       RemoveExchangeOffer offer = new RemoveExchangeOffer(MOSAIC_ID, ExchangeOfferType.SELL);
-      ExchangeOfferRemoveTransaction trans = new ExchangeOfferRemoveTransaction(NetworkType.MIJIN, 1, new FakeDeadline(),
+      ExchangeOfferRemoveTransaction trans = new ExchangeOfferRemoveTransaction(NetworkType.TEST_NET, 1, new FakeDeadline(),
             BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), Arrays.asList(offer));
 
       assertEquals(Arrays.asList(offer), trans.getOffers());
@@ -42,7 +42,7 @@ class ExchangeOfferRemoveTransactionTest extends ResourceBasedTest {
    @Test
    void serialization() throws IOException {
       RemoveExchangeOffer offer = new RemoveExchangeOffer(MOSAIC_ID, ExchangeOfferType.SELL);
-      ExchangeOfferRemoveTransaction trans = new ExchangeOfferRemoveTransaction(NetworkType.MIJIN, 1, new FakeDeadline(),
+      ExchangeOfferRemoveTransaction trans = new ExchangeOfferRemoveTransaction(NetworkType.TEST_NET, 1, new FakeDeadline(),
             BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), Arrays.asList(offer));
 
 
@@ -53,10 +53,10 @@ class ExchangeOfferRemoveTransactionTest extends ResourceBasedTest {
 
    @Test
    void checkCopyToSigner() throws IOException {
-      PublicAccount remoteAccount = new Account(new KeyPair(), NetworkType.MIJIN).getPublicAccount();
+      PublicAccount remoteAccount = new Account(new KeyPair(), NetworkType.TEST_NET).getPublicAccount();
 
       RemoveExchangeOffer offer = new RemoveExchangeOffer(MOSAIC_ID, ExchangeOfferType.SELL);
-      ExchangeOfferRemoveTransaction trans = new ExchangeOfferRemoveTransaction(NetworkType.MIJIN, 1, new FakeDeadline(),
+      ExchangeOfferRemoveTransaction trans = new ExchangeOfferRemoveTransaction(NetworkType.TEST_NET, 1, new FakeDeadline(),
             BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), Arrays.asList(offer));
 
       Transaction t = trans.copyForSigner(remoteAccount);

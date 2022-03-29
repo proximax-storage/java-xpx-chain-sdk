@@ -36,13 +36,13 @@ public class NamespaceId implements UInt64Id {
    /**
     * Create NamespaceId from namespace string name (ex: nem or domain.subdom.subdome)
     *
-    * @param id string representing domain levels
+    * @param namespaceName string representing domain levels
     */
-   public NamespaceId(String id) {
-      this.id = IdGenerator.generateNamespaceId(id);
-      this.fullName = Optional.of(id);
+   public NamespaceId(String namespaceName) {
+      this.id = IdGenerator.generateNamespaceId(namespaceName);
+      this.fullName = Optional.of(namespaceName);
    }
-
+  
    /**
     * Create NamespaceId from biginteger id
     *

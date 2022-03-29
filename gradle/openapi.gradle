@@ -4,28 +4,43 @@
  * license that can be found in the LICENSE file.
  */
 
-/*
-to generate DTOs run
-  ./gradlew openApiGenerate
-then copy model from build/generated/.. to src/gen
-
-then resolve compilation issues by replacing
-  (private UInt64DTO \w+ = new )(ArrayList<>)\(\);
-by
-  \1UInt64DTO\(\);
-
-also weird types need to be manually replaced by Object class
-*/
-
 openApiGenerate {
     generatorName = "java"
     inputSpec = "$rootDir/schemas/swagger/swagger.yaml".toString()
-    outputDir = "$buildDir/generated".toString()
+    outputDir = "$rootDir/src/gen/java".toString()
     apiPackage = "io.proximax.sdk.gen.api"
     invokerPackage = "io.proximax.sdk.gen.invoker"
     modelPackage = "io.proximax.sdk.gen.model"
-    generateAliasAsModel = true
+    generateAliasAsModel = false
+    generateModelTests = false
+    generateModelDocumentation = false
+    generateApiTests = false
+    generateApiDocumentation = false
     configOptions = [
-        dateLibrary: "java8"
+            sourceFolder: "",
+            dateLibrary: "java11",
+            library: "resttemplate",
+            hideGenerationTimestamp: "true"
     ]
+}
+
+task removeMetafiles(type: Delete) {
+    delete (
+            "$rootDir/src/gen/java/.openapi-generator",
+            "$rootDir/src/gen/java/api",
+            "$rootDir/src/gen/java/gradle",
+            "$rootDir/src/gen/java/src",
+            "$rootDir/src/gen/java/.gitignore",
+            "$rootDir/src/gen/java/.openapi-generator-ignore",
+            "$rootDir/src/gen/java/.travis.yml",
+            "$rootDir/src/gen/java/build.gradle",
+            "$rootDir/src/gen/java/build.sbt",
+            "$rootDir/src/gen/java/git_push.sh",
+            "$rootDir/src/gen/java/gradle.properties",
+            "$rootDir/src/gen/java/gradlew",
+            "$rootDir/src/gen/java/gradlew.bat",
+            "$rootDir/src/gen/java/pom.xml",
+            "$rootDir/src/gen/java/README.md",
+            "$rootDir/src/gen/java/settings.gradle",
+    )
 }

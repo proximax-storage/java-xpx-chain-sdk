@@ -28,33 +28,33 @@ import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.ResourceBasedTest;
 import io.proximax.sdk.model.account.Address;
-import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.NetworkCurrencyMosaic;
+import io.proximax.sdk.model.network.NetworkType;
 
 public class SecretLockTransactionTest extends ResourceBasedTest {
 
    @Test
    void constructor() {
       String secret = "3fc8ba10229ab5778d05d9c4b7f56676a88bf9295c185acfc0f961db5408cafe";
-      SecretLockTransaction tx = new SecretLockTransaction(NetworkType.MIJIN, 23, new FakeDeadline(), BigInteger.ONE,
+      SecretLockTransaction tx = new SecretLockTransaction(NetworkType.TEST_NET, 23, new FakeDeadline(), BigInteger.ONE,
             Optional.empty(), Optional.empty(), Optional.empty(), NetworkCurrencyMosaic.TEN, BigInteger.valueOf(100),
-            HashType.SHA3_256, secret, Address.createFromRawAddress("SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM"));
+            HashType.SHA3_256, secret, Address.createFromRawAddress("VCZGEQBIOSJMWW3VWMVL4PLMZNTMSOII246PIH6Z"));
 
       // make assertions
       assertEquals(NetworkCurrencyMosaic.TEN, tx.getMosaic());
       assertEquals(BigInteger.valueOf(100), tx.getDuration());
       assertEquals(HashType.SHA3_256, tx.getHashType());
       assertEquals(secret, tx.getSecret());
-      assertEquals(Address.createFromRawAddress("SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM"), tx.getRecipient());
+      assertEquals(Address.createFromRawAddress("VCZGEQBIOSJMWW3VWMVL4PLMZNTMSOII246PIH6Z"), tx.getRecipient());
    }
 
    @Test
    void serialization() throws IOException {
       String secret = "3fc8ba10229ab5778d05d9c4b7f56676a88bf9295c185acfc0f961db5408cafe";
-      SecretLockTransaction secretLocktx = new SecretLockTransaction(NetworkType.MIJIN_TEST, 1, new FakeDeadline(),
+      SecretLockTransaction secretLocktx = new SecretLockTransaction(NetworkType.TEST_NET, 1, new FakeDeadline(),
             BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), NetworkCurrencyMosaic.TEN,
             BigInteger.valueOf(100), HashType.SHA3_256, secret,
-            Address.createFromRawAddress("SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM"));
+            Address.createFromRawAddress("VCZGEQBIOSJMWW3VWMVL4PLMZNTMSOII246PIH6Z"));
 
       byte[] actual = secretLocktx.generateBytes();
 //      saveBytes("secret_lock", actual);
@@ -64,10 +64,10 @@ public class SecretLockTransactionTest extends ResourceBasedTest {
    @Test
    void shouldThrowErrorWhenSecretIsNotValid() {
       assertThrows(IllegalArgumentException.class, () -> {
-         SecretLockTransaction secretLocktx = new SecretLockTransaction(NetworkType.MIJIN_TEST, 1, new FakeDeadline(),
+         SecretLockTransaction secretLocktx = new SecretLockTransaction(NetworkType.TEST_NET, 1, new FakeDeadline(),
                BigInteger.ZERO, Optional.empty(), Optional.empty(), Optional.empty(), NetworkCurrencyMosaic.TEN,
                BigInteger.valueOf(100), HashType.SHA3_256, "this is not valid",
-               Address.createFromRawAddress("SDUP5PLHDXKBX3UU5Q52LAY4WYEKGEWC6IB3VBFM"));
+               Address.createFromRawAddress("VCZGEQBIOSJMWW3VWMVL4PLMZNTMSOII246PIH6Z"));
       }, "not a valid secret");
    }
 }

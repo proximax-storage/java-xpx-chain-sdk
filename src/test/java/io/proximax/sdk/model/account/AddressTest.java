@@ -28,45 +28,45 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 
 class AddressTest {
 
     @Test
     void testAddressCreation() {
-        Address address = new Address("SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.MIJIN_TEST);
-        assertEquals("SDGLFWDSHILTIUHGIBH5UGX2VYF5VNJEKCCDBR26", address.plain());
+        Address address = new Address("VCZGEQ-BIOSJM-WW3VWM-VL4PLM-ZNTMSO-II246P-IH6Z", NetworkType.TEST_NET);
+        assertEquals("VCZGEQBIOSJMWW3VWMVL4PLMZNTMSOII246PIH6Z", address.plain());
     }
 
     @Test
     void testAddressWithSpacesCreation() {
-        Address address = new Address(" SDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26 ", NetworkType.MIJIN_TEST);
-        assertEquals("SDGLFWDSHILTIUHGIBH5UGX2VYF5VNJEKCCDBR26", address.plain());
+        Address address = new Address(" VCZGEQ-BIOSJM-WW3VWM-VL4PLM-ZNTMSO-II246P-IH6Z ", NetworkType.TEST_NET);
+        assertEquals("VCZGEQBIOSJMWW3VWMVL4PLMZNTMSOII246PIH6Z", address.plain());
     }
 
     @Test
     void testLowerCaseAddressCreation() {
-        Address address = new Address("sdglfw-dshilt-iuhgib-h5ugx2-vyf5vn-jekccd-br26", NetworkType.MIJIN_TEST);
-        assertEquals("SDGLFWDSHILTIUHGIBH5UGX2VYF5VNJEKCCDBR26", address.plain());
+        Address address = new Address("vczgeq-biosjm-ww3vwm-vl4plm-zntmso-ii246p-ih6z", NetworkType.TEST_NET);
+        assertEquals("VCZGEQBIOSJMWW3VWMVL4PLMZNTMSOII246PIH6Z", address.plain());
     }
 
     @Test
     void addressInPrettyFormat() {
-        Address address = new Address("SDRDGF-TDLLCB-67D4HP-GIMIHP-NSRYRJ-RT7DOB-GWZY", NetworkType.MIJIN_TEST);
-        assertEquals("SDRDGF-TDLLCB-67D4HP-GIMIHP-NSRYRJ-RT7DOB-GWZY", address.pretty());
+        Address address = new Address("VCZGEQ-BIOSJM-WW3VWM-VL4PLM-ZNTMSO-II246P-IH6Z", NetworkType.TEST_NET);
+        assertEquals("VCZGEQ-BIOSJM-WW3VWM-VL4PLM-ZNTMSO-II246P-IH6Z", address.pretty());
     }
 
     @Test
     void equality() {
-        Address address1 = new Address("SDRDGF-TDLLCB-67D4HP-GIMIHP-NSRYRJ-RT7DOB-GWZY", NetworkType.MIJIN_TEST);
-        Address address2 = new Address("SDRDGFTDLLCB67D4HPGIMIHPNSRYRJRT7DOBGWZY", NetworkType.MIJIN_TEST);
+        Address address1 = new Address("VCZGEQ-BIOSJM-WW3VWM-VL4PLM-ZNTMSO-II246P-IH6Z", NetworkType.TEST_NET);
+        Address address2 = new Address("VCZGEQBIOSJMWW3VWMVL4PLMZNTMSOII246PIH6Z", NetworkType.TEST_NET);
         assertEquals(address1, address2);
     }
 
     @Test
     void noEquality() {
-        Address address1 = new Address("SRRRRR-TTTTTT-555555-GIMIHP-NSRYRJ-RT7DOB-GWZY", NetworkType.MIJIN_TEST);
-        Address address2 = new Address("SDRDGF-TDLLCB-67D4HP-GIMIHP-NSRYRJ-RT7DOB-GWZY", NetworkType.MIJIN_TEST);
+        Address address1 = new Address("VCZGEQ-BIOSJM-WW3VWM-VL4PLM-ZNTMSO-II246P-IH6Z", NetworkType.TEST_NET);
+        Address address2 = new Address("VD3YBI-RQMWXS-6HHUJB-XFZJ56-62BJPX-OTKOOV-6HDO", NetworkType.TEST_NET);
         assertNotEquals(address1, address2);
     }
 
@@ -102,8 +102,7 @@ class AddressTest {
                 Arguments.of("VDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.TEST_NET),
                 Arguments.of("XDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.MAIN_NET),
                 Arguments.of("WDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.PRIVATE_TEST),
-                Arguments.of("ZDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.PRIVATE)
-        );
+                Arguments.of("ZDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.PRIVATE));
     }
 
     private static Stream<Arguments> assertExceptionProvider() {
@@ -114,19 +113,23 @@ class AddressTest {
                 Arguments.of("XDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.TEST_NET),
                 Arguments.of("WDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.PRIVATE),
                 Arguments.of("ZDGLFW-DSHILT-IUHGIB-H5UGX2-VYF5VN-JEKCCD-BR26", NetworkType.PRIVATE_TEST),
-                Arguments.of("WDRDGF-TDLLCB-67D4HP-GIMIHP-NSRYRJ-RT7DOB-GWZY", NetworkType.MIJIN_TEST)
-        );
+                Arguments.of("WDRDGF-TDLLCB-67D4HP-GIMIHP-NSRYRJ-RT7DOB-GWZY", NetworkType.MIJIN_TEST));
     }
 
     private static Stream<Arguments> publicKeys() {
         return Stream.of(
-                Arguments.of("b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf", NetworkType.MIJIN_TEST, "SARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJETM3ZSP"),
-                Arguments.of("b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf", NetworkType.MIJIN, "MARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJE5K5RYU"),
-                Arguments.of("b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf", NetworkType.TEST_NET, "VARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJGOH3FCE"),
-                Arguments.of("b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf", NetworkType.MAIN_NET, "XARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJF6CHIGW"),
-                Arguments.of("b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf", NetworkType.PRIVATE_TEST, "WARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJHPRCU4F"),
-                Arguments.of("b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf", NetworkType.PRIVATE, "ZARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJF2S3UOQ")
-        );
+                Arguments.of("b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf", NetworkType.MIJIN_TEST,
+                        "SARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJETM3ZSP"),
+                Arguments.of("b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf", NetworkType.MIJIN,
+                        "MARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJE5K5RYU"),
+                Arguments.of("b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf", NetworkType.TEST_NET,
+                        "VARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJGOH3FCE"),
+                Arguments.of("b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf", NetworkType.MAIN_NET,
+                        "XARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJF6CHIGW"),
+                Arguments.of("b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf",
+                        NetworkType.PRIVATE_TEST, "WARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJHPRCU4F"),
+                Arguments.of("b4f12e7c9f6946091e2cb8b6d3a12b50d17ccbbf646386ea27ce2946a7423dcf", NetworkType.PRIVATE,
+                        "ZARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJF2S3UOQ"));
     }
 
 }

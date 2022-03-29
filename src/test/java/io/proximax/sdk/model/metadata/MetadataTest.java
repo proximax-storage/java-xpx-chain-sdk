@@ -20,9 +20,9 @@ class MetadataTest {
    @Test
    void checkConstructor() {
       List<Field> fields = Arrays.asList(new Field("key"));
-      Metadata meta = new Metadata(MetadataType.ADDRESS, fields);
+      Metadata meta = new Metadata(OldMetadataType.ADDRESS, fields);
       
-      assertEquals(MetadataType.ADDRESS, meta.getType());
+      assertEquals(OldMetadataType.ADDRESS, meta.getType());
       assertEquals(fields, meta.getFields());
    }
 

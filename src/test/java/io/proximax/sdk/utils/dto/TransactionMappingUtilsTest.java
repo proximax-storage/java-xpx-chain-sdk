@@ -16,7 +16,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import io.gsonfire.builders.JsonArrayBuilder;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 
 /**
  * {@link TransactionMappingUtils} tests

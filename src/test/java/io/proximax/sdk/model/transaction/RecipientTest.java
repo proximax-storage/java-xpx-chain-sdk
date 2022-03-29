@@ -16,8 +16,8 @@ import io.proximax.core.crypto.KeyPair;
 import io.proximax.core.utils.Base32Encoder;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.Address;
-import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.namespace.NamespaceId;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.utils.dto.UInt64Utils;
 
 /**
@@ -83,7 +83,7 @@ class RecipientTest {
    
    @Test
    void serializeAddress() {
-      Address addr = Address.createFromRawAddress("SARDGFTDLLCB67D4HPGIMIHPNSRYRJRT7DOBGWZY");
+      Address addr = Address.createFromRawAddress("VCZGEQBIOSJMWW3VWMVL4PLMZNTMSOII246PIH6Z");
       byte[] addrBytes = Base32Encoder.getBytes(addr.plain());
       byte[] recipientBytes = Recipient.from(addr).getBytes();
       assertEquals(25, recipientBytes.length);

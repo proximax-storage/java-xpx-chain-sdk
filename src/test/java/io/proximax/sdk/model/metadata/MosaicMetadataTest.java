@@ -26,7 +26,7 @@ class MosaicMetadataTest {
       MosaicId id = new MosaicId(BigInteger.ONE);
       MosaicMetadata meta = new MosaicMetadata(fields, id);
       
-      assertEquals(MetadataType.MOSAIC, meta.getType());
+      assertEquals(OldMetadataType.MOSAIC, meta.getType());
       assertEquals(id, meta.getId());
       assertEquals(fields, meta.getFields());
    }

@@ -8,7 +8,7 @@ package io.proximax.sdk.model.transaction.builder;
 import java.math.BigInteger;
 
 import io.proximax.sdk.FeeCalculationStrategy;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 
 /**
  * Central factory to instantiate transaction builders for all transaction types
@@ -151,6 +151,28 @@ public class TransactionBuilderFactory {
       return builder;      
    }
    
+   /**
+    * create builder for modify mosaic levy transaction
+    * 
+    * @return the builder
+    */
+   public ModifyMosaicLevyTransactionBuilder modifyMosaicLevy() {
+      ModifyMosaicLevyTransactionBuilder builder = new ModifyMosaicLevyTransactionBuilder();
+      initDefaults(builder);
+      return builder;
+   }
+
+   /**
+    * create builder for remove mosaic levy transaction
+    * 
+    * @return the builder
+    */
+   public RemoveMosaicLevyTransactionBuilder removeMosaicLevy() {
+      RemoveMosaicLevyTransactionBuilder builder = new RemoveMosaicLevyTransactionBuilder();
+      initDefaults(builder);
+      return builder;
+   }
+
    /**
     * create builder for lock funds transaction
     * 
@@ -306,14 +328,36 @@ public class TransactionBuilderFactory {
    }
 
    /**
-    * create builder for metadata modification transaction
+    * create builder for mosaic metadata transaction
     * 
     * @return the builder
     */
-   public ModifyMetadataTransactionBuilder modifyMetadata() {
-      ModifyMetadataTransactionBuilder builder = new ModifyMetadataTransactionBuilder();
+   public MosaicMetadataTransactionBuilder mosaicMetadata() {
+      MosaicMetadataTransactionBuilder builder = new MosaicMetadataTransactionBuilder();
       initDefaults(builder);
-      return builder; 
+      return builder;
+   }
+   
+   /**
+    * create builder for account metadata transaction
+    * 
+    * @return the builder
+    */
+   public AccountMetadataTransactionBuilder accountMetadata() {
+      AccountMetadataTransactionBuilder builder = new AccountMetadataTransactionBuilder();
+      initDefaults(builder);
+      return builder;
+   }
+
+   /**
+    * create builder for namespace metadata transaction
+    * 
+    * @return the builder
+    */
+   public NamespaceMetadataTransactionBuilder namespaceMetadata() {
+      NamespaceMetadataTransactionBuilder builder = new NamespaceMetadataTransactionBuilder();
+      initDefaults(builder);
+      return builder;
    }
 
    /**

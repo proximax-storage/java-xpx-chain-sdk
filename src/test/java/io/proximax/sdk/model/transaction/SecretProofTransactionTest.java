@@ -30,7 +30,7 @@ import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.ResourceBasedTest;
 import io.proximax.sdk.model.account.Address;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 
 public class SecretProofTransactionTest extends ResourceBasedTest {
 
@@ -38,7 +38,7 @@ public class SecretProofTransactionTest extends ResourceBasedTest {
    void constructor() {
       String secret = "3fc8ba10229ab5778d05d9c4b7f56676a88bf9295c185acfc0f961db5408cafe";
       String secretSeed = "9a493664";
-      Recipient recipient = Recipient.from(new Address("XY", NetworkType.MAIN_NET));
+      Recipient recipient = Recipient.from(new Address("XDAMVRBUZJTH4E4BGHAS5O5BMZ5XPHECKG47M23C", NetworkType.MAIN_NET));
       SecretProofTransaction tx = new SecretProofTransaction(NetworkType.MAIN_NET, 23, new FakeDeadline(), BigInteger.ONE,
             Optional.of("signaturestring"),
             Optional.of(new PublicAccount(new KeyPair().getPublicKey().getHexString(), NetworkType.MAIN_NET)),
@@ -55,11 +55,9 @@ public class SecretProofTransactionTest extends ResourceBasedTest {
    void serialization() throws IOException {
       String secret = "3fc8ba10229ab5778d05d9c4b7f56676a88bf9295c185acfc0f961db5408cafe";
       String secretSeed = "9a493664";
-      Recipient recipient = Recipient.from(new Address("XY", NetworkType.MAIN_NET));
+      Recipient recipient = Recipient.from(new Address("XDAMVRBUZJTH4E4BGHAS5O5BMZ5XPHECKG47M23C", NetworkType.MAIN_NET));
 
-      SecretProofTransaction secretProoftx = new SecretProofTransaction(NetworkType.MAIN_NET, 1, new FakeDeadline(),
-            BigInteger.ONE, Optional.empty(), Optional.empty(), Optional.empty(), HashType.SHA3_256, secret, secretSeed,
-            recipient);
+      SecretProofTransaction secretProoftx = new SecretProofTransaction(NetworkType.MAIN_NET, 1, new FakeDeadline(),  BigInteger.ONE, Optional.empty(), Optional.empty(), Optional.empty(), HashType.SHA3_256, secret, secretSeed, recipient);
 
       byte[] actual = secretProoftx.generateBytes();
 //      saveBytes("secret_proof", actual);
@@ -70,7 +68,7 @@ public class SecretProofTransactionTest extends ResourceBasedTest {
    void shouldThrowErrorWhenSecretIsNotValid() {
       String proof = "B778A39A3663719DFC5E48C9D78431B1E45C2AF9DF538782BF199C189DABEAC7680ADA57DCEC8EEE91"
             + "C4E3BF3BFA9AF6FFDE90CD1D249D1C6121D7B759A001B1";
-      Recipient recipient = Recipient.from(new Address("XY", NetworkType.MAIN_NET));
+      Recipient recipient = Recipient.from(new Address("XDAMVRBUZJTH4E4BGHAS5O5BMZ5XPHECKG47M23C", NetworkType.MAIN_NET));
       assertThrows(IllegalArgumentException.class, () -> new SecretProofTransaction(NetworkType.MAIN_NET, 1, new FakeDeadline(),
             BigInteger.ONE, Optional.empty(), Optional.empty(), Optional.empty(), HashType.SHA3_256, "non valid hash", proof,
             recipient), "not a valid secret");

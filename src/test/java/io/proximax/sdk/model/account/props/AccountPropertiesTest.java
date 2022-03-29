@@ -19,7 +19,7 @@ import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.ResourceBasedTest;
 import io.proximax.sdk.gen.model.AccountPropertiesInfoDTO;
 import io.proximax.sdk.model.account.Account;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 import io.reactivex.Observable;
 
 /**

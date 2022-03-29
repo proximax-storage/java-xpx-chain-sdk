@@ -28,7 +28,7 @@ import io.proximax.core.crypto.Signature;
 import io.proximax.core.crypto.Signer;
 import io.proximax.sdk.model.account.Account;
 import io.proximax.sdk.model.account.PublicAccount;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.utils.dto.TransactionMappingUtils;
 
 /**
@@ -341,4 +341,5 @@ public abstract class Transaction {
             + transactionInfo + "]";
    }
 
+  
 }

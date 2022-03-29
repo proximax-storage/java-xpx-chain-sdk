@@ -20,11 +20,10 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.spongycastle.util.Arrays;
-
-import io.proximax.sdk.gen.model.UInt64DTO;
 
 /**
  * Utility class to handle conversions between BigInteger and int array
@@ -111,8 +110,8 @@ public class UInt64Utils {
      * @param dto UInt64DTO instance representing array of int64 values holding unsigned integer
      * @return BigInteger reconstructed from the array
      */
-    public static BigInteger toBigInt(UInt64DTO dto) {
-    	return fromIntArray(dto.stream().mapToInt(Long::intValue).toArray());
+    public static BigInteger toBigInt(ArrayList<Integer> dto) {
+    	return fromIntArray(dto.stream().mapToInt(v -> v).toArray());
     }
     
     /**
@@ -160,11 +159,11 @@ public class UInt64Utils {
      * @param bigInt the big integer
      * @return the DTO
      */
-    public static UInt64DTO dtoFromBigInt(BigInteger bigInt) {
+    public static ArrayList<Integer> dtoFromBigInt(BigInteger bigInt) {
        int[] uint64Parts = UInt64Utils.fromBigInteger(bigInt);
-       UInt64DTO dto = new UInt64DTO();
-       dto.add((long)uint64Parts[0]);
-       dto.add((long)uint64Parts[1]);
+        ArrayList<Integer> dto = new ArrayList<>();
+       dto.add(uint64Parts[0]);
+       dto.add(uint64Parts[1]);
        return dto;
     }
 }

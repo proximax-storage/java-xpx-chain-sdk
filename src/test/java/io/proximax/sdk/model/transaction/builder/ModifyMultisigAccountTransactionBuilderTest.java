@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import io.proximax.core.crypto.KeyPair;
 import io.proximax.sdk.FeeCalculationStrategy;
 import io.proximax.sdk.model.account.Account;
-import io.proximax.sdk.model.blockchain.NetworkType;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.model.transaction.ModifyMultisigAccountTransaction;
 import io.proximax.sdk.model.transaction.MultisigCosignatoryModification;
 
@@ -25,7 +25,7 @@ import io.proximax.sdk.model.transaction.MultisigCosignatoryModification;
  */
 class ModifyMultisigAccountTransactionBuilderTest {
 
-   private static final NetworkType NETWORK_TYPE = NetworkType.MIJIN_TEST;
+   private static final NetworkType NETWORK_TYPE = NetworkType.TEST_NET;
 
    private ModifyMultisigAccountTransactionBuilder builder;
 

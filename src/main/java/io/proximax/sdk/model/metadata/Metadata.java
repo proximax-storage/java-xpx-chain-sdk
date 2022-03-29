@@ -21,14 +21,14 @@ import java.util.List;
  * Generic metadata having type and key-value fields
  */
 public class Metadata {
-   private final MetadataType type;
+   private final OldMetadataType type;
    private final List<Field> fields;
    
    /**
     * @param type type of the metadata (account/mosaic/namespace)
     * @param fields metadata fields
     */
-   public Metadata(MetadataType type, List<Field> fields) {
+   public Metadata(OldMetadataType type, List<Field> fields) {
       this.type = type;
       this.fields = fields;
    }
@@ -36,7 +36,7 @@ public class Metadata {
    /**
     * @return the type
     */
-   public MetadataType getType() {
+   public OldMetadataType getType() {
       return type;
    }
    /**

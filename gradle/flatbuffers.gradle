@@ -1,0 +1,58 @@
+/*
+ * Copyright 2022 ProximaX Limited. All rights reserved.
+ * Use of this source code is governed by the Apache 2.0
+ * license that can be found in the LICENSE file.
+ */
+
+import org.apache.tools.ant.taskdefs.condition.Os
+
+task flatBuffersCloneRepository(type: Exec) {
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+        println "*** Windows ***"
+        ant.get(src: 'https://github.com/google/flatbuffers/releases/download/v1.12.0/flatc_windows.zip', dest: 'build', skipexisting: 'true')
+        ant.unzip(src: 'build' + '/flatc_windows.zip', dest: 'build/flatbuffers')
+        commandLine "git", "--version"
+    } else if (Os.isFamily(Os.FAMILY_UNIX)) {
+        println "*** Unix ***"
+        println 'Clone flatbuffers repository'
+        def folder = new File( './build/flatbuffers' )
+        if( folder.exists() ) {
+            println "./build/flatbuffers exists!"
+            commandLine "git", "--version"
+        } else {
+            commandLine "git", "clone",  "--branch", "v1.12.0", "https://github.com/google/flatbuffers.git", "./build/flatbuffers"
+        }
+    } else {
+        throw new GradleException('*** Unknown platform ***')
+    }
+}
+
+task flatBuffersRunCmake(type: Exec) {
+    if (Os.isFamily(Os.FAMILY_UNIX)) {
+        def folder = new File( './build/flatbuffers/CMakeCache.txt' )
+        if( folder.exists() ) {
+            println "Cmake configuration exists!"
+            commandLine "git", "--version"
+        } else {
+            commandLine "cmake", "-B./build/flatbuffers", "-S./build/flatbuffers"
+        }
+    } else {
+        println "*** skip CMAKE for the current platform ***"
+        commandLine "git", "--version"
+    }
+}
+
+task flatBuffersRunMake(type: Exec) {
+    if (Os.isFamily(Os.FAMILY_UNIX)) {
+        def flatc = new File( './build/flatbuffers/flatc' )
+        if( flatc.exists() ) {
+            println "flatc exists!"
+            commandLine "git", "--version"
+        } else {
+            commandLine "make", "-C", file('./build/flatbuffers').absolutePath
+        }
+    } else {
+        println "*** skip MAKE for the current platform ***"
+        commandLine "git", "--version"
+    }
+}

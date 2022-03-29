@@ -13,9 +13,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.proximax.sdk.FeeCalculationStrategy;
-import io.proximax.sdk.model.blockchain.NetworkType;
 import io.proximax.sdk.model.mosaic.MosaicId;
 import io.proximax.sdk.model.mosaic.MosaicSupplyType;
+import io.proximax.sdk.model.network.NetworkType;
 import io.proximax.sdk.model.transaction.MosaicSupplyChangeTransaction;
 
 /**
@@ -23,7 +23,7 @@ import io.proximax.sdk.model.transaction.MosaicSupplyChangeTransaction;
  */
 class MosaicSupplyChangeTransactionBuilderTest {
 
-   private static final NetworkType NETWORK_TYPE = NetworkType.MIJIN_TEST;
+   private static final NetworkType NETWORK_TYPE = NetworkType.TEST_NET;
 
    private MosaicSupplyChangeTransactionBuilder builder;
 
